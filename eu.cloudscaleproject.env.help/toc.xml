@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="CloudScale Environment" topic="html/index.html">
+	<topic label="Environment"  href="html/environment/index.html"> 
+		<topic label="User Guide" href="html/environment/guide.html"/> 
+	</topic>
+ <topic href="html/method/index.html" label="CloudScale Method">
+    <topic href="html/method/requirements.html" label="Requirements and Indentification">
+    </topic>
+    <topic href="html/method/construction.html" label="System Construction and Analysis">
+       <topic href="html/method/extractor.html" label="Extractor">
+       </topic>
+       <topic href="html/method/analyser.html" label="Analyser &amp; Static Spotter">
+       </topic>
+       <topic href="html/method/spotter.html" label="Dynamic Spotter">
+       </topic>
+    </topic>
+    <topic href="html/method/realisation.html" label="Realisation">
+    </topic>
+    <topic href="html/method/deployment.html" label="Deployment">
+    </topic>
+    <topic href="html/method/operation.html" label="Operation">
+    </topic>
+    <topic href="html/method/monitoring.html" label="Monitoring">
+    </topic>
+ </topic>
+ <topic href="html/maintopic.html" label="CloudScale Tool-chain">
+    <topic href="html/maintopic.html" label="Analyser &amp; Static Spotter">
+    </topic>
+    <topic href="html/maintopic.html" label="Extractor">
+    </topic>
+    <topic href="html/maintopic.html" label="Dyanamic Spotter">
+    </topic>
+ </topic>
+</toc>

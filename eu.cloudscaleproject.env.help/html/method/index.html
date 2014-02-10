@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>CloudScale Method</title>
+</head>
+
+<body>
+<h1>CloudScale Method</h1>
+
+The method describes how to model self-adaptive
+elastic services. Moreover, it also gives advice on how to develop scalability models, which can
+be used for "what-if" analysis. The overall CloudScale Method is a collection of concrete process
+steps required to engineer scalable cloud systems. CloudScale Method describes how to model
+scalability both during design and during evolution of cloud systems. It also defines the input of a
+scalability model and what output can be produced based on this input. Finally, in later version of
+this deliverable, the method will also describe the effort involved in each process step and gives
+advice on model granularity.
+
+<h2>Overview</h2>
+The key to the development of scalable cloud applications is an appropriate engineering method for
+the scalability. Initially, a service provider has an idea for an application which he wants to execute in
+the cloud because of the cost-efficient management and the virtually unlimited amount of hardware
+resources. The service provider wants to ensure that the application scales cost-effectively, i.e., that
+it always tries to cope with its workload with the minimum amount of cloud resources (measured in
+terms of costs paid for the resources).<br>
+To enable sustainable engineering method for scalable cloud applications it is important to support
+the complete application life-cycle. The proposed CloudScale Method builds on an overall system
+life-cycle process from initial requirements collection towards operation and monitoring process.
+
+<h2>Scenarios and Basic Elements</h2>
+CloudScale provides an engineering method for building (evolving) and adapting scalable cloud applications
+ and services. We focus on two core scenarios:
+<br>
+<br>
+<b>Development:</b> Enabling software engineers to develop scalable applications and services for a
+cloud computing platform. We extend existing capacity planning tools for scalability analysis,
+and introduce ScaleDL Usage Evolution to describe, compare, and compose the scalability of
+services. We also provide a set of best practices and design-patterns for building scalable
+software systems. <br><br>
+<b>Evolution:</b> Enabling software engineers to evolve an existing software system or service into a
+solution that scales in cloud computing environments. We introduce a novel approach for
+scalability evaluation of existing systems by systematic experimentation using existing loadtesting
+ tools or making experiments on the models. This approach allows for scalability antipattern
+ detection in an existing application and for extracting scalability models.<br><br>
+
+Furthermore, the CloudScale Method will enable a combination of both scenarios. The scalability
+evaluation of existing systems will yield scalability models that allow for scalability redesign and the
+evaluation of "What-if" scenarios that can be combined with measured behaviour from deployed
+system. The integrated view the CloudScale Method provides on scalability allows software engineers
+ to address scalability in all lifecycle phases of their application with minimal effort.
+<br><br>
+On the bottom of the overview is a legend explaining the notation. It is important to form clear process
+steps which cover essential service life-cycle steps like Requirements, Design, Realisation, Operation
+ and Monitoring. It is also important to show the data and control flow between the process
+steps. The most important service life-cycle steps are additionally elaborated with supported tools
+and intermediate documents. To enable experimentation and iterative construction and analysis
+cycles, a couple of decision points for control and data flow were introduced (e.g., a decision step
+where we determine if scalability requirements are satisfied after system modelling and analysis).
+Additionally, the method enables solution check after each service life-cycle steps and then returning
+to the analysis step to optimise the constructed service.
+<br><br>
+The basic processes in CloudScale Method are standard development processes in software development. 
+We make some changes in the naming of processes to have more focus on the specific
+need of the CloudScale Method. The first defined process is Requirements identification, because
+the CloudScale Method will specifically deal with scalability issues in the system development or
+adaptation, and will be integrated with some other general accepted engineering method for requirements
+ engineering. However, it may also be executed independently. This process is defined
+because we must always annotate and define scalability requirements for the analysed system.
+During the Requirements identification process, the main focus is on describing the load and work
+scaling path, i.e., the anticipated evolution of load and work on the system. The resource scaling
+path describes how our cloud platform can increase its amount of cloud resources, and quality metric
+describes what is acceptable system quality to the users, e.g., a particular response time. For example, 
+we may expect used service response time in less than one second. This process results in
+a requirement specification document that is visible as ScaleDL Usage Evolution Specification. This
+output document of the Requirements Identification process is used like main input in the System
+construction and Analysis process.
+
+<h2>Roles and Stakeholders</h2>
+<b>Product manager:</b> Person responsible for discussing with the customer of our service and identify
+initial system requirements and define development goals especially from the business
+perspective. The product manager is always active during the decisions regarding the require-
+ments fulfilment and business potential of the solution, i.e., in theRequirements identification
+and System Construction and Analysis process steps.
+<br><br>
+<b>System architect:</b> Person responsible for Requirements Identification and the main driver of System
+Construction and Analysis. This role cooperates with Product manager and Service developer
+and its main responsibilities are architecture definition and to propose the main service com-
+ponents.
+<br><br>
+<b>Service developer:</b> Person responsible for service realisation (both development and test), and for
+preparing the system deployment process. This role cooperates with System architect for
+checking realised services and with System engineer in preparing system deployment.
+<br><br>
+<b>System engineer:</b> Person responsible for service deployment and monitoring of the system in operation. 
+Based on monitoring results, the system engineer tends to optimise system operation
+parameters or to run the SystemConstruction and Analysis process step if it is not possible to
+fix system by fine tuning. System engineer cooperates with all other roles during the system life-cycle.
+<br><br>
+Looking from the perspective of CloudScale Method usage, we can define four basic system stake-
+holders : <br>
+Service consumer wants to have supplied services for own purpose according to business needs
+and according an agreed SLA.
+<br><br>
+<b>Service provider:</b> responsible to fulfil SLA and other requirements towards service user (according
+to cloud services it can be IaaS, PaaS or SaaS provider), preparing service requirements and interact 
+with system builder to enable appropriate service, operate system during system life-cycle and lead needs for system adaptation.
+<br><br>
+<b>System builder:</b> responsible for all activities to transfer requirements to the system realisation and
+deployment
+<br><br>
+<b>Service developer:</b> develops modelled service and cooperates with system builder.
+
+</body>
+</html>

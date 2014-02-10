@@ -1,0 +1,11 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>eu.cloudscaleproject.env.csm2pcm</artifactId>
+  <parent>
+  	<groupId>eu.cloudscaleproject</groupId>
+  	<artifactId>eu.cloudscaleproject.env.build</artifactId>
+  	<version>1.0.0-SNAPSHOT</version>
+  	<relativePath>../eu.cloudscaleproject.env.build</relativePath>
+  </parent>
+  <packaging>eclipse-plugin</packaging>
+</project>

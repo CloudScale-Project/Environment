@@ -1,0 +1,37 @@
+
+Eclipse Juno  // Version: Juno Service Release 2 // Eclipse RCP
+---------------------------------------------------
+Juno - http://download.eclipse.org/releases/juno
+Juno - Ecore Tools SDK
+... (many more)
+
+QVTo
+----------------------------
+Operational QVT SDK
+
+
+Palladio
+---------------------
+Palladio 3.4 - http://sdqweb.ipd.kit.edu/eclipse/palladio/releases/3.4/
+
+
+Graphiti
+---------------------
+Graphiti - - http://download.eclipse.org/graphiti/updates/0.9.2
+
+
+Architemrix
+---------------------
+User Installation
+If you only want to try out Archimetrix without actively developing it, there is an Eclipse feature of Archimetrix available for easy installation. You can install it as follows
+
+Download and install the Eclipse Modeling Tools (Juno).
+Select Help -> Install New Software... and from category Modelling from Eclipse Juno update site install Xtext and Xpand features.
+Select Help -> Install New Software... and install SoMoX feature from the update site.
+	http://sdqweb.ipd.kit.edu/eclipse/somox/nightly/
+Select Help -> Install New Software... and install Gast model feature from the update site.
+	http://sissy.sourceforge.net/SISSy_Nightly
+Select Help -> Install New Software... and install SAMM feature from the update site.
+	http://q-impress.ow2.org/updateSite
+Select Help -> Install New Software... and install Archimetrix from our update site.
+	http://archimetrix.googlecode.com/svn/ArchimetrixUpdatesite/

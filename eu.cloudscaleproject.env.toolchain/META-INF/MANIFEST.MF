@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Toolchain
+Bundle-SymbolicName: eu.cloudscaleproject.env.toolchain;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.cloudscaleproject.env.toolchain.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ javax.inject;bundle-version="1.0.0",
+ org.eclipse.e4.core.di;bundle-version="1.1.0",
+ org.eclipse.e4.core.contexts;bundle-version="1.1.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: eu.cloudscaleproject.env.toolchain.definition

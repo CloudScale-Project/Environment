@@ -1,0 +1,196 @@
+library csm2pcmUtil;
+
+modeltype CSMMODEL uses csm('http://eu.cloudscaleproject.env/CloudscaleComponentModel/1.0');
+modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype SYSTEM uses pcm::system('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype COMPOSITION uses pcm::core::composition('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype RESOURCE uses pcm::resourceenvironment('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype ALLOCATION uses pcm::allocation('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+
+//AssemblyContext helper querys
+
+query AssemblyContext::getRequiredRole(in operaionInterface : pcm::repository::OperationInterface) : OperationRequiredRole {
+	var opRequiredRole : OperationRequiredRole;
+	if(operaionInterface = null) then{
+		opRequiredRole := self.encapsulatedComponent__AssemblyContext
+			.requiredRoles_InterfaceRequiringEntity[OperationRequiredRole]
+			->any(true);
+	}
+	else{
+		opRequiredRole := self.encapsulatedComponent__AssemblyContext
+			.requiredRoles_InterfaceRequiringEntity[OperationRequiredRole]
+			->selectOne(requiredInterface__OperationRequiredRole = operaionInterface);
+	}endif;
+	
+	return opRequiredRole;
+}
+	
+query AssemblyContext::getProvidedRole(in operaionInterface : pcm::repository::OperationInterface) : OperationProvidedRole {
+	var opProvidedRole : OperationProvidedRole;
+	if(operaionInterface = null) then{
+		opProvidedRole := self.encapsulatedComponent__AssemblyContext
+			.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]
+			->any(true);
+	}
+	else{
+		opProvidedRole := self.encapsulatedComponent__AssemblyContext
+			.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]
+			->selectOne(providedInterface__OperationProvidedRole = operaionInterface);
+	}endif;
+	
+	return opProvidedRole;
+}
+
+query getAssemblyContextFromProvidedRole(in assemblyContexts : Set(AssemblyContext), in providedRole : OperationProvidedRole) : AssemblyContext {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.providedRoles_InterfaceProvidingEntity->forEach(pr){
+			if(pr = providedRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs->any(true);
+}
+
+query getOpositeAssemblyContextFromProvidedRole(in assemblyContexts : Set(AssemblyContext), in providedRole : OperationProvidedRole) : List(AssemblyContext) {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.requiredRoles_InterfaceRequiringEntity[OperationRequiredRole]->forEach(rr){
+			if(rr.requiredInterface__OperationRequiredRole = providedRole.providedInterface__OperationProvidedRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs;
+}
+
+query getRelatedAssemblyContextFromProvidedRole(in assemblyContexts : Set(AssemblyContext), in providedRole : OperationProvidedRole) : List(AssemblyContext) {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]->forEach(pr){
+			if(pr.providedInterface__OperationProvidedRole = providedRole.providedInterface__OperationProvidedRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs;
+}
+
+query getAssemblyContextFromRequiredRole(in assemblyContexts : Set(AssemblyContext), in requiredRole : OperationProvidedRole) : AssemblyContext {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.requiredRoles_InterfaceRequiringEntity->forEach(rr){
+			if(rr = requiredRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs->any(true);
+}
+
+query getOpositeAssemblyContextFromRequiredRole(in assemblyContexts : Set(AssemblyContext), in requiredRole : OperationRequiredRole) : List(AssemblyContext) {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]->forEach(pr){
+			if(pr.providedInterface__OperationProvidedRole = requiredRole.requiredInterface__OperationRequiredRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs;
+}
+
+query getRelatedAssemblyContextFromRequiredRole(in assemblyContexts : Set(AssemblyContext), in requiredRole : OperationRequiredRole) : List(AssemblyContext) {
+	var acs : List(AssemblyContext);
+	
+	assemblyContexts->forEach(ac){
+		ac.encapsulatedComponent__AssemblyContext.requiredRoles_InterfaceRequiringEntity[OperationRequiredRole]->forEach(rr){
+			if(rr.requiredInterface__OperationRequiredRole = requiredRole.requiredInterface__OperationRequiredRole) then{
+				acs += ac;
+			}endif;
+		};
+	};
+	
+	return acs;
+}
+
+query getOperationInterfaces(in platformService : CSMMODEL::architecture::PlatformService) : Set(CSMMODEL::core::OperationInterface){
+	var interfaces : Set(CSMMODEL::core::OperationInterface);
+	
+	if(platformService.oclIsKindOf(CSMMODEL::architecture::OperationInterfaceContainer)) then {
+		var oic = platformService.oclAsType(CSMMODEL::architecture::OperationInterfaceContainer);
+		interfaces += oic.providedInterfaces;
+	}endif;
+	if(platformService.oclIsKindOf(CSMMODEL::architecture::SoftwareServiceContainer)) then {
+		var asc = platformService.oclAsType(CSMMODEL::architecture::SoftwareServiceContainer);
+		asc.softwareServices->forEach(as){
+			interfaces += as.providedInterfaces;
+		}
+	}endif;
+
+	return interfaces;
+}
+
+query getProvidingHybridConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::HybridConnection){
+	return cloudProvider.architecture.hybridConnections->select(sourcePlatformService.platformLayer.cloudEnvironment = cloudProvider);
+}
+
+query getRequiringHybridConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::HybridConnection){
+	return cloudProvider.architecture.hybridConnections->select(targetPlatformService.platformLayer.cloudEnvironment = cloudProvider);
+}
+
+query getExternalConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::ExternalConnection){
+	return cloudProvider.architecture.externalConnections->select(platformService.platformLayer.cloudEnvironment = cloudProvider);
+}
+
+query collectProvidedOpInterfaces(in connections : Set(CSMMODEL::architecture::Connection)) : Set(CSMMODEL::core::OperationInterface){
+	var hcs : Set(CSMMODEL::core::OperationInterface);
+	//collect internal
+	connections[CSMMODEL::architecture::InternalConnection]->forEach(hc){
+		hcs += getOperationInterfaces(hc.sourcePlatformService);
+	};
+	//collect hybrid
+	connections[CSMMODEL::architecture::HybridConnection]->forEach(hc){
+		hcs += getOperationInterfaces(hc.sourcePlatformService);
+	};
+	//collect external
+	connections[CSMMODEL::architecture::ExternalConnection]->forEach(hc){
+		hcs += getOperationInterfaces(hc.platformService);
+	};
+	return hcs;
+}
+
+query getApplicationServicesRequiringInterfaces(in platformService : CSMMODEL::architecture::SoftwareServiceContainer, 
+												in interface : CSMMODEL::core::OperationInterface) 
+												: Set(CSMMODEL::architecture::DeployableSoftwareService){
+	
+	var daServices : Set(CSMMODEL::architecture::DeployableSoftwareService);
+	
+	platformService.softwareServices->forEach(daService){
+		if(daService.requiredInterfaces->includes(interface)) then{
+			daServices += daService;
+		}endif;
+	};
+	return daServices;
+}
+
+/*
+query collectRequiringOpInterfaces(in hybridConnections : Set(CSMMODEL::architecture::HybridConnection)) : Set(CSMMODEL::core::OperationInterface){
+	var hcs : Set(CSMMODEL::core::OperationInterface);
+	hybridConnections->forEach(hc){
+		hcs += hc.targetComponent.requiredInterfaces->select(hc.sourceComponent.providedInterface);
+	};
+	return hcs;
+}
+*/

@@ -1,0 +1,257 @@
+library csm2pcmResource;
+
+modeltype CSMMODEL uses csm('http://eu.cloudscaleproject.env/CloudscaleComponentModel/1.0');
+modeltype RESOURCE_TYPE uses pcm::resourcetype('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype RESOURCE uses pcm::resourceenvironment('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype ALLOCATION uses pcm::allocation('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+
+modeltype STOEX uses stoex('http://sdq.ipd.uka.de/StochasticExpressions/1.0');
+
+configuration property CSMID : String;
+
+mapping CSMMODEL::architecture::ComputingInfrastructureService::computingInfrastructureService2resourceContainer(in resourceRepository : ResourceRepository) 
+		: RESOURCE::ResourceContainer{
+	id := CSMID + self.id + '_instance2resourceContainer'; 
+	entityName := 'Instance Resource ' + self.name;
+	activeResourceSpecifications_ResourceContainer := createComputingInfrastructureResourceSpecifications(resourceRepository, self, result);
+}
+
+mapping CSMMODEL::architecture::ExternalPlatformService::externalPlatformService2resourceContainer(in resourceRepository : ResourceRepository) 
+		: RESOURCE::ResourceContainer{
+	id := CSMID + self.id + '_service2resourceContainer';
+	entityName := 'Service Resource ' + self.name;
+	activeResourceSpecifications_ResourceContainer := createExternalPlatformServiceResourceSpecifications(resourceRepository, self, result);
+	
+}
+
+mapping CSMMODEL::architecture::ServiceProxy::serviceProxy2resourceContainer(in resourceRepository : ResourceRepository) 
+		: RESOURCE::ResourceContainer{
+	id := CSMID + self.id + '_serviceProxy2resourceContainer';
+	entityName := 'Service Resource ' + self.name;
+	activeResourceSpecifications_ResourceContainer := createProxyResourceSpecifications(resourceRepository, self, result);
+	
+}
+
+mapping CSMMODEL::architecture::Proxy::connector2resourceContainer(in resourceRepository : ResourceRepository) 
+		: RESOURCE::ResourceContainer{
+	id := CSMID + self.id + '_connector2resourceContainer'; 
+	entityName := 'Client Resource ' + self.name;
+	activeResourceSpecifications_ResourceContainer := createProxyResourceSpecifications(resourceRepository, self, result);
+	
+}
+
+helper createResourceContainerLink(in name : String,
+									in connectionId : String, 
+									in bandwidth : Integer,
+									in latency : Integer,
+									in pcmLinkType : CommunicationLinkResourceType,
+									in resourceRepository : ResourceRepository,
+									in resourceContainers : Set(ResourceContainer)) : LinkingResource{
+	
+	var link : LinkingResource := object LinkingResource{
+	
+		entityName := name;
+		id := CSMID + connectionId + '_createResourceContainerLink';
+		
+		resourceContainers->forEach(rc){
+			connectedResourceContainers_LinkingResource += rc;		
+		};
+		
+		communicationLinkResourceSpecifications_LinkingResource := object CommunicationLinkResourceSpecification{
+	
+				id := CSMID + connectionId + '_createResSpec'; 
+	
+				communicationLinkResourceType_CommunicationLinkResourceSpecification := pcmLinkType;
+				failureProbability := 0.0;
+				
+				latency_CommunicationLinkResourceSpecification := object pcm::core::PCMRandomVariable{
+					specification := latency.toString();
+				};
+				throughput_CommunicationLinkResourceSpecification := object pcm::core::PCMRandomVariable{
+					specification := bandwidth.toString();
+				};
+		};
+	};
+	
+	return link;
+}
+
+////////////////////////// internal helper functions ///////////////////////////////////////////////////////////////////////////////////
+
+helper createComputingInfrastructureResourceSpecifications(in resourceRepository : ResourceRepository, 
+									in ciService : CSMMODEL::architecture::ComputingInfrastructureService, 
+									in container : ResourceContainer) : Sequence(RESOURCE::ProcessingResourceSpecification){
+		
+	var resources : Sequence(ProcessingResourceSpecification);
+	var descriptor : CSMMODEL::definition::ComputingInfrastructureServiceDescriptor;
+	descriptor := ciService.descriptor;
+	
+	//add one CPU
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := descriptor.cpuUnits;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix
+			specification := descriptor.cpu.toString();
+		};
+		id := CSMID + ciService.id + '_createCPU';
+	};
+	
+	//add one HDD
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 1;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix
+			specification := descriptor.storage.toString();
+		};
+		id := CSMID + ciService.id + '_createHDD';
+	};
+	
+	return resources;
+}
+
+helper createExternalPlatformServiceResourceSpecifications(in resourceRepository : ResourceRepository, 
+									in service : CSMMODEL::architecture::ExternalPlatformService, 
+									in container : ResourceContainer) : Sequence(RESOURCE::ProcessingResourceSpecification){
+		
+	//TODO: parse wsdl service specification
+	var resources : Sequence(ProcessingResourceSpecification);
+	var descriptor : CSMMODEL::definition::ExternalPlatformServiceDescriptor;
+	descriptor := service.descriptor;
+	
+	//add one CPU
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 1;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := '100';
+		};
+		id := CSMID + service.id + '_createCPU';
+	};
+	
+	//add one HDD
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 1;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := '100';
+		};
+		id := CSMID + service.id + '_createHDD';
+	};
+	
+	return resources;
+}
+
+helper createProxyResourceSpecifications(in resourceRepository : ResourceRepository, 
+									in connecor : CSMMODEL::architecture::Proxy, 
+									in container : ResourceContainer) : Sequence(RESOURCE::ProcessingResourceSpecification){
+		
+	//TODO: retrieve client hardware specifications
+	var resources : Sequence(ProcessingResourceSpecification);
+	
+	//add one CPU
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 100;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := '100';
+		};
+		
+		id := CSMID + connecor.id + '_createCPU';
+	};
+	
+	//add one HDD
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 100;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := '100';
+		};
+
+		id := CSMID + connecor.id + '_createHDD';
+	};
+	
+	return resources;
+}
+
+query getResourceContainer(in platformService : CSMMODEL::architecture::PlatformService) : ResourceContainer{
+	if(platformService.oclIsKindOf(CSMMODEL::architecture::DeployablePlatformService) 
+	   and platformService.oclAsType(CSMMODEL::architecture::DeployablePlatformService).computingInfrastructureService != null) then{
+		return platformService.oclAsType(CSMMODEL::architecture::DeployablePlatformService).computingInfrastructureService.resolveoneIn(
+															CSMMODEL::architecture::ComputingInfrastructureService::computingInfrastructureService2resourceContainer,
+															ResourceContainer);
+	}endif;
+				
+	if(platformService.oclIsKindOf(CSMMODEL::architecture::ExternalPlatformService)) then{
+		return platformService.oclAsType(CSMMODEL::architecture::ExternalPlatformService).resolveoneIn(
+															CSMMODEL::architecture::ExternalPlatformService::externalPlatformService2resourceContainer,
+															ResourceContainer);
+	}endif;
+	
+	return null;
+}

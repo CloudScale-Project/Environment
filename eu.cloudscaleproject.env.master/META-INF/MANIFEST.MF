@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: eu.cloudscaleproject.env.master
+Bundle-SymbolicName: eu.cloudscaleproject.env.master
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.cloudscaleproject.env.master.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

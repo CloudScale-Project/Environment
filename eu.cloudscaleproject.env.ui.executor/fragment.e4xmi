@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_vsQGYJVWEeKJvIgVVxfoQg">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_zVVs8JVWEeKJvIgVVxfoQg" featurename="toolBarContributions" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="menu:ToolBarContribution" xmi:id="_uOzoAJYGEeKbYNjbsnaPhA" elementId="eu.cloudscaleproject.env.ui.executor.tc" toBeRendered="false" visible="false" parentId="org.eclipse.debug.ui.launchActionSet">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_zYHrMJYGEeKbYNjbsnaPhA" elementId="eu.cloudscaleproject.env.ui.executor.handledtoolitem.run" toBeRendered="false" visible="false" label="Run" iconURI="platform:/plugin/eu.cloudscaleproject.env.ui.executor/icons/alt_window_16.gif" tooltip="Run simulation" enabled="false" command="_QKZXQJVYEeKJvIgVVxfoQg"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O0FroJVYEeKJvIgVVxfoQg" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_QKZXQJVYEeKJvIgVVxfoQg" elementId="eu.cloudscaleproject.env.ui.executor.command.run" commandName="run command"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Z3AmgJVYEeKJvIgVVxfoQg" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_audL4JVYEeKJvIgVVxfoQg" elementId="eu.cloudscaleproject.env.ui.executor.handler.run" contributionURI="bundleclass://eu.cloudscaleproject.env.ui.executor/eu.cloudscaleproject.env.ui.executor.handlers.BasicRunHandler" command="_QKZXQJVYEeKJvIgVVxfoQg"/>
+  </fragments>
+</fragment:ModelFragments>

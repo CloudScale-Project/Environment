@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.cloudscaleproject.env.csm/src" modelPluginID="eu.cloudscaleproject.env.csm"
+    modelName="Csm" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false" providerRootExtendsClass="">
+  <foreignModel>csm.ecore</foreignModel>
+  <genPackages prefix="Csm" basePackage="eu.cloudscaleproject.env" resource="XML"
+      disposableProviderFactory="true" ecorePackage="csm.ecore#/">
+    <genClasses ecoreClass="csm.ecore#//Csm">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//Csm/architecture"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//Csm/definition"/>
+    </genClasses>
+    <nestedGenPackages prefix="Core" basePackage="eu.cloudscaleproject.env.csm" disposableProviderFactory="true"
+        ecorePackage="csm.ecore#//core">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="csm.ecore#//core/TypeEnum">
+        <genEnumLiterals ecoreEnumLiteral="csm.ecore#//core/TypeEnum/INT"/>
+        <genEnumLiterals ecoreEnumLiteral="csm.ecore#//core/TypeEnum/STRING"/>
+        <genEnumLiterals ecoreEnumLiteral="csm.ecore#//core/TypeEnum/BOOL"/>
+        <genEnumLiterals ecoreEnumLiteral="csm.ecore#//core/TypeEnum/DOUBLE"/>
+      </genEnums>
+      <genClasses ecoreClass="csm.ecore#//core/AVEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/AVEntry/key"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/AVEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//core/AEEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/AEEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//core/AEEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//core/Entity">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Entity/id"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Entity/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Entity/description"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//core/Entity/avMap"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//core/Entity/aeMap"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//core/Operation">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Operation/methodName"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Operation/returnValue"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//core/Operation/parameters"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//core/OperationInterface">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//core/OperationInterface/operations"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//core/OperationInterface/providingContainer"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//core/OperationInterface/requiringContainer"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Architecture" basePackage="eu.cloudscaleproject.env.csm"
+        disposableProviderFactory="true" ecorePackage="csm.ecore#//architecture">
+      <genClasses ecoreClass="csm.ecore#//architecture/Architecture">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/Architecture/cloudProviders"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/Architecture/proxies"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/Architecture/externalConnections"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/Architecture/hybridConnections"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/Architecture/unresolvedOperationInterfaces"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/CloudEnvironment">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/internalConnections"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/cloudProviderDescriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/availabilityZoneDescriptor"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/architecture"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/infrastructureLayer"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/platformLayer"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/CloudEnvironment/softwareLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/InfrastructureLayer">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/InfrastructureLayer/services"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/InfrastructureLayer/cloudProvider"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/PlatformLayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/PlatformLayer/services"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/PlatformLayer/cloudEnvironment"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/SoftwareLayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/SoftwareLayer/services"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/SoftwareLayer/cloudProvider"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/Service"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/InfrastructureService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/InfrastructureService/infrastructureLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/PlatformService">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/PlatformService/platformLayer"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/SoftwareService">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/SoftwareService/softwareLayer"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/DeployablePlatformService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/DeployablePlatformService/computingInfrastructureService"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/DeployablePlatformService/descriptor"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/ExternalPlatformService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ExternalPlatformService/descriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/DeployableRuntimeService"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/DeployableSupportService"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/ExternalRuntimeService"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/ExternalSupportService"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/ExternalSoftwareService">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference csm.ecore#//architecture/ExternalSoftwareService/serviceProxy"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/DeployableSoftwareService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/DeployableSoftwareService/runtimePlatformService"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/ComputingInfrastructureService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ComputingInfrastructureService/descriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ComputingInfrastructureService/platformServices"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/SoftwareServiceContainer">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/SoftwareServiceContainer/softwareServices"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/OperationInterfaceContainer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//architecture/OperationInterfaceContainer/providedInterfaces"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/OperationInterfaceContainer/requiredInterfaces"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/Connection"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/InternalConnection">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/InternalConnection/sourcePlatformService"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/InternalConnection/destinationPlatformService"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/HybridConnection">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/HybridConnection/sourcePlatformService"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/HybridConnection/targetPlatformService"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/HybridConnection/descriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/ExternalConnection">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ExternalConnection/proxy"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ExternalConnection/platformService"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//architecture/ExternalConnection/isOutbound"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ExternalConnection/descriptor"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//architecture/Proxy"/>
+      <genClasses ecoreClass="csm.ecore#//architecture/ServiceProxy">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference csm.ecore#//architecture/ServiceProxy/softwareService"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//architecture/UsageProxy"/>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Definition" basePackage="eu.cloudscaleproject.env.csm"
+        disposableProviderFactory="true" ecorePackage="csm.ecore#//definition">
+      <genClasses image="false" ecoreClass="csm.ecore#//definition/Definition"/>
+      <genClasses ecoreClass="csm.ecore#//definition/SystemDefinition">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/SystemDefinition/descriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/CloudDefinition">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/CloudDefinition/descriptor"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/CloudDefinition/infrastructureDescriptors"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/CloudDefinition/platformDescriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/SoftwareDefinition">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/SoftwareDefinition/deployablePlatformServiceDescriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/Descriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/Descriptor/providerID"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/CloudEnvironmentDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/CloudEnvironmentDescriptor/availabilityZones"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/CloudEnvironmentDescriptor/regions"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/RegionDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/AvailabilityZoneDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference csm.ecore#//definition/AvailabilityZoneDescriptor/internalConnectionDescriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/InfrastructureServiceDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/NetworkInfrastructureServiceDescriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/NetworkInfrastructureServiceDescriptor/bandwidth"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/NetworkInfrastructureServiceDescriptor/latency"/>
+      </genClasses>
+      <genClasses ecoreClass="csm.ecore#//definition/ComputingInfrastructureServiceDescriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/ComputingInfrastructureServiceDescriptor/memory"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/ComputingInfrastructureServiceDescriptor/cpu"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/ComputingInfrastructureServiceDescriptor/cpuUnits"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute csm.ecore#//definition/ComputingInfrastructureServiceDescriptor/storage"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="csm.ecore#//definition/DeployablePlatformServiceDescriptor"/>
+      <genClasses image="false" ecoreClass="csm.ecore#//definition/ExternalPlatformServiceDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/DeployableRuntimeServiceDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/ExternalRuntimeServiceDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/DeployableSupportServiceDescriptor"/>
+      <genClasses ecoreClass="csm.ecore#//definition/ExternalSupportServiceDescriptor"/>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Analyser and Static Spotter</title>
+</head>
+
+<body>
+<h1>Analyser and Static Spotter</h1>
+
+<b>Process type:</b> tool-driven <br>
+<b>Roles:</b> System Architect <br>
+<b>Input:</b> Requirements Specification, ScaleDL Usage Evolution instance <br>
+<b>Output:</b> Analyser and Static Spotter Output <br>
+<b>Description:</b> Analyser and Static Spotter process analyses a modelled system (ScaleDL Usage Evo-
+lution instance) to check whether it meets the scalability requirements of the requirement spec-
+ification. The Analyser is a tool that can automatically execute these checks and Static Spotter
+can detect scalability issues on model level. <br>
+To do so, outputs of this process are scalability predictions for the modelled system. Based on
+this first output, Analyser can further output whether a requirement is met or not, respectively.
+In case it is not met, additional analyses can automatically be executed by Static Spotter to
+detect the causes for that (e.g., Static Spotter identifies a guilty component).
+Example: The architect who modeled the TPC-W system via a ScaleDL Usage Evolution instance
+executes the Analyser on this instance. The elasticity requirement specified in the requirement
+specification is checked (the system should be capable of responding in less than 3 seconds
+for user arrival rates between 1 and 60 users per hour). The Analyser then predicts whether
+the requirement is met or not. <br>
+<b>Status:</b> Analyser is currently in a conceptual phase. It will be based on Palladio and SimuLizar. The
+first prototype allowing to analyse a simple example will be available at M12. Static Spotter is
+also currently in a conceptual phase.
+
+</body>
+</html>

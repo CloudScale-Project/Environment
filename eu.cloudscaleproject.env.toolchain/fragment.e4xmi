@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_P3854G-cEeK1goHNX4VHjw" featurename="handlers" parentElementId="org.eclipse.e4.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_Z1uxoG-cEeK1goHNX4VHjw" elementId="eu.cloudscaleproject.env.toolchain.handler.analysetest" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.AnalyseTestHandler" command="_jmSFsG-cEeK1goHNX4VHjw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fYl9QG-cEeK1goHNX4VHjw" featurename="commands" parentElementId="org.eclipse.e4.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_jmSFsG-cEeK1goHNX4VHjw" elementId="eu.cloudscaleproject.env.toolchain.handler.analysetest" commandName="Analyser Test"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_dEhzcG-dEeK1goHNX4VHjw" featurename="children" parentElementId="eu.cloudscale.environment.menu.file">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_4vKHcG-dEeK1goHNX4VHjw" elementId="eu.cloudscale.environment.manu.analyse" label="Analyser Test" command="_jmSFsG-cEeK1goHNX4VHjw"/>
+  </fragments>
+</fragment:ModelFragments>

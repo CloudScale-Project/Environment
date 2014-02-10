@@ -1,0 +1,718 @@
+import csm2pcmUtil;
+import csm2pcmResource;
+
+modeltype CSMMODEL uses csm('http://eu.cloudscaleproject.env/CloudscaleComponentModel/1.0');
+
+modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype SYSTEM uses pcm::system('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype COMPOSITION uses pcm::core::composition('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype RESOURCE_TYPE uses pcm::resourcetype('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype DATA_TYPE uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype RESOURCE uses pcm::resourceenvironment('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype ALLOCATION uses pcm::allocation('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype USAGE uses pcm::usagemodel('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+
+
+transformation csm2pcm(in csmInstance : CSMMODEL,
+					   in pcmResourceTypeInstance : RESOURCE_TYPE,
+					   in pcmDataTypeInstance : DATA_TYPE,
+					   
+					   inout pcmResourceInstance : RESOURCE,
+					   inout pcmRepoInstance : REPOSITORY,
+					   inout pcmSystemInstance : SYSTEM,
+					   inout pcmAllocationInstance : ALLOCATION,
+					   inout pcmUsageInstance : USAGE);
+					  
+configuration property CSMID : String;
+
+configuration property PCM_SYSTEM_KEY : String;
+configuration property PCM_INTERFACE_KEY : String;
+configuration property PCM_OPERATION_KEY : String;
+
+property resourceRepository : ResourceRepository = pcmResourceTypeInstance.rootObjects()![ResourceRepository];
+property dataTypeRepository : Set(DataType) = pcmDataTypeInstance.rootObjects()![Repository].dataTypes__Repository;
+	
+intermediate property pcm::repository::RequiredRole::type_requiredRole : String;
+intermediate property pcm::repository::ProvidedRole::type_providedRole : String;
+
+intermediate property pcm::repository::Repository::referencedInterfaces : Set(REPOSITORY::OperationInterface);
+
+intermediate property pcm::core::composition::ProvidedDelegationConnector::parentObject_providedDelegationConnector : pcm::core::entity::Entity;
+intermediate property pcm::core::composition::RequiredDelegationConnector::parentObject_requiredDelegationConnector : pcm::core::entity::Entity;
+
+intermediate property pcm::repository::Repository::interfaces : Sequence(pcm::repository::OperationInterface);
+
+
+main() {
+	log("Transformation CSM2PCM started!");
+	
+	var csmRoot : Csm := csmInstance.rootObjects()![Csm];
+	
+	csmRoot.map csm2resource();
+	csmRoot.map csm2repository();
+	csmRoot.map csm2system();
+	csmRoot.map csm2allocation();
+	csmRoot.map csm2usage();
+		
+	log("Transformation CSM2PCM done");
+}
+
+/////////////// Resource mapping   ///////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping CSMMODEL::Csm::csm2resource() : RESOURCE::ResourceEnvironment @ pcmResourceInstance {
+	
+	resourceContainer_ResourceEnvironment = Sequence{};
+	
+	self.architecture.cloudProviders->forEach(cp){
+	
+		var resourceContainers : Set(ResourceContainer);
+	
+		//map computing infrastructure services
+		resourceContainers += cp.infrastructureLayer
+								.services[CSMMODEL::architecture::ComputingInfrastructureService]
+								->map computingInfrastructureService2resourceContainer(resourceRepository);
+		//map services
+		resourceContainers += cp.platformLayer
+								.services[CSMMODEL::architecture::ExternalPlatformService]
+								->map externalPlatformService2resourceContainer(resourceRepository);
+								
+		//map service proxy
+		resourceContainers += cp.architecture.proxies[csm::architecture::ServiceProxy]
+								->map serviceProxy2resourceContainer(resourceRepository);
+
+		resourceContainer_ResourceEnvironment += resourceContainers;
+
+		//link internal resources	
+		if(not cp.internalConnections->isEmpty()) then{
+			
+			var bandwidth : Integer := cp.availabilityZoneDescriptor.internalConnectionDescriptor.bandwidth;
+			var latency : Integer := cp.availabilityZoneDescriptor.internalConnectionDescriptor.latency;
+			
+			if(not cp.availabilityZoneDescriptor.oclIsUndefined()) then{
+				bandwidth := cp.availabilityZoneDescriptor.internalConnectionDescriptor.bandwidth;
+				latency := cp.availabilityZoneDescriptor.internalConnectionDescriptor.latency;
+			}endif;
+			
+			var type : CommunicationLinkResourceType 
+				:= resourceRepository.availableResourceTypes_ResourceRepository[CommunicationLinkResourceType]
+					->selectOne(entityName = 'LAN');
+			
+			linkingResources__ResourceEnvironment 
+				+= createResourceContainerLink(cp.name+" connection", cp.id, 
+												bandwidth, latency, type,
+												resourceRepository, resourceContainers);
+		}endif;
+	};
+	
+	//link hybrid connections
+	if(not self.architecture.hybridConnections->isEmpty()) then{
+			self.architecture.hybridConnections->forEach(hc){
+				
+				var currentResourceContainers : Set(ResourceContainer);
+			
+				// find mapped resource containers		
+				currentResourceContainers += getResourceContainer(hc.sourcePlatformService);
+				currentResourceContainers += getResourceContainer(hc.targetPlatformService);
+				
+				var type : CommunicationLinkResourceType 
+					:= resourceRepository.availableResourceTypes_ResourceRepository[CommunicationLinkResourceType]
+						->selectOne(entityName = 'LAN');
+				
+				//create link
+				linkingResources__ResourceEnvironment
+					+= createResourceContainerLink(hc.name, hc.id,
+													hc.descriptor.bandwidth,
+													hc.descriptor.latency, type,
+												   	resourceRepository, 
+												   	currentResourceContainers);
+			};
+	}endif;
+}
+
+/////////////// Repository mapping ///////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping CSMMODEL::Csm::csm2repository() : REPOSITORY::Repository @ pcmRepoInstance {
+	
+	interfaces__Repository := self.architecture.cloudProviders.platformLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer].providedInterfaces
+								->map OpInterface2OpInterface();
+	interfaces__Repository += self.architecture.cloudProviders.softwareLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer].providedInterfaces
+								->map OpInterface2OpInterface();
+	interfaces__Repository += self.architecture.proxies[CSMMODEL::architecture::ServiceProxy]
+								.softwareService.providedInterfaces->map OpInterface2OpInterface();
+
+	interfaces__Repository += self.architecture.unresolvedOperationInterfaces->map OpInterface2OpInterface();
+	
+	//external mapping
+	referencedInterfaces := self.architecture.cloudProviders.platformLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer].providedInterfaces
+								->map OpInterface2OpInterfaceExternal();
+	referencedInterfaces += self.architecture.cloudProviders.softwareLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer].providedInterfaces
+								->map OpInterface2OpInterfaceExternal();
+	referencedInterfaces += self.architecture.proxies[CSMMODEL::architecture::ServiceProxy]
+								.softwareService.providedInterfaces->map OpInterface2OpInterfaceExternal();
+	referencedInterfaces += self.architecture.unresolvedOperationInterfaces->map OpInterface2OpInterfaceExternal();
+	
+
+	interfaces__Repository += self.architecture.unresolvedOperationInterfaces->map OpInterface2OpInterface();
+	
+	
+	components__Repository := Sequence{};
+	components__Repository += self.architecture.cloudProviders.platformLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer]->map opInterfaceContainer2repositoryComponent();
+	components__Repository += self.architecture.cloudProviders.softwareLayer
+								.services[CSMMODEL::architecture::OperationInterfaceContainer]->map opInterfaceContainer2repositoryComponent();
+								
+	//proxy components
+	components__Repository += self.architecture.proxies[CSMMODEL::architecture::ServiceProxy]
+								.softwareService->map opInterfaceContainer2repositoryComponent();
+	
+	id := CSMID;
+}
+
+mapping CSMMODEL::core::OperationInterface::OpInterface2OpInterface() : REPOSITORY::OperationInterface
+	when{not self.aeMap.key->includes(PCM_INTERFACE_KEY) } {
+	
+	entityName := 'Interface_' + self.name;
+	signatures__OperationInterface := self.operations->map operation2operationSignature();
+	id := CSMID + self.id + '_OpInterface2OpInterface';
+}
+
+mapping CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal() : REPOSITORY::OperationInterface
+	when{ self.aeMap.key->includes(PCM_INTERFACE_KEY) } {
+	
+	init{
+		result := self.aeMap->any(key = PCM_INTERFACE_KEY).value.oclAsType(REPOSITORY::OperationInterface);
+	}
+}
+
+mapping CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2repositoryComponent() : RepositoryComponent{
+	init{
+		var hasSys : Boolean := self.aeMap.key->includes(PCM_SYSTEM_KEY);
+	
+		if((not hasSys)) then{
+			result := self.map opInterfaceContainer2basicComponent();
+		}
+		else{
+			result := self.map opInterfaceContainer2CompositeComponent();
+		}endif;
+	}
+}
+
+/*
+//BUG IN DISJUNCT METHOD??? RESOLVE OPERATION RETURNS NULL!
+mapping CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2repositoryComponent() : RepositoryComponent
+	disjuncts CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2basicComponent,
+			  CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2CompositeComponent
+{}
+*/
+
+mapping CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2basicComponent() : REPOSITORY::BasicComponent 
+	when{not self.aeMap.key->includes(PCM_SYSTEM_KEY)} {
+	
+	entityName := self.name;
+	
+	providedRoles_InterfaceProvidingEntity := Sequence{};
+	requiredRoles_InterfaceRequiringEntity := Sequence{};
+	serviceEffectSpecifications__BasicComponent := Sequence{};
+	
+	providedRoles_InterfaceProvidingEntity := self.providedInterfaces->map OpInterface2ProvidedRole('SystemInner');
+	requiredRoles_InterfaceRequiringEntity := self.requiredInterfaces->map OpInterface2RequiredRole('SystemInner');
+		
+	id := CSMID + self.id + '_opInterfaceContainer2basicComponent';
+	
+	//generate SEFFs
+	serviceEffectSpecifications__BasicComponent += self.providedInterfaces.operations->map operation2seff(result);
+}
+
+mapping CSMMODEL::architecture::OperationInterfaceContainer::
+		opInterfaceContainer2CompositeComponent() : CompositeComponent
+		when{self.aeMap.key->includes(PCM_SYSTEM_KEY)} {
+
+	var system : System := self.aeMap->any(key =PCM_SYSTEM_KEY).value.oclAsType(System);
+
+	entityName := self.name;
+
+	log('Importing pcm system: ', system.toString());
+	
+	//copy assembly context
+	assemblyContexts__ComposedStructure := system.assemblyContexts__ComposedStructure->map assemblyContext2assemblyContext();
+	
+	//copy connectors
+	connectors__ComposedStructure := system.connectors__ComposedStructure[COMPOSITION::AssemblyConnector]->map assemblyConnector2assemblyConnector();
+	
+	//copy provided roles
+	providedRoles_InterfaceProvidingEntity := system.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]
+													.providedInterface__OperationProvidedRole->invresolveIn(
+																CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+																CSMMODEL::core::OperationInterface)->map OpInterface2ProvidedRole('SystemInner');
+	//copy required roles
+	requiredRoles_InterfaceRequiringEntity := system.requiredRoles_InterfaceRequiringEntity[OperationRequiredRole]
+													.requiredInterface__OperationRequiredRole->invresolveIn(
+																CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+																CSMMODEL::core::OperationInterface)->map OpInterface2RequiredRole('SystemInner');
+	//copy delegation connectors
+	system.connectors__ComposedStructure[COMPOSITION::ProvidedDelegationConnector]->forEach(pdc){
+		var pdcCopy : COMPOSITION::ProvidedDelegationConnector := pdc.deepclone().oclAsType(COMPOSITION::ProvidedDelegationConnector);
+		
+		pdcCopy.assemblyContext_ProvidedDelegationConnector := pdc.assemblyContext_ProvidedDelegationConnector.resolveoneIn(
+																COMPOSITION::AssemblyContext::assemblyContext2assemblyContext,
+																COMPOSITION::AssemblyContext);
+																
+		pdcCopy.outerProvidedRole_ProvidedDelegationConnector := pdc.outerProvidedRole_ProvidedDelegationConnector
+																.providedInterface__OperationProvidedRole.invresolveoneIn(
+																CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+																CSMMODEL::core::OperationInterface).resolveoneIn(
+																	CSMMODEL::core::OperationInterface::OpInterface2ProvidedRole,
+																	REPOSITORY::OperationProvidedRole)->selectOne(type_providedRole = 'SystemInner');
+		connectors__ComposedStructure += pdcCopy;
+	};
+	system.connectors__ComposedStructure[COMPOSITION::RequiredDelegationConnector]->forEach(rdc){
+		var rdcCopy : COMPOSITION::RequiredDelegationConnector := rdc.deepclone().oclAsType(COMPOSITION::RequiredDelegationConnector);
+		
+		rdcCopy.assemblyContext_RequiredDelegationConnector := rdc.assemblyContext_RequiredDelegationConnector.resolveoneIn(
+																COMPOSITION::AssemblyContext::assemblyContext2assemblyContext,
+																COMPOSITION::AssemblyContext);
+																
+		rdcCopy.outerRequiredRole_RequiredDelegationConnector := rdc.outerRequiredRole_RequiredDelegationConnector
+																.requiredInterface__OperationRequiredRole.invresolveoneIn(
+																CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+																CSMMODEL::core::OperationInterface).resolveoneIn(
+																	CSMMODEL::core::OperationInterface::OpInterface2RequiredRole,
+																	REPOSITORY::OperationRequiredRole)->selectOne(type_requiredRole = 'SystemInner');
+		connectors__ComposedStructure += rdcCopy;	
+	};
+
+	id := CSMID + self.id + '_opInterfaceContainer2CompositeComponent';
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//imported models copy operations
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping COMPOSITION::AssemblyContext::assemblyContext2assemblyContext() : COMPOSITION::AssemblyContext{
+	entityName := self.entityName;
+	//parentStructure__AssemblyContext := result;
+	encapsulatedComponent__AssemblyContext := self.encapsulatedComponent__AssemblyContext;
+	id := CSMID + self.id + '_opInterfaceContainer2CompositeComponent';
+}
+
+mapping COMPOSITION::AssemblyConnector::assemblyConnector2assemblyConnector() : COMPOSITION::AssemblyConnector{
+	entityName := self.entityName;
+	
+	providingAssemblyContext_AssemblyConnector := self.providingAssemblyContext_AssemblyConnector.resolveoneIn(
+										COMPOSITION::AssemblyContext::assemblyContext2assemblyContext,
+										COMPOSITION::AssemblyContext
+										);
+										
+	requiringAssemblyContext_AssemblyConnector := self.requiringAssemblyContext_AssemblyConnector.resolveoneIn(
+										COMPOSITION::AssemblyContext::assemblyContext2assemblyContext,
+										COMPOSITION::AssemblyContext
+										);
+	
+	providedRole_AssemblyConnector := self.providedRole_AssemblyConnector;
+	requiredRole_AssemblyConnector := self.requiredRole_AssemblyConnector;
+	
+	id := CSMID + self.id + '_assemblyConnector2assemblyConnector';
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping CSMMODEL::core::Operation::operation2seff(in component : BasicComponent) : pcm::seff::ResourceDemandingSEFF{
+	describedService__SEFF := self.resolveoneIn(
+										CSMMODEL::core::Operation::operation2operationSignature,
+										OperationSignature
+									);				
+									
+	basicComponent_ServiceEffectSpecification := component;
+	seffTypeID := '1';
+	
+	//add default start/stop actions
+	var startAction : pcm::seff::StartAction;
+	var stopAction : pcm::seff::StopAction;
+	
+	startAction := object pcm::seff::StartAction{
+		id := CSMID + self.id +'StartAction' + '_operation2seff';
+		entityName := 'Start action';
+		successor_AbstractAction
+	};
+	
+	stopAction := object pcm::seff::StopAction{
+		id := CSMID + self.id +'StopAction' + '_operation2seff';
+		entityName := 'Stop action';
+		predecessor_AbstractAction
+	};
+	
+	startAction.successor_AbstractAction := stopAction;
+	stopAction.predecessor_AbstractAction := startAction;
+	
+	steps_Behaviour := Sequence{};
+	
+	steps_Behaviour += startAction;
+	steps_Behaviour += stopAction;
+	
+	id := CSMID + self.id + '_operation2seff';
+}
+
+mapping CSMMODEL::core::Operation::operation2operationSignature() : OperationSignature {
+	entityName := self.methodName;
+	
+	parameters__OperationSignature := Sequence{};
+	parameters__OperationSignature := Sequence{};
+	
+	self.parameters->forEach(param){
+		parameters__OperationSignature += object Parameter{
+			parameterName := 'parameter';
+			dataType__Parameter := dataTypeRepository->selectByKind(PrimitiveDataType)![type.toString() = param.toString()];
+		};
+	};
+	
+	var defReturn := dataTypeRepository->selectByKind(PrimitiveDataType)![type = PrimitiveTypeEnum::STRING];
+	returnType__OperationSignature := defReturn;
+	
+	id := CSMID + self.id + '_operation2operationSignature';
+}
+
+mapping CSMMODEL::core::OperationInterface::
+		OpInterface2ProvidedRole(in type : String) 
+		: REPOSITORY::OperationProvidedRole {
+		
+	entityName := 'I_' + self.providingContainer.name;
+	providedInterface__OperationProvidedRole := self.resolveoneIn(
+													CSMMODEL::core::OperationInterface::OpInterface2OpInterface,
+													REPOSITORY::OperationInterface
+												);
+	
+	if(providedInterface__OperationProvidedRole = null) then{
+		providedInterface__OperationProvidedRole := self.resolveoneIn(
+													CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+													REPOSITORY::OperationInterface
+												);
+	}endif;
+	
+	type_providedRole := type;
+	id := CSMID + type + self.id + '_OpIntrface2ProvidedRole';
+}
+
+mapping CSMMODEL::core::OperationInterface::
+		OpInterface2RequiredRole(in type : String) 
+		: REPOSITORY::OperationRequiredRole {
+		
+	entityName := 'I_' + self.providingContainer.name;
+	requiredInterface__OperationRequiredRole := self.resolveoneIn(
+													CSMMODEL::core::OperationInterface::OpInterface2OpInterface,
+													REPOSITORY::OperationInterface
+												);
+	
+	if(requiredInterface__OperationRequiredRole = null) then{
+		requiredInterface__OperationRequiredRole := self.resolveoneIn(
+													CSMMODEL::core::OperationInterface::OpInterface2OpInterfaceExternal,
+													REPOSITORY::OperationInterface
+												);
+	}endif;											
+											
+	type_requiredRole := type;
+	id := CSMID + type + self.id + '_OpInterface2RequiredRole';
+}
+
+/////////////// Composite mapping ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+//Operation interface transform to system provided delegation connectors
+mapping CSMMODEL::core::OperationInterface::
+		OpInterface2compositeProvidedDelegationConnector(in compositeComponent : REPOSITORY::CompositeComponent) 
+		: COMPOSITION::ProvidedDelegationConnector {
+		
+	assemblyContext_ProvidedDelegationConnector := self.providingContainer.resolveoneIn(
+														CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2assemblyContext, 
+														COMPOSITION::AssemblyContext
+													);
+	
+	var repComponent : RepositoryComponent;
+	repComponent := self.providingContainer.resolveoneIn(CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2repositoryComponent, 
+												  		REPOSITORY::RepositoryComponent
+												 	);
+												 
+	innerProvidedRole_ProvidedDelegationConnector := repComponent.providedRoles_InterfaceProvidingEntity![OperationProvidedRole];
+	outerProvidedRole_ProvidedDelegationConnector := self.resolveIn(
+															CSMMODEL::core::OperationInterface::OpInterface2ProvidedRole,
+															REPOSITORY::OperationProvidedRole
+														)->selectOne(type_providedRole = 'CompositeOuter');
+
+	parentStructure__Connector := compositeComponent;
+	
+	if(compositeComponent != null) then{
+		id := CSMID + compositeComponent.id + self.id + '_OpInterface2compositeProvidedDelegationConnector';
+	}
+	else{
+		id := CSMID + self.id + '_OpInterface2compositeProvidedDelegationConnector';
+	}endif;		
+}
+
+//Operation interface transform to system required delegation connectors
+mapping CSMMODEL::core::OperationInterface::
+		OpInterface2compositeRequiredDelegationConnector(in compositeComponent : REPOSITORY::CompositeComponent, in assemblyContexts : Set(AssemblyContext)) 
+		: Set(COMPOSITION::RequiredDelegationConnector){
+		
+	var outerRequiredRole : OperationRequiredRole;
+	//TODO: bug!! resolve can return multiple OperationRequiredRoles. Find right one...
+	outerRequiredRole := self.resolveIn(
+								CSMMODEL::core::OperationInterface::OpInterface2RequiredRole,
+								REPOSITORY::OperationRequiredRole
+								)->selectOne(type_requiredRole = 'ComponentCompositeComponent');
+			
+	var assemblyContextsRequiringConnector : List(AssemblyContext);
+	assemblyContextsRequiringConnector := getRelatedAssemblyContextFromRequiredRole(
+												assemblyContexts, outerRequiredRole
+												);
+	assemblyContextsRequiringConnector->forEach(ac) {
+		result += object RequiredDelegationConnector {
+			assemblyContext_RequiredDelegationConnector := ac;
+			innerRequiredRole_RequiredDelegationConnector := ac.getRequiredRole(
+					outerRequiredRole.oclAsType(OperationRequiredRole).requiredInterface__OperationRequiredRole
+					);
+			outerRequiredRole_RequiredDelegationConnector := outerRequiredRole;
+			parentStructure__Connector := compositeComponent;								
+			id := CSMID + innerRequiredRole_RequiredDelegationConnector.id + outerRequiredRole_RequiredDelegationConnector.id;	
+		}
+	};
+}
+*/
+
+/////////////// System mapping ///////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+mapping CSMMODEL::Csm::csm2system() : SYSTEM::System @ pcmSystemInstance {
+	
+	assemblyContexts__ComposedStructure := Sequence{};
+	
+	self.architecture.cloudProviders->forEach(cp){
+		assemblyContexts__ComposedStructure += cp.platformLayer
+													.services[CSMMODEL::architecture::OperationInterfaceContainer]
+													->map opInterfaceContainer2assemblyContext();
+		assemblyContexts__ComposedStructure += cp.softwareLayer
+													.services[CSMMODEL::architecture::OperationInterfaceContainer]
+													->map opInterfaceContainer2assemblyContext();
+	};
+	
+	//proxy
+	assemblyContexts__ComposedStructure += self.architecture.proxies[CSMMODEL::architecture::ServiceProxy].softwareService->map opInterfaceContainer2assemblyContext();
+	
+	connectors__ComposedStructure := Sequence{}; 
+	providedRoles_InterfaceProvidingEntity := Sequence{}; 
+	
+	//link all assembly contexts with connectors
+	assemblyContexts__ComposedStructure->forEach(assemblyContextProvide){
+		assemblyContextProvide.encapsulatedComponent__AssemblyContext.providedRoles_InterfaceProvidingEntity[OperationProvidedRole]->forEach(pRole){		
+			var assemblyContextRequireList := getOpositeAssemblyContextFromProvidedRole(assemblyContexts__ComposedStructure, pRole);
+			assemblyContextRequireList->forEach(assemblyContextRequire){
+				connectors__ComposedStructure += object COMPOSITION::AssemblyConnector{
+					entityName := "AssemblyConnector-"+assemblyContextProvide.entityName+"->"+assemblyContextRequire.entityName;
+					requiringAssemblyContext_AssemblyConnector := assemblyContextRequire;
+					providingAssemblyContext_AssemblyConnector := assemblyContextProvide;
+					providedRole_AssemblyConnector := assemblyContextProvide.getProvidedRole(pRole.providedInterface__OperationProvidedRole);
+					requiredRole_AssemblyConnector := assemblyContextRequire.getRequiredRole(pRole.providedInterface__OperationProvidedRole);
+					
+					id := CSMID + providedRole_AssemblyConnector.id + requiredRole_AssemblyConnector.id;
+				}
+			}
+		};
+	};
+	
+	//create usage external provided roles and delegation connectors
+	self.architecture.cloudProviders->forEach(cp){
+		var externalInterfaces = collectProvidedOpInterfaces(getExternalConnections(cp));
+		//create provided roles
+		providedRoles_InterfaceProvidingEntity += externalInterfaces->map OpInterface2ProvidedRole('System');
+		//create provided delegation connectors
+		connectors__ComposedStructure += externalInterfaces->map OpInterface2systemProvidedDelegationConnector(assemblyContexts__ComposedStructure);
+	};
+	
+	id := CSMID;
+}
+
+mapping CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2assemblyContext() : COMPOSITION::AssemblyContext {
+	entityName := "Ass-" + self.name;
+	encapsulatedComponent__AssemblyContext := self.resolveoneIn(
+												CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2repositoryComponent, 
+												REPOSITORY::RepositoryComponent );
+	id := CSMID + self.id + '_opInterfaceContainer2assemblyContext';
+}
+
+mapping CSMMODEL::core::OperationInterface::
+		OpInterface2systemProvidedDelegationConnector(in assemblyContexts : Set(AssemblyContext)) 
+		: COMPOSITION::ProvidedDelegationConnector {
+	
+	outerProvidedRole_ProvidedDelegationConnector := self.resolveIn(
+															CSMMODEL::core::OperationInterface::OpInterface2ProvidedRole,
+															REPOSITORY::OperationProvidedRole
+														)->selectOne(type_providedRole = 'System');
+													
+	innerProvidedRole_ProvidedDelegationConnector := self.resolveIn(
+														CSMMODEL::core::OperationInterface::OpInterface2ProvidedRole,
+														REPOSITORY::OperationProvidedRole
+														)->selectOne(type_providedRole = 'SystemInner');
+														
+	assemblyContext_ProvidedDelegationConnector := getAssemblyContextFromProvidedRole(assemblyContexts, innerProvidedRole_ProvidedDelegationConnector);
+
+	id := CSMID + self.id + '_OpInterface2systemProvidedDelegationConnector'; 
+}
+
+
+/////////////// Allocation mapping ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping CSMMODEL::Csm::csm2allocation() : Allocation @pcmAllocationInstance{
+	entityName := "Default";
+	
+	targetResourceEnvironment_Allocation := pcmResourceInstance.rootObjects()![ResourceEnvironment];
+	system_Allocation := pcmSystemInstance.rootObjects()![System];
+	
+	self.architecture.cloudProviders->forEach(cp){
+		
+		cp.platformLayer.services[CSMMODEL::architecture::OperationInterfaceContainer]->map opInterfaceContainer2allocationContext(result);
+		cp.softwareLayer.services[CSMMODEL::architecture::OperationInterfaceContainer]->map opInterfaceContainer2allocationContext(result);
+	};
+	id := CSMID;
+}
+
+mapping CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2allocationContext(in allocation : Allocation) : AllocationContext{
+	entityName := 'Allocation ' + self.name;
+
+	if(self.oclIsKindOf(CSMMODEL::architecture::DeployableSoftwareService)) then{
+		var daService = self.oclAsType(CSMMODEL::architecture::DeployableSoftwareService);
+		var platformService := daService.runtimePlatformService;
+		
+		if(platformService.oclIsKindOf(CSMMODEL::architecture::DeployablePlatformService)) then{
+			var dpService = platformService.oclAsType(CSMMODEL::architecture::DeployablePlatformService);
+			resourceContainer_AllocationContext := dpService.computingInfrastructureService.resolveoneIn(
+												CSMMODEL::architecture::ComputingInfrastructureService::computingInfrastructureService2resourceContainer,
+												ResourceContainer);
+		}endif;
+	
+		if(platformService.oclIsKindOf(CSMMODEL::architecture::ExternalPlatformService)) then{
+			resourceContainer_AllocationContext := self.resolveoneIn(
+												CSMMODEL::architecture::ExternalPlatformService::externalPlatformService2resourceContainer,
+												ResourceContainer);
+		}endif;
+	}endif;
+	
+	if(self.oclIsKindOf(CSMMODEL::architecture::DeployablePlatformService)) then{
+		var dpService = self.oclAsType(CSMMODEL::architecture::DeployablePlatformService);
+		resourceContainer_AllocationContext := dpService.computingInfrastructureService.resolveoneIn(
+												CSMMODEL::architecture::ComputingInfrastructureService::computingInfrastructureService2resourceContainer,
+												ResourceContainer);
+	}endif;
+	
+	if(self.oclIsKindOf(CSMMODEL::architecture::ExternalPlatformService)) then{
+		resourceContainer_AllocationContext := self.resolveoneIn(
+												CSMMODEL::architecture::ExternalPlatformService::externalPlatformService2resourceContainer,
+												ResourceContainer);
+	}endif;
+	
+	assemblyContext_AllocationContext := self.resolveoneIn(
+												CSMMODEL::architecture::OperationInterfaceContainer::opInterfaceContainer2assemblyContext,
+												AssemblyContext);
+	allocation_AllocationContext := allocation;
+	
+	id := CSMID + self.id + '_opInterfaceContainer2allocationContext';
+}
+
+/////////////// Usage diagram ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+mapping CSMMODEL::Csm::csm2usage() : USAGE::UsageModel @ pcmUsageInstance{
+
+	usageScenario_UsageModel := object UsageScenario{
+		
+		id := CSMID + self.architecture.id + 'usageModel' + '_csm2usage';
+		entityName := 'DefaultUsageScenario';
+		
+		workload_UsageScenario := object ClosedWorkload{
+			_population = 100;
+			id := CSMID + self.architecture.id + 'closedWorkload' +'_csm2usage';
+		};
+		
+		scenarioBehaviour_UsageScenario := object ScenarioBehaviour{
+			id := CSMID + self.architecture.id + 'usageScenario' +'_csm2usage';
+			entityName := 'DefaultUsageBehaviour';
+			
+			var start := object pcm::usagemodel::Start{
+				id := CSMID + self.architecture.id + 'start' +'_csm2usage';
+				entityName := 'Start usage action';
+			};
+
+			var stop := object pcm::usagemodel::Stop{
+				id := CSMID + self.architecture.id + 'stop' +'_csm2usage';
+				entityName := 'Stop usage action';
+			};
+			
+			var branch := object Branch{
+				id := CSMID + self.architecture.id + 'systemCall' +'_csm2usage';
+				entityName := 'Default entry level system call';
+			};
+			
+			var opInterface : Set(CSMMODEL::core::OperationInterface) := collectProvidedOpInterfaces(self.architecture.externalConnections);
+			
+			branch.branchTransitions_Branch := Sequence{};
+			opInterface->forEach(interface){
+				interface.operations->forEach(operation){
+					branch.branchTransitions_Branch += operation.map operation2branchTransition(interface, branch);
+				};
+			};
+			
+			start.successor := branch;
+			branch.predecessor := start;
+			branch.successor := stop;
+			stop.predecessor := branch;
+			
+			actions_ScenarioBehaviour += start;
+			actions_ScenarioBehaviour += branch;
+			actions_ScenarioBehaviour += stop;
+		};
+	};
+}
+
+mapping CSMMODEL::core::Operation::operation2branchTransition(in interface : CSMMODEL::core::OperationInterface, in branch : USAGE::Branch) : USAGE::BranchTransition{
+	branchProbability := 50;
+	branch_BranchTransition := branch;
+	
+	branchedBehaviour_BranchTransition := object ScenarioBehaviour{
+		var start := object pcm::usagemodel::Start{
+			id := CSMID + self.id + 'start' +'_opInterface2branchTransition';
+			entityName := 'Start usage action';
+		};
+
+		var stop := object pcm::usagemodel::Stop{
+			id := CSMID + self.id + 'stop' +'_opInterface2branchTransition';
+			entityName := 'Stop usage action';
+		};
+		
+		var entryCall := self.map operation2entryLevelSystemCall(interface);
+		
+		start.successor := entryCall;
+		entryCall.predecessor := start;
+		entryCall.successor := stop;
+		stop.predecessor := entryCall;
+		
+		actions_ScenarioBehaviour += start;
+		actions_ScenarioBehaviour += entryCall;
+		actions_ScenarioBehaviour += stop;
+		
+		id := CSMID + self.id +'_operation2branchTransition';
+	}
+}
+
+mapping CSMMODEL::core::Operation::operation2entryLevelSystemCall(in opInterface : CSMMODEL::core::OperationInterface) : USAGE::EntryLevelSystemCall{
+	entityName := 'Default entry level system call';
+				
+				 
+	providedRole_EntryLevelSystemCall := opInterface.resolveIn(
+													CSMMODEL::core::OperationInterface::OpInterface2ProvidedRole,
+													OperationProvidedRole)->selectOne(type_providedRole = 'System');
+				
+	operationSignature__EntryLevelSystemCall := self.resolveoneIn(
+													CSMMODEL::core::Operation::operation2operationSignature,
+													OperationSignature);
+	priority = 0;
+	
+	id := CSMID + self.id +'_operation2entryLevelSystemCall';
+}

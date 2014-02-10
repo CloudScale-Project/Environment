@@ -1,0 +1,99 @@
+
+html {
+	background-color: #eaeceb;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #333333;
+    background-color: #ffffff;
+    
+    margin-right:50px;
+	margin-left:50px;
+    }
+  
+  h1{
+  	font-weight:normal;
+  	font-size:23px;
+  }
+  
+  h2{
+  	font-weight:normal;
+  	font-size:21px;
+  }
+  
+  h3{font-size:20px}
+  h4{font-size:18px}
+  
+  a:link {
+    color: #b2b2b2 }
+  a:visited {
+    color: black }
+  address {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: thin dotted }
+  
+div.Split {
+	background-color: #e0e1e3;
+	background-image:url('tools-gradient.png');
+	background-repeat:repeat-x;
+	
+	height: 43px;
+	border-top: solid;
+	border-bottom: solid;
+	border-width: 1px;
+	border-color: #d8d8d8;
+	font-weight:normal;
+  	font-size:23px;
+}
+
+div.Split p {
+	position: relative;
+	left:40px;
+	top:-15px;
+} 
+   
+div.Tools {
+	display: table;
+	background-color: #f3f4f6;
+}
+
+div.ToolsStack {
+	display: table;
+}
+
+div.ToolsStack h1 {
+	color: #4b6f96;
+}
+
+div.ToolsStack .SplitBox {
+	color: #4b6f96;
+	
+	border-style:solid;
+	border-width:1px;
+	
+	border-top-color:#ffffff;
+	border-bottom-color:#d8d8d8;
+	border-left-color:#ffffff;
+	border-right-color:#d8d8d8;
+}
+
+div.SplitBox {
+	display: table;
+}
+
+div.SplitBox #Title {
+	float:left;
+	display: table;
+	padding-right: 30px;
+	padding-left: 40px;
+}
+
+div.SplitBox #Title img{
+	padding-top: 20px;
+}
+
+div.SplitBox #Description {
+	overflow: hidden;
+}

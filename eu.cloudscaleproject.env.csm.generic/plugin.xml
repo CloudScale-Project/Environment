@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="eu.cloudscaleproject.env.csm.CsmDefinition">
+      <definition
+            class="eu.cloudscaleproject.env.csm.generic.AwsCloudDefinition"
+            name="Amazon Web Services -- CSM extension">
+      </definition>
+      <definition
+            class="eu.cloudscaleproject.env.csm.generic.BasicSystemDefinition"
+            name="Basic System extension">
+      </definition>
+      <definition
+            class="eu.cloudscaleproject.env.csm.generic.PrivateCloudDefinition"
+            name="Private Cloud extension">
+      </definition>
+      
+      <definition
+            class="eu.cloudscaleproject.env.csm.generic.SapHanaCloudDefinition"
+            name="SAP HANA Cloud Platform">
+      </definition>
+   </extension>
+</plugin>

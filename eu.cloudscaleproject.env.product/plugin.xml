@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="eu.cloudscaleproject.env.product.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="eu.cloudscaleproject.env.product.application"
+            name="CloudScale">
+         <property
+               name="appName"
+               value="CloudScale">
+         </property>
+         <property
+               name="applicationXMI"
+               value="eu.cloudscaleproject.env.product/Application.e4xmi">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FFFFFF">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="50,295,445,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="50,280,445,10">
+         </property>
+         <property
+               name="aboutText"
+               value="CloudScale Environment&#x0A;Version: 0.1&#x0A;&#x0A;Visit http://www.cloudscale-project.eu">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/cse-icon_16.png,icons/cse-icon_32.png,icons/cse-icon_48.png,icons/cse-icon_64.png">
+         </property>
+      </product>
+   </extension>
+</plugin>

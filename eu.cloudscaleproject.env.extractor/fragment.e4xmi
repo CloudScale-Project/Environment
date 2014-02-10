@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_lFWCADGqEeO3JJACK76kDw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_H1QkYDGwEeO3JJACK76kDw" featurename="children" parentElementId="eu.cloudscaleproject.env.product.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_KsJ5ADGwEeO3JJACK76kDw" elementId="eu.cloudscaleproject.env.extractor.perspective" label="Archimetrix"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_OuRY4DHXEeO3JJACK76kDw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_aPymADGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspective" commandName="Open archimetrix perspective" description="Open archimetrix perspective"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PRJccDHXEeO3JJACK76kDw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_lT1iQDGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorHandler" command="_aPymADGwEeO3JJACK76kDw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pm0KcDHXEeO3JJACK76kDw" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_w38eoDGwEeO3JJACK76kDw" elementId="eu.cloudscaleproject.env.extractor.menuContribution" parentId="cloudscale.environment.product.menu.tools">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_3V6noDGwEeO3JJACK76kDw" elementId="eu.cloudscaleproject.env.extractor.mc.openArchimetrix" label="Archimetrix" tooltip="Open Archimetrix prespective" command="_aPymADGwEeO3JJACK76kDw"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

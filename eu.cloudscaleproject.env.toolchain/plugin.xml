@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="eu.cloudscaleproject.env.toolchain.analyser" name="Analyser" schema="schema/eu.cloudscaleproject.env.toolchain.analyser.exsd"/>
+   <extension-point id="eu.cloudscaleproject.env.toolchain.spotter" name="Spotter" schema="schema/eu.cloudscaleproject.env.toolchain.spotter.exsd"/>
+   <extension-point id="eu.cloudscaleproject.env.toolchain.extractor" name="Extractor" schema="schema/eu.cloudscaleproject.env.toolchain.extractor.exsd"/>
+   <extension-point id="eu.cloudscaleproject.env.toolchain.tools" name="Tools" schema="schema/eu.cloudscaleproject.env.toolchain.tools.exsd"/>
+   <extension
+         id="id1"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+
+</plugin>

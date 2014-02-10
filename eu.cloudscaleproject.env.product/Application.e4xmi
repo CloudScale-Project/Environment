@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_gFKJ4HnEEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_TbooIHnFEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.trimmedwindow.0">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_UiTVQHnFEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.perspectivestack.main" selectedElement="_8RpYEHzVEeK-IOesy2BnRg">
+      <children xsi:type="advanced:Perspective" xmi:id="_8RpYEHzVEeK-IOesy2BnRg" elementId="eu.cloudscaleproject.env.product.perspective.intro" selectedElement="_eTY_IHzWEeK-IOesy2BnRg" label="Cloudscale intro perspective">
+        <tags>hideToolbar</tags>
+        <children xsi:type="basic:Part" xmi:id="_eTY_IHzWEeK-IOesy2BnRg" elementId="eu.cloudscaleproject.env.product.part.intro" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.gui.IntroPart" label="Intro"/>
+      </children>
+      <children xsi:type="advanced:Perspective" xmi:id="_U_BGcHnFEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.perspective.main" label="Main perspective">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_-CLUcIshEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_CzIiAIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0">
+            <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.0">
+              <tags>org.eclipse.e4.primaryNavigationStack</tags>
+              <tags>newtablook</tags>
+              <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
+            </children>
+          </children>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_GM8WcIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0">
+              <children xsi:type="advanced:Placeholder" xmi:id="_wjD7AJb1EeKpEPzYk_19sw" elementId="eu.cloudscaleproject.env.product.placeholder.editor" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
+            </children>
+            <children xsi:type="basic:PartSashContainer" xmi:id="_hLCmEDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0">
+              <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" ref="_mc-PMDZ_EeOUZvbZvEH41A"/>
+            </children>
+          </children>
+        </children>
+      </children>
+    </children>
+    <sharedElements xsi:type="advanced:Area" xmi:id="_dcRyAIDpEeKVEoXKPSzKEw" elementId="org.eclipse.ui.editorss" selectedElement="_dcRyAYDpEeKVEoXKPSzKEw">
+      <children xsi:type="basic:PartStack" xmi:id="_dcRyAYDpEeKVEoXKPSzKEw" elementId="org.eclipse.e4.primaryDataStack">
+        <tags>newtablook</tags>
+        <tags>org.eclipse.e4.primaryDataStack</tags>
+        <tags>EditorStack</tags>
+      </children>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_sS7Q8NS1EeGBn6dQ9VPexA" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources//icons/full/eview16/resource_persp.gif">
+      <tags>View</tags>
+      <tags>categoryTag:General</tags>
+      <menus xmi:id="_4UXAUNSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer">
+        <tags>ViewMenu</tags>
+        <tags>menuContribution:menu</tags>
+      </menus>
+      <menus xsi:type="menu:PopupMenu" xmi:id="_4VpZwNSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer#PopupMenu">
+        <tags>menuContribution:popup</tags>
+        <tags>popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu</tags>
+      </menus>
+      <toolbar xmi:id="_4UXAUdSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_mc-PMDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties"/>
+    <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
+      <children xsi:type="menu:ToolControl" xmi:id="_3WnY4HteEeKIYfuE0pelcA" elementId="SearchField" toBeRendered="false" visible="false"/>
+      <children xsi:type="menu:ToolControl" xmi:id="_Ic3vMHtfEeKIYfuE0pelcA" elementId="Search-PS Glue" toBeRendered="false" visible="false"/>
+      <children xsi:type="menu:ToolControl" xmi:id="_I2nE4HtfEeKIYfuE0pelcA" elementId="Spacer Glue" toBeRendered="false" visible="false"/>
+      <children xsi:type="menu:ToolControl" xmi:id="_Nez_EHtfEeKIYfuE0pelcA" elementId="PerspectiveSpacer" toBeRendered="false" visible="false"/>
+      <children xsi:type="menu:ToolBar" xmi:id="_y_WBMHtfEeKIYfuE0pelcA" elementId="org.eclipse.debug.ui.launchActionSet">
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_FQby8HtgEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.navigate">
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_k12hgHtgEeKIYfuE0pelcA" elementId="org.eclipse.search.searchActionSet">
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_nO0ZcHtfEeKIYfuE0pelcA" elementId="de.uka.ipd.sdq.pcm.gfm.toolbar.actionSet">
+        <tags>Draggable</tags>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file"/>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_qUWXYHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.openCsPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CloudscalePerspectiveHandler" command="_pRP7oHnoEeKfc49LSeS68A"/>
+  <handlers xmi:id="_KOUtIH8tEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.openIntroPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.IntroPerspectiveHandler" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
+  <rootContext xmi:id="_SeXUHO8EEd6BC9cDb6iV7y" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="%bindingcontext.name.dialogAndWindows">
+    <children xmi:id="_SeXUEO8EEd6FC9cDb6iV7w" elementId="org.eclipse.ui.contexts.window" name="%bindingcontext.name.windows">
+      <children xmi:id="_SeXUEO8EEd6FC9cDb6yV7x" elementId="org.eclipse.e4.ui.contexts.views" name="%bindingcontext.name.bindingView"/>
+    </children>
+    <children xmi:id="_SeXUEO8EEd6FC9cDb6iV7x" elementId="org.eclipse.ui.contexts.dialog" name="%bindingcontext.name.dialogs"/>
+  </rootContext>
+  <menuContributions xmi:id="_dprbkHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution" parentId="cloudscale.environment.product.menu.tools">
+    <children xsi:type="menu:HandledMenuItem" xmi:id="_juk9QHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.cloudscalePerspective" label="Cloudscale" command="_pRP7oHnoEeKfc49LSeS68A"/>
+  </menuContributions>
+  <menuContributions xmi:id="_QRPFQH9CEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.help.contribution" parentId="cloudscale.environment.product.menu.tools">
+    <children xsi:type="menu:HandledMenuItem" xmi:id="_kEDxgH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.intro" label="Intro" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
+  </menuContributions>
+  <commands xmi:id="_pRP7oHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.command.openCsPerspectiv" commandName="openCsPerspective"/>
+  <commands xmi:id="_6PggAH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.command.0" commandName="openIntroPerspective"/>
+  <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXh" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXi" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_LK0NgPZmEd-XstlTZ6nTXj" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_LK0NgPZmEd-XstlTZ6nTXk" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_LK0NgPZmEd-XstlTZ6nTXl" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_XwQYkE2EEd-DfN2vYY4Lew" elementId="Cleanup Addon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
+  <addons xmi:id="_bqcWME2EEd-DfN2vYY4Lew" elementId="DnD Addon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
+  <addons xmi:id="_7GC6sGp-Ed-QyNZjH9g15Q" elementId="MinMax Addon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
+  <addons xmi:id="_HyFOMHz-EeK-IOesy2BnRg" elementId="eu.cloudscaleproject.env.product.addon.0" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.ToolBarVisibilityHandler"/>
+</application:Application>
