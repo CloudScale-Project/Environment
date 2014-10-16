@@ -35,7 +35,14 @@
 
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
+          <h3>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Architecture</h3>
+<p>
+    <img src="images/cloudscale-environment.png" />
+</p>
+<p>
+The picture above shows the high-level CloudScale Environment architecture. Its main purpose is to modularize the whole application and split it into three loosely coupled clusters: the Platform, Tools and GUI. Each cluster is further split into main components that are modularized and can be extended to provide additional functionalities. The Platform is the base of the CloudScale Environment responsible of providing extension points (Tool chain) for integrating the Tools, and presenting the information and actions required to the GUI (Graphical User Interface). Clusters and containing components are described below.
+</p>
 <ul>
 <li><a href="https://github.com/jurepolutnik" class="user-mention">Jure Polutnik</a></li>
 <li><a href="https://github.com/vcucek" class="user-mention">Vito Cucek</a></li></ul>
