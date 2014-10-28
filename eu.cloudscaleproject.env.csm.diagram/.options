@@ -1,7 +1,0 @@
-# Tracing options for the eu.cloudscaleproject.env.csm.diagram plug-in
-
-# Common issues
-eu.cloudscaleproject.env.csm.diagram/debug=false
-
-# Visual IDs
-eu.cloudscaleproject.env.csm.diagram/debug/visualID=false
