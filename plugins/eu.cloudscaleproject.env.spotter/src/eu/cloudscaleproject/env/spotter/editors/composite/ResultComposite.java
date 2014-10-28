@@ -54,6 +54,7 @@ import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.ServiceClientWrapper;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.model.ExtensionItem;
+import org.spotter.eclipse.ui.model.IExtensionItem;
 import org.spotter.eclipse.ui.navigator.SpotterProjectParent;
 import org.spotter.eclipse.ui.providers.ResultExtensionsImageProvider;
 import org.spotter.eclipse.ui.providers.SpotterExtensionsLabelProvider;
@@ -259,7 +260,7 @@ public class ResultComposite extends Composite{
 	private void updateHierarchy() {
 		IFile file = resultFolder.getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME);
 
-		ExtensionItem input = null;
+		IExtensionItem input = null;
 		try {
 			if (!file.isSynchronized(IResource.DEPTH_ZERO)) {
 				file.refreshLocal(IResource.DEPTH_ZERO, null);

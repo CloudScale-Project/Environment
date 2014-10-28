@@ -33,13 +33,20 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.ServiceClientWrapper;
+import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
 import org.spotter.eclipse.ui.editors.factory.ElementFactory;
 import org.spotter.eclipse.ui.jobs.DynamicSpotterRunJob;
+import org.spotter.eclipse.ui.model.xml.HierarchyFactory;
+import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.eclipse.ui.util.DialogUtils;
 import org.spotter.eclipse.ui.util.SpotterProjectSupport;
+import org.spotter.shared.configuration.FileManager;
+import org.spotter.shared.configuration.JobDescription;
+import org.spotter.shared.environment.model.XMeasurementEnvironment;
+import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.spotter.Util;
@@ -147,7 +154,7 @@ public class RunAlternativeComposite extends Composite{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(SpotterProjectSupport.SPOTTER_CONFIG_FILENAME);
+						.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
 				SpotterConfigEditor.openInstance(
 						(IEditorInput) ElementFactory.createEditorInput(SpotterConfigEditor.ID, file), 
 						SpotterConfigEditor.ID);
@@ -161,7 +168,7 @@ public class RunAlternativeComposite extends Composite{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(SpotterProjectSupport.HIERARCHY_FILENAME);
+						.getResource().getFile(FileManager.HIERARCHY_FILENAME);
 				HierarchyEditor.openInstance(
 						(IEditorInput) ElementFactory.createEditorInput(HierarchyEditor.ID, file), 
 						HierarchyEditor.ID);
@@ -175,7 +182,7 @@ public class RunAlternativeComposite extends Composite{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(SpotterProjectSupport.ENVIRONMENT_FILENAME);
+						.getResource().getFile(FileManager.ENVIRONMENT_FILENAME);
 				WorkloadEditor.openInstance(
 						(IEditorInput) ElementFactory.createEditorInput(WorkloadEditor.ID, file), 
 						WorkloadEditor.ID);
@@ -206,7 +213,7 @@ public class RunAlternativeComposite extends Composite{
 				
 				setInput(selectedEditorInput);
 				//set configuration
-				IFile fileConf = editorInput.getResource().getFile(SpotterProjectSupport.SPOTTER_CONFIG_FILENAME);
+				IFile fileConf = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
 				if(fileConf.exists()){
 					Properties prop = new Properties();
 					try {
@@ -214,8 +221,8 @@ public class RunAlternativeComposite extends Composite{
 						
 						IPath confEditorInputLocation = editorInput.getResource().getLocation();
 						
-						String hierarchyPath = confEditorInputLocation.append(SpotterProjectSupport.HIERARCHY_FILENAME).toString();
-						String envPath = confEditorInputLocation.append(SpotterProjectSupport.ENVIRONMENT_FILENAME).toString();
+						String hierarchyPath = confEditorInputLocation.append(FileManager.HIERARCHY_FILENAME).toString();
+						String envPath = confEditorInputLocation.append(FileManager.ENVIRONMENT_FILENAME).toString();
 						
 						//create/retrieve results entry
 						IEditorInputResource resultEditorInput;
@@ -259,9 +266,8 @@ public class RunAlternativeComposite extends Composite{
 					e1.printStackTrace();
 				}	
 				
-				//ServiceClientWrapper client = activator.getClient(selectedEditorInput.getResource().getName());
-				ServiceClientWrapper client = activator.getClient(project.getName());
-				startSpotterRun(client);
+				ServiceClientWrapper client = activator.getClient(selectedEditorInput.getResource().getName());
+				startSpotterRun(RunAlternativeComposite.this.editorInput, client);
 			}
 		});
 		
@@ -272,11 +278,11 @@ public class RunAlternativeComposite extends Composite{
 		Util.bindEditorInputs((EditorInputFolder)ei, this.editorInput);
 	}
 	
-	private void startSpotterRun(ServiceClientWrapper client){
+	private void startSpotterRun(EditorInputFolder editorInput, ServiceClientWrapper client){
 		
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		
-		IFile spotterFile = editorInput.getResource().getFile(SpotterProjectSupport.SPOTTER_CONFIG_FILENAME);
+		IFile spotterFile = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
 		String spotterFilePath = spotterFile.getLocation().toString();
 
 		if (!spotterFile.exists()) {
@@ -295,19 +301,45 @@ public class RunAlternativeComposite extends Composite{
 		boolean startConfirm = DialogUtils.openConfirm(DIALOG_TITLE,
 				String.format(MSG_SPOTTER_STARTED, project.getName()));
 		if (startConfirm) {
-			doStartSpotterRun(project, client, spotterFilePath);
+			
+			JobDescription jobDescription;
+			try {
+				jobDescription = createJobDescription(editorInput);
+			} catch (UICoreException e) {
+				String message = "Unable to read and parse all configuration files!";
+				DialogUtils.handleError(message, e);
+				return;
+			}
+			Long jobId = client.startDiagnosis(jobDescription);
+			if (jobId != null && jobId != 0) {
+				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, jobId, System.currentTimeMillis());
+				job.schedule();
+			} else {
+				String msg = String.format(MSG_RUNTIME_ERROR, "Could not retrieve a valid job id!");
+				DialogUtils.openError(DIALOG_TITLE, msg);
+			}
+			
 		}
 	}
-	
-	private void doStartSpotterRun(IProject project, ServiceClientWrapper client, String spotterConfigPath) {
-		Long jobId = client.startDiagnosis(spotterConfigPath);
-		if (jobId != null && jobId != 0) {
-			DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, jobId);
-			job.schedule();
-		} else {
-			String msg = String.format(MSG_RUNTIME_ERROR, "Could not retrieve a valid job id!");
-			DialogUtils.openError(DIALOG_TITLE, msg);
-		}
+
+	private JobDescription createJobDescription(EditorInputFolder editorInput) throws UICoreException {
+		JobDescription jobDescription = new JobDescription();
+
+		IFile spotterFile = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
+		Properties dynamicSpotterConfig = SpotterProjectSupport.getSpotterConfig(spotterFile);
+		jobDescription.setDynamicSpotterConfig(dynamicSpotterConfig);
+
+		MeasurementEnvironmentFactory envFactory = MeasurementEnvironmentFactory.getInstance();
+		String envFile = editorInput.getResource().getFile(FileManager.ENVIRONMENT_FILENAME).getLocation().toString();
+		XMeasurementEnvironment measurementEnvironment = envFactory.parseXMLFile(envFile);
+		jobDescription.setMeasurementEnvironment(measurementEnvironment);
+
+		HierarchyFactory hierFactory = HierarchyFactory.getInstance();
+		String hierFile = editorInput.getResource().getFile(FileManager.HIERARCHY_FILENAME).getLocation().toString();
+		XPerformanceProblem hierarchy = hierFactory.parseHierarchyFile(hierFile);
+		jobDescription.setHierarchy(hierarchy);
+
+		return jobDescription;
 	}
 	
 	private IEditorInputResource getSelectedEditorInput(){
