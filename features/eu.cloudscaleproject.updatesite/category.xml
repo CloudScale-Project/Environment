@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/eu.cloudscaleproject.feature_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature" version="1.0.0.qualifier">
+      <category name="eu.cloudscaleproject"/>
+   </feature>
+   <feature url="features/eu.cloudscaleproject.feature.dev_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.dev" version="1.0.0.qualifier">
+      <category name="eu.cloudscaleproject"/>
+   </feature>
+   <category-def name="eu.cloudscaleproject" label="CloudScale Environment"/>
+</site>
