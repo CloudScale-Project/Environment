@@ -15,39 +15,40 @@ Package : mvn install
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>eu.cloudscaleproject.env.product</module>
-    <module>eu.cloudscaleproject.env.common</module>
-    <module>eu.cloudscaleproject.env.master</module>
+    <module>plugins/eu.cloudscaleproject.env.product</module>
+    <module>plugins/eu.cloudscaleproject.env.common</module>
+    <module>plugins/eu.cloudscaleproject.env.master</module>
   
-    <module>eu.cloudscaleproject.env.method.common</module>
-    <module>eu.cloudscaleproject.env.method.viewer</module>
+    <module>plugins/eu.cloudscaleproject.env.method.common</module>
+    <module>plugins/eu.cloudscaleproject.env.method.viewer</module>
 
-    <module>eu.cloudscaleproject.env.csm2pcm</module>
-    <module>eu.cloudscaleproject.env.toolchain</module>	
+    <module>plugins/eu.cloudscaleproject.env.csm2pcm</module>
+    <module>plugins/eu.cloudscaleproject.env.toolchain</module>	
     
-    <module>eu.cloudscaleproject.env.extractor</module>
-    <module>eu.cloudscaleproject.env.analyser</module>
-    <module>eu.cloudscaleproject.env.staticspotter</module>
-    <module>eu.cloudscaleproject.env.spotter</module>
+    <module>plugins/eu.cloudscaleproject.env.extractor</module>
+    <module>plugins/eu.cloudscaleproject.env.analyser</module>
+    <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
+    <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
 
-    <module>org.scaledl.overview</module>
-    <module>org.scaledl.overview.diagram</module>
-    <module>org.scaledl.overview.edit</module>
-    <module>org.scaledl.overview.editor</module>
-    <module>org.scaledl.overview.generic</module>
-    <module>org.scaledl.overview.properties</module>
+    <module>plugins/org.scaledl.overview</module>
+    <module>plugins/org.scaledl.overview.diagram</module>
+    <module>plugins/org.scaledl.overview.edit</module>
+    <module>plugins/org.scaledl.overview.editor</module>
+    <module>plugins/org.scaledl.overview.generic</module>
+    <module>plugins/org.scaledl.overview.properties</module>
     <!--module>eu.cloudscaleproject.env.method.editor</module-->
-    <module>eu.cloudscaleproject.env.help</module>
+    <module>plugins/eu.cloudscaleproject.env.help</module>
     
     
-    <module>../eclipse/eu.cloudscaleproject.feature</module>
-    <module>../eclipse/eu.cloudscaleproject.feature.dev</module>
-    <module>../eclipse/eu.cloudscaleproject.updatesite</module>
+    <module>features/eu.cloudscaleproject.feature</module>
+    <module>features/eu.cloudscaleproject.feature.dev</module>
+    <module>features/eu.cloudscaleproject.updatesite</module>
     
   </modules>
   <!-- Export "Available Software Sites" (properties > install/update) from eclipse and use following sed command on it -->
   <!--sed -r 's;.*url="(.*?)" sel.*name="(.*)".*;<repository><id>\2</id><layout>p2</layout><url>\1</url></repository>;g' sites.xml -->
 <repositories>
+	<repository><id>Architectural Templates</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/architecturaltemplates/nightly/</url></repository>
 	<repository><id>Usage evolution</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/usageevolution/nightly/</url></repository>
 	<repository><id>Limbo Update</id><layout>p2</layout><url>http://se2.informatik.uni-wuerzburg.de/eclipse/limbo/</url></repository>
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
