@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_qlGRoCOREeS1oPSD-5Nz5Q">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EmZ0YCOzEeS1oPSD-5Nz5Q" featurename="addons" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="application:Addon" xmi:id="_GzJ_0COzEeS1oPSD-5Nz5Q" elementId="eu.cloudscaleproject.env.common.addon.0" contributionURI="bundleclass://eu.cloudscaleproject.env.common/eu.cloudscaleproject.env.common.FragmentAddon"/>
+  </fragments>
+</fragment:ModelFragments>

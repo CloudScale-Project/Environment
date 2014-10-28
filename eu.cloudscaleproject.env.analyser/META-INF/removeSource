@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cp ./MANIFEST.MF ./MANIFEST.MF_BACK && egrep -v '\.source;' ./MANIFEST.MF_BACK > MANIFEST.MF || echo "ERROR!"

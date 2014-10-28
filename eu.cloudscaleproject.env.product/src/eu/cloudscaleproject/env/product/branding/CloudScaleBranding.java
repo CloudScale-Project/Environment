@@ -58,7 +58,8 @@ public class CloudScaleBranding {
 							return;
 						}
 			
-						view.getCommonViewer().setInput(ResourcesPlugin.getWorkspace ().getRoot()); 
+						view.getCommonViewer().setInput(ResourcesPlugin.getWorkspace ().getRoot());
+						view.getCommonViewer().refresh();
 					}
 				});
 				
@@ -70,14 +71,19 @@ public class CloudScaleBranding {
 	}
 	
 	private static void removeWizards ()
-	{
+	{	
 		AbstractExtensionWizardRegistry wizardRegistry = (AbstractExtensionWizardRegistry)PlatformUI.getWorkbench().getNewWizardRegistry();
 		IWizardCategory[] categories = PlatformUI.getWorkbench().getNewWizardRegistry().getRootCategory().getCategories();
 		for(IWizardDescriptor wizard : getAllWizards(categories)){
 		    if(
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Basic") && 
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Examples") && 
-		    		!wizard.getCategory().getId().equals("eu.cloudscaleproject.env.new")) 
+		    		!wizard.getCategory().getId().startsWith("org.scaledl") && 
+		    		!wizard.getCategory().getId().startsWith("de.uka") && 
+		    		!wizard.getCategory().getId().startsWith("org.spotter") && 
+		    		!wizard.getCategory().getId().startsWith("org.palladiosimulator") && 
+		    		!wizard.getCategory().getId().contains("cloudscale")
+		    		)
 		    		
 		    {
 		        WorkbenchWizardElement wizardElement = (WorkbenchWizardElement) wizard;

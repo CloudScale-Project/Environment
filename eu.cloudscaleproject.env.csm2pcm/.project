@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>eu.cloudscaleproject.env.csm2pcm</name>
+	<name>org.scaledl.overview2pcm</name>
 	<comment></comment>
 	<projects>
+		<project>eu.cloudscaleproject.env.analyser</project>
+		<project>eu.cloudscaleproject.env.common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

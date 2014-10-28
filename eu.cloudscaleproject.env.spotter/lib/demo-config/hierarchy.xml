@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="http://www.sopeco.org/PerformanceProblemHierarchySchema">
+    <uniqueId>3a105ebc-9390-4176-ba51-ce2f092092fb</uniqueId>
+    <config key="org.spotter.detection.detectable" value="false"/>
+    <problem>
+        <extensionName>OLB</extensionName>
+        <uniqueId>cc28442c-2a90-43ff-8758-eef8987b6478</uniqueId>
+        <config key="org.spotter.detection.detectable" value="true"/>
+    </problem>
+    <problem>
+        <extensionName>Ramp</extensionName>
+        <uniqueId>462e144b-3581-4e94-ab07-ffa7f51afe8c</uniqueId>
+        <config key="org.spotter.detection.detectable" value="true"/>
+    </problem>
+</root>

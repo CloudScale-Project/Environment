@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ASCII"?>
+<specification:ServiceSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
+  <serviceDescriptors xsi:type="specification:PlatformRuntimeServiceDescriptor" name="Generic Application Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic SQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic NoSQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic Cache Server"/>
+</specification:ServiceSpecification>

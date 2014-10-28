@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.cloudscaleproject</groupId>
+  <artifactId>environment</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>eu.cloudscaleproject.env.product</module>
+    <module>eu.cloudscaleproject.env.common</module>
+    <module>eu.cloudscaleproject.env.master</module>
+  
+    <module>eu.cloudscaleproject.env.method.common</module>
+    <module>eu.cloudscaleproject.env.method.editor</module>
+    <module>eu.cloudscaleproject.env.method.viewer</module>
+
+    <module>eu.cloudscaleproject.env.csm2pcm</module>
+    <module>eu.cloudscaleproject.env.help</module>
+    <module>eu.cloudscaleproject.env.toolchain</module>	
+    
+    <module>eu.cloudscaleproject.env.extractor</module>
+    <module>eu.cloudscaleproject.env.analyser</module>
+    <module>eu.cloudscaleproject.env.spotter</module>
+
+    <module>org.scaledl.overview</module>
+    <module>org.scaledl.overview.diagram</module>
+    <module>org.scaledl.overview.edit</module>
+    <module>org.scaledl.overview.editor</module>
+    <module>org.scaledl.overview.generic</module>
+    <module>org.scaledl.overview.properties</module>
+    
+  </modules>
+  
+  <repositories>
+		<repository>
+			<id>luna</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/luna/</url>
+		</repository>
+		<repository>
+			<id>emf</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/emf/emf/updates/releases/</url>
+		</repository>
+		<repository>
+			<id>orbit</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130827064939/repository/</url>
+		</repository>
+		<repository>
+			<id>xpand</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/m2t/xpand/updates/releases</url>
+		</repository>
+		<repository>
+			<id>xtext</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url>
+		</repository>
+
+		
+		<!-- 3rd party --> 
+		<repository>
+			<id>qvt</id>
+			<layout>p2</layout>
+			<url>http://www.ikv.de/qvt/update-site-indigo</url>
+		</repository>
+		<repository>
+			<id>guava</id>
+			<layout>p2</layout>
+			<url>http://guava-osgi.googlecode.com/svn/trunk/repository</url>
+		</repository>
+
+		<!-- Palladio and friends --> 
+		<repository>
+			<id>palladio</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/palladio/nightly/</url>
+		</repository>
+		<repository>
+			<id>commons</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/commons/nightly/</url>
+		</repository>
+		<repository>
+			<id>edp2</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/edp2/nightly</url>
+		</repository>
+		<repository>
+			<id>featuremodel</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/featuremodel/nightly</url>
+		</repository>
+		<repository>
+			<id>mdsdprofiles</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/mdsdprofiles/nightly</url>
+		</repository>
+		<repository>
+			<id>probeframework</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/probeframework/nightly</url>
+		</repository>
+		<repository>
+			<id>recorderframework</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/recorderframework/nightly</url>
+		</repository>
+		<repository>
+			<id>sensorframework</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/sensorframework/nightly</url>
+		</repository>
+		<repository>
+			<id>thirdpartywrapper</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/thirdpartywrapper/nightly</url>
+		</repository>
+		<repository>
+			<id>workflowengine</id>
+			<layout>p2</layout>
+			<url>http://sdqweb.ipd.kit.edu/eclipse/workflowengine/nightly</url>
+		</repository>
+
+
+		<!-- Somox and friends -->
+		<repository>
+		    <id>somox</id>
+		    <layout>p2</layout>
+		    <url>http://sdqweb.ipd.kit.edu/eclipse/somox/nightly/</url>
+		</repository>
+
+		<!--  repository>
+            <id>sissy</id>
+            <layout>p2</layout>
+            <url>http://sissy.sourceforge.net/SISSy_Nightly/</url>
+        </repository>
+        <repository>
+            <id>q-impress</id>
+            <layout>p2</layout>
+            <url>http://q-impress.ow2.org/updateSite/</url>
+        </repository>
+        <repository>
+            <id>archimetrix</id>
+            <layout>p2</layout>
+            <url>http://archimetrix.googlecode.com/svn/ArchimetrixUpdatesite/</url>
+        </repository-->
+	</repositories>
+ 
+  <build>
+    <plugins>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-maven-plugin</artifactId>
+			<version>0.21.0</version>
+			<extensions>true</extensions>
+		</plugin>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-packaging-plugin</artifactId>
+			<version>0.21.0</version>
+		</plugin>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>target-platform-configuration</artifactId>
+			<version>0.21.0</version>
+			<configuration>
+				<environments>
+					<environment>
+						<os>linux</os>
+						<ws>gtk</ws>
+						<arch>x86_64</arch>
+					</environment>
+					<environment>
+						<os>linux</os>
+						<ws>gtk</ws>
+						<arch>x86</arch>
+					</environment>
+					<environment>
+						<os>macosx</os>
+						<ws>cocoa</ws>
+						<arch>x86</arch>
+					</environment>
+					<environment>
+						<os>macosx</os>
+						<ws>cocoa</ws>
+						<arch>x86_64</arch>
+					</environment>
+					<environment>
+						<os>win32</os>
+						<ws>win32</ws>
+						<arch>x86</arch>
+					</environment>
+					<environment>
+						<os>win32</os>
+						<ws>win32</ws>
+						<arch>x86_64</arch>
+					</environment>
+				</environments>
+			</configuration>
+		</plugin>
+	</plugins>
+  </build>
+</project>
+
+
+
+
+
+
+
+
+

@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.PlatformResourceURIHandlerImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.notation.Diagram;
 
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
@@ -21,7 +20,7 @@ public class PalladioModel {
 	public static final String DEFAULT_MODEL_ID = "CSMGen_";
 	
 	public static final Logger logger = Logger.getLogger(PalladioModel.class.getSimpleName());
-	public static final ResourceSet resourceSet = new ResourceSetImpl();
+	//public static final ResourceSet resourceSet = new ResourceSetImpl();
 	
 	public final URI uri;
 	public final URI uriDiagram;
@@ -32,13 +31,22 @@ public class PalladioModel {
 	private EObject model = null;
 	private Diagram diagram = null;
 	
-	public PalladioModel(URI modelUriFolder, URI diagramUriFolder, ModelID id) {
+	public PalladioModel(ResourceSet resourceSet, URI modelUriFolder, URI diagramUriFolder, ModelID id) {
 		this.uri = PalladioUtil.createModelURI(id, modelUriFolder);
-		this.uriDiagram = PalladioUtil.createDiagramURI(id, diagramUriFolder);
+		
+		if(diagramUriFolder != null){
+			this.uriDiagram = PalladioUtil.createDiagramURI(id, diagramUriFolder);
+		}
+		else{
+			this.uriDiagram = null;
+		}
 		
 		try{
-			this.resource = resourceSet.getResource(uri, true);
-			this.resourceDiagram = resourceSet.getResource(uriDiagram, true);
+			this.resource = resourceSet.getResource(uri, false);
+			
+			if(uriDiagram != null){
+				this.resourceDiagram = resourceSet.getResource(uriDiagram, true);
+			}
 		}
 		catch(Exception e){
 			//ignore exception - resource file probably don't exist jet...
@@ -56,7 +64,7 @@ public class PalladioModel {
 		}
 		
 		//remove/delete diagram resource if file doesn't exist
-		if(!fileExist(uriDiagram) && this.resourceDiagram != null){
+		if(resourceDiagram != null && !fileExist(uriDiagram)){
 			try {
 				this.resourceDiagram.delete(null);
 				this.resourceDiagram = null;
@@ -79,19 +87,21 @@ public class PalladioModel {
 		}
 		
 		//handle resource diagram
-		if(this.resourceDiagram == null){
-			this.resourceDiagram = resourceSet.createResource(uriDiagram);
-			saveDiagramResource();
-			loadDiagramResource();
-		}
-		else{
-			if(!resourceDiagram.getContents().isEmpty()){
-				this.diagram = (Diagram)this.resourceDiagram.getContents().get(0);
+		if(uriDiagram != null){
+			if(this.resourceDiagram == null){
+				this.resourceDiagram = resourceSet.createResource(uriDiagram);
+				saveDiagramResource();
+				loadDiagramResource();
+			}
+			else{
+				if(!resourceDiagram.getContents().isEmpty()){
+					this.diagram = (Diagram)this.resourceDiagram.getContents().get(0);
+				}
 			}
 		}
 		
 		//check
-		if(this.resource == null || this.resourceDiagram == null){
+		if(this.resource == null || (this.uriDiagram != null && this.resourceDiagram == null)){
 			logger.log(Level.SEVERE, "Can not create resource files! Check write permissions!");
 		}
 		
@@ -103,7 +113,7 @@ public class PalladioModel {
 		}
 		
 		//create new diagram if needed
-		if(this.diagram == null){
+		if(this.resourceDiagram != null && this.diagram == null){
 			this.diagram = PalladioUtil.createDiagram(id, model);
 			resourceDiagram.getContents().add(diagram);
 			
@@ -111,7 +121,7 @@ public class PalladioModel {
 		}
 		
 		//check
-		if(this.model == null || this.diagram == null){
+		if(this.model == null || (this.uriDiagram != null && this.diagram == null)){
 			logger.log(Level.SEVERE, "Can not create model files!");
 		}
 	}
@@ -154,11 +164,15 @@ public class PalladioModel {
 	}
 	
 	public void unloadResource(){
-		this.resource.unload();
+		if(resource != null){
+			this.resource.unload();
+		}
 	}
 	
 	public void unloadDiagramResource(){
-		this.resourceDiagram.unload();
+		if(resourceDiagram != null){
+			this.resourceDiagram.unload();
+		}
 	}
 	
 	public final void saveModelResource(){
@@ -195,7 +209,10 @@ public class PalladioModel {
 		this.resource.getContents().clear();
 		this.resource.getContents().add(root);
 		this.model = root;
-		this.diagram.setElement(root);
+		
+		if(this.diagram != null){
+			this.diagram.setElement(root);
+		}
 	}
 	
 	public EObject getModel(){

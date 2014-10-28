@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	 <extension
+         point="org.eclipse.ui.newWizards">
+         <category
+               id="org.scaledl.overview.diagram.wizard.category"
+               name="CloudScale Diagrams">
+         </category>
+      <wizard
+            category="org.scaledl.overview.diagram.wizard.category"
+            class="org.scaledl.overview.diagram.wizard.NewScaleDLOverviewWizard"
+            id="org.scaledl.overview.diagram.wizard.newScaleDLOverviewWizard"
+            icon="icons/editor.png"
+            name="ScaleDL Overview">
+      </wizard>
+      <wizard
+            category="org.scaledl.overview.diagram.wizard.category"
+            class="org.scaledl.overview.diagram.wizard.NewScaleDLOverviewWizard"
+            id="org.scaledl.overview.diagram.wizard.NewScaleDLArchitecturalTemplates"
+            icon="icons/editor.png"
+            name="ScaleDL Architectural Templates">
+      </wizard>
+      <wizard
+            category="org.scaledl.overview.diagram.wizard.category"
+            class="org.scaledl.overview.diagram.wizard.NewScaleDLOverviewWizard"
+            id="org.scaledl.overview.diagram.wizard.NewScaleDLUsageEvolution"
+            icon="icons/editor.png"
+            name="ScaleDL Usage Evolution">
+      </wizard>
+   </extension>
+   
+   <extension
+         id="org.scaledl.overview.diagram.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypes">
+      <diagramType
+            name="CSM Diagram Type"
+            type="CSMDiagram"
+            id="org.scaledl.overview.diagram.diagramCSMType">
+      </diagramType>
+   </extension>
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypeProviders">
+      <diagramTypeProvider
+            name="CSM Diagram Type Provider"
+            class="org.scaledl.overview.diagram.diagram.CSMDiagramTypeProvider"
+            id="org.scaledl.overview.diagram.diagramDiagramTypeProvider">
+         <diagramType
+               id="org.scaledl.overview.diagram.diagramCSMType">
+         </diagramType>
+         <imageProvider
+               id="org.scaledl.overview.diagram.DiagramImageProvider">
+         </imageProvider>
+      </diagramTypeProvider>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="csm_diagram"
+            id="org.eclipse.graphiti.content.diagram" 
+            name="%_contenttype_diagram">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      
+      <editor
+          class="org.eclipse.graphiti.ui.editor.DiagramEditor"
+          contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
+          default="true"
+          extensions="sdlo_diagram"
+          icon="icons/explorer/csm_diagram.png"
+          id="eu.cloudscaleproject.env.diagram.DiagramEditor"
+          name="ScaleDL Overview">
+       <contentTypeBinding
+             contentTypeId="org.eclipse.graphiti.content.diagram">
+       </contentTypeBinding>
+      </editor>
+      <editor
+            class="org.eclipse.graphiti.ui.editor.DiagramEditor"
+            contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
+            default="true"
+            extensions="csm_diagram"
+            icon="icons/explorer/csm_diagram.png"
+            id="eu.cloudscaleproject.env.diagram.DiagramEditor"
+            name="CSM">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.graphiti.content.diagram">
+         </contentTypeBinding>
+      </editor>
+      
+      <editor
+            class="org.scaledl.overview.diagram.editor.platform.PlatformServiceEditor"
+            id="org.scaledl.overview.diagram.editor.component.ComponentEditor"
+            name="Component Editor">
+      </editor>
+      <editor
+            class="org.scaledl.overview.diagram.editor.system.SystemEditor"
+            id="org.scaledl.overview.diagram.editor.system.SystemEditor"
+            name="System Editor">
+      </editor>
+      <editor
+            class="org.scaledl.overview.diagram.editor.application.SoftwareServiceEditor"
+            id="org.scaledl.overview.diagram.editor.application.ApplicationServiceEditor"
+            name="Application Service Editor">
+      </editor>
+      <editor
+            class="org.scaledl.overview.diagram.editor.interfaces.OICEditor"
+            contributorClass="org.scaledl.overview.presentation.OverviewActionBarContributor"
+            default="false"
+            id="org.cloudscale.overview.diagram.editor.oiceditor"
+            name="Operation container Editor">
+      </editor>
+      <editor
+            class="org.scaledl.overview.diagram.editor.interfaces.InterfacesEditor"
+            contributorClass="org.scaledl.overview.presentation.OverviewActionBarContributor"
+            default="false"
+            id="org.scaledl.overview.diagram.editor3"
+            name="Test">
+      </editor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.graphiti.ui.imageProviders">
+      <imageProvider
+            class="org.scaledl.overview.diagram.DiagramImageProvider"
+            id="org.scaledl.overview.diagram.DiagramImageProvider">
+      </imageProvider>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.product.newproject">
+      <client
+            class="org.scaledl.overview.diagram.wizard.NewProjectWizard">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="org.scaledl.overview.diagram.ExplorerDecorator"
+            id="org.scaledl.overview.diagram.explorerdecorator"
+            label="CloudScale Model Diagram"
+            state="true">
+         <description>
+            This extension adds overview model and diagram decorations.
+         </description>
+      </decorator>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.common.notification.validator">
+      <client
+            class="org.scaledl.overview.diagram.validation.OverviewValidator">
+      </client>
+   </extension>
+   
+   <!--
+   <extension
+	    point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+	    <propertyContributor
+           contributorId="CSMDiagram.PropertyContributor">
+	        <propertyCategory category="Graphiti">
+	        </propertyCategory>
+	    </propertyContributor>
+	</extension>
+	
+	<extension
+	    point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+	    <propertyTabs contributorId="CSMDiagram.PropertyContributor">
+	        <propertyTab
+               afterTab="0"
+               category="Graphiti"
+               id="diagram.property.tab.general"
+               label="General">
+	        </propertyTab>
+         <propertyTab
+               afterTab="10"
+               category="Graphiti"
+               id="diagram.property.tab.InfrastructureServices"
+               label="Infrastructure services">
+         </propertyTab>
+         <propertyTab
+               afterTab="20"
+               category="Graphiti"
+               id="diagram.property.tab.platformServices"
+               label="Platform services">
+         </propertyTab>
+         <propertyTab
+               afterTab="30"
+               category="Graphiti"
+               id="diagram.property.tab.softwareServices"
+               label="Software services">
+         </propertyTab>
+	        
+	    </propertyTabs>
+	</extension>
+	 
+	<extension
+	    point="org.eclipse.ui.views.properties.tabbed.propertySections">
+	    <propertySections contributorId="CSMDiagram.PropertyContributor">
+	        <propertySection tab="diagram.property.tab.general"            
+	         class="org.scaledl.overview.diagram.properties.sections.EntitySection"
+	         filter="org.scaledl.overview.diagram.properties.PropertyFilters$EntityFilter"
+	         id="diagram.property.tab.general.section">
+	        </propertySection>
+         <propertySection
+               class="org.scaledl.overview.diagram.properties.sections.InfrastructureServicesSection"
+               filter="org.scaledl.overview.diagram.properties.PropertyFilters$CloudEnvironmentFilter"
+               id="diagram.property.tab.InfrastructureServices.section"
+               tab="diagram.property.tab.InfrastructureServices">
+         </propertySection>
+         <propertySection
+               class="org.scaledl.overview.diagram.properties.sections.PlatformServicesSection"
+               filter="org.scaledl.overview.diagram.properties.PropertyFilters$CloudEnvironmentFilter"
+               id="diagram.property.tab.platformServices.section"
+               tab="diagram.property.tab.platformServices">
+         </propertySection>
+         <propertySection
+               class="org.scaledl.overview.diagram.properties.sections.SoftwareServicesSection"
+               filter="org.scaledl.overview.diagram.properties.PropertyFilters$CloudEnvironmentFilter"
+               id="diagram.property.tab.softwareServices.section"
+               tab="diagram.property.tab.softwareServices">
+         </propertySection>
+	        
+	    </propertySections>
+	</extension>
+   
+   <extension
+       point="org.eclipse.core.runtime.adapters">
+		<factory
+			adaptableType="org.eclipse.graphiti.ui.platform.GraphitiConnectionEditPart"
+			class="org.scaledl.overview.diagram.properties.PropertyAdapterFactory">
+			<adapter
+				type="org.eclipse.ui.views.properties.IPropertySource">
+			</adapter>
+		</factory>
+	</extension>
+	-->
+
+</plugin>

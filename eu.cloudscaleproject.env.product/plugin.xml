@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="eu.cloudscaleproject.env.product.newproject" name="New Cloudscale project wizard extension point" schema="schema/eu.cloudscaleproject.env.product.newproject.exsd"/>
 
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            visible="true">
          <run
                class="eu.cloudscaleproject.env.product.Application">
          </run>
@@ -38,6 +40,10 @@
                value="plugin_customization.ini">
          </property>
          <property
+               name="aboutText"
+               value="CloudScale Environment&#x0A;Version: 0.1&#x0A;&#x0A;Visit http://www.cloudscale-project.eu">
+         </property>
+         <property
                name="startupProgressRect"
                value="50,280,445,10">
          </property>
@@ -50,5 +56,54 @@
                value="icons/cse-icon_16.png,icons/cse-icon_32.png,icons/cse-icon_48.png,icons/cse-icon_64.png">
          </property>
       </product>
+   </extension>
+   <extension
+         id="eu.cloudscaleproject.env.projectnature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="eu.cloudscaleproject.env.product.ProjectNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="eu.cloudscaleproject.env.product.ExplorerDecorator"
+            id="eu.cloudscaleproject.env.product.explorerdecorator"
+            label="CloudScale Project Folder Decorator"
+            state="true">
+         <description>
+            CloudScale Project Folder Decorator
+         </description>
+      </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="eu.cloudscaleproject.env.product.wizard.category"
+            name="CloudScale Projects">
+      </category>
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.product.wizard.NewProjectWizard"
+            icon="icons/explorer/project_24.png"
+            id="eu.cloudscaleproject.env.product.wizard.newproject"
+            name="CloudScale Project"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="org.eclipse.core.runtime.content.XMLContentDescriber"
+            file-extensions="cse"
+            id="eu.cloudscaleproject.env.product.projectfile"
+            name="Project properties file"
+            priority="high">
+      </content-type>
    </extension>
 </plugin>

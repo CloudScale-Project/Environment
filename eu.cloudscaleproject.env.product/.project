@@ -3,6 +3,22 @@
 	<name>eu.cloudscaleproject.env.product</name>
 	<comment></comment>
 	<projects>
+		<project>eu.cloudscaleproject.env.analyser</project>
+		<project>eu.cloudscaleproject.env.build</project>
+		<project>eu.cloudscaleproject.env.common</project>
+		<project>eu.cloudscaleproject.env.extractor</project>
+		<project>eu.cloudscaleproject.env.help</project>
+		<project>eu.cloudscaleproject.env.master</project>
+		<project>eu.cloudscaleproject.env.method</project>
+		<project>eu.cloudscaleproject.env.spotter</project>
+		<project>eu.cloudscaleproject.env.toolchain</project>
+		<project>org.scaledl.overview</project>
+		<project>org.scaledl.overview.diagram</project>
+		<project>org.scaledl.overview.edit</project>
+		<project>org.scaledl.overview.editor</project>
+		<project>org.scaledl.overview.properties</project>
+		<project>org.scaledl.overview.specification</project>
+		<project>org.scaledl.overview2pcm</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

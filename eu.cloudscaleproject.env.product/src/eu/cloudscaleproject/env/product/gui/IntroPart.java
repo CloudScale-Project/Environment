@@ -18,12 +18,13 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.Bundle;
 
+import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.ui.resources.ResourceManager;
 import eu.cloudscaleproject.env.product.Activator;
-import eu.cloudscaleproject.env.product.CommandExecutor;
 
 public class IntroPart {
 
@@ -60,12 +61,12 @@ public class IntroPart {
 		parent.setLayout(gl_parent);
 		
 		Composite header = new Composite(parent, SWT.NONE);
-		header.setBackground(SWTResourceManager.getColor(80, 114, 149));
+		header.setBackground(CommonResources.getColor(80, 114, 149));
 		header.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		header.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite c_header = new Composite(header, SWT.NONE);
-		GridLayout gl_c_header = new GridLayout(6, false);
+		GridLayout gl_c_header = new GridLayout(7, false);
 		gl_c_header.horizontalSpacing = 0;
 		gl_c_header.verticalSpacing = 0;
 		gl_c_header.marginWidth = 0;
@@ -85,6 +86,7 @@ public class IntroPart {
 		
 		Composite composite_1 = new Composite(c_header, SWT.NONE);
 		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.FILL, true, true, 1, 1);
+		gd_composite_1.widthHint = 30;
 		gd_composite_1.heightHint = 90;
 		composite_1.setLayoutData(gd_composite_1);
 		
@@ -100,9 +102,17 @@ public class IntroPart {
 				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-home.png"),
 				60, 90);
 		
+		ButtonImg newProject = new ButtonImg(c_header, 
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-newProject.png"),
+				60, 90);
+		
 		ButtonImg workspace = new ButtonImg(c_header, 
 				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/button_enter.png"),
 				75, 90);
+		new Label(c_header, SWT.NONE);
+		new Label(c_header, SWT.NONE);
+		new Label(c_header, SWT.NONE);
+		new Label(c_header, SWT.NONE);
 		
 		Composite c_body = new Composite(parent, SWT.NONE);
 		c_body.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -122,6 +132,13 @@ public class IntroPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				browser.forward();
+			}
+		});
+		
+		newProject.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				commandExecutor.execute("eu.cloudscaleproject.env.product.command.newProject");
 			}
 		});
 		

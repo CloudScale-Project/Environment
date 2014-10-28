@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.core.runtime.applications"
+         id="OverviewEditorAdvisorApplication">
+      <!-- @generated org.scaledl.overview -->
+      <application>
+         <run class="org.scaledl.overview.presentation.OverviewEditorAdvisor$Application"/>
+      </application>
+   </extension>
+
+   <extension point="org.eclipse.ui.perspectives">
+      <!-- @generated org.scaledl.overview -->
+      <perspective
+            name="%_UI_Perspective_label"
+            class="org.scaledl.overview.presentation.OverviewEditorAdvisor$Perspective"
+            id="org.scaledl.overview.presentation.OverviewEditorAdvisorPerspective">
+      </perspective>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands">
+      <!-- @generated org.scaledl.overview -->
+      <command
+            name="%_UI_Menu_OpenURI_label"
+            description="%_UI_Menu_OpenURI_description"
+            categoryId="org.eclipse.ui.category.file"
+            id="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenURICommand"/>
+      <command
+            name="%_UI_Menu_Open_label"
+            description="%_UI_Menu_Open_description"
+            categoryId="org.eclipse.ui.category.file"
+            id="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenCommand"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.bindings">
+      <!-- @generated org.scaledl.overview -->
+      <key
+            commandId="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenURICommand"
+            sequence="M1+U"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenCommand"
+            sequence="M1+O"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_OverviewEditorAdvisor_ActionSet_label"
+            visible="true"
+            id="OverviewEditorAdvisorActionSet">
+         <action
+               label="%_UI_Menu_About_label"
+               class="org.scaledl.overview.presentation.OverviewEditorAdvisor$AboutAction"
+               menubarPath="help/additions"
+               id="org.scaledl.overview.presentation.OverviewEditorAdvisorAboutAction"/>
+         <action
+               label="%_UI_Menu_OpenURI_label"
+               definitionId="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenURICommand"
+               class="org.scaledl.overview.presentation.OverviewEditorAdvisor$OpenURIAction"
+               menubarPath="file/additions"
+               id="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenURIAction"/>
+         <action
+               label="%_UI_Menu_Open_label"
+               definitionId="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenCommand"
+               class="org.scaledl.overview.presentation.OverviewEditorAdvisor$OpenAction"
+               menubarPath="file/additions"
+               id="org.scaledl.overview.presentation.OverviewEditorAdvisorOpenAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_OverviewModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.presentation.OverviewActionBarContributorActionSet">
+         <action
+               label="%_UI_OverviewModelWizard_label"
+               class="org.scaledl.overview.presentation.OverviewActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.presentation.OverviewActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.presentation.OverviewEditorID"
+            name="%_UI_OverviewEditor_label"
+            icon="icons/full/obj16/OverviewModelFile.gif"
+            extensions="sdlo"
+            class="org.scaledl.overview.presentation.OverviewEditor"
+            contributorClass="org.scaledl.overview.presentation.OverviewActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_CoreModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.core.presentation.CoreActionBarContributorActionSet">
+         <action
+               label="%_UI_CoreModelWizard_label"
+               class="org.scaledl.overview.core.presentation.CoreActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.core.presentation.CoreActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.core.presentation.CoreEditorID"
+            name="%_UI_CoreEditor_label"
+            icon="icons/full/obj16/CoreModelFile.gif"
+            extensions="core"
+            class="org.scaledl.overview.core.presentation.CoreEditor"
+            contributorClass="org.scaledl.overview.core.presentation.CoreActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_ApplicationModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.application.presentation.ApplicationActionBarContributorActionSet">
+         <action
+               label="%_UI_ApplicationModelWizard_label"
+               class="org.scaledl.overview.application.presentation.ApplicationActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.application.presentation.ApplicationActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.application.presentation.ApplicationEditorID"
+            name="%_UI_ApplicationEditor_label"
+            icon="icons/full/obj16/ApplicationModelFile.gif"
+            extensions="application"
+            class="org.scaledl.overview.application.presentation.ApplicationEditor"
+            contributorClass="org.scaledl.overview.application.presentation.ApplicationActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_ArchitectureModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.architecture.presentation.ArchitectureActionBarContributorActionSet">
+         <action
+               label="%_UI_ArchitectureModelWizard_label"
+               class="org.scaledl.overview.architecture.presentation.ArchitectureActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.architecture.presentation.ArchitectureActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.architecture.presentation.ArchitectureEditorID"
+            name="%_UI_ArchitectureEditor_label"
+            icon="icons/full/obj16/ArchitectureModelFile.gif"
+            extensions="architecture"
+            class="org.scaledl.overview.architecture.presentation.ArchitectureEditor"
+            contributorClass="org.scaledl.overview.architecture.presentation.ArchitectureActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_DeploymentModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.deployment.presentation.DeploymentActionBarContributorActionSet">
+         <action
+               label="%_UI_DeploymentModelWizard_label"
+               class="org.scaledl.overview.deployment.presentation.DeploymentActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.deployment.presentation.DeploymentActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.deployment.presentation.DeploymentEditorID"
+            name="%_UI_DeploymentEditor_label"
+            icon="icons/full/obj16/DeploymentModelFile.gif"
+            extensions="deployment"
+            class="org.scaledl.overview.deployment.presentation.DeploymentEditor"
+            contributorClass="org.scaledl.overview.deployment.presentation.DeploymentActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_SpecificationModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.specification.presentation.SpecificationActionBarContributorActionSet">
+         <action
+               label="%_UI_SpecificationModelWizard_label"
+               class="org.scaledl.overview.specification.presentation.SpecificationActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.specification.presentation.SpecificationActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.specification.presentation.SpecificationEditorID"
+            name="%_UI_SpecificationEditor_label"
+            icon="icons/full/obj16/SpecificationModelFile.gif"
+            extensions="specification"
+            class="org.scaledl.overview.specification.presentation.SpecificationEditor"
+            contributorClass="org.scaledl.overview.specification.presentation.SpecificationActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_SlaModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.specification.sla.presentation.SlaActionBarContributorActionSet">
+         <action
+               label="%_UI_SlaModelWizard_label"
+               class="org.scaledl.overview.specification.sla.presentation.SlaActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.specification.sla.presentation.SlaActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.specification.sla.presentation.SlaEditorID"
+            name="%_UI_SlaEditor_label"
+            icon="icons/full/obj16/SlaModelFile.gif"
+            extensions="sla"
+            class="org.scaledl.overview.specification.sla.presentation.SlaEditor"
+            contributorClass="org.scaledl.overview.specification.sla.presentation.SlaActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets">
+      <!-- @generated org.scaledl.overview -->
+      <actionSet
+            label="%_UI_ParametertypeModelWizard_ActionSet_label"
+            visible="true"
+            id="org.scaledl.overview.parametertype.presentation.ParametertypeActionBarContributorActionSet">
+         <action
+               label="%_UI_ParametertypeModelWizard_label"
+               class="org.scaledl.overview.parametertype.presentation.ParametertypeActionBarContributor$NewAction"
+               menubarPath="file/new/additions"
+               id="org.scaledl.overview.parametertype.presentation.ParametertypeActionBarContributorNewAction"/>
+      </actionSet>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated org.scaledl.overview -->
+      <editor
+            id="org.scaledl.overview.parametertype.presentation.ParametertypeEditorID"
+            name="%_UI_ParametertypeEditor_label"
+            icon="icons/full/obj16/ParametertypeModelFile.gif"
+            extensions="parametertype"
+            class="org.scaledl.overview.parametertype.presentation.ParametertypeEditor"
+            contributorClass="org.scaledl.overview.parametertype.presentation.ParametertypeActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

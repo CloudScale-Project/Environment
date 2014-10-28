@@ -18,14 +18,16 @@ import eu.cloudscaleproject.env.product.branding.CloudScaleBranding;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private static final String PERSPECTIVE_ID = "eu.cloudscaleproject.env.product.perspective"; //$NON-NLS-1$
+	//TODO: Check if true! Default perspective should already be set in "Application.e4xmi" meta model.
+	//private static final String INITIAL_PERSPECTIVE_ID = "eu.cloudscaleproject.env.product.perspective.intro"; //$NON-NLS-1$
 
     public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return PERSPECTIVE_ID;
+		return IWorkbenchPreferenceConstants.DEFAULT_PERSPECTIVE_ID;
+		//return INITIAL_PERSPECTIVE_ID;
 	}
 	
 	@Override

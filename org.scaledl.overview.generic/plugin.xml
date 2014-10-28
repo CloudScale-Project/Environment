@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.scaledl.overview.Specification">
+      <specification
+            model="models/aws-cloud.specification"
+            name="AWS Cloud Specification">
+      </specification>
+      <specification
+            model="models/sap-hana-cloud.specification"
+            name="SAP Hana Cloud Specification">
+      </specification>
+      <specification
+            model="models/open-stack-cloud.specification"
+            name="Open Stack Cloud Specification">
+      </specification>
+      <specification
+            model="models/generic-system.specification"
+            name="Generic System Specification">
+      </specification>
+   </extension>
+</plugin>

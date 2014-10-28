@@ -1,6 +1,6 @@
 library csm2pcmUtil;
 
-modeltype CSMMODEL uses csm('http://eu.cloudscaleproject.env/CloudscaleComponentModel/1.0');
+modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
 modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
 modeltype SYSTEM uses pcm::system('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
 modeltype COMPOSITION uses pcm::core::composition('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
@@ -83,7 +83,7 @@ query getRelatedAssemblyContextFromProvidedRole(in assemblyContexts : Set(Assemb
 	return acs;
 }
 
-query getAssemblyContextFromRequiredRole(in assemblyContexts : Set(AssemblyContext), in requiredRole : OperationProvidedRole) : AssemblyContext {
+query getAssemblyContextFromRequiredRole(in assemblyContexts : Set(AssemblyContext), in requiredRole : RequiredRole) : AssemblyContext {
 	var acs : List(AssemblyContext);
 	
 	assemblyContexts->forEach(ac){
@@ -125,57 +125,36 @@ query getRelatedAssemblyContextFromRequiredRole(in assemblyContexts : Set(Assemb
 	return acs;
 }
 
-query getOperationInterfaces(in platformService : CSMMODEL::architecture::PlatformService) : Set(CSMMODEL::core::OperationInterface){
-	var interfaces : Set(CSMMODEL::core::OperationInterface);
-	
-	if(platformService.oclIsKindOf(CSMMODEL::architecture::OperationInterfaceContainer)) then {
-		var oic = platformService.oclAsType(CSMMODEL::architecture::OperationInterfaceContainer);
-		interfaces += oic.providedInterfaces;
-	}endif;
-	if(platformService.oclIsKindOf(CSMMODEL::architecture::SoftwareServiceContainer)) then {
-		var asc = platformService.oclAsType(CSMMODEL::architecture::SoftwareServiceContainer);
-		asc.softwareServices->forEach(as){
-			interfaces += as.providedInterfaces;
-		}
-	}endif;
-
-	return interfaces;
+query getProvidingExternalConnections(in cloudEnv : OVERVIEW::architecture::CloudEnvironment) : Set(OVERVIEW::architecture::ExternalConnection){
+	return cloudEnv.architecture.externalConnections->select(cloudEnv = (source.getCloudEnvironment()));
 }
 
-query getProvidingHybridConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::HybridConnection){
-	return cloudProvider.architecture.hybridConnections->select(sourcePlatformService.platformLayer.cloudEnvironment = cloudProvider);
+query getRequiringExternalConnections(in cloudEnv : OVERVIEW::architecture::CloudEnvironment) : Set(OVERVIEW::architecture::ExternalConnection){
+		return cloudEnv.architecture.externalConnections->select(cloudEnv = (source.getCloudEnvironment()));
 }
 
-query getRequiringHybridConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::HybridConnection){
-	return cloudProvider.architecture.hybridConnections->select(targetPlatformService.platformLayer.cloudEnvironment = cloudProvider);
+query getUsageConnections(in cloudEnv : OVERVIEW::architecture::CloudEnvironment) : Set(OVERVIEW::architecture::ExternalConnection){
+		return cloudEnv.architecture.usageConnections->select(cloudEnv = (target.getCloudEnvironment()));
 }
 
-query getExternalConnections(in cloudProvider : CSMMODEL::architecture::CloudEnvironment) : Set(CSMMODEL::architecture::ExternalConnection){
-	return cloudProvider.architecture.externalConnections->select(platformService.platformLayer.cloudEnvironment = cloudProvider);
-}
-
-query collectProvidedOpInterfaces(in connections : Set(CSMMODEL::architecture::Connection)) : Set(CSMMODEL::core::OperationInterface){
-	var hcs : Set(CSMMODEL::core::OperationInterface);
+query collectProvidedOpInterfaces(in connections : Set(OVERVIEW::architecture::Connection)) : Set(OVERVIEW::application::OperationInterface){
+	var hcs : Set(OVERVIEW::application::OperationInterface);
 	//collect internal
-	connections[CSMMODEL::architecture::InternalConnection]->forEach(hc){
-		hcs += getOperationInterfaces(hc.sourcePlatformService);
+	connections[OVERVIEW::architecture::InternalConnection]->forEach(ic){
+		hcs += ic.target.providedInterfaces;
 	};
 	//collect hybrid
-	connections[CSMMODEL::architecture::HybridConnection]->forEach(hc){
-		hcs += getOperationInterfaces(hc.sourcePlatformService);
-	};
-	//collect external
-	connections[CSMMODEL::architecture::ExternalConnection]->forEach(hc){
-		hcs += getOperationInterfaces(hc.platformService);
+	connections[OVERVIEW::architecture::ExternalConnection]->forEach(ec){
+		hcs += ec.target.providedInterfaces;
 	};
 	return hcs;
 }
 
-query getApplicationServicesRequiringInterfaces(in platformService : CSMMODEL::architecture::SoftwareServiceContainer, 
-												in interface : CSMMODEL::core::OperationInterface) 
-												: Set(CSMMODEL::architecture::DeployableSoftwareService){
+query getApplicationServicesRequiringInterfaces(in platformService : OVERVIEW::architecture::SoftwareServiceContainer, 
+												in interface : OVERVIEW::application::OperationInterface) 
+												: Set(OVERVIEW::architecture::SoftwareService){
 	
-	var daServices : Set(CSMMODEL::architecture::DeployableSoftwareService);
+	var daServices : Set(OVERVIEW::architecture::SoftwareService);
 	
 	platformService.softwareServices->forEach(daService){
 		if(daService.requiredInterfaces->includes(interface)) then{
@@ -185,12 +164,85 @@ query getApplicationServicesRequiringInterfaces(in platformService : CSMMODEL::a
 	return daServices;
 }
 
-/*
-query collectRequiringOpInterfaces(in hybridConnections : Set(CSMMODEL::architecture::HybridConnection)) : Set(CSMMODEL::core::OperationInterface){
-	var hcs : Set(CSMMODEL::core::OperationInterface);
-	hybridConnections->forEach(hc){
-		hcs += hc.targetComponent.requiredInterfaces->select(hc.sourceComponent.providedInterface);
-	};
-	return hcs;
+query OVERVIEW::application::OperationInterfaceContainer::getProvidedService() : OVERVIEW::architecture::ProvidedService{
+	
+	var providedService : OVERVIEW::architecture::ProvidedService := null;
+	
+	if(self.oclIsKindOf(OVERVIEW::architecture::Service)) then{
+		providedService := self.oclAsType(OVERVIEW::architecture::Service).getProvidedService();
+	} endif;
+	if(self.oclIsKindOf(OVERVIEW::architecture::Proxy)) then{
+		providedService := self.oclAsType(OVERVIEW::architecture::Proxy).getProvidedService();
+	}endif;
+	
+	return providedService;
 }
-*/
+
+query OVERVIEW::architecture::Proxy::getProvidedService() : OVERVIEW::architecture::ProvidedService{
+	
+	var providedService : OVERVIEW::architecture::ProvidedService := null;
+	if(self.oclIsKindOf(OVERVIEW::architecture::ProvidedService)) then{
+		providedService := self.oclAsType(OVERVIEW::architecture::ProvidedService);
+	} endif;
+	
+	return providedService;
+}
+
+query OVERVIEW::architecture::Service::getProvidedService() : OVERVIEW::architecture::ProvidedService{
+	
+	var providedService : OVERVIEW::architecture::ProvidedService := null;
+	
+	if(self.oclIsKindOf(OVERVIEW::architecture::ProvidedService)) then{
+		providedService := self.oclAsType(OVERVIEW::architecture::ProvidedService);
+		return providedService;
+	} endif;
+	
+	if(self.oclIsKindOf(OVERVIEW::architecture::SoftwareService)) then{
+		var softwareService := self.oclAsType(OVERVIEW::architecture::SoftwareService);
+		
+		if(softwareService.runtimePlatformService.oclIsKindOf(OVERVIEW::architecture::ProvidedService)) then{
+			providedService := softwareService.runtimePlatformService.oclAsType(OVERVIEW::architecture::ProvidedService);
+		}
+		else{ 
+			providedService := softwareService.runtimePlatformService
+				.oclAsType(OVERVIEW::architecture::PlatformService).computingInfrastructureService
+				.oclAsType(OVERVIEW::architecture::ProvidedService);
+		}endif;
+		return providedService;
+	} endif;
+	
+	if(self.oclIsKindOf(OVERVIEW::architecture::PlatformService)) then{
+		var platformService := self.oclAsType(OVERVIEW::architecture::PlatformService);
+		
+		if(platformService.computingInfrastructureService.oclIsKindOf(OVERVIEW::architecture::ProvidedService)) then{
+			providedService := platformService.computingInfrastructureService.oclAsType(OVERVIEW::architecture::ProvidedService);
+			return providedService;
+		}endif;
+	} endif;
+	
+	log("Unable to retrieve 'ProvidedService' (the one that holds deployment) from specified 'Service'");
+	
+	return providedService;
+}
+
+query OVERVIEW::architecture::Service::getDeployment() : OVERVIEW::deployment::ServiceDeployment{
+	return self.getProvidedService().deployment;
+}
+
+query OVERVIEW::core::Entity::getCloudEnvironment() : OVERVIEW::architecture::CloudEnvironment{
+	
+	var srv : Element := self;
+	
+	while(srv != null){
+		
+		if(srv.oclIsKindOf(OVERVIEW::architecture::CloudEnvironment)) then{
+			return srv.oclAsType(OVERVIEW::architecture::CloudEnvironment);
+		}endif;
+		
+		srv := srv.container();
+	};
+	
+	log("Searching cloud environment for entity failed! Entity is not contained in cloud environment!");
+	
+	return null;
+}

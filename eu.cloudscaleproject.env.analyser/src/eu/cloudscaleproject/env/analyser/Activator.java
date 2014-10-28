@@ -3,8 +3,6 @@ package eu.cloudscaleproject.env.analyser;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.toolchain.definition.IAnalyser;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -14,7 +12,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "eu.cloudscaleproject.env.analyser"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	public static Activator plugin;
+	public static BundleContext bundleContext;
 	
 	/**
 	 * The constructor
@@ -27,11 +26,9 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		
-		context.registerService(IAnalyser.class.getName(), new Analyser(), null);
-		
+		super.start(context);		
 		plugin = this;
+		bundleContext = context;
 	}
 
 	/*
@@ -40,7 +37,12 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		bundleContext = null;
 		super.stop(context);
+	}
+	
+	public static BundleContext getContext(){
+		return bundleContext;
 	}
 
 	/**

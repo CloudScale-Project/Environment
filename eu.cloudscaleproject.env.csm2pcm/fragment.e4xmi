@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_jgtTMKt_EeOG6cOE6pIkzA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_C4EXoKuAEeOG6cOE6pIkzA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_OtcqMKuAEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.csm2pcm.command.runtransformation" commandName="runTransformation"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EpU54KuAEeOG6cOE6pIkzA" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_VL-M0KuAEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.csm2pcm.handler.runtransformation" contributionURI="bundleclass://eu.cloudscaleproject.env.csm2pcm/eu.cloudscaleproject.env.csm2pcm.handlers.RunTransformationHandler" command="_OtcqMKuAEeOG6cOE6pIkzA"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<measurementEnvironment xmlns="org.spotter.shared.environment.model">
+    <instrumentationController>
+        <extensionName>instrumentation.satellite.adapter.default</extensionName>
+        <config key="org.spotter.satellite.port" value="8888"/>
+        <config key="org.spotter.satellite.adapter.name" value="Default Instrumentation Satellite Adapter"/>
+        <config key="org.spotter.satellite.host" value="localhost"/>
+    </instrumentationController>
+    <measurementController>
+        <extensionName>measurement.satellite.adapter.instrumentation</extensionName>
+        <config key="org.spotter.satellite.port" value="8888"/>
+        <config key="org.spotter.satellite.adapter.name" value="Instrumentation Measurement Satellite Adapter"/>
+        <config key="org.spotter.satellite.host" value="localhost"/>
+    </measurementController>
+    <workloadAdapter>
+        <extensionName>workload.satellite.adapter.customized</extensionName>
+        <config key="org.spotter.satellite.adapter.name" value="Customized Workload Satellite Adapter"/>
+        <config key="org.spotter.workload.simple.userScriptClassName" value="org.spotter.ext.demo.load.VUser"/>
+        <config key="org.spotter.workload.simple.userScriptPath" value="C:/Users/c5170547/Documents/DynamicSpotter/SPEC-RG submission/DS-Demo/Executables/loadScript"/>
+    </workloadAdapter>
+</measurementEnvironment>

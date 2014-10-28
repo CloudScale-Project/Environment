@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<specification:CloudSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
+  <descriptor name="SAP HANA Cloud Platform" description="SAP HANA Cloud Platform cloud environment... " providerID="hana">
+    <availabilityZones name="HANA Default" providerID="hana" networkInfrastructureServiceDescriptor="//@infrastructureServiceDescriptors.0"/>
+  </descriptor>
+  <infrastructureServiceDescriptors xsi:type="specification:NetworkInfrastructureServiceDescriptor" name="Internal connection" bandwidth="1000" latency="50"/>
+  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" providerID="hana">
+    <computingResourceDescriptors name="HANA Low Perofmance Instance" providerID="hana" memory="1700" cpu="1200" cpuUnits="1" storage="160"/>
+  </infrastructureServiceDescriptors>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformRuntimeServiceDescriptor" name="HANA PaaS" providerID="hana" infrastructureServiceDescriptor="//@infrastructureServiceDescriptors.1"/>
+</specification:CloudSpecification>

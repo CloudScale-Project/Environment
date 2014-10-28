@@ -1,10 +1,12 @@
-modeltype CSMMODEL uses csm('http://eu.cloudscaleproject.env/CloudscaleComponentModel/1.0'); 
+import pcm2csmData;
+
+modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0'); 
 modeltype PCM uses pcm('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
 modeltype ECORE uses "http://www.eclipse.org/emf/2002/Ecore";
-modeltype DATA_TYPE uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
 
 transformation csm2pcm(in pcmInstance : PCM,
-					   inout csmInstance : CSMMODEL);
+					   inout overviewInstance : OVERVIEW);
 					  
 configuration property moduleID : String;
 configuration property CSMID : String;
@@ -16,12 +18,12 @@ configuration property PCM_INTERFACE_KEY : String;
 main() {
 	log("Transformation pcm2csmModule started!");
 	
-	var csmRoot : Csm := csmInstance.rootObjects()![Csm];
+	var csmRoot : Overview := overviewInstance.rootObjects()![Overview];
 	
 	var systemRoot : pcm::system::System := pcmInstance.rootObjects()![pcm::system::System];
 	var repositoryRoot : pcm::repository::Repository := pcmInstance.rootObjects()![pcm::repository::Repository];
 	
-	var softwareService : CSMMODEL::architecture::SoftwareService := csmRoot.architecture.cloudProviders.softwareLayer.services![id = moduleID];
+	var softwareService : OVERVIEW::architecture::SoftwareService := csmRoot.architecture.cloudEnvironments.softwareLayer.services![id = moduleID];
 	
 	if(systemRoot = null) then{
 		return;
@@ -31,6 +33,10 @@ main() {
 	
 	softwareService.name := systemRoot.entityName;
 	
+	//datatypes
+	csmRoot.dataTypes.types += repositoryRoot.dataTypes__Repository->map dataType2parameter();
+	
+	//interfaces
 	softwareService.providedInterfaces := systemRoot.
 									providedRoles_InterfaceProvidingEntity[pcm::repository::OperationProvidedRole]
 									->map providedRole2OpInterface(softwareService);
@@ -60,44 +66,26 @@ main() {
 	log("Transformation pcm2csmModule done!");
 }
 
-mapping pcm::repository::OperationSignature::operationSignature2operation() : CSMMODEL::core::Operation{
+mapping pcm::repository::OperationSignature::operationSignature2operation() : OVERVIEW::application::Operation{
 	
 	name := self.entityName;
-	methodName := self.entityName;
 	
-	self.parameters__OperationSignature->forEach(param){
-	
-		if(param.dataType__Parameter.toString().endsWith("INT)")) then{
-			parameters += CSMMODEL::core::TypeEnum::INT;
+	self.parameters__OperationSignature.dataType__Parameter[REPOSITORY::PrimitiveDataType]->forEach(dataType){
+		var primitiveType = dataType.getOverviewModelEquivalent(overviewInstance.rootObjects()![Overview].dataTypes);
+		if(primitiveType <> null) then{
+			parameters += primitiveType;
+		}
+		else{
+			parameters += dataType.resolveoneIn(REPOSITORY::DataType::dataType2parameter, 
+												OVERVIEW::parametertype::Parameter);
 		}endif;
-		if(param.dataType__Parameter.toString().endsWith("STRING)")) then{
-			parameters += CSMMODEL::core::TypeEnum::STRING;
-		}endif;
-		if(param.dataType__Parameter.toString().endsWith("BOOL)")) then{
-			parameters += CSMMODEL::core::TypeEnum::BOOL;
-		}endif;
-		if(param.dataType__Parameter.toString().endsWith("DOUBLE)")) then{
-			parameters += CSMMODEL::core::TypeEnum::DOUBLE;
-		}endif;
+		
 	};
-	
-	if(self.returnType__OperationSignature.toString().endsWith("INT)")) then{
-		returnValue := CSMMODEL::core::TypeEnum::INT;
-	}endif;
-	if(self.returnType__OperationSignature.toString().endsWith("STRING)")) then{
-		returnValue := CSMMODEL::core::TypeEnum::STRING;
-	}endif;
-	if(self.returnType__OperationSignature.toString().endsWith("BOOL)")) then{
-		returnValue := CSMMODEL::core::TypeEnum::BOOL;
-	}endif;
-	if(self.returnType__OperationSignature.toString().endsWith("DOUBLE)")) then{
-		returnValue := CSMMODEL::core::TypeEnum::DOUBLE;
-	}endif;
-	
+																				 
 	id := CSMID + self.id + '_operationSignature2operation';
 }
 
-mapping pcm::repository::OperationProvidedRole::providedRole2OpInterface(in parentSoftwareService : CSMMODEL::architecture::SoftwareService) : CSMMODEL::core::OperationInterface{
+mapping pcm::repository::OperationProvidedRole::providedRole2OpInterface(in parentSoftwareService : OVERVIEW::architecture::SoftwareService) : OVERVIEW::application::OperationInterface{
 
 	name := self.providedInterface__OperationProvidedRole.entityName;
 	providingContainer := parentSoftwareService;
@@ -105,7 +93,7 @@ mapping pcm::repository::OperationProvidedRole::providedRole2OpInterface(in pare
 	operations := Sequence{};
 	operations += self.providedInterface__OperationProvidedRole.signatures__OperationInterface->map operationSignature2operation();
 	
-	aeMap += object CSMMODEL::core::AEEntry{
+	aeMap += object OVERVIEW::core::AEEntry{
 		key := PCM_INTERFACE_KEY;
 		value := self.providedInterface__OperationProvidedRole.oclAsType(ECORE::EObject);
 	};
@@ -115,7 +103,7 @@ mapping pcm::repository::OperationProvidedRole::providedRole2OpInterface(in pare
 	id := self.providedInterface__OperationProvidedRole.id + '_providedRole2OpInterface';
 }
 
-mapping pcm::repository::OperationRequiredRole::requiredRole2OpInterface(in parentSoftwareService : CSMMODEL::architecture::SoftwareService) : CSMMODEL::core::OperationInterface{
+mapping pcm::repository::OperationRequiredRole::requiredRole2OpInterface(in parentSoftwareService : OVERVIEW::architecture::SoftwareService) : OVERVIEW::application::OperationInterface{
 	
 	name := self.requiredInterface__OperationRequiredRole.entityName;
 	providingContainer := parentSoftwareService;
@@ -123,7 +111,7 @@ mapping pcm::repository::OperationRequiredRole::requiredRole2OpInterface(in pare
 	operations := Sequence{};
 	operations += self.requiredInterface__OperationRequiredRole.signatures__OperationInterface->map operationSignature2operation();
 
-	aeMap += object CSMMODEL::core::AEEntry{
+	aeMap += object OVERVIEW::core::AEEntry{
 		key := PCM_INTERFACE_KEY;
 		value := self.requiredInterface__OperationRequiredRole.oclAsType(ECORE::EObject);
 	};

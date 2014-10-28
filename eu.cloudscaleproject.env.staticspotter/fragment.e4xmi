@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_nlLzYC3jEeSFlZh2WowR_Q">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EsKJkC3kEeSFlZh2WowR_Q" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_O0RpEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.command.openeditor" commandName="Open Static Spotter Editor"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FUq7EC3kEeSFlZh2WowR_Q" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_PhIIAC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.StaticSpotterEditorHandler" command="_O0RpEC3kEeSFlZh2WowR_Q"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FmhgEC3kEeSFlZh2WowR_Q" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_QH5NEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/html/ic-spotter.png" tooltip="Open Static Spotter Editor" command="_O0RpEC3kEeSFlZh2WowR_Q"/>
+  </fragments>
+</fragment:ModelFragments>

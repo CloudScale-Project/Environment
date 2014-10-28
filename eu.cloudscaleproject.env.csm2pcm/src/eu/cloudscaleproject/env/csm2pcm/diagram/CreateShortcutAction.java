@@ -8,7 +8,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.TransactionalEditingDomain.Registry;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.CreateCommand;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
@@ -19,7 +18,7 @@ import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
 
 import de.uka.ipd.sdq.pcm.gmf.repository.part.PalladioComponentModelRepositoryDiagramEditor;
@@ -86,13 +85,13 @@ public class CreateShortcutAction  {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					IEditorPart[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors();
+					IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
 					
-					for (IEditorPart editor : editors)
+					for (IEditorReference editorRef : editorReferences)
 					{
-						if (editor instanceof PalladioComponentModelRepositoryDiagramEditor)
+						if (editorRef.getEditor(false) instanceof PalladioComponentModelRepositoryDiagramEditor)
 						{
-							PalladioComponentModelRepositoryDiagramEditor pe = (PalladioComponentModelRepositoryDiagramEditor) editor;
+							PalladioComponentModelRepositoryDiagramEditor pe = (PalladioComponentModelRepositoryDiagramEditor) editorRef.getEditor(false);
 							
 							editPart = pe.getDiagramEditPart();
 							view = (View) editPart.getModel();
@@ -114,7 +113,7 @@ public class CreateShortcutAction  {
     	List<OperationInterface> interfaces = getInterfaces(d);
     	if (interfaces == null || interfaces.isEmpty()) return;
     	
-    	Repository repository = (Repository) d.getElement();
+    	//Repository repository = (Repository) d.getElement();
 
  		
     	ICommand command = null;
@@ -159,8 +158,8 @@ public class CreateShortcutAction  {
 
 		List<OperationInterface> interfaces = new ArrayList<OperationInterface>();
 		// we create a composition of the commands necessary
-		CreateViewRequest.ViewDescriptor rootDescriptor = new CreateViewRequest.ViewDescriptor(
-				new EObjectAdapter(repository), Node.class, null, null);
+		//CreateViewRequest.ViewDescriptor rootDescriptor = new CreateViewRequest.ViewDescriptor(
+		//		new EObjectAdapter(repository), Node.class, null, null);
 		//ICommand command = new RefreshElementCommand(rootObject,
 		//		editingDomain,
 		//		diagram);

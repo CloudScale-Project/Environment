@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="overview" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0"
+    nsPrefix="overview">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="This package is the root package of all packages of the CloudScale Model (CSM)."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Overview">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The CSM is the single root element of the XMI file which is generated for the CSM model. It consist of two main sub-models; Architecture and SystemDefinition."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="architecture" eType="#//architecture/Architecture"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployment" eType="#//deployment/Deployment"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definition" eType="#//specification/SystemSpecification"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataTypes" eType="#//parametertype/ParameterType"
+        containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="core" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Core/1.0"
+      nsPrefix="core">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This package contains several core classes that are used by classes from other two packages (i.e. Architecture and Definition package). It provides abstract base class Entity, used by all other classes, providing them id, name and description attributes. Additionally, the package provides business logic related classes; modules, operation interfaces and operations. "/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EEnum" name="MeasurementMetric_NOTUSED">
+      <eLiterals name="CPU_UTILIZATION"/>
+      <eLiterals name="DISK_WRITE_OPS" value="1"/>
+      <eLiterals name="DISK_WRITE_BYTES" value="2"/>
+      <eLiterals name="DISK_READ_OPS" value="3"/>
+      <eLiterals name="DISK_READ_BYTES" value="4"/>
+      <eLiterals name="LATENCY" value="5"/>
+      <eLiterals name="REQUEST_COUNT" value="6"/>
+      <eLiterals name="NETWORK_OUT" value="7"/>
+      <eLiterals name="NETWORK_IN" value="8"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="StatisticType_NOTUSED">
+      <eLiterals name="AVERAGE"/>
+      <eLiterals name="MIN" value="1"/>
+      <eLiterals name="MAX" value="2"/>
+      <eLiterals name="SUM" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AVEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AEEntry" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Entity" abstract="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Entity is a meta-class high up the CSM meta-class hierarchy and represents all entities of the CSM that have an id, name and description. Additionally the Entity contains key-value set, which can be used to extend the model with additional information.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="" unsettable="true" iD="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="avMap" upperBound="-1"
+          eType="#//core/AVEntry" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aeMap" upperBound="-1"
+          eType="#//core/AEEntry" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="application" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Application/1.0"
+      nsPrefix="application">
+    <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The operation represents specific operation signature in association to parameters and return value.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnParameter" eType="#//parametertype/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//parametertype/Parameter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationInterfaceContainer" abstract="true"
+        interface="true" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedInterfaces" upperBound="-1"
+          eType="#//application/OperationInterface" containment="true" eOpposite="#//application/OperationInterface/providingContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredInterfaces" upperBound="-1"
+          eType="#//application/OperationInterface" eOpposite="#//application/OperationInterface/requiringContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationInterface" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This entity models represents provided or required services, used by modules (see Module), as a set of operation signatures (see Operation). "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+          eType="#//application/Operation" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providingContainer" eType="#//application/OperationInterfaceContainer"
+          eOpposite="#//application/OperationInterfaceContainer/providedInterfaces">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiringContainer" upperBound="-1"
+          eType="#//application/OperationInterfaceContainer" eOpposite="#//application/OperationInterfaceContainer/requiredInterfaces"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="architecture" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Architecture/1.0"
+      nsPrefix="architecture">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The package contains base classes for building cloud based systems. The classes are abstract representation of the cloud system architecture, while the exact specification is referenced through descriptors defined in the Definition package."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Architecture" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Architecture view provides a descriptive abstraction of the system’s architecture, without any additional performance or cost information. The root entity of the system architecture is the cloud provider (see CloudProvider), defining an abstract cloud environment that consists of components (see Component), defining provided services, and connections (see Connection) between them, defining requested intererfaces.&#xA;Additionally, for the purpose of connectivity with the external environment, connectors (see Connector) are introduced into the model that can function as an operation provider or as an operation requester.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cloudEnvironments" upperBound="-1"
+          eType="#//architecture/CloudEnvironment" containment="true" eOpposite="#//architecture/CloudEnvironment/architecture">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="proxies" upperBound="-1"
+          eType="#//architecture/Proxy" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usageConnections" upperBound="-1"
+          eType="#//architecture/ExternalConnection" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="externalConnections"
+          upperBound="-1" eType="#//architecture/ExternalConnection" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unresolvedOperationInterfaces"
+          upperBound="-1" eType="#//application/OperationInterface" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloudEnvironment" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The CloudProvider model represents abstract cloud environment. It consists of components, the deployment information of node components (for IaaS clouds) and internal connections between the components (see InternalConnection). &#xA;The nature of the cloud (IaaS and PaaS) are specified through the cloud provider descriptor (see CloudProviderDescriptor)."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="architecture" eType="#//architecture/Architecture"
+          eOpposite="#//architecture/Architecture/cloudEnvironments">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="internalConnections"
+          upperBound="-1" eType="#//architecture/InternalConnection" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cloudEnvironmentDescriptor"
+          lowerBound="1" eType="#//specification/CloudEnvironmentDescriptor">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="availabilityZoneDescriptor"
+          eType="#//specification/AvailabilityZoneDescriptor">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="infrastructureLayer"
+          lowerBound="1" eType="#//architecture/InfrastructureLayer" containment="true"
+          eOpposite="#//architecture/InfrastructureLayer/cloudEnvironment">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="platformLayer" lowerBound="1"
+          eType="#//architecture/PlatformLayer" containment="true" eOpposite="#//architecture/PlatformLayer/cloudEnvironment">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="softwareLayer" lowerBound="1"
+          eType="#//architecture/SoftwareLayer" containment="true" eOpposite="#//architecture/SoftwareLayer/cloudEnvironment">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InfrastructureLayer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+          eType="#//architecture/InfrastructureService" containment="true" eOpposite="#//architecture/InfrastructureService/infrastructureLayer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cloudEnvironment" lowerBound="1"
+          eType="#//architecture/CloudEnvironment" eOpposite="#//architecture/CloudEnvironment/infrastructureLayer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformLayer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+          eType="#//architecture/PlatformService" containment="true" eOpposite="#//architecture/PlatformService/platformLayer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cloudEnvironment" lowerBound="1"
+          eType="#//architecture/CloudEnvironment" eOpposite="#//architecture/CloudEnvironment/platformLayer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SoftwareLayer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+          eType="#//architecture/SoftwareService" containment="true" eOpposite="#//architecture/SoftwareService/softwareLayer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cloudEnvironment" lowerBound="1"
+          eType="#//architecture/CloudEnvironment" eOpposite="#//architecture/CloudEnvironment/softwareLayer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Service" abstract="true" interface="true"
+        eSuperTypes="#//core/Entity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedService" abstract="true" eSuperTypes="#//architecture/Service">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deployment" eType="#//deployment/ServiceDeployment"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InfrastructureService" abstract="true"
+        eSuperTypes="#//architecture/ProvidedService">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="infrastructureLayer"
+          eType="#//architecture/InfrastructureLayer" eOpposite="#//architecture/InfrastructureLayer/services"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComputingInfrastructureService" eSuperTypes="#//architecture/InfrastructureService">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Instance model represents an IaaS computing node; virtual machine in the elastic cloud environment. The node components (see Node) can be deployed/installed on instances.&#xA;The behaviour and hardware are specified through instance descriptors (see InstanceDescriptor), which are specified in cloud provider descriptor; each IaaS cloud environment has a set of predefined computing nodes that can be used. "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+          eType="#//specification/ComputingInfrastructureServiceDescriptor">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="platformServices" upperBound="-1"
+          eType="#//architecture/PlatformService" eOpposite="#//architecture/PlatformService/computingInfrastructureService">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformService" abstract="true" eSuperTypes="#//architecture/Service">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+          eType="#//specification/PlatformServiceDescriptor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computingInfrastructureService"
+          eType="#//architecture/ComputingInfrastructureService" eOpposite="#//architecture/ComputingInfrastructureService/platformServices"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="platformLayer" eType="#//architecture/PlatformLayer"
+          eOpposite="#//architecture/PlatformLayer/services"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformRuntimeService" eSuperTypes="#//architecture/SoftwareServiceContainer #//architecture/PlatformService"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformSupportService" eSuperTypes="#//application/OperationInterfaceContainer #//architecture/PlatformService"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedPlatformRuntimeService" eSuperTypes="#//architecture/PlatformRuntimeService #//architecture/ProvidedService"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedPlatformSupportService" eSuperTypes="#//architecture/PlatformSupportService #//architecture/ProvidedService"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SoftwareService" eSuperTypes="#//architecture/Service #//application/OperationInterfaceContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="runtimePlatformService"
+          eType="#//architecture/SoftwareServiceContainer" eOpposite="#//architecture/SoftwareServiceContainer/softwareServices"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="softwareLayer" eType="#//architecture/SoftwareLayer"
+          eOpposite="#//architecture/SoftwareLayer/services"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedSoftwareService" eSuperTypes="#//architecture/SoftwareService #//architecture/ProvidedService">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+          eType="#//specification/ProvidedSoftwareServiceDescriptor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExternalSoftwareService" eSuperTypes="#//architecture/ProvidedSoftwareService">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceProxy" lowerBound="1"
+          eType="#//architecture/ServiceProxy"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SoftwareServiceContainer" abstract="true"
+        interface="true" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="softwareServices" upperBound="-1"
+          eType="#//architecture/SoftwareService" eOpposite="#//architecture/SoftwareService/runtimePlatformService"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Connection represents dependency between two components or between connector and component. The performance of the connection (e.g. bandwidth and latency) is defined through connection descriptors. "/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InternalConnection" eSuperTypes="#//architecture/Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The InternalConnection represents dependency between two components from the same cloud environment (i.e. CloudProvider). &#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+          eType="#//specification/NetworkInfrastructureServiceDescriptor">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//application/OperationInterfaceContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//application/OperationInterfaceContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExternalConnection" eSuperTypes="#//architecture/Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The HybridConnection represents dependency between two components from different cloud environments (i.e. CloudProvider). This connection enables modeling of hybrid clouds.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//application/OperationInterfaceContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//application/OperationInterfaceContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandwidth" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="latency" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Proxy" abstract="true" eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Connector model represents external environment to which the system provides (usage connectors) its services or from which it requires services (service connector). Link between connectors and the system components is created through external connections (see ExternalConnection)."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceProxy" eSuperTypes="#//architecture/Proxy">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ServiceConnector represents external services (SaaS) that are used by the modelled system. It exposes interfaces (i.e. OperationInterface), which are required by the modules contained in the system components. "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="softwareService" eType="#//architecture/SoftwareService"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UsageProxy" eSuperTypes="#//architecture/Proxy #//application/OperationInterfaceContainer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The UsageConnector model contains the interfaces that are exposed by the system. Each component connected to usage connector  (through external connection) can expose interfaces defined in their modules to an external environment."/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="deployment" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Deployment/1.0"
+      nsPrefix="deployment">
+    <eClassifiers xsi:type="ecore:EEnum" name="SchedulingPolicy">
+      <eLiterals name="ROUND_ROBIN"/>
+      <eLiterals name="CUSTOM" value="1" literal="CUSTOM"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ScalingPolicyType">
+      <eLiterals name="SCALING_UP_POLICY" literal="SCALING_UP_POLICY"/>
+      <eLiterals name="SCALING_DOWN_POLICY" value="1" literal="SCALING_DOWN_POLICY"/>
+      <eLiterals name="PRECENT_CHANGE_IN_CAPACITY" value="2" literal="PRECENT_CHANGE_IN_CAPACITY"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ScalingCapacityType">
+      <eLiterals name="CHANGE_IN_CAPACITY" literal="CHANGE_IN_CAPACITY"/>
+      <eLiterals name="EXACT_CAPACITY" value="1" literal="EXACT_CAPACITY"/>
+      <eLiterals name="PRECENT_CHANGE_IN_CAPACITY" value="2" literal="PRECENT_CHANGE_IN_CAPACITY"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Deployment" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceDeployments" upperBound="-1"
+          eType="#//deployment/ServiceDeployment" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceDeployment" eSuperTypes="#//core/Entity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GenericDeployment" eSuperTypes="#//deployment/ServiceDeployment"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RuntimeDeployment" eSuperTypes="#//deployment/ServiceDeployment">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computingEnvironment"
+          lowerBound="1" eType="#//deployment/ComputingEnvironment" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComputingEnvironment" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instanceDescriptor" eType="#//specification/ComputingResourceDescriptor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClusteredComputingEnvironment" eSuperTypes="#//deployment/ComputingEnvironment">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loadBalancer" lowerBound="1"
+          eType="#//deployment/LoadBalancer" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ScalableComputingEnvironment" eSuperTypes="#//deployment/ClusteredComputingEnvironment">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="scalingManager" lowerBound="1"
+          eType="#//deployment/ScalingManager" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ScalingManager" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="scalingPolicy" upperBound="-1"
+          eType="#//deployment/ScalingPolicy" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ScalingPolicy" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scalingPolicyType" lowerBound="1"
+          eType="#//deployment/ScalingPolicyType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scalingCapacityType"
+          lowerBound="1" eType="#//deployment/ScalingCapacityType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="adjustment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cooldown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="trigger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LoadBalancer" eSuperTypes="#//core/Entity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="schedulingPolicy" lowerBound="1"
+          eType="#//deployment/SchedulingPolicy"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="specification" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0"
+      nsPrefix="specification">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This package defines the descriptors, which are referenced by classes in Architecture package, and provides exact specification to cloud system components. Additionally package defines also two definition classes (i.e. CloudDefinition and SoftwareDefinition) that are used as descriptor containers, whose purpose is to extend available specifications.&#xA;"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Specification" abstract="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SystemSpecification" eSuperTypes="#//specification/Specification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The SystemDefinition is part of the CSM and is container for all descriptors referenced by the architecture classes. The main purpose of a such container is to be able to reference same descriptor more than once, and thus providing easier maintenance of a system specifications in the case of change (e.g. AWS upgrades it’s instances - more memory and storage)."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptors" upperBound="-1"
+          eType="#//specification/Descriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloudSpecification" eSuperTypes="#//specification/Specification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The CloudDefinition model specifies all the details of the cloud provider (see CloudProvider). It consists of cloud provider descriptor, instance descriptors (in case the IaaS clouds), service descriptors (in case of PaaS clouds) and connection descriptors, specifying internal connections (e.g. bandwidth and latency). &#xA;This model is not meant to be included into CSM model, but it provides ability for specifying different cloud environments, which descriptors can be assigned to CSM model entities."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+          eType="#//specification/CloudEnvironmentDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="infrastructureServiceDescriptors"
+          upperBound="-1" eType="#//specification/InfrastructureServiceDescriptor"
+          containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="platformServiceDescriptors"
+          upperBound="-1" eType="#//specification/ProvidedServiceDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="softwareServiceDescriptors"
+          upperBound="-1" eType="#//specification/ProvidedServiceDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceSpecification" eSuperTypes="#//specification/Specification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The SoftwareDefinition model specifies the deployable 3rd party software that can be used to specify node components (see Node) or used operating systems on the instances (see Instance).&#xA;This model is not meant to be included into CSM model, but it provides ability for specifying different software bundles, which descriptors can be assigned to CSM model entities.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceDescriptors" upperBound="-1"
+          eType="#//specification/ServiceDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Descriptor" abstract="true" interface="true"
+        eSuperTypes="#//core/Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Descriptor model is used to specify the behaviour of the CSM architecture elements (e.g. components, connectors, cloud providers, …). For the descriptors that are available in the specific cloud provider, the provider id is defined (e.g. specification of services provided by specific PaaS provider). "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloudEnvironmentDescriptor" eSuperTypes="#//specification/Descriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The CloudProviderDecscriptor specifies the global properties of the cloud providers (see CloudProvider). &#xA;In the current version only Entity properties are available; name and description."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="availabilityZones" upperBound="-1"
+          eType="#//specification/AvailabilityZoneDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1"
+          eType="#//specification/RegionDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RegionDescriptor" eSuperTypes="#//specification/Descriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The RegionDescriptro specify the properties of the cloud regions (see CloudProvider). &#xA;In the current version only Entity properties are available; name and description."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AvailabilityZoneDescriptor" eSuperTypes="#//specification/Descriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The AvaliabilityZoneDescriptor specify the properties of the cloud availability zones (see CloudProvider). &#xA;In the current version only Entity properties are available; name and description."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="networkInfrastructureServiceDescriptor"
+          lowerBound="1" eType="#//specification/NetworkInfrastructureServiceDescriptor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceDescriptor" abstract="true"
+        interface="true" eSuperTypes="#//specification/Descriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedServiceDescriptor" abstract="true"
+        interface="true" eSuperTypes="#//specification/Descriptor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sla" eType="#//specification/sla/Sla"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InfrastructureServiceDescriptor" abstract="true"
+        interface="true" eSuperTypes="#//specification/ProvidedServiceDescriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ServiceDescriptor specify properties of PaaS services. &#xA;In the current version only entity properties are available; name and description.&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NetworkInfrastructureServiceDescriptor"
+        eSuperTypes="#//specification/InfrastructureServiceDescriptor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="bandwidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="latency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComputingInfrastructureServiceDescriptor"
+        eSuperTypes="#//specification/InfrastructureServiceDescriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ServiceDescriptor specify properties of PaaS services. &#xA;In the current version only entity properties are available; name and description.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computingResourceDescriptors"
+          upperBound="-1" eType="#//specification/ComputingResourceDescriptor" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="generalPurpose" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComputingResourceDescriptor" eSuperTypes="#//specification/Descriptor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="editable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="memory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cpu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cpuUnits" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="storage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformServiceDescriptor" eSuperTypes="#//specification/ServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformRuntimeServiceDescriptor"
+        eSuperTypes="#//specification/PlatformServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformSupportServiceDescriptor"
+        eSuperTypes="#//specification/PlatformServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedPlatformServiceDescriptor"
+        eSuperTypes="#//specification/PlatformServiceDescriptor #//specification/ProvidedServiceDescriptor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="infrastructureServiceDescriptor"
+          eType="#//specification/ComputingInfrastructureServiceDescriptor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedPlatformRuntimeServiceDescriptor"
+        eSuperTypes="#//specification/ProvidedPlatformServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedPlatformSupportServiceDescriptor"
+        eSuperTypes="#//specification/ProvidedPlatformServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SoftwareServiceDescriptor" eSuperTypes="#//specification/ServiceDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProvidedSoftwareServiceDescriptor"
+        eSuperTypes="#//specification/SoftwareServiceDescriptor #//specification/ProvidedServiceDescriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" lowerBound="1"
+          upperBound="-1" eType="#//application/Operation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExternalSoftwareServiceDescriptor"
+        eSuperTypes="#//specification/ProvidedSoftwareServiceDescriptor"/>
+    <eSubpackages name="sla" nsURI="http://eu.cloudscaleproject.env/ScaleDLOverviewComponentModel/Specification/Sla/1.0"
+        nsPrefix="sla">
+      <eClassifiers xsi:type="ecore:EClass" name="Sla">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="priceModel" eType="#//specification/sla/PriceModel"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="slo" eType="#//specification/sla/Slo"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PriceModel"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Slo"/>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="parametertype" nsURI="http://org.scaledl.overview/ScaleDLOverviewComponentModel/DataType/1.0"
+      nsPrefix="parametertype">
+    <eClassifiers xsi:type="ecore:EClass" name="ParameterType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+          eType="#//parametertype/Parameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//core/Entity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimitiveParameter" eSuperTypes="#//parametertype/Parameter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//parametertype/TypeEnum"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositeParameter" eSuperTypes="#//parametertype/Parameter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" unique="false"
+          upperBound="-1" eType="#//parametertype/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="extends" eType="#//parametertype/Parameter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollectionParameter" eSuperTypes="#//parametertype/Parameter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+          eType="#//parametertype/Parameter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TypeEnum">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This entity represents a data type that can be used for specification and modeling of interface operation signatures.&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="INT"/>
+      <eLiterals name="STRING" value="1"/>
+      <eLiterals name="BOOL" value="2" literal="BOOL"/>
+      <eLiterals name="DOUBLE" value="3"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

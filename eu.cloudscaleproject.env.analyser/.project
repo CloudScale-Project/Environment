@@ -3,6 +3,8 @@
 	<name>eu.cloudscaleproject.env.analyser</name>
 	<comment></comment>
 	<projects>
+		<project>eu.cloudscaleproject.env.common</project>
+		<project>eu.cloudscaleproject.env.toolchain</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

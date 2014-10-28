@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point ="org.eclipse.graphiti.ui.diagramTypes">
+    <diagramType
+      id="eu.cloudscaleproject.env.method.diagram.MethodDiagramType"
+      name="Workflow diagram"
+      type="Workflow diagram">
+    </diagramType>
+  </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated method -->
+      <package
+            uri="http://eu.cloudscale.env.method/MethodComponentModel/1.0"
+            class="eu.cloudscaleproject.env.method.common.method.MethodPackage"
+            genModel="model/method.genmodel"/>
+   </extension>
+
+</plugin>

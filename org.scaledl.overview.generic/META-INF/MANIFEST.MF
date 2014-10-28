@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Generic
+Bundle-SymbolicName: org.scaledl.overview.specification;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.scaledl.overview.specification.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.scaledl.overview;bundle-version="1.0.0",
+ javax.inject;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

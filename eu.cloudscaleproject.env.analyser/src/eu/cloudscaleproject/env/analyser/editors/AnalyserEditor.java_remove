@@ -1,0 +1,207 @@
+package eu.cloudscaleproject.env.analyser.editors;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
+import eu.cloudscaleproject.env.toolchain.util.HoverButton;
+
+public class AnalyserEditor extends Composite implements IPropertySheetPageProvider{
+			
+	private final Composite compositeView;
+	private final Composite compositeButtons;
+	
+	private final StackLayout stackLayout;
+	
+	private final IntroComposite introComposite;
+	private final InputComposite inputComposite;
+	private final RunComposite runComposite;
+	private final ResultsComposite resultComposite;
+	
+	private final HoverButton btnIntro;
+	private final HoverButton btnInput;
+	private final HoverButton btnRun;
+	private final HoverButton btnResult;
+		
+	/**
+	 * Create the composite.
+	 * @param parent
+	 * @param style
+	 */
+	public AnalyserEditor(ProjectEditor projectEditor, Composite parent, int style) {
+		super(parent, SWT.NONE);
+		
+		GridLayout layout = new GridLayout(2, false);
+		layout.horizontalSpacing = 0;
+		layout.verticalSpacing = 0;
+		setLayout(layout);
+		
+		CloudscaleContext.inject(this);
+		stackLayout = new StackLayout();
+		
+		compositeButtons = new Composite(this, SWT.NONE);
+		//compositeButtons.setBackground(SWTResourceManager.getColor(84,118,147));
+		
+		GridLayout buttonsLayout = new GridLayout(1, false);
+		buttonsLayout.verticalSpacing = 1;
+		buttonsLayout.horizontalSpacing = 0;
+		buttonsLayout.marginHeight = 0;
+		buttonsLayout.marginWidth = 0;
+		buttonsLayout.marginRight = 4;
+
+		compositeButtons.setLayout(buttonsLayout);
+		
+		GridData gd_compositeButtons = new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1);
+		gd_compositeButtons.widthHint = 160;
+		gd_compositeButtons.minimumWidth = 120;
+		compositeButtons.setLayoutData(gd_compositeButtons);
+		
+		btnIntro = new HoverButton(compositeButtons, SWT.NONE);
+		btnIntro.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		btnIntro.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		btnIntro.setText("Intro");
+		btnIntro.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				deselectAll();
+				showIntro();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		
+		btnInput = new HoverButton(compositeButtons, SWT.NONE);
+		btnInput.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		btnInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		btnInput.setText("Input");
+		btnInput.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				deselectAll();
+				showInput();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		
+		btnRun = new HoverButton(compositeButtons, SWT.NONE);
+		btnRun.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		btnRun.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		btnRun.setText("Run");
+		btnRun.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				deselectAll();
+				showRun();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		
+		btnResult = new HoverButton(compositeButtons, SWT.NONE);
+		btnResult.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		btnResult.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		btnResult.setText("Results");
+		btnResult.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				deselectAll();
+				showResults();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		
+		compositeView = new Composite(this, SWT.NONE);
+		stackLayout.marginWidth = 0;
+		compositeView.setLayout(stackLayout);
+		compositeView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		IProject project = ExplorerProjectPaths.getProject(projectEditor);
+		
+		introComposite = new IntroComposite(compositeView, SWT.NONE);
+		inputComposite = new InputComposite(project, compositeView, SWT.NONE);
+		runComposite = new RunComposite(project, compositeView, SWT.NONE);
+		resultComposite = new ResultsComposite(project, compositeView, SWT.NONE);
+		
+		showIntro();
+	}
+	
+	private void deselectAll(){
+		for(Control c : compositeButtons.getChildren()){
+			if(c instanceof HoverButton){
+				((HoverButton)c).setSelection(false);
+			}
+		}
+	}
+	
+	public void showIntro(){
+		deselectAll();
+		btnIntro.setSelection(true);
+		
+		stackLayout.topControl = introComposite;
+		compositeView.layout();
+	}
+	
+	public void showInput(){
+		deselectAll();
+		btnInput.setSelection(true);
+		
+		stackLayout.topControl = inputComposite;
+		compositeView.layout();
+	}
+	
+	public void showRun(){
+		deselectAll();
+		btnRun.setSelection(true);
+		
+		stackLayout.topControl = runComposite;
+		compositeView.layout();
+	}
+	
+	public void showResults(){
+		deselectAll();
+		btnResult.setSelection(true);
+		
+		resultComposite.refresh();
+		stackLayout.topControl = resultComposite;
+		compositeView.layout();
+	}
+	
+	public IPropertySheetPage getPropertySheetPage(){
+		if(stackLayout.topControl instanceof IPropertySheetPageProvider){
+			IPropertySheetPageProvider pageProvider = (IPropertySheetPageProvider)stackLayout.topControl;
+			return pageProvider.getPropertySheetPage();
+		}
+		return null;
+	}
+
+	@Override
+	protected void checkSubclass() {
+		// Disable the check that prevents subclassing of SWT components
+	}
+}

@@ -1,0 +1,7 @@
+# Tracing options for the org.scaledl.overview.diagram plug-in
+
+# Common issues
+org.scaledl.overview.diagram/debug=false
+
+# Visual IDs
+org.scaledl.overview.diagram/debug/visualID=false

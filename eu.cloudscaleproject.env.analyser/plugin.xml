@@ -2,11 +2,26 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="palladioExtension"
+         id="eu.cloudscaleproject.env.analyser.modelfragment"
          point="org.eclipse.e4.workbench.model">
       <fragment
             uri="fragment.e4xmi">
       </fragment>
    </extension>
+   <extension
+         id="eu.cloudscaleproject.env.analyser.tabitemextension"
+         point="eu.cloudscaleproject.env.toolchain.editors">
+      <client
+            class="eu.cloudscaleproject.env.analyser.editors.AnalyserTabItemExtension"
+            position="20">
+      </client>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.common.notification.validator">
+      <client
+            class="eu.cloudscaleproject.env.analyser.validation.PCMModelValidator">
+      </client>
+   </extension>
+
 
 </plugin>

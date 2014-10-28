@@ -28,13 +28,13 @@ public class PalladioComponentModelCreateShortcutDecorationsCommand extends Abst
     /**
      * @generated
      */
-    private List myDescriptors;
+    private List<?> myDescriptors;
 
     /**
      * @generated
      */
     public PalladioComponentModelCreateShortcutDecorationsCommand(TransactionalEditingDomain editingDomain,
-            View parentView, List viewDescriptors) {
+            View parentView, List<?> viewDescriptors) {
         super(editingDomain, "Create Shortcuts", getWorkspaceFiles(parentView)); //$NON-NLS-1$
         myDescriptors = viewDescriptors;
     }
@@ -51,7 +51,7 @@ public class PalladioComponentModelCreateShortcutDecorationsCommand extends Abst
      * @generated
      */
     protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-        for (Iterator it = myDescriptors.iterator(); it.hasNext();) {
+        for (Iterator<?> it = myDescriptors.iterator(); it.hasNext();) {
             CreateViewRequest.ViewDescriptor nextDescriptor = (CreateViewRequest.ViewDescriptor) it.next();
             View view = (View) nextDescriptor.getAdapter(View.class);
             if (view != null && view.getEAnnotation("Shortcut") == null) { //$NON-NLS-1$

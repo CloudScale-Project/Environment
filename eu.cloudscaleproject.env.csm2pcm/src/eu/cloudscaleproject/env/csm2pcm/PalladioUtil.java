@@ -23,21 +23,21 @@ import de.uka.ipd.sdq.pcm.gmf.usage.edit.parts.UsageScenarioEditPart;
 import de.uka.ipd.sdq.pcm.gmf.usage.part.PalladioComponentModelUsageDiagramEditorPlugin;
 import de.uka.ipd.sdq.pcm.repository.Repository;
 import de.uka.ipd.sdq.pcm.repository.RepositoryFactory;
+import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
 import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceenvironmentFactory;
 import de.uka.ipd.sdq.pcm.system.System;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import de.uka.ipd.sdq.pcm.usagemodel.UsagemodelFactory;
-import de.uka.ipd.sdq.spa.resourcemodel.Resource;
 
 public class PalladioUtil {
 	
 	public static enum ModelID{
+		 USAGE,
+		 RESOURCE,
+		 ALLOCATION, 
 		 REPOSITORY, 
 		 SYSTEM, 
-		 RESOURCE, 
-		 ALLOCATION, 
-		 USAGE;
-		}
+	}
 	
 	public static final String DEFAULT_MODEL_ID = "CSMGen_";
 	private static final Logger logger = Logger.getLogger(PalladioUtil.class.getSimpleName());
@@ -211,7 +211,7 @@ public class PalladioUtil {
 			return ModelID.REPOSITORY;
 		else if (obj instanceof System)
 			return ModelID.SYSTEM;
-		else if (obj instanceof Resource)
+		else if (obj instanceof ResourceEnvironment)
 			return ModelID.RESOURCE;
 		else if (obj instanceof Allocation)
 			return ModelID.ALLOCATION;

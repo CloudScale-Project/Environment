@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+	<extension
+         id="eu.cloudscaleproject.env.csm2pcm.modelfragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
    <extension
-         point="eu.cloudscaleproject.env.csm.CsmConverter">
+         point="org.scaledl.overview.OverviewConverter">
       <CsmConverter
-            class="eu.cloudscaleproject.env.csm2pcm.CsmConverter">
+            class="eu.cloudscaleproject.env.csm2pcm.OverviewConverter">
       </CsmConverter>
    </extension>
 

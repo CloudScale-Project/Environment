@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+<extension
+         id="eu.cloudscaleproject.env.spotter.modelfragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         id="eu.cloudscaleproject.env.spotter.tabitemextension"
+         point="eu.cloudscaleproject.env.toolchain.editors">
+      <client
+            class="eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension"
+            position="30">
+      </client>
+   </extension>
+
+</plugin>

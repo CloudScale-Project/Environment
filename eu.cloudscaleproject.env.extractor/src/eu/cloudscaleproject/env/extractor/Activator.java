@@ -1,13 +1,16 @@
 package eu.cloudscaleproject.env.extractor;
 
-import org.osgi.framework.BundleActivator;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class Activator extends AbstractUIPlugin  {
 
 	private static BundleContext context;
+	
+	// The shared instance
+	public static Activator plugin;
 
-	static BundleContext getContext() {
+	public static BundleContext getContext() {
 		return context;
 	}
 
@@ -17,6 +20,8 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
+		plugin = this;
+
 	}
 
 	/*
@@ -24,7 +29,12 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
+		plugin = null;
 		Activator.context = null;
+	}
+
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 }

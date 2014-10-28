@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.scaledl.overview.OverviewConverter" name="Overview model transformation extension" schema="schema/OverviewConverter.exsd"/>
+   <extension-point id="org.scaledl.overview.Specification" name="Overview Specification Extension Point" schema="schema/Specificaiton.exsd"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0"
+            class="org.scaledl.overview.OverviewPackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated org.scaledl.overview -->
+      <parser
+            type="sdlo"
+            class="org.scaledl.overview.util.OverviewResourceFactoryImpl"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Core/1.0"
+            class="org.scaledl.overview.core.CorePackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Application/1.0"
+            class="org.scaledl.overview.application.ApplicationPackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Architecture/1.0"
+            class="org.scaledl.overview.architecture.ArchitecturePackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Deployment/1.0"
+            class="org.scaledl.overview.deployment.DeploymentPackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0"
+            class="org.scaledl.overview.specification.SpecificationPackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://eu.cloudscaleproject.env/ScaleDLOverviewComponentModel/Specification/Sla/1.0"
+            class="org.scaledl.overview.specification.sla.SlaPackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated org.scaledl.overview -->
+      <package
+            uri="http://org.scaledl.overview/ScaleDLOverviewComponentModel/DataType/1.0"
+            class="org.scaledl.overview.parametertype.ParametertypePackage"
+            genModel="model/overview.genmodel"/>
+   </extension>
+
+</plugin>

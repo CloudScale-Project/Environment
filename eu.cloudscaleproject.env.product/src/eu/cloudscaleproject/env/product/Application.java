@@ -24,7 +24,7 @@ public class Application implements IApplication {
 			else
 				return IApplication.EXIT_OK;
 		} finally {
-			display.dispose();
+			if (!display.isDisposed()) display.dispose();
 		}
 		
 	}

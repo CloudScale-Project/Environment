@@ -16,7 +16,10 @@ Visit http://www.cloudscale-project.eu
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-Xmx1024M</vmArgs>
+      <vmArgs>-Xmx1024m
+-Xms256m
+-XX:MaxPermSize=512m
+      </vmArgs>
    </launcherArgs>
 
    <windowImages i16="/eu.cloudscaleproject.env.product/icons/cse-icon_16.png" i32="/eu.cloudscaleproject.env.product/icons/cse-icon_32.png" i48="/eu.cloudscaleproject.env.product/icons/cse-icon_48.png" i64="/eu.cloudscaleproject.env.product/icons/cse-icon_64.png"/>
@@ -40,24 +43,13 @@ Visit http://www.cloudscale-project.eu
    <plugins>
       <plugin id="LQNModel"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
-      <plugin id="ch.qos.logback.classic"/>
-      <plugin id="ch.qos.logback.core"/>
-      <plugin id="ch.qos.logback.slf4j" fragment="true"/>
       <plugin id="com.google.guava"/>
       <plugin id="com.google.inject"/>
-      <plugin id="com.google.inject.assistedinject" fragment="true"/>
-      <plugin id="com.google.inject.multibindings" fragment="true"/>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.ning.async-http-client"/>
       <plugin id="de.desmoj"/>
-      <plugin id="de.fzi.gast"/>
       <plugin id="de.fzi.se.accuracy"/>
       <plugin id="de.fzi.se.quality"/>
-      <plugin id="de.mdelab.sdm.interpreter.core"/>
-      <plugin id="de.mdelab.sdm.interpreter.core.eclipse"/>
-      <plugin id="de.mdelab.sdm.interpreter.ocl"/>
       <plugin id="de.uka.ipd.sdq.branding"/>
-      <plugin id="de.uka.ipd.sdq.codegen.ejb"/>
       <plugin id="de.uka.ipd.sdq.codegen.simucontroller"/>
       <plugin id="de.uka.ipd.sdq.codegen.simudatavisualisation.datatypes"/>
       <plugin id="de.uka.ipd.sdq.completions"/>
@@ -87,6 +79,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.custom"/>
       <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.helper"/>
       <plugin id="de.uka.ipd.sdq.pcm.gmf.composite"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.helper"/>
       <plugin id="de.uka.ipd.sdq.pcm.gmf.repository"/>
       <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.custom"/>
       <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.helper"/>
@@ -110,24 +104,19 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.pcmbench.tabs"/>
       <plugin id="de.uka.ipd.sdq.pcmbench.ui"/>
       <plugin id="de.uka.ipd.sdq.pcmsolver"/>
-      <plugin id="de.uka.ipd.sdq.pipesandfilters"/>
-      <plugin id="de.uka.ipd.sdq.pipesandfilters.framework"/>
-      <plugin id="de.uka.ipd.sdq.pipesandfilters.framework.recorder.sensorframework"/>
-      <plugin id="de.uka.ipd.sdq.probespec.framework"/>
       <plugin id="de.uka.ipd.sdq.probfunction"/>
       <plugin id="de.uka.ipd.sdq.probfunction.edit"/>
       <plugin id="de.uka.ipd.sdq.probfunction.math"/>
-      <plugin id="de.uka.ipd.sdq.prototype.framework"/>
       <plugin id="de.uka.ipd.sdq.reliability.core"/>
       <plugin id="de.uka.ipd.sdq.reliability.sensitivity"/>
       <plugin id="de.uka.ipd.sdq.reliability.sensitivity.edit"/>
       <plugin id="de.uka.ipd.sdq.reliability.sensitivity.editor"/>
       <plugin id="de.uka.ipd.sdq.reliability.solver"/>
-      <plugin id="de.uka.ipd.sdq.resourcestrategies"/>
       <plugin id="de.uka.ipd.sdq.scheduler"/>
       <plugin id="de.uka.ipd.sdq.sensorframework"/>
       <plugin id="de.uka.ipd.sdq.sensorframework.adapter"/>
       <plugin id="de.uka.ipd.sdq.sensorframework.dialogs"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.filter"/>
       <plugin id="de.uka.ipd.sdq.sensorframework.storage"/>
       <plugin id="de.uka.ipd.sdq.sensorframework.visualisation"/>
       <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.jfreechartvisualisation"/>
@@ -157,26 +146,21 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.workflow.pcm"/>
       <plugin id="de.uka.ipd.sdq.workflow.ui"/>
       <plugin id="de.uka.ipd.sdq.workflow.workbench"/>
-      <plugin id="de.upb.swt.core"/>
-      <plugin id="de.upb.swt.core.ui"/>
-      <plugin id="de.upb.swt.core.ui.properties"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles.builder"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles.nature"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles.util"/>
       <plugin id="eu.cloudscaleproject.env.analyser"/>
-      <plugin id="eu.cloudscaleproject.env.csm"/>
-      <plugin id="eu.cloudscaleproject.env.csm.diagram"/>
-      <plugin id="eu.cloudscaleproject.env.csm.edit"/>
-      <plugin id="eu.cloudscaleproject.env.csm.editor"/>
-      <plugin id="eu.cloudscaleproject.env.csm.generic"/>
-      <plugin id="eu.cloudscaleproject.env.csm.properties"/>
+      <plugin id="eu.cloudscaleproject.env.common"/>
       <plugin id="eu.cloudscaleproject.env.csm2pcm"/>
       <plugin id="eu.cloudscaleproject.env.extractor"/>
       <plugin id="eu.cloudscaleproject.env.help"/>
-      <plugin id="eu.cloudscaleproject.env.method"/>
+      <plugin id="eu.cloudscaleproject.env.method.common"/>
+      <plugin id="eu.cloudscaleproject.env.method.viewer"/>
       <plugin id="eu.cloudscaleproject.env.product"/>
+      <plugin id="eu.cloudscaleproject.env.spotter"/>
+      <plugin id="eu.cloudscaleproject.env.staticspotter"/>
       <plugin id="eu.cloudscaleproject.env.toolchain"/>
-      <plugin id="eu.cloudscaleproject.env.ui.executor"/>
-      <plugin id="eu.qimpress.gast"/>
-      <plugin id="eu.qimpress.identifier"/>
-      <plugin id="eu.qimpress.samm"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.el"/>
       <plugin id="javax.inject"/>
@@ -184,6 +168,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
       <plugin id="lpg.runtime.java"/>
+      <plugin id="net.sourceforge.secondstring"/>
       <plugin id="org.antlr.runtime"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.batik.bridge"/>
@@ -199,29 +184,15 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.batik.util.gui"/>
       <plugin id="org.apache.batik.xml"/>
       <plugin id="org.apache.commons.cli"/>
-      <plugin id="org.apache.commons.javaflow"/>
+      <plugin id="org.apache.commons.codec"/>
+      <plugin id="org.apache.commons.collections15"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.commons.math"/>
       <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
-      <plugin id="org.apache.lucene"/>
       <plugin id="org.apache.lucene.analysis"/>
       <plugin id="org.apache.lucene.core"/>
-      <plugin id="org.apache.lucene.misc"/>
-      <plugin id="org.apache.lucene.queries"/>
-      <plugin id="org.apache.xerces"/>
-      <plugin id="org.apache.xml.resolver"/>
-      <plugin id="org.apache.xml.serializer"/>
-      <plugin id="org.archimetrix.architecturepreview"/>
-      <plugin id="org.archimetrix.architetureprognosis.ui"/>
-      <plugin id="org.archimetrix.commons"/>
-      <plugin id="org.archimetrix.deficiencydetection"/>
-      <plugin id="org.archimetrix.deficiencydetection.ui"/>
-      <plugin id="org.archimetrix.gast.java.generator"/>
-      <plugin id="org.archimetrix.reengineeringstrategieswriter"/>
-      <plugin id="org.archimetrix.relevanceanalysis"/>
-      <plugin id="org.archimetrix.relevanceanalysis.ui"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.ant.launching"/>
       <plugin id="org.eclipse.ant.ui"/>
@@ -237,12 +208,18 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.core.externaltools"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.java7" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.macosx" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.net"/>
+      <plugin id="org.eclipse.core.net.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.resources"/>
-      <plugin id="org.eclipse.core.resources.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.core.runtime"/>
+      <plugin id="org.eclipse.core.runtime.compatibility"/>
       <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
       <plugin id="org.eclipse.core.variables"/>
       <plugin id="org.eclipse.debug.core"/>
@@ -264,7 +241,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.e4.ui.workbench"/>
       <plugin id="org.eclipse.e4.ui.workbench.addons.swt"/>
       <plugin id="org.eclipse.e4.ui.workbench.renderers.swt"/>
-      <plugin id="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" fragment="true"/>
       <plugin id="org.eclipse.e4.ui.workbench.swt"/>
       <plugin id="org.eclipse.e4.ui.workbench3"/>
       <plugin id="org.eclipse.emf"/>
@@ -273,8 +249,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.common"/>
       <plugin id="org.eclipse.emf.common.ui"/>
       <plugin id="org.eclipse.emf.compare"/>
-      <plugin id="org.eclipse.emf.compare.diff"/>
-      <plugin id="org.eclipse.emf.compare.match"/>
       <plugin id="org.eclipse.emf.converter"/>
       <plugin id="org.eclipse.emf.databinding"/>
       <plugin id="org.eclipse.emf.databinding.edit"/>
@@ -282,8 +256,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.ecore.change"/>
       <plugin id="org.eclipse.emf.ecore.edit"/>
       <plugin id="org.eclipse.emf.ecore.xmi"/>
-      <plugin id="org.eclipse.emf.ecoretools.properties"/>
-      <plugin id="org.eclipse.emf.ecoretools.tabbedproperties"/>
       <plugin id="org.eclipse.emf.edit"/>
       <plugin id="org.eclipse.emf.edit.ui"/>
       <plugin id="org.eclipse.emf.facet.common.core"/>
@@ -291,6 +263,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.facet.util.core"/>
       <plugin id="org.eclipse.emf.facet.util.emf.catalog"/>
       <plugin id="org.eclipse.emf.facet.util.emf.core"/>
+      <plugin id="org.eclipse.emf.facet.util.pde.core"/>
       <plugin id="org.eclipse.emf.importer"/>
       <plugin id="org.eclipse.emf.mapping.ecore.editor"/>
       <plugin id="org.eclipse.emf.mapping.ecore2xml"/>
@@ -304,6 +277,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.validation.ocl"/>
       <plugin id="org.eclipse.emf.workspace"/>
       <plugin id="org.eclipse.equinox.app"/>
+      <plugin id="org.eclipse.equinox.bidi"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.ds"/>
       <plugin id="org.eclipse.equinox.event"/>
@@ -331,19 +305,17 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.equinox.security"/>
-      <plugin id="org.eclipse.equinox.security.macosx" fragment="true"/>
       <plugin id="org.eclipse.equinox.security.ui"/>
-      <plugin id="org.eclipse.equinox.security.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator.manipulator"/>
       <plugin id="org.eclipse.equinox.util"/>
-      <plugin id="org.eclipse.equinox.weaving.hook" fragment="true"/>
       <plugin id="org.eclipse.gef"/>
       <plugin id="org.eclipse.gmf.runtime.common.core"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.action"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.action.ide"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.printing"/>
+      <plugin id="org.eclipse.gmf.runtime.common.ui.printing.win32" fragment="true"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.services"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.services.action"/>
       <plugin id="org.eclipse.gmf.runtime.common.ui.services.properties"/>
@@ -402,19 +374,11 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.jdt.junit.runtime"/>
       <plugin id="org.eclipse.jdt.launching"/>
       <plugin id="org.eclipse.jdt.ui"/>
-      <plugin id="org.eclipse.jem.util"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.text"/>
       <plugin id="org.eclipse.ltk.core.refactoring"/>
       <plugin id="org.eclipse.ltk.ui.refactoring"/>
-      <plugin id="org.eclipse.m2e.archetype.common"/>
-      <plugin id="org.eclipse.m2e.core"/>
-      <plugin id="org.eclipse.m2e.core.ui"/>
-      <plugin id="org.eclipse.m2e.logback.appender" fragment="true"/>
-      <plugin id="org.eclipse.m2e.maven.indexer"/>
-      <plugin id="org.eclipse.m2e.maven.runtime"/>
-      <plugin id="org.eclipse.m2e.model.edit"/>
       <plugin id="org.eclipse.m2m.qvt.oml"/>
       <plugin id="org.eclipse.m2m.qvt.oml.common"/>
       <plugin id="org.eclipse.m2m.qvt.oml.cst.parser"/>
@@ -428,10 +392,13 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.modisco.java.composition"/>
       <plugin id="org.eclipse.modisco.kdm.source.discoverer"/>
       <plugin id="org.eclipse.modisco.kdm.source.extension"/>
+      <plugin id="org.eclipse.net4j"/>
+      <plugin id="org.eclipse.net4j.util"/>
       <plugin id="org.eclipse.ocl"/>
       <plugin id="org.eclipse.ocl.common"/>
       <plugin id="org.eclipse.ocl.ecore"/>
       <plugin id="org.eclipse.osgi"/>
+      <plugin id="org.eclipse.osgi.compatibility.state" fragment="true"/>
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.osgi.util"/>
       <plugin id="org.eclipse.pde.build"/>
@@ -440,7 +407,10 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.pde.ui"/>
       <plugin id="org.eclipse.search"/>
       <plugin id="org.eclipse.swt"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
       <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
@@ -456,10 +426,10 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.ui.intro.universal"/>
       <plugin id="org.eclipse.ui.navigator"/>
       <plugin id="org.eclipse.ui.navigator.resources"/>
+      <plugin id="org.eclipse.ui.trace"/>
       <plugin id="org.eclipse.ui.views"/>
       <plugin id="org.eclipse.ui.views.log"/>
       <plugin id="org.eclipse.ui.views.properties.tabbed"/>
-      <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
       <plugin id="org.eclipse.uml2.codegen.ecore"/>
@@ -469,93 +439,82 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.uml2.uml"/>
       <plugin id="org.eclipse.uml2.uml.ecore.importer"/>
       <plugin id="org.eclipse.update.configurator"/>
-      <plugin id="org.eclipse.wst.common.core"/>
-      <plugin id="org.eclipse.wst.common.emf"/>
-      <plugin id="org.eclipse.wst.common.environment"/>
-      <plugin id="org.eclipse.wst.common.frameworks"/>
-      <plugin id="org.eclipse.wst.common.project.facet.core"/>
-      <plugin id="org.eclipse.wst.common.uriresolver"/>
-      <plugin id="org.eclipse.wst.sse.core"/>
-      <plugin id="org.eclipse.wst.validation"/>
-      <plugin id="org.eclipse.wst.xml.core"/>
-      <plugin id="org.eclipse.wst.xsd.core"/>
       <plugin id="org.eclipse.xpand"/>
-      <plugin id="org.eclipse.xsd"/>
       <plugin id="org.eclipse.xtend"/>
       <plugin id="org.eclipse.xtend.lib"/>
       <plugin id="org.eclipse.xtend.typesystem.emf"/>
-      <plugin id="org.eclipse.xtend.util.stdlib"/>
       <plugin id="org.eclipse.xtext"/>
       <plugin id="org.eclipse.xtext.builder"/>
+      <plugin id="org.eclipse.xtext.common.types"/>
+      <plugin id="org.eclipse.xtext.common.types.ui"/>
       <plugin id="org.eclipse.xtext.ecore"/>
       <plugin id="org.eclipse.xtext.generator"/>
+      <plugin id="org.eclipse.xtext.logging" fragment="true"/>
       <plugin id="org.eclipse.xtext.ui"/>
+      <plugin id="org.eclipse.xtext.ui.codetemplates"/>
+      <plugin id="org.eclipse.xtext.ui.codetemplates.ui"/>
       <plugin id="org.eclipse.xtext.ui.shared"/>
       <plugin id="org.eclipse.xtext.util"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
-      <plugin id="org.fujaba.commons"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.hibernate"/>
-      <plugin id="org.jboss.netty"/>
       <plugin id="org.jfree.jfreechart"/>
       <plugin id="org.jgrapht"/>
       <plugin id="org.jscience"/>
       <plugin id="org.junit"/>
-      <plugin id="org.junit4"/>
-      <plugin id="org.reclipse.math"/>
-      <plugin id="org.reclipse.metrics"/>
-      <plugin id="org.reclipse.structure.generator"/>
-      <plugin id="org.reclipse.structure.inference"/>
-      <plugin id="org.reclipse.structure.inference.annotations"/>
-      <plugin id="org.reclipse.structure.inference.ui"/>
-      <plugin id="org.reclipse.structure.specification"/>
-      <plugin id="org.reclipse.structure.specification.edit"/>
-      <plugin id="org.reclipse.structure.specification.ui"/>
+      <plugin id="org.modelversioning.emfprofile"/>
+      <plugin id="org.modelversioning.emfprofile.application.registry"/>
+      <plugin id="org.modelversioning.emfprofile.project"/>
+      <plugin id="org.modelversioning.emfprofile.registry"/>
+      <plugin id="org.objectweb.asm"/>
+      <plugin id="org.palladiosimulator.commons"/>
+      <plugin id="org.palladiosimulator.edp2"/>
+      <plugin id="org.palladiosimulator.edp2.dao"/>
+      <plugin id="org.palladiosimulator.edp2.util"/>
+      <plugin id="org.palladiosimulator.measurementframework"/>
+      <plugin id="org.palladiosimulator.metricspec"/>
+      <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint"/>
+      <plugin id="org.palladiosimulator.probeframework"/>
+      <plugin id="org.palladiosimulator.recorderframework"/>
       <plugin id="org.rosuda.JRI"/>
       <plugin id="org.sat4j.core"/>
       <plugin id="org.sat4j.pb"/>
-      <plugin id="org.slf4j.api"/>
-      <plugin id="org.slf4j.jcl"/>
+      <plugin id="org.scaledl.overview"/>
+      <plugin id="org.scaledl.overview.diagram"/>
+      <plugin id="org.scaledl.overview.edit"/>
+      <plugin id="org.scaledl.overview.editor"/>
+      <plugin id="org.scaledl.overview.properties"/>
+      <plugin id="org.scaledl.overview.specification"/>
       <plugin id="org.somox.analyzer.sissymodelanalyzer"/>
+      <plugin id="org.somox.analyzer.sissymodelanalyzer.ui"/>
       <plugin id="org.somox.core"/>
       <plugin id="org.somox.filter"/>
+      <plugin id="org.somox.gast2seff"/>
       <plugin id="org.somox.kdmhelper"/>
       <plugin id="org.somox.metrics"/>
+      <plugin id="org.somox.metrics.dsl"/>
+      <plugin id="org.somox.metrics.dsl.ui"/>
       <plugin id="org.somox.metricvaluesstorage"/>
       <plugin id="org.somox.seff2javaast"/>
+      <plugin id="org.somox.seff2javaast.edit"/>
+      <plugin id="org.somox.seff2javaast.editor"/>
       <plugin id="org.somox.sourcecodedecorator"/>
       <plugin id="org.somox.sourcecodedecorator.edit"/>
       <plugin id="org.somox.sourcecodedecorator.editor"/>
       <plugin id="org.somox.ui"/>
-      <plugin id="org.storydriven.core"/>
-      <plugin id="org.storydriven.core.edit"/>
-      <plugin id="org.storydriven.core.ui"/>
-      <plugin id="org.storydriven.storydiagrams"/>
-      <plugin id="org.storydriven.storydiagrams.diagram"/>
-      <plugin id="org.storydriven.storydiagrams.diagram.custom"/>
-      <plugin id="org.storydriven.storydiagrams.diagram.interpreter"/>
-      <plugin id="org.storydriven.storydiagrams.edit"/>
-      <plugin id="org.storydriven.storydiagrams.editor"/>
-      <plugin id="org.storydriven.storydiagrams.expressions"/>
-      <plugin id="org.storydriven.storydiagrams.expressions.common"/>
-      <plugin id="org.storydriven.storydiagrams.expressions.ui"/>
-      <plugin id="org.storydriven.storydiagrams.interpreter.core"/>
-      <plugin id="org.storydriven.storydiagrams.interpreter.eclipse"/>
-      <plugin id="org.storydriven.storydiagrams.ui"/>
       <plugin id="org.w3c.css.sac"/>
+      <plugin id="org.w3c.dom.events"/>
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
-      <plugin id="uk.ac.shef.dcs.simmetrics"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true" />
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true" />
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true" />
-      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true" />
    </plugins>
 
    <configurations>
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
    </configurations>
 
 </product>

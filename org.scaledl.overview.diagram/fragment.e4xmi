@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_HWOQ4DG6EeSAkNNGxeU_SA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_KQJEUDG6EeSAkNNGxeU_SA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_UbcasDG6EeSAkNNGxeU_SA" elementId="org.scaledl.overview.diagram.open" commandName="Open overview diagram"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ZSIc0DG6EeSAkNNGxeU_SA" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_eT7iwDG6EeSAkNNGxeU_SA" elementId="org.scaledl.overview.diagram.handler.open" contributionURI="bundleclass://org.scaledl.overview.diagram/org.scaledl.overview.diagram.handlers.OpenDiagramHandler" command="_UbcasDG6EeSAkNNGxeU_SA"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.product;
 
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -9,6 +10,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
@@ -30,6 +32,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     
     private IWorkbenchAction importAction;
     private IWorkbenchAction exportAction;
+    
+    //show
+    private IWorkbenchAction quickAction;
+    private IContributionItem showViews;
 
     //edit
     private IWorkbenchAction deleteAction;
@@ -39,6 +45,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     private static final String ID_MENU_FILE = IWorkbenchActionConstants.M_FILE;
     private static final String ID_MENU_EDIT = IWorkbenchActionConstants.M_EDIT;
     private static final String ID_MENU_TOOLS = "cloudscale.environment.product.menu.tools";
+    private static final String ID_MENU_VIEW = "cloudscale.environment.product.menu.view";
     private static final String ID_MENU_HELP = IWorkbenchActionConstants.M_HELP;
     
 
@@ -81,6 +88,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         exportAction = ActionFactory.EXPORT.create(window);
         register(exportAction);
         
+        //show
+        quickAction = ActionFactory.SHOW_QUICK_ACCESS.create(window);
+        register(quickAction);
+        
+        showViews = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
+        
         //edit
         selectAllAction = ActionFactory.SELECT_ALL.create(window);
         register(selectAllAction);
@@ -90,15 +103,21 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     }
     
     protected void fillMenuBar(IMenuManager menuBar) {
+    	
         MenuManager fileMenu = new MenuManager("&File", ID_MENU_FILE);
+        
         MenuManager editMenu = new MenuManager("&Edit", ID_MENU_EDIT);
+        editMenu.add(new GroupMarker(IWorkbenchActionConstants.FIND_EXT));
+        
         MenuManager toolsMenu = new MenuManager("&Tools", ID_MENU_TOOLS);
+        MenuManager viewMenu = new MenuManager("&View", ID_MENU_VIEW);
         
         MenuManager helpMenu = new MenuManager("&Help", ID_MENU_HELP);
         
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(toolsMenu);
+        menuBar.add(viewMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(helpMenu);
@@ -106,9 +125,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         // File
         
         //printAction.setEnabled(false);
-        fileMenu.add(printAction);
+        
         fileMenu.add(saveAction);
         fileMenu.add(saveAllAction);
+        fileMenu.add(printAction);
         fileMenu.add(new Separator());
         fileMenu.add(importAction);
         fileMenu.add(exportAction);
@@ -120,15 +140,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         
         //tools
         
+        //view
+        viewMenu.add(quickAction);
+        viewMenu.add(showViews);
+        showViews.update();
+        
         // Help
         helpMenu.add(aboutAction);
         helpMenu.add(helpAction);
     }
     
     protected void fillCoolBar(ICoolBarManager coolBar) {
+    	/*
     	coolBar.setLockLayout(false);
-    	//coolBar.update(true);
-        //IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
-        //coolBar.add(new ToolBarContributionItem(toolbar, "org.eclipse.ui.main.toolbar.main"));
+        
+    	IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
+        coolBar.add(new ToolBarContributionItem(toolbar, "eu.cloudscaleproject.env.product.toolbar.toolchain"));
+        
+        coolBar.update(true);
+        */
     }
 }

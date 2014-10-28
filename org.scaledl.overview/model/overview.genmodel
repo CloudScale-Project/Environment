@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.scaledl.overview/src" editDirectory="/org.scaledl.overview.edit/src"
+    editorDirectory="/org.scaledl.overview.editor/src" modelPluginID="org.scaledl.overview"
+    modelName="Overview" modelPluginClass="org.scaledl.overview.OverviewPlugin" editPluginClass="org.scaledl.overview.provider.OverviewEditPlugin"
+    editorPluginClass="org.scaledl.overview.presentation.OverviewEditorPlugin" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" providerRootExtendsClass="" editPluginID="org.scaledl.overview.edit"
+    editorPluginID="org.scaledl.overview.editor" runtimePlatform="RCP" pluginKey="org.scaledl.overview">
+  <foreignModel>overview.ecore</foreignModel>
+  <genPackages prefix="Overview" basePackage="org.scaledl" resource="XMI" disposableProviderFactory="true"
+      fileExtensions="sdlo" ecorePackage="overview.ecore#/">
+    <genClasses ecoreClass="overview.ecore#//Overview">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//Overview/architecture"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//Overview/deployment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//Overview/definition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//Overview/dataTypes"/>
+    </genClasses>
+    <nestedGenPackages prefix="Core" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//core">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//core/MeasurementMetric_NOTUSED">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/CPU_UTILIZATION"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/DISK_WRITE_OPS"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/DISK_WRITE_BYTES"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/DISK_READ_OPS"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/DISK_READ_BYTES"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/LATENCY"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/REQUEST_COUNT"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/NETWORK_OUT"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/MeasurementMetric_NOTUSED/NETWORK_IN"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//core/StatisticType_NOTUSED">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/StatisticType_NOTUSED/AVERAGE"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/StatisticType_NOTUSED/MIN"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/StatisticType_NOTUSED/MAX"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//core/StatisticType_NOTUSED/SUM"/>
+      </genEnums>
+      <genClasses ecoreClass="overview.ecore#//core/AVEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/AVEntry/key"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/AVEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//core/AEEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/AEEntry/key"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//core/AEEntry/value"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//core/Entity">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/Entity/id"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/Entity/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//core/Entity/description"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//core/Entity/avMap"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//core/Entity/aeMap"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Application" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//application">
+      <genClasses ecoreClass="overview.ecore#//application/Operation">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//application/Operation/returnParameter"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EReference overview.ecore#//application/Operation/parameters"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//application/OperationInterfaceContainer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//application/OperationInterfaceContainer/providedInterfaces"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//application/OperationInterfaceContainer/requiredInterfaces"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//application/OperationInterface">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//application/OperationInterface/operations"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//application/OperationInterface/providingContainer"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//application/OperationInterface/requiringContainer"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Architecture" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//architecture">
+      <genClasses ecoreClass="overview.ecore#//architecture/Architecture">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/Architecture/cloudEnvironments"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/Architecture/proxies"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/Architecture/usageConnections"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/Architecture/externalConnections"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/Architecture/unresolvedOperationInterfaces"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/CloudEnvironment">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/architecture"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/internalConnections"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/cloudEnvironmentDescriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/availabilityZoneDescriptor"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/infrastructureLayer"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/platformLayer"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/CloudEnvironment/softwareLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/InfrastructureLayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/InfrastructureLayer/services"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/InfrastructureLayer/cloudEnvironment"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/PlatformLayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/PlatformLayer/services"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/PlatformLayer/cloudEnvironment"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/SoftwareLayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/SoftwareLayer/services"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/SoftwareLayer/cloudEnvironment"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/Service"/>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/ProvidedService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ProvidedService/deployment"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/InfrastructureService">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/InfrastructureService/infrastructureLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/ComputingInfrastructureService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ComputingInfrastructureService/descriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ComputingInfrastructureService/platformServices"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/PlatformService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/PlatformService/descriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/PlatformService/computingInfrastructureService"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/PlatformService/platformLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/PlatformRuntimeService"/>
+      <genClasses ecoreClass="overview.ecore#//architecture/PlatformSupportService"/>
+      <genClasses ecoreClass="overview.ecore#//architecture/ProvidedPlatformRuntimeService"/>
+      <genClasses ecoreClass="overview.ecore#//architecture/ProvidedPlatformSupportService"/>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/SoftwareService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/SoftwareService/runtimePlatformService"/>
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/SoftwareService/softwareLayer"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/ProvidedSoftwareService">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ProvidedSoftwareService/descriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/ExternalSoftwareService">
+        <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference overview.ecore#//architecture/ExternalSoftwareService/serviceProxy"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/SoftwareServiceContainer">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/SoftwareServiceContainer/softwareServices"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/Connection"/>
+      <genClasses ecoreClass="overview.ecore#//architecture/InternalConnection">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/InternalConnection/descriptor"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/InternalConnection/source"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/InternalConnection/target"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/ExternalConnection">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ExternalConnection/source"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//architecture/ExternalConnection/target"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//architecture/ExternalConnection/bandwidth"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//architecture/ExternalConnection/latency"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//architecture/Proxy"/>
+      <genClasses ecoreClass="overview.ecore#//architecture/ServiceProxy">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//architecture/ServiceProxy/softwareService"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//architecture/UsageProxy"/>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Deployment" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//deployment">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//deployment/SchedulingPolicy">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/SchedulingPolicy/ROUND_ROBIN"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/SchedulingPolicy/CUSTOM"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//deployment/ScalingPolicyType">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingPolicyType/SCALING_UP_POLICY"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingPolicyType/SCALING_DOWN_POLICY"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingPolicyType/PRECENT_CHANGE_IN_CAPACITY"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//deployment/ScalingCapacityType">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingCapacityType/CHANGE_IN_CAPACITY"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingCapacityType/EXACT_CAPACITY"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//deployment/ScalingCapacityType/PRECENT_CHANGE_IN_CAPACITY"/>
+      </genEnums>
+      <genClasses ecoreClass="overview.ecore#//deployment/Deployment">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//deployment/Deployment/serviceDeployments"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ServiceDeployment"/>
+      <genClasses ecoreClass="overview.ecore#//deployment/GenericDeployment"/>
+      <genClasses ecoreClass="overview.ecore#//deployment/RuntimeDeployment">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//deployment/RuntimeDeployment/computingEnvironment"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ComputingEnvironment">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//deployment/ComputingEnvironment/instanceDescriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ClusteredComputingEnvironment">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//deployment/ClusteredComputingEnvironment/loadBalancer"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ClusteredComputingEnvironment/size"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ScalableComputingEnvironment">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//deployment/ScalableComputingEnvironment/scalingManager"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ScalingManager">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//deployment/ScalingManager/scalingPolicy"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingManager/maximumSize"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingManager/minimumSize"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/ScalingPolicy">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingPolicy/scalingPolicyType"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingPolicy/scalingCapacityType"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingPolicy/adjustment"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingPolicy/cooldown"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/ScalingPolicy/trigger"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//deployment/LoadBalancer">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//deployment/LoadBalancer/schedulingPolicy"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Specification" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//specification">
+      <genClasses image="false" ecoreClass="overview.ecore#//specification/Specification"/>
+      <genClasses ecoreClass="overview.ecore#//specification/SystemSpecification">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/SystemSpecification/descriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/CloudSpecification">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudSpecification/descriptor"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudSpecification/infrastructureServiceDescriptors"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudSpecification/platformServiceDescriptors"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudSpecification/softwareServiceDescriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/ServiceSpecification">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/ServiceSpecification/serviceDescriptors"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/Descriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/Descriptor/providerID"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/CloudEnvironmentDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudEnvironmentDescriptor/availabilityZones"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/CloudEnvironmentDescriptor/regions"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/RegionDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/AvailabilityZoneDescriptor">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//specification/AvailabilityZoneDescriptor/networkInfrastructureServiceDescriptor"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//specification/ServiceDescriptor"/>
+      <genClasses image="false" ecoreClass="overview.ecore#//specification/ProvidedServiceDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/ProvidedServiceDescriptor/sla"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//specification/InfrastructureServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/NetworkInfrastructureServiceDescriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/NetworkInfrastructureServiceDescriptor/bandwidth"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/NetworkInfrastructureServiceDescriptor/latency"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="overview.ecore#//specification/ComputingInfrastructureServiceDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/ComputingInfrastructureServiceDescriptor/computingResourceDescriptors"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingInfrastructureServiceDescriptor/generalPurpose"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/ComputingResourceDescriptor">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingResourceDescriptor/editable"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingResourceDescriptor/memory"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingResourceDescriptor/cpu"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingResourceDescriptor/cpuUnits"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//specification/ComputingResourceDescriptor/storage"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/PlatformServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/PlatformRuntimeServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/PlatformSupportServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/ProvidedPlatformServiceDescriptor">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//specification/ProvidedPlatformServiceDescriptor/infrastructureServiceDescriptor"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/ProvidedPlatformRuntimeServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/ProvidedPlatformSupportServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/SoftwareServiceDescriptor"/>
+      <genClasses ecoreClass="overview.ecore#//specification/ProvidedSoftwareServiceDescriptor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/ProvidedSoftwareServiceDescriptor/operations"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//specification/ExternalSoftwareServiceDescriptor"/>
+      <nestedGenPackages prefix="Sla" basePackage="org.scaledl.overview.specification"
+          disposableProviderFactory="true" ecorePackage="overview.ecore#//specification/sla">
+        <genClasses ecoreClass="overview.ecore#//specification/sla/Sla">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/sla/Sla/priceModel"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//specification/sla/Sla/slo"/>
+        </genClasses>
+        <genClasses ecoreClass="overview.ecore#//specification/sla/PriceModel"/>
+        <genClasses ecoreClass="overview.ecore#//specification/sla/Slo"/>
+      </nestedGenPackages>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Parametertype" basePackage="org.scaledl.overview" disposableProviderFactory="true"
+        ecorePackage="overview.ecore#//parametertype">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="overview.ecore#//parametertype/TypeEnum">
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//parametertype/TypeEnum/INT"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//parametertype/TypeEnum/STRING"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//parametertype/TypeEnum/BOOL"/>
+        <genEnumLiterals ecoreEnumLiteral="overview.ecore#//parametertype/TypeEnum/DOUBLE"/>
+      </genEnums>
+      <genClasses ecoreClass="overview.ecore#//parametertype/ParameterType">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference overview.ecore#//parametertype/ParameterType/types"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//parametertype/Parameter"/>
+      <genClasses ecoreClass="overview.ecore#//parametertype/PrimitiveParameter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute overview.ecore#//parametertype/PrimitiveParameter/type"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//parametertype/CompositeParameter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//parametertype/CompositeParameter/parameters"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//parametertype/CompositeParameter/extends"/>
+      </genClasses>
+      <genClasses ecoreClass="overview.ecore#//parametertype/CollectionParameter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference overview.ecore#//parametertype/CollectionParameter/parameter"/>
+      </genClasses>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

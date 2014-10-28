@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point ="org.eclipse.graphiti.ui.diagramTypeProviders">
+    <diagramTypeProvider
+      class ="eu.cloudscaleproject.env.method.editor.diagram.DiagramTypeProvider"
+      id="eu.cloudscaleproject.env.method.editor.diagram.MethodDiagram"
+      name="Workflow diagram">
+      <diagramType
+        id ="eu.cloudscaleproject.env.method.diagram.MethodDiagramType">
+      </diagramType>
+    </diagramTypeProvider>
+  </extension>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated method -->
+      <factory
+            uri="http://eu.cloudscale.env.method/MethodComponentModel/1.0"
+            class="eu.cloudscaleproject.env.method.common.method.provider.MethodItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated method -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="eu.cloudscaleproject.env.method.common.method.presentation.MethodModelWizardID"
+            name="%_UI_MethodModelWizard_label"
+            class="eu.cloudscaleproject.env.method.common.method.presentation.MethodModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/MethodModelFile.gif">
+         <description>%_UI_MethodModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated method -->
+      <editor
+            id="eu.cloudscaleproject.env.method.common.method.presentation.MethodEditorID"
+            name="%_UI_MethodEditor_label"
+            icon="icons/full/obj16/MethodModelFile.gif"
+            extensions="method"
+            class="eu.cloudscaleproject.env.method.common.method.presentation.MethodEditor"
+            contributorClass="eu.cloudscaleproject.env.method.common.method.presentation.MethodActionBarContributor">
+      </editor>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="CloudscaleMethodDiagram.PropertyContributor">
+         <propertyCategory
+               category="Graphiti"></propertyCategory>
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="CloudscaleMethodDiagram.PropertyContributor">
+         <propertyTab
+               afterTab="0"
+               category="Graphiti"
+               id="diagram.property.tab.general"
+               label="General">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="CloudscaleMethodDiagram.PropertyContributor">
+         <propertySection
+               class="eu.cloudscaleproject.env.method.editor.diagram.properties.EditSection"
+               filter="eu.cloudscaleproject.env.method.editor.diagram.properties.EditSectionFilter"
+               id="eu.cloudscaleproject.env.method.editor.propertySection"
+               tab="diagram.property.tab.general">
+         </propertySection>
+      </propertySections>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="eu.cloudscaleproject.env.method.editor.diagram.EditDiagramEditor"
+            contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
+            default="false"
+            extensions="workflow"
+            id="eu.cloudscaleproject.env.method.editor.editor1"
+            name="Workflow editor">
+      </editor>
+   </extension>
+</plugin>

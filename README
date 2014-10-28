@@ -1,37 +1,55 @@
+BUILD
+---------------------------------------------------------------------------------------
+mvn compile 
+mvn package --> creates linux/macos/windows distributions
 
-Eclipse Juno  // Version: Juno Service Release 2 // Eclipse RCP
+
+
+DEVELOPMENT - Eclipse IDE
+-----------------------------------------------------------------------------------------
+
+Eclipse Luna - RCP Edition
 ---------------------------------------------------
-Juno - http://download.eclipse.org/releases/juno
-Juno - Ecore Tools SDK
-... (many more)
+	Help > Install new software... 
+	==> Work with: Luna - http://www.eclipse.org/luna/
 
-QVTo
-----------------------------
-Operational QVT SDK
+	-> Graphiti
+		 Graphiti (Incubation)
+		 Graphiti Tools (Incubation)
+		 opt. Grapthiti SDK (Incubation) 
+		 opt. Grapthiti Examples (Incubation)
+	   
+	-> EMF - Eclipse Modeling Framework SDK
+	-> EMF Compare Core
+	-> Graphic Modeling Framework (GMF) Runtime (and SDK)
+	-> Graphic Modeling Framework (GMF) Notation SDK
+	-> QVT Operational SDK
+ 	-> XText SDK
+	-> Xpand SDK
+	-> MoDisco SDK
 
-
-Palladio
+Analyser :: Palladio 
 ---------------------
-Palladio 3.4 - http://sdqweb.ipd.kit.edu/eclipse/palladio/releases/3.4/
 
+Palladio Nightly - https://sdqweb.ipd.kit.edu/eclipse/palladio/nightly/
+Simulizar Nightly - https://sdqweb.ipd.kit.edu/eclipse/simulizar/nightly/
+Experiment Automation - https://sdqweb.ipd.kit.edu/eclipse/experimentautomation/nightly/
+SLO Feature - https://sdqweb.ipd.kit.edu/eclipse/servicelevelobjectives/nightly/
+EDP2 - https://sdqweb.ipd.kit.edu/eclipse/edp2/nightly/
 
-Graphiti
+Extractor :: SoMoX
 ---------------------
-Graphiti - - http://download.eclipse.org/graphiti/updates/0.9.2
+Somox Nightly - https://sdqweb.ipd.kit.edu/eclipse/somox/nightly/
 
 
-Architemrix
----------------------
-User Installation
-If you only want to try out Archimetrix without actively developing it, there is an Eclipse feature of Archimetrix available for easy installation. You can install it as follows
+Static spotter
+-------------------------
+Reclipse Nightly - https://sdqweb.ipd.kit.edu/eclipse/reclipse/nightly/
++ palladio, modisco, somox
 
-Download and install the Eclipse Modeling Tools (Juno).
-Select Help -> Install New Software... and from category Modelling from Eclipse Juno update site install Xtext and Xpand features.
-Select Help -> Install New Software... and install SoMoX feature from the update site.
-	http://sdqweb.ipd.kit.edu/eclipse/somox/nightly/
-Select Help -> Install New Software... and install Gast model feature from the update site.
-	http://sissy.sourceforge.net/SISSy_Nightly
-Select Help -> Install New Software... and install SAMM feature from the update site.
-	http://q-impress.ow2.org/updateSite
-Select Help -> Install New Software... and install Archimetrix from our update site.
-	http://archimetrix.googlecode.com/svn/ArchimetrixUpdatesite/
+
+Spotter
+-------------------
+	Download Dynamic Spotter from http://sopeco.github.io/DynamicSpotter/index.html
+	Install plugin : copy ds-eclipse.ui.jar into eclipse plugins directory
+

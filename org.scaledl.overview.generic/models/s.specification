@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<specification:CloudSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
+  <descriptor name="AWS" description="AWS Custom provider" providerID="AWS2"/>
+</specification:CloudSpecification>

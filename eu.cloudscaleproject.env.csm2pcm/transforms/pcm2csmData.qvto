@@ -1,0 +1,132 @@
+library pcm2csmData;
+
+modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0'); 
+modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+
+mapping REPOSITORY::DataType::dataType2parameter() : OVERVIEW::parametertype::Parameter
+	disjuncts REPOSITORY::DataType::dataTypePrimitive2parameter,
+				REPOSITORY::DataType::dataTypeComposite2parameter,
+				REPOSITORY::DataType::dataTypeCollection2parameter
+	{}
+	
+query REPOSITORY::PrimitiveDataType::getOverviewModelEquivalent(in paramTypes : OVERVIEW::parametertype::ParameterType) 
+										: OVERVIEW::parametertype::PrimitiveParameter{
+	
+	//INT
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::INT) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::INT);
+	}endif;
+	
+	//STRING
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::STRING) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::STRING);
+	}endif;
+	
+	//BOOL
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::BOOL) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::BOOL);
+	}endif;
+	
+	//DOUBLE
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::DOUBLE) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::DOUBLE);
+	}endif;
+	
+	//TODO: implement following types in overview model!!
+	
+	//CHAR
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::CHAR) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::DOUBLE);
+	}endif;
+	
+	//BYTE
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::BYTE) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::DOUBLE);
+	}endif;
+	
+	//LONG
+	if(self.type = REPOSITORY::PrimitiveTypeEnum::LONG) then{
+		return paramTypes.types[OVERVIEW::parametertype::PrimitiveParameter]
+				->any(type = OVERVIEW::parametertype::TypeEnum::DOUBLE);
+	}endif;
+	
+	return null;
+}
+
+//primitive paramtere transformation
+mapping REPOSITORY::DataType::dataTypePrimitive2parameter() : OVERVIEW::parametertype::PrimitiveParameter
+	when{self.oclIsKindOf(REPOSITORY::PrimitiveDataType)} {
+	
+	var par : REPOSITORY::PrimitiveDataType;
+	par := self.oclAsType(REPOSITORY::PrimitiveDataType);
+		
+	//INT
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::INT) then{
+		type := OVERVIEW::parametertype::TypeEnum::INT;
+	}endif;
+	
+	//STRING
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::STRING) then{
+		type := OVERVIEW::parametertype::TypeEnum::STRING;
+	}endif;
+	
+	//BOOL
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::BOOL) then{
+		type := OVERVIEW::parametertype::TypeEnum::BOOL;
+	}endif;
+	
+	//DOUBLE
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::DOUBLE) then{
+		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
+	}endif;
+	
+	//TODO: implement following types in overview model!!
+	
+	//CHAR
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::CHAR) then{
+		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
+	}endif;
+	
+	//BYTE
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::BYTE) then{
+		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
+	}endif;
+	
+	//LONG
+	if(par.type = REPOSITORY::PrimitiveTypeEnum::LONG) then{
+		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
+	}endif;
+}
+
+//composite parameter transformation
+mapping REPOSITORY::DataType::dataTypeComposite2parameter() : OVERVIEW::parametertype::CompositeParameter
+	when{self.oclIsKindOf(REPOSITORY::CompositeDataType)} {
+	
+	var par : REPOSITORY::CompositeDataType;
+	par := self.oclAsType(REPOSITORY::CompositeDataType);
+	
+	name := par.entityName;
+	_extends := par.parentType_CompositeDataType.late resolveoneIn(REPOSITORY::DataType::dataTypeComposite2parameter,
+																   OVERVIEW::parametertype::CompositeParameter);
+	parameters := par.innerDeclaration_CompositeDataType
+						.datatype_InnerDeclaration->late resolveoneIn(REPOSITORY::DataType::dataType2parameter,
+							 										  OVERVIEW::parametertype::Parameter);
+}
+
+//collection parameter trensformation
+mapping REPOSITORY::DataType::dataTypeCollection2parameter() :OVERVIEW::parametertype::CollectionParameter 
+	when{self.oclIsKindOf(REPOSITORY::CollectionDataType)}{
+	
+	var par : REPOSITORY::CollectionDataType;
+	par := self.oclAsType(REPOSITORY::CollectionDataType);
+	
+	name := par.entityName;
+	parameter := par.innerType_CollectionDataType.late resolveoneIn(REPOSITORY::DataType::dataType2parameter, 
+																	OVERVIEW::parametertype::Parameter);
+}
