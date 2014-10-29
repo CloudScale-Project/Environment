@@ -3,6 +3,10 @@ package eu.cloudscaleproject.env.method.viewer.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IDoubleClickContext;
@@ -24,13 +28,22 @@ import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
+import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
 import eu.cloudscaleproject.env.method.viewer.ToolStatusImpl;
 import eu.cloudscaleproject.env.method.viewer.diagram.features.CommandFeature;
 
 public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
-		
+			
 	public ToolBehaviorProvider(IDiagramTypeProvider diagramTypeProvider) {
 		super(diagramTypeProvider);
+	}
+	
+	public IProject getProject(StatusNode statusNode){
+		URI uri = statusNode.eResource().getURI();
+		String platformString = uri.toPlatformString(true);
+		Path path = new Path(platformString);
+		
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(path).getProject();
 	}
 	
 	@Override
@@ -41,9 +54,11 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 		List<IDecorator> decorators = new ArrayList<IDecorator>();
 		
 		if (bo instanceof StatusNode) {
-			StatusNode statusNode = (StatusNode) bo;			
-			ToolStatusImpl status = new ToolStatusImpl();
-			status.setStatusNode(statusNode);
+			String id = ((StatusNode) bo).getId();
+			IProject project = getProject((StatusNode) bo);
+			
+			ToolStatusImpl status = (ToolStatusImpl)StatusServiceImpl.getProjectStatusSrvice(project).getToolStatus(id);
+			StatusNode statusNode = status.getStatusNode();
 
 			if(!statusNode.getWarnings().isEmpty()){
 				for(Warning w : statusNode.getWarnings()) {
@@ -85,10 +100,7 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
 				imageRenderingDecorator.setY(5);
 				decorators.add(imageRenderingDecorator);
-			}
-			
-			status.dispose();
-						
+			}						
 		}
 		else if(bo instanceof Requirement){
 			Requirement r = (Requirement)bo;
