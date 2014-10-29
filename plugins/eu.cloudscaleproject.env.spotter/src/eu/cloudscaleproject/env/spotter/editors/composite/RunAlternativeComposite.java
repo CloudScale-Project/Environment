@@ -39,14 +39,9 @@ import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
 import org.spotter.eclipse.ui.editors.factory.ElementFactory;
 import org.spotter.eclipse.ui.jobs.DynamicSpotterRunJob;
-import org.spotter.eclipse.ui.model.xml.HierarchyFactory;
-import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.eclipse.ui.util.DialogUtils;
-import org.spotter.eclipse.ui.util.SpotterProjectSupport;
 import org.spotter.shared.configuration.FileManager;
 import org.spotter.shared.configuration.JobDescription;
-import org.spotter.shared.environment.model.XMeasurementEnvironment;
-import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.spotter.Util;
@@ -304,7 +299,7 @@ public class RunAlternativeComposite extends Composite{
 			
 			JobDescription jobDescription;
 			try {
-				jobDescription = createJobDescription(editorInput);
+				jobDescription = Util.createJobDescription(editorInput);
 			} catch (UICoreException e) {
 				String message = "Unable to read and parse all configuration files!";
 				DialogUtils.handleError(message, e);
@@ -320,26 +315,6 @@ public class RunAlternativeComposite extends Composite{
 			}
 			
 		}
-	}
-
-	private JobDescription createJobDescription(EditorInputFolder editorInput) throws UICoreException {
-		JobDescription jobDescription = new JobDescription();
-
-		IFile spotterFile = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
-		Properties dynamicSpotterConfig = SpotterProjectSupport.getSpotterConfig(spotterFile);
-		jobDescription.setDynamicSpotterConfig(dynamicSpotterConfig);
-
-		MeasurementEnvironmentFactory envFactory = MeasurementEnvironmentFactory.getInstance();
-		String envFile = editorInput.getResource().getFile(FileManager.ENVIRONMENT_FILENAME).getLocation().toString();
-		XMeasurementEnvironment measurementEnvironment = envFactory.parseXMLFile(envFile);
-		jobDescription.setMeasurementEnvironment(measurementEnvironment);
-
-		HierarchyFactory hierFactory = HierarchyFactory.getInstance();
-		String hierFile = editorInput.getResource().getFile(FileManager.HIERARCHY_FILENAME).getLocation().toString();
-		XPerformanceProblem hierarchy = hierFactory.parseHierarchyFile(hierFile);
-		jobDescription.setHierarchy(hierarchy);
-
-		return jobDescription;
 	}
 	
 	private IEditorInputResource getSelectedEditorInput(){

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 
@@ -21,7 +22,10 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
 public class ToolStatusImpl implements IToolStatus{
 	
 	private final HashSet<IToolStatusListener> listeners = new HashSet<IToolStatusListener>();
+	
+	private final IProject project;
 	private final StatusNode statusNode;
+	
 	private final AdapterImpl adapter = new AdapterImpl(){
 		
 		public void notifyChanged(Notification msg) {
@@ -57,10 +61,17 @@ public class ToolStatusImpl implements IToolStatus{
 		};
 	};
 	
-	public ToolStatusImpl(StatusNode statusNode) {
+	public ToolStatusImpl(IProject project, StatusNode statusNode) {
+		
+		this.project = project;
 		this.statusNode = statusNode;
+		
 		this.statusNode.eSetDeliver(true);
 		this.statusNode.eAdapters().add(adapter);
+	}
+	
+	public IProject getProject(){
+		return this.project;
 	}
 	
 	public StatusNode getStatusNode(){

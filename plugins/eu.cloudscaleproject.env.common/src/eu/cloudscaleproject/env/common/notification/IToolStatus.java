@@ -21,7 +21,7 @@ public interface IToolStatus{
 	public String getWarningCommand(String id);
 	public String[] getWarningCommandParam(String id);
 	public Set<String> getWarningIDs();
-	
+		
 	public void addWarning(String id, String message);
 	public void addWarning(String id, String message, String command);
 	public void addWarning(String id, String message, String command, String... param);

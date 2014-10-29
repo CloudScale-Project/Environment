@@ -61,17 +61,17 @@ public class StatusManager {
 	private final Object statusLock = new Object();
 	private final Object validationLock = new Object();
 	
-	private List<IToolValidator> validators = null;
+	private List<ToolValidator> validators = null;
 	private List<IStatusService> services = null;
 	
 	@Inject
 	private ExtensionRetriever er;
 	
-	public List<IToolValidator> getValidators(){
+	public List<ToolValidator> getValidators(){
 		if(validators == null){
 			validators = er.retrieveExtensionObjects(
 					"eu.cloudscaleproject.env.common.notification.validator",
-					"class", IToolValidator.class);
+					"class", ToolValidator.class);
 		}
 		return validators;
 	}
@@ -87,7 +87,7 @@ public class StatusManager {
 	
 	public boolean hasValidator(String toolID){
 		boolean validatorFound = false;
-		for (IToolValidator v : getValidators()) {
+		for (ToolValidator v : getValidators()) {
 			if (v.getToolID().equals(toolID)) {
 				validatorFound = true;
 			}
@@ -102,7 +102,7 @@ public class StatusManager {
 
 		synchronized (validationLock) {
 			boolean validatorFound = false;
-			for (IToolValidator v : getValidators()) {
+			for (ToolValidator v : getValidators()) {
 				if (v.getToolID().equals(toolID)) {
 					validatorFound = true;
 					isValid &= v.validate(project);
@@ -123,7 +123,7 @@ public class StatusManager {
 
 		boolean isValid = true;
 		synchronized (validationLock) {
-			for (IToolValidator v : getValidators()) {
+			for (ToolValidator v : getValidators()) {
 				isValid &= v.validate(project);
 			}
 		}

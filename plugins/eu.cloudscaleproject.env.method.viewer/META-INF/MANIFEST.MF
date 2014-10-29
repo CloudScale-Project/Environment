@@ -34,7 +34,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.transaction;bundle-version="1.4.0",
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.6.0",
  eu.cloudscaleproject.env.common,
- eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0",
  eu.cloudscaleproject.env.method.common;bundle-version="1.0.0",
  org.eclipse.swt
 Bundle-ActivationPolicy: lazy

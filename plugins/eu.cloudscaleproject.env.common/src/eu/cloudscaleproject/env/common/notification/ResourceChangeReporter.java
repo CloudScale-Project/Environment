@@ -22,7 +22,7 @@ public class ResourceChangeReporter implements IResourceChangeListener {
 	
 	public void runValidators(IProject project, IResourceChangeEvent event){
 		
-		for (final IToolValidator validator : sm.getValidators()) {
+		for (final ToolValidator validator : sm.getValidators()) {
 			
 			IResource[] resArray = validator.getDependantResources(project);
 			if (resArray == null || resArray.length == 0) {

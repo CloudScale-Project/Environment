@@ -1,7 +1,5 @@
 package org.scaledl.overview.diagram.validation;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -9,22 +7,16 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.scaledl.overview.Overview;
 
-import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.IToolValidator;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.StatusManager.Tool;
+import eu.cloudscaleproject.env.common.notification.ToolValidator;
 
-public class OverviewValidator extends DIExtension implements IToolValidator {
+public class OverviewValidator extends ToolValidator {
 	
 	//private static final String ERR_OVERVIEW_NULL = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewnull";
 	private static final String ERR_OVERVIEW_EMPTY = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewempty";
 	private static final String ERR_OVERVIEW_INVALID = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewinvalid";
-
-	
-	@Inject
-	private StatusManager sm;
 
 	@Override
 	public String getToolID() {
@@ -38,11 +30,9 @@ public class OverviewValidator extends DIExtension implements IToolValidator {
 	}
 
 	@Override
-	public boolean validate(IProject project) {
+	public boolean doValidate(IProject project, IToolStatus status) {
 		boolean isValid = true;
-		
-		IToolStatus status = sm.getStatus(project, getToolID());
-		
+				
 		try{
 			IResource res = ExplorerProjectPaths.getProjectFile(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_MODEL);
 			//status.handleWarning(ERR_OVERVIEW_NULL, res == null, false, "Overview model file does not exist!");

@@ -12,7 +12,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
@@ -51,7 +53,7 @@ public class InputAlternativeComposite extends Composite{
 		textName.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				InputAlternativeComposite.this.editorInput.setName(textName.getText());
+				InputAlternativeComposite.this.editorInput.setName(textName.getText().trim());
 				InputAlternativeComposite.this.editorInput.save();
 			}
 		});
@@ -70,7 +72,7 @@ public class InputAlternativeComposite extends Composite{
 		textHostname.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				InputAlternativeComposite.this.editorInput.setProperty("hostname", textHostname.getText());
+				InputAlternativeComposite.this.editorInput.setProperty("hostname", textHostname.getText().trim());
 				InputAlternativeComposite.this.editorInput.save();
 			}
 		});
@@ -80,11 +82,28 @@ public class InputAlternativeComposite extends Composite{
 		lblPort.setText("Port:");
 		
 		textPort = new Text(this, SWT.BORDER);
+		textPort.addListener(SWT.Verify,new Listener() {  
+			  @Override  
+			  public void handleEvent(Event event) {
+				  
+				  if(event.text.isEmpty()){
+					  event.doit = true;
+					  return;
+				  }
+				  
+			      try{
+			          Integer.valueOf(event.text);
+			      }  
+			      catch(NumberFormatException ex){  
+			         event.doit = false;  
+			      }                 
+			   }  
+			});
 		textPort.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textPort.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				InputAlternativeComposite.this.editorInput.setProperty("port", textPort.getText());
+				InputAlternativeComposite.this.editorInput.setProperty("port", textPort.getText().trim());
 				InputAlternativeComposite.this.editorInput.save();
 			}
 		});
@@ -177,7 +196,7 @@ public class InputAlternativeComposite extends Composite{
 		Activator activator = Activator.getDefault();
 		ServiceClientWrapper client = activator.getClient(ei.getResource().getName());
 		
-		client.updateUrl(textHostname.getText(), textPort.getText());
+		client.updateUrl(ei.getProperty("hostname"), ei.getProperty("port"));
 
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		Cursor waitCursor = Display.getDefault().getSystemCursor(SWT.CURSOR_WAIT);

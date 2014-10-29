@@ -17,5 +17,14 @@
             position="30">
       </client>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.common.notification.validator">
+      <client
+            class="eu.cloudscaleproject.env.spotter.validation.InputValidator">
+      </client>
+      <client
+            class="eu.cloudscaleproject.env.spotter.validation.ConfValidator">
+      </client>
+   </extension>
 
 </plugin>

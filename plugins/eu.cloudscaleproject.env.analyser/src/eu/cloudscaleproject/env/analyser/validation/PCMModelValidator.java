@@ -1,13 +1,10 @@
 package eu.cloudscaleproject.env.analyser.validation;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -17,19 +14,15 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 
 import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
-import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.IToolValidator;
+import eu.cloudscaleproject.env.common.notification.ToolValidator;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 
-public class PCMModelValidator extends DIExtension implements IToolValidator {
+public class PCMModelValidator extends ToolValidator {
 	
 	private static final String ERR_MODEL_ERROR = "eu.cloudscaleproject.env.analyser.validation.PCMModelValidator.modelerror";
 	private static final String ERR_MODEL_EMPTY = "eu.cloudscaleproject.env.analyser.validation.PCMModelValidator.modelempty";
-
-	@Optional @Inject
-	StatusManager statusManager;
 	
 	@Override
 	public IResource[] getDependantResources(IProject project) {
@@ -106,14 +99,8 @@ public class PCMModelValidator extends DIExtension implements IToolValidator {
 	}
 
 	@Override
-	public boolean validate(IProject project) {
+	public boolean doValidate(IProject project, IToolStatus status) {
 		boolean valid = true;
-
-		if (statusManager == null) {
-			return valid;
-		}
-
-		IToolStatus status = statusManager.getStatus(project, getToolID());
 		
 		InputAlternative ia = AnalyserUtil.getCurrentInputAlternative(project);
 		if(ia != null && ia.getResource().exists()){

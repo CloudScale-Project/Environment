@@ -62,7 +62,7 @@ public class ProjectStatusService {
 			if (o instanceof StatusNode) {
 				StatusNode s = (StatusNode) o;
 				
-				ToolStatusImpl status = new ToolStatusImpl(s);
+				ToolStatusImpl status = new ToolStatusImpl(project, s);
 				statusMap.put(s.getId(), status);
 				
 				status.addListener(new IToolStatusListener() {
