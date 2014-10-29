@@ -1,13 +1,11 @@
 package eu.cloudscaleproject.env.method.viewer;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
@@ -23,9 +21,7 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
 public class ToolStatusImpl implements IToolStatus{
 	
 	private final HashSet<IToolStatusListener> listeners = new HashSet<IToolStatusListener>();
-	
-	private StatusNode statusNode = null;
-	
+	private final StatusNode statusNode;
 	private final AdapterImpl adapter = new AdapterImpl(){
 		
 		public void notifyChanged(Notification msg) {
@@ -59,26 +55,16 @@ public class ToolStatusImpl implements IToolStatus{
 				fireChange(IToolStatusListener.PROP_REQUIREMENT_UPDATE);
 			}
 		};
-		
 	};
 	
-	public void setStatusNode(StatusNode section){
-		
-		if(this.statusNode == section){
-			return;
-		}
-		
-		if(this.statusNode != null){
-			this.statusNode.eAdapters().remove(adapter);
-			this.statusNode = null;
-		}
-		
-		if(section != null){
-			this.statusNode = section;
-			this.statusNode.eAdapters().add(adapter);
-		}
-		
-		fireChange(IToolStatusListener.PROP_UPDATE_ALL);
+	public ToolStatusImpl(StatusNode statusNode) {
+		this.statusNode = statusNode;
+		this.statusNode.eSetDeliver(true);
+		this.statusNode.eAdapters().add(adapter);
+	}
+	
+	public StatusNode getStatusNode(){
+		return this.statusNode;
 	}
 		
 	@Override
@@ -173,7 +159,6 @@ public class ToolStatusImpl implements IToolStatus{
 		}
 		
 		statusNode.getWarnings().clear();		
-		save();
 	}
 
 	@Override
@@ -182,7 +167,6 @@ public class ToolStatusImpl implements IToolStatus{
 		w.setId(id);
 		w.setMessage(message);
 		statusNode.getWarnings().add(w);
-		save();
 	}
 	
 	public synchronized void addWarning(String id, String message, String command){
@@ -196,7 +180,6 @@ public class ToolStatusImpl implements IToolStatus{
 		w.getCommands().add(comm);
 		
 		statusNode.getWarnings().add(w);
-		save();
 	}
 	
 	public synchronized void addWarning(String id, String message, String command, String... param){
@@ -213,25 +196,16 @@ public class ToolStatusImpl implements IToolStatus{
 		w.getCommands().add(comm);
 		
 		statusNode.getWarnings().add(w);
-		save();
 	}
 
 	@Override
-	public synchronized void removeWarning(String id) {
-		
-		boolean removed = false;
-		
+	public synchronized void removeWarning(String id) {	
 		Iterator<Warning> iter = statusNode.getWarnings().iterator();
 		while(iter.hasNext()){
 			Warning w = iter.next();
 			if(w.getId().equals(id)){
 				iter.remove();
-				removed = true;
 			}
-		}
-		
-		if(removed){
-			save();
 		}
 	}
 
@@ -263,7 +237,6 @@ public class ToolStatusImpl implements IToolStatus{
 		}
 		
 		this.statusNode.setDone(isDone);
-		save();
 	}
 	
 	@Override
@@ -274,7 +247,6 @@ public class ToolStatusImpl implements IToolStatus{
 		}
 		
 		this.statusNode.setDirty(dirty);
-		save();
 	}
 	
 	@Override
@@ -293,7 +265,6 @@ public class ToolStatusImpl implements IToolStatus{
 				}
 			}
 		}
-		save();
 	}
 
 	@Override
@@ -313,22 +284,9 @@ public class ToolStatusImpl implements IToolStatus{
 			if(section.isInProgress() != inProgress){
 				section.setInProgress(inProgress);
 			}
-			save();
 		}
 		else{
 			throw new UnsupportedOperationException("setIsInProgress: Method ID: " + this.statusNode.getId());
-		}
-	}
-	
-	private void save(){
-		if(statusNode.eResource() != null){
-			Resource res = statusNode.eResource();
-			try {
-				res.save(null);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -349,10 +307,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 	
 	public void dispose(){
-		if(this.statusNode != null){
-			this.statusNode.eAdapters().remove(adapter);
-			this.statusNode = null;
-		}
+		this.statusNode.eAdapters().remove(adapter);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.method.viewer;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IProject;
 
@@ -15,17 +16,18 @@ public class StatusServiceImpl implements IStatusService{
 	public static ProjectStatusService getProjectStatusSrvice(IProject project){
 		
 		//dispose unexisting project statuses
-		Iterator<IProject> iter = psList.keySet().iterator();
+		Iterator<Entry<IProject, ProjectStatusService>> iter = psList.entrySet().iterator();
 		while(iter.hasNext()){
-			IProject p = iter.next();
-			if(!p.exists()){
+			Entry<IProject, ProjectStatusService> entry = iter.next();
+			if(!entry.getKey().exists()){
+				entry.getValue().dispose();
 				iter.remove();
 			}
 		}
 		
 		ProjectStatusService pss = psList.get(project);
 		if(pss == null){
-			pss = new ProjectStatusService();
+			pss = new ProjectStatusService(project);
 			psList.put(project, pss);
 		}
 		return pss;
@@ -34,6 +36,6 @@ public class StatusServiceImpl implements IStatusService{
 	@Override
 	public IToolStatus getToolStatus(IProject project, String tool) {
 		ProjectStatusService pss = getProjectStatusSrvice(project);
-		return pss.getToolStatus(project, tool);
+		return pss.getToolStatus(tool);
 	}
 }
