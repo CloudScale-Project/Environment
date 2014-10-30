@@ -1,16 +1,7 @@
 package eu.cloudscaleproject.env.spotter.editors.composite;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -31,17 +22,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
-import org.spotter.eclipse.ui.Activator;
-import org.spotter.eclipse.ui.ServiceClientWrapper;
-import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
 import org.spotter.eclipse.ui.editors.factory.ElementFactory;
-import org.spotter.eclipse.ui.jobs.DynamicSpotterRunJob;
 import org.spotter.eclipse.ui.util.DialogUtils;
 import org.spotter.shared.configuration.FileManager;
-import org.spotter.shared.configuration.JobDescription;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.spotter.Util;
@@ -52,15 +38,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class RunAlternativeComposite extends Composite{
-	
-	public static final String DIALOG_TITLE = "DynamicSpotter Diagnosis";
-
-	private static final String MSG_MISS_CONFIG = "DynamicSpotter Configuration '%s' is missing!";
-	private static final String MSG_ALREADY_RUNNING = "DynamicSpotter is already running!";
-	private static final String MSG_NO_CONNECTION = "No connection to DynamicSpotter Service!";
-	private static final String MSG_RUNTIME_ERROR = "Error occured during diagnosis: %s";
-	private static final String MSG_SPOTTER_STARTED = "Going to start DynamicSpotter diagnosis for project '%s' now. Continue?";
-	
+		
 	private final IProject project;
 	private final EditorInputFolder editorInput;
 	private final ResourceProvider inputResourceProvider;
@@ -114,14 +92,14 @@ public class RunAlternativeComposite extends Composite{
 			
 		});
 		comboViewer.setInput(inputResourceProvider.getResources());
-		String selectedInputResourceName = editorInput.getProperty(Util.KEY_SELECTED_INPUT);
+		String selectedInputResourceName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
 		if(selectedInputResourceName != null && !selectedInputResourceName.isEmpty()){
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			if(selectedEditorInput != null){
 				comboViewer.setSelection(new StructuredSelection(selectedEditorInput));
 			}
 			else{
-				editorInput.setProperty(Util.KEY_SELECTED_INPUT, "");
+				editorInput.setProperty(Util.KEY_PARENT_EDITOR_RESOURCE, "");
 			}
 		}
 
@@ -130,7 +108,7 @@ public class RunAlternativeComposite extends Composite{
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				IEditorInputResource selectedEditorInput = (IEditorInputResource)selection.getFirstElement();
-				editorInput.setProperty(Util.KEY_SELECTED_INPUT, selectedEditorInput.getResource().getName());
+				editorInput.setProperty(Util.KEY_PARENT_EDITOR_RESOURCE, selectedEditorInput.getResource().getName());
 				editorInput.save();
 				
 				setInput(selectedEditorInput);
@@ -197,72 +175,16 @@ public class RunAlternativeComposite extends Composite{
 		btnRunDynamicSpotter.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Activator activator = Activator.getDefault();
 				IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 				IEditorInputResource selectedEditorInput = getSelectedEditorInput();
 				
 				if(selectedEditorInput == null){
-					//TODO: Display error dialog!
+					DialogUtils.openError("DynamicSpotter Diagnosis", "Input alternative missing!");
 					return;
 				}
 				
 				setInput(selectedEditorInput);
-				//set configuration
-				IFile fileConf = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
-				if(fileConf.exists()){
-					Properties prop = new Properties();
-					try {
-						prop.load(fileConf.getContents());
-						
-						IPath confEditorInputLocation = editorInput.getResource().getLocation();
-						
-						String hierarchyPath = confEditorInputLocation.append(FileManager.HIERARCHY_FILENAME).toString();
-						String envPath = confEditorInputLocation.append(FileManager.ENVIRONMENT_FILENAME).toString();
-						
-						//create/retrieve results entry
-						IEditorInputResource resultEditorInput;
-						IEditorInputResource runEditorInput = RunAlternativeComposite.this.editorInput;
-						String runEditorInputName = runEditorInput.getResource().getName();
-						
-						ResourceProvider resultResourceProvider = ResourceRegistry.getInstance().getResourceProvider(
-																	project, ToolchainUtils.SPOTTER_DYN_RES_ID);
-						
-						if(!resultResourceProvider.hasResource(runEditorInputName)){
-							resultEditorInput = resultResourceProvider.createNewResource(
-									RunAlternativeComposite.this.editorInput.getResource().getName());
-						}
-						else{
-							resultEditorInput = resultResourceProvider.getResource(runEditorInputName);
-						}
-						resultEditorInput.setName(RunAlternativeComposite.this.editorInput.getName());
-						resultEditorInput.setProperty(Util.KEY_SELECTED_INPUT, selectedEditorInput.getResource().getName());
-						resultEditorInput.save();
-						
-						prop.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
-						prop.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
-						prop.setProperty("org.spotter.resultDir", resultEditorInput.getResource().getLocation().toString());
-						
-						File f = fileConf.getLocation().toFile();
-						try(OutputStream os = new FileOutputStream(f)){
-							prop.store(os, "");
-						}
-						catch(IOException ex){
-							ex.printStackTrace();
-						}
-					} catch (IOException | CoreException e1) {
-						e1.printStackTrace();
-					}
-				}
-				
-				try {
-					fileConf.refreshLocal(IResource.DEPTH_ZERO, null);
-				} catch (CoreException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
-				
-				ServiceClientWrapper client = activator.getClient(selectedEditorInput.getResource().getName());
-				startSpotterRun(RunAlternativeComposite.this.editorInput, client);
+				Util.run(project, RunAlternativeComposite.this.editorInput);
 			}
 		});
 		
@@ -273,52 +195,8 @@ public class RunAlternativeComposite extends Composite{
 		Util.bindEditorInputs((EditorInputFolder)ei, this.editorInput);
 	}
 	
-	private void startSpotterRun(EditorInputFolder editorInput, ServiceClientWrapper client){
-		
-		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
-		
-		IFile spotterFile = editorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
-		String spotterFilePath = spotterFile.getLocation().toString();
-
-		if (!spotterFile.exists()) {
-			DialogUtils.openError(DIALOG_TITLE, String.format(MSG_MISS_CONFIG, spotterFilePath));
-			return;
-		}
-		if (client.isRunning(true)) {
-			DialogUtils.openWarning(DIALOG_TITLE, MSG_ALREADY_RUNNING);
-			return;
-		}
-		if (client.isConnectionIssue()) {
-			DialogUtils.openWarning(DIALOG_TITLE, MSG_NO_CONNECTION);
-			return;
-		}
-
-		boolean startConfirm = DialogUtils.openConfirm(DIALOG_TITLE,
-				String.format(MSG_SPOTTER_STARTED, project.getName()));
-		if (startConfirm) {
-			
-			JobDescription jobDescription;
-			try {
-				jobDescription = Util.createJobDescription(editorInput);
-			} catch (UICoreException e) {
-				String message = "Unable to read and parse all configuration files!";
-				DialogUtils.handleError(message, e);
-				return;
-			}
-			Long jobId = client.startDiagnosis(jobDescription);
-			if (jobId != null && jobId != 0) {
-				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, jobId, System.currentTimeMillis());
-				job.schedule();
-			} else {
-				String msg = String.format(MSG_RUNTIME_ERROR, "Could not retrieve a valid job id!");
-				DialogUtils.openError(DIALOG_TITLE, msg);
-			}
-			
-		}
-	}
-	
 	private IEditorInputResource getSelectedEditorInput(){
-		String selectedInputResourceName = editorInput.getProperty(Util.KEY_SELECTED_INPUT);
+		String selectedInputResourceName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
 		if(selectedInputResourceName != null){
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			return selectedEditorInput;

@@ -52,7 +52,7 @@ public class ResultAlternativeComposite extends AbstractSidebarMenuComposite{
 	public Composite createInputComposite(IEditorInput input, Composite parent,
 			int style) {
 		
-		String inputResourceName = ((EditorInputFolder)input).getProperty(Util.KEY_SELECTED_INPUT);
+		String inputResourceName = ((EditorInputFolder)input).getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
 		return new ResultComposite(parent, style, inputResourceName, editorInput.getResource().getFolder(input.getName()));
 	}
 

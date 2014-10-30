@@ -7,6 +7,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 
 public class OpenDynamicSpotterEditorHandler{
 
@@ -14,7 +15,6 @@ public class OpenDynamicSpotterEditorHandler{
 	public void execute(CommandExecutor ex,
 						@Optional @Named("eu.cloudscaleproject.env.dynamicspotter.commandparameter.action") String action) {
 		
-		ex.execute("eu.cloudscaleproject.env.toolchain.command.openprojecteditor", 
-				   new String[]{"eu.cloudscaleproject.env.dynamicspotter.tabitemextension", action});
+		ex.execute("eu.cloudscaleproject.env.toolchain.command.openprojecteditor", SpotterTabItemExtension.ID, action);
 	}
 }	

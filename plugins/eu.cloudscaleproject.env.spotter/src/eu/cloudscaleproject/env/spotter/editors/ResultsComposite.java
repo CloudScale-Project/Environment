@@ -119,7 +119,7 @@ public class ResultsComposite extends Composite{
 			public Composite createInputComposite(IEditorInput input,
 					Composite parent, int style) {
 				
-				String selectedInputName = editorInput.getProperty(Util.KEY_SELECTED_INPUT);
+				String selectedInputName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
 				return new ResultComposite(parent, style, selectedInputName, editorInput.getResource().getFolder(input.getName()));
 			}
 
