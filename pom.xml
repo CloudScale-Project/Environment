@@ -15,6 +15,10 @@ Package : mvn install
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
+    <!-- 
+     Plugins - env and scaledl.overview
+     -->
+     <!--
     <module>plugins/eu.cloudscaleproject.env.product</module>
     <module>plugins/eu.cloudscaleproject.env.common</module>
     <module>plugins/eu.cloudscaleproject.env.master</module>
@@ -28,21 +32,34 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.extractor</module>
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
+	-->
+	
     <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
 
+     <!--
     <module>plugins/org.scaledl.overview</module>
     <module>plugins/org.scaledl.overview.diagram</module>
     <module>plugins/org.scaledl.overview.edit</module>
     <module>plugins/org.scaledl.overview.editor</module>
     <module>plugins/org.scaledl.overview.generic</module>
     <module>plugins/org.scaledl.overview.properties</module>
-    <!--module>eu.cloudscaleproject.env.method.editor</module-->
     <module>plugins/eu.cloudscaleproject.env.help</module>
+	-->
+    <!--module>eu.cloudscaleproject.env.method.editor</module-->
     
     
-    <module>features/eu.cloudscaleproject.feature</module>
-    <module>features/eu.cloudscaleproject.feature.dev</module>
-    <module>features/eu.cloudscaleproject.updatesite</module>
+
+    <!--
+     Features and Update sites
+     -->
+    <module>features/eu.cloudscaleproject.feature.analyser</module>
+    <module>features/eu.cloudscaleproject.feature.extractor</module>
+    <module>features/eu.cloudscaleproject.feature.staticspotter</module>
+    <module>features/eu.cloudscaleproject.feature.dynamicspotter</module>
+    <module>features/eu.cloudscaleproject.feature.environment</module>
+
+    <module>features/eu.cloudscaleproject.updatesite.toolchain</module>
+    <module>features/eu.cloudscaleproject.updatesite.environment</module>
     
   </modules>
   <!-- Export "Available Software Sites" (properties > install/update) from eclipse and use following sed command on it -->

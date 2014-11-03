@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="eu.cloudscaleproject.feature.dev"
-      label="Cloudscale developement"
+      id="eu.cloudscaleproject.feature.analyser"
+      label="Analyser"
       version="1.0.0.qualifier">
 
    <description url="http://www.example.com/description">
@@ -178,18 +178,6 @@
 
    <includes
          id="org.palladiosimulator.simulizar.source.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.somox.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.somox.modisco.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.reclipse.feature"
          version="0.0.0"/>
 
 </feature>
