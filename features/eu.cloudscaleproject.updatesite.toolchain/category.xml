@@ -6,14 +6,15 @@
    <feature url="features/eu.cloudscaleproject.feature.dynamicspotter_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.dynamicspotter" version="1.0.0.qualifier">
       <category name="eu.cloudscaleproject.toolchain"/>
    </feature>
-   <feature url="features/eu.cloudscaleproject.feature.environment_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.environment" version="1.0.0.qualifier">
-      <category name="eu.cloudscaleproject.toolchain"/>
-   </feature>
    <feature url="features/eu.cloudscaleproject.feature.extractor_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.extractor" version="1.0.0.qualifier">
       <category name="eu.cloudscaleproject.toolchain"/>
    </feature>
    <feature url="features/eu.cloudscaleproject.feature.staticspotter_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.staticspotter" version="1.0.0.qualifier">
       <category name="eu.cloudscaleproject.toolchain"/>
    </feature>
-   <category-def name="eu.cloudscaleproject.toolchain" label="CloudScale Toolchain"/>
+   <category-def name="eu.cloudscaleproject.toolchain" label="CloudScale Toolchain">
+      <description>
+         CloudScale Toolchain - Analyser, Extractor and Spotter with all dependencies...
+      </description>
+   </category-def>
 </site>
