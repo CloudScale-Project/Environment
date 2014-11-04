@@ -14,8 +14,8 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.ui.PlatformUI;
-import org.spotter.eclipse.ui.util.DialogUtils;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;

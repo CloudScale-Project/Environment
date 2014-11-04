@@ -187,7 +187,6 @@ Require-Bundle: javax.inject;bundle-version="1.0.0",
  de.uka.ipd.sdq.workflow.mdsd;bundle-version="2.1.0",
  de.uka.ipd.sdq.workflow.pcm;bundle-version="1.0.0",
  de.uka.ipd.sdq.workflow.ui;bundle-version="2.1.0",
- de.uka.ipd.sdq.workflow.workbench;bundle-version="2.1.0",
- org.spotter.eclipse.ui
+ de.uka.ipd.sdq.workflow.workbench;bundle-version="2.1.0"
 Import-Package: eu.cloudscaleproject.env.product.branding
 Export-Package: eu.cloudscaleproject.env.analyser

@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.spotter.eclipse.ui.util.DialogUtils;
 
 import eu.cloudscaleproject.env.analyser.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
@@ -16,6 +15,7 @@ import eu.cloudscaleproject.env.analyser.dialogs.SelectConfAltDialog;
 import eu.cloudscaleproject.env.analyser.editors.AnalyserTabItemExtension;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
