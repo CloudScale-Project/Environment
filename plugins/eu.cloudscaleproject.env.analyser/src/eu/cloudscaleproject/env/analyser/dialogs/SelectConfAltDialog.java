@@ -14,22 +14,32 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
-import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.ConfAlternative;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class SelectDefaultInputDialog extends Dialog{
+public class SelectConfAltDialog extends Dialog{
 	
 	@Inject
 	private StatusManager statusManager;
 	
+	private final ResourceProvider confResourceProvider;
+	
 	private final IProject project;
 	
 	private List list = null;
+	private final java.util.List<ConfAlternative> alternatives;
 
-	public SelectDefaultInputDialog(IProject project, Shell parentShell) {
+	public SelectConfAltDialog(IProject project, Shell parentShell, java.util.List<ConfAlternative> alternatives) {
 		super(parentShell);
 		this.project = project;
+		this.confResourceProvider = ResourceRegistry.getInstance().
+				getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		
+		this.alternatives = alternatives;
 	}
 
 	@Override
@@ -39,10 +49,9 @@ public class SelectDefaultInputDialog extends Dialog{
 		list = new List(container, SWT.BORDER);
 		GridData gd_list = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		list.setLayoutData(gd_list);
-		
-		java.util.List<InputAlternative> inputs = AnalyserUtil.getInputAlternatives(project);
-		for(InputAlternative input : inputs){
-			list.add(input.getName());
+				
+		for(IEditorInputResource res : alternatives){
+			list.add(res.getName());
 		}
 		
 		return container;
@@ -51,24 +60,15 @@ public class SelectDefaultInputDialog extends Dialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
-			String selection = list.getSelection().length > 0 ? list.getSelection()[0] : null;
-			if(selection != null){
+			int selectionIndex = list.getSelectionIndex();
+			if(selectionIndex >= 0){
 				
-				java.util.List<InputAlternative> alt = AnalyserUtil.getInputAlternatives(project);
-				
-				InputAlternative selectedAlternative = null;
-				for(InputAlternative a : alt){
-					if(selection.equals(a.getName())){
-						selectedAlternative = a;
-						break;
-					}
-				}
-				
-				AnalyserUtil.setCurrentInputAlternative(project, selectedAlternative);
+				IEditorInputResource selectedResource = confResourceProvider.getResources().get(selectionIndex);
+				confResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
 				
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						statusManager.validate(project, StatusManager.Tool.ANALYSER_INPUT.getID());
+						statusManager.validate(project, StatusManager.Tool.ANALYSER.getID());
 					};
 				});
 			}

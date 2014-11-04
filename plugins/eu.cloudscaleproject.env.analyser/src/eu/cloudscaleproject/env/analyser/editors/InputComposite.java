@@ -1,27 +1,22 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeTreeviewComposite;
-import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditorComposite;
+import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
+import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class InputComposite extends AbstractSidebarEditorComposite{
+public class InputComposite extends SidebarEditorComposite{
 	
 	private static final String SECTION_GEN = "Generated inputs:";
 	private static final String SECTION_ALT = "Alternative inputs:";
@@ -31,7 +26,30 @@ public class InputComposite extends AbstractSidebarEditorComposite{
 	public InputComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		this.project = project;
-		init();
+		
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
+		setContentProvider(new SidebarContentProvider() {
+			
+			@Override
+			public String[] getSections() {
+				return new String[]{SECTION_GEN, SECTION_ALT};
+			}
+			
+			@Override
+			public String getSection(IEditorInputResource resource) {
+				if(ResourceUtils.ANALYSER_INPUT_GENERATED_RES_NAME.equals(resource.getResource().getName())){
+					return SECTION_GEN;
+				}
+				else{
+					return SECTION_ALT;
+				}
+			}
+			
+			@Override
+			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
+				return new RightPanelComposite(InputComposite.this.project, (InputAlternative)resource, parent, SWT.NONE);
+			}
+		});
 	}
 	
 	private class RightPanelComposite extends Composite{
@@ -63,6 +81,7 @@ public class InputComposite extends AbstractSidebarEditorComposite{
 		}
 	}
 
+	/*
 	@Override
 	public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
 		if(input instanceof InputAlternative){
@@ -145,4 +164,5 @@ public class InputComposite extends AbstractSidebarEditorComposite{
 		return new IResource[]{analyserFolder.getFolder(
 				ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT))};
 	}
+	*/
 }

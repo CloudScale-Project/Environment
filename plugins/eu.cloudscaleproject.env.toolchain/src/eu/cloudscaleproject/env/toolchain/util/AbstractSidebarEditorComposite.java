@@ -23,6 +23,7 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	protected final Composite compositeSidebar;
 	protected final Composite compositeArea;
 	
+	public abstract Composite createInputComposite(IEditorInput input, Composite parent, int style);
 	public void handleNewInput(IEditorInput selected){};
 	public void handleNewInputFrom(IEditorInput selected){};
 	public void handleInputDelete(IEditorInput toDelete){};	

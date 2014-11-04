@@ -6,11 +6,13 @@
       <parameters xmi:id="_Jct-MDN5EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.analyser.commandparameter.action" name="action" typeId="String"/>
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_Z1yUsDdmEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.command.openinputdialog" commandName="openInputDialog"/>
+    <elements xsi:type="commands:Command" xmi:id="_DpYPAGN7EeSorYO_PWJo-g" elementId="eu.cloudscaleproject.env.analyser.command.openconfdialog" commandName="openConfDialog"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Lh83oHncEeKfc49LSeS68A" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_XCPD8HncEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.analyser.openPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.PalladioPerspectiveHandler" command="_0a2vUHnSEeKfc49LSeS68A"/>
     <elements xsi:type="commands:Handler" xmi:id="_KZzcwCFKEeSfNL-QVYMrbg" elementId="eu.cloudscaleproject.env.analyser.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenAnalyserEditorHandler" command="_yNgQ0CFJEeSfNL-QVYMrbg"/>
-    <elements xsi:type="commands:Handler" xmi:id="_BRIrMDgLEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.handler.openinputdialog" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenInputDialogHandler" command="_Z1yUsDdmEeSsq_TBtPScgQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_BRIrMDgLEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.handler.openinputdialog" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenInputAltHandler" command="_Z1yUsDdmEeSsq_TBtPScgQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_HgKTUGN7EeSorYO_PWJo-g" elementId="eu.cloudscaleproject.env.analyser.handler.openconfhandler" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenConfAltHandler" command="_DpYPAGN7EeSorYO_PWJo-g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wHppMHncEeKfc49LSeS68A" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_clTQ4DgUEeSZvujNsROb0w" elementId="eu.cloudscaleproject.env.analyser.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">

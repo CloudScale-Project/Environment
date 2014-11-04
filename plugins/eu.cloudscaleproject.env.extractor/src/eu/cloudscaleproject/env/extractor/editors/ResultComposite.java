@@ -32,7 +32,7 @@ public class ResultComposite extends SidebarEditorComposite {
 		IFolder extractorConfigurationFolder = extractorFolder.getFolder(
 				ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
 		
-		setResourceProvider(new ResourceProvider(project, extractorConfigurationFolder, "Result") {
+		setResourceProvider(new ResourceProvider(extractorConfigurationFolder, "Result") {
 			
 			@Override
 			public boolean validateResource(IResource res) {

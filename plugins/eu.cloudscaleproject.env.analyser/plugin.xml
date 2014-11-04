@@ -19,7 +19,10 @@
    <extension
          point="eu.cloudscaleproject.env.common.notification.validator">
       <client
-            class="eu.cloudscaleproject.env.analyser.validation.PCMModelValidator">
+            class="eu.cloudscaleproject.env.analyser.validation.InputValidator">
+      </client>
+      <client
+            class="eu.cloudscaleproject.env.analyser.validation.ConfValidator">
       </client>
    </extension>
 

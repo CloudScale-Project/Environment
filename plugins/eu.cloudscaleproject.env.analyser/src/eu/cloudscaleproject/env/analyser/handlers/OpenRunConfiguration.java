@@ -1,6 +1,8 @@
  
 package eu.cloudscaleproject.env.analyser.handlers;
 
+import java.util.logging.Logger;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -12,15 +14,31 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.ui.PlatformUI;
+import org.spotter.eclipse.ui.util.DialogUtils;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.IToolStatus;
+import eu.cloudscaleproject.env.common.notification.StatusManager;
 
 public class OpenRunConfiguration {
 	
+	private Logger logger = Logger.getLogger(OpenRunConfiguration.class.getName());
+	
 	@Execute
-	public void execute() {
+	public void execute(StatusManager statusManager) {
 
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
+		if(project == null){
+			logger.warning("Can't open dialog! Current project can not be retrieved!");
+			return;
+		}
+		
+		IToolStatus confStatus = statusManager.getStatus(project, StatusManager.Tool.ANALYSER.getID());
+		if(!confStatus.isDone()){
+			DialogUtils.openInformation("Analyser workflow diagram", "Analyser configuration in not complete. Can not run simulation.");
+			return;
+		}
+
 		IFolder folder = ExplorerProjectPaths.getProjectFolder(project,
 				ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 		IFolder folderConf = folder.getFolder(ExplorerProjectPaths.getProjectProperty(project,

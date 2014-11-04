@@ -7,13 +7,13 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.analyser.dialogs.SelectDefaultInputDialog;
+import eu.cloudscaleproject.env.analyser.dialogs.SelectInputAltDialog;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
-public class OpenInputDialogHandler {
+public class OpenInputAltHandler {
 	
-	private Logger logger = Logger.getLogger(OpenInputDialogHandler.class.getName());
+	private Logger logger = Logger.getLogger(OpenInputAltHandler.class.getName());
 	
 	@Execute
 	public void execute(){
@@ -22,7 +22,7 @@ public class OpenInputDialogHandler {
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		
 		if(project != null){
-			SelectDefaultInputDialog dialog = new SelectDefaultInputDialog(project, shell);
+			SelectInputAltDialog dialog = new SelectInputAltDialog(project, shell);
 			CloudscaleContext.inject(dialog);
 			dialog.open();
 		}

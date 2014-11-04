@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -105,6 +106,12 @@ public class InputAlternative extends EditorInputFile{
 		source.setProperty(KEY_ALLOCATION, alloc.getProjectRelativePath().toString());
 		firePropertyChange(KEY_ALLOCATION, old, alloc);
 
+		try {
+			alloc.refreshLocal(IFile.DEPTH_ZERO, null);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//set other model file that are referenced inside allocation
 		ResourceSet resSet = new ResourceSetImpl();

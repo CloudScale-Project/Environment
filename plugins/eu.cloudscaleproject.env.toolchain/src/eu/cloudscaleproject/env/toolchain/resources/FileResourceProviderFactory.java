@@ -13,7 +13,7 @@ public class FileResourceProviderFactory implements IResourceProviderFactory{
 	@Override
 	public ResourceProvider create(final IFolder folder) {
 		
-		ResourceProvider inputResources = new ResourceProvider(folder.getProject(), folder, "Alternative") {
+		ResourceProvider inputResources = new ResourceProvider(folder, "Alternative") {
 			
 			@Override
 			public boolean validateResource(IResource res) {

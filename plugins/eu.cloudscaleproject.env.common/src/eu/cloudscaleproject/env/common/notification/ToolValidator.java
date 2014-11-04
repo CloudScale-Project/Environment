@@ -34,6 +34,12 @@ public abstract class ToolValidator extends DIExtension{
 			return false;
 		}
 		
+		if(!status.hasMetRequirements()){
+			status.setIsInProgress(false);
+			status.setIsDone(false);
+			return false;
+		}
+		
 		try{
 			return doValidate(project, status);
 		}

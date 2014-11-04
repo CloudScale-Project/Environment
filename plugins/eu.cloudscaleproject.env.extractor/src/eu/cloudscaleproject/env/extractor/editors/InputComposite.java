@@ -31,7 +31,7 @@ public class InputComposite extends SidebarEditorComposite {
 		
 		IFolder extractorInputFolder = Util.getInputFolder(project);
 		
-		setResourceProvider(new ResourceProvider(project, extractorInputFolder, "Alternative.alt") {
+		setResourceProvider(new ResourceProvider(extractorInputFolder, "Alternative.alt") {
 			
 			@Override
 			public boolean validateResource(IResource res) {

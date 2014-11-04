@@ -12,14 +12,17 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.ToolValidator;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.ToolValidator;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class PCMModelValidator extends ToolValidator {
+public class InputValidator extends ToolValidator {
 	
 	private static final String ERR_MODEL_ERROR = "eu.cloudscaleproject.env.analyser.validation.PCMModelValidator.modelerror";
 	private static final String ERR_MODEL_EMPTY = "eu.cloudscaleproject.env.analyser.validation.PCMModelValidator.modelempty";
@@ -102,26 +105,30 @@ public class PCMModelValidator extends ToolValidator {
 	public boolean doValidate(IProject project, IToolStatus status) {
 		boolean valid = true;
 		
-		InputAlternative ia = AnalyserUtil.getCurrentInputAlternative(project);
-		if(ia != null && ia.getResource().exists()){
-			ia.load();
+		IEditorInputResource selectedResource = null;
+		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().
+				getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		selectedResource = inputResourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
+		
+		if(selectedResource == null){
+			selectedResource = inputResourceProvider.getResources().isEmpty() ? 
+					null : inputResourceProvider.getResources().get(0);
+		}
+		
+		if(selectedResource != null && selectedResource.getResource().exists()){
+			inputResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
+			selectedResource.load();
+			status.setIsInProgress(true);
 		}
 		
 		try {
-			valid = validateModels(project, ia);
+			valid = validateModels(project, (InputAlternative)selectedResource);
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		if(!valid){
-			status.setIsInProgress(false);
-			status.setIsDone(false);
-		}
-		else{
-			status.setIsDone(true);
-		}
-		
+		status.setIsDone(valid);
 		return valid;
 	}
 }

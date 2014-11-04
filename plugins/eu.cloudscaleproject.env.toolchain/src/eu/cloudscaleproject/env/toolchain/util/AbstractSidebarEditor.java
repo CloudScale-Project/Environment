@@ -46,7 +46,8 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	protected final LinkedHashMap<IEditorInput, EditorItem> entries 
 			= new LinkedHashMap<IEditorInput, EditorItem>();
 	
-	// user-implemented methods //////////// 
+	// user-implemented methods ////////////
+	public abstract Composite createInputComposite(IEditorInput input, Composite parent, int style);
 	public void handleNewInput(IEditorInput selected){};
 	public void handleNewInputFrom(IEditorInput selected){};
 	public void handleInputDelete(IEditorInput toDelete){};

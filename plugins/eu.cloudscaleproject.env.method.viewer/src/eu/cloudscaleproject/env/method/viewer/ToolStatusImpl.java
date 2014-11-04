@@ -129,7 +129,7 @@ public class ToolStatusImpl implements IToolStatus{
 
 	@Override
 	public boolean isDone() {
-		return statusNode.isDone();
+		return statusNode.isDone() && hasMetRequirements() && statusNode.getWarnings().isEmpty();
 	}
 	
 	public String getWarningMessage(String id){

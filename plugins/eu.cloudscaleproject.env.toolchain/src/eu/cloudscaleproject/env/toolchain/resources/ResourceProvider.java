@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.toolchain.resources;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,31 +17,44 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class ResourceProvider{
 	
-	public static final String PROP_RESOURCE_CREATED = "create";
-	public static final String PROP_RESOURCE_DELETED = "delete";
-	public static final String PROP_RESOURCE_ADDED = "add";
-	public static final String PROP_RESOURCE_REMOVED = "remove";
-
-	private final IProject project;
-	private final IFolder rootFolder;
+	public static final String PROP_RESOURCE_CREATED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.create";
+	public static final String PROP_RESOURCE_DELETED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.delete";
+	public static final String PROP_RESOURCE_ADDED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.add";
+	public static final String PROP_RESOURCE_REMOVED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.remove";
 	
+	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
+
+	private final IFolder rootFolder;
 	private final String defaultResName;
 	
 	private final LinkedHashMap<IResource, IEditorInputResource> resources 
 			= new LinkedHashMap<IResource, IEditorInputResource>();
 	
-	public abstract boolean validateResource(IResource res);
-	public abstract IResource createResource(String resourceName);
-	public abstract IEditorInputResource loadResource(IResource res);
+	private transient HashMap<String, IEditorInputResource> taggedResources = new HashMap<String, IEditorInputResource>();
+	
+	protected abstract boolean validateResource(IResource res);
+	protected abstract IResource createResource(String resourceName);
+	protected abstract IEditorInputResource loadResource(IResource res);
 
 	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
-	public ResourceProvider(IProject project, IFolder folder, String defaultResName){
-		this.project = project;
+	public ResourceProvider(IFolder folder, String defaultResName){
 		this.rootFolder = folder;
 		this.defaultResName = defaultResName;
 		
 		reloadResources();
+	}
+	
+	public void tagResource(String tag, IEditorInputResource resource){
+		taggedResources.put(tag, resource);
+	}
+	
+	public boolean hasTag(String tag, IEditorInputResource resource){
+		return resource == null ? false : taggedResources.get(tag) == resource;
+	}
+	
+	public IEditorInputResource getTaggedResource(String tag){
+		return taggedResources.get(tag);
 	}
 	
 	public final void checkRootFolder(){
@@ -68,8 +82,11 @@ public abstract class ResourceProvider{
 				
 				IEditorInputResource eir = resources.get(res);
 				iter.remove();
+				
+				//remove from tagged resources
+				taggedResources.values().remove(eir);
 
-				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, null, eir);
+				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
 				modified = true;
 			}
 		}
@@ -102,7 +119,7 @@ public abstract class ResourceProvider{
 	}
 	
 	public IProject getProject(){
-		return this.project;
+		return this.rootFolder.getProject();
 	}
 	
 	public List<IEditorInputResource> getResources(){
@@ -137,6 +154,31 @@ public abstract class ResourceProvider{
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public IEditorInputResource createNewResource(String resourceName, String name){
+		checkRootFolder();
+		
+		IResource res = createResource(resourceName);
+		if(res.exists()){
+			try {
+				res.delete(true, null);
+				resources.remove(res);
+				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, res, null);		
+				pcs.firePropertyChange(PROP_RESOURCE_DELETED, res, null);		
+
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		IEditorInputResource eir = loadResource(res);
+		eir.setName(name);
+		eir.save();
+		
+		pcs.firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
+		return eir;
 	}
 	
 	public IEditorInputResource createNewResource(String name){

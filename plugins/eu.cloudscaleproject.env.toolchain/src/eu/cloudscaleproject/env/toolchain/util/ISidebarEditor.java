@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -18,7 +17,6 @@ public interface ISidebarEditor extends ExplorerChangeListener{
 	public void removeSidebarEditor(IEditorInput ei);
 	
 	public List<IEditorInput> getInputs(String section);
-	public Composite createInputComposite(IEditorInput input, Composite parent, int style);
 	public String[] getSidebarSections();
 	public IResource[] getDependentRootResource();	
 	

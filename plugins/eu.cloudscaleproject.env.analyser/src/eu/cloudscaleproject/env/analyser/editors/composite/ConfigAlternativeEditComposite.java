@@ -1,13 +1,10 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -21,6 +18,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -30,16 +29,28 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class ConfigAlternativeEditComposite extends Composite {
 	
-	private final IProject project;
-	private final Map<IResource, InputAlternative> inputAlternatives = new HashMap<IResource, InputAlternative>();
-	
+	private final ResourceProvider inputResources;
 	private final ComboViewer comboViewer;
+	
+	private final PropertyChangeListener inputResourceListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
+				comboViewer.add(evt.getNewValue());
+			}
+			else if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
+				comboViewer.remove(evt.getOldValue());
+			}
+		}
+	};
 	
 	/**
 	 * Create the composite.
@@ -48,7 +59,9 @@ public class ConfigAlternativeEditComposite extends Composite {
 	 */
 	public ConfigAlternativeEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
-		this.project = project;
+		//this.project = project;
+		
+		this.inputResources = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		
 		setLayout(new GridLayout(3, false));
 		
@@ -99,12 +112,20 @@ public class ConfigAlternativeEditComposite extends Composite {
 			}
 			
 		});
-
-		updateInput();
-		comboViewer.setInput(inputAlternatives.values());
+		
+		//init listeners
+		inputResources.addListener(inputResourceListener);
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				inputResources.removeListener(inputResourceListener);
+			}
+		});
+		
+		//init combo viewer
+		comboViewer.setInput(inputResources.getResources());
 		if(ca.getInput() != null){
-			//TODO: find out why the selection is not set!
-			comboViewer.setSelection(new StructuredSelection(inputAlternatives.get(ca.getInput().getResource())), true);
+			comboViewer.setSelection(new StructuredSelection(inputResources.getResource(ca.getInput().getResource().getName())), true);
 		}
 
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -115,43 +136,6 @@ public class ConfigAlternativeEditComposite extends Composite {
 				ca.save();
 			}
 		});
-	}
-		
-	public void updateInput(){
-		
-		List<InputAlternative> tmp = AnalyserUtil.getInputAlternatives(project);
-		
-		HashMap<IResource, InputAlternative> alternatives = new HashMap<IResource, InputAlternative>();
-		for(InputAlternative ia : tmp){
-			alternatives.put(ia.getResource(), ia);
-		}
-		
-		//add missing
-		for(InputAlternative ia : alternatives.values()){
-			if(!inputAlternatives.containsKey(ia.getResource())){
-				inputAlternatives.put(ia.getResource(), ia);
-				comboViewer.add(ia);
-			}
-		}
-		
-		//remove removed
-		Iterator<InputAlternative> iter = inputAlternatives.values().iterator();
-		while(iter.hasNext()){
-			InputAlternative ia = (InputAlternative)iter.next();
-			if(!alternatives.containsKey(ia.getResource())){
-				iter.remove();
-				comboViewer.remove(ia);
-			}
-		}
-	}
-	
-	@Override
-	public void update() {
-		
-		if(!isDisposed()){
-			updateInput();
-		}
-		super.update();
 	}
 
 	@Override

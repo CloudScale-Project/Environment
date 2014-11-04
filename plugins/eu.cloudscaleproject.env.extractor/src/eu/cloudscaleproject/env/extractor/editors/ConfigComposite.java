@@ -32,7 +32,7 @@ public class ConfigComposite extends SidebarEditorComposite {
 		IFolder extractorConfigurationFolder = extractorFolder.getFolder(
 				ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION));
 		
-		setResourceProvider(new ResourceProvider(project, extractorConfigurationFolder, "Alternative") {
+		setResourceProvider(new ResourceProvider(extractorConfigurationFolder, "Alternative") {
 			
 			@Override
 			public boolean validateResource(IResource res) {

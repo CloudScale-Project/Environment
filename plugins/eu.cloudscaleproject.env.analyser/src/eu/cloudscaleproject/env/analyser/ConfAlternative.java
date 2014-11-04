@@ -19,16 +19,18 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
-import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfAlternative extends PropertyChangeSupport implements IEditorInputResource{
@@ -107,24 +109,24 @@ public class ConfAlternative extends PropertyChangeSupport implements IEditorInp
 		if(prop == null){
 			return null;
 		}
-		return AnalyserUtil.getInputAlternative(project, prop);
+		return (InputAlternative)ResourceRegistry.getInstance()
+				.getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID).getResource(prop);
 	}
 	
 	public void setInput(InputAlternative ia){
 		
 		Resource expResource = getExperiments();
-		
-		ExperimentRepository expRep = expResource.getContents().size() > 0 ? (ExperimentRepository)expResource.getContents().get(0) : null;
-		if(expRep == null){
-			expRep = ExperimentsFactory.eINSTANCE.createExperimentRepository();
-			expResource.getContents().add(expRep);
+		EObject root = expResource.getContents().size() > 0 ? expResource.getContents().get(0) : null;
+		if(root == null){
+			Experiment exp = ExperimentsFactory.eINSTANCE.createExperiment();
+			root = exp;
+			expResource.getContents().add(exp);
 		}
 		
-		Experiment exp = expRep.getExperiments().size() > 0 ? (Experiment)expRep.getExperiments().get(0) : null;
-		if(exp == null){
-			exp = ExperimentsFactory.eINSTANCE.createExperiment();
-			expRep.getExperiments().add(exp);
+		if(!(root instanceof Experiment)){
+			throw new IllegalArgumentException("Experiments model with root object type other then Experiment is not supported!");
 		}
+		Experiment exp = (Experiment)root;
 		
 		InitialModel initialModel = exp.getInitialModel();
 		if(initialModel != null && ia == null){

@@ -102,7 +102,7 @@ public class StatusManager {
 
 		synchronized (validationLock) {
 			boolean validatorFound = false;
-			for (ToolValidator v : getValidators()) {
+			for (ToolValidator v : getValidators()) {				
 				if (v.getToolID().equals(toolID)) {
 					validatorFound = true;
 					isValid &= v.validate(project);

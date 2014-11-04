@@ -1,42 +1,56 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeTreeviewComposite;
-import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditorComposite;
+import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
+import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class RunComposite extends AbstractSidebarEditorComposite{
+public class RunComposite extends SidebarEditorComposite{
+	
+	private static final String SECTION_DEFAULT = "Default measurements:";
+	private static final String SECTION_ALT = "Alternative conf:";
 	
 	private final IProject project;
 	
-	private static final String[] sections = new String[]{
-			"Default measurements:",
-			"Alternatives:"
-	};
 			
 	public RunComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		this.project = project;
-		init();
+		
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID));
+		setContentProvider(new SidebarContentProvider() {
+			
+			@Override
+			public String[] getSections() {
+				return new String[]{SECTION_DEFAULT, SECTION_ALT};
+			}
+			
+			@Override
+			public String getSection(IEditorInputResource resource) {
+				if(ResourceUtils.ANALYSER_CONF_CAPACITY_ANALYSES.equals(resource.getResource().getName())){
+					return SECTION_DEFAULT;
+				}
+				return SECTION_ALT;
+			}
+			
+			@Override
+			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
+				return new RightPanelComposite(RunComposite.this.project, (ConfAlternative)resource, parent, SWT.NONE);
+			}
+		});
 	}
 	
 	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
@@ -73,6 +87,8 @@ public class RunComposite extends AbstractSidebarEditorComposite{
 		}
 	}
 
+	/*
+	
 	@Override
 	public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
 		if(input instanceof ConfAlternative){
@@ -161,4 +177,6 @@ public class RunComposite extends AbstractSidebarEditorComposite{
 				analyserFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT))
 				};
 	}
+	
+	*/
 }

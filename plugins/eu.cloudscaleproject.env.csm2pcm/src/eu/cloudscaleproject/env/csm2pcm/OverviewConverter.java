@@ -57,8 +57,8 @@ import org.scaledl.overview.core.Entity;
 
 import com.google.common.base.Predicate;
 
-import eu.cloudscaleproject.env.analyser.AnalyserUtil;
 import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
 
@@ -70,11 +70,13 @@ public class OverviewConverter implements IOverviewConverter{
 	private ExecutionContextImpl context;
 	private TransformationExecutor executor;
 	
+	//TODO: this resource sets should not be static! If they are not, the merge don't work properly!
+	//		Find workaround for this.
 	private static final ResourceSet resoultResSet = new ResourceSetImpl();
 	private static final ResourceSet oldGenResSet = new ResourceSetImpl();
 	private static final ResourceSet newGenResSet = new ResourceSetImpl();
 	
-	private final PalladioModel[] resoultModels = new PalladioModel[5];
+	private final PalladioModel[] resultModels = new PalladioModel[5];
 	private final PalladioModel[] oldGenModels = new PalladioModel[5];
 	private final PalladioModel[] newGenModels = new PalladioModel[5];
 	
@@ -185,15 +187,15 @@ public class OverviewConverter implements IOverviewConverter{
 		this.newGenModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
 				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.USAGE);
 		
-		this.resoultModels[PalladioUtil.ModelID.REPOSITORY.ordinal()] = 
+		this.resultModels[PalladioUtil.ModelID.REPOSITORY.ordinal()] = 
 				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.REPOSITORY);
-		this.resoultModels[PalladioUtil.ModelID.SYSTEM.ordinal()] = 
+		this.resultModels[PalladioUtil.ModelID.SYSTEM.ordinal()] = 
 				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.SYSTEM);
-		this.resoultModels[PalladioUtil.ModelID.RESOURCE.ordinal()] = 
+		this.resultModels[PalladioUtil.ModelID.RESOURCE.ordinal()] = 
 				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.RESOURCE);
-		this.resoultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()] = 
+		this.resultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()] = 
 				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.ALLOCATION);
-		this.resoultModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
+		this.resultModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
 				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.USAGE);
 		
 		// define the transformation input
@@ -265,7 +267,7 @@ public class OverviewConverter implements IOverviewConverter{
 				newGenModel.saveModelResource();
 				
 				this.oldGenModels[i].loadModelResource();
-				this.resoultModels[i].loadModelResource();
+				this.resultModels[i].loadModelResource();
 			}
 			
 			//set track modifications false
@@ -273,7 +275,7 @@ public class OverviewConverter implements IOverviewConverter{
 				
 				if(newObjects[i] == null){continue;}
 				
-				PalladioModel model = this.resoultModels[i];
+				PalladioModel model = this.resultModels[i];
 				model.getResourceDiagram().setTrackingModification(false);
 			}
 			
@@ -285,7 +287,7 @@ public class OverviewConverter implements IOverviewConverter{
 				
 				if(newObjects[i] == null){continue;}
 				
-				final PalladioModel model = this.resoultModels[i];
+				final PalladioModel model = this.resultModels[i];
 				model.unloadDiagramResource();
 				model.saveModelResource();
 
@@ -315,11 +317,10 @@ public class OverviewConverter implements IOverviewConverter{
 			}
 			
 			//create or set analyser generated input alternative
-			InputAlternative ia = AnalyserUtil.getTransformInputAlternative(project);
-			ia.setAllocation(ExplorerProjectPaths.getFileFromEmfResource(this.resoultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()].getResource()));
+			InputAlternative ia = ResourceUtils.getGeneratedResourceInput(project);
+			ia.setAllocation(ExplorerProjectPaths.getFileFromEmfResource(this.resultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()].getResource()));
 			//ia.setUsage(ExplorerProjectPaths.getFileFromEmfResource(this.resoultModels[PalladioUtil.ModelID.USAGE.ordinal()].getResource()));
 			ia.save();
-			AnalyserUtil.setCurrentInputAlternative(project, ia);
 		} 
 		
 		/*new Job ("tt")
