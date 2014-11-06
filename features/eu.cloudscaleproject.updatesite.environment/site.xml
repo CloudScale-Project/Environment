@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/eu.cloudscaleproject.feature.environment_1.0.0.201411040826.jar" id="eu.cloudscaleproject.feature.environment" version="1.0.0.201411040826">
+   <feature url="features/eu.cloudscaleproject.feature.environment_1.0.0.201411061520.jar" id="eu.cloudscaleproject.feature.environment" version="1.0.0.201411061520">
       <category name="eu.cloudscaleproject.environment"/>
    </feature>
-   <feature url="features/eu.cloudscaleproject.feature.environment_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.environment" version="1.0.0.qualifier">
+   <feature url="features/eu.cloudscaleproject.feature.environment.dev_1.0.0.201411061520.jar" id="eu.cloudscaleproject.feature.environment.dev" version="1.0.0.201411061520">
       <category name="eu.cloudscaleproject.environment"/>
    </feature>
    <category-def name="eu.cloudscaleproject.environment" label="CloudScale Environment">

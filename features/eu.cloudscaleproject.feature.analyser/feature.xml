@@ -204,4 +204,19 @@
          id="org.modelversioning.emfprofile.feature"
          version="0.0.0"/>
 
+   <includes
+         id="de.uka.ipd.sdq.workflow.feature.core"
+         version="0.0.0"/>
+
+   <includes
+         id="de.uka.ipd.sdq.workflow.feature.mdsd"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jscience"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
