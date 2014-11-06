@@ -72,6 +72,7 @@
 <includes id="org.palladiosimulator.protocom.javaee.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.protocom.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.recorderframework.feature" version="0.0.0"/>
+<includes id="org.palladiosimulator.thirdpartywrapper.feature" version="0.0.0"/>
 <includes id="org.reclipse.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.recorderframework.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.sensorframework.feature" version="0.0.0"/>
