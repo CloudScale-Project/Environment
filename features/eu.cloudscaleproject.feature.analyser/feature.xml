@@ -17,6 +17,18 @@
    </license>
 
    <includes
+         id="org.scaledl.architecturaltemplates.examples.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.scaledl.architecturaltemplates.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.scaledl.usageevolution.feature"
+         version="0.0.0"/>
+
+   <includes
          id="de.uka.ipd.sdq.dialogs.feature"
          version="0.0.0"/>
 
@@ -178,6 +190,18 @@
 
    <includes
          id="org.palladiosimulator.simulizar.source.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="edu.kit.ipd.sdq.mdsd.profiles.examples.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="edu.kit.ipd.sdq.mdsd.profiles.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.modelversioning.emfprofile.feature"
          version="0.0.0"/>
 
 </feature>
