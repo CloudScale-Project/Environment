@@ -37,7 +37,7 @@ Plugin descriptions
 
 - **eu.cloudscaleproject.env.analyser**
 
-The Analyser plugin wraps all external dependencies for the Analyser tool and provides functionality to model, configure and simulate services deployed on the elastic infrastructures.
+ The Analyser plugin wraps all external dependencies for the Analyser tool and provides functionality to model, configure and simulate services deployed on the elastic infrastructures.
 It mostly contains classes which provide GUI components for the Dashboard editor and the 'validators', that monitor current project input/run/result contents.
 
 - **eu.cloudscaleproject.env.extractor**
@@ -46,82 +46,71 @@ It mostly contains classes which provide GUI components for the Dashboard editor
 
 - **eu.cloudscaleproject.env.spotter**
 
-Dynamic Spotter plugin that wraps all external dependencies for the Dynamic Spotter tool and provides functionality to analyse and discover performance problems. Dynamic spotter approach is measurement-based, in contrast to the Analyser or Static spotter tool approach.
+ Dynamic Spotter plugin that wraps all external dependencies for the Dynamic Spotter tool and provides functionality to analyse and discover performance problems. Dynamic spotter approach is measurement-based, in contrast to the Analyser or Static spotter tool approach.
 It mostly contains classes which provide GUI components for the Dashboard editor and various validators, that monitor current input/run/result configurations.
 
 - **eu.cloudscaleproject.env.staticspotter**
 
-Static Spotter plugin that wraps all external dependencies for the Static Spotter tool.
+ Static Spotter plugin that wraps all external dependencies for the Static Spotter tool.
 
 #### CloudScale application plugins: 
 
 - **eu.cloudscaleproject.env.master**
 
-Plugin used as a base project plugin for building the RCP application. It contains the '.product' file.
+ Plugin used as a base project plugin for building the RCP application. It contains the '.product' file.
 
 - **eu.cloudscaleproject.env.product**
 
-Plugin serves as a main CloudScale application configuration. It contains Eclipse E4 application model, toolbar and menu items, project nature, new project wizard and custom application brandings.
+ Plugin serves as a main CloudScale application configuration. It contains Eclipse E4 application model, toolbar and menu items, project nature, new project wizard and custom application brandings.
 
 - **eu.cloudscaleproject.env.common**
 
-The Common plugin contains generally used dialogs and custom GUI components, project explorer common operations, functionality to retrieve project files, interfaces for notification and tool status mechanism and common context used by dependency injection. It also contains helper classes for GUI resource management, base class used by extension points to support dependency injection, color manipulator and converter and others. It is required by most of the other plugins. 
+ The Common plugin contains generally used dialogs and custom GUI components, project explorer common operations, functionality to retrieve project files, interfaces for notification and tool status mechanism and common context used by dependency injection. It also contains helper classes for GUI resource management, base class used by extension points to support dependency injection, color manipulator and converter and others. It is required by most of the other plugins. 
 
 - **eu.cloudscaleproject.env.help**
 
-Plugin includes HTML help pages.
+ Plugin includes HTML help pages.
 
 #### Plugins providing enhanced integration between tools:
 
 - **eu.cloudscaleproject.env.toolchain**
-
-Toolchain plugin serves as the base plugin for the Dashboard editor. Dashboard editor is the common editor for all the tools that consist CloudScale Environment. It is extended, using the extension point functionality, by the aforementioned Analyser, Dynamic Spotter, Static Spotter and Extractor plugins, to provide GUI components for editing configurations and displaying the results.
+ Toolchain plugin serves as the base plugin for the Dashboard editor. Dashboard editor is the common editor for all the tools that consist CloudScale Environment. It is extended, using the extension point functionality, by the aforementioned Analyser, Dynamic Spotter, Static Spotter and Extractor plugins, to provide GUI components for editing configurations and displaying the results.
 
 - **eu.cloudscaleproject.env.csm2pcm**
-
-Contains QVTO scripts and support classes that gives support for transformation from Overview model to PCM model. PCM model is needed as an input to the Analyser.
+ Contains QVTO scripts and support classes that gives support for transformation from Overview model to PCM model. PCM model is needed as an input to the Analyser.
 
 ##### CloudScale Method plugins:
 
 - **eu.cloudscaleproject.env.method.common**
-
-Common plugin for the Workflow diagram. Workflow diagram shows notifications and enabled options, based on the current state of the project. It contains Method meta-model and Graphiti diagram patterns, used for persisting, viewing and editing Workflow diagram.
+ Common plugin for the Workflow diagram. Workflow diagram shows notifications and enabled options, based on the current state of the project. It contains Method meta-model and Graphiti diagram patterns, used for persisting, viewing and editing Workflow diagram.
 
 - **eu.cloudscaleproject.env.method.editor**
-
-Plugin that is used as a Eclipse extension to create and edit Workflow diagrams, based on Method meta-model.
+ Plugin that is used as a Eclipse extension to create and edit Workflow diagrams, based on Method meta-model.
 This plugin is not meant to be used inside CloudScale product application.
 Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
-- **eu.cloudscaleproject.env.method.viewer**
-
-Plugin that provides only view capabilities and dynamic decorations for the Workflow diagram.
+- **eu.cloudscaleproject.env.method.viewer** 
+ Plugin that provides only view capabilities and dynamic decorations for the Workflow diagram.
 Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
 #### ScaleDL Overview model plugins (definition, editors, diagrams):
 
 - **org.scaledl.overview**
-
-This plugin contains EMF auto-generated classes, produced from Overview meta-model. It also introduces two new extension points to support different cloud environment specifications and model-to-model transformations.
+ This plugin contains EMF auto-generated classes, produced from Overview meta-model. It also introduces two new extension points to support different cloud environment specifications and model-to-model transformations.
 
 - **org.scaledl.overview.diagram**
-
-Plugin provides diagram representation of the Overview model. It uses Graphiti framework for displaying and editing EMF based Overview model, together with custom service editors.
+ Plugin provides diagram representation of the Overview model. It uses Graphiti framework for displaying and editing EMF based Overview model, together with custom service editors.
 
 - **org.scaledl.overview.edit**
-
-This plugin contains EMF auto-generated "item provider" classes, used mainly by the "org.scaledl.overview.editor" plugin.
+ This plugin contains EMF auto-generated "item provider" classes, used mainly by the "org.scaledl.overview.editor" plugin.
 
 - **org.scaledl.overview.editor**
-
-Provides basic EMF editor for the Overview model.
+ Provides basic EMF editor for the Overview model.
 
 - **org.scaledl.overview.generic**
-
-Overview generic plugin contains different cloud infrastructure specifications for the Overview model. Currently AWS, OpenStack, SAP Hana and Generic cloud infrastructures are supported.
+ Overview generic plugin contains different cloud infrastructure specifications for the Overview model. Currently AWS, OpenStack, SAP Hana and Generic cloud infrastructures are supported.
 
 - **org.scaledl.overview.properties**
-
-Overview properties plugin provides extension for the Overview diagram properties panel. It contains custom table and cell editors that facilitates Overview diagram editing.
+ Overview properties plugin provides extension for the Overview diagram properties panel. It contains custom table and cell editors that facilitates Overview diagram editing.
 
 [1]: https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/lunasr1
