@@ -36,39 +36,32 @@ Plugin descriptions
 #### CloudScale Toolchain integration plugins:
 
 - **eu.cloudscaleproject.env.analyser**
-
  The Analyser plugin wraps all external dependencies for the Analyser tool and provides functionality to model, configure and simulate services deployed on the elastic infrastructures.
 It mostly contains classes which provide GUI components for the Dashboard editor and the 'validators', that monitor current project input/run/result contents.
 
 - **eu.cloudscaleproject.env.extractor**
-
+ The Extractor plugin that wraps all external dependencies for the Extractor tool. It mostly contains classes which provide GUI components for the Dashboard editor and various validators, that monitor current input/run/result configurations.
 
 
 - **eu.cloudscaleproject.env.spotter**
-
  Dynamic Spotter plugin that wraps all external dependencies for the Dynamic Spotter tool and provides functionality to analyse and discover performance problems. Dynamic spotter approach is measurement-based, in contrast to the Analyser or Static spotter tool approach.
 It mostly contains classes which provide GUI components for the Dashboard editor and various validators, that monitor current input/run/result configurations.
 
 - **eu.cloudscaleproject.env.staticspotter**
-
- Static Spotter plugin that wraps all external dependencies for the Static Spotter tool.
+ Static Spotter plugin that wraps all external dependencies for the Static Spotter tool. It mostly contains classes which provide GUI components for the Dashboard editor and various validators, that monitor current input/run/result configurations.
 
 #### CloudScale application plugins: 
 
 - **eu.cloudscaleproject.env.master**
-
  Plugin used as a base project plugin for building the RCP application. It contains the '.product' file.
 
 - **eu.cloudscaleproject.env.product**
-
  Plugin serves as a main CloudScale application configuration. It contains Eclipse E4 application model, toolbar and menu items, project nature, new project wizard and custom application brandings.
 
 - **eu.cloudscaleproject.env.common**
-
  The Common plugin contains generally used dialogs and custom GUI components, project explorer common operations, functionality to retrieve project files, interfaces for notification and tool status mechanism and common context used by dependency injection. It also contains helper classes for GUI resource management, base class used by extension points to support dependency injection, color manipulator and converter and others. It is required by most of the other plugins. 
 
 - **eu.cloudscaleproject.env.help**
-
  Plugin includes HTML help pages.
 
 #### Plugins providing enhanced integration between tools:
