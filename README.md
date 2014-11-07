@@ -5,6 +5,8 @@ The CloudScale Environment is a desktop application that integrates the differen
 namely the Dynamic and Static Spotters, the Analyzer and the Extractor, while driving the user through the flow of the CloudScale Model.
 This desktop application can be installed and used in any personal computer running Java 6+, including Windows, MacOS and Linux.
 
+Bundled versions are available here: http://cloudscale-project.github.io/Environment/
+
 Build and run CloudScale Environment
 -----------------------------------------
 
@@ -31,7 +33,7 @@ Start developing CloudScale Environment
 Plugin descriptions
 -----------------------------------------
 
-#### Plugins providing tool functionality:
+#### CloudScale Toolchain integration plugins:
 
 - **eu.cloudscaleproject.env.analyser**
 
@@ -79,6 +81,8 @@ Toolchain plugin serves as the base plugin for the Dashboard editor. Dashboard e
 
 Contains QVTO scripts and support classes that gives support for transformation from Overview model to PCM model. PCM model is needed as an input to the Analyser.
 
+##### CloudScale Method plugins:
+
 - **eu.cloudscaleproject.env.method.common**
 
 Common plugin for the Workflow diagram. Workflow diagram shows notifications and enabled options, based on the current state of the project. It contains Method meta-model and Graphiti diagram patterns, used for persisting, viewing and editing Workflow diagram.
@@ -94,7 +98,7 @@ Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 Plugin that provides only view capabilities and dynamic decorations for the Workflow diagram.
 Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
-#### Plugins related to Overview model:
+#### ScaleDL Overview model plugins (definition, editors, diagrams):
 
 - **org.scaledl.overview**
 
