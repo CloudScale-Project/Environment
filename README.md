@@ -106,4 +106,19 @@ Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 - **org.scaledl.overview.properties** : 
  Overview properties plugin provides extension for the Overview diagram properties panel. It contains custom table and cell editors that facilitates Overview diagram editing.
 
+Features descriptions
+-----------------------------------------
+#### Features
+- **eu.cloudscaleproject.feature.analyser**
+- **eu.cloudscaleproject.feature.dynamicspotter**
+- **eu.cloudscaleproject.feature.environment**
+- **eu.cloudscaleproject.feature.environment.dev**
+- **eu.cloudscaleproject.feature.extractor**
+- **eu.cloudscaleproject.feature.staticspotter**
+
+#### Update-site
+- **eu.cloudscaleproject.updatesite.environment**
+- **eu.cloudscaleproject.updatesite.toolchain**
+
+
 [1]: https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/lunasr1
