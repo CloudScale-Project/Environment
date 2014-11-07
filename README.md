@@ -1,4 +1,4 @@
-<img src="http://www.cloudscale-project.eu/static/img/logo-CloudScale.png" width=200> 
+<img src="http://www.cloudscale-project.eu/static/img/logo-CloudScale.png" alt="http://wwww.cloudscale-project.eu" width=200> 
 =========
 
 The CloudScale Environment is a desktop application that integrates the different tools of the CloudScale project, 
@@ -13,8 +13,8 @@ Build and run CloudScale Environment
 	* `$ git clone https://github.com/CloudScale-Project/Environment.git`
 2. Build Cloudscale Environemnt.
 	* `$ mvn compile`
-	* `$ mvn package`
 3. Run Linux,MacOS,Windows distribution.
+	* Bundle location : plugins/master/target/products
 
 Start developing CloudScale Environment
 -----------------------------------------
@@ -26,19 +26,19 @@ Start developing CloudScale Environment
 	- Install CloudScale Environment Developement feature.
 3. Clone repository
 	$ git clone https://github.com/CloudScale-Project/Environment.git
-4. Import CloudScale Environment plugins, under "plugins/" directory, into Eclipse.
+4. Import CloudScale Environment plugins, under "plugins/" directory, into the workbench.
 
 Plugin descriptions
 -----------------------------------------
 
 **eu.cloudscaleproject.env.analyser**
 
-Analyser plugin that wraps all external dependencies for the Analyser tool and provides functionality to model, configure and simulate services deployed on elastic infrastructures.
-It mostly contains classes which provide GUI components for the Dashboard editor and 'validators', that monitor current input/run/result configurations.
+The Analyser plugin wraps all external dependencies for the Analyser tool and provides functionality to model, configure and simulate services deployed on the elastic infrastructures.
+It mostly contains classes which provide GUI components for the Dashboard editor and the 'validators', that monitor current input/run/result content.
 
 **eu.cloudscaleproject.env.common**
 
-Common plugin required by all other plugins. It contains generally used dialogs and custom GUI components, project explorer common operations, functionality to retrieve project files, interfaces for notification and tool status mechanism and common context used by dependency injection. It also contains helper classes for GUI resource management, base class used by extension points to support dependency injection, color manipulator and converter and others.
+The Common plugin contains generally used dialogs and custom GUI components, project explorer common operations, functionality to retrieve project files, interfaces for notification and tool status mechanism and common context used by dependency injection. It also contains helper classes for GUI resource management, base class used by extension points to support dependency injection, color manipulator and converter and others. It is required by most of the other plugins. 
 
 **eu.cloudscaleproject.env.csm2pcm**
 
