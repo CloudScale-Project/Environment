@@ -76,8 +76,8 @@ public class MethodAdapterFactory extends AdapterFactoryImpl {
 				return createNodeAdapter();
 			}
 			@Override
-			public Adapter caseLinkedNode(LinkedNode object) {
-				return createLinkedNodeAdapter();
+			public Adapter caseLinkedObject(LinkedObject object) {
+				return createLinkedObjectAdapter();
 			}
 			@Override
 			public Adapter caseContainer(Container object) {
@@ -108,8 +108,8 @@ public class MethodAdapterFactory extends AdapterFactoryImpl {
 				return createCommandAdapter();
 			}
 			@Override
-			public Adapter caseSectionConnector(SectionConnector object) {
-				return createSectionConnectorAdapter();
+			public Adapter caseLink(Link object) {
+				return createLinkAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -160,16 +160,16 @@ public class MethodAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode <em>Linked Node</em>}'.
+	 * Creates a new adapter for an object of class '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject <em>Linked Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode
+	 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject
 	 * @generated
 	 */
-	public Adapter createLinkedNodeAdapter() {
+	public Adapter createLinkedObjectAdapter() {
 		return null;
 	}
 
@@ -272,16 +272,16 @@ public class MethodAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link eu.cloudscaleproject.env.method.common.method.SectionConnector <em>Section Connector</em>}'.
+	 * Creates a new adapter for an object of class '{@link eu.cloudscaleproject.env.method.common.method.Link <em>Link</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see eu.cloudscaleproject.env.method.common.method.SectionConnector
+	 * @see eu.cloudscaleproject.env.method.common.method.Link
 	 * @generated
 	 */
-	public Adapter createSectionConnectorAdapter() {
+	public Adapter createLinkAdapter() {
 		return null;
 	}
 

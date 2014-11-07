@@ -4,22 +4,20 @@ package eu.cloudscaleproject.env.method.common.method.impl;
 
 import eu.cloudscaleproject.env.method.common.method.Action;
 import eu.cloudscaleproject.env.method.common.method.Command;
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Method;
 import eu.cloudscaleproject.env.method.common.method.MethodFactory;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -48,7 +46,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass linkedNodeEClass = null;
+	private EClass linkedObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -104,7 +102,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass sectionConnectorEClass = null;
+	private EClass linkEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -181,7 +179,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getMethod_SectionConnectors() {
+	public EReference getMethod_Links() {
 		return (EReference)methodEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -307,8 +305,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getLinkedNode() {
-		return linkedNodeEClass;
+	public EClass getLinkedObject() {
+		return linkedObjectEClass;
 	}
 
 	/**
@@ -316,8 +314,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLinkedNode_Next() {
-		return (EReference)linkedNodeEClass.getEStructuralFeatures().get(0);
+	public EReference getLinkedObject_Next() {
+		return (EReference)linkedObjectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -325,8 +323,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLinkedNode_Previous() {
-		return (EReference)linkedNodeEClass.getEStructuralFeatures().get(1);
+	public EReference getLinkedObject_Previous() {
+		return (EReference)linkedObjectEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -523,8 +521,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getSectionConnector() {
-		return sectionConnectorEClass;
+	public EClass getLink() {
+		return linkEClass;
 	}
 
 	/**
@@ -532,8 +530,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSectionConnector_Start() {
-		return (EReference)sectionConnectorEClass.getEStructuralFeatures().get(0);
+	public EReference getLink_Start() {
+		return (EReference)linkEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -541,8 +539,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSectionConnector_End() {
-		return (EReference)sectionConnectorEClass.getEStructuralFeatures().get(1);
+	public EReference getLink_End() {
+		return (EReference)linkEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -550,8 +548,8 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSectionConnector_Required() {
-		return (EAttribute)sectionConnectorEClass.getEStructuralFeatures().get(2);
+	public EAttribute getLink_Required() {
+		return (EAttribute)linkEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -583,7 +581,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		// Create classes and their features
 		methodEClass = createEClass(METHOD);
-		createEReference(methodEClass, METHOD__SECTION_CONNECTORS);
+		createEReference(methodEClass, METHOD__LINKS);
 		createEReference(methodEClass, METHOD__NODES);
 
 		nodeEClass = createEClass(NODE);
@@ -599,9 +597,9 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		createEAttribute(nodeEClass, NODE__COMMAND_ID);
 		createEAttribute(nodeEClass, NODE__COMMAND_PARAM);
 
-		linkedNodeEClass = createEClass(LINKED_NODE);
-		createEReference(linkedNodeEClass, LINKED_NODE__NEXT);
-		createEReference(linkedNodeEClass, LINKED_NODE__PREVIOUS);
+		linkedObjectEClass = createEClass(LINKED_OBJECT);
+		createEReference(linkedObjectEClass, LINKED_OBJECT__NEXT);
+		createEReference(linkedObjectEClass, LINKED_OBJECT__PREVIOUS);
 
 		containerEClass = createEClass(CONTAINER);
 		createEReference(containerEClass, CONTAINER__CHILDREN);
@@ -631,10 +629,10 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		commandEClass = createEClass(COMMAND);
 		createEAttribute(commandEClass, COMMAND__POSITION);
 
-		sectionConnectorEClass = createEClass(SECTION_CONNECTOR);
-		createEReference(sectionConnectorEClass, SECTION_CONNECTOR__START);
-		createEReference(sectionConnectorEClass, SECTION_CONNECTOR__END);
-		createEAttribute(sectionConnectorEClass, SECTION_CONNECTOR__REQUIRED);
+		linkEClass = createEClass(LINK);
+		createEReference(linkEClass, LINK__START);
+		createEReference(linkEClass, LINK__END);
+		createEAttribute(linkEClass, LINK__REQUIRED);
 	}
 
 	/**
@@ -668,19 +666,19 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		containerEClass.getESuperTypes().add(this.getNode());
 		statusNodeEClass.getESuperTypes().add(this.getNode());
 		actionEClass.getESuperTypes().add(this.getStatusNode());
-		actionEClass.getESuperTypes().add(this.getLinkedNode());
+		actionEClass.getESuperTypes().add(this.getLinkedObject());
 		sectionEClass.getESuperTypes().add(this.getStatusNode());
-		sectionEClass.getESuperTypes().add(this.getLinkedNode());
+		sectionEClass.getESuperTypes().add(this.getLinkedObject());
 		requirementEClass.getESuperTypes().add(this.getStatusNode());
 		commandEClass.getESuperTypes().add(this.getNode());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(methodEClass, Method.class, "Method", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMethod_SectionConnectors(), this.getSectionConnector(), null, "sectionConnectors", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMethod_Links(), this.getLink(), null, "links", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMethod_Nodes(), this.getNode(), null, "nodes", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nodeEClass, Node.class, "Node", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getNode_Id(), ecorePackage.getEString(), "id", "", 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNode_Id(), ecorePackage.getEString(), "id", "", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Name(), ecorePackage.getEString(), "name", "name", 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Description(), ecorePackage.getEString(), "description", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Tooltip(), ecorePackage.getEString(), "tooltip", "", 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -692,42 +690,42 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		initEAttribute(getNode_CommandId(), ecorePackage.getEString(), "commandId", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_CommandParam(), ecorePackage.getEString(), "commandParam", null, 0, -1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(linkedNodeEClass, LinkedNode.class, "LinkedNode", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getLinkedNode_Next(), this.getSectionConnector(), null, "next", null, 0, -1, LinkedNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLinkedNode_Previous(), this.getSectionConnector(), null, "previous", null, 0, -1, LinkedNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(linkedObjectEClass, LinkedObject.class, "LinkedObject", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLinkedObject_Next(), this.getLink(), null, "next", null, 0, -1, LinkedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLinkedObject_Previous(), this.getLink(), null, "previous", null, 0, -1, LinkedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(containerEClass, eu.cloudscaleproject.env.method.common.method.Container.class, "Container", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContainer_Children(), this.getNode(), null, "children", null, 0, -1, eu.cloudscaleproject.env.method.common.method.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContainer_Commands(), this.getCommand(), null, "commands", null, 0, -1, eu.cloudscaleproject.env.method.common.method.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(statusNodeEClass, StatusNode.class, "StatusNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getStatusNode_Done(), ecorePackage.getEBoolean(), "done", "false", 0, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getStatusNode_Dirty(), ecorePackage.getEBoolean(), "dirty", "false", 0, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStatusNode_Done(), ecorePackage.getEBoolean(), "done", "false", 1, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStatusNode_Dirty(), ecorePackage.getEBoolean(), "dirty", "false", 1, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getStatusNode_Warnings(), this.getWarning(), null, "warnings", null, 0, -1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(actionEClass, Action.class, "Action", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(sectionEClass, Section.class, "Section", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSection_Valid(), ecorePackage.getEBoolean(), "valid", "true", 0, 1, Section.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSection_InProgress(), ecorePackage.getEBoolean(), "inProgress", "false", 0, 1, Section.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSection_Valid(), ecorePackage.getEBoolean(), "valid", "true", 1, 1, Section.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSection_InProgress(), ecorePackage.getEBoolean(), "inProgress", "false", 1, 1, Section.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSection_Commands(), this.getCommand(), null, "commands", null, 0, -1, Section.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSection_Requirements(), this.getRequirement(), null, "requirements", null, 0, -1, Section.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRequirement_Position(), ecorePackage.getEInt(), "position", "0", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRequirement_Position(), ecorePackage.getEInt(), "position", "0", 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(warningEClass, Warning.class, "Warning", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getWarning_Id(), ecorePackage.getEString(), "id", null, 0, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getWarning_Message(), ecorePackage.getEString(), "message", null, 0, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getWarning_Id(), ecorePackage.getEString(), "id", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getWarning_Message(), ecorePackage.getEString(), "message", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getWarning_Commands(), this.getCommand(), null, "commands", null, 0, -1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commandEClass, Command.class, "Command", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCommand_Position(), ecorePackage.getEInt(), "position", "0", 0, 1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCommand_Position(), ecorePackage.getEInt(), "position", "0", 1, 1, Command.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(sectionConnectorEClass, SectionConnector.class, "SectionConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSectionConnector_Start(), this.getLinkedNode(), null, "start", null, 1, 1, SectionConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSectionConnector_End(), this.getLinkedNode(), null, "end", null, 1, 1, SectionConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSectionConnector_Required(), ecorePackage.getEBoolean(), "required", "false", 1, 1, SectionConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLink_Start(), this.getLinkedObject(), null, "start", null, 1, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLink_End(), this.getLinkedObject(), null, "end", null, 1, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLink_Required(), ecorePackage.getEBoolean(), "required", "false", 1, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

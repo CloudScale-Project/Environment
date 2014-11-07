@@ -23,7 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Section extends StatusNode, LinkedNode {
+public interface Section extends StatusNode, LinkedObject {
 	/**
 	 * Returns the value of the '<em><b>Valid</b></em>' attribute.
 	 * The default value is <code>"true"</code>.
@@ -36,7 +36,7 @@ public interface Section extends StatusNode, LinkedNode {
 	 * @return the value of the '<em>Valid</em>' attribute.
 	 * @see #setValid(boolean)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getSection_Valid()
-	 * @model default="true" transient="true"
+	 * @model default="true" required="true" transient="true"
 	 * @generated
 	 */
 	boolean isValid();
@@ -63,7 +63,7 @@ public interface Section extends StatusNode, LinkedNode {
 	 * @return the value of the '<em>In Progress</em>' attribute.
 	 * @see #setInProgress(boolean)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getSection_InProgress()
-	 * @model default="false" transient="true"
+	 * @model default="false" required="true" transient="true"
 	 * @generated
 	 */
 	boolean isInProgress();

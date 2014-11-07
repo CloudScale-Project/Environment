@@ -103,13 +103,13 @@ public interface MethodFactory extends EFactory {
 	Command createCommand();
 
 	/**
-	 * Returns a new object of class '<em>Section Connector</em>'.
+	 * Returns a new object of class '<em>Link</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Section Connector</em>'.
+	 * @return a new object of class '<em>Link</em>'.
 	 * @generated
 	 */
-	SectionConnector createSectionConnector();
+	Link createLink();
 
 	/**
 	 * Returns the package supported by this factory.

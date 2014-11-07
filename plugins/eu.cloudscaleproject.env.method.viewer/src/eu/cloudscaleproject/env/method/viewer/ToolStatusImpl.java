@@ -11,11 +11,11 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
 import eu.cloudscaleproject.env.method.common.method.Command;
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.MethodFactory;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
 import eu.cloudscaleproject.env.method.common.method.Section;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
 
@@ -80,25 +80,25 @@ public class ToolStatusImpl implements IToolStatus{
 		
 	@Override
 	public boolean hasMetRequirements() {
-		if(this.statusNode instanceof LinkedNode){
-			return hasMetRequirementsRecursive((LinkedNode)this.statusNode);
+		if(this.statusNode instanceof LinkedObject){
+			return hasMetRequirementsRecursive((LinkedObject)this.statusNode);
 		}
 		return true;
 	}
 	
-	private boolean hasMetRequirementsRecursive(LinkedNode linkedNode){
+	private boolean hasMetRequirementsRecursive(LinkedObject linkedObject){
 		boolean out = true;
-		for(SectionConnector sc : linkedNode.getPrevious()){
-			if(sc.isRequired() && sc.getStart() instanceof StatusNode){
-				StatusNode required = (StatusNode)sc.getStart();
+		for(Link link : linkedObject.getPrevious()){
+			if(link.isRequired() && link.getStart() instanceof StatusNode){
+				StatusNode required = (StatusNode)link.getStart();
 				
 				if(!out){break;}
 				out &= required.getWarnings().isEmpty();
 				if(!out){break;}
 				out &= required.isDone();
 				if(!out){break;}
-				if(required instanceof LinkedNode){
-					out &= hasMetRequirementsRecursive((LinkedNode)required);
+				if(required instanceof LinkedObject){
+					out &= hasMetRequirementsRecursive((LinkedObject)required);
 				}
 				else{
 					out &= true;
@@ -262,11 +262,11 @@ public class ToolStatusImpl implements IToolStatus{
 	
 	@Override
 	public void setIsDirtyNextRecursive(boolean dirty){
-		if(this.statusNode instanceof LinkedNode){
-			LinkedNode ln = (LinkedNode)this.statusNode;
+		if(this.statusNode instanceof LinkedObject){
+			LinkedObject ln = (LinkedObject)this.statusNode;
 			
-			for(SectionConnector sc : ln.getNext()){
-				LinkedNode next = sc.getEnd();
+			for(Link link : ln.getNext()){
+				LinkedObject next = link.getEnd();
 				if(next instanceof StatusNode){
 					if(((StatusNode)next).isDone()){
 						if(((StatusNode)next).isDirty() != dirty){

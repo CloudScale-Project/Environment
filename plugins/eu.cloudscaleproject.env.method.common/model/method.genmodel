@@ -11,7 +11,7 @@
   <genPackages prefix="Method" basePackage="eu.cloudscaleproject.env.method.common"
       disposableProviderFactory="true" ecorePackage="method.ecore#/">
     <genClasses ecoreClass="method.ecore#//Method">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Method/sectionConnectors"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Method/links"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Method/nodes"/>
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Node">
@@ -27,9 +27,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/commandId"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/commandParam"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="method.ecore#//LinkedNode">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//LinkedNode/next"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//LinkedNode/previous"/>
+    <genClasses image="false" ecoreClass="method.ecore#//LinkedObject">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//LinkedObject/next"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//LinkedObject/previous"/>
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Container">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Container/children"/>
@@ -58,10 +58,10 @@
     <genClasses ecoreClass="method.ecore#//Command">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Command/position"/>
     </genClasses>
-    <genClasses ecoreClass="method.ecore#//SectionConnector">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//SectionConnector/start"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//SectionConnector/end"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//SectionConnector/required"/>
+    <genClasses ecoreClass="method.ecore#//Link">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//Link/start"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference method.ecore#//Link/end"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Link/required"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

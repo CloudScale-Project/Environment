@@ -78,9 +78,9 @@ public class MethodSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MethodPackage.LINKED_NODE: {
-				LinkedNode linkedNode = (LinkedNode)theEObject;
-				T result = caseLinkedNode(linkedNode);
+			case MethodPackage.LINKED_OBJECT: {
+				LinkedObject linkedObject = (LinkedObject)theEObject;
+				T result = caseLinkedObject(linkedObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -102,7 +102,7 @@ public class MethodSwitch<T> extends Switch<T> {
 				Action action = (Action)theEObject;
 				T result = caseAction(action);
 				if (result == null) result = caseStatusNode(action);
-				if (result == null) result = caseLinkedNode(action);
+				if (result == null) result = caseLinkedObject(action);
 				if (result == null) result = caseNode(action);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -111,7 +111,7 @@ public class MethodSwitch<T> extends Switch<T> {
 				Section section = (Section)theEObject;
 				T result = caseSection(section);
 				if (result == null) result = caseStatusNode(section);
-				if (result == null) result = caseLinkedNode(section);
+				if (result == null) result = caseLinkedObject(section);
 				if (result == null) result = caseNode(section);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -137,9 +137,9 @@ public class MethodSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MethodPackage.SECTION_CONNECTOR: {
-				SectionConnector sectionConnector = (SectionConnector)theEObject;
-				T result = caseSectionConnector(sectionConnector);
+			case MethodPackage.LINK: {
+				Link link = (Link)theEObject;
+				T result = caseLink(link);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -178,17 +178,17 @@ public class MethodSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Linked Node</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Linked Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Linked Node</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Linked Object</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLinkedNode(LinkedNode object) {
+	public T caseLinkedObject(LinkedObject object) {
 		return null;
 	}
 
@@ -298,17 +298,17 @@ public class MethodSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Section Connector</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Link</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Section Connector</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Link</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSectionConnector(SectionConnector object) {
+	public T caseLink(Link object) {
 		return null;
 	}
 

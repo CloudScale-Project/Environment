@@ -2,9 +2,9 @@
  */
 package eu.cloudscaleproject.env.method.common.method.impl;
 
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -16,20 +16,20 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Section Connector</b></em>'.
+ * An implementation of the model object '<em><b>Link</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl#getStart <em>Start</em>}</li>
- *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl#getEnd <em>End</em>}</li>
- *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl#isRequired <em>Required</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.LinkImpl#getStart <em>Start</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.LinkImpl#getEnd <em>End</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.LinkImpl#isRequired <em>Required</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class SectionConnectorImpl extends MinimalEObjectImpl.Container implements SectionConnector {
+public class LinkImpl extends MinimalEObjectImpl.Container implements Link {
 	/**
 	 * The cached value of the '{@link #getStart() <em>Start</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -38,7 +38,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 * @ordered
 	 */
-	protected LinkedNode start;
+	protected LinkedObject start;
 
 	/**
 	 * The cached value of the '{@link #getEnd() <em>End</em>}' reference.
@@ -48,7 +48,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 * @ordered
 	 */
-	protected LinkedNode end;
+	protected LinkedObject end;
 
 	/**
 	 * The default value of the '{@link #isRequired() <em>Required</em>}' attribute.
@@ -75,7 +75,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SectionConnectorImpl() {
+	protected LinkImpl() {
 		super();
 	}
 
@@ -86,7 +86,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return MethodPackage.Literals.SECTION_CONNECTOR;
+		return MethodPackage.Literals.LINK;
 	}
 
 	/**
@@ -94,13 +94,13 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LinkedNode getStart() {
+	public LinkedObject getStart() {
 		if (start != null && start.eIsProxy()) {
 			InternalEObject oldStart = (InternalEObject)start;
-			start = (LinkedNode)eResolveProxy(oldStart);
+			start = (LinkedObject)eResolveProxy(oldStart);
 			if (start != oldStart) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MethodPackage.SECTION_CONNECTOR__START, oldStart, start));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MethodPackage.LINK__START, oldStart, start));
 			}
 		}
 		return start;
@@ -111,7 +111,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LinkedNode basicGetStart() {
+	public LinkedObject basicGetStart() {
 		return start;
 	}
 
@@ -120,11 +120,11 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStart(LinkedNode newStart) {
-		LinkedNode oldStart = start;
+	public void setStart(LinkedObject newStart) {
+		LinkedObject oldStart = start;
 		start = newStart;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.SECTION_CONNECTOR__START, oldStart, start));
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.LINK__START, oldStart, start));
 	}
 
 	/**
@@ -132,13 +132,13 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LinkedNode getEnd() {
+	public LinkedObject getEnd() {
 		if (end != null && end.eIsProxy()) {
 			InternalEObject oldEnd = (InternalEObject)end;
-			end = (LinkedNode)eResolveProxy(oldEnd);
+			end = (LinkedObject)eResolveProxy(oldEnd);
 			if (end != oldEnd) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MethodPackage.SECTION_CONNECTOR__END, oldEnd, end));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MethodPackage.LINK__END, oldEnd, end));
 			}
 		}
 		return end;
@@ -149,7 +149,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LinkedNode basicGetEnd() {
+	public LinkedObject basicGetEnd() {
 		return end;
 	}
 
@@ -158,11 +158,11 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEnd(LinkedNode newEnd) {
-		LinkedNode oldEnd = end;
+	public void setEnd(LinkedObject newEnd) {
+		LinkedObject oldEnd = end;
 		end = newEnd;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.SECTION_CONNECTOR__END, oldEnd, end));
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.LINK__END, oldEnd, end));
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 		boolean oldRequired = required;
 		required = newRequired;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.SECTION_CONNECTOR__REQUIRED, oldRequired, required));
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.LINK__REQUIRED, oldRequired, required));
 	}
 
 	/**
@@ -194,13 +194,13 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MethodPackage.SECTION_CONNECTOR__START:
+			case MethodPackage.LINK__START:
 				if (resolve) return getStart();
 				return basicGetStart();
-			case MethodPackage.SECTION_CONNECTOR__END:
+			case MethodPackage.LINK__END:
 				if (resolve) return getEnd();
 				return basicGetEnd();
-			case MethodPackage.SECTION_CONNECTOR__REQUIRED:
+			case MethodPackage.LINK__REQUIRED:
 				return isRequired();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -214,13 +214,13 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MethodPackage.SECTION_CONNECTOR__START:
-				setStart((LinkedNode)newValue);
+			case MethodPackage.LINK__START:
+				setStart((LinkedObject)newValue);
 				return;
-			case MethodPackage.SECTION_CONNECTOR__END:
-				setEnd((LinkedNode)newValue);
+			case MethodPackage.LINK__END:
+				setEnd((LinkedObject)newValue);
 				return;
-			case MethodPackage.SECTION_CONNECTOR__REQUIRED:
+			case MethodPackage.LINK__REQUIRED:
 				setRequired((Boolean)newValue);
 				return;
 		}
@@ -235,13 +235,13 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MethodPackage.SECTION_CONNECTOR__START:
-				setStart((LinkedNode)null);
+			case MethodPackage.LINK__START:
+				setStart((LinkedObject)null);
 				return;
-			case MethodPackage.SECTION_CONNECTOR__END:
-				setEnd((LinkedNode)null);
+			case MethodPackage.LINK__END:
+				setEnd((LinkedObject)null);
 				return;
-			case MethodPackage.SECTION_CONNECTOR__REQUIRED:
+			case MethodPackage.LINK__REQUIRED:
 				setRequired(REQUIRED_EDEFAULT);
 				return;
 		}
@@ -256,11 +256,11 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MethodPackage.SECTION_CONNECTOR__START:
+			case MethodPackage.LINK__START:
 				return start != null;
-			case MethodPackage.SECTION_CONNECTOR__END:
+			case MethodPackage.LINK__END:
 				return end != null;
-			case MethodPackage.SECTION_CONNECTOR__REQUIRED:
+			case MethodPackage.LINK__REQUIRED:
 				return required != REQUIRED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -282,4 +282,4 @@ public class SectionConnectorImpl extends MinimalEObjectImpl.Container implement
 		return result.toString();
 	}
 
-} //SectionConnectorImpl
+} //LinkImpl

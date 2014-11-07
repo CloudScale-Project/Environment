@@ -67,13 +67,13 @@ public interface MethodPackage extends EPackage {
 	int METHOD = 0;
 
 	/**
-	 * The feature id for the '<em><b>Section Connectors</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Links</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METHOD__SECTION_CONNECTORS = 0;
+	int METHOD__LINKS = 0;
 
 	/**
 	 * The feature id for the '<em><b>Nodes</b></em>' containment reference list.
@@ -230,14 +230,14 @@ public interface MethodPackage extends EPackage {
 	int NODE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode <em>Linked Node</em>}' class.
+	 * The meta object id for the '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject <em>Linked Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode
-	 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLinkedNode()
+	 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject
+	 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLinkedObject()
 	 * @generated
 	 */
-	int LINKED_NODE = 2;
+	int LINKED_OBJECT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Next</b></em>' reference list.
@@ -246,7 +246,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LINKED_NODE__NEXT = 0;
+	int LINKED_OBJECT__NEXT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Previous</b></em>' reference list.
@@ -255,25 +255,25 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LINKED_NODE__PREVIOUS = 1;
+	int LINKED_OBJECT__PREVIOUS = 1;
 
 	/**
-	 * The number of structural features of the '<em>Linked Node</em>' class.
+	 * The number of structural features of the '<em>Linked Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LINKED_NODE_FEATURE_COUNT = 2;
+	int LINKED_OBJECT_FEATURE_COUNT = 2;
 
 	/**
-	 * The number of operations of the '<em>Linked Node</em>' class.
+	 * The number of operations of the '<em>Linked Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LINKED_NODE_OPERATION_COUNT = 0;
+	int LINKED_OBJECT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link eu.cloudscaleproject.env.method.common.method.impl.ContainerImpl <em>Container</em>}' class.
@@ -1309,14 +1309,14 @@ public interface MethodPackage extends EPackage {
 	int COMMAND_OPERATION_COUNT = NODE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl <em>Section Connector</em>}' class.
+	 * The meta object id for the '{@link eu.cloudscaleproject.env.method.common.method.impl.LinkImpl <em>Link</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl
-	 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getSectionConnector()
+	 * @see eu.cloudscaleproject.env.method.common.method.impl.LinkImpl
+	 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLink()
 	 * @generated
 	 */
-	int SECTION_CONNECTOR = 10;
+	int LINK = 10;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' reference.
@@ -1325,7 +1325,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SECTION_CONNECTOR__START = 0;
+	int LINK__START = 0;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' reference.
@@ -1334,7 +1334,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SECTION_CONNECTOR__END = 1;
+	int LINK__END = 1;
 
 	/**
 	 * The feature id for the '<em><b>Required</b></em>' attribute.
@@ -1343,26 +1343,25 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SECTION_CONNECTOR__REQUIRED = 2;
+	int LINK__REQUIRED = 2;
 
 	/**
-	 * The number of structural features of the '<em>Section Connector</em>' class.
+	 * The number of structural features of the '<em>Link</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SECTION_CONNECTOR_FEATURE_COUNT = 3;
+	int LINK_FEATURE_COUNT = 3;
 
 	/**
-	 * The number of operations of the '<em>Section Connector</em>' class.
+	 * The number of operations of the '<em>Link</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SECTION_CONNECTOR_OPERATION_COUNT = 0;
-
+	int LINK_OPERATION_COUNT = 0;
 
 	/**
 	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.Method <em>Method</em>}'.
@@ -1375,15 +1374,15 @@ public interface MethodPackage extends EPackage {
 	EClass getMethod();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link eu.cloudscaleproject.env.method.common.method.Method#getSectionConnectors <em>Section Connectors</em>}'.
+	 * Returns the meta object for the containment reference list '{@link eu.cloudscaleproject.env.method.common.method.Method#getLinks <em>Links</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Section Connectors</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.Method#getSectionConnectors()
+	 * @return the meta object for the containment reference list '<em>Links</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.Method#getLinks()
 	 * @see #getMethod()
 	 * @generated
 	 */
-	EReference getMethod_SectionConnectors();
+	EReference getMethod_Links();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link eu.cloudscaleproject.env.method.common.method.Method#getNodes <em>Nodes</em>}'.
@@ -1528,36 +1527,36 @@ public interface MethodPackage extends EPackage {
 	EAttribute getNode_CommandParam();
 
 	/**
-	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode <em>Linked Node</em>}'.
+	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject <em>Linked Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Linked Node</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode
+	 * @return the meta object for class '<em>Linked Object</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject
 	 * @generated
 	 */
-	EClass getLinkedNode();
+	EClass getLinkedObject();
 
 	/**
-	 * Returns the meta object for the reference list '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode#getNext <em>Next</em>}'.
+	 * Returns the meta object for the reference list '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject#getNext <em>Next</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Next</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode#getNext()
-	 * @see #getLinkedNode()
+	 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject#getNext()
+	 * @see #getLinkedObject()
 	 * @generated
 	 */
-	EReference getLinkedNode_Next();
+	EReference getLinkedObject_Next();
 
 	/**
-	 * Returns the meta object for the reference list '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode#getPrevious <em>Previous</em>}'.
+	 * Returns the meta object for the reference list '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject#getPrevious <em>Previous</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Previous</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode#getPrevious()
-	 * @see #getLinkedNode()
+	 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject#getPrevious()
+	 * @see #getLinkedObject()
 	 * @generated
 	 */
-	EReference getLinkedNode_Previous();
+	EReference getLinkedObject_Previous();
 
 	/**
 	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.Container <em>Container</em>}'.
@@ -1784,47 +1783,47 @@ public interface MethodPackage extends EPackage {
 	EAttribute getCommand_Position();
 
 	/**
-	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.SectionConnector <em>Section Connector</em>}'.
+	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.Link <em>Link</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Section Connector</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.SectionConnector
+	 * @return the meta object for class '<em>Link</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.Link
 	 * @generated
 	 */
-	EClass getSectionConnector();
+	EClass getLink();
 
 	/**
-	 * Returns the meta object for the reference '{@link eu.cloudscaleproject.env.method.common.method.SectionConnector#getStart <em>Start</em>}'.
+	 * Returns the meta object for the reference '{@link eu.cloudscaleproject.env.method.common.method.Link#getStart <em>Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Start</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.SectionConnector#getStart()
-	 * @see #getSectionConnector()
+	 * @see eu.cloudscaleproject.env.method.common.method.Link#getStart()
+	 * @see #getLink()
 	 * @generated
 	 */
-	EReference getSectionConnector_Start();
+	EReference getLink_Start();
 
 	/**
-	 * Returns the meta object for the reference '{@link eu.cloudscaleproject.env.method.common.method.SectionConnector#getEnd <em>End</em>}'.
+	 * Returns the meta object for the reference '{@link eu.cloudscaleproject.env.method.common.method.Link#getEnd <em>End</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>End</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.SectionConnector#getEnd()
-	 * @see #getSectionConnector()
+	 * @see eu.cloudscaleproject.env.method.common.method.Link#getEnd()
+	 * @see #getLink()
 	 * @generated
 	 */
-	EReference getSectionConnector_End();
+	EReference getLink_End();
 
 	/**
-	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.SectionConnector#isRequired <em>Required</em>}'.
+	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Link#isRequired <em>Required</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Required</em>'.
-	 * @see eu.cloudscaleproject.env.method.common.method.SectionConnector#isRequired()
-	 * @see #getSectionConnector()
+	 * @see eu.cloudscaleproject.env.method.common.method.Link#isRequired()
+	 * @see #getLink()
 	 * @generated
 	 */
-	EAttribute getSectionConnector_Required();
+	EAttribute getLink_Required();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1860,12 +1859,12 @@ public interface MethodPackage extends EPackage {
 		EClass METHOD = eINSTANCE.getMethod();
 
 		/**
-		 * The meta object literal for the '<em><b>Section Connectors</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Links</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference METHOD__SECTION_CONNECTORS = eINSTANCE.getMethod_SectionConnectors();
+		EReference METHOD__LINKS = eINSTANCE.getMethod_Links();
 
 		/**
 		 * The meta object literal for the '<em><b>Nodes</b></em>' containment reference list feature.
@@ -1974,14 +1973,14 @@ public interface MethodPackage extends EPackage {
 		EAttribute NODE__COMMAND_PARAM = eINSTANCE.getNode_CommandParam();
 
 		/**
-		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.LinkedNode <em>Linked Node</em>}' class.
+		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.LinkedObject <em>Linked Object</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see eu.cloudscaleproject.env.method.common.method.LinkedNode
-		 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLinkedNode()
+		 * @see eu.cloudscaleproject.env.method.common.method.LinkedObject
+		 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLinkedObject()
 		 * @generated
 		 */
-		EClass LINKED_NODE = eINSTANCE.getLinkedNode();
+		EClass LINKED_OBJECT = eINSTANCE.getLinkedObject();
 
 		/**
 		 * The meta object literal for the '<em><b>Next</b></em>' reference list feature.
@@ -1989,7 +1988,7 @@ public interface MethodPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LINKED_NODE__NEXT = eINSTANCE.getLinkedNode_Next();
+		EReference LINKED_OBJECT__NEXT = eINSTANCE.getLinkedObject_Next();
 
 		/**
 		 * The meta object literal for the '<em><b>Previous</b></em>' reference list feature.
@@ -1997,7 +1996,7 @@ public interface MethodPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LINKED_NODE__PREVIOUS = eINSTANCE.getLinkedNode_Previous();
+		EReference LINKED_OBJECT__PREVIOUS = eINSTANCE.getLinkedObject_Previous();
 
 		/**
 		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.impl.ContainerImpl <em>Container</em>}' class.
@@ -2182,14 +2181,14 @@ public interface MethodPackage extends EPackage {
 		EAttribute COMMAND__POSITION = eINSTANCE.getCommand_Position();
 
 		/**
-		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl <em>Section Connector</em>}' class.
+		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.impl.LinkImpl <em>Link</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see eu.cloudscaleproject.env.method.common.method.impl.SectionConnectorImpl
-		 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getSectionConnector()
+		 * @see eu.cloudscaleproject.env.method.common.method.impl.LinkImpl
+		 * @see eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl#getLink()
 		 * @generated
 		 */
-		EClass SECTION_CONNECTOR = eINSTANCE.getSectionConnector();
+		EClass LINK = eINSTANCE.getLink();
 
 		/**
 		 * The meta object literal for the '<em><b>Start</b></em>' reference feature.
@@ -2197,7 +2196,7 @@ public interface MethodPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SECTION_CONNECTOR__START = eINSTANCE.getSectionConnector_Start();
+		EReference LINK__START = eINSTANCE.getLink_Start();
 
 		/**
 		 * The meta object literal for the '<em><b>End</b></em>' reference feature.
@@ -2205,7 +2204,7 @@ public interface MethodPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SECTION_CONNECTOR__END = eINSTANCE.getSectionConnector_End();
+		EReference LINK__END = eINSTANCE.getLink_End();
 
 		/**
 		 * The meta object literal for the '<em><b>Required</b></em>' attribute feature.
@@ -2213,7 +2212,7 @@ public interface MethodPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SECTION_CONNECTOR__REQUIRED = eINSTANCE.getSectionConnector_Required();
+		EAttribute LINK__REQUIRED = eINSTANCE.getLink_Required();
 
 	}
 

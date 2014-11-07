@@ -36,7 +36,7 @@ public interface Warning extends EObject {
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getWarning_Id()
-	 * @model id="true"
+	 * @model id="true" required="true"
 	 * @generated
 	 */
 	String getId();
@@ -62,7 +62,7 @@ public interface Warning extends EObject {
 	 * @return the value of the '<em>Message</em>' attribute.
 	 * @see #setMessage(String)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getWarning_Message()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getMessage();

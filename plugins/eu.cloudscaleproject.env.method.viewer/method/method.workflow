@@ -554,7 +554,7 @@
     </children>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.6/@anchors.0" end="/0/@children.2/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.0"/>
+      <link businessObjects="/1/@links.0"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -567,7 +567,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.7/@anchors.0" end="/0/@children.1/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.1"/>
+      <link businessObjects="/1/@links.1"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -580,7 +580,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.1/@children.1/@anchors.0" end="/0/@children.5/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.2"/>
+      <link businessObjects="/1/@links.2"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -593,7 +593,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.5/@anchors.0" end="/0/@children.2/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.3"/>
+      <link businessObjects="/1/@links.3"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -607,7 +607,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.2/@children.1/@anchors.0" end="/0/@children.2/@children.2/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.4"/>
+      <link businessObjects="/1/@links.4"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -619,7 +619,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.2/@children.2/@anchors.0" end="/0/@children.2/@children.3/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.5"/>
+      <link businessObjects="/1/@links.5"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -631,7 +631,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.0/@children.2/@anchors.0" end="/0/@children.0/@children.3/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.6"/>
+      <link businessObjects="/1/@links.6"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -643,7 +643,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.0/@children.3/@anchors.0" end="/0/@children.0/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.7"/>
+      <link businessObjects="/1/@links.7"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -655,7 +655,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.1/@anchors.0" end="/0/@children.3/@children.2/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.8"/>
+      <link businessObjects="/1/@links.8"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -668,7 +668,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.2/@anchors.0" end="/0/@children.3/@children.3/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.9"/>
+      <link businessObjects="/1/@links.9"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -680,7 +680,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.4/@anchors.0" end="/0/@children.3/@children.5/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.10"/>
+      <link businessObjects="/1/@links.10"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -693,7 +693,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.5/@anchors.0" end="/0/@children.3/@children.6/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.11"/>
+      <link businessObjects="/1/@links.11"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -705,7 +705,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.4/@anchors.0" end="/0/@children.2/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.12"/>
+      <link businessObjects="/1/@links.12"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -719,7 +719,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.6/@anchors.0" end="/0/@children.4/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.13"/>
+      <link businessObjects="/1/@links.13"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -732,7 +732,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.8/@anchors.0" end="/0/@children.3/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.14"/>
+      <link businessObjects="/1/@links.14"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -746,7 +746,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.0/@children.1/@anchors.0" end="/0/@children.8/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.15"/>
+      <link businessObjects="/1/@links.15"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -761,7 +761,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.0/@children.1/@anchors.0" end="/0/@children.6/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.16"/>
+      <link businessObjects="/1/@links.16"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -775,7 +775,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.0/@children.1/@anchors.0" end="/0/@children.7/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.17"/>
+      <link businessObjects="/1/@links.17"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -788,7 +788,7 @@
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.1/@children.3/@anchors.0" end="/0/@children.2/@children.2/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
-      <link businessObjects="/1/@sectionConnectors.18"/>
+      <link businessObjects="/1/@links.18"/>
       <connectionDecorators visible="true" locationRelative="true" location="1.0">
         <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2">
           <points x="-10" y="8"/>
@@ -807,27 +807,27 @@
     <colors blue="255"/>
   </pi:Diagram>
   <method:Method>
-    <sectionConnectors start="action_import_ext_analyser" end="analyser_input"/>
-    <sectionConnectors start="action_import_ext_overview" end="overview"/>
-    <sectionConnectors start="overview" end="action_transform_overview_analyser" required="true"/>
-    <sectionConnectors start="action_transform_overview_analyser" end="analyser_input"/>
-    <sectionConnectors start="analyser_input" end="analyser_tool" required="true"/>
-    <sectionConnectors start="analyser_tool" end="analyser_res" required="true"/>
-    <sectionConnectors start="ext_input" end="ext_tool" required="true"/>
-    <sectionConnectors start="ext_tool" end="ext_res" required="true"/>
-    <sectionConnectors start="static_spotter_input" end="static_spotter_tool" required="true"/>
-    <sectionConnectors start="static_spotter_tool" end="static_spotter_res" required="true"/>
-    <sectionConnectors start="dynamic_spotter_input" end="dynamic_spotter_tool" required="true"/>
-    <sectionConnectors start="dynamic_spotter_tool" end="dynamic_spotter_res" required="true"/>
-    <sectionConnectors start="action_useMeasurements" end="analyser_input"/>
-    <sectionConnectors start="dynamic_spotter_res" end="action_useMeasurements" required="true"/>
-    <sectionConnectors start="action_import_ext_ss" end="static_spotter_input"/>
-    <sectionConnectors start="ext_res" end="action_import_ext_ss" required="true"/>
-    <sectionConnectors start="ext_res" end="action_import_ext_analyser"/>
-    <sectionConnectors start="ext_res" end="action_import_ext_overview"/>
-    <sectionConnectors start="usageEvolution" end="analyser_tool"/>
+    <links start="action_import_ext_analyser" end="analyser_input"/>
+    <links start="action_import_ext_overview" end="overview"/>
+    <links start="overview" end="action_transform_overview_analyser" required="true"/>
+    <links start="action_transform_overview_analyser" end="analyser_input"/>
+    <links start="analyser_input" end="analyser_tool" required="true"/>
+    <links start="analyser_tool" end="analyser_res" required="true"/>
+    <links start="ext_input" end="ext_tool" required="true"/>
+    <links start="ext_tool" end="ext_res" required="true"/>
+    <links start="static_spotter_input" end="static_spotter_tool" required="true"/>
+    <links start="static_spotter_tool" end="static_spotter_res" required="true"/>
+    <links start="dynamic_spotter_input" end="dynamic_spotter_tool" required="true"/>
+    <links start="dynamic_spotter_tool" end="dynamic_spotter_res" required="true"/>
+    <links start="action_useMeasurements" end="analyser_input"/>
+    <links start="dynamic_spotter_res" end="action_useMeasurements" required="true"/>
+    <links start="action_import_ext_ss" end="static_spotter_input"/>
+    <links start="ext_res" end="action_import_ext_ss" required="true"/>
+    <links start="ext_res" end="action_import_ext_analyser"/>
+    <links start="ext_res" end="action_import_ext_overview"/>
+    <links start="usageEvolution" end="analyser_tool"/>
     <nodes xsi:type="method:Container" id="_SqDU0C61EeSADewJHO2y3w" name="Extractor">
-      <children xsi:type="method:Section" id="ext_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@sectionConnectors.15 /1/@sectionConnectors.16 /1/@sectionConnectors.17" previous="/1/@sectionConnectors.7">
+      <children xsi:type="method:Section" id="ext_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.15 /1/@links.16 /1/@links.17" previous="/1/@links.7">
         <commandParam>openResults</commandParam>
         <commands id="_t6RzcDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor">
           <commandParam>openResults</commandParam>
@@ -835,13 +835,13 @@
         <requirements id="ext_res_repository" name="Repository" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
         <requirements id="ext_res_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
       </children>
-      <children xsi:type="method:Section" id="ext_input" name="Input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@sectionConnectors.6">
+      <children xsi:type="method:Section" id="ext_input" name="Input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.6">
         <commandParam>openInput</commandParam>
         <commands id="_1QP7cDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor">
           <commandParam>openInput</commandParam>
         </commands>
       </children>
-      <children xsi:type="method:Section" id="ext_tool" name="Extractor" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@sectionConnectors.7" previous="/1/@sectionConnectors.6">
+      <children xsi:type="method:Section" id="ext_tool" name="Extractor" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.7" previous="/1/@links.6">
         <commandParam>openRun</commandParam>
         <commands id="_6bS5cDRUEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" position="10">
           <commandParam>openRun</commandParam>
@@ -854,14 +854,14 @@
       </commands>
     </nodes>
     <nodes xsi:type="method:Container" id="_YVJPYC61EeSADewJHO2y3w" name="ScaleDL">
-      <children xsi:type="method:Section" id="overview" name="Overview model" description="Overview model digram is used to model cloud environment architecture and its deployment." tooltip="Overview model of a cloud environemnt." colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview.diagram.open" next="/1/@sectionConnectors.2" previous="/1/@sectionConnectors.1"/>
+      <children xsi:type="method:Section" id="overview" name="Overview model" description="Overview model digram is used to model cloud environment architecture and its deployment." tooltip="Overview model of a cloud environemnt." colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview.diagram.open" next="/1/@links.2" previous="/1/@links.1"/>
       <children xsi:type="method:Section" id="architectureTemplates" name="Architecture templates" colorForeground="000000" colorBackground="a1c9d5"/>
-      <children xsi:type="method:Section" id="usageEvolution" name="Usage evolution" description="Usage evolution model" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@sectionConnectors.18">
+      <children xsi:type="method:Section" id="usageEvolution" name="Usage evolution" description="Usage evolution model" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@links.18">
         <commandParam>usageEvolution</commandParam>
       </children>
     </nodes>
     <nodes xsi:type="method:Container" id="_Yqbi4C61EeSADewJHO2y3w" name="Analyser">
-      <children xsi:type="method:Section" id="analyser_input" name="PCM input" description="Input models, used by the Analyser tool." tooltip="Input for the Analyser tool." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@sectionConnectors.4" previous="/1/@sectionConnectors.0 /1/@sectionConnectors.3 /1/@sectionConnectors.12">
+      <children xsi:type="method:Section" id="analyser_input" name="PCM input" description="Input models, used by the Analyser tool." tooltip="Input for the Analyser tool." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@links.4" previous="/1/@links.0 /1/@links.3 /1/@links.12">
         <commandParam>openInput</commandParam>
         <commands id="_7zWcEDRVEeSMLJ8vnBP-0A" name="v" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openinputdialog"/>
         <requirements id="analyser_input_repository" name="Repository" description="Repository model diagram is used to model cloud services and their components." tooltip="Represents the repository model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="10"/>
@@ -870,7 +870,7 @@
         <requirements id="analyser_input_resource" name="Resource environment" description="Describes hardware resources in cloud environemnt." tooltip="Represents the resource environment model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="40"/>
         <requirements id="analyser_input_usage" name="Usage" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="100"/>
       </children>
-      <children xsi:type="method:Section" id="analyser_tool" name="Analyser" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@sectionConnectors.5" previous="/1/@sectionConnectors.4 /1/@sectionConnectors.18">
+      <children xsi:type="method:Section" id="analyser_tool" name="Analyser" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@links.5" previous="/1/@links.4 /1/@links.18">
         <commandParam>openRun</commandParam>
         <commands id="_7Eo-8DHDEeSAkNNGxeU_SA" name="v" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openconfdialog" position="10"/>
         <commands id="_YEzigDHEEeSAkNNGxeU_SA" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="" position="20"/>
@@ -879,7 +879,7 @@
         <requirements id="analyser_conf_pms" name="Measurement spec." colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
         <requirements id="analyser_conf_slo" name="Service Level Objectives" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
       </children>
-      <children xsi:type="method:Section" id="analyser_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" previous="/1/@sectionConnectors.5">
+      <children xsi:type="method:Section" id="analyser_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" previous="/1/@links.5">
         <commandParam>openResults</commandParam>
         <commands id="_PdUsUDRWEeSMLJ8vnBP-0A" name="+" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor">
           <commandParam>openResults</commandParam>
@@ -890,27 +890,27 @@
       </commands>
     </nodes>
     <nodes xsi:type="method:Container" id="_Zcc1sC61EeSADewJHO2y3w" name="Spotter">
-      <children xsi:type="method:Section" id="static_spotter_input" name="Static spotter input" colorForeground="000000" colorBackground="a1c9d5" next="/1/@sectionConnectors.8" previous="/1/@sectionConnectors.14"/>
-      <children xsi:type="method:Section" id="static_spotter_tool" name="Static spotter" colorForeground="000000" colorBackground="a1c9d5" next="/1/@sectionConnectors.9" previous="/1/@sectionConnectors.8"/>
-      <children xsi:type="method:Section" id="static_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" previous="/1/@sectionConnectors.9"/>
-      <children xsi:type="method:Section" id="dynamic_spotter_input" name="Dynamic spotter input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@sectionConnectors.10">
+      <children xsi:type="method:Section" id="static_spotter_input" name="Static spotter input" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.8" previous="/1/@links.14"/>
+      <children xsi:type="method:Section" id="static_spotter_tool" name="Static spotter" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.9" previous="/1/@links.8"/>
+      <children xsi:type="method:Section" id="static_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" previous="/1/@links.9"/>
+      <children xsi:type="method:Section" id="dynamic_spotter_input" name="Dynamic spotter input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.10">
         <commandParam>openInput</commandParam>
         <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.input.select"/>
       </children>
-      <children xsi:type="method:Section" id="dynamic_spotter_tool" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@sectionConnectors.11" previous="/1/@sectionConnectors.10">
+      <children xsi:type="method:Section" id="dynamic_spotter_tool" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.11" previous="/1/@links.10">
         <commandParam>openRun</commandParam>
         <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.conf.select"/>
         <commands id="_0xIjQF3mEeScwqkqKbMIeg" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.run"/>
       </children>
-      <children xsi:type="method:Section" id="dynamic_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@sectionConnectors.13" previous="/1/@sectionConnectors.11">
+      <children xsi:type="method:Section" id="dynamic_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.13" previous="/1/@links.11">
         <commandParam>openResults</commandParam>
         <commands id="_3Gnz8F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.result.select"/>
       </children>
     </nodes>
-    <nodes xsi:type="method:Action" id="action_useMeasurements" name="Use measurements" colorForeground="000000" colorBackground="a1c9d5" next="/1/@sectionConnectors.12" previous="/1/@sectionConnectors.13"/>
-    <nodes xsi:type="method:Action" id="action_transform_overview_analyser" name="Transformation" description="Transform Overview model into PCM model." tooltip="Overview to PCM transformation" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.csm2pcm.command.runtransformation" next="/1/@sectionConnectors.3" previous="/1/@sectionConnectors.2"/>
-    <nodes xsi:type="method:Action" id="action_import_ext_analyser" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@sectionConnectors.0" previous="/1/@sectionConnectors.16"/>
-    <nodes xsi:type="method:Action" id="action_import_ext_overview" name="Import" description="Import repository and system model, extracted from source code, into overview model." tooltip="Import extracted model into overview" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cludscale.environment.extractor.openImportWizard" next="/1/@sectionConnectors.1" previous="/1/@sectionConnectors.17"/>
-    <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@sectionConnectors.14" previous="/1/@sectionConnectors.15"/>
+    <nodes xsi:type="method:Action" id="action_useMeasurements" name="Use measurements" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.12" previous="/1/@links.13"/>
+    <nodes xsi:type="method:Action" id="action_transform_overview_analyser" name="Transformation" description="Transform Overview model into PCM model." tooltip="Overview to PCM transformation" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.csm2pcm.command.runtransformation" next="/1/@links.3" previous="/1/@links.2"/>
+    <nodes xsi:type="method:Action" id="action_import_ext_analyser" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.0" previous="/1/@links.16"/>
+    <nodes xsi:type="method:Action" id="action_import_ext_overview" name="Import" description="Import repository and system model, extracted from source code, into overview model." tooltip="Import extracted model into overview" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cludscale.environment.extractor.openImportWizard" next="/1/@links.1" previous="/1/@links.17"/>
+    <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.14" previous="/1/@links.15"/>
   </method:Method>
 </xmi:XMI>

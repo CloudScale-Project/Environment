@@ -2,22 +2,16 @@
  */
 package eu.cloudscaleproject.env.method.common.method.impl;
 
+import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.Method;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
 import eu.cloudscaleproject.env.method.common.method.Node;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
-
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -28,7 +22,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.MethodImpl#getSectionConnectors <em>Section Connectors</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.MethodImpl#getLinks <em>Links</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.MethodImpl#getNodes <em>Nodes</em>}</li>
  * </ul>
  * </p>
@@ -37,14 +31,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	/**
-	 * The cached value of the '{@link #getSectionConnectors() <em>Section Connectors</em>}' containment reference list.
+	 * The cached value of the '{@link #getLinks() <em>Links</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSectionConnectors()
+	 * @see #getLinks()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SectionConnector> sectionConnectors;
+	protected EList<Link> links;
 
 	/**
 	 * The cached value of the '{@link #getNodes() <em>Nodes</em>}' containment reference list.
@@ -80,11 +74,11 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SectionConnector> getSectionConnectors() {
-		if (sectionConnectors == null) {
-			sectionConnectors = new EObjectContainmentEList<SectionConnector>(SectionConnector.class, this, MethodPackage.METHOD__SECTION_CONNECTORS);
+	public EList<Link> getLinks() {
+		if (links == null) {
+			links = new EObjectContainmentEList<Link>(Link.class, this, MethodPackage.METHOD__LINKS);
 		}
-		return sectionConnectors;
+		return links;
 	}
 
 	/**
@@ -107,8 +101,8 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
-				return ((InternalEList<?>)getSectionConnectors()).basicRemove(otherEnd, msgs);
+			case MethodPackage.METHOD__LINKS:
+				return ((InternalEList<?>)getLinks()).basicRemove(otherEnd, msgs);
 			case MethodPackage.METHOD__NODES:
 				return ((InternalEList<?>)getNodes()).basicRemove(otherEnd, msgs);
 		}
@@ -123,8 +117,8 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
-				return getSectionConnectors();
+			case MethodPackage.METHOD__LINKS:
+				return getLinks();
 			case MethodPackage.METHOD__NODES:
 				return getNodes();
 		}
@@ -140,9 +134,9 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
-				getSectionConnectors().clear();
-				getSectionConnectors().addAll((Collection<? extends SectionConnector>)newValue);
+			case MethodPackage.METHOD__LINKS:
+				getLinks().clear();
+				getLinks().addAll((Collection<? extends Link>)newValue);
 				return;
 			case MethodPackage.METHOD__NODES:
 				getNodes().clear();
@@ -160,8 +154,8 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
-				getSectionConnectors().clear();
+			case MethodPackage.METHOD__LINKS:
+				getLinks().clear();
 				return;
 			case MethodPackage.METHOD__NODES:
 				getNodes().clear();
@@ -178,8 +172,8 @@ public class MethodImpl extends MinimalEObjectImpl.Container implements Method {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
-				return sectionConnectors != null && !sectionConnectors.isEmpty();
+			case MethodPackage.METHOD__LINKS:
+				return links != null && !links.isEmpty();
 			case MethodPackage.METHOD__NODES:
 				return nodes != null && !nodes.isEmpty();
 		}

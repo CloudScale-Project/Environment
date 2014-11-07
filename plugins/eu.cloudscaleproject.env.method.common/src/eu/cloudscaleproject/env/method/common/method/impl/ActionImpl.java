@@ -3,9 +3,9 @@
 package eu.cloudscaleproject.env.method.common.method.impl;
 
 import eu.cloudscaleproject.env.method.common.method.Action;
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -34,7 +34,7 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SectionConnector> next;
+	protected EList<Link> next;
 	/**
 	 * The cached value of the '{@link #getPrevious() <em>Previous</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -43,7 +43,7 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SectionConnector> previous;
+	protected EList<Link> previous;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,9 +68,9 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SectionConnector> getNext() {
+	public EList<Link> getNext() {
 		if (next == null) {
-			next = new EObjectResolvingEList<SectionConnector>(SectionConnector.class, this, MethodPackage.ACTION__NEXT);
+			next = new EObjectResolvingEList<Link>(Link.class, this, MethodPackage.ACTION__NEXT);
 		}
 		return next;
 	}
@@ -80,9 +80,9 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SectionConnector> getPrevious() {
+	public EList<Link> getPrevious() {
 		if (previous == null) {
-			previous = new EObjectResolvingEList<SectionConnector>(SectionConnector.class, this, MethodPackage.ACTION__PREVIOUS);
+			previous = new EObjectResolvingEList<Link>(Link.class, this, MethodPackage.ACTION__PREVIOUS);
 		}
 		return previous;
 	}
@@ -114,11 +114,11 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 		switch (featureID) {
 			case MethodPackage.ACTION__NEXT:
 				getNext().clear();
-				getNext().addAll((Collection<? extends SectionConnector>)newValue);
+				getNext().addAll((Collection<? extends Link>)newValue);
 				return;
 			case MethodPackage.ACTION__PREVIOUS:
 				getPrevious().clear();
-				getPrevious().addAll((Collection<? extends SectionConnector>)newValue);
+				getPrevious().addAll((Collection<? extends Link>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -165,10 +165,10 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == LinkedNode.class) {
+		if (baseClass == LinkedObject.class) {
 			switch (derivedFeatureID) {
-				case MethodPackage.ACTION__NEXT: return MethodPackage.LINKED_NODE__NEXT;
-				case MethodPackage.ACTION__PREVIOUS: return MethodPackage.LINKED_NODE__PREVIOUS;
+				case MethodPackage.ACTION__NEXT: return MethodPackage.LINKED_OBJECT__NEXT;
+				case MethodPackage.ACTION__PREVIOUS: return MethodPackage.LINKED_OBJECT__PREVIOUS;
 				default: return -1;
 			}
 		}
@@ -182,10 +182,10 @@ public class ActionImpl extends StatusNodeImpl implements Action {
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == LinkedNode.class) {
+		if (baseClass == LinkedObject.class) {
 			switch (baseFeatureID) {
-				case MethodPackage.LINKED_NODE__NEXT: return MethodPackage.ACTION__NEXT;
-				case MethodPackage.LINKED_NODE__PREVIOUS: return MethodPackage.ACTION__PREVIOUS;
+				case MethodPackage.LINKED_OBJECT__NEXT: return MethodPackage.ACTION__NEXT;
+				case MethodPackage.LINKED_OBJECT__PREVIOUS: return MethodPackage.ACTION__PREVIOUS;
 				default: return -1;
 			}
 		}

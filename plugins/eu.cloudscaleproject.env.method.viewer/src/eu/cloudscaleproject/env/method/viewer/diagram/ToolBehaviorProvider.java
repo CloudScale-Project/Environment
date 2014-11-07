@@ -22,11 +22,11 @@ import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.eclipse.graphiti.util.IColorConstant;
 
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
 import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
@@ -196,14 +196,14 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			{
 
 				boolean hasRequired = false;
-				if(node instanceof LinkedNode){
+				if(node instanceof LinkedObject){
 					StringBuilder sb1 = new StringBuilder();
 					sb1.append("Required: ");
 					
-					LinkedNode ln = (LinkedNode)node;
-					for (SectionConnector sc : ln.getPrevious()) {
-						if (sc.isRequired() && sc.getStart() instanceof Node) {
-							sb1.append(((Node)sc.getStart()).getName());
+					LinkedObject linkedObject = (LinkedObject)node;
+					for (Link link : linkedObject.getPrevious()) {
+						if (link.isRequired() && link.getStart() instanceof Node) {
+							sb1.append(((Node)link.getStart()).getName());
 							sb1.append(", ");
 							hasRequired = true;
 						}

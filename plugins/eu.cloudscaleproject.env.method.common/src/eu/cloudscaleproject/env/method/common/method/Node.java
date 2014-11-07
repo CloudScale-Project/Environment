@@ -44,7 +44,7 @@ public interface Node extends EObject {
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getNode_Id()
-	 * @model default="" id="true"
+	 * @model default="" id="true" required="true"
 	 * @generated
 	 */
 	String getId();

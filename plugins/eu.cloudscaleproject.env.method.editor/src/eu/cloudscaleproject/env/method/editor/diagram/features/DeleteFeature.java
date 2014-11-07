@@ -10,9 +10,9 @@ import org.eclipse.graphiti.mm.pictograms.PictogramLink;
 import org.eclipse.graphiti.ui.features.DefaultDeleteFeature;
 
 import eu.cloudscaleproject.env.method.common.method.Container;
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 
 public class DeleteFeature extends DefaultDeleteFeature{
 
@@ -31,27 +31,27 @@ public class DeleteFeature extends DefaultDeleteFeature{
 		
 		for(Object o : new LinkedList<Object>(link.getBusinessObjects())){
 			
-			if(o instanceof LinkedNode){
-				disposeLinkedNode((LinkedNode)o);;
+			if(o instanceof LinkedObject){
+				disposeLinkedNode((LinkedObject)o);;
 			}
 			else if(o instanceof Container){
 				Container c = (Container)o;
 				for(Node node : c.getChildren()){
-					if(node instanceof LinkedNode){
-						disposeLinkedNode((LinkedNode)node);
+					if(node instanceof LinkedObject){
+						disposeLinkedNode((LinkedObject)node);
 					}
 				}
 			}
 			
-			if(o instanceof SectionConnector){
-				SectionConnector sc = (SectionConnector)o;
+			if(o instanceof Link){
+				Link sc = (Link)o;
 				
-				LinkedNode lnStart = sc.getStart();
+				LinkedObject lnStart = sc.getStart();
 				if(lnStart != null){
 					lnStart.getNext().remove(sc);
 				}
 				
-				LinkedNode lnEnd = sc.getEnd();
+				LinkedObject lnEnd = sc.getEnd();
 				if(lnEnd != null){
 					lnStart.getPrevious().remove(sc);
 				}
@@ -63,11 +63,11 @@ public class DeleteFeature extends DefaultDeleteFeature{
 		}
 	}
 	
-	private void disposeLinkedNode(LinkedNode linkedNode){
-		for(SectionConnector sc : new LinkedList<SectionConnector>(linkedNode.getPrevious())){
+	private void disposeLinkedNode(LinkedObject linkedNode){
+		for(Link sc : new LinkedList<Link>(linkedNode.getPrevious())){
 			EcoreUtil.delete(sc);
 		}
-		for(SectionConnector sc : new LinkedList<SectionConnector>(linkedNode.getNext())){
+		for(Link sc : new LinkedList<Link>(linkedNode.getNext())){
 			EcoreUtil.delete(sc);
 		}
 	}

@@ -5,9 +5,9 @@ import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.tb.DefaultToolBehaviorProvider;
 
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 
 public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 		
@@ -33,12 +33,12 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			{
 
 				boolean hasRequired = false;
-				if(node instanceof LinkedNode){
+				if(node instanceof LinkedObject){
 					StringBuilder sb1 = new StringBuilder();
 					sb1.append("Required: ");
 					
-					LinkedNode ln = (LinkedNode)node;
-					for (SectionConnector sc : ln.getPrevious()) {
+					LinkedObject ln = (LinkedObject)node;
+					for (Link sc : ln.getPrevious()) {
 						if (sc.isRequired() && sc.getStart() instanceof Node) {
 							sb1.append(((Node)sc.getStart()).getName());
 							sb1.append(", ");

@@ -15,10 +15,10 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.services.IPeCreateService;
 
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Method;
 import eu.cloudscaleproject.env.method.common.method.MethodFactory;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import eu.cloudscaleproject.env.method.common.util.MethodUtil;
 
 public class ConnectorPattern extends AbstractConnectionPattern{
@@ -39,7 +39,7 @@ public class ConnectorPattern extends AbstractConnectionPattern{
 		Object source = getBusinessObjectForPictogramElement(context.getSourcePictogramElement());
 		Object target = getBusinessObjectForPictogramElement(context.getTargetPictogramElement());
 		
-		if(source instanceof LinkedNode && target instanceof LinkedNode){
+		if(source instanceof LinkedObject && target instanceof LinkedObject){
 			return true;
 		}
 		
@@ -49,7 +49,7 @@ public class ConnectorPattern extends AbstractConnectionPattern{
 	public boolean canStartConnection(ICreateConnectionContext context) {
 		Object source = getBusinessObjectForPictogramElement(context.getSourcePictogramElement());
 		
-		if(source instanceof LinkedNode){
+		if(source instanceof LinkedObject){
 			return true;
 		}
 		
@@ -62,14 +62,14 @@ public class ConnectorPattern extends AbstractConnectionPattern{
 		Method method = MethodUtil.getMethodModel(getDiagram());
 		Connection connectionPictogram = null;
 		
-		LinkedNode source = (LinkedNode)getBusinessObjectForPictogramElement(context.getSourcePictogramElement());
-		LinkedNode target = (LinkedNode)getBusinessObjectForPictogramElement(context.getTargetPictogramElement());
+		LinkedObject source = (LinkedObject)getBusinessObjectForPictogramElement(context.getSourcePictogramElement());
+		LinkedObject target = (LinkedObject)getBusinessObjectForPictogramElement(context.getTargetPictogramElement());
 		
-		SectionConnector connector = MethodFactory.eINSTANCE.createSectionConnector();
+		Link connector = MethodFactory.eINSTANCE.createLink();
 		connector.setStart(source);
 		connector.setEnd(target);
 		connector.setRequired(required);
-		method.getSectionConnectors().add(connector);
+		method.getLinks().add(connector);
 		
 		source.getNext().add(connector);
 		target.getPrevious().add(connector);
@@ -83,7 +83,7 @@ public class ConnectorPattern extends AbstractConnectionPattern{
 	
 	public boolean canAdd(IAddContext context) {
 		Object bo = context.getNewObject();
-		if(bo instanceof SectionConnector){
+		if(bo instanceof Link){
 			return true;
 		}
 		return false;
@@ -94,7 +94,7 @@ public class ConnectorPattern extends AbstractConnectionPattern{
 		IAddConnectionContext addConContext = (IAddConnectionContext) context;
 		
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
-		SectionConnector connector = (SectionConnector) context.getNewObject();
+		Link connector = (Link) context.getNewObject();
 
 		// CONNECTION WITH POLYLINE
 		Connection connection = peCreateService.createFreeFormConnection(getDiagram());

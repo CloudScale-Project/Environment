@@ -3,8 +3,8 @@
 package eu.cloudscaleproject.env.method.common.method.provider;
 
 
+import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 
 import eu.cloudscaleproject.env.method.editor.provider.MethodEditPlugin;
 
@@ -28,12 +28,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link eu.cloudscaleproject.env.method.common.method.SectionConnector} object.
+ * This is the item provider adapter for a {@link eu.cloudscaleproject.env.method.common.method.Link} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SectionConnectorItemProvider 
+public class LinkItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -47,7 +47,7 @@ public class SectionConnectorItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SectionConnectorItemProvider(AdapterFactory adapterFactory) {
+	public LinkItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -80,9 +80,9 @@ public class SectionConnectorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SectionConnector_start_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SectionConnector_start_feature", "_UI_SectionConnector_type"),
-				 MethodPackage.Literals.SECTION_CONNECTOR__START,
+				 getString("_UI_Link_start_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_start_feature", "_UI_Link_type"),
+				 MethodPackage.Literals.LINK__START,
 				 true,
 				 false,
 				 true,
@@ -102,9 +102,9 @@ public class SectionConnectorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SectionConnector_end_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SectionConnector_end_feature", "_UI_SectionConnector_type"),
-				 MethodPackage.Literals.SECTION_CONNECTOR__END,
+				 getString("_UI_Link_end_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_end_feature", "_UI_Link_type"),
+				 MethodPackage.Literals.LINK__END,
 				 true,
 				 false,
 				 true,
@@ -124,9 +124,9 @@ public class SectionConnectorItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SectionConnector_required_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SectionConnector_required_feature", "_UI_SectionConnector_type"),
-				 MethodPackage.Literals.SECTION_CONNECTOR__REQUIRED,
+				 getString("_UI_Link_required_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Link_required_feature", "_UI_Link_type"),
+				 MethodPackage.Literals.LINK__REQUIRED,
 				 true,
 				 false,
 				 false,
@@ -136,14 +136,14 @@ public class SectionConnectorItemProvider
 	}
 
 	/**
-	 * This returns SectionConnector.gif.
+	 * This returns Link.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SectionConnector"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Link"));
 	}
 
 	/**
@@ -154,8 +154,8 @@ public class SectionConnectorItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		SectionConnector sectionConnector = (SectionConnector)object;
-		return getString("_UI_SectionConnector_type") + " " + sectionConnector.isRequired();
+		Link link = (Link)object;
+		return getString("_UI_Link_type") + " " + link.isRequired();
 	}
 	
 
@@ -170,8 +170,8 @@ public class SectionConnectorItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(SectionConnector.class)) {
-			case MethodPackage.SECTION_CONNECTOR__REQUIRED:
+		switch (notification.getFeatureID(Link.class)) {
+			case MethodPackage.LINK__REQUIRED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

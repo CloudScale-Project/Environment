@@ -79,7 +79,7 @@ public class MethodItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(MethodPackage.Literals.METHOD__SECTION_CONNECTORS);
+			childrenFeatures.add(MethodPackage.Literals.METHOD__LINKS);
 			childrenFeatures.add(MethodPackage.Literals.METHOD__NODES);
 		}
 		return childrenFeatures;
@@ -133,7 +133,7 @@ public class MethodItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Method.class)) {
-			case MethodPackage.METHOD__SECTION_CONNECTORS:
+			case MethodPackage.METHOD__LINKS:
 			case MethodPackage.METHOD__NODES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -154,8 +154,8 @@ public class MethodItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(MethodPackage.Literals.METHOD__SECTION_CONNECTORS,
-				 MethodFactory.eINSTANCE.createSectionConnector()));
+				(MethodPackage.Literals.METHOD__LINKS,
+				 MethodFactory.eINSTANCE.createLink()));
 
 		newChildDescriptors.add
 			(createChildParameter

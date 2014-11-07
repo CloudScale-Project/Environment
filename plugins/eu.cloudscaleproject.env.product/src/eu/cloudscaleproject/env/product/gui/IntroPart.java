@@ -118,23 +118,6 @@ public class IntroPart {
 		c_body.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		c_body.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		final Browser browser = new Browser(c_body, SWT.NONE);
-		browser.setUrl(introUrl.toString());
-		
-		back.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				browser.back();
-			}
-		});
-		
-		forward.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				browser.forward();
-			}
-		});
-		
 		newProject.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -149,12 +132,34 @@ public class IntroPart {
 			}
 		});
 		
-		home.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				browser.setUrl(introUrl.toString());
-			}
-		});
+		try{
+			final Browser browser = new Browser(c_body, SWT.NONE);
+			browser.setUrl(introUrl.toString());
+			
+			back.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					browser.back();
+				}
+			});
+			
+			forward.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					browser.forward();
+				}
+			});
+			
+			home.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					browser.setUrl(introUrl.toString());
+				}
+			});
+		}
+		catch(Exception e){
+			//ignore error if the browser plugin is not supported
+		}
 	}
 
 	@PreDestroy

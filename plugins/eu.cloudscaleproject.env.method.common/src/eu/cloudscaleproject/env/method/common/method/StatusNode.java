@@ -35,7 +35,7 @@ public interface StatusNode extends Node {
 	 * @return the value of the '<em>Done</em>' attribute.
 	 * @see #setDone(boolean)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getStatusNode_Done()
-	 * @model default="false" transient="true"
+	 * @model default="false" required="true" transient="true"
 	 * @generated
 	 */
 	boolean isDone();
@@ -62,7 +62,7 @@ public interface StatusNode extends Node {
 	 * @return the value of the '<em>Dirty</em>' attribute.
 	 * @see #setDirty(boolean)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getStatusNode_Dirty()
-	 * @model default="false" transient="true"
+	 * @model default="false" required="true" transient="true"
 	 * @generated
 	 */
 	boolean isDirty();

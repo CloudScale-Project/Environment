@@ -14,6 +14,6 @@ package eu.cloudscaleproject.env.method.common.method;
  * @model
  * @generated
  */
-public interface Action extends StatusNode, LinkedNode {
+public interface Action extends StatusNode, LinkedObject {
 
 } // Action

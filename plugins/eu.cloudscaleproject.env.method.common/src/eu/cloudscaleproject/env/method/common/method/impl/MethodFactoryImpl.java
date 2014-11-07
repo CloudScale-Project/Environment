@@ -65,7 +65,7 @@ public class MethodFactoryImpl extends EFactoryImpl implements MethodFactory {
 			case MethodPackage.REQUIREMENT: return createRequirement();
 			case MethodPackage.WARNING: return createWarning();
 			case MethodPackage.COMMAND: return createCommand();
-			case MethodPackage.SECTION_CONNECTOR: return createSectionConnector();
+			case MethodPackage.LINK: return createLink();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -166,9 +166,9 @@ public class MethodFactoryImpl extends EFactoryImpl implements MethodFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SectionConnector createSectionConnector() {
-		SectionConnectorImpl sectionConnector = new SectionConnectorImpl();
-		return sectionConnector;
+	public Link createLink() {
+		LinkImpl link = new LinkImpl();
+		return link;
 	}
 
 	/**

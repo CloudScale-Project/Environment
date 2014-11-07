@@ -279,26 +279,26 @@ public class MethodItemProviderAdapterFactory extends MethodAdapterFactory imple
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link eu.cloudscaleproject.env.method.common.method.SectionConnector} instances.
+	 * This keeps track of the one adapter used for all {@link eu.cloudscaleproject.env.method.common.method.Link} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SectionConnectorItemProvider sectionConnectorItemProvider;
+	protected LinkItemProvider linkItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link eu.cloudscaleproject.env.method.common.method.SectionConnector}.
+	 * This creates an adapter for a {@link eu.cloudscaleproject.env.method.common.method.Link}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createSectionConnectorAdapter() {
-		if (sectionConnectorItemProvider == null) {
-			sectionConnectorItemProvider = new SectionConnectorItemProvider(this);
+	public Adapter createLinkAdapter() {
+		if (linkItemProvider == null) {
+			linkItemProvider = new LinkItemProvider(this);
 		}
 
-		return sectionConnectorItemProvider;
+		return linkItemProvider;
 	}
 
 	/**
@@ -409,7 +409,7 @@ public class MethodItemProviderAdapterFactory extends MethodAdapterFactory imple
 		if (requirementItemProvider != null) requirementItemProvider.dispose();
 		if (warningItemProvider != null) warningItemProvider.dispose();
 		if (commandItemProvider != null) commandItemProvider.dispose();
-		if (sectionConnectorItemProvider != null) sectionConnectorItemProvider.dispose();
+		if (linkItemProvider != null) linkItemProvider.dispose();
 	}
 
 }

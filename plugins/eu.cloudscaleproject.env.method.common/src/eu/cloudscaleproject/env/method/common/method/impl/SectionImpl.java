@@ -3,24 +3,18 @@
 package eu.cloudscaleproject.env.method.common.method.impl;
 
 import eu.cloudscaleproject.env.method.common.method.Command;
-import eu.cloudscaleproject.env.method.common.method.LinkedNode;
+import eu.cloudscaleproject.env.method.common.method.Link;
+import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.MethodPackage;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
-
-import eu.cloudscaleproject.env.method.common.method.SectionConnector;
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -52,7 +46,7 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SectionConnector> next;
+	protected EList<Link> next;
 
 	/**
 	 * The cached value of the '{@link #getPrevious() <em>Previous</em>}' reference list.
@@ -62,7 +56,7 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SectionConnector> previous;
+	protected EList<Link> previous;
 
 	/**
 	 * The default value of the '{@link #isValid() <em>Valid</em>}' attribute.
@@ -148,9 +142,9 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SectionConnector> getNext() {
+	public EList<Link> getNext() {
 		if (next == null) {
-			next = new EObjectResolvingEList<SectionConnector>(SectionConnector.class, this, MethodPackage.SECTION__NEXT);
+			next = new EObjectResolvingEList<Link>(Link.class, this, MethodPackage.SECTION__NEXT);
 		}
 		return next;
 	}
@@ -160,9 +154,9 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SectionConnector> getPrevious() {
+	public EList<Link> getPrevious() {
 		if (previous == null) {
-			previous = new EObjectResolvingEList<SectionConnector>(SectionConnector.class, this, MethodPackage.SECTION__PREVIOUS);
+			previous = new EObjectResolvingEList<Link>(Link.class, this, MethodPackage.SECTION__PREVIOUS);
 		}
 		return previous;
 	}
@@ -284,11 +278,11 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 		switch (featureID) {
 			case MethodPackage.SECTION__NEXT:
 				getNext().clear();
-				getNext().addAll((Collection<? extends SectionConnector>)newValue);
+				getNext().addAll((Collection<? extends Link>)newValue);
 				return;
 			case MethodPackage.SECTION__PREVIOUS:
 				getPrevious().clear();
-				getPrevious().addAll((Collection<? extends SectionConnector>)newValue);
+				getPrevious().addAll((Collection<? extends Link>)newValue);
 				return;
 			case MethodPackage.SECTION__VALID:
 				setValid((Boolean)newValue);
@@ -369,10 +363,10 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == LinkedNode.class) {
+		if (baseClass == LinkedObject.class) {
 			switch (derivedFeatureID) {
-				case MethodPackage.SECTION__NEXT: return MethodPackage.LINKED_NODE__NEXT;
-				case MethodPackage.SECTION__PREVIOUS: return MethodPackage.LINKED_NODE__PREVIOUS;
+				case MethodPackage.SECTION__NEXT: return MethodPackage.LINKED_OBJECT__NEXT;
+				case MethodPackage.SECTION__PREVIOUS: return MethodPackage.LINKED_OBJECT__PREVIOUS;
 				default: return -1;
 			}
 		}
@@ -386,10 +380,10 @@ public class SectionImpl extends StatusNodeImpl implements Section {
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == LinkedNode.class) {
+		if (baseClass == LinkedObject.class) {
 			switch (baseFeatureID) {
-				case MethodPackage.LINKED_NODE__NEXT: return MethodPackage.SECTION__NEXT;
-				case MethodPackage.LINKED_NODE__PREVIOUS: return MethodPackage.SECTION__PREVIOUS;
+				case MethodPackage.LINKED_OBJECT__NEXT: return MethodPackage.SECTION__NEXT;
+				case MethodPackage.LINKED_OBJECT__PREVIOUS: return MethodPackage.SECTION__PREVIOUS;
 				default: return -1;
 			}
 		}

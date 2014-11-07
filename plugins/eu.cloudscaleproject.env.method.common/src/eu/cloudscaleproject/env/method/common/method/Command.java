@@ -33,7 +33,7 @@ public interface Command extends Node {
 	 * @return the value of the '<em>Position</em>' attribute.
 	 * @see #setPosition(int)
 	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getCommand_Position()
-	 * @model default="0"
+	 * @model default="0" required="true"
 	 * @generated
 	 */
 	int getPosition();
