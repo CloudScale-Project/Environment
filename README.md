@@ -116,11 +116,8 @@ Features descriptions
 - eu.cloudscaleproject.feature.extractor
 - eu.cloudscaleproject.feature.staticspotter
 
-- 
-
 ##### Update-site
 - eu.cloudscaleproject.updatesite.environment
 - eu.cloudscaleproject.updatesite.toolchain
-
 
 [1]: https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/lunasr1
