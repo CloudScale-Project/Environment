@@ -8,12 +8,12 @@ This desktop application can be installed and used in any personal computer runn
 Build and run CloudScale Environment
 -----------------------------------------
 
-1. Clone repository
-	$ cd Cloudscale
-	$ git clone https://github.com/CloudScale-Project/Environment.git
-2. Build Cloudscale Environemnt
-	$ mvn compile
-	$ mvn package
+1. Clone the repository.
+	* `$ cd Cloudscale`
+	* `$ git clone https://github.com/CloudScale-Project/Environment.git`
+2. Build Cloudscale Environemnt.
+	* `$ mvn compile`
+	* `$ mvn package`
 3. Run Linux,MacOS,Windows distribution.
 
 Start developing CloudScale Environment
