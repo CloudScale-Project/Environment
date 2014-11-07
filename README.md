@@ -108,6 +108,7 @@ Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
 Features descriptions
 -----------------------------------------
+
 ##### Features
 - eu.cloudscaleproject.feature.analyser
 - eu.cloudscaleproject.feature.dynamicspotter
@@ -115,6 +116,7 @@ Features descriptions
 - eu.cloudscaleproject.feature.environment.dev
 - eu.cloudscaleproject.feature.extractor
 - eu.cloudscaleproject.feature.staticspotter
+
 
 ##### Update-site
 - eu.cloudscaleproject.updatesite.environment
