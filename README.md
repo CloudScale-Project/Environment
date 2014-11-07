@@ -79,18 +79,18 @@ It mostly contains classes which provide GUI components for the Dashboard editor
 - **eu.cloudscaleproject.env.csm2pcm**
  Contains QVTO scripts and support classes that gives support for transformation from Overview model to PCM model. PCM model is needed as an input to the Analyser.
 
-##### CloudScale Method plugins:
+ ##### CloudScale Method plugins:
 
-- **eu.cloudscaleproject.env.method.common**
- Common plugin for the Workflow diagram. Workflow diagram shows notifications and enabled options, based on the current state of the project. It contains Method meta-model and Graphiti diagram patterns, used for persisting, viewing and editing Workflow diagram.
+ - **eu.cloudscaleproject.env.method.common**
+  Common plugin for the Workflow diagram. Workflow diagram shows notifications and enabled options, based on the current state of the project. It contains Method meta-model and Graphiti diagram patterns, used for persisting, viewing and editing Workflow diagram.
 
-- **eu.cloudscaleproject.env.method.editor**
- Plugin that is used as a Eclipse extension to create and edit Workflow diagrams, based on Method meta-model.
+ - **eu.cloudscaleproject.env.method.editor**
+  Plugin that is used as a Eclipse extension to create and edit Workflow diagrams, based on Method meta-model.
 This plugin is not meant to be used inside CloudScale product application.
 Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
-- **eu.cloudscaleproject.env.method.viewer** 
- Plugin that provides only view capabilities and dynamic decorations for the Workflow diagram.
+ - **eu.cloudscaleproject.env.method.viewer** 
+  Plugin that provides only view capabilities and dynamic decorations for the Workflow diagram.
 Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
 #### ScaleDL Overview model plugins (definition, editors, diagrams):
