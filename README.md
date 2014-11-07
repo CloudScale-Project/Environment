@@ -108,17 +108,19 @@ Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 
 Features descriptions
 -----------------------------------------
-#### Features
-- **eu.cloudscaleproject.feature.analyser**
-- **eu.cloudscaleproject.feature.dynamicspotter**
-- **eu.cloudscaleproject.feature.environment**
-- **eu.cloudscaleproject.feature.environment.dev**
-- **eu.cloudscaleproject.feature.extractor**
-- **eu.cloudscaleproject.feature.staticspotter**
+##### Features
+- eu.cloudscaleproject.feature.analyser
+- eu.cloudscaleproject.feature.dynamicspotter
+- eu.cloudscaleproject.feature.environment
+- eu.cloudscaleproject.feature.environment.dev
+- eu.cloudscaleproject.feature.extractor
+- eu.cloudscaleproject.feature.staticspotter
 
-#### Update-site
-- **eu.cloudscaleproject.updatesite.environment**
-- **eu.cloudscaleproject.updatesite.toolchain**
+- 
+
+##### Update-site
+- eu.cloudscaleproject.updatesite.environment
+- eu.cloudscaleproject.updatesite.toolchain
 
 
 [1]: https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/lunasr1
