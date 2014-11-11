@@ -38,70 +38,65 @@ public class InputValidator extends ToolValidator {
 
 	@Override
 	public boolean doValidate(IProject project, IToolStatus status) {
-				
+		
 		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().
 				getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
 		
-		if(!inputResourceProvider.getResources().isEmpty()){
-			status.setIsInProgress(true);
-		}
-		else{
+		IEditorInputResource selectedRes = inputResourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
+		
+		if(selectedRes == null){
 			status.setIsInProgress(false);
 			status.setIsDone(false);
 			return false;
 		}
+		
+		status.setIsInProgress(true);
 
-		//validate all input alternatives
-		try {
-			for(IEditorInputResource resource : inputResourceProvider.getResources()){
-								
-				// check connection
-				ServiceClientWrapper client = Activator.getDefault().getClient(resource.getResource().getName());
-				String hostname = resource.getProperty("hostname");
-				String port = resource.getProperty("port");
+		//validate selected input alternatives
+		try {								
+			// check connection
+			ServiceClientWrapper client = Activator.getDefault().getClient(selectedRes.getResource().getName());
+			String hostname = selectedRes.getProperty("hostname");
+			String port = selectedRes.getProperty("port");
+			
+			status.handleWarning(ERROR, hostname == null || hostname.isEmpty(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection hostname is not specified!"));
+			status.handleWarning(ERROR, port == null || port.isEmpty(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection port is not specified!"));
+			
+			client.saveServiceClientSettings(hostname, port);
+			
+			status.handleWarning(ERROR, !client.testConnection(false), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection to server can not be established!"));
+			
+			// check input files
+			IFolder folder = (IFolder)selectedRes.getResource();
+			IFile confFile = folder.getFile("mEnv.xml");
+			status.handleWarning(ERROR, !confFile.exists(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Instrumentation controller and Measurement controller not specified!"));
+			
+			MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
 				
-				status.handleWarning(ERROR, hostname == null || hostname.isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Connection hostname is not specified!"));
-				status.handleWarning(ERROR, port == null || port.isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Connection port is not specified!"));
+			XMeasurementEnvironment confEnv = factory.parseXMLFile(confFile.getLocation().toString());
+			status.handleWarning(ERROR, confEnv == null, true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Invalid input configuration!"));
+			
+			List<?> ic = confEnv.getInstrumentationController();
+			List<?> mc = confEnv.getMeasurementController();
+			
+			status.handleWarning(ERROR, ic == null || ic.isEmpty(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Instrumentation controller not specified!"));					
+			status.handleWarning(ERROR, mc == null || mc.isEmpty(), true,
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Measurement controller not specified!"));
 				
-				client.saveServiceClientSettings(hostname, port);
-				
-				status.handleWarning(ERROR, !client.testConnection(false), true, 
-						MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Connection to server can not be established!"));
-				
-				// check input files
-				IFolder folder = (IFolder)resource.getResource();
-				IFile confFile = folder.getFile("mEnv.xml");
-				status.handleWarning(ERROR, !confFile.exists(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Instrumentation controller and Measurement controller not specified!"));
-				
-				MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
-				try {
-					XMeasurementEnvironment confEnv = factory.parseXMLFile(confFile.getLocation().toString());
-					status.handleWarning(ERROR, confEnv == null, true, 
-							MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Invalid input configuration!"));
-					
-					List<?> ic = confEnv.getInstrumentationController();
-					List<?> mc = confEnv.getMeasurementController();
-					
-					status.handleWarning(ERROR, ic == null || ic.isEmpty(), true, 
-							MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Instrumentation controller not specified!"));					
-					status.handleWarning(ERROR, mc == null || mc.isEmpty(), true,
-							MessageFormat.format(MESSAGE_PATTERN, resource.getName(),"Measurement controller not specified!"));
-					
-				} catch (UICoreException e) {
-					e.printStackTrace();
-				}
-				
-			}
 		} catch (IllegalStateException e) {
 			status.setIsDone(false);
 			return false;
+		} catch (UICoreException e) {
+			e.printStackTrace();
 		}
 		
 		status.setIsDone(true);
-		
 		return true;
 	}
 

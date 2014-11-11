@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.spotter.Util;
+import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.editors.composite.ResultComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -119,7 +119,7 @@ public class ResultsComposite extends Composite{
 			public Composite createInputComposite(IEditorInput input,
 					Composite parent, int style) {
 				
-				String selectedInputName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
+				String selectedInputName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 				return new ResultComposite(parent, style, selectedInputName, editorInput.getResource().getFolder(input.getName()));
 			}
 

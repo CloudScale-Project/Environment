@@ -8,7 +8,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.spotter.Util;
+import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -52,7 +52,7 @@ public class ResultAlternativeComposite extends AbstractSidebarMenuComposite{
 	public Composite createInputComposite(IEditorInput input, Composite parent,
 			int style) {
 		
-		String inputResourceName = ((EditorInputFolder)input).getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
+		String inputResourceName = ((EditorInputFolder)input).getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 		return new ResultComposite(parent, style, inputResourceName, editorInput.getResource().getFolder(input.getName()));
 	}
 

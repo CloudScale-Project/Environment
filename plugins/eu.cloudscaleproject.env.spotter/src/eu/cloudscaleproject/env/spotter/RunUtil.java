@@ -4,14 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.LinkedList;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.xml.bind.JAXBException;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -23,10 +19,8 @@ import org.spotter.eclipse.ui.model.xml.HierarchyFactory;
 import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.eclipse.ui.util.DialogUtils;
 import org.spotter.eclipse.ui.util.SpotterProjectSupport;
-import org.spotter.eclipse.ui.util.SpotterUtils;
 import org.spotter.shared.configuration.FileManager;
 import org.spotter.shared.configuration.JobDescription;
-import org.spotter.shared.environment.model.XMeasurementEnvObject;
 import org.spotter.shared.environment.model.XMeasurementEnvironment;
 import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 
@@ -36,14 +30,13 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class Util {
+public class RunUtil {
 	
-	public static final Logger logger = Logger.getLogger(Util.class.getName());
-	public static final String KEY_PARENT_EDITOR_RESOURCE = "parent.editor.resource";
+	public static final Logger logger = Logger.getLogger(RunUtil.class.getName());
 	
 	public static void run(IProject project, EditorInputFolder confEditorInput){
 		
-		String inputResourceName = confEditorInput.getProperty(KEY_PARENT_EDITOR_RESOURCE);
+		String inputResourceName = confEditorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 		if(inputResourceName == null || inputResourceName.isEmpty()){
 			logger.severe("run(): Input resource not set for the specified configuration resource: " + confEditorInput.getName());
 			logger.severe("run(): Editing run operation!");
@@ -86,7 +79,7 @@ public class Util {
 					resultEditorInput = resultResourceProvider.getResource(runEditorInputName);
 				}
 				resultEditorInput.setName(confEditorInput.getName());
-				resultEditorInput.setProperty(KEY_PARENT_EDITOR_RESOURCE, confEditorInput.getResource().getName());
+				resultEditorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, confEditorInput.getResource().getName());
 				resultEditorInput.save();
 				
 				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
@@ -116,7 +109,7 @@ public class Util {
 		ServiceClientWrapper client = Activator.getDefault().getClient(inputEditorInput.getResource().getName());
 		
 		try {
-			JobDescription jobDescription = Util.createJobDescription(confEditorInput);
+			JobDescription jobDescription = RunUtil.createJobDescription(confEditorInput);
 			Long jobId = client.startDiagnosis(jobDescription);
 			if (jobId != null && jobId != 0) {
 				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, client, 
@@ -153,47 +146,5 @@ public class Util {
 		jobDescription.setHierarchy(hierarchy);
 
 		return jobDescription;
-	}
-	
-	public static void bindEditorInputs(EditorInputFolder inputAlternative, EditorInputFolder runAlternative){
-		
-		IFile inputEnvFile = ((IFolder)inputAlternative.getResource()).getFile("mEnv.xml");
-		IFile confEnvFile = ((IFolder)runAlternative.getResource()).getFile("mEnv.xml");
-		
-		MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
-		try {			
-			//input model
-			XMeasurementEnvironment inputEnv = factory.parseXMLFile(inputEnvFile.getLocation().toString());
-			if(!confEnvFile.exists()){
-				try {
-					SpotterUtils.writeElementToFile(confEnvFile, inputEnv);
-					return;
-				} catch (JAXBException | CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			//run conf model
-			XMeasurementEnvironment confEnv = factory.parseXMLFile(confEnvFile.getLocation().toString());
-			
-			confEnv.setInstrumentationController(inputEnv.getInstrumentationController() != null ? 
-					new LinkedList<XMeasurementEnvObject>(inputEnv.getInstrumentationController()) : new LinkedList<XMeasurementEnvObject>());
-			confEnv.setMeasurementController(inputEnv.getMeasurementController() != null ? 
-					new LinkedList<XMeasurementEnvObject>(inputEnv.getMeasurementController()) : new LinkedList<XMeasurementEnvObject>());
-			
-			try {
-				SpotterUtils.writeElementToFile(confEnvFile, confEnv);
-			} catch (JAXBException | CoreException e) {
-				e.printStackTrace();
-			}
-			
-		} catch (UICoreException e) {
-			e.printStackTrace();
-		}
-		
-		//save to properties
-		runAlternative.setProperty(KEY_PARENT_EDITOR_RESOURCE, inputAlternative.getResource().getName());
-		runAlternative.save();
 	}
 }

@@ -895,11 +895,11 @@
       <children xsi:type="method:Section" id="static_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" previous="/1/@links.9"/>
       <children xsi:type="method:Section" id="dynamic_spotter_input" name="Dynamic spotter input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.10">
         <commandParam>openInput</commandParam>
-        <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.input.select"/>
+        <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.openinputdialog"/>
       </children>
       <children xsi:type="method:Section" id="dynamic_spotter_tool" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.11" previous="/1/@links.10">
         <commandParam>openRun</commandParam>
-        <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.conf.select"/>
+        <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.openconfdialog"/>
         <commands id="_0xIjQF3mEeScwqkqKbMIeg" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.run"/>
       </children>
       <children xsi:type="method:Section" id="dynamic_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.13" previous="/1/@links.11">

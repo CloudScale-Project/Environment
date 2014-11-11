@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.toolchain.resources;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -30,7 +30,7 @@ public abstract class ResourceProvider{
 	private final LinkedHashMap<IResource, IEditorInputResource> resources 
 			= new LinkedHashMap<IResource, IEditorInputResource>();
 	
-	private transient HashMap<String, IEditorInputResource> taggedResources = new HashMap<String, IEditorInputResource>();
+	//private transient HashMap<String, IEditorInputResource> taggedResources = new HashMap<String, IEditorInputResource>();
 	
 	protected abstract boolean validateResource(IResource res);
 	protected abstract IResource createResource(String resourceName);
@@ -46,15 +46,65 @@ public abstract class ResourceProvider{
 	}
 	
 	public void tagResource(String tag, IEditorInputResource resource){
-		taggedResources.put(tag, resource);
+		IProject project = rootFolder.getProject();
+
+		// save tags into project persisted storage
+		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
+		try {
+			project.getPersistentProperties().put(key, resource.getResource().getName());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	public boolean hasTag(String tag, IEditorInputResource resource){
-		return resource == null ? false : taggedResources.get(tag) == resource;
+		IProject project = rootFolder.getProject();
+		
+		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
+		try {
+			String tagedResourceName = project.getPersistentProperties().get(key);
+			if(tagedResourceName == null || tagedResourceName.isEmpty()){
+				return false;
+			}
+			
+			IEditorInputResource res = getResource(tagedResourceName);
+			if(res == null || !res.getResource().exists()){
+				return false;
+			}
+			
+			if(res.equals(resource)){
+				return true;
+			}
+			
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	public IEditorInputResource getTaggedResource(String tag){
-		return taggedResources.get(tag);
+		IProject project = rootFolder.getProject();
+		
+		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
+		try {
+			String tagedResourceName = project.getPersistentProperties().get(key);
+			if(tagedResourceName == null || tagedResourceName.isEmpty()){
+				return null;
+			}
+			
+			IEditorInputResource res = getResource(tagedResourceName);
+			if(res == null || !res.getResource().exists()){
+				return null;
+			}
+			
+			return res;
+			
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	public final void checkRootFolder(){
@@ -82,9 +132,6 @@ public abstract class ResourceProvider{
 				
 				IEditorInputResource eir = resources.get(res);
 				iter.remove();
-				
-				//remove from tagged resources
-				taggedResources.values().remove(eir);
 
 				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
 				modified = true;

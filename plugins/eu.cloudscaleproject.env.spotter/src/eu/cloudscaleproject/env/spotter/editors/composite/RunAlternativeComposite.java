@@ -30,7 +30,8 @@ import org.spotter.eclipse.ui.util.DialogUtils;
 import org.spotter.shared.configuration.FileManager;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.spotter.Util;
+import eu.cloudscaleproject.env.spotter.ResourceUtils;
+import eu.cloudscaleproject.env.spotter.RunUtil;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -92,14 +93,14 @@ public class RunAlternativeComposite extends Composite{
 			
 		});
 		comboViewer.setInput(inputResourceProvider.getResources());
-		String selectedInputResourceName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
+		String selectedInputResourceName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 		if(selectedInputResourceName != null && !selectedInputResourceName.isEmpty()){
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			if(selectedEditorInput != null){
 				comboViewer.setSelection(new StructuredSelection(selectedEditorInput));
 			}
 			else{
-				editorInput.setProperty(Util.KEY_PARENT_EDITOR_RESOURCE, "");
+				editorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, "");
 			}
 		}
 
@@ -108,7 +109,7 @@ public class RunAlternativeComposite extends Composite{
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				IEditorInputResource selectedEditorInput = (IEditorInputResource)selection.getFirstElement();
-				editorInput.setProperty(Util.KEY_PARENT_EDITOR_RESOURCE, selectedEditorInput.getResource().getName());
+				editorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, selectedEditorInput.getResource().getName());
 				editorInput.save();
 				
 				setInput(selectedEditorInput);
@@ -184,7 +185,7 @@ public class RunAlternativeComposite extends Composite{
 				}
 				
 				setInput(selectedEditorInput);
-				Util.run(project, RunAlternativeComposite.this.editorInput);
+				RunUtil.run(project, RunAlternativeComposite.this.editorInput);
 			}
 		});
 		
@@ -192,11 +193,11 @@ public class RunAlternativeComposite extends Composite{
 	}
 	
 	private void setInput(IEditorInputResource ei){
-		Util.bindEditorInputs((EditorInputFolder)ei, this.editorInput);
+		ResourceUtils.bindEditorInputs((EditorInputFolder)ei, this.editorInput);
 	}
 	
 	private IEditorInputResource getSelectedEditorInput(){
-		String selectedInputResourceName = editorInput.getProperty(Util.KEY_PARENT_EDITOR_RESOURCE);
+		String selectedInputResourceName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 		if(selectedInputResourceName != null){
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			return selectedEditorInput;
