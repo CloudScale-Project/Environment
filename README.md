@@ -32,11 +32,11 @@ Develope CloudScale Environment
 
 CloudScale Tool-chain
 -----------------------------------------
- **Analyser** is used for modelling and analysing the scalability of basic and composed cloud services. It is based on the Palladio; a software architecture simulation framework, which analyses software at the model level for performance bottlenecks, scalability issues and reliability threats, and allows for a subsequent optimisation. In the CloudScale Environment mainly the backend engines will be used to analyse the user’s application. This will be achieved by automatically transforming ScaleDL Overview models into the Palladio Component Models; structure on which Palladio operates. 
+ **Analyser** is used for modelling and analysing the scalability of basic and composed cloud services. It is based on the Palladio; a software architecture simulation framework, which analyses software at the model level for performance bottlenecks, scalability issues and reliability threats, and allows for a subsequent optimisation. In the CloudScale Environment mainly the backend engines will be used to analyse the user’s application. This will be achieved by automatically transforming ScaleDL Overview models into the Palladio Component Models; structure on which Palladio operates. http://www.palladio-simulator.com/tools/
  
- **Extractor** is responsible for extracting scalability models from the system’s source code. It is based on the SoMoX, which provides clustering-based architecture reconstruction to recover the architecture of a software system from source code. The clustering mechanism extracts a software architecture based on source code metrics and construct PCM models to be used by Analyser.
+ **Extractor** is responsible for extracting scalability models from the system’s source code. It is based on the SoMoX, which provides clustering-based architecture reconstruction to recover the architecture of a software system from source code. The clustering mechanism extracts a software architecture based on source code metrics and construct PCM models to be used by Analyser. https://sdqweb.ipd.kit.edu/wiki/SoMoX
  
- **Static Spotter**  and  **Dynamic Spotter** semi-automatically spots scalability issues in software code. It combines static code analysis to identify structures of scalability anti-patterns, together with a spotting by measurement method (Spotting by Measuring) to spot scalability bottlenecks on the running system
+ **Static Spotter**  and  **Dynamic Spotter** semi-automatically spots scalability issues in software code. It combines static code analysis to identify structures of scalability anti-patterns, together with a spotting by measurement method (Spotting by Measuring) to spot scalability bottlenecks on the running system. https://code.google.com/p/reclipse-emf/ & http://sopeco.github.io/DynamicSpotter/
  
 
 
