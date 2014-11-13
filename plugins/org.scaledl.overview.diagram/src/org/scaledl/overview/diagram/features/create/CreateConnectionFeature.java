@@ -15,7 +15,6 @@ import org.scaledl.overview.architecture.InternalConnection;
 import org.scaledl.overview.architecture.Proxy;
 import org.scaledl.overview.core.Entity;
 import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.SpecificationFactory;
 import org.scaledl.overview.util.OverviewUtil;
 
 public class CreateConnectionFeature extends AbstractCreateConnectionFeature
@@ -57,10 +56,12 @@ public class CreateConnectionFeature extends AbstractCreateConnectionFeature
 		CloudEnvironment targetCloudEnvironment = OverviewUtil.getCloudEnvironment(target);
 		CloudEnvironment cloudEnvironment = sourceCloudEnvironment != null ? sourceCloudEnvironment : targetCloudEnvironment;
 		
-		NetworkInfrastructureServiceDescriptor descriptor = SpecificationFactory.eINSTANCE.createNetworkInfrastructureServiceDescriptor();
+		/*
+		NetworkInfrastructureServiceDescriptor desc riptor = SpecificationFactory.eINSTANCE.createNetworkInfrastructureServiceDescriptor();
 		descriptor.setBandwidth(1000);
 		descriptor.setLatency(50);
 		descriptor.setName(target.getName()+"->"+source.getName());
+		*/
 		
 		if (target instanceof Proxy || source instanceof Proxy)
 		{
@@ -91,6 +92,9 @@ public class CreateConnectionFeature extends AbstractCreateConnectionFeature
 			else{
 				//connection is internal
 				InternalConnection ic = ArchitectureFactory.eINSTANCE.createInternalConnection();
+				NetworkInfrastructureServiceDescriptor descriptor 
+					= OverviewUtil.getCloudEnvironment(source).getAvailabilityZoneDescriptor().getNetworkInfrastructureServiceDescriptor();
+				ic.setDescriptor(descriptor);
 				ic.setName("Internal service connection");
 				
 				ic.setSource((OperationInterfaceContainer)source);
