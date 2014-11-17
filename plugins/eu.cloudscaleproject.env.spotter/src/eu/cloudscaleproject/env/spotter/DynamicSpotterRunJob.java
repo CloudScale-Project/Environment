@@ -15,13 +15,12 @@
  */
 package eu.cloudscaleproject.env.spotter;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
@@ -41,6 +40,7 @@ import org.spotter.eclipse.ui.navigator.SpotterProjectResults;
 import org.spotter.eclipse.ui.navigator.SpotterProjectRunResult;
 import org.spotter.eclipse.ui.util.DialogUtils;
 import org.spotter.shared.status.DiagnosisProgress;
+import org.spotter.shared.status.DiagnosisStatus;
 import org.spotter.shared.status.SpotterProgress;
 
 /**
@@ -52,6 +52,16 @@ import org.spotter.shared.status.SpotterProgress;
  * 
  */
 public class DynamicSpotterRunJob extends Job {
+
+	/**
+	 * The unique key used to set the job id property of this job.
+	 */
+	public static final QualifiedName JOB_ID_KEY = new QualifiedName(Activator.PLUGIN_ID, "jobId");
+	/**
+	 * The identifier used to identify this job as a member of the job family of
+	 * DS runs.
+	 */
+	public static final String DS_RUN_JOB_FAMILY = "org.spotter.eclipse.ui.jobs.DynamicSpotterRunJob";
 
 	private static final String ICON_PATH = "icons/diagnosis.png"; //$NON-NLS-1$
 
@@ -67,12 +77,9 @@ public class DynamicSpotterRunJob extends Job {
 			+ "server though (cancellation of a running diagnosis is not implemented yet).";
 
 	private final IProject project;
-	private final ServiceClientWrapper client;
-	private final String name;
-	
+	private final String inputAltResName;
 	private final long jobId;
-	private final Set<String> processedProblems;
-	private Map.Entry<String, DiagnosisProgress> currentProblem;
+	private String currentProblem;
 
 	/**
 	 * Create a new job for the given project and job id.
@@ -84,17 +91,12 @@ public class DynamicSpotterRunJob extends Job {
 	 * @param timestamp
 	 *            The timestamp when the job was initiated
 	 */
-	public DynamicSpotterRunJob(final IProject project, final ServiceClientWrapper client, 
-								final String name, final long jobId, long timestamp) {
-		
+	public DynamicSpotterRunJob(final IProject project, final String inputAltResName, final long jobId, long timestamp) {
 		super("DynamicSpotter Diagnosis '" + project.getName() + "'");
 
 		this.project = project;
-		this.client = client;
-		this.name = name;
-		
+		this.inputAltResName = inputAltResName;
 		this.jobId = jobId;
-		this.processedProblems = new HashSet<>();
 
 		ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, ICON_PATH);
 		setProperty(IProgressConstants.ICON_PROPERTY, imageDescriptor);
@@ -106,6 +108,8 @@ public class DynamicSpotterRunJob extends Job {
 		};
 
 		setProperty(IProgressConstants.ACTION_PROPERTY, gotoAction);
+		setProperty(JOB_ID_KEY, String.valueOf(jobId));
+
 		setPriority(LONG);
 		setUser(true);
 
@@ -115,11 +119,25 @@ public class DynamicSpotterRunJob extends Job {
 		}
 	}
 
+	/**
+	 * Returns <code>true</code> only if the family is
+	 * {@link #DS_RUN_JOB_FAMILY}, the family of DS run jobs.
+	 * 
+	 * @param family
+	 *            the job family identifier
+	 * @return <code>true</code> for DS run job family, <code>false</code>
+	 *         otherwise
+	 */
+	@Override
+	public boolean belongsTo(Object family) {
+		return DS_RUN_JOB_FAMILY.equals(family);
+	}
+
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		processedProblems.clear();
 		currentProblem = null;
-		monitor.beginTask("DynamicSpotter Diagnosis '" + name + "'", IProgressMonitor.UNKNOWN);
+		monitor.beginTask("DynamicSpotter Diagnosis '" + inputAltResName + "'", IProgressMonitor.UNKNOWN);
+		ServiceClientWrapper client = Activator.getDefault().getClient(inputAltResName);
 
 		while (client.isRunning(true)) {
 			if (monitor.isCanceled()) {
@@ -140,19 +158,16 @@ public class DynamicSpotterRunJob extends Job {
 			}
 		}
 
-		Exception runException = null;
+		monitor.done();
+		boolean isConnectionIssue = client.isConnectionIssue();
+		Exception runException = client.getLastRunException(true);
+		isConnectionIssue |= client.isConnectionIssue();
 
-		if (client.getLastException() != null) {
-			if (client.isConnectionIssue()) {
-				DialogUtils.openWarning(RunHandler.DIALOG_TITLE, MSG_LOST_CONNECTION);
-				return new Status(Status.OK, Activator.PLUGIN_ID, Status.OK, MSG_LOST_CONNECTION, null);
-			} else {
-				// job was cancelled on server-side due to an error
-				runException = client.getLastException();
-			}
+		if (isConnectionIssue) {
+			DialogUtils.openWarning(RunHandler.DIALOG_TITLE, MSG_LOST_CONNECTION);
+			return new Status(Status.OK, Activator.PLUGIN_ID, Status.OK, MSG_LOST_CONNECTION, null);
 		}
 
-		monitor.done();
 		onFinishedJob(runException);
 
 		// keep the finished job in the progress view only if
@@ -162,6 +177,49 @@ public class DynamicSpotterRunJob extends Job {
 			setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
 		}
 		return Status.OK_STATUS;
+	}
+
+	/**
+	 * Creates a progress string representing the progress of the given problem.
+	 * 
+	 * @param spotterProgress
+	 *            the overall spotter progress to use for the lookup
+	 * @param problemId
+	 *            the id of the concrete problem to create the progress for
+	 * @param omitProblemName
+	 *            whether to omit the problem name in the resulting string
+	 * @return a progress string
+	 */
+	public static String createProgressString(SpotterProgress spotterProgress, String problemId, boolean omitProblemName) {
+		if (spotterProgress == null || problemId == null) {
+			return null;
+		}
+
+		DiagnosisProgress diagProgress = spotterProgress.getProgress(problemId);
+		String estimation = String.format("%.1f", HUNDRED_PERCENT * diagProgress.getEstimatedProgress());
+		String duration = String.valueOf(diagProgress.getEstimatedRemainingDuration());
+
+		String problemName = "";
+		if (!omitProblemName) {
+			String keyHashTag = createKeyHashTag(problemId);
+			problemName = diagProgress.getName() + "-" + keyHashTag + " ";
+		}
+
+		String estimates = " ";
+		if (!diagProgress.getStatus().equals(DiagnosisStatus.PENDING)) {
+			estimates = "(" + estimation + " %%, " + duration + "s remaining): ";
+		}
+
+		String progressString = problemName + estimates + diagProgress.getStatus();
+		return progressString;
+	}
+
+	private static String createKeyHashTag(String key) {
+		if (key.length() < KEY_HASH_LENGTH) {
+			return key;
+		} else {
+			return key.substring(0, KEY_HASH_LENGTH);
+		}
 	}
 
 	private void updateCurrentRun(ServiceClientWrapper client, IProgressMonitor monitor) {
@@ -175,32 +233,9 @@ public class DynamicSpotterRunJob extends Job {
 			return;
 		}
 
-		for (Map.Entry<String, DiagnosisProgress> progressEntry : progressAll.entrySet()) {
-			String key = progressEntry.getKey();
-			if (processedProblems.contains(key)) {
-				if (currentProblem.getKey().equals(key)) {
-					currentProblem = progressEntry;
-				}
-			} else {
-				// the current problem under investigation changed
-				currentProblem = progressEntry;
-				processedProblems.add(currentProblem.getKey());
-			}
-		}
-		if (currentProblem != null) {
-			DiagnosisProgress progress = currentProblem.getValue();
-			String estimation = String.format("%.1f", HUNDRED_PERCENT * progress.getEstimatedProgress());
-			String keyHashTag = createKeyHashTag(currentProblem.getKey());
-			String problemName = progress.getName() + "-" + keyHashTag;
-			monitor.setTaskName(problemName + " (" + estimation + " %): " + progress.getStatus());
-		}
-	}
-
-	private String createKeyHashTag(String key) {
-		if (key.length() < KEY_HASH_LENGTH) {
-			return key;
-		} else {
-			return key.substring(0, KEY_HASH_LENGTH);
+		currentProblem = spotterProgress.getCurrentProblem();
+		if (currentProblem != null && progressAll.containsKey(currentProblem)) {
+			monitor.setTaskName(createProgressString(spotterProgress, currentProblem, false));
 		}
 	}
 
@@ -218,7 +253,7 @@ public class DynamicSpotterRunJob extends Job {
 			public void run() {
 				if (runException == null) {
 					Map<String, SpotterProjectResults> results = activator.getProjectHistoryElements();
-					SpotterProjectResults projectResultsNode = results.get(name);
+					SpotterProjectResults projectResultsNode = results.get(inputAltResName);
 					projectResultsNode.refreshChildren();
 					CommonViewer viewer = activator.getNavigatorViewer();
 					if (!viewer.isBusy()) {
@@ -245,7 +280,7 @@ public class DynamicSpotterRunJob extends Job {
 	private void revealResults() {
 		Activator activator = Activator.getDefault();
 		Map<String, SpotterProjectResults> results = activator.getProjectHistoryElements();
-		SpotterProjectResults projectResultsNode = results.get(name);
+		SpotterProjectResults projectResultsNode = results.get(inputAltResName);
 		if (projectResultsNode != null) {
 			SpotterProjectRunResult runNode = projectResultsNode.getRunResultForJobId(jobId);
 			if (runNode != null) {
@@ -255,5 +290,4 @@ public class DynamicSpotterRunJob extends Job {
 			}
 		}
 	}
-
 }

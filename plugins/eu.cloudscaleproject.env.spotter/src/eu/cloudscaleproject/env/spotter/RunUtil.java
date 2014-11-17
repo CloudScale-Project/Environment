@@ -80,6 +80,7 @@ public class RunUtil {
 				}
 				resultEditorInput.setName(confEditorInput.getName());
 				resultEditorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, confEditorInput.getResource().getName());
+				resultEditorInput.setProperty(ResourceUtils.KEY_CLIENT_NAME, confEditorInput.getProperty(ResourceUtils.KEY_CLIENT_NAME));
 				resultEditorInput.save();
 				
 				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
@@ -112,8 +113,7 @@ public class RunUtil {
 			JobDescription jobDescription = RunUtil.createJobDescription(confEditorInput);
 			Long jobId = client.startDiagnosis(jobDescription);
 			if (jobId != null && jobId != 0) {
-				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, client, 
-												inputEditorInput.getResource().getName(), jobId, System.currentTimeMillis());
+				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, inputEditorInput.getResource().getName(), jobId, System.currentTimeMillis());
 				job.schedule();
 			} else {
 				String msg = String.format("Error occured during diagnosis: %s", "Could not retrieve a valid job id!");

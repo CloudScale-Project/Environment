@@ -274,7 +274,7 @@ public class ResultComposite extends Composite{
 			XPerformanceProblem root = resultsContainer.getRootProblem();
 			if (root != null) {
 				IProject project = resultFolder.getProject();
-				input = HierarchyEditor.createPerformanceProblemHierarchy(project.getName(), root);
+				//input = HierarchyEditor.createPerformanceProblemHierarchy(project.getName(), root);
 			}
 		} catch (CoreException e) {
 			resultsContainer = null;
