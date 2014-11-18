@@ -7,7 +7,7 @@ This desktop application can be installed and used in any personal computer runn
 
 Bundled versions are available here: http://cloudscale-project.github.io/Environment/
 
-Build and run CloudScale Environment
+Build and Run CloudScale Environment
 -----------------------------------------
 
 1. Clone the repository.
@@ -18,7 +18,7 @@ Build and run CloudScale Environment
 3. Run Linux,MacOS,Windows distribution.
 	* Bundle location : plugins/master/target/products
 
-Develope CloudScale Environment
+Develop CloudScale Environment
 -----------------------------------------
 
 1. Download and install [Eclipse Luna for RCP and RAP][1]
@@ -38,7 +38,6 @@ CloudScale Tool-chain
  
  **Static Spotter**  and  **Dynamic Spotter** semi-automatically spots scalability issues in software code. It combines static code analysis to identify structures of scalability anti-patterns, together with a spotting by measurement method (Spotting by Measuring) to spot scalability bottlenecks on the running system. https://code.google.com/p/reclipse-emf/ & http://sopeco.github.io/DynamicSpotter/
  
-
 
 Plugin descriptions
 -----------------------------------------
@@ -116,7 +115,7 @@ Please read description of the "eu.cloudscaleproject.env.method.common" plugin.
 - **org.scaledl.overview.properties** : 
  Overview properties plugin provides extension for the Overview diagram properties panel. It contains custom table and cell editors that facilitates Overview diagram editing.
 
-Features descriptions
+Feature descriptions
 -----------------------------------------
 
 ##### Features
