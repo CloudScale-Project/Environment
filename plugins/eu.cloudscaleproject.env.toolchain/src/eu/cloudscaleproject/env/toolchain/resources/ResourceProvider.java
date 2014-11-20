@@ -51,7 +51,7 @@ public abstract class ResourceProvider{
 		// save tags into project persisted storage
 		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
 		try {
-			project.getPersistentProperties().put(key, resource != null ? resource.getResource().getName() : "");
+			project.setPersistentProperty(key, resource != null ? resource.getResource().getName() : "");
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}		

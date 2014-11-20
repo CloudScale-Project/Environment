@@ -14,7 +14,6 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
-import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
@@ -42,17 +41,20 @@ public class CapacityExperiment {
 		ca.setName("User capacity");
 		
 		Resource resExp = ca.getExperiments();
+		if(resExp.getContents().size() > 0){
+			resExp.getContents().clear();
+		}
+		Experiment exp = ExperimentsFactory.eINSTANCE.createExperiment();
+		resExp.getContents().add(exp);
+		
+		/*
 		ExperimentRepository expRep = resExp.getContents().size() > 0 ? (ExperimentRepository)resExp.getContents().get(0) : null;
 		if(expRep == null){
 			expRep = ExperimentsFactory.eINSTANCE.createExperimentRepository();
 			resExp.getContents().add(expRep);
 		}
+		*/
 		
-		Experiment exp = expRep.getExperiments().size() > 0 ? (Experiment)expRep.getExperiments().get(0) : null;
-		if(exp == null){
-			exp = ExperimentsFactory.eINSTANCE.createExperiment();
-			expRep.getExperiments().add(exp);
-		}
 		exp.setRepetitions(1);
 		exp.setName("Capacity measurement");
 		exp.getStopConditions().clear();

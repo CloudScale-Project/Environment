@@ -35,6 +35,7 @@ import org.scaledl.overview.converter.IOverviewConverterCallback;
 import org.scaledl.overview.core.Entity;
 
 import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;

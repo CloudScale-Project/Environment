@@ -135,10 +135,18 @@ public class InputAlternativeTreeviewComposite extends Composite{
 	private void updateTreeview(){
 			
 		ResourceSet resSet = new ResourceSetImpl();
-		ExplorerProjectPaths.getEmfResource(resSet, alternative.getRepository());
-		ExplorerProjectPaths.getEmfResource(resSet, alternative.getSystem());
-		ExplorerProjectPaths.getEmfResource(resSet, alternative.getAllocation());
-		ExplorerProjectPaths.getEmfResource(resSet, alternative.getResourceEnv());
+		if(alternative.getRepository() != null){
+			ExplorerProjectPaths.getEmfResource(resSet, alternative.getRepository());
+		}
+		if(alternative.getSystem() != null){
+			ExplorerProjectPaths.getEmfResource(resSet, alternative.getSystem());
+		}
+		if(alternative.getAllocation() != null){
+			ExplorerProjectPaths.getEmfResource(resSet, alternative.getAllocation());
+		}
+		if(alternative.getResourceEnv() != null){
+			ExplorerProjectPaths.getEmfResource(resSet, alternative.getResourceEnv());
+		}
 		
 		if(!this.tree.isDisposed()){
 			this.treeViewer.setInput(resSet);

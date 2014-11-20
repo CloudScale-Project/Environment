@@ -35,9 +35,41 @@ public class ResourceUtils {
 		return (InputAlternative)editorInput;
 	}
 	
+	/**
+	 * 
+	 * Retrieves Analyser capacity experiment configuration alternative resource for the specified project.
+	 * If this alternative does not exist, it is created.
+	 * 
+	 * @param project Workbench project to retrieve <code>ResourceProvider</code> from.
+	 * @return Default capacity experiment configuration alternative.
+	 */
 	public static ConfAlternative getCapacityResourceConf(IProject project){
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
 												.getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_CONF_CAPACITY_ANALYSES);
+		
+		if(editorInput == null){
+			editorInput = resourceProvider.createNewResource(ANALYSER_CONF_CAPACITY_ANALYSES, "Capacity analyses");
+			try {
+				CapacityExperiment.init((ConfAlternative)editorInput);
+				editorInput.save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return (ConfAlternative)editorInput;
+	}
+	
+	/**
+	 * 
+	 * Creates capacity experiment configuration alternative resource inside specified <code>ResourceProvider</code>.
+	 * If capacity experiment configuration alternative already exist, this method does nothing.
+	 * 
+	 * @param resourceProvider ResourceProvider specifies, where to create alternative resource. 
+	 * @return Capacity experiment configuration alternative resource.
+	 */
+	public static ConfAlternative createCapacityResourceConf(ResourceProvider resourceProvider){
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_CONF_CAPACITY_ANALYSES);
 		
 		if(editorInput == null){
@@ -109,7 +141,8 @@ public class ResourceUtils {
 
 			@Override
 			public ResourceProvider create(IFolder folder) {
-				return new ResourceProvider(folder, "Alternative") {
+				
+				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
 					@Override
 					public boolean validateResource(IResource res) {
@@ -127,6 +160,11 @@ public class ResourceUtils {
 						return getRootFolder().getFolder(resourceName);
 					}
 				};
+				
+				//create default configuration alternatives
+				createCapacityResourceConf(resourceProvider);
+				
+				return resourceProvider;
 			}
 			
 		});

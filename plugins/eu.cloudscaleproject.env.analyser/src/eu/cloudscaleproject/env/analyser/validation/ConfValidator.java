@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 
 import eu.cloudscaleproject.env.analyser.ConfAlternative;
+import eu.cloudscaleproject.env.common.notification.IResourceStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.ToolValidator;
@@ -47,13 +48,15 @@ public class ConfValidator extends ToolValidator {
 	}
 	
 	public boolean validateModel(IProject project, List<Resource> resources, String reqID) throws CoreException{
-		IToolStatus resStatus = statusManager.getStatus(project, reqID);
+		IResourceStatus resStatus = statusManager.getResourceStatus(project, reqID);
 		
 		if(resources.isEmpty()){
 			resStatus.clearWarnings();
 			resStatus.setIsDone(false);
 			return false;
 		}
+		
+		resStatus.setResource(resources.get(0));
 		
 		boolean out = true;
 		for(Resource res : resources){

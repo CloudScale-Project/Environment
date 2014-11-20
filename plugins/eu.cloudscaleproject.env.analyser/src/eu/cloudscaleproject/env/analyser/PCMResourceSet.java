@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.csm2pcm;
+package eu.cloudscaleproject.env.analyser;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -34,51 +35,80 @@ public class PCMResourceSet extends ResourceSetImpl{
 	private static final Logger logger = Logger.getLogger(PCMResourceSet.class.getName());
 	
 	public static enum ModelType{
-		 REPOSITORY, 
-		 SYSTEM,
-		 RESOURCE,
-		 ALLOCATION,
-		 USAGE
+		
+		 REPOSITORY("repository"), 
+		 SYSTEM("system"),
+		 RESOURCE("resourceenvironment"),
+		 ALLOCATION("allocation"),
+		 USAGE("usagemodel");
+		 
+		 private final String extension;
+		 
+		 ModelType(String modelExtension){
+			 this.extension = modelExtension;
+		 }
+		 
+		 public String getFileExtension(){
+			 return extension;
+		 }
 	}
 	
-	private final IFolder rootFolder;
-	private final IFolder rootFolderModels;
+	private final IFile[] modelFiles;
+	private final IFile[] diagramFiles;
 	
-	private final IFile[] modelFiles = new IFile[5];
-	private final IFile[] diagramFiles = new IFile[5];
+	public PCMResourceSet(){
+		modelFiles = new IFile[ModelType.values().length];
+		diagramFiles = new IFile[ModelType.values().length];
+	}
 	
 	public PCMResourceSet(IFolder rootFolder) {
-		this.rootFolder = rootFolder;
-		this.rootFolderModels = rootFolder.getFolder("models");
+		
+		this();
+		
+		IFolder rootFolderModels = rootFolder.getFolder("models");
 		
 		//create folders if they don't exist jet
 		try{
-			if(!this.rootFolder.exists()){
-				this.rootFolder.create(true, true, null);
+			if(!rootFolder.exists()){
+				rootFolder.create(true, true, null);
 			}
-			if(!this.rootFolderModels.exists()){
-				this.rootFolderModels.create(true, true, null);
+			if(!rootFolderModels.exists()){
+				rootFolderModels.create(true, true, null);
 			}
 		}
 		catch(CoreException e){
 			e.printStackTrace();
 		}
 		
-		this.modelFiles[ModelType.USAGE.ordinal()] = rootFolderModels.getFile("pcm.usagemodel");
-		this.modelFiles[ModelType.RESOURCE.ordinal()] = rootFolderModels.getFile("pcm.resourceenvironment");
-		this.modelFiles[ModelType.ALLOCATION.ordinal()] = rootFolderModels.getFile("pcm.allocation");
-		this.modelFiles[ModelType.REPOSITORY.ordinal()] = rootFolderModels.getFile("pcm.repository");
-		this.modelFiles[ModelType.SYSTEM.ordinal()] = rootFolderModels.getFile("pcm.system");
+		for(ModelType mt : ModelType.values()){
+			this.modelFiles[mt.ordinal()] = rootFolderModels.getFile("pcm." + mt.getFileExtension());
+		}
 		
-		this.diagramFiles[ModelType.USAGE.ordinal()] = rootFolder.getFile("pcm.usagemodel_diagram");
-		this.diagramFiles[ModelType.RESOURCE.ordinal()] = rootFolder.getFile("pcm.resourceenvironment_diagram");
-		this.diagramFiles[ModelType.ALLOCATION.ordinal()] = rootFolder.getFile("pcm.allocation_diagram");
-		this.diagramFiles[ModelType.REPOSITORY.ordinal()] = rootFolder.getFile("pcm.repository_diagram");
-		this.diagramFiles[ModelType.SYSTEM.ordinal()] = rootFolder.getFile("pcm.system_diagram");
+		for(ModelType mt : ModelType.values()){
+			this.diagramFiles[mt.ordinal()] = rootFolderModels.getFile("pcm." + mt.getFileExtension() + "_diagram");
+		}
 	}
 	
-	public IFolder getRootFolder(){
-		return this.rootFolder;
+	public void setModelFile(ModelType model, IFile file){
+		IFile old = this.modelFiles[model.ordinal()];
+		if(ExplorerProjectPaths.hasEmfResource(this, old)){
+			Resource res = ExplorerProjectPaths.getEmfResource(this, old);
+			this.getResources().remove(res);
+		}
+		
+		this.modelFiles[model.ordinal()] = file;
+	}
+	
+	public void setDiagramFile(ModelType model, IFile file){
+		
+		//TODO: if diagram exist so must model file too - set model file automatically
+		IFile old = this.diagramFiles[model.ordinal()];
+		if(ExplorerProjectPaths.hasEmfResource(this, old)){
+			Resource res = ExplorerProjectPaths.getEmfResource(this, old);
+			this.getResources().remove(res);
+		}
+		
+		this.diagramFiles[model.ordinal()] = file;
 	}
 	
 	public IFile getModelFile(ModelType model){
@@ -90,44 +120,71 @@ public class PCMResourceSet extends ResourceSetImpl{
 	}
 	
 	public EObject getModelRootObject(ModelType model){
+		
+		if(getModelFile(model) == null){
+			return null;
+		}
+		
 		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
 		return res.getContents().isEmpty() ? null : res.getContents().get(0);
 	}
 	
 	public Diagram getDiagramRootObject(ModelType model){
+		
+		if(getDiagramFile(model) == null){
+			return null;
+		}
+		
 		Resource res = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 		return res.getContents().isEmpty() ? null : (Diagram)res.getContents().get(0);
 	}
 	
 	public void create(ModelType model){
 		
-		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
-		Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+		if(getModelFile(model) != null){
+			Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+			res.getContents().clear();
+			res.getContents().add(createModelRootObject(model));
+		}
+		else{
+			throw new IllegalStateException("create(): File not specified! ModelType: " + model.name());
+		}
 		
-		res.getContents().clear();
-		resD.getContents().clear();
-		
-		res.getContents().add(createModelRootObject(model));
-		resD.getContents().add(createDiagramRootObject(model));
+		if(getDiagramFile(model) != null){
+			Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+			resD.getContents().clear();
+			resD.getContents().add(createDiagramRootObject(model));
+		}
 	}
 	
 	public void createAll(){
 		for(ModelType mt : ModelType.values()){
-			create(mt);
+			if(getModelFile(mt) != null){
+				create(mt);
+			}
 		}
 	}
 	
 	public void clear(ModelType model){
-		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
-		Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+		if(getModelFile(model) != null){
+			Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+			if(res != null){res.getContents().clear();};
+		}
+		else{
+			throw new IllegalStateException("clear(): File not specified! ModelType: " + model.name());
+		}
 		
-		if(res != null){res.getContents().clear();};
-		if(resD != null){resD.getContents().clear();}
+		if(getDiagramFile(model) != null){
+			Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+			if(resD != null){resD.getContents().clear();}
+		}
 	}
 	
 	public void clearAll(){
 		for(ModelType mt : ModelType.values()){
-			clear(mt);
+			if(getModelFile(mt) != null){
+				clear(mt);
+			}
 		}
 	}
 	
@@ -152,17 +209,21 @@ public class PCMResourceSet extends ResourceSetImpl{
 		resD.getContents().add(createDiagramRootObject(model));
 	}
 	
-	public void load(ModelType model){
-		
-	}
-	
 	public void save(ModelType model){
-		Resource modelRes = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
-		Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 		
 		try{
-			modelRes.save(null);
-			diagramRes.save(null);
+			if(getModelFile(model) != null){
+				Resource modelRes = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+				modelRes.save(null);
+			}
+			else{
+				throw new IllegalStateException("save(): File not specified! ModelType: " + model.name());
+			}
+			
+			if(getDiagramFile(model) != null){
+				Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+				diagramRes.save(null);
+			}
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -171,24 +232,30 @@ public class PCMResourceSet extends ResourceSetImpl{
 	
 	public void saveAll(){
 		for(ModelType mt : ModelType.values()){
-			save(mt);
+			if(getModelFile(mt) != null){
+				save(mt);
+			}
 		}
 	}
 	
 	public void delete(ModelType model){
 		
-		IFile modelFile = getModelFile(model);
-		IFile diagramFile = getDiagramFile(model);
-				
-		Resource modelRes = ExplorerProjectPaths.getEmfResource(this, modelFile);
-		Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, diagramFile);
-		
 		try{
-			if(modelRes != null){
-				modelRes.delete(null);
+			if(getModelFile(model) != null){
+				Resource modelRes = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+				if(modelRes != null){
+					modelRes.delete(null);
+				}
 			}
-			if(diagramRes != null){
-				diagramRes.delete(null);
+			else{
+				throw new IllegalStateException("delete(): File not specified! ModelType: " + model.name());
+			}
+			
+			if(getDiagramFile(model) != null){
+				Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+				if(diagramRes != null){
+					diagramRes.delete(null);
+				}
 			}
 		}
 		catch(IOException e){
@@ -198,7 +265,9 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 	public void deleteAll(){
 		for(ModelType mt : ModelType.values()){
-			delete(mt);
+			if(getModelFile(mt) != null){
+				delete(mt);
+			}
 		}
 	}
 	
@@ -281,5 +350,54 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		return diagram;
 	}
+	
+	@Override
+	public Resource createResource(URI uri, String contentType) {
+		Resource res =  super.createResource(uri, contentType);
 
+		//TODO: Don't do this if file already set
+		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
+		ModelType mt = getModelType(file);
+		
+		if(mt == null){
+			throw new IllegalArgumentException("createResource(): Specified URI is invalid for this ResourceSet! URI: " + uri.toString());
+		}
+		
+		if(isModelDiagram(file)){
+			if(getDiagramFile(mt) == null){
+				setDiagramFile(mt, file);
+			}
+		}
+		else{
+			if(getModelFile(mt) == null){
+				setModelFile(mt, file);
+			}
+		}
+		
+		return res;
+	}
+	
+	public static ModelType getModelType(IFile file){
+		String ext = file.getFileExtension();
+		for(ModelType mt : ModelType.values()){
+			if(ext.startsWith(mt.getFileExtension())){
+				return mt;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static boolean isModelDiagram(IFile file){
+		ModelType mt = getModelType(file);
+		if(mt == null){
+			throw new IllegalArgumentException("isModelDiagram(): Specified file is invalid for this ResourceSet! URI: " 
+						+ file.getRawLocationURI().toString());
+		}
+		
+		if(file.getFileExtension().endsWith("diagram")){
+			return true;
+		}
+		return false;
+	}
 }

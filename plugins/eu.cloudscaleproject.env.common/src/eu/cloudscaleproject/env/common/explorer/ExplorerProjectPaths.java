@@ -336,6 +336,28 @@ public class ExplorerProjectPaths {
 	}
 	
 	/**
+	 * Returns true if the specified 'resSet' contains resource, where resource URI equals 'file' URI.
+	 * If the specified IFile is null, this method returns false.
+	 * 
+	 * @param resSet ResourceSet used for finding the Resource.
+	 * @param file IFile used for finding the Resource in the specified ResourceSet.
+	 * @return true if the resSet contains specified resource.
+	 */
+	public static boolean hasEmfResource(ResourceSet resSet, IFile file){
+		if(file == null){
+			return false;
+		}
+		URI uri = URI.createPlatformResourceURI(file.getFullPath()
+				.toString(), true);
+		
+		Resource res = resSet.getResource(uri, false);
+		if(res == null){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * 
 	 * Retrieves <code>Resource</code> from project. Resource is retrieved by
 	 * using file path, specified under 'fileKey' tag in project configuration
