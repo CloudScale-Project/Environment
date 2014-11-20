@@ -153,4 +153,28 @@ public class StatusManager {
 			return status;
 		}
 	}
+	
+	public IResourceStatus getResourceStatus(IProject project, String resourceID) {
+
+		synchronized (statusLock) {
+			
+			if(getServices().isEmpty()){
+				logger.warning("Notification system implementation plugin or extension point NOT FOUND!");
+				logger.warning("Returning \"dummy\" IToolStatus object for toolID: "+ resourceID); 
+				//dummy implementations - notification service should not produce null pointer exceptions! 
+				return new DummyToolStatus(); 
+			}
+			
+			IResourceStatus status = getServices().get(0).getResourceStatus(project, resourceID);
+
+			if(status == null){
+				logger.warning("Notification system for specified toolID NOT FOUND!");
+				logger.warning("Returning \"dummy\" IToolStatus object for: " + resourceID);
+				//dummy implementations - notification service should not produce null pointer exceptions!
+				return new DummyToolStatus();
+			}
+
+			return status;
+		}
+	}
 }

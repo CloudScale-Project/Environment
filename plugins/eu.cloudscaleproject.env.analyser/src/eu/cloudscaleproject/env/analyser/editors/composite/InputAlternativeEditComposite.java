@@ -24,7 +24,7 @@ public class InputAlternativeEditComposite extends Composite{
 	private final InputAlternative alternative;
 	
 	private final Text textAlloc;
-	private final Text textReconfig;
+	private final Text textUsage;
 	private Text textName;
 
 	public InputAlternativeEditComposite(IProject project, InputAlternative ia, Composite parent, int style) {
@@ -52,7 +52,7 @@ public class InputAlternativeEditComposite extends Composite{
 		
 		Label lblRepository = new Label(this, SWT.NONE);
 		lblRepository.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblRepository.setText("Allocation:");
+		lblRepository.setText("Allocation model:");
 		
 		textAlloc = new Text(this, SWT.BORDER);
 		textAlloc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -61,16 +61,16 @@ public class InputAlternativeEditComposite extends Composite{
 		Button btnAlloc = new Button(this, SWT.NONE);
 		btnAlloc.setText("Browse...");
 		
-		Label lblReconfig = new Label(this, SWT.NONE);
-		lblReconfig.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblReconfig.setText("Reconfig rules:");
+		Label lblUsage = new Label(this, SWT.NONE);
+		lblUsage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblUsage.setText("Usage model:");
 		
-		textReconfig = new Text(this, SWT.BORDER);
-		textReconfig.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textReconfig.setEditable(false);
+		textUsage = new Text(this, SWT.BORDER);
+		textUsage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textUsage.setEditable(false);
 		
-		Button btnReconfig = new Button(this, SWT.NONE);
-		btnReconfig.setText("Browse...");
+		Button btnUsage = new Button(this, SWT.NONE);
+		btnUsage.setText("Browse...");
 		
 		final IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 		final IFolder analyserInput = analyserFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
@@ -91,17 +91,17 @@ public class InputAlternativeEditComposite extends Composite{
 			}
 		});
 		
-		btnReconfig.addSelectionListener(new SelectionAdapter() {
+		btnUsage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				CustomResourceSelectionDialog dialog = new CustomResourceSelectionDialog(
-						"Reconfiguration folder", "Select reconfiguration scripts folder", IFolder.class, new String[]{""}, analyserInput);
+						"Reconfiguration folder", "Select reconfiguration scripts folder", IFile.class, new String[]{"usagemodel"}, analyserInput);
 				dialog.open();
 				
-				IFolder selection = (IFolder)dialog.getFirstResult();
+				IFile selection = (IFile)dialog.getFirstResult();
 				if(selection != null){
-					textReconfig.setText(selection.getProjectRelativePath().toString());
-		        	InputAlternativeEditComposite.this.alternative.setReconfigRules(selection);
+					textUsage.setText(selection.getProjectRelativePath().toString());
+		        	InputAlternativeEditComposite.this.alternative.setUsage(selection);
 		        	InputAlternativeEditComposite.this.alternative.save();
 				}
 			}
@@ -117,7 +117,7 @@ public class InputAlternativeEditComposite extends Composite{
 	public void update(){
 		if(!this.isDisposed()){			
 			textAlloc.setText(alternative.getAllocation() != null ? alternative.getAllocation().getProjectRelativePath().toString() : "");
-			textReconfig.setText(alternative.getReconfigRules() != null ? alternative.getReconfigRules().getProjectRelativePath().toString() : "");
+			//textReconfig.setText(alternative.getReconfigRules() != null ? alternative.getReconfigRules().getProjectRelativePath().toString() : "");
 		}
 		super.update();
 	}

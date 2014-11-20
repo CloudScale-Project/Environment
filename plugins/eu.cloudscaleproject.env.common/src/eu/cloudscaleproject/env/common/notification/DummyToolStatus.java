@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.common.notification;
 import java.util.HashSet;
 import java.util.Set;
 
-class DummyToolStatus implements IToolStatus{
+class DummyToolStatus implements IToolStatus, IResourceStatus{
 
 	@Override
 	public boolean hasMetRequirements() {return true;}
@@ -82,6 +82,16 @@ class DummyToolStatus implements IToolStatus{
 	}
 	@Override
 	public void setIsDirtyNextRecursive(boolean dirty) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Object getResource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setResource(Object o) {
 		// TODO Auto-generated method stub
 		
 	}

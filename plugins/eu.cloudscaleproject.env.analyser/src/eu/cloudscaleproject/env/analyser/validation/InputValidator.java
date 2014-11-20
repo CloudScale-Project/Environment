@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 
 import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.IResourceStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.ToolValidator;
@@ -54,13 +55,14 @@ public class InputValidator extends ToolValidator {
 		sys = validateModel(project, ia != null ? ia.getSystem() : null, "analyser_input_system");
 		all = validateModel(project, ia != null ? ia.getAllocation() : null, "analyser_input_allocation");
 		res = validateModel(project, ia != null ? ia.getResourceEnv() : null, "analyser_input_resource");
+		usa = validateModel(project, ia != null ? ia.getUsage() : null, "analyser_input_usage");
 
 		return rep && sys && all && res && usa;
 		
 	}
 	
 	public boolean validateModel(IProject project, IFile file, String reqID) throws CoreException{
-		IToolStatus resStatus = statusManager.getStatus(project, reqID);
+		IResourceStatus resStatus = statusManager.getResourceStatus(project, reqID);
 		
 		if(file == null || !file.exists()){
 			resStatus.clearWarnings();
@@ -71,11 +73,14 @@ public class InputValidator extends ToolValidator {
 			ResourceSet resSet = new ResourceSetImpl();
 			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 			Resource emfRes = resSet.getResource(uri, true);
+			
+			//
+			resStatus.setResource(file);
 			return validateModel(resStatus, emfRes);
 		}		
 	}
 	
-	public boolean validateModel(IToolStatus status, Resource resource){		
+	public boolean validateModel(IResourceStatus status, Resource resource){		
 		// validate model
 		
 		status.handleWarning(ERR_MODEL_EMPTY, resource.getContents().isEmpty(),

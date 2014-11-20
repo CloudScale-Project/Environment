@@ -44,6 +44,7 @@ public class RequirementItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPositionPropertyDescriptor(object);
+			addResourcePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -66,6 +67,28 @@ public class RequirementItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Resource feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addResourcePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Requirement_resource_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Requirement_resource_feature", "_UI_Requirement_type"),
+				 MethodPackage.Literals.REQUIREMENT__RESOURCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -109,6 +132,7 @@ public class RequirementItemProvider
 
 		switch (notification.getFeatureID(Requirement.class)) {
 			case MethodPackage.REQUIREMENT__POSITION:
+			case MethodPackage.REQUIREMENT__RESOURCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

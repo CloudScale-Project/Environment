@@ -23,8 +23,8 @@ public class ToolStatusImpl implements IToolStatus{
 	
 	private final HashSet<IToolStatusListener> listeners = new HashSet<IToolStatusListener>();
 	
-	private final IProject project;
-	private final StatusNode statusNode;
+	protected final IProject project;
+	protected final StatusNode statusNode;
 	
 	private final AdapterImpl adapter = new AdapterImpl(){
 		

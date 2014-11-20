@@ -49,6 +49,7 @@
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Requirement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Requirement/position"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Requirement/resource"/>
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Warning">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Warning/id"/>

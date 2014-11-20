@@ -3,10 +3,6 @@ package eu.cloudscaleproject.env.method.viewer.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IDoubleClickContext;
@@ -22,6 +18,7 @@ import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.eclipse.graphiti.util.IColorConstant;
 
+import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
@@ -30,21 +27,12 @@ import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
 import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
-import eu.cloudscaleproject.env.method.viewer.ToolStatusImpl;
 import eu.cloudscaleproject.env.method.viewer.diagram.features.CommandFeature;
 
 public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			
 	public ToolBehaviorProvider(IDiagramTypeProvider diagramTypeProvider) {
 		super(diagramTypeProvider);
-	}
-	
-	public IProject getProject(StatusNode statusNode){
-		URI uri = statusNode.eResource().getURI();
-		String platformString = uri.toPlatformString(true);
-		Path path = new Path(platformString);
-		
-		return ResourcesPlugin.getWorkspace().getRoot().getFile(path).getProject();
 	}
 	
 	@Override
@@ -58,16 +46,13 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			return decorators.toArray(new IDecorator[decorators.size()]);
 		}
 		
-		//retrieve chached instance in status service (workaround to obtain same object instance)
-		String id = ((StatusNode) bo).getId();
-		IProject project = getProject((StatusNode) bo);
-		
-		ToolStatusImpl status = (ToolStatusImpl)StatusServiceImpl.getProjectStatusSrvice(project).getToolStatus(id);
-		if(status == null){
+		//Retrieve chached instance in status service (workaround to obtain exactly the same object instance)
+		IToolStatus status = StatusServiceImpl.getStatus((StatusNode)bo);
+		StatusNode statusNode = StatusServiceImpl.getStatusNode((StatusNode)bo);
+		if(status == null || statusNode == null){
 			return decorators.toArray(new IDecorator[decorators.size()]);
 		}
-		StatusNode statusNode = status.getStatusNode();
-		
+				
 		//handle requirements
 		if(statusNode instanceof Requirement){
 			Requirement r = (Requirement)statusNode;

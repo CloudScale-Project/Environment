@@ -78,14 +78,16 @@ public class CapacityExperiment {
 		UsageModel usageModel = UsagemodelFactory.eINSTANCE.createUsageModel();
 		UsageScenario usageScenario = UsagemodelFactory.eINSTANCE.createUsageScenario();
 		usageModel.getUsageScenario_UsageModel().add(usageScenario);
-		Resource resUsage = ExplorerProjectPaths.createEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.usagemodel"));
+		Resource resUsage = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.usagemodel"));
+		resUsage.getContents().clear();
 		resUsage.getContents().add(usageModel);
 		resUsage.save(null);
 		
 		//create measuring point
 		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
 		measurePoint.setUsageScenario(usageScenario);
-		Resource resMp = ExplorerProjectPaths.createEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.measuringpoint"));
+		Resource resMp = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.measuringpoint"));
+		resMp.getContents().clear();
 		resMp.getContents().add(measurePoint);
 		resMp.save(null);
 		
@@ -101,7 +103,8 @@ public class CapacityExperiment {
 		ms.setTemporalRestriction(intervall);
 		pm.getMeasurementSpecification().add(ms);
 		pms.getPerformanceMeasurements().add(pm);
-		Resource resPms = ExplorerProjectPaths.createEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.pms"));
+		Resource resPms = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.pms"));
+		resPms.getContents().clear();
 		resPms.getContents().add(pms);
 		resPms.save(null);
 		

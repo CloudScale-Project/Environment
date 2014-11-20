@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.common.explorer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -226,8 +227,40 @@ public class ExplorerProjectPaths {
 	}
 	
 	/**
+	 * Returns <code>IFolder</code>, located inside specified 'folder'.
+	 * Name of the folder is retrieved from the project properties, by the specified 'folderKey'.
+	 * If the folder doesn't exist jet, empty folder is created.
+	 * 
+	 * @param folder
+	 *            Folder from where to retrieve/create child folder.
+	 * @param folderKey
+	 *            Key that identifies folder path in project configuration file
+	 * @return Generated folder
+	 */
+	public static IFolder getProjectFolder(IFolder folder, String folderKey){
+		String folederName = getProjectProperty(folder.getProject(), folderKey);
+		
+		if(!folder.exists()){
+			throw new IllegalArgumentException("getProjectFolder(): Specified folder does not exist!");
+		}
+		
+		IFolder f = folder.getFolder(folederName);
+		
+		if (!f.exists()) {
+			try {
+				f.create(true, true, new NullProgressMonitor());
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return f;
+	}
+	
+	/**
 	 * Retrieves <code>IFolder</code> located inside tool folder. Both folders must be specified as keys defined in this class.
-	 * Returned folder always has following hierarchy "projectFolder/toolFolder/folder".
+	 * Returned folder always has the following hierarchy "projectFolder/toolFolder/folder".
 	 * 
 	 * @param project Project to retrieve folder from.
 	 * @param toolFolderKey Key that represents a tool folder, located inside the project.
@@ -270,7 +303,8 @@ public class ExplorerProjectPaths {
 	
 	/**
 	 * Retrieves EMF resource from IFile, by using specified EMF resource set.
-	 * If file does not exists, null is returned.
+	 * If the resource does not exist jet, it is created.
+	 * If the specified <code>IFile</code> exist, resource is loaded before it is returned.
 	 * Returned resource is contained inside resource set. 
 	 * 
 	 * @param resSet ResourceSet used for creating EMF Resource.
@@ -278,38 +312,29 @@ public class ExplorerProjectPaths {
 	 * @return EMF Resource contained inside specified ResourceSet.
 	 */
 	public static Resource getEmfResource(ResourceSet resSet, IFile file){
-		if(file == null || !file.exists()){
-			return null;
+		if(file == null){
+			throw new NullPointerException("getEmfResource(): Specified file is null!");
 		}
-		
 		URI uri = URI.createPlatformResourceURI(file.getFullPath()
 				.toString(), true);
-		return resSet.getResource(uri, true);
-	}
-	
-	/**
-	 * Creates EMF resource from IFile, by using specified EMF resource set.
-	 * If file already exists, it is deleted and recreated. 
-	 * Returned resource is contained inside resource set. 
-	 * 
-	 * @param resSet ResourceSet used for creating EMF Resource.
-	 * @param file IFile used to retrieve URI of the desired Resource.
-	 * @return EMF Resource contained inside specified ResourceSet.
-	 */
-	public static Resource createEmfResource(ResourceSet resSet, IFile file){
+		
+		Resource res = resSet.getResource(uri, false);
+		
+		if(res == null){
+			res = resSet.createResource(uri);
+		}
+		
 		if(file.exists()){
 			try {
-				file.delete(true, null);
-			} catch (CoreException e) {
+				res.load(null);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		URI uri = URI.createPlatformResourceURI(file.getFullPath()
-				.toString(), true);
-		return resSet.createResource(uri);
+		return res;
 	}
-
+	
 	/**
 	 * 
 	 * Retrieves <code>Resource</code> from project. Resource is retrieved by

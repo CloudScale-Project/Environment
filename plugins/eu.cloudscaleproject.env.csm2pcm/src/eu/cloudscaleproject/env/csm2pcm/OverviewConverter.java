@@ -1,40 +1,19 @@
 package eu.cloudscaleproject.env.csm2pcm;
 
-import static org.eclipse.emf.compare.utils.EMFComparePredicates.fromSide;
-
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.compare.Comparison;
-import org.eclipse.emf.compare.Diff;
-import org.eclipse.emf.compare.DifferenceSource;
-import org.eclipse.emf.compare.EMFCompare;
-import org.eclipse.emf.compare.match.DefaultComparisonFactory;
-import org.eclipse.emf.compare.match.DefaultEqualityHelperFactory;
-import org.eclipse.emf.compare.match.DefaultMatchEngine;
-import org.eclipse.emf.compare.match.IComparisonFactory;
-import org.eclipse.emf.compare.match.IMatchEngine;
-import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
-import org.eclipse.emf.compare.match.impl.MatchEngineFactoryImpl;
-import org.eclipse.emf.compare.match.impl.MatchEngineFactoryRegistryImpl;
-import org.eclipse.emf.compare.merge.BatchMerger;
-import org.eclipse.emf.compare.merge.IMerger;
-import org.eclipse.emf.compare.scope.DefaultComparisonScope;
-import org.eclipse.emf.compare.scope.IComparisonScope;
-import org.eclipse.emf.compare.utils.UseIdentifiers;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -55,8 +34,6 @@ import org.scaledl.overview.converter.IOverviewConverter;
 import org.scaledl.overview.converter.IOverviewConverterCallback;
 import org.scaledl.overview.core.Entity;
 
-import com.google.common.base.Predicate;
-
 import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -67,143 +44,46 @@ public class OverviewConverter implements IOverviewConverter{
 	private static final String ENTITY_ID_PREFIX = PalladioModel.DEFAULT_MODEL_ID;
 	private static final String CSM2PCM_QVTO = "transforms/csm2pcm.qvto";
 	
-	private ExecutionContextImpl context;
-	private TransformationExecutor executor;
-	
-	//TODO: this resource sets should not be static! If they are not, the merge don't work properly!
-	//		Find workaround for this.
-	private static final ResourceSet resoultResSet = new ResourceSetImpl();
-	private static final ResourceSet oldGenResSet = new ResourceSetImpl();
-	private static final ResourceSet newGenResSet = new ResourceSetImpl();
-	
-	private final PalladioModel[] resultModels = new PalladioModel[5];
-	private final PalladioModel[] oldGenModels = new PalladioModel[5];
-	private final PalladioModel[] newGenModels = new PalladioModel[5];
+	private HashMap<IProject, PCMResourceSet> resourceSetMap = new HashMap<IProject, PCMResourceSet>();
 	
 	public OverviewConverter() {
 		// If not removed, ClassCastException...
 		EPackage.Registry.INSTANCE.remove ("http://org.somox/qimpressgast");
 	}
 	
-	private void init(){
+	@Override
+	public void transform(Resource csmResource){
 		
-		this.executor = new TransformationExecutor(URI.createURI("platform:/plugin/eu.cloudscaleproject.env.csm2pcm/"+CSM2PCM_QVTO));
-		this.executor.loadTransformation();
-
-		this.context = new ExecutionContextImpl();
+		// Initialize QVTO transformation
+		TransformationExecutor executor = new TransformationExecutor(URI.createURI("platform:/plugin/eu.cloudscaleproject.env.csm2pcm/"+CSM2PCM_QVTO));
+		executor.loadTransformation();
+		ExecutionContextImpl context = new ExecutionContextImpl();
 		// configuration properties, logger, parameters.
 		context.setConfigProperty("keepModeling", true);
 		context.setLog(new TransformationLogger());
 		context.setConfigProperty("CSMID", ENTITY_ID_PREFIX);
-		
 		context.setConfigProperty("PCM_SYSTEM_KEY", IOverviewConverter.KEY_PCM_SYSTEM);
 		context.setConfigProperty("PCM_INTERFACE_KEY", IOverviewConverter.KEY_PCM_INTERFACE);
-	}
-	
-	private Comparison compare(Notifier originObject, Notifier newObject, Notifier resultObject) {
-
-		// Configure EMF Compare
-		IEObjectMatcher matcher = DefaultMatchEngine.createDefaultEObjectMatcher(UseIdentifiers.NEVER);
-		
-		IComparisonFactory comparisonFactory = new DefaultComparisonFactory(new DefaultEqualityHelperFactory());
-		IMatchEngine.Factory matchEngineFactory = new MatchEngineFactoryImpl(matcher, comparisonFactory);
-		matchEngineFactory.setRanking(20);
-		
-		IMatchEngine.Factory.Registry matchEngineRegistry = new MatchEngineFactoryRegistryImpl();
-		matchEngineRegistry.add(matchEngineFactory);
-		
-		EMFCompare comparator = EMFCompare.builder().setMatchEngineFactoryRegistry(matchEngineRegistry).build();
-	 
-		// Compare the two models
-		IComparisonScope scope = new DefaultComparisonScope(newObject, resultObject, originObject);
-		return comparator.compare(scope);
-	}
-	
-	private void merge(Notifier originObject, Notifier newObject, Notifier resoultObject, Predicate<? super Diff> predicate){
-		
-		Comparison comparison = compare(originObject, newObject, resoultObject);
-		BatchMerger merger = null;
-		
-		if(predicate != null){
-			merger = new BatchMerger(IMerger.RegistryImpl.createStandaloneInstance(), predicate);
-		}
-		else{
-			merger = new BatchMerger(IMerger.RegistryImpl.createStandaloneInstance());
-		}
-		
-		merger.copyAllLeftToRight(comparison.getDifferences(), null);
-	}
-	
-	@Override
-	public void transform(Resource csmResource){
-		
-		init();
 		
 		IProject project = ExplorerProjectPaths.getProjectFromEmfResource(csmResource);
-		IFolder genFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
 		
-		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-		IFolder analyserInput = analyserFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
-		
-		String analyserGenPath = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
-		IFolder analyserGen = analyserInput.getFolder(analyserGenPath);
-		if(!analyserGen.exists()){
-			try {
-				analyserGen.create(true, true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		PCMResourceSet resSet = resourceSetMap.get(project);
+		if(resSet == null){
+			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
+			IFolder analyserInput = ExplorerProjectPaths.getProjectFolder(analyserFolder, ExplorerProjectPaths.KEY_FOLDER_INPUT);
+			IFolder analyserGen = ExplorerProjectPaths.getProjectFolder(analyserInput, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
+			
+			resSet = new PCMResourceSet(analyserGen);
+			resSet.createAll();
+			
+			resourceSetMap.put(project, resSet);
+			
 		}
 				
-		URI analyserGenFolderUri = URI.createPlatformResourceURI(analyserGen.getFullPath().toString(), true);
-		URI genFolderUri = URI.createPlatformResourceURI(genFolder.getFullPath().toString(), true);
-		
-		URI outDiagramPrefix = analyserGenFolderUri;
-		URI outModelPrefix = analyserGenFolderUri.appendSegment("models");
-		
-		URI outModelGenPrefix = genFolderUri.appendSegment("gen");
-		URI outModelTmpGenPrefix = genFolderUri.appendSegment("gen").appendSegment("tmp");
-		
-		this.oldGenModels[PalladioUtil.ModelID.REPOSITORY.ordinal()] = 
-				new PalladioModel(oldGenResSet, outModelGenPrefix, null, PalladioUtil.ModelID.REPOSITORY);
-		this.oldGenModels[PalladioUtil.ModelID.SYSTEM.ordinal()] = 
-				new PalladioModel(oldGenResSet, outModelGenPrefix, null, PalladioUtil.ModelID.SYSTEM);
-		this.oldGenModels[PalladioUtil.ModelID.RESOURCE.ordinal()] = 
-				new PalladioModel(oldGenResSet, outModelGenPrefix, null, PalladioUtil.ModelID.RESOURCE);
-		this.oldGenModels[PalladioUtil.ModelID.ALLOCATION.ordinal()] = 
-				new PalladioModel(oldGenResSet, outModelGenPrefix, null, PalladioUtil.ModelID.ALLOCATION);
-		this.oldGenModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
-				new PalladioModel(oldGenResSet, outModelGenPrefix, null, PalladioUtil.ModelID.USAGE);
-		
-		this.newGenModels[PalladioUtil.ModelID.REPOSITORY.ordinal()] = 
-				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.REPOSITORY);
-		this.newGenModels[PalladioUtil.ModelID.SYSTEM.ordinal()] = 
-				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.SYSTEM);
-		this.newGenModels[PalladioUtil.ModelID.RESOURCE.ordinal()] = 
-				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.RESOURCE);
-		this.newGenModels[PalladioUtil.ModelID.ALLOCATION.ordinal()] = 
-				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.ALLOCATION);
-		this.newGenModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
-				new PalladioModel(newGenResSet, outModelTmpGenPrefix, null, PalladioUtil.ModelID.USAGE);
-		
-		this.resultModels[PalladioUtil.ModelID.REPOSITORY.ordinal()] = 
-				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.REPOSITORY);
-		this.resultModels[PalladioUtil.ModelID.SYSTEM.ordinal()] = 
-				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.SYSTEM);
-		this.resultModels[PalladioUtil.ModelID.RESOURCE.ordinal()] = 
-				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.RESOURCE);
-		this.resultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()] = 
-				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.ALLOCATION);
-		this.resultModels[PalladioUtil.ModelID.USAGE.ordinal()] = 
-				new PalladioModel(resoultResSet, outModelPrefix, outDiagramPrefix, PalladioUtil.ModelID.USAGE);
-		
 		// define the transformation input
 		EList<EObject> inObjectsCsm = csmResource.getContents();
-		
 		EcoreUtil.resolveAll(inObjectsCsm.get(0));
 		
-		ResourceSet resSet = new ResourceSetImpl();
 		URI inResTypeUri = URI.createURI("pathmap://PCM_MODELS/Palladio.resourcetype");
 		Resource resTypesResource = resSet.getResource(inResTypeUri, true);
 		EList<EObject> inObjectsResTypes = resTypesResource.getContents();
@@ -237,135 +117,31 @@ public class OverviewConverter implements IOverviewConverter{
 			
 			OverviewPackage.eINSTANCE.eClass();
 			
-			EcoreUtil.resolveAll(resoultResSet);
-			EcoreUtil.resolveAll(oldGenResSet);
+			resSet.clearAll();
+						
+			resSet.setRootObject(PCMResourceSet.ModelType.RESOURCE, 
+					outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0));
+			resSet.setRootObject(PCMResourceSet.ModelType.REPOSITORY, 
+					outputRepository.getContents().isEmpty() ? null : outputRepository.getContents().get(0));
+			resSet.setRootObject(PCMResourceSet.ModelType.SYSTEM, 
+					outputSystem.getContents().isEmpty() ? null : outputSystem.getContents().get(0));
+			resSet.setRootObject(PCMResourceSet.ModelType.ALLOCATION, 
+					outputAllocation.getContents().isEmpty() ? null : outputAllocation.getContents().get(0));
+			resSet.setRootObject(PCMResourceSet.ModelType.USAGE, 
+					outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0));
 			
-			// the output objects got captured in the output extent
-			final EObject[] newObjects = new EObject[5];
-			
-			newObjects[PalladioUtil.ModelID.RESOURCE.ordinal()]   = outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0);
-			newObjects[PalladioUtil.ModelID.REPOSITORY.ordinal()] = outputRepository.getContents().isEmpty() ? null : outputRepository.getContents().get(0);
-			newObjects[PalladioUtil.ModelID.SYSTEM.ordinal()]     = outputSystem.getContents().isEmpty() ? null : outputSystem.getContents().get(0);
-			newObjects[PalladioUtil.ModelID.ALLOCATION.ordinal()] = outputAllocation.getContents().isEmpty() ? null : outputAllocation.getContents().get(0);
-			newObjects[PalladioUtil.ModelID.USAGE.ordinal()]      = outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0);
-			
-			//set transformed model to newGenModel
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				PalladioModel newGenModel = this.newGenModels[i];
-				newGenModel.setModel(newObjects[i]);
-			}
-			
-			//save new gen model and load existing
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				PalladioModel newGenModel = this.newGenModels[i];
-				newGenModel.saveModelResource();
-				
-				this.oldGenModels[i].loadModelResource();
-				this.resultModels[i].loadModelResource();
-			}
-			
-			//set track modifications false
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				PalladioModel model = this.resultModels[i];
-				model.getResourceDiagram().setTrackingModification(false);
-			}
-			
-			//merge
-			merge(oldGenResSet, newGenResSet, resoultResSet, fromSide(DifferenceSource.LEFT));
-			
-			//clean up
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				final PalladioModel model = this.resultModels[i];
-				model.unloadDiagramResource();
-				model.saveModelResource();
-
-				model.getResourceDiagram().setTrackingModification(true);
-				
-				model.loadDiagramResource();
-				model.saveDiagramResource();
-				model.getResourceDiagram().setModified(false);
-				model.getResourceDiagram().setTimeStamp(System.currentTimeMillis());
-			}
-			
-			//set unmerged model
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				final PalladioModel model = this.oldGenModels[i];
-				model.setModel(newObjects[i]);
-			}
-			//save unmerged model
-			for(int i=0; i<5; i++){
-				
-				if(newObjects[i] == null){continue;}
-				
-				final PalladioModel model = this.oldGenModels[i];
-				model.saveModelResource();
-			}
+			resSet.saveAll();
 			
 			//create or set analyser generated input alternative
 			InputAlternative ia = ResourceUtils.getGeneratedResourceInput(project);
-			ia.setAllocation(ExplorerProjectPaths.getFileFromEmfResource(this.resultModels[PalladioUtil.ModelID.ALLOCATION.ordinal()].getResource()));
-			//ia.setUsage(ExplorerProjectPaths.getFileFromEmfResource(this.resoultModels[PalladioUtil.ModelID.USAGE.ordinal()].getResource()));
+			ia.setAllocation(resSet.getModelFile(PCMResourceSet.ModelType.ALLOCATION));
+			ia.setUsage(resSet.getModelFile(PCMResourceSet.ModelType.USAGE));
 			ia.save();
 		} 
-		
-		/*new Job ("tt")
-		{@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			// TODO Auto-generated method stub
-
-			currentModels[0].getResourceDiagram().setTrackingModification(false);
-			CreateShortcutAction.execute(currentModels[0].getDiagram());
-			currentModels[0].getResourceDiagram().setTrackingModification(true);
-			return Status.OK_STATUS;
-		
-		}}.schedule(5000);*/
 
 		IStatus status = BasicDiagnostic.toIStatus(result);
 		Activator.getDefault().getLog().log(status);
 	}
-	
-	/*
-	private URI getGeneratedFolder(Resource csmResource) {
-		try
-		{
-			// Find project, load project.proerties and get generated models folder location
-			String ps = csmResource.getURI().toPlatformString(true);
-			IResource rcpResource = ResourcesPlugin.getWorkspace().getRoot().findMember(ps);
-			
-			IProject project = rcpResource.getProject();
-			IFile file = project.getFile("project.cse");
-			Properties p = new Properties();
-			p.load(file.getContents(true));
-			String genFolderName = p.getProperty("generated-folder");
-			IFolder folder = project.getFolder(genFolderName);
-			if (!folder.exists())
-				folder.create(true, true, new NullProgressMonitor());
-			
-			return URI.createPlatformResourceURI(folder.getFullPath().toString(), true);
-		}
-		catch (Exception e)
-		{
-			System.out.println("Exception durring finding generated models folder: "+e.getMessage());
-		}
-		
-		return null;
-	}
-	*/
 
 	@Override
 	public boolean canTransform(Resource resource){
@@ -386,39 +162,6 @@ public class OverviewConverter implements IOverviewConverter{
 		if(!(entity instanceof SoftwareService)){
 			throw new UnsupportedOperationException("Model import not supported for this object type");
 		}
-		
-		//set new ID's for imported models.
-		/*
-		for (EObject obj : external) {
-			
-			try {
-				Resource r = obj.eResource();
-				r.unload();
-				r.load(null);
-			} catch (IOException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			
-			System.out.println(obj.toString());
-			TreeIterator<EObject> iter = EcoreUtil.getAllProperContents(obj, true); 
-			while(iter.hasNext()){
-				EObject current = iter.next();
-				if(current instanceof de.uka.ipd.sdq.pcm.core.entity.Entity){
-					de.uka.ipd.sdq.pcm.core.entity.Entity e = (de.uka.ipd.sdq.pcm.core.entity.Entity)current;
-					e.setId(ENTITY_ID_PREFIX + e.getId());
-					System.out.println(e.getEntityName());
-				}
-			}
-		
-			try {
-				obj.eResource().save(null);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		*/
 		
 		// Create diagrams
 		new Job("Imported models : Create diagrams") {

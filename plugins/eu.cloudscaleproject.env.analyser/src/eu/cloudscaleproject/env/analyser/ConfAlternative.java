@@ -375,7 +375,7 @@ public class ConfAlternative extends PropertyChangeSupport implements IEditorInp
 	
 	private Resource createEmfResource(String extension){
 		IFile f = folder.getFile(project.getName()+"." + extension);
-		return ExplorerProjectPaths.createEmfResource(resSet, f);
+		return ExplorerProjectPaths.getEmfResource(resSet, f);
 	}
 
 	@Override

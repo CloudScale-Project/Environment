@@ -18,6 +18,7 @@ import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
+import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 
 public class ProjectStatusService {
@@ -28,7 +29,8 @@ public class ProjectStatusService {
 	private DiagramEditor editor;
 	private final Object editorLock = new Object();
 
-	private HashMap<String, ToolStatusImpl> statusMap = new HashMap<String, ToolStatusImpl>();
+	private HashMap<String, ToolStatusImpl> toolStatusMap = new HashMap<String, ToolStatusImpl>();
+	private HashMap<String, ResourceStatusImpl> resoStatusMap = new HashMap<String, ResourceStatusImpl>();
 
 	public ProjectStatusService(IProject project) {
 		
@@ -62,8 +64,16 @@ public class ProjectStatusService {
 			if (o instanceof StatusNode) {
 				StatusNode s = (StatusNode) o;
 				
-				ToolStatusImpl status = new ToolStatusImpl(project, s);
-				statusMap.put(s.getId(), status);
+				ToolStatusImpl status = null;
+				
+				if(s instanceof Requirement){
+					status = new ResourceStatusImpl(project, s);
+					resoStatusMap.put(s.getId(), (ResourceStatusImpl)status);
+				}
+				else{
+					status = new ToolStatusImpl(project, s);
+					toolStatusMap.put(s.getId(), status);
+				}
 				
 				status.addListener(new IToolStatusListener() {
 					@Override
@@ -88,12 +98,19 @@ public class ProjectStatusService {
 		}
 	}
 
-	public IToolStatus getToolStatus(String tool) {
-		return statusMap.get(tool);
+	public ToolStatusImpl getToolStatus(String toolID) {
+		return toolStatusMap.get(toolID);
+	}
+	
+	public ResourceStatusImpl getResourceStatus(String resID) {
+		return resoStatusMap.get(resID);
 	}
 	
 	public void dispose(){
-		for(ToolStatusImpl status : statusMap.values()){
+		for(ToolStatusImpl status : toolStatusMap.values()){
+			status.dispose();
+		}
+		for(ToolStatusImpl status : resoStatusMap.values()){
 			status.dispose();
 		}
 	}

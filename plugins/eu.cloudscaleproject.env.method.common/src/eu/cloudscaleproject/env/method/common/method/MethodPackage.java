@@ -1100,13 +1100,22 @@ public interface MethodPackage extends EPackage {
 	int REQUIREMENT__POSITION = STATUS_NODE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIREMENT__RESOURCE = STATUS_NODE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Requirement</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REQUIREMENT_FEATURE_COUNT = STATUS_NODE_FEATURE_COUNT + 1;
+	int REQUIREMENT_FEATURE_COUNT = STATUS_NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Requirement</em>' class.
@@ -1719,6 +1728,17 @@ public interface MethodPackage extends EPackage {
 	EAttribute getRequirement_Position();
 
 	/**
+	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Requirement#getResource <em>Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Resource</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.Requirement#getResource()
+	 * @see #getRequirement()
+	 * @generated
+	 */
+	EAttribute getRequirement_Resource();
+
+	/**
 	 * Returns the meta object for class '{@link eu.cloudscaleproject.env.method.common.method.Warning <em>Warning</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2127,6 +2147,14 @@ public interface MethodPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REQUIREMENT__POSITION = eINSTANCE.getRequirement_Position();
+
+		/**
+		 * The meta object literal for the '<em><b>Resource</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REQUIREMENT__RESOURCE = eINSTANCE.getRequirement_Resource();
 
 		/**
 		 * The meta object literal for the '{@link eu.cloudscaleproject.env.method.common.method.impl.WarningImpl <em>Warning</em>}' class.

@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.analyser;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -27,12 +26,11 @@ public class InputAlternative extends EditorInputFile{
 	public static final String KEY_SYSTEM = "system";
 	public static final String KEY_RESOURCES = "resources";
 	public static final String KEY_ALLOCATION = "allocation";
-	public static final String KEY_RECONFRULES = "reconfigroules";
+	public static final String KEY_USAGE = "usage";
 	
 	public InputAlternative(IProject project, IFile file){
 		super(project, file);
 	}
-	
 	
 	public String getProjectPath(){
 		return file.getProjectRelativePath().toString();
@@ -70,12 +68,12 @@ public class InputAlternative extends EditorInputFile{
 		return project.getFile(new Path(prop));
 	}
 
-	public IFolder getReconfigRules() {
-		String prop = source.getProperty(KEY_RECONFRULES);
+	public IFile getUsage() {
+		String prop = source.getProperty(KEY_USAGE);
 		if(prop == null){
 			return null;
 		}
-		return project.getFolder(new Path(prop));
+		return project.getFile(new Path(prop));
 	}
 	
 	public void setRepository(IFile repository) {
@@ -94,6 +92,12 @@ public class InputAlternative extends EditorInputFile{
 		IFile old = getResourceEnv();
 		source.setProperty(KEY_RESOURCES, resourceEnv.getProjectRelativePath().toString());
 		firePropertyChange(KEY_RESOURCES, old, resourceEnv);
+	}
+	
+	public void setUsage(IFile usage) {
+		IFile old = getResourceEnv();
+		source.setProperty(KEY_USAGE, usage.getProjectRelativePath().toString());
+		firePropertyChange(KEY_USAGE, old, usage);
 	}
 	
 	/**
@@ -118,6 +122,7 @@ public class InputAlternative extends EditorInputFile{
 		Resource res = ExplorerProjectPaths.getEmfResource(resSet, alloc);
 		
 		EObject eo = res.getContents().get(0);
+		
 		if(eo instanceof Allocation){
 			Allocation allocModel = (Allocation)eo;
 			
@@ -136,11 +141,5 @@ public class InputAlternative extends EditorInputFile{
 				}
 			}
 		}
-	}
-	
-	public void setReconfigRules(IFolder reconfigRules) {
-		IFolder old = getReconfigRules();
-		source.setProperty(KEY_RECONFRULES, reconfigRules.getProjectRelativePath().toString());
-		firePropertyChange(KEY_RECONFRULES, old, reconfigRules);
 	}
 }

@@ -467,6 +467,15 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRequirement_Resource() {
+		return (EAttribute)requirementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getWarning() {
 		return warningEClass;
 	}
@@ -620,6 +629,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		requirementEClass = createEClass(REQUIREMENT);
 		createEAttribute(requirementEClass, REQUIREMENT__POSITION);
+		createEAttribute(requirementEClass, REQUIREMENT__RESOURCE);
 
 		warningEClass = createEClass(WARNING);
 		createEAttribute(warningEClass, WARNING__ID);
@@ -713,6 +723,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRequirement_Position(), ecorePackage.getEInt(), "position", "0", 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRequirement_Resource(), ecorePackage.getEJavaObject(), "resource", null, 0, 1, Requirement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(warningEClass, Warning.class, "Warning", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWarning_Id(), ecorePackage.getEString(), "id", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

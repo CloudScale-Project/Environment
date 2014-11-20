@@ -458,8 +458,8 @@ public class ResultComposite2 extends Composite{
 
 		popupShell.setLayout(new FillLayout());
 		popupShell.setImage(Activator.getImage(SpotterProjectParent.IMAGE_PATH));
-		String confAlternativeName = resultAlternative.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
-		popupShell.setText(String.format(DLG_RESOURCE_TITLE, resourceIdentifier, confAlternativeName));
+		String resultAlternativeName = resultAlternative.getName();
+		popupShell.setText(String.format(DLG_RESOURCE_TITLE, resourceIdentifier, resultAlternativeName));
 		popupShell.pack();
 
 		Rectangle shellRect = popupShell.getBounds();
@@ -659,8 +659,8 @@ public class ResultComposite2 extends Composite{
 		if (resultsContainer != null) {
 			XPerformanceProblem root = resultsContainer.getRootProblem();
 			if (root != null) {
-				String projectName = resultAlternative.getProject().getName();
-				input = HierarchyEditor.createPerformanceProblemHierarchy(projectName, extensionItemFactory, root);
+				String clientName = resultAlternative.getProperty(ResourceUtils.KEY_CLIENT_NAME);
+				input = HierarchyEditor.createPerformanceProblemHierarchy(clientName, extensionItemFactory, root);
 			}
 		}
 

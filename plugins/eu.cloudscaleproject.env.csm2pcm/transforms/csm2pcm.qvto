@@ -655,12 +655,22 @@ mapping OVERVIEW::Overview::csm2usage() : USAGE::UsageModel @ pcmUsageInstance{
 				entityName := 'Default entry level system call';
 			};
 			
-			var opInterface : Set(OVERVIEW::application::OperationInterface) := collectProvidedOpInterfaces(self.architecture.externalConnections);
+			var opInterface : Set(OVERVIEW::application::OperationInterface) := collectProvidedOpInterfaces(self.architecture.usageConnections);
+			
+			//count all operations
+			var operation_count := 0.0;
+			opInterface->forEach(interface){
+				interface.operations->forEach(operation){
+					operation_count := operation_count + 1.0;
+				};
+			};
 			
 			branch.branchTransitions_Branch := Sequence{};
 			opInterface->forEach(interface){
 				interface.operations->forEach(operation){
-					branch.branchTransitions_Branch += operation.map operation2branchTransition(interface, branch);
+					var bt := operation.map operation2branchTransition(interface, 1.0/operation_count);
+					bt.branch_BranchTransition := branch;
+					branch.branchTransitions_Branch += bt;
 				};
 			};
 			
@@ -676,10 +686,8 @@ mapping OVERVIEW::Overview::csm2usage() : USAGE::UsageModel @ pcmUsageInstance{
 	};
 }
 
-mapping OVERVIEW::application::Operation::operation2branchTransition(in interface : OVERVIEW::application::OperationInterface, in branch : USAGE::Branch) : USAGE::BranchTransition{
-	branchProbability := 50;
-	branch_BranchTransition := branch;
-	
+mapping OVERVIEW::application::Operation::operation2branchTransition(in interface : OVERVIEW::application::OperationInterface, in prob : Real) : USAGE::BranchTransition{
+	branchProbability := prob;
 	branchedBehaviour_BranchTransition := object ScenarioBehaviour{
 		var start := object pcm::usagemodel::Start{
 			id := CSMID + self.id + 'start' +'_opInterface2branchTransition';
