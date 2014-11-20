@@ -80,7 +80,7 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 					return new InputComposite(project, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new RunComposite(project, parent, SWT.NONE);
+					return new ConfigComposite(project, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
 					return new ResultsComposite(project, parent, SWT.NONE);

@@ -18,7 +18,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class RunComposite extends SidebarEditorComposite{
+public class ConfigComposite extends SidebarEditorComposite{
 	
 	private static final String SECTION_DEFAULT = "Default measurements:";
 	private static final String SECTION_ALT = "Alternative conf:";
@@ -26,7 +26,7 @@ public class RunComposite extends SidebarEditorComposite{
 	private final IProject project;
 	
 			
-	public RunComposite(IProject project, Composite parent, int style) {
+	public ConfigComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		this.project = project;
 		
@@ -48,7 +48,7 @@ public class RunComposite extends SidebarEditorComposite{
 			
 			@Override
 			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
-				return new RightPanelComposite(RunComposite.this.project, (ConfAlternative)resource, parent, SWT.NONE);
+				return new RightPanelComposite(ConfigComposite.this.project, (ConfAlternative)resource, parent, SWT.NONE);
 			}
 		});
 	}
