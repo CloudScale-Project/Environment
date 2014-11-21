@@ -35,13 +35,19 @@ public class CustomDiagramEditor extends DiagramEditor{
 		super.dispose();
 	}
 	
+	@Override
+	public String getPartName() {
+		IProject p = ExplorerProjectPaths.getProject(this);
+		return "Workflow ("+p.getName()+")";
+	}
+	
 	public void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
-		
+
 		//register editor
 		IProject p = ExplorerProjectPaths.getProject(this);
 		StatusServiceImpl.getProjectStatusSrvice(p).registerDiagramEditor(this);
-		
+				
 		//set zoom
 		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);
 		zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_NEVER);

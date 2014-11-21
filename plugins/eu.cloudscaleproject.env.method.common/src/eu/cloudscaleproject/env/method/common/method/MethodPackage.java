@@ -530,13 +530,22 @@ public interface MethodPackage extends EPackage {
 	int STATUS_NODE__COMMAND_PARAM = NODE__COMMAND_PARAM;
 
 	/**
+	 * The feature id for the '<em><b>Instance Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATUS_NODE__INSTANCE_NAME = NODE_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Done</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATUS_NODE__DONE = NODE_FEATURE_COUNT + 0;
+	int STATUS_NODE__DONE = NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Dirty</b></em>' attribute.
@@ -545,7 +554,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATUS_NODE__DIRTY = NODE_FEATURE_COUNT + 1;
+	int STATUS_NODE__DIRTY = NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Warnings</b></em>' containment reference list.
@@ -554,7 +563,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATUS_NODE__WARNINGS = NODE_FEATURE_COUNT + 2;
+	int STATUS_NODE__WARNINGS = NODE_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Status Node</em>' class.
@@ -563,7 +572,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STATUS_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 3;
+	int STATUS_NODE_FEATURE_COUNT = NODE_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Status Node</em>' class.
@@ -682,6 +691,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTION__COMMAND_PARAM = STATUS_NODE__COMMAND_PARAM;
+
+	/**
+	 * The feature id for the '<em><b>Instance Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION__INSTANCE_NAME = STATUS_NODE__INSTANCE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Done</b></em>' attribute.
@@ -854,6 +872,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int SECTION__COMMAND_PARAM = STATUS_NODE__COMMAND_PARAM;
+
+	/**
+	 * The feature id for the '<em><b>Instance Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SECTION__INSTANCE_NAME = STATUS_NODE__INSTANCE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Done</b></em>' attribute.
@@ -1062,6 +1089,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int REQUIREMENT__COMMAND_PARAM = STATUS_NODE__COMMAND_PARAM;
+
+	/**
+	 * The feature id for the '<em><b>Instance Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIREMENT__INSTANCE_NAME = STATUS_NODE__INSTANCE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Done</b></em>' attribute.
@@ -1610,6 +1646,17 @@ public interface MethodPackage extends EPackage {
 	EClass getStatusNode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.StatusNode#getInstanceName <em>Instance Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Instance Name</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.StatusNode#getInstanceName()
+	 * @see #getStatusNode()
+	 * @generated
+	 */
+	EAttribute getStatusNode_InstanceName();
+
+	/**
 	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.StatusNode#isDone <em>Done</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2053,6 +2100,14 @@ public interface MethodPackage extends EPackage {
 		 * @generated
 		 */
 		EClass STATUS_NODE = eINSTANCE.getStatusNode();
+
+		/**
+		 * The meta object literal for the '<em><b>Instance Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATUS_NODE__INSTANCE_NAME = eINSTANCE.getStatusNode_InstanceName();
 
 		/**
 		 * The meta object literal for the '<em><b>Done</b></em>' attribute feature.

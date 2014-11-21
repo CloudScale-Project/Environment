@@ -10,6 +10,7 @@ public interface IToolStatus{
 	public boolean isDirty();
 	public boolean isDone();
 	
+	public void setInstanceName(String name);
 	public void setMetRequirements(boolean metRequ);
 	public void setIsDirtyNextRecursive(boolean dirty);
 	public void setIsDirty(boolean dirty);

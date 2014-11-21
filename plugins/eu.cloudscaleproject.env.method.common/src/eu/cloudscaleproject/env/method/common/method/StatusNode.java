@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.StatusNode#getInstanceName <em>Instance Name</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.StatusNode#isDone <em>Done</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.StatusNode#isDirty <em>Dirty</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.StatusNode#getWarnings <em>Warnings</em>}</li>
@@ -23,6 +24,32 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface StatusNode extends Node {
+	/**
+	 * Returns the value of the '<em><b>Instance Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Instance Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Instance Name</em>' attribute.
+	 * @see #setInstanceName(String)
+	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getStatusNode_InstanceName()
+	 * @model transient="true"
+	 * @generated
+	 */
+	String getInstanceName();
+
+	/**
+	 * Sets the value of the '{@link eu.cloudscaleproject.env.method.common.method.StatusNode#getInstanceName <em>Instance Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Instance Name</em>' attribute.
+	 * @see #getInstanceName()
+	 * @generated
+	 */
+	void setInstanceName(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Done</b></em>' attribute.
 	 * The default value is <code>"false"</code>.

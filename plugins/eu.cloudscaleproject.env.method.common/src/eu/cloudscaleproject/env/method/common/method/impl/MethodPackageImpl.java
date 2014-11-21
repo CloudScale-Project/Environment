@@ -368,7 +368,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getStatusNode_Done() {
+	public EAttribute getStatusNode_InstanceName() {
 		return (EAttribute)statusNodeEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -377,7 +377,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getStatusNode_Dirty() {
+	public EAttribute getStatusNode_Done() {
 		return (EAttribute)statusNodeEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -386,8 +386,17 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getStatusNode_Dirty() {
+		return (EAttribute)statusNodeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getStatusNode_Warnings() {
-		return (EReference)statusNodeEClass.getEStructuralFeatures().get(2);
+		return (EReference)statusNodeEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -615,6 +624,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		createEReference(containerEClass, CONTAINER__COMMANDS);
 
 		statusNodeEClass = createEClass(STATUS_NODE);
+		createEAttribute(statusNodeEClass, STATUS_NODE__INSTANCE_NAME);
 		createEAttribute(statusNodeEClass, STATUS_NODE__DONE);
 		createEAttribute(statusNodeEClass, STATUS_NODE__DIRTY);
 		createEReference(statusNodeEClass, STATUS_NODE__WARNINGS);
@@ -709,6 +719,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 		initEReference(getContainer_Commands(), this.getCommand(), null, "commands", null, 0, -1, eu.cloudscaleproject.env.method.common.method.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(statusNodeEClass, StatusNode.class, "StatusNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStatusNode_InstanceName(), ecorePackage.getEString(), "instanceName", null, 0, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStatusNode_Done(), ecorePackage.getEBoolean(), "done", "false", 1, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStatusNode_Dirty(), ecorePackage.getEBoolean(), "dirty", "false", 1, 1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getStatusNode_Warnings(), this.getWarning(), null, "warnings", null, 0, -1, StatusNode.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

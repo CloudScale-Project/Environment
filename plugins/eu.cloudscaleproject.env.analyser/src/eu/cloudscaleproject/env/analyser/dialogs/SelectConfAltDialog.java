@@ -31,9 +31,9 @@ public class SelectConfAltDialog extends Dialog{
 	private final IProject project;
 	
 	private List list = null;
-	private final java.util.List<ConfAlternative> alternatives;
+	private final ConfAlternative[] alternatives;
 
-	public SelectConfAltDialog(IProject project, Shell parentShell, java.util.List<ConfAlternative> alternatives) {
+	public SelectConfAltDialog(IProject project, Shell parentShell, ConfAlternative[] alternatives) {
 		super(parentShell);
 		this.project = project;
 		this.confResourceProvider = ResourceRegistry.getInstance().
@@ -63,7 +63,7 @@ public class SelectConfAltDialog extends Dialog{
 			int selectionIndex = list.getSelectionIndex();
 			if(selectionIndex >= 0){
 				
-				IEditorInputResource selectedResource = confResourceProvider.getResources().get(selectionIndex);
+				IEditorInputResource selectedResource = alternatives[selectionIndex];
 				confResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
 				
 				Display.getDefault().asyncExec(new Runnable() {

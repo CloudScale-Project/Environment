@@ -95,4 +95,9 @@ class DummyToolStatus implements IToolStatus, IResourceStatus{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void setInstanceName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
 }

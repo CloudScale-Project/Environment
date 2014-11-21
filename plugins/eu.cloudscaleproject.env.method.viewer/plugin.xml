@@ -63,6 +63,7 @@
             default="true"
             extensions="workflow"
             id="eu.cloudscaleproject.env.method.viewer.diagram.CustomDiagramEditor"
+            matchingStrategy="org.eclipse.graphiti.ui.editor.DiagramEditorMatchingStrategy"
             name="Workflow viewer">
       </editor>
    </extension>

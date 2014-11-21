@@ -171,7 +171,7 @@
     <children xsi:type="pi:ContainerShape" visible="true" active="true">
       <properties key="node" value="node"/>
       <properties key="container" value="container"/>
-      <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.1" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="331" height="408" x="810" y="73" cornerHeight="15" cornerWidth="15"/>
+      <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.1" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="331" height="548" x="810" y="73" cornerHeight="15" cornerWidth="15"/>
       <link businessObjects="_Yqbi4C61EeSADewJHO2y3w"/>
       <children visible="true">
         <properties key="node_name" value="node_name"/>
@@ -180,51 +180,51 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="181" height="181" x="20" y="37" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="181" x="30" y="37" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="analyser_input"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.4" incomingConnections="/0/@connections.0 /0/@connections.3 /0/@connections.12"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="176" height="20" x="5" y="5" value="PCM input"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="PCM input"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_input_repository"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Repository"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Repository"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_input_system"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="System"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="System"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="97" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="97" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_input_allocation"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Allocation"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Allocation"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="119" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="119" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_input_resource"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Resource environment"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Resource environment"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
@@ -240,23 +240,23 @@
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="141" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="141" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_input_usage"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Usage"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Usage"/>
           </children>
         </children>
       </children>
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="181" height="141" x="20" y="247" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="141" x="30" y="257" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="analyser_tool"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.5" incomingConnections="/0/@connections.4 /0/@connections.18"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="176" height="20" x="5" y="5" value="Analyser"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="Analyser"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
@@ -291,43 +291,43 @@
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_conf_measuringpoints"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Measuring points"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Measuring points"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_conf_pms"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Measurement spec."/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Measurement spec."/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="171" height="20" x="5" y="97" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="20" x="5" y="97" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="analyser_conf_slo"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="171" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Service Level Objectives"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="241" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Service Level Objectives"/>
           </children>
         </children>
       </children>
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="91" height="66" x="220" y="287" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="66" x="30" y="447" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="analyser_res"/>
         <anchors xsi:type="pi:ChopboxAnchor" incomingConnections="/0/@connections.5"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="86" height="20" x="5" y="5" value="Results"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="Results"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
@@ -354,7 +354,7 @@
     <children xsi:type="pi:ContainerShape" visible="true" active="true">
       <properties key="node" value="node"/>
       <properties key="container" value="container"/>
-      <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.1" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="601" height="181" x="60" y="360" cornerHeight="15" cornerWidth="15"/>
+      <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.1" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="601" height="261" x="60" y="360" cornerHeight="15" cornerWidth="15"/>
       <link businessObjects="_Zcc1sC61EeSADewJHO2y3w"/>
       <children visible="true">
         <properties key="node_name" value="node_name"/>
@@ -363,45 +363,45 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="151" height="51" x="20" y="40" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="40" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="static_spotter_input"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.8" incomingConnections="/0/@connections.14"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="146" height="20" x="5" y="5" value="Static spotter input"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="Static spotter input"/>
         </children>
       </children>
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="101" height="51" x="20" y="110" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="110" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="static_spotter_tool"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.9" incomingConnections="/0/@connections.8"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="96" height="20" x="5" y="5" value="Static spotter"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="Static spotter"/>
         </children>
       </children>
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="51" x="160" y="110" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="180" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="static_spotter_res"/>
         <anchors xsi:type="pi:ChopboxAnchor" incomingConnections="/0/@connections.9"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="106" height="20" x="5" y="5" value="Results"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="246" height="20" x="5" y="5" value="Results"/>
         </children>
       </children>
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="141" height="51" x="330" y="40" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="40" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="dynamic_spotter_input"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.10"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="136" height="20" x="5" y="5" value="Dynamic spotter input"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="236" height="20" x="5" y="5" value="Dynamic spotter input"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
@@ -417,12 +417,12 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="101" height="51" x="330" y="110" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="110" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="dynamic_spotter_tool"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.11" incomingConnections="/0/@connections.10"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="96" height="20" x="5" y="5" value="Dynamic spotter"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="236" height="20" x="5" y="5" value="Dynamic spotter"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
@@ -448,12 +448,12 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="51" x="460" y="110" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="180" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="dynamic_spotter_res"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.13" incomingConnections="/0/@connections.11"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="106" height="20" x="5" y="5" value="Results"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="236" height="20" x="5" y="5" value="Results"/>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
@@ -563,7 +563,7 @@
           <points x="-10" y="-8"/>
         </graphicsAlgorithm>
       </connectionDecorators>
-      <bendpoints x="919" y="57"/>
+      <bendpoints x="964" y="57"/>
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.7/@anchors.0" end="/0/@children.1/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
@@ -664,7 +664,6 @@
           <points x="-10" y="-8"/>
         </graphicsAlgorithm>
       </connectionDecorators>
-      <bendpoints x="129" y="451"/>
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.2/@anchors.0" end="/0/@children.3/@children.3/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
@@ -689,7 +688,6 @@
           <points x="-10" y="-8"/>
         </graphicsAlgorithm>
       </connectionDecorators>
-      <bendpoints x="439" y="451"/>
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.3/@children.5/@anchors.0" end="/0/@children.3/@children.6/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" filled="false" transparency="0.0"/>
@@ -728,7 +726,7 @@
           <points x="-10" y="-8"/>
         </graphicsAlgorithm>
       </connectionDecorators>
-      <bendpoints x="705" y="495"/>
+      <bendpoints x="705" y="564"/>
     </connections>
     <connections xsi:type="pi:FreeFormConnection" visible="true" active="true" start="/0/@children.8/@anchors.0" end="/0/@children.3/@children.1/@anchors.0">
       <graphicsAlgorithm xsi:type="al:Polyline" lineWidth="2" lineStyle="DASH" filled="false" transparency="0.0"/>
@@ -798,7 +796,7 @@
         </graphicsAlgorithm>
       </connectionDecorators>
       <bendpoints x="728" y="307"/>
-      <bendpoints x="728" y="390"/>
+      <bendpoints x="728" y="399"/>
     </connections>
     <colors red="227" green="238" blue="249"/>
     <colors red="255" green="255" blue="255"/>

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.StatusNodeImpl#getInstanceName <em>Instance Name</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.StatusNodeImpl#isDone <em>Done</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.StatusNodeImpl#isDirty <em>Dirty</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.StatusNodeImpl#getWarnings <em>Warnings</em>}</li>
@@ -31,6 +32,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class StatusNodeImpl extends NodeImpl implements StatusNode {
+	/**
+	 * The default value of the '{@link #getInstanceName() <em>Instance Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInstanceName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String INSTANCE_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getInstanceName() <em>Instance Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInstanceName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String instanceName = INSTANCE_NAME_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #isDone() <em>Done</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -98,6 +119,27 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 	@Override
 	protected EClass eStaticClass() {
 		return MethodPackage.Literals.STATUS_NODE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getInstanceName() {
+		return instanceName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInstanceName(String newInstanceName) {
+		String oldInstanceName = instanceName;
+		instanceName = newInstanceName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.STATUS_NODE__INSTANCE_NAME, oldInstanceName, instanceName));
 	}
 
 	/**
@@ -176,6 +218,8 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case MethodPackage.STATUS_NODE__INSTANCE_NAME:
+				return getInstanceName();
 			case MethodPackage.STATUS_NODE__DONE:
 				return isDone();
 			case MethodPackage.STATUS_NODE__DIRTY:
@@ -195,6 +239,9 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case MethodPackage.STATUS_NODE__INSTANCE_NAME:
+				setInstanceName((String)newValue);
+				return;
 			case MethodPackage.STATUS_NODE__DONE:
 				setDone((Boolean)newValue);
 				return;
@@ -217,6 +264,9 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case MethodPackage.STATUS_NODE__INSTANCE_NAME:
+				setInstanceName(INSTANCE_NAME_EDEFAULT);
+				return;
 			case MethodPackage.STATUS_NODE__DONE:
 				setDone(DONE_EDEFAULT);
 				return;
@@ -238,6 +288,8 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case MethodPackage.STATUS_NODE__INSTANCE_NAME:
+				return INSTANCE_NAME_EDEFAULT == null ? instanceName != null : !INSTANCE_NAME_EDEFAULT.equals(instanceName);
 			case MethodPackage.STATUS_NODE__DONE:
 				return done != DONE_EDEFAULT;
 			case MethodPackage.STATUS_NODE__DIRTY:
@@ -258,7 +310,9 @@ public class StatusNodeImpl extends NodeImpl implements StatusNode {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (done: ");
+		result.append(" (instanceName: ");
+		result.append(instanceName);
+		result.append(", done: ");
 		result.append(done);
 		result.append(", dirty: ");
 		result.append(dirty);

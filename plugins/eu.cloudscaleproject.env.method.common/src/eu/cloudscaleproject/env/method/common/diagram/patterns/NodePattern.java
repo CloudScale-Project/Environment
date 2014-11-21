@@ -158,7 +158,7 @@ public class NodePattern extends AbstractPattern implements IPattern {
 		Shape shape = peService.createShape(root, false);
 		PatternUtil.addShapeID(shape, "node_name");
 		
-		Text textName = gaService.createText(shape, node.getName());
+		Text textName = gaService.createText(shape, getTitle(node));
 		textName.setForeground(getColorText(node));
 		textName.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		gaService.setLocationAndSize(textName, x, y, w, h);
@@ -196,6 +196,18 @@ public class NodePattern extends AbstractPattern implements IPattern {
 		return true;
 	}
 	
+	public String getTitle(Node node){
+		String title = node.getName();
+		if(node instanceof StatusNode){
+			String instanceName = ((StatusNode)node).getInstanceName();
+			if(instanceName != null){
+				title += " : ";
+				title += instanceName;
+			}
+		}
+		return title;
+	}
+	
 	@Override
 	public IReason updateNeeded(IUpdateContext context) {
 		PictogramElement pictogramElement = context.getPictogramElement();
@@ -217,7 +229,7 @@ public class NodePattern extends AbstractPattern implements IPattern {
 			//check name
 			Shape shapeName = getName(root);
 			Text text = (Text)shapeName.getGraphicsAlgorithm();
-			if(!text.getValue().equals(node.getName())){
+			if(!text.getValue().equals(getTitle(node))){
 				return Reason.createTrueReason("Name is out of date");
 			}
 		}
@@ -236,9 +248,9 @@ public class NodePattern extends AbstractPattern implements IPattern {
 		
 		//update name
 		if(pictogramElement instanceof ContainerShape){
-			setName((ContainerShape)pictogramElement, node.getName());
+			setName((ContainerShape)pictogramElement, getTitle(node));
 			//update text name color
-			getName((ContainerShape)pictogramElement).getGraphicsAlgorithm().setForeground(getColorText(node));
+			getName((ContainerShape)pictogramElement).getGraphicsAlgorithm().setForeground(getColorText(node));			
 			return true;
 		}
 		return false;

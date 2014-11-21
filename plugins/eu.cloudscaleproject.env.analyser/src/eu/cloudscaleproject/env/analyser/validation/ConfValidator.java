@@ -103,14 +103,17 @@ public class ConfValidator extends ToolValidator {
 		
 		selectedResource = confResourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
 		
-		if(selectedResource == null){
+		if(selectedResource == null || !selectedResource.getResource().exists()){
 			status.setIsInProgress(false);
+			status.clearWarnings();
 			status.setIsDone(false);
 			return false;
 		}
 		else{
 			status.setIsInProgress(true);
 		}
+		
+		status.setInstanceName(selectedResource.getName());
 		
 		ConfAlternative ca = (ConfAlternative)selectedResource;
 		try{

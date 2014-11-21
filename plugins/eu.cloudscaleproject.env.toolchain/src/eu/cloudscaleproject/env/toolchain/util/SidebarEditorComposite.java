@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,6 +68,14 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 				return SidebarEditorComposite.this.getSidebarForegroundColor();
 			}
 		};
+		
+		this.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				sidebarBuilder.dispose();
+			}
+		});
 	}
 	
 	public void setContentProvider(SidebarContentProvider compositeProvider) {

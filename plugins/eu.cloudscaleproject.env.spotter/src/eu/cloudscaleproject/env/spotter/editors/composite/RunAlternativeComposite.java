@@ -22,8 +22,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
+import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
+import org.spotter.eclipse.ui.editors.HierarchyEditorInput;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
+import org.spotter.eclipse.ui.editors.SpotterConfigEditorInput;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
 import org.spotter.eclipse.ui.editors.factory.ElementFactory;
 import org.spotter.eclipse.ui.util.DialogUtils;
@@ -129,9 +132,7 @@ public class RunAlternativeComposite extends Composite{
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = RunAlternativeComposite.this.editorInput
 						.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
-				SpotterConfigEditor.openInstance(
-						(IEditorInput) ElementFactory.createEditorInput(SpotterConfigEditor.ID, file), 
-						SpotterConfigEditor.ID);
+				AbstractSpotterEditor.openInstance(new SpotterConfigEditorInput(file), SpotterConfigEditor.ID);
 			}
 		});
 		
@@ -143,9 +144,7 @@ public class RunAlternativeComposite extends Composite{
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = RunAlternativeComposite.this.editorInput
 						.getResource().getFile(FileManager.HIERARCHY_FILENAME);
-				HierarchyEditor.openInstance(
-						(IEditorInput) ElementFactory.createEditorInput(HierarchyEditor.ID, file), 
-						HierarchyEditor.ID);
+				AbstractSpotterEditor.openInstance(new HierarchyEditorInput(file), HierarchyEditor.ID);
 			}
 		});
 		

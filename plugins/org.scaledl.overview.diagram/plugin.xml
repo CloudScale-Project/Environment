@@ -73,13 +73,14 @@
          point="org.eclipse.ui.editors">
       
       <editor
-          class="org.eclipse.graphiti.ui.editor.DiagramEditor"
-          contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
-          default="true"
-          extensions="sdlo_diagram"
-          icon="icons/explorer/csm_diagram.png"
-          id="eu.cloudscaleproject.env.diagram.DiagramEditor"
-          name="ScaleDL Overview">
+            class="org.eclipse.graphiti.ui.editor.DiagramEditor"
+            contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
+            default="true"
+            extensions="sdlo_diagram"
+            icon="icons/explorer/csm_diagram.png"
+            id="eu.cloudscaleproject.env.diagram.DiagramEditor"
+            matchingStrategy="org.eclipse.graphiti.ui.editor.DiagramEditorMatchingStrategy"
+            name="ScaleDL Overview">
        <contentTypeBinding
              contentTypeId="org.eclipse.graphiti.content.diagram">
        </contentTypeBinding>

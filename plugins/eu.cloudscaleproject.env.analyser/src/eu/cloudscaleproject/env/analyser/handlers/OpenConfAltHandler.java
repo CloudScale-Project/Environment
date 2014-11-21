@@ -75,7 +75,8 @@ public class OpenConfAltHandler {
 			return;
 		}
 		
-		SelectConfAltDialog dialog = new SelectConfAltDialog(project, shell, alternatives);
+		SelectConfAltDialog dialog = new SelectConfAltDialog(project, shell, 
+				alternatives.toArray(new ConfAlternative[alternatives.size()]));
 		CloudscaleContext.inject(dialog);
 		dialog.open();
 		

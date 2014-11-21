@@ -6,7 +6,9 @@ public interface IToolStatusListener {
 	public static final String PROP_VALID = "eu.cloudscaleproject.env.common.notification.toolstatus.valid";
 	public static final String PROP_PROGRESS = "eu.cloudscaleproject.env.common.notification.toolstatus.progress";
 	public static final String PROP_DONE = "eu.cloudscaleproject.env.common.notification.toolstatus.done";
-	
+	public static final String PROP_DIRTY = "eu.cloudscaleproject.env.common.notification.toolstatus.dirty";
+	public static final String PROP_INSTANCE = "eu.cloudscaleproject.env.common.notification.toolstatus.instance";
+
 	public static final String PROP_WARNING_ADD = "eu.cloudscaleproject.env.common.notification.toolstatus.warning.add";
 	public static final String PROP_WARNING_REMOVE = "eu.cloudscaleproject.env.common.notification.toolstatus.warning.remove";
 	public static final String PROP_WARNING_CHANGED = "eu.cloudscaleproject.env.common.notification.toolstatus.warning.change";

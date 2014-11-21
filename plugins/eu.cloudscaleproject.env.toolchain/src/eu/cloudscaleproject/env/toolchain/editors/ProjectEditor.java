@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
@@ -18,6 +19,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 
@@ -34,6 +36,12 @@ public class ProjectEditor extends EditorPart {
 	public ProjectEditor() {
 		IEclipseContext context = EclipseContextFactory.getServiceContext(Activator.plugin.getBundle().getBundleContext());
 		ContextInjectionFactory.inject(this, context);
+	}
+	
+	@Override
+	public String getPartName() {
+		IProject p = ExplorerProjectPaths.getProject(this);
+		return "Dashboard ("+p.getName()+")";
 	}
 	
 	@SuppressWarnings("rawtypes")

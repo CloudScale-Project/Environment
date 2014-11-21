@@ -36,6 +36,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Container/commands"/>
     </genClasses>
     <genClasses ecoreClass="method.ecore#//StatusNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//StatusNode/instanceName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//StatusNode/done"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//StatusNode/dirty"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//StatusNode/warnings"/>

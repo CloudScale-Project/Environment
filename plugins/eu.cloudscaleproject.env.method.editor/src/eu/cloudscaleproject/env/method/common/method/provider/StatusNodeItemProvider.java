@@ -45,10 +45,33 @@ public class StatusNodeItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addInstanceNamePropertyDescriptor(object);
 			addDonePropertyDescriptor(object);
 			addDirtyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Instance Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInstanceNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_StatusNode_instanceName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_StatusNode_instanceName_feature", "_UI_StatusNode_type"),
+				 MethodPackage.Literals.STATUS_NODE__INSTANCE_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -163,6 +186,7 @@ public class StatusNodeItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(StatusNode.class)) {
+			case MethodPackage.STATUS_NODE__INSTANCE_NAME:
 			case MethodPackage.STATUS_NODE__DONE:
 			case MethodPackage.STATUS_NODE__DIRTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

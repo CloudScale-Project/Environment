@@ -41,6 +41,12 @@ public class ToolStatusImpl implements IToolStatus{
 			else if(feature == MethodPackage.Literals.STATUS_NODE__DONE){
 				fireChange(IToolStatusListener.PROP_DONE);
 			}
+			else if(feature == MethodPackage.Literals.STATUS_NODE__DIRTY){
+				fireChange(IToolStatusListener.PROP_DIRTY);
+			}
+			else if (feature == MethodPackage.Literals.STATUS_NODE__INSTANCE_NAME) {
+				fireChange(IToolStatusListener.PROP_INSTANCE);
+			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__WARNINGS){
 				if(type == Notification.ADD){
 					fireChange(IToolStatusListener.PROP_WARNING_ADD);
@@ -218,6 +224,11 @@ public class ToolStatusImpl implements IToolStatus{
 				iter.remove();
 			}
 		}
+	}
+	
+	@Override
+	public void setInstanceName(String name){
+		this.statusNode.setInstanceName(name);
 	}
 
 	@Override

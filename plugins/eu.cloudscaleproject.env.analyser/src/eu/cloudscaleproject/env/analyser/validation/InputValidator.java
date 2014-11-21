@@ -120,11 +120,19 @@ public class InputValidator extends ToolValidator {
 					null : inputResourceProvider.getResources().get(0);
 		}
 		
-		if(selectedResource != null && selectedResource.getResource().exists()){
+		if(selectedResource == null || !selectedResource.getResource().exists()){
+			status.setIsInProgress(false);
+			status.clearWarnings();
+			status.setIsDone(false);
+			return false;
+		}
+		else{
 			inputResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
 			selectedResource.load();
 			status.setIsInProgress(true);
 		}
+		
+		status.setInstanceName(selectedResource.getName());
 		
 		try {
 			valid = validateModels(project, (InputAlternative)selectedResource);
