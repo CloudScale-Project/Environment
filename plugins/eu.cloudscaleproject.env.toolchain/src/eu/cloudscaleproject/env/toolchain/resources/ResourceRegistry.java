@@ -77,7 +77,7 @@ public class ResourceRegistry {
 	}
 	
 	public ResourceProvider getResourceProvider(IProject project, String toolchainID){
-		return getResourceProvider(toolchainID, ToolchainUtils.getToolchainFolder(project, toolchainID));
+		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
 	}
 
 }

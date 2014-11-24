@@ -30,7 +30,7 @@ public class ConfValidator extends ToolValidator {
 
 	@Override
 	public IResource[] getDependantResources(IProject project) {
-		return new IResource[]{ToolchainUtils.getToolchainFolder(project, ToolchainUtils.ANALYSER_CONF_ID)};
+		return new IResource[]{ToolchainUtils.getToolFolder(project, ToolchainUtils.ANALYSER_CONF_ID)};
 	}
 	
 	public boolean validateModels(IProject project, ConfAlternative ca) throws CoreException{

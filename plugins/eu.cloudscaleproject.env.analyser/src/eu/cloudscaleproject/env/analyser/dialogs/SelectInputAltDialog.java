@@ -23,6 +23,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
+//TODO: replace with eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog!!!!!
+
 public class SelectInputAltDialog extends Dialog{
 	
 	@Inject

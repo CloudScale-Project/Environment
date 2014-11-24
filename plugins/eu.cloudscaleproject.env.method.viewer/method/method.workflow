@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:al="http://eclipse.org/graphiti/mm/algorithms" xmlns:method="http://eu.cloudscale.env.method/MethodComponentModel/1.0" xmlns:pi="http://eclipse.org/graphiti/mm/pictograms">
-  <pi:Diagram visible="true" gridUnit="10" diagramTypeId="Workflow diagram" name="method" snapToGrid="true" pictogramLinks="/0/@children.0/@link /0/@children.0/@children.1/@link /0/@children.0/@children.1/@children.1/@link /0/@children.1/@link /0/@children.2/@link /0/@children.3/@link /0/@children.0/@children.2/@link /0/@children.0/@children.3/@link /0/@children.1/@children.1/@link /0/@children.1/@children.2/@link /0/@children.1/@children.3/@link /0/@children.2/@children.1/@link /0/@children.2/@children.2/@link /0/@children.2/@children.3/@link /0/@children.0/@children.1/@children.2/@link /0/@children.3/@children.1/@link /0/@children.3/@children.2/@link /0/@children.3/@children.3/@link /0/@children.3/@children.4/@link /0/@children.3/@children.5/@link /0/@children.3/@children.6/@link /0/@children.2/@children.1/@children.1/@link /0/@children.2/@children.1/@children.2/@link /0/@children.2/@children.1/@children.3/@link /0/@children.2/@children.1/@children.4/@link /0/@children.4/@link /0/@children.5/@link /0/@children.6/@link /0/@children.7/@link /0/@children.8/@link /0/@connections.0/@link /0/@connections.1/@link /0/@connections.2/@link /0/@connections.3/@link /0/@connections.4/@link /0/@connections.5/@link /0/@connections.6/@link /0/@connections.7/@link /0/@connections.8/@link /0/@connections.9/@link /0/@connections.10/@link /0/@connections.11/@link /0/@connections.12/@link /0/@connections.13/@link /0/@connections.14/@link /0/@connections.15/@link /0/@connections.16/@link /0/@connections.17/@link /0/@children.2/@children.2/@children.1/@link /0/@children.2/@children.2/@children.2/@link /0/@children.0/@children.3/@children.1/@link /0/@children.0/@children.1/@children.3/@link /0/@children.0/@children.2/@children.1/@link /0/@children.2/@children.1/@children.5/@link /0/@children.2/@children.3/@children.1/@link /0/@children.2/@children.4/@link /0/@children.0/@children.4/@link /0/@children.2/@children.2/@children.3/@link /0/@children.0/@children.3/@children.2/@link /0/@children.0/@children.3/@children.3/@link /0/@children.3/@children.4/@children.1/@link /0/@children.3/@children.5/@children.1/@link /0/@children.3/@children.5/@children.2/@link /0/@children.3/@children.6/@children.1/@link /0/@connections.18/@link /0/@children.2/@children.2/@children.4/@link /0/@children.2/@children.2/@children.5/@link /0/@children.2/@children.2/@children.6/@link /0/@children.2/@children.1/@children.6/@link" version="0.11.0">
+  <pi:Diagram visible="true" gridUnit="10" diagramTypeId="Workflow diagram" name="method" snapToGrid="true" pictogramLinks="/0/@children.0/@link /0/@children.0/@children.1/@link /0/@children.0/@children.1/@children.1/@link /0/@children.1/@link /0/@children.2/@link /0/@children.3/@link /0/@children.0/@children.2/@link /0/@children.0/@children.3/@link /0/@children.1/@children.1/@link /0/@children.1/@children.2/@link /0/@children.1/@children.3/@link /0/@children.2/@children.1/@link /0/@children.2/@children.2/@link /0/@children.2/@children.3/@link /0/@children.0/@children.1/@children.2/@link /0/@children.3/@children.1/@link /0/@children.3/@children.2/@link /0/@children.3/@children.3/@link /0/@children.3/@children.4/@link /0/@children.3/@children.5/@link /0/@children.3/@children.6/@link /0/@children.2/@children.1/@children.1/@link /0/@children.2/@children.1/@children.2/@link /0/@children.2/@children.1/@children.3/@link /0/@children.2/@children.1/@children.4/@link /0/@children.4/@link /0/@children.5/@link /0/@children.6/@link /0/@children.7/@link /0/@children.8/@link /0/@connections.0/@link /0/@connections.1/@link /0/@connections.2/@link /0/@connections.3/@link /0/@connections.4/@link /0/@connections.5/@link /0/@connections.6/@link /0/@connections.7/@link /0/@connections.8/@link /0/@connections.9/@link /0/@connections.10/@link /0/@connections.11/@link /0/@connections.12/@link /0/@connections.13/@link /0/@connections.14/@link /0/@connections.15/@link /0/@connections.16/@link /0/@connections.17/@link /0/@children.2/@children.2/@children.1/@link /0/@children.2/@children.2/@children.2/@link /0/@children.0/@children.3/@children.1/@link /0/@children.0/@children.1/@children.3/@link /0/@children.0/@children.2/@children.1/@link /0/@children.2/@children.1/@children.5/@link /0/@children.2/@children.3/@children.1/@link /0/@children.2/@children.4/@link /0/@children.0/@children.4/@link /0/@children.2/@children.2/@children.3/@link /0/@children.0/@children.3/@children.2/@link /0/@children.0/@children.3/@children.3/@link /0/@children.3/@children.4/@children.1/@link /0/@children.3/@children.5/@children.1/@link /0/@children.3/@children.5/@children.2/@link /0/@children.3/@children.6/@children.1/@link /0/@connections.18/@link /0/@children.2/@children.2/@children.4/@link /0/@children.2/@children.2/@children.5/@link /0/@children.2/@children.2/@children.6/@link /0/@children.2/@children.1/@children.6/@link /0/@children.1/@children.3/@children.1/@link" version="0.11.0">
     <graphicsAlgorithm xsi:type="al:Rectangle" background="/0/@colors.1" foreground="/0/@colors.0" lineWidth="1" transparency="0.0" width="1000" height="1000"/>
     <children xsi:type="pi:ContainerShape" visible="true" active="true">
       <properties key="node" value="node"/>
@@ -159,12 +159,22 @@
       <children xsi:type="pi:ContainerShape" visible="true" active="true">
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
-        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="141" height="46" x="20" y="165" cornerHeight="15" cornerWidth="15"/>
+        <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="141" height="56" x="20" y="165" cornerHeight="15" cornerWidth="15"/>
         <link businessObjects="usageEvolution"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.18"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
           <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="136" height="20" x="5" y="5" value="Usage evolution"/>
+        </children>
+        <children xsi:type="pi:ContainerShape" visible="true" active="true">
+          <properties key="node" value="node"/>
+          <properties key="command" value="command"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="21" height="20" x="5" y="25" cornerHeight="5" cornerWidth="5"/>
+          <link businessObjects="_iueiAHPSEeS3b6FdlQPPqA"/>
+          <children visible="true">
+            <properties key="node_name" value="node_name"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+          </children>
         </children>
       </children>
     </children>
@@ -795,7 +805,7 @@
           <points x="-10" y="-8"/>
         </graphicsAlgorithm>
       </connectionDecorators>
-      <bendpoints x="728" y="307"/>
+      <bendpoints x="728" y="312"/>
       <bendpoints x="728" y="399"/>
     </connections>
     <colors red="227" green="238" blue="249"/>
@@ -854,8 +864,9 @@
     <nodes xsi:type="method:Container" id="_YVJPYC61EeSADewJHO2y3w" name="ScaleDL">
       <children xsi:type="method:Section" id="overview" name="Overview model" description="Overview model digram is used to model cloud environment architecture and its deployment." tooltip="Overview model of a cloud environemnt." colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview.diagram.open" next="/1/@links.2" previous="/1/@links.1"/>
       <children xsi:type="method:Section" id="architectureTemplates" name="Architecture templates" colorForeground="000000" colorBackground="a1c9d5"/>
-      <children xsi:type="method:Section" id="usageEvolution" name="Usage evolution" description="Usage evolution model" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openeditor" next="/1/@links.18">
+      <children xsi:type="method:Section" id="usageEvolution" name="Usage evolution" description="Usage evolution model" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.usageevolution.command.openeditor" next="/1/@links.18">
         <commandParam>usageEvolution</commandParam>
+        <commands id="_iueiAHPSEeS3b6FdlQPPqA" name="v" description="Usage evolution alternative selection button " tooltip="Select Usage evolution alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.usageevolution.command.openSelectionDialog"/>
       </children>
     </nodes>
     <nodes xsi:type="method:Container" id="_Yqbi4C61EeSADewJHO2y3w" name="Analyser">

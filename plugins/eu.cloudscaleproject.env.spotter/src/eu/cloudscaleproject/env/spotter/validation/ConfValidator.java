@@ -30,7 +30,7 @@ public class ConfValidator extends ToolValidator {
 
 	@Override
 	public IResource[] getDependantResources(IProject project) {
-		return new IResource[]{ToolchainUtils.getToolchainFolder(project, ToolchainUtils.SPOTTER_DYN_CONF_ID)};
+		return new IResource[]{ToolchainUtils.getToolFolder(project, ToolchainUtils.SPOTTER_DYN_CONF_ID)};
 	}
 
 	@Override

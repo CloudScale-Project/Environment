@@ -33,7 +33,7 @@ public class InputValidator extends ToolValidator {
 
 	@Override
 	public IResource[] getDependantResources(IProject project) {
-		return new IResource[]{ToolchainUtils.getToolchainFolder(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID)};
+		return new IResource[]{ToolchainUtils.getToolFolder(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID)};
 	}
 
 	@Override
