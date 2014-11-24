@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="eu.cloudscaleproject.env.usageevolution.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.product.newproject">
+      <client
+            class="eu.cloudscaleproject.env.usageevolution.wizard.NewProjectWizard">
+      </client>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.editors">
+      <client
+            class="eu.cloudscaleproject.env.usageevolution.editors.UsageTabItemExtension"
+            position="1000">
+      </client>
+   </extension>
+
+</plugin>
