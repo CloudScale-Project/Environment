@@ -1,5 +1,15 @@
 package eu.cloudscaleproject.env.product;
 
+import java.util.Locale;
+
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.internal.di.InjectorImpl;
+import org.eclipse.e4.core.internal.services.BundleTranslationProvider;
+import org.eclipse.e4.core.services.nls.ILocaleChangeService;
+import org.eclipse.e4.core.services.translation.TranslationProviderFactory;
+import org.eclipse.e4.core.services.translation.TranslationService;
+import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
@@ -14,11 +24,13 @@ public class Application implements IApplication {
 	/* (non-Javadoc)
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
 	 */
+
 	public Object start(IApplicationContext context) throws Exception {
-		System.out.println("Starting Application ...");
+		
 		Display display = PlatformUI.createDisplay();
 		try {
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
+
 			if (returnCode == PlatformUI.RETURN_RESTART)
 				return IApplication.EXIT_RESTART;
 			else

@@ -16,7 +16,7 @@ Package : mvn install
   <packaging>pom</packaging>
 
   <properties>
-        <tycho.version>0.20.0</tycho.version>
+        <tycho.version>0.21.0</tycho.version>
   </properties>
 
   <modules>
@@ -36,7 +36,6 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.extractor</module>
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
-    <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
 
     <module>plugins/org.scaledl.overview</module>
     <module>plugins/org.scaledl.overview.diagram</module>
@@ -47,11 +46,12 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.help</module>
     <module>plugins/eu.cloudscaleproject.env.method.editor</module>
     
+    <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
     
 
     <!--
      Features and Update sites
-     -->
+ -->
     <module>features/eu.cloudscaleproject.feature.analyser</module>
     <module>features/eu.cloudscaleproject.feature.extractor</module>
     <module>features/eu.cloudscaleproject.feature.staticspotter</module>
@@ -102,7 +102,7 @@ Package : mvn install
 
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
-	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna</url></repository>
+	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
 
 	<repository><id>org.eclipse.e4.core.tools.update</id><layout>p2</layout><url>http://download.vogella.com/luna/e4tools</url></repository>
 	<repository><id>Update Site</id><layout>p2</layout><url>http://antlreclipse.sourceforge.net/updates/</url></repository>
@@ -147,11 +147,6 @@ Package : mvn install
 	        <groupId>org.eclipse.tycho</groupId>
 	        <artifactId>tycho-versions-plugin</artifactId>
 	        <version>${tycho.version}</version>
-		    <configuration>
-			    <dependency-resolution>
-		        <optionalDependencies>ignore</optionalDependencies>
-	      	</dependency-resolution>
-    		</configuration>
     	</plugin>
 		<plugin>
 			<groupId>org.eclipse.tycho</groupId>
