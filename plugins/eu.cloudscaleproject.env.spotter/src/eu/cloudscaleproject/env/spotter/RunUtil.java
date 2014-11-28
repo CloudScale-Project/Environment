@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IPath;
 import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.ServiceClientWrapper;
 import org.spotter.eclipse.ui.UICoreException;
+import org.spotter.eclipse.ui.jobs.DynamicSpotterRunJob;
 import org.spotter.eclipse.ui.model.xml.HierarchyFactory;
 import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.eclipse.ui.util.DialogUtils;
@@ -52,6 +53,8 @@ public class RunUtil {
 			return;
 		}
 		
+		IEditorInputResource resultEditorInput = null;
+		
 		//prepare configuration for run 
 		IFile fileConf = confEditorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
 		if(fileConf.exists()){
@@ -66,7 +69,6 @@ public class RunUtil {
 				String envPath = confEditorInputLocation.append(FileManager.ENVIRONMENT_FILENAME).toString();
 				
 				//create/retrieve results entry
-				IEditorInputResource resultEditorInput;
 				String runEditorInputName = confEditorInput.getResource().getName();
 				
 				ResourceProvider resultResourceProvider = ResourceRegistry.getInstance().getResourceProvider(
@@ -80,7 +82,6 @@ public class RunUtil {
 				}
 				resultEditorInput.setName(confEditorInput.getName());
 				resultEditorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, confEditorInput.getResource().getName());
-				resultEditorInput.setProperty(ResourceUtils.KEY_CLIENT_NAME, confEditorInput.getProperty(ResourceUtils.KEY_CLIENT_NAME));
 				resultEditorInput.save();
 				
 				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
@@ -112,9 +113,12 @@ public class RunUtil {
 		try {
 			JobDescription jobDescription = RunUtil.createJobDescription(confEditorInput);
 			Long jobId = client.startDiagnosis(jobDescription);
+			
 			if (jobId != null && jobId != 0) {
-				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, inputEditorInput.getResource().getName(), jobId, System.currentTimeMillis());
+				DynamicSpotterRunJob job = new DynamicSpotterRunJob(project, jobId, System.currentTimeMillis());
+				//resultEditorInput.setProperty(ResourceUtils.KEY_JOB, String.valueOf(jobId));
 				job.schedule();
+				
 			} else {
 				String msg = String.format("Error occured during diagnosis: %s", "Could not retrieve a valid job id!");
 				logger.warning(msg);

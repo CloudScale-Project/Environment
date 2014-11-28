@@ -63,7 +63,7 @@ public class SelectConfAltDialog extends Dialog{
 			int selectionIndex = list.getSelectionIndex();
 			if(selectionIndex >= 0){
 				
-				IEditorInputResource selectedResource = confResourceProvider.getResources().get(selectionIndex);
+				IEditorInputResource selectedResource = alternatives.get(selectionIndex);
 				confResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
 				
 				Display.getDefault().asyncExec(new Runnable() {

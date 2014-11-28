@@ -6,10 +6,15 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.spotter.editors.composite.ConnectionComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.RunStatusComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
@@ -28,6 +33,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	public static final String ACTION_OPEN_RESULTS = "openResults";
 	
 	private final EditorInput introInput = new EditorInput("Intro");
+	private final EditorInput serverInput = new EditorInput("Server");
 	private final EditorInput inputInput = new EditorInput("Input");
 	private final EditorInput runInput = new EditorInput("Run");
 	private final EditorInput resultsInput = new EditorInput("Results");
@@ -44,7 +50,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void createTabItem(ProjectEditor editor) {
+	public void createTabItem(final ProjectEditor editor) {
 		tabItem = new CTabItem(editor.getTabFolder(), SWT.NONE);
 		tabItem.setText("Dynamic Spotter");
 		
@@ -62,6 +68,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 				List<IEditorInput> out = new ArrayList<IEditorInput>();
 				if(SECTION_MAINMENU.equals(section)){
 					out.add(introInput);
+					out.add(serverInput);
 					out.add(inputInput);
 					out.add(runInput);
 					out.add(resultsInput);
@@ -74,6 +81,32 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 				
 				if(introInput.equals(input)){
 					return new IntroComposite(parent, SWT.NONE);
+				}
+				else if(serverInput.equals(input)){
+					Composite c = new Composite(parent, style);
+					GridLayout gl = new GridLayout(1, true);
+					gl.marginWidth = 0;
+					gl.marginHeight = 0;
+					gl.verticalSpacing = 0;
+					gl.horizontalSpacing = 0;
+					c.setLayout(gl);
+					
+					ConnectionComposite connection = new ConnectionComposite(project, c, SWT.NONE);
+					GridData gdc = new GridData();
+					gdc.horizontalAlignment = SWT.FILL;
+					connection.setLayoutData(gdc);
+					
+					Label label = new Label(c, SWT.SEPARATOR | SWT.HORIZONTAL);
+					label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+					
+					RunStatusComposite status = new RunStatusComposite(project, c, SWT.NONE);
+					GridData gds = new GridData();
+					gds.horizontalAlignment = SWT.FILL;
+					gds.grabExcessHorizontalSpace = true;
+					gds.grabExcessVerticalSpace = true;
+					status.setLayoutData(gds);
+					
+					return c;
 				}
 				else if(inputInput.equals(input)){
 					return new InputComposite(project, parent, SWT.NONE);

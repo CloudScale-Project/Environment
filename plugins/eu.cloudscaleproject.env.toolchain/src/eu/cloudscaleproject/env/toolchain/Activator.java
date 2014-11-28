@@ -1,7 +1,10 @@
 package eu.cloudscaleproject.env.toolchain;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -13,6 +16,14 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	public static Activator plugin;
+	
+	public static IEclipseContext context;
+	public static IEclipseContext getToolchainContext(){
+		if(context == null){
+			context = CloudscaleContext.getContext().createChild(Activator.class.getName());
+		}
+		return context;
+	}
 	
 	/**
 	 * The constructor

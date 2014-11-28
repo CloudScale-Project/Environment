@@ -25,7 +25,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class ResourceUtils {
 	
 	public static final String KEY_PARENT_EDITOR_RESOURCE = "parent.editor.resource";
-	public static final String KEY_CLIENT_NAME = "parent.editor.resource";
 	
 	public static List<EditorInputFolder> getConfAlternatives(IProject project, EditorInputFolder inputAlt){
 		
@@ -84,7 +83,6 @@ public class ResourceUtils {
 		}
 		
 		//save to properties
-		runAlternative.setProperty(KEY_CLIENT_NAME, inputAlternative.getProperty(KEY_CLIENT_NAME));
 		runAlternative.setProperty(KEY_PARENT_EDITOR_RESOURCE, inputAlternative.getResource().getName());
 		runAlternative.save();
 	}

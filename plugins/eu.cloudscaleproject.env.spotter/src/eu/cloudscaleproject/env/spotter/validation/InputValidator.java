@@ -44,12 +44,19 @@ public class InputValidator extends ToolValidator {
 		
 		IEditorInputResource selectedRes = inputResourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
 		
+		//retrieve first
+		if(!inputResourceProvider.getResources().isEmpty()){
+			selectedRes = inputResourceProvider.getResources().get(0);
+			inputResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedRes);
+		}
+		
 		if(selectedRes == null){
 			status.setIsInProgress(false);
 			status.setIsDone(false);
 			return false;
 		}
 		
+		status.setInstanceName(selectedRes.getName());
 		status.setIsInProgress(true);
 
 		//validate selected input alternatives

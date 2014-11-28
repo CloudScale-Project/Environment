@@ -15,10 +15,14 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
+import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
+import eu.cloudscaleproject.env.usageevolution.editors.composite.EditorComposite;
 
 public class UsageTabItemExtension extends DIExtension implements ProjectEditorExtension{
 	
 	public static final String ID = "eu.cloudscaleproject.env.usageevolution.tabitemextension";
+	
+	private String[] sections = new String[]{"Alternatives:"};
 		
 	private CTabItem tabItem = null;
 	private SidebarEditorComposite usageEditor;
@@ -44,20 +48,24 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 			
 			@Override
 			public String[] getSections() {
-				// TODO Auto-generated method stub
-				return new String[]{"Alternatives:"};
+				return sections;
 			}
 			
 			@Override
 			public String getSection(IEditorInputResource resource) {
-				// TODO Auto-generated method stub
-				return null;
+				return sections[0];
 			}
 			
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				// TODO Auto-generated method stub
+				
+				if(resource instanceof UsageEvolutionAlternative){
+					UsageEvolutionAlternative alt = (UsageEvolutionAlternative)resource;
+					EditorComposite editor = new EditorComposite(alt, parent, style);
+					return editor;
+				}
+				
 				return null;
 			}
 		});

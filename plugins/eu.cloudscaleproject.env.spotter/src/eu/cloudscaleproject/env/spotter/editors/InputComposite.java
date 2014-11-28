@@ -1,14 +1,8 @@
 package eu.cloudscaleproject.env.spotter.editors;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.editors.composite.InputAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -18,7 +12,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class InputComposite extends SidebarEditorComposite implements PropertyChangeListener{
+public class InputComposite extends SidebarEditorComposite{
 	
 	private final String[] sections = new String[]{"Inputs:"};
 	private final ResourceProvider resourceProvider;
@@ -32,7 +26,6 @@ public class InputComposite extends SidebarEditorComposite implements PropertyCh
 		super(parent, style);
 		
 		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
-		this.resourceProvider.addListener(this);
 		
 		setResourceProvider(resourceProvider);
 		setContentProvider(new SidebarContentProvider() {
@@ -54,21 +47,5 @@ public class InputComposite extends SidebarEditorComposite implements PropertyCh
 				return new InputAlternativeComposite(parent, style, (EditorInputFolder)resource);
 			}
 		});
-		
-		addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				resourceProvider.removeListener(InputComposite.this);
-			}
-		});
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent arg) {
-		if(ResourceProvider.PROP_RESOURCE_CREATED.equals(arg.getPropertyName())){
-			IEditorInputResource eir = (IEditorInputResource)arg.getNewValue();
-			eir.setProperty(ResourceUtils.KEY_CLIENT_NAME, eir.getResource().getName());
-		}
 	}
 }

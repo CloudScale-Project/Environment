@@ -46,6 +46,8 @@ public class ConfValidator extends ToolValidator {
 			status.setIsDone(false);
 			return false;
 		}
+		
+		status.setInstanceName(selectedRes.getName());
 		status.setIsInProgress(true);
 		
 		try {

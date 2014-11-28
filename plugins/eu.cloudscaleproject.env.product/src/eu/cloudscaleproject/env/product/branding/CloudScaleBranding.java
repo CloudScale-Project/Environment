@@ -21,6 +21,8 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 
 public class CloudScaleBranding {
 	
+	//private static final Logger logger = Logger.getLogger(CloudScaleBranding.class.getName());
+	
 	public static void initialize()
 	{
 		removeWizards();
@@ -75,14 +77,37 @@ public class CloudScaleBranding {
 		AbstractExtensionWizardRegistry wizardRegistry = (AbstractExtensionWizardRegistry)PlatformUI.getWorkbench().getNewWizardRegistry();
 		IWizardCategory[] categories = PlatformUI.getWorkbench().getNewWizardRegistry().getRootCategory().getCategories();
 		for(IWizardDescriptor wizard : getAllWizards(categories)){
-		    if(
+			
+			/*
+			System.out.println("ID: " + wizard.getId());
+			System.out.println("	Label: " + wizard.getLabel()); 
+			System.out.println("	Category label: " + wizard.getCategory().getLabel()); 
+			System.out.println("	Category ID: " + wizard.getCategory().getId());
+		    */
+		    
+			if(
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Basic") && 
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Examples") && 
 		    		!wizard.getCategory().getId().startsWith("org.scaledl") && 
 		    		!wizard.getCategory().getId().startsWith("de.uka") && 
 		    		!wizard.getCategory().getId().startsWith("org.spotter") && 
 		    		!wizard.getCategory().getId().startsWith("org.palladiosimulator") && 
-		    		!wizard.getCategory().getId().contains("cloudscale")
+		    		!wizard.getCategory().getId().contains("cloudscale") &&
+		    		
+		    		!wizard.getLabel().contains("ServicelevelObjective Model") &&
+		    		!wizard.getLabel().contains("Pms Model") &&
+		    		!wizard.getLabel().contains("Experiments Model") &&
+		    		!wizard.getLabel().contains("Measuringpoint Model") &&
+		    		!wizard.getLabel().contains("Resourceenvironment Model") &&
+		    		!wizard.getLabel().contains("Seff Model") &&
+		    		!wizard.getLabel().contains("Repository Model") &&
+		    		!wizard.getLabel().contains("Usage Model") &&
+		    		!wizard.getLabel().contains("Variation Model") &&
+		    		!wizard.getLabel().contains("Allocation Model") &&
+
+		    		
+		    		!wizard.getCategory().getId().contains("Usageevolution") &&
+		    		!wizard.getCategory().getId().contains("dlim") 
 		    		)
 		    		
 		    {

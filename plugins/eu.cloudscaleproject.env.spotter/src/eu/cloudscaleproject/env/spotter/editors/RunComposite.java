@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
 public class RunComposite extends SidebarEditorComposite {
 
-	private final String[] sections = new String[]{"Inputs:"};
+	private final String[] sections = new String[]{"Run configurations:"};
 	
 	/**
 	 * Create the composite.

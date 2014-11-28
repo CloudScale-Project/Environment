@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -39,11 +38,10 @@ public class ResourceSelectionDialog extends Dialog{
 	private final IEditorInputResource[] editorInputs;
 	
 	public static void openDialog(ResourceProvider resProvider, Tool tool){
-		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		
 		if(project != null){
-			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, resProvider, tool);
+			ResourceSelectionDialog dialog = new ResourceSelectionDialog(resProvider, tool);
 			CloudscaleContext.inject(dialog);
 			dialog.open();
 		}
@@ -52,8 +50,9 @@ public class ResourceSelectionDialog extends Dialog{
 		}
 	}
 
-	public ResourceSelectionDialog(Shell parentShell, ResourceProvider resProvider, Tool tool) {
-		super(parentShell);		
+	public ResourceSelectionDialog(ResourceProvider resProvider, Tool tool) {
+		super(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+		
 		java.util.List<IEditorInputResource> resList = resProvider.getResources();
 		
 		this.toolEnum = tool;

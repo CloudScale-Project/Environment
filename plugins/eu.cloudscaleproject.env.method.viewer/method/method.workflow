@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:al="http://eclipse.org/graphiti/mm/algorithms" xmlns:method="http://eu.cloudscale.env.method/MethodComponentModel/1.0" xmlns:pi="http://eclipse.org/graphiti/mm/pictograms">
-  <pi:Diagram visible="true" gridUnit="10" diagramTypeId="Workflow diagram" name="method" snapToGrid="true" pictogramLinks="/0/@children.0/@link /0/@children.0/@children.1/@link /0/@children.0/@children.1/@children.1/@link /0/@children.1/@link /0/@children.2/@link /0/@children.3/@link /0/@children.0/@children.2/@link /0/@children.0/@children.3/@link /0/@children.1/@children.1/@link /0/@children.1/@children.2/@link /0/@children.1/@children.3/@link /0/@children.2/@children.1/@link /0/@children.2/@children.2/@link /0/@children.2/@children.3/@link /0/@children.0/@children.1/@children.2/@link /0/@children.3/@children.1/@link /0/@children.3/@children.2/@link /0/@children.3/@children.3/@link /0/@children.3/@children.4/@link /0/@children.3/@children.5/@link /0/@children.3/@children.6/@link /0/@children.2/@children.1/@children.1/@link /0/@children.2/@children.1/@children.2/@link /0/@children.2/@children.1/@children.3/@link /0/@children.2/@children.1/@children.4/@link /0/@children.4/@link /0/@children.5/@link /0/@children.6/@link /0/@children.7/@link /0/@children.8/@link /0/@connections.0/@link /0/@connections.1/@link /0/@connections.2/@link /0/@connections.3/@link /0/@connections.4/@link /0/@connections.5/@link /0/@connections.6/@link /0/@connections.7/@link /0/@connections.8/@link /0/@connections.9/@link /0/@connections.10/@link /0/@connections.11/@link /0/@connections.12/@link /0/@connections.13/@link /0/@connections.14/@link /0/@connections.15/@link /0/@connections.16/@link /0/@connections.17/@link /0/@children.2/@children.2/@children.1/@link /0/@children.2/@children.2/@children.2/@link /0/@children.0/@children.3/@children.1/@link /0/@children.0/@children.1/@children.3/@link /0/@children.0/@children.2/@children.1/@link /0/@children.2/@children.1/@children.5/@link /0/@children.2/@children.3/@children.1/@link /0/@children.2/@children.4/@link /0/@children.0/@children.4/@link /0/@children.2/@children.2/@children.3/@link /0/@children.0/@children.3/@children.2/@link /0/@children.0/@children.3/@children.3/@link /0/@children.3/@children.4/@children.1/@link /0/@children.3/@children.5/@children.1/@link /0/@children.3/@children.5/@children.2/@link /0/@children.3/@children.6/@children.1/@link /0/@connections.18/@link /0/@children.2/@children.2/@children.4/@link /0/@children.2/@children.2/@children.5/@link /0/@children.2/@children.2/@children.6/@link /0/@children.2/@children.1/@children.6/@link /0/@children.1/@children.3/@children.1/@link" version="0.11.0">
+  <pi:Diagram visible="true" gridUnit="10" diagramTypeId="Workflow diagram" name="method" snapToGrid="true" pictogramLinks="/0/@children.0/@link /0/@children.0/@children.1/@link /0/@children.0/@children.1/@children.1/@link /0/@children.1/@link /0/@children.2/@link /0/@children.3/@link /0/@children.0/@children.2/@link /0/@children.0/@children.3/@link /0/@children.1/@children.1/@link /0/@children.1/@children.2/@link /0/@children.1/@children.3/@link /0/@children.2/@children.1/@link /0/@children.2/@children.2/@link /0/@children.2/@children.3/@link /0/@children.0/@children.1/@children.2/@link /0/@children.3/@children.1/@link /0/@children.3/@children.2/@link /0/@children.3/@children.3/@link /0/@children.3/@children.4/@link /0/@children.3/@children.5/@link /0/@children.3/@children.6/@link /0/@children.2/@children.1/@children.1/@link /0/@children.2/@children.1/@children.2/@link /0/@children.2/@children.1/@children.3/@link /0/@children.2/@children.1/@children.4/@link /0/@children.4/@link /0/@children.5/@link /0/@children.6/@link /0/@children.7/@link /0/@children.8/@link /0/@connections.0/@link /0/@connections.1/@link /0/@connections.2/@link /0/@connections.3/@link /0/@connections.4/@link /0/@connections.5/@link /0/@connections.6/@link /0/@connections.7/@link /0/@connections.8/@link /0/@connections.9/@link /0/@connections.10/@link /0/@connections.11/@link /0/@connections.12/@link /0/@connections.13/@link /0/@connections.14/@link /0/@connections.15/@link /0/@connections.16/@link /0/@connections.17/@link /0/@children.2/@children.2/@children.1/@link /0/@children.2/@children.2/@children.2/@link /0/@children.0/@children.3/@children.1/@link /0/@children.0/@children.1/@children.3/@link /0/@children.0/@children.2/@children.1/@link /0/@children.2/@children.1/@children.5/@link /0/@children.2/@children.3/@children.1/@link /0/@children.2/@children.4/@link /0/@children.0/@children.4/@link /0/@children.2/@children.2/@children.3/@link /0/@children.0/@children.3/@children.2/@link /0/@children.0/@children.3/@children.3/@link /0/@children.3/@children.4/@children.1/@link /0/@children.3/@children.5/@children.1/@link /0/@children.3/@children.5/@children.2/@link /0/@connections.18/@link /0/@children.2/@children.2/@children.4/@link /0/@children.2/@children.2/@children.5/@link /0/@children.2/@children.2/@children.6/@link /0/@children.2/@children.1/@children.6/@link /0/@children.1/@children.3/@children.1/@link /0/@children.3/@children.5/@children.3/@link" version="0.11.0">
     <graphicsAlgorithm xsi:type="al:Rectangle" background="/0/@colors.1" foreground="/0/@colors.0" lineWidth="1" transparency="0.0" width="1000" height="1000"/>
     <children xsi:type="pi:ContainerShape" visible="true" active="true">
       <properties key="node" value="node"/>
@@ -447,11 +447,21 @@
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
           <properties key="node" value="node"/>
           <properties key="command" value="command"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="35" height="20" x="28" y="25" cornerHeight="5" cornerWidth="5"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="35" height="20" x="184" y="25" cornerHeight="5" cornerWidth="5"/>
           <link businessObjects="_0xIjQF3mEeScwqkqKbMIeg"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
             <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="35" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Run"/>
+          </children>
+        </children>
+        <children xsi:type="pi:ContainerShape" visible="true" active="true">
+          <properties key="node" value="node"/>
+          <properties key="command" value="command"/>
+          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="154" height="20" x="28" y="25" cornerHeight="5" cornerWidth="5"/>
+          <link businessObjects="_3_M7UHcMEeShwN5JJ02Rxw"/>
+          <children visible="true">
+            <properties key="node_name" value="node_name"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="154" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Server configuration"/>
           </children>
         </children>
       </children>
@@ -464,16 +474,6 @@
         <children visible="true">
           <properties key="node_name" value="node_name"/>
           <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="236" height="20" x="5" y="5" value="Results"/>
-        </children>
-        <children xsi:type="pi:ContainerShape" visible="true" active="true">
-          <properties key="node" value="node"/>
-          <properties key="command" value="command"/>
-          <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="21" height="20" x="5" y="25" cornerHeight="5" cornerWidth="5"/>
-          <link businessObjects="_3Gnz8F3mEeScwqkqKbMIeg"/>
-          <children visible="true">
-            <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
-          </children>
         </children>
       </children>
     </children>
@@ -909,11 +909,13 @@
       <children xsi:type="method:Section" id="dynamic_spotter_tool" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.11" previous="/1/@links.10">
         <commandParam>openRun</commandParam>
         <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.openconfdialog"/>
-        <commands id="_0xIjQF3mEeScwqkqKbMIeg" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.run"/>
+        <commands id="_0xIjQF3mEeScwqkqKbMIeg" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.run" position="10"/>
+        <commands id="_3_M7UHcMEeShwN5JJ02Rxw" name="Server configuration" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" position="5">
+          <commandParam>openServer</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="dynamic_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.13" previous="/1/@links.11">
         <commandParam>openResults</commandParam>
-        <commands id="_3Gnz8F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.result.select"/>
       </children>
     </nodes>
     <nodes xsi:type="method:Action" id="action_useMeasurements" name="Use measurements" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.12" previous="/1/@links.13"/>

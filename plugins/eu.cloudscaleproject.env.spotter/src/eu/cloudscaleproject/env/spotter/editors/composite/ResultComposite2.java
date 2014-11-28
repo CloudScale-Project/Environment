@@ -73,7 +73,6 @@ import org.spotter.shared.result.ResultsLocationConstants;
 import org.spotter.shared.result.model.ResultsContainer;
 import org.spotter.shared.result.model.SpotterResult;
 
-import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ResultComposite2 extends Composite{
@@ -160,8 +159,7 @@ public class ResultComposite2 extends Composite{
 	public void setResult(EditorInputFolder resultAlternative) {
 		this.resultAlternative = resultAlternative;
 		if (resultAlternative != null) {
-			String clientName = resultAlternative.getProperty(ResourceUtils.KEY_CLIENT_NAME);
-			this.client = Activator.getDefault().getClient(clientName);
+			this.client = Activator.getDefault().getClient(resultAlternative.getResource().getProject().getName());
 		} else {
 			this.client = null;
 		}
@@ -659,8 +657,8 @@ public class ResultComposite2 extends Composite{
 		if (resultsContainer != null) {
 			XPerformanceProblem root = resultsContainer.getRootProblem();
 			if (root != null) {
-				String clientName = resultAlternative.getProperty(ResourceUtils.KEY_CLIENT_NAME);
-				input = HierarchyEditor.createPerformanceProblemHierarchy(clientName, extensionItemFactory, root);
+				String projectName = resultAlternative.getProject().getName();
+				input = HierarchyEditor.createPerformanceProblemHierarchy(projectName, extensionItemFactory, root);
 			}
 		}
 
