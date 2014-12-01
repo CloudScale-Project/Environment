@@ -23,7 +23,7 @@ Package : mvn install
     <!-- 
      Plugins - env and scaledl.overview
      -->
-    <!--module>plugins/eu.cloudscaleproject.env.product</module>
+    <module>plugins/eu.cloudscaleproject.env.product</module>
     <module>plugins/eu.cloudscaleproject.env.common</module>
     <module>plugins/eu.cloudscaleproject.env.master</module>
   
@@ -44,7 +44,7 @@ Package : mvn install
     <module>plugins/org.scaledl.overview.generic</module>
     <module>plugins/org.scaledl.overview.properties</module>
     <module>plugins/eu.cloudscaleproject.env.help</module>
-    <module>plugins/eu.cloudscaleproject.env.method.editor</module-->
+    <module>plugins/eu.cloudscaleproject.env.method.editor</module>
     
     <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
     
