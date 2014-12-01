@@ -24,4 +24,40 @@
          id="org.somox.modisco.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.modisco.examples.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.infra.omg.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.infrastructure.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.java.cdo.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.java.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.jee.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.sdk.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.modisco.xml.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.somox.modisco.feature"
+         version="0.0.0"/>
+
 </feature>

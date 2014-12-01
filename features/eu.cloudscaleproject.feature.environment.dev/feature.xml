@@ -32,6 +32,22 @@
          id="eu.cloudscaleproject.feature.staticspotter"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.graphiti.export.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.graphiti.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.graphiti.feature.examples"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.graphiti.feature.tools"
+         version="0.0.0"/>
+
    <plugin
          id="eu.cloudscaleproject.env.method.common"
          download-size="0"
