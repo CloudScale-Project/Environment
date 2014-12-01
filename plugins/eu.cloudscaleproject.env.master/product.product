@@ -37,10 +37,8 @@ Visit http://www.cloudscale-project.eu
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="LQNModel"/>
@@ -77,6 +75,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.markov.editor"/>
       <plugin id="de.uka.ipd.sdq.pcm"/>
       <plugin id="de.uka.ipd.sdq.pcm.codegen.m2m"/>
+      <plugin id="de.uka.ipd.sdq.pcm.codegen.simucom"/>
       <plugin id="de.uka.ipd.sdq.pcm.dialogs"/>
       <plugin id="de.uka.ipd.sdq.pcm.edit"/>
       <plugin id="de.uka.ipd.sdq.pcm.editor"/>
@@ -151,8 +150,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.workflow.pcm"/>
       <plugin id="de.uka.ipd.sdq.workflow.ui"/>
       <plugin id="de.uka.ipd.sdq.workflow.workbench"/>
-      <plugin id="dlim.generator"/>
-      <plugin id="dlim.generator.edit"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles.builder"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles.nature"/>
@@ -700,8 +697,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.simulizar.prm.edit"/>
       <plugin id="org.palladiosimulator.simulizar.ui"/>
       <plugin id="org.palladiosimulator.simulizar.ui.perspective"/>
-      <plugin id="org.palladiosimulator.simulizar.ui.wizard.loadbalancer"/>
-      <plugin id="org.palladiosimulator.simulizar.ui.wizard.znncom"/>
+      <plugin id="org.palladiosimulator.simulizar.ui.wizards"/>
       <plugin id="org.rosuda.JRI"/>
       <plugin id="org.sat4j.core"/>
       <plugin id="org.sat4j.pb"/>
@@ -743,6 +739,11 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.w3c.dom.events"/>
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
+      <plugin id="tools.descartes.dlim.exporter"/>
+      <plugin id="tools.descartes.dlim.extractor"/>
+      <plugin id="tools.descartes.dlim.generator"/>
+      <plugin id="tools.descartes.dlim.generator.edit"/>
+      <plugin id="tools.descartes.dlim.generator.editor"/>
    </plugins>
 
    <configurations>
