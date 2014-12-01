@@ -111,8 +111,9 @@ public class CloudScaleBranding {
 		    		)
 		    		
 		    {
-		        WorkbenchWizardElement wizardElement = (WorkbenchWizardElement) wizard;
-		        wizardRegistry.removeExtension(wizardElement.getConfigurationElement().getDeclaringExtension(), new Object[]{wizardElement});
+		        // TODO: removed for now when new stuff are integrated on daily bases -- fix-it
+		        //WorkbenchWizardElement wizardElement = (WorkbenchWizardElement) wizard;
+		        // wizardRegistry.removeExtension(wizardElement.getConfigurationElement().getDeclaringExtension(), new Object[]{wizardElement});
 		    }
 		}
 		
