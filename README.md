@@ -11,12 +11,11 @@ Build and Run CloudScale Environment
 -----------------------------------------
 
 1. Clone the repository.
-	* `$ cd Cloudscale`
 	* `$ git clone https://github.com/CloudScale-Project/Environment.git`
 2. Build Cloudscale Environemnt.
-	* `$ mvn compile`
+	* `$ mvn package`
 3. Run Linux,MacOS,Windows distribution.
-	* Bundle location : plugins/master/target/products
+	* Bundle location : plugins/eu.cloudscaleproject.env.master/target/products
 
 Develop CloudScale Environment
 -----------------------------------------
