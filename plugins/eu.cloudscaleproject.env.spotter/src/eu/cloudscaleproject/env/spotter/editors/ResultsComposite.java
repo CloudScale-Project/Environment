@@ -13,7 +13,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
-import eu.cloudscaleproject.env.spotter.editors.composite.ResultComposite2;
+import eu.cloudscaleproject.env.spotter.editors.composite.ResultDataComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
@@ -121,7 +121,7 @@ public class ResultsComposite extends Composite{
 				String selectedInputName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 				
 				//TODO: test is this is correct! Wait until DynamicSpotter bug is fixed!
-				ResultComposite2 rc = new ResultComposite2(parent, style);
+				ResultDataComposite rc = new ResultDataComposite(parent, style);
 				rc.setResult((EditorInputFolder)input);
 				return rc;
 				//return new ResultComposite(parent, style, selectedInputName, editorInput.getResource().getFolder(input.getName()));

@@ -34,7 +34,7 @@ import org.spotter.shared.configuration.FileManager;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
-import eu.cloudscaleproject.env.spotter.RunUtil;
+import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -184,7 +184,7 @@ public class RunAlternativeComposite extends Composite{
 				}
 				
 				setInput(selectedEditorInput);
-				RunUtil.run(project, RunAlternativeComposite.this.editorInput);
+				ServerService.getInstance().runSimulation(project, RunAlternativeComposite.this.editorInput);
 			}
 		});
 		

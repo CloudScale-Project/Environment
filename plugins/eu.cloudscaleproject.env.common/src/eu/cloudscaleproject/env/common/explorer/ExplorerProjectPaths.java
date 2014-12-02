@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -55,6 +57,24 @@ public class ExplorerProjectPaths {
 	public static final String KEY_FILE_OVERVIEW_MODEL = "scaledl-overview-model";
 	public static final String KEY_FILE_OVERVIEW_DIAGRAM = "scaledl-overview-diagram";
 
+	/**
+	 * Retrieve all CloudScale projects from the Workspace
+	 * 
+	 * @return CloudScale IProject's
+	 */
+	public static IProject[] getProjects(){
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+		List<IProject> filtered = new ArrayList<IProject>();
+		for(IProject p : projects){
+			if(getPropertyFile(p).exists()){
+				filtered.add(p);
+			}
+		}
+		
+		return filtered.toArray(new IProject[filtered.size()]);
+	}
+	
 	/**
 	 * 
 	 * Check if specified project has property file. This method can be used

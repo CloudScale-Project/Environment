@@ -60,7 +60,7 @@ public class ResultAlternativeComposite extends AbstractSidebarMenuComposite{
 	public List<IEditorInput> getInputs(String section) {
 		List<IEditorInput> out = new ArrayList<IEditorInput>();
 		
-		if(validateResults(editorInput)){
+		if(!validateResults(editorInput)){
 			return out;
 		}
 		

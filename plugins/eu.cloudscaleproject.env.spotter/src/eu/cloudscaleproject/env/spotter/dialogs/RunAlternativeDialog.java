@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.cloudscaleproject.env.spotter.RunUtil;
+import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -57,7 +57,7 @@ public class RunAlternativeDialog extends Dialog{
 			if(selectionIndex >= 0){
 				
 				IEditorInputResource selectedResource = confResourceProvider.getResources().get(selectionIndex);
-				RunUtil.run(project, (EditorInputFolder)selectedResource);
+				ServerService.getInstance().runSimulation(project, (EditorInputFolder)selectedResource);
 			}
 		}
 		super.buttonPressed(buttonId);

@@ -8,9 +8,9 @@ import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.shared.configuration.JobDescription;
 
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.ToolValidator;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.spotter.RunUtil;
+import eu.cloudscaleproject.env.common.notification.ToolValidator;
+import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -55,7 +55,7 @@ public class ConfValidator extends ToolValidator {
 			
 			boolean jobCreationFailed = false;
 			try {
-				JobDescription job = RunUtil.createJobDescription(editorInput);
+				JobDescription job = ServerService.getInstance().createJobDescription(editorInput);
 				
 				status.handleWarning(ERROR_CONF, 
 						job.getDynamicSpotterConfig().isEmpty(), true, 

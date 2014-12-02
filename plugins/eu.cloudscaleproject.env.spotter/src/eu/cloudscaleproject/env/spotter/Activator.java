@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.spotter;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
@@ -7,6 +8,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.FolderResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -39,7 +41,11 @@ public class Activator extends AbstractUIPlugin implements ISelectionListener{
 		//register resource provider factories		
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID, new FolderResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, new FolderResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, new FolderResourceProviderFactory());
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, new FolderResourceProviderFactory());		
+		
+		for(IProject p : ExplorerProjectPaths.getProjects()){
+			ServerService.getInstance().fetchResults(p);
+		}
 		
 		/*
 		new Thread(new Runnable() {

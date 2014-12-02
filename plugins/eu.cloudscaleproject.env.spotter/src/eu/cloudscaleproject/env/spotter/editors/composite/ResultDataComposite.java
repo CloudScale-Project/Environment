@@ -75,7 +75,7 @@ import org.spotter.shared.result.model.SpotterResult;
 
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class ResultComposite2 extends Composite{
+public class ResultDataComposite extends Composite{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);
 
@@ -125,7 +125,7 @@ public class ResultComposite2 extends Composite{
 	private ResultsContainer resultsContainer;
 	private XPerformanceProblem currentSelectedProblem;
 
-	public ResultComposite2(Composite parent, int style) {
+	public ResultDataComposite(Composite parent, int style) {
 		super(parent, style);
 		
 		this.client = null;
@@ -163,7 +163,18 @@ public class ResultComposite2 extends Composite{
 		} else {
 			this.client = null;
 		}
-		updateTabs();
+		if(this.resultAlternative.getResource().getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME).exists()){
+			updateTabs();
+		}
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+		if(this.resultAlternative != null && this.resultAlternative.getResource()
+				.getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME).exists()){
+			updateTabs();
+		}
 	}
 
 	/**
