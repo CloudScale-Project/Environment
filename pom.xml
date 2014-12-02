@@ -52,70 +52,20 @@ Package : mvn install
     <!--
      Features and Update sites
  -->
-    <module>features/eu.cloudscaleproject.feature.analyser</module>
-    <module>features/eu.cloudscaleproject.feature.extractor</module>
-    <module>features/eu.cloudscaleproject.feature.staticspotter</module>
-    <module>features/eu.cloudscaleproject.feature.dynamicspotter</module>
-    <module>features/eu.cloudscaleproject.updatesite.toolchain</module>
-
-    <module>features/eu.cloudscaleproject.feature.environment.dev</module>
+    <!--module>features/eu.cloudscaleproject.feature.environment.dev</module>
     <module>features/eu.cloudscaleproject.feature.environment</module>
-    <module>features/eu.cloudscaleproject.updatesite.environment</module>
+    <module>features/eu.cloudscaleproject.updatesite.environment</module-->
     
   </modules>
   <!-- Export "Available Software Sites" (properties > install/update) from eclipse and use following sed command on it -->
   <!--sed -r 's;.*url="(.*?)" sel.*name="(.*)".*;<repository><id>\2</id><layout>p2</layout><url>\1</url></repository>;g' sites.xml -->
 <repositories>
 	<!-- CloudScale update-sites --> 
-	<repository><id>Architectural Templates</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/architecturaltemplates/nightly/</url></repository>
-	<repository><id>Usage evolution</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/usageevolution/nightly/</url></repository>
-
-	<!-- SDQWEB update-sites --> 
-	<repository><id>Experiment Automation</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/experimentautomation/nightly/</url></repository>
-
-	<repository><id>Buckminster</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/storydiagraminterpreter/nightly/</url></repository>
-	<repository><id>Buckminster Build for EDP2 features</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/edp2/nightly/</url></repository>
-	<repository><id>MDSD Profiles</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/mdsdprofiles/nightly</url></repository>
-	<repository><id>Palladio Commons - Buckminster Build Nightly</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/commons/nightly/</url></repository>
-	<repository><id>Palladio Commons - Buckminster Build Kit 1.3</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/commons/releases/1.3</url></repository>
-	<repository><id>Palladio Commons - Buckminster Build Ipd 1.3</id><layout>p2</layout><url>http://sdqweb.ipd.uka.de/eclipse/commons/releases/1.3</url></repository>
-	<repository><id>Palladio Feature Model</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/featuremodel/nightly/</url></repository>
-	<repository><id>Palladio Measurement Framework</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/measurementframework/nightly/</url></repository>
-	<repository><id>Palladio Metric Specification Framework</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/metricspec/nightly/</url></repository>
-	<repository><id>Palladio ProbeFramework</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/probeframework/nightly/</url></repository>
-	<repository><id>Palladio RecorderFramework</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/recorderframework/nightly/</url></repository>
-	<repository><id>Palladio SensorFramework</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/sensorframework/nightly</url></repository>
-	<repository><id>Palladio Third-Party Wrapper</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/thirdpartywrapper/nightly/</url></repository>
-	<repository><id>Palladio Addons</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/ssj/nightly/</url></repository>
-	<repository><id>Palladio Workflow Engine</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/workflowengine/nightly/</url></repository>
-	<repository><id>PCM Core - Buckminster Feature</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/palladio/nightly/</url></repository>
-	<repository><id>PCM Core - Buckminster Feature Https</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/nightly</url></repository>
-	<repository><id>Service Level Objectives</id><layout>p2</layout><url>http://sdqweb.ipd.kit.edu/eclipse/servicelevelobjectives/nightly/</url></repository>
-	<repository><id>Simulizer Buckminster Feature</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/simulizar/nightly</url></repository>
-
-	<!-- 3rd party --> 
-	<repository><id>Limbo Update</id><layout>p2</layout><url>http://se2.informatik.uni-wuerzburg.de/eclipse/limbo/</url></repository>
-    <repository><id>Reclipse</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/reclipse/nightly/</url></repository>
-    <repository><id>guava-osgi metadata repository</id><layout>p2</layout><url>http://guava-osgi.googlecode.com/svn/trunk/repository</url></repository>
-    <repository><id>modeling.gmt.modisco Update Site</id><layout>p2</layout><url>http://download.eclipse.org/modeling/gmt/modisco/updates/release/</url></repository>
-    <repository><id>SoMoX</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/somox/nightly</url></repository>
+	<repository><id>CloudScale Toolchain</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/</url></repository>
 
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
 	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
-
-	<repository><id>org.eclipse.e4.core.tools.update</id><layout>p2</layout><url>http://download.vogella.com/luna/e4tools</url></repository>
-	<repository><id>Update Site</id><layout>p2</layout><url>http://antlreclipse.sourceforge.net/updates/</url></repository>
-
-
-	<repository><id>Composite Artifact Repository</id><layout>p2</layout><url>http://download.eclipse.org/modeling/m2t/xpand/updates/releases</url></repository>
-	<repository><id>Eclipse Modeling Framework (EMF) Releases Site</id><layout>p2</layout><url>http://download.eclipse.org/modeling/emf/emf/updates/releases/</url></repository>
-	<repository><id>Orbit-R20120526062928</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url></repository>
-	<repository><id>Orbit-R20130827064939</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130827064939/repository/</url></repository>
-	<repository><id>Orbit-R20140114142710</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140114142710/repository/</url></repository>
-	<repository><id>Orbit-R20140525021250</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</url></repository>
-	<repository><id>QVTo Build Site</id><layout>p2</layout><url>http://download.eclipse.org/mmt/qvto/updates/releases/3.4.0</url></repository>
-	<repository><id>Xtext All In One (Releases)</id><layout>p2</layout><url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url></repository>
 
 </repositories>
  
