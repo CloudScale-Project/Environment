@@ -52,6 +52,10 @@
          id="org.eclipse.emf.compare"
          version="0.0.0"/>
 
+   <includes
+         id="org.sonatype.tycho.m2e.feature"
+         version="0.0.0"/>
+
    <plugin
          id="eu.cloudscaleproject.env.method.common"
          download-size="0"

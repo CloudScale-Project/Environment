@@ -37,6 +37,8 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
 
+    <module>plugins/eu.cloudscaleproject.env.usageevolution</module>
+
     <module>plugins/org.scaledl.overview</module>
     <module>plugins/org.scaledl.overview.diagram</module>
     <module>plugins/org.scaledl.overview.edit</module>
@@ -66,6 +68,9 @@ Package : mvn install
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
 	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
+
+	<!-- Tycho M2 Connectors - Dev update site -->
+	<repository><id>org.sonatype.tycho.repository</id><layout>p2</layout><url>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/0.8.0.201409231215/</url></repository>
 
 </repositories>
  

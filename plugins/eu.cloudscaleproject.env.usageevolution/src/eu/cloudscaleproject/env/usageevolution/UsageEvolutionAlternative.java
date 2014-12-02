@@ -17,8 +17,8 @@ import org.scaledl.usageevolution.Usage;
 import org.scaledl.usageevolution.UsageEvolution;
 import org.scaledl.usageevolution.UsageevolutionFactory;
 
-import dlim.DlimFactory;
-import dlim.ExponentialIncreaseLogarithmicDecline;
+import tools.descartes.dlim.DlimFactory;
+import tools.descartes.dlim.ExponentialIncreaseLogarithmicDecline;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
