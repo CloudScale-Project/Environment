@@ -16,9 +16,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_KSSYgC3MEeSaD7cZMXxbKA" elementId="eu.cludscale.environment.extractor.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorEditorHandler" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pm0KcDHXEeO3JJACK76kDw" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_ErSHsAzmEeSp8dUgDO-GmA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_gOzHEAzmEeSp8dUgDO-GmA" elementId="eu.cloudscaleproject.env.extractor.handledmenuitem.0" label="Import Wizard" command="_ha7YcAzlEeSp8dUgDO-GmA"/>
-    </elements>
+    <elements xsi:type="menu:MenuContribution" xmi:id="_ErSHsAzmEeSp8dUgDO-GmA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IUZ4kAzoEeSp8dUgDO-GmA" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:1">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_WliS0C3MEeSaD7cZMXxbKA" elementId="eu.cloudscaleproject.env.extractor.handledtoolitem.openeditor" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/html/ic-extractor.png" tooltip="Open Extractor Editor" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
