@@ -23,9 +23,9 @@ Package : mvn install
     <!-- 
      Plugins - env and scaledl.overview
      -->
-    <module>plugins/eu.cloudscaleproject.env.product</module>
     <module>plugins/eu.cloudscaleproject.env.common</module>
     <module>plugins/eu.cloudscaleproject.env.master</module>
+    <module>plugins/eu.cloudscaleproject.env.product</module>
   
     <module>plugins/eu.cloudscaleproject.env.method.common</module>
     <module>plugins/eu.cloudscaleproject.env.method.viewer</module>
@@ -48,7 +48,7 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.help</module>
     <module>plugins/eu.cloudscaleproject.env.method.editor</module>
     
-    <!--module>plugins/eu.cloudscaleproject.env.spotter</module-->
+    <module>plugins/eu.cloudscaleproject.env.spotter</module>
     
 
     <!--

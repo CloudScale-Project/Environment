@@ -18,7 +18,7 @@ public class RunStatusComposite extends Composite{
 		
 		this.activeRunView = new ActiveRunViewExtended();
 		this.activeRunView.createPartControl(this);
-		this.activeRunView.updateContent(project);
+		//this.activeRunView.updateContent(project);
 		
 		this.layout();
 		
@@ -32,10 +32,10 @@ public class RunStatusComposite extends Composite{
 	}
 	
 	private class ActiveRunViewExtended extends ActiveRunView{
-		@Override
-		protected void updateView() {
-			this.updateContent(project);
-		}
+		//@Override
+		//protected void updateView() {
+			//this.updateContent(project);
+		//}
 	}
 	
 }
