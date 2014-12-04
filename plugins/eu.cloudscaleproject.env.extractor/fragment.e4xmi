@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_lFWCADGqEeO3JJACK76kDw">
+  <imports xsi:type="commands:Command" xmi:id="_W-nacHuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_H1QkYDGwEeO3JJACK76kDw" featurename="children" parentElementId="eu.cloudscaleproject.env.product.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_KsJ5ADGwEeO3JJACK76kDw" elementId="eu.cloudscaleproject.env.extractor.perspective" label="Archimetrix"/>
   </fragments>
@@ -16,7 +17,11 @@
     <elements xsi:type="commands:Handler" xmi:id="_KSSYgC3MEeSaD7cZMXxbKA" elementId="eu.cludscale.environment.extractor.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorEditorHandler" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pm0KcDHXEeO3JJACK76kDw" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_ErSHsAzmEeSp8dUgDO-GmA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools"/>
+    <elements xsi:type="menu:MenuContribution" xmi:id="_LwkNoHuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
+      <children xsi:type="menu:Menu" xmi:id="_LwkNoXuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.extractor.menu.extractor" label="Extractor">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_LwkNonuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.extractor.handledmenuitem.main" label="Perspective" command="_W-nacHuaEeSCzZgOtBwvkA"/>
+      </children>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IUZ4kAzoEeSp8dUgDO-GmA" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:1">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_WliS0C3MEeSaD7cZMXxbKA" elementId="eu.cloudscaleproject.env.extractor.handledtoolitem.openeditor" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/html/ic-extractor.png" tooltip="Open Extractor Editor" command="_90Z7gC3LEeSaD7cZMXxbKA"/>

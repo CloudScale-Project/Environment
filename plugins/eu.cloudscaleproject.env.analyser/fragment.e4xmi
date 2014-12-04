@@ -6,8 +6,8 @@
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_Z1yUsDdmEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.command.openinputdialog" commandName="openInputDialog"/>
     <elements xsi:type="commands:Command" xmi:id="_DpYPAGN7EeSorYO_PWJo-g" elementId="eu.cloudscaleproject.env.analyser.command.openconfdialog" commandName="openConfDialog"/>
-    <elements xsi:type="commands:Command" xmi:id="_oyCqUHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openMainPerspective" commandName="openMainPerspective"/>
-    <elements xsi:type="commands:Command" xmi:id="_sXzQEHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openResultsPerspective" commandName="openResultsPerspective"/>
+    <elements xsi:type="commands:Command" xmi:id="_oyCqUHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective" commandName="openAnalyserPerspective"/>
+    <elements xsi:type="commands:Command" xmi:id="_sXzQEHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openAnalyserResultsPerspective" commandName="openAnalyserResultsPerspective"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Lh83oHncEeKfc49LSeS68A" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_KZzcwCFKEeSfNL-QVYMrbg" elementId="eu.cloudscaleproject.env.analyser.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenAnalyserEditorHandler" command="_yNgQ0CFJEeSfNL-QVYMrbg"/>
@@ -19,8 +19,8 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wHppMHncEeKfc49LSeS68A" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_clTQ4DgUEeSZvujNsROb0w" elementId="eu.cloudscaleproject.env.analyser.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
       <children xsi:type="menu:Menu" xmi:id="_ExAd8Hr_EeSnk-N-pbZOPQ" elementId="eu.cloudscaleproject.env.analyser.menu.analyser" label="Analyser">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_ZXxUsHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.test" label="Main perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_B7kTgHtPEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.test" label="Results" command="_sXzQEHtOEeSNHIyeGGCx9A"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_ZXxUsHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.test" label="Perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_B7kTgHtPEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.test" label="Results perspective (EDP2)" command="_sXzQEHtOEeSNHIyeGGCx9A"/>
       </children>
     </elements>
   </fragments>

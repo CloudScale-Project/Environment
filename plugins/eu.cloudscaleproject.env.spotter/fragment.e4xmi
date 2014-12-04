@@ -21,7 +21,9 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DshzYEPvEeSK3KV4OioXdg" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_4VzLsEPuEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.menucontribution.perspective" parentId="cloudscale.environment.product.menu.tools">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_OrJdEEPvEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.perspective" label="Open Dynamic Spotter perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
+      <children xsi:type="menu:Menu" xmi:id="_yzpLIHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.dynamicspotter.menu.dynamicspotter" label="Dynamic Spotter">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_3NNzcHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.perspective" label="Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
+      </children>
     </elements>
   </fragments>
 </fragment:ModelFragments>
