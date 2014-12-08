@@ -1,38 +1,5 @@
 package eu.cloudscaleproject.env.analyser.experiments;
 
-import java.io.IOException;
-
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
-import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
-import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
-import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
-import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
-import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
-import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
-import org.palladiosimulator.experimentautomation.experiments.Experiment;
-import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
-import org.palladiosimulator.experimentautomation.experiments.InitialModel;
-import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
-import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
-import org.palladiosimulator.simulizar.pms.Intervall;
-import org.palladiosimulator.simulizar.pms.MeasurementSpecification;
-import org.palladiosimulator.simulizar.pms.PMSModel;
-import org.palladiosimulator.simulizar.pms.PerformanceMeasurement;
-import org.palladiosimulator.simulizar.pms.PerformanceMetricEnum;
-import org.palladiosimulator.simulizar.pms.PmsFactory;
-import org.palladiosimulator.simulizar.pms.StatisticalCharacterizationEnum;
-import org.palladiosimulator.simulizar.pms.impl.PmsFactoryImpl;
-
-import de.uka.ipd.sdq.pcm.repository.Repository;
-import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
-import de.uka.ipd.sdq.pcm.usagemodel.UsageScenario;
-import de.uka.ipd.sdq.pcm.usagemodel.UsagemodelFactory;
-import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
 public class CapacityExperiment {
 	
