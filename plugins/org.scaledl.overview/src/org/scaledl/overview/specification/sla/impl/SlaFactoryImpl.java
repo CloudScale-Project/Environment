@@ -5,13 +5,12 @@ package org.scaledl.overview.specification.sla.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.specification.sla.PriceModel;
-import org.scaledl.overview.specification.sla.Sla;
-import org.scaledl.overview.specification.sla.SlaFactory;
-import org.scaledl.overview.specification.sla.SlaPackage;
-import org.scaledl.overview.specification.sla.Slo;
+
+import org.scaledl.overview.specification.sla.*;
 
 /**
  * <!-- begin-user-doc -->

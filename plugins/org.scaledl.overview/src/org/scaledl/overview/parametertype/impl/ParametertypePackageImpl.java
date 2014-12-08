@@ -7,17 +7,29 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import org.scaledl.overview.OverviewPackage;
+
 import org.scaledl.overview.application.ApplicationPackage;
+
 import org.scaledl.overview.application.impl.ApplicationPackageImpl;
+
 import org.scaledl.overview.architecture.ArchitecturePackage;
+
 import org.scaledl.overview.architecture.impl.ArchitecturePackageImpl;
+
 import org.scaledl.overview.core.CorePackage;
+
 import org.scaledl.overview.core.impl.CorePackageImpl;
+
 import org.scaledl.overview.deployment.DeploymentPackage;
+
 import org.scaledl.overview.deployment.impl.DeploymentPackageImpl;
+
 import org.scaledl.overview.impl.OverviewPackageImpl;
+
 import org.scaledl.overview.parametertype.CollectionParameter;
 import org.scaledl.overview.parametertype.CompositeParameter;
 import org.scaledl.overview.parametertype.Parameter;
@@ -26,9 +38,13 @@ import org.scaledl.overview.parametertype.ParametertypeFactory;
 import org.scaledl.overview.parametertype.ParametertypePackage;
 import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
+
 import org.scaledl.overview.specification.SpecificationPackage;
+
 import org.scaledl.overview.specification.impl.SpecificationPackageImpl;
+
 import org.scaledl.overview.specification.sla.SlaPackage;
+
 import org.scaledl.overview.specification.sla.impl.SlaPackageImpl;
 
 /**

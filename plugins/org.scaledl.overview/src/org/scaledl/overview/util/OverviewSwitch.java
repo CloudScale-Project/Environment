@@ -4,9 +4,10 @@ package org.scaledl.overview.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
-import org.scaledl.overview.Overview;
-import org.scaledl.overview.OverviewPackage;
+
+import org.scaledl.overview.*;
 
 /**
  * <!-- begin-user-doc -->

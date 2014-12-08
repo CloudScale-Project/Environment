@@ -4,12 +4,12 @@ package org.scaledl.overview.specification.sla.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
-import org.scaledl.overview.specification.sla.PriceModel;
-import org.scaledl.overview.specification.sla.Sla;
-import org.scaledl.overview.specification.sla.SlaPackage;
-import org.scaledl.overview.specification.sla.Slo;
+
+import org.scaledl.overview.specification.sla.*;
 
 /**
  * <!-- begin-user-doc -->

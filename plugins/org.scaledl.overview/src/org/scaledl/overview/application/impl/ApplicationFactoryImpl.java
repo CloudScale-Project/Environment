@@ -5,12 +5,12 @@ package org.scaledl.overview.application.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.application.ApplicationFactory;
-import org.scaledl.overview.application.ApplicationPackage;
-import org.scaledl.overview.application.Operation;
-import org.scaledl.overview.application.OperationInterface;
+
+import org.scaledl.overview.application.*;
 
 /**
  * <!-- begin-user-doc -->

@@ -3,6 +3,7 @@
 package org.scaledl.overview.specification.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.scaledl.overview.specification.ProvidedPlatformSupportServiceDescriptor;
 import org.scaledl.overview.specification.SpecificationPackage;
 

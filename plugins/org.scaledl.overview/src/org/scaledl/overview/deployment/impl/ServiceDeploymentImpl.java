@@ -3,7 +3,9 @@
 package org.scaledl.overview.deployment.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.scaledl.overview.core.impl.EntityImpl;
+
 import org.scaledl.overview.deployment.DeploymentPackage;
 import org.scaledl.overview.deployment.ServiceDeployment;
 

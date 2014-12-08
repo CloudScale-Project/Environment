@@ -8,12 +8,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.core.CoreFactory;
-import org.scaledl.overview.core.CorePackage;
-import org.scaledl.overview.core.MeasurementMetric_NOTUSED;
-import org.scaledl.overview.core.StatisticType_NOTUSED;
+
+import org.scaledl.overview.core.*;
 
 /**
  * <!-- begin-user-doc -->

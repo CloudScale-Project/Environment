@@ -6,9 +6,10 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
-import org.scaledl.overview.core.CorePackage;
-import org.scaledl.overview.core.Entity;
+
+import org.scaledl.overview.core.*;
 
 /**
  * <!-- begin-user-doc -->

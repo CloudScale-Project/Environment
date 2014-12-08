@@ -3,6 +3,7 @@
 package org.scaledl.overview.deployment;
 
 import org.scaledl.overview.core.Entity;
+
 import org.scaledl.overview.specification.ComputingResourceDescriptor;
 
 /**

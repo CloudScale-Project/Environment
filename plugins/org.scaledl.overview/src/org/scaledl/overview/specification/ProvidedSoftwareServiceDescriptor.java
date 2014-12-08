@@ -3,6 +3,7 @@
 package org.scaledl.overview.specification;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.application.Operation;
 
 /**

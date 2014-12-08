@@ -4,15 +4,14 @@ package org.scaledl.overview.parametertype.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
+
 import org.scaledl.overview.core.Entity;
-import org.scaledl.overview.parametertype.CollectionParameter;
-import org.scaledl.overview.parametertype.CompositeParameter;
-import org.scaledl.overview.parametertype.Parameter;
-import org.scaledl.overview.parametertype.ParameterType;
-import org.scaledl.overview.parametertype.ParametertypePackage;
-import org.scaledl.overview.parametertype.PrimitiveParameter;
+
+import org.scaledl.overview.parametertype.*;
 
 /**
  * <!-- begin-user-doc -->

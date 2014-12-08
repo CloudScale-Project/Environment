@@ -3,7 +3,9 @@
 package org.scaledl.overview.specification.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.scaledl.overview.specification.Specification;
 import org.scaledl.overview.specification.SpecificationPackage;
 

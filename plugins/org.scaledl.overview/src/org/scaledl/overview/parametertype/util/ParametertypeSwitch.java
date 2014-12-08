@@ -4,14 +4,12 @@ package org.scaledl.overview.parametertype.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
+
 import org.scaledl.overview.core.Entity;
-import org.scaledl.overview.parametertype.CollectionParameter;
-import org.scaledl.overview.parametertype.CompositeParameter;
-import org.scaledl.overview.parametertype.Parameter;
-import org.scaledl.overview.parametertype.ParameterType;
-import org.scaledl.overview.parametertype.ParametertypePackage;
-import org.scaledl.overview.parametertype.PrimitiveParameter;
+
+import org.scaledl.overview.parametertype.*;
 
 /**
  * <!-- begin-user-doc -->

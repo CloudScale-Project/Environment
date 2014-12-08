@@ -3,8 +3,10 @@
 package org.scaledl.overview.architecture.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.scaledl.overview.architecture.ArchitecturePackage;
 import org.scaledl.overview.architecture.Proxy;
+
 import org.scaledl.overview.core.impl.EntityImpl;
 
 /**

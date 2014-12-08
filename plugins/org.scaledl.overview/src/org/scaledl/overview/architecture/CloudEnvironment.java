@@ -3,7 +3,9 @@
 package org.scaledl.overview.architecture;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.core.Entity;
+
 import org.scaledl.overview.specification.AvailabilityZoneDescriptor;
 import org.scaledl.overview.specification.CloudEnvironmentDescriptor;
 

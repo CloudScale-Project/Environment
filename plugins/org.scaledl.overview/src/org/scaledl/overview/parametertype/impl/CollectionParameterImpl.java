@@ -3,9 +3,12 @@
 package org.scaledl.overview.parametertype.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.scaledl.overview.parametertype.CollectionParameter;
 import org.scaledl.overview.parametertype.Parameter;
 import org.scaledl.overview.parametertype.ParametertypePackage;

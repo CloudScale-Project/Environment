@@ -3,7 +3,9 @@
 package org.scaledl.overview.architecture;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.application.OperationInterface;
+
 import org.scaledl.overview.core.Entity;
 
 /**

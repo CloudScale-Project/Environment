@@ -3,6 +3,7 @@
 package org.scaledl.overview.architecture;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
 
 /**

@@ -4,33 +4,14 @@ package org.scaledl.overview.specification.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
+
 import org.scaledl.overview.core.Entity;
-import org.scaledl.overview.specification.AvailabilityZoneDescriptor;
-import org.scaledl.overview.specification.CloudEnvironmentDescriptor;
-import org.scaledl.overview.specification.CloudSpecification;
-import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.ComputingResourceDescriptor;
-import org.scaledl.overview.specification.Descriptor;
-import org.scaledl.overview.specification.ExternalSoftwareServiceDescriptor;
-import org.scaledl.overview.specification.InfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.PlatformRuntimeServiceDescriptor;
-import org.scaledl.overview.specification.PlatformServiceDescriptor;
-import org.scaledl.overview.specification.PlatformSupportServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformRuntimeServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformSupportServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedSoftwareServiceDescriptor;
-import org.scaledl.overview.specification.RegionDescriptor;
-import org.scaledl.overview.specification.ServiceDescriptor;
-import org.scaledl.overview.specification.ServiceSpecification;
-import org.scaledl.overview.specification.SoftwareServiceDescriptor;
-import org.scaledl.overview.specification.Specification;
-import org.scaledl.overview.specification.SpecificationPackage;
-import org.scaledl.overview.specification.SystemSpecification;
+
+import org.scaledl.overview.specification.*;
 
 /**
  * <!-- begin-user-doc -->

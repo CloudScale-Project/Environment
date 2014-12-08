@@ -4,19 +4,12 @@ package org.scaledl.overview.deployment.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
+
 import org.scaledl.overview.core.Entity;
-import org.scaledl.overview.deployment.ClusteredComputingEnvironment;
-import org.scaledl.overview.deployment.ComputingEnvironment;
-import org.scaledl.overview.deployment.Deployment;
-import org.scaledl.overview.deployment.DeploymentPackage;
-import org.scaledl.overview.deployment.GenericDeployment;
-import org.scaledl.overview.deployment.LoadBalancer;
-import org.scaledl.overview.deployment.RuntimeDeployment;
-import org.scaledl.overview.deployment.ScalableComputingEnvironment;
-import org.scaledl.overview.deployment.ScalingManager;
-import org.scaledl.overview.deployment.ScalingPolicy;
-import org.scaledl.overview.deployment.ServiceDeployment;
+
+import org.scaledl.overview.deployment.*;
 
 /**
  * <!-- begin-user-doc -->

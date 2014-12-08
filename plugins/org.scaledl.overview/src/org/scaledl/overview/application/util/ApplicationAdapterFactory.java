@@ -4,12 +4,13 @@ package org.scaledl.overview.application.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
-import org.scaledl.overview.application.ApplicationPackage;
-import org.scaledl.overview.application.Operation;
-import org.scaledl.overview.application.OperationInterface;
-import org.scaledl.overview.application.OperationInterfaceContainer;
+
+import org.scaledl.overview.application.*;
+
 import org.scaledl.overview.core.Entity;
 
 /**

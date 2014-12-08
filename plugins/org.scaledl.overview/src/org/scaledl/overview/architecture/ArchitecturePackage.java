@@ -6,7 +6,9 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.scaledl.overview.application.ApplicationPackage;
+
 import org.scaledl.overview.core.CorePackage;
 
 /**

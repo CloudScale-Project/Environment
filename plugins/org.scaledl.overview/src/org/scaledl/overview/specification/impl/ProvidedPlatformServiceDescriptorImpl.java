@@ -4,13 +4,17 @@ package org.scaledl.overview.specification.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedServiceDescriptor;
 import org.scaledl.overview.specification.SpecificationPackage;
+
 import org.scaledl.overview.specification.sla.Sla;
 
 /**

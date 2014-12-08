@@ -4,11 +4,11 @@ package org.scaledl.overview.application.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.util.Switch;
-import org.scaledl.overview.application.ApplicationPackage;
-import org.scaledl.overview.application.Operation;
-import org.scaledl.overview.application.OperationInterface;
-import org.scaledl.overview.application.OperationInterfaceContainer;
+
+import org.scaledl.overview.application.*;
+
 import org.scaledl.overview.core.Entity;
 
 /**

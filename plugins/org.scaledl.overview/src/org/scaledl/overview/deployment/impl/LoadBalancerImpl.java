@@ -3,9 +3,13 @@
 package org.scaledl.overview.deployment.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.scaledl.overview.core.impl.EntityImpl;
+
 import org.scaledl.overview.deployment.DeploymentPackage;
 import org.scaledl.overview.deployment.LoadBalancer;
 import org.scaledl.overview.deployment.SchedulingPolicy;

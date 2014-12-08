@@ -3,7 +3,9 @@
 package org.scaledl.overview.parametertype.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.scaledl.overview.core.impl.EntityImpl;
+
 import org.scaledl.overview.parametertype.Parameter;
 import org.scaledl.overview.parametertype.ParametertypePackage;
 

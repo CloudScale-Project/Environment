@@ -8,13 +8,18 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
 import org.scaledl.overview.application.ApplicationPackage;
 import org.scaledl.overview.application.Operation;
+
 import org.scaledl.overview.core.provider.EntityItemProvider;
+
 import org.scaledl.overview.provider.OverviewEditPlugin;
 
 /**
@@ -23,8 +28,7 @@ import org.scaledl.overview.provider.OverviewEditPlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class OperationItemProvider
-	extends EntityItemProvider {
+public class OperationItemProvider extends EntityItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -89,7 +93,7 @@ public class OperationItemProvider
 				 getString("_UI_PropertyDescriptor_description", "_UI_Operation_parameters_feature", "_UI_Operation_type"),
 				 ApplicationPackage.Literals.OPERATION__PARAMETERS,
 				 true,
-				 false,
+				 true,
 				 false,
 				 null,
 				 null,
@@ -120,6 +124,7 @@ public class OperationItemProvider
 			getString("_UI_Operation_type") :
 			getString("_UI_Operation_type") + " " + label;
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

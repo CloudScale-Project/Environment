@@ -6,16 +6,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.parametertype.CollectionParameter;
-import org.scaledl.overview.parametertype.CompositeParameter;
-import org.scaledl.overview.parametertype.Parameter;
-import org.scaledl.overview.parametertype.ParameterType;
-import org.scaledl.overview.parametertype.ParametertypeFactory;
-import org.scaledl.overview.parametertype.ParametertypePackage;
-import org.scaledl.overview.parametertype.PrimitiveParameter;
-import org.scaledl.overview.parametertype.TypeEnum;
+
+import org.scaledl.overview.parametertype.*;
 
 /**
  * <!-- begin-user-doc -->

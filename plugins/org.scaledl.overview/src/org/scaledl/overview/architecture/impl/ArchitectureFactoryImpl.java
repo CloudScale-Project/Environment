@@ -5,27 +5,12 @@ package org.scaledl.overview.architecture.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.architecture.Architecture;
-import org.scaledl.overview.architecture.ArchitectureFactory;
-import org.scaledl.overview.architecture.ArchitecturePackage;
-import org.scaledl.overview.architecture.CloudEnvironment;
-import org.scaledl.overview.architecture.ComputingInfrastructureService;
-import org.scaledl.overview.architecture.ExternalConnection;
-import org.scaledl.overview.architecture.ExternalSoftwareService;
-import org.scaledl.overview.architecture.InfrastructureLayer;
-import org.scaledl.overview.architecture.InternalConnection;
-import org.scaledl.overview.architecture.PlatformLayer;
-import org.scaledl.overview.architecture.PlatformRuntimeService;
-import org.scaledl.overview.architecture.PlatformSupportService;
-import org.scaledl.overview.architecture.ProvidedPlatformRuntimeService;
-import org.scaledl.overview.architecture.ProvidedPlatformSupportService;
-import org.scaledl.overview.architecture.ProvidedSoftwareService;
-import org.scaledl.overview.architecture.ServiceProxy;
-import org.scaledl.overview.architecture.SoftwareLayer;
-import org.scaledl.overview.architecture.SoftwareService;
-import org.scaledl.overview.architecture.UsageProxy;
+
+import org.scaledl.overview.architecture.*;
 
 /**
  * <!-- begin-user-doc -->

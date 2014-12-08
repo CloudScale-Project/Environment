@@ -4,15 +4,22 @@ package org.scaledl.overview.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.scaledl.overview.Overview;
 import org.scaledl.overview.OverviewPackage;
+
 import org.scaledl.overview.architecture.Architecture;
+
 import org.scaledl.overview.deployment.Deployment;
+
 import org.scaledl.overview.parametertype.ParameterType;
+
 import org.scaledl.overview.specification.SystemSpecification;
 
 /**

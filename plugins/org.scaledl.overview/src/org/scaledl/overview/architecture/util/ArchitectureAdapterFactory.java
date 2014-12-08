@@ -4,34 +4,15 @@ package org.scaledl.overview.architecture.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
+
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
 import org.eclipse.emf.ecore.EObject;
+
 import org.scaledl.overview.application.OperationInterfaceContainer;
-import org.scaledl.overview.architecture.Architecture;
-import org.scaledl.overview.architecture.ArchitecturePackage;
-import org.scaledl.overview.architecture.CloudEnvironment;
-import org.scaledl.overview.architecture.ComputingInfrastructureService;
-import org.scaledl.overview.architecture.Connection;
-import org.scaledl.overview.architecture.ExternalConnection;
-import org.scaledl.overview.architecture.ExternalSoftwareService;
-import org.scaledl.overview.architecture.InfrastructureLayer;
-import org.scaledl.overview.architecture.InfrastructureService;
-import org.scaledl.overview.architecture.InternalConnection;
-import org.scaledl.overview.architecture.PlatformLayer;
-import org.scaledl.overview.architecture.PlatformRuntimeService;
-import org.scaledl.overview.architecture.PlatformService;
-import org.scaledl.overview.architecture.PlatformSupportService;
-import org.scaledl.overview.architecture.ProvidedPlatformRuntimeService;
-import org.scaledl.overview.architecture.ProvidedPlatformSupportService;
-import org.scaledl.overview.architecture.ProvidedService;
-import org.scaledl.overview.architecture.ProvidedSoftwareService;
-import org.scaledl.overview.architecture.Proxy;
-import org.scaledl.overview.architecture.Service;
-import org.scaledl.overview.architecture.ServiceProxy;
-import org.scaledl.overview.architecture.SoftwareLayer;
-import org.scaledl.overview.architecture.SoftwareService;
-import org.scaledl.overview.architecture.SoftwareServiceContainer;
-import org.scaledl.overview.architecture.UsageProxy;
+
+import org.scaledl.overview.architecture.*;
+
 import org.scaledl.overview.core.Entity;
 
 /**

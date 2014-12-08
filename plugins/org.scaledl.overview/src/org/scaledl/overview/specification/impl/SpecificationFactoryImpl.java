@@ -5,28 +5,12 @@ package org.scaledl.overview.specification.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
+
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.scaledl.overview.specification.AvailabilityZoneDescriptor;
-import org.scaledl.overview.specification.CloudEnvironmentDescriptor;
-import org.scaledl.overview.specification.CloudSpecification;
-import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.ComputingResourceDescriptor;
-import org.scaledl.overview.specification.ExternalSoftwareServiceDescriptor;
-import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
-import org.scaledl.overview.specification.PlatformRuntimeServiceDescriptor;
-import org.scaledl.overview.specification.PlatformServiceDescriptor;
-import org.scaledl.overview.specification.PlatformSupportServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformRuntimeServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedPlatformSupportServiceDescriptor;
-import org.scaledl.overview.specification.ProvidedSoftwareServiceDescriptor;
-import org.scaledl.overview.specification.RegionDescriptor;
-import org.scaledl.overview.specification.ServiceSpecification;
-import org.scaledl.overview.specification.SoftwareServiceDescriptor;
-import org.scaledl.overview.specification.SpecificationFactory;
-import org.scaledl.overview.specification.SpecificationPackage;
-import org.scaledl.overview.specification.SystemSpecification;
+
+import org.scaledl.overview.specification.*;
 
 /**
  * <!-- begin-user-doc -->

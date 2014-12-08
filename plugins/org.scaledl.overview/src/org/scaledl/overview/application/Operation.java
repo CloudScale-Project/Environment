@@ -3,7 +3,9 @@
 package org.scaledl.overview.application;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.core.Entity;
+
 import org.scaledl.overview.parametertype.Parameter;
 
 /**

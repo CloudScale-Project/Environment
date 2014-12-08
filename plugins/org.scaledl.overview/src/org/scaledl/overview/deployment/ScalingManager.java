@@ -3,6 +3,7 @@
 package org.scaledl.overview.deployment;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.scaledl.overview.core.Entity;
 
 /**
