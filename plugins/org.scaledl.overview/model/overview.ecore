@@ -103,8 +103,8 @@
         <details key="documentation" value="The operation represents specific operation signature in association to parameters and return value.&#xA;"/>
       </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="returnParameter" eType="#//parametertype/Parameter"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
-          eType="#//parametertype/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" unique="false"
+          upperBound="-1" eType="#//parametertype/Parameter"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="OperationInterfaceContainer" abstract="true"
         interface="true" eSuperTypes="#//core/Entity">
