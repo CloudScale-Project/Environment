@@ -60,6 +60,16 @@ public class CommandExecutor {
 			logger.warning("execute("+ id +"): Command with specified ID was not found!");
 			return;
 		}
+		
+		try {
+			if(command.getParameters() == null){
+				execute(id);
+				return;
+			}
+		} catch (NotDefinedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		List<Parameterization> parameters = new ArrayList<Parameterization>();
 		

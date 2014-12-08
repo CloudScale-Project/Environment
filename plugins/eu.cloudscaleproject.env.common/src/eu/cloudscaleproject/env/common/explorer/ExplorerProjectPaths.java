@@ -339,7 +339,6 @@ public class ExplorerProjectPaths {
 				.toString(), true);
 		
 		Resource res = resSet.getResource(uri, false);
-		
 		if(res == null){
 			res = resSet.createResource(uri);
 		}

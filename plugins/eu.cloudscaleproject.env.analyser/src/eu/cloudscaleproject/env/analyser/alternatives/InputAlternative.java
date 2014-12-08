@@ -1,9 +1,11 @@
-package eu.cloudscaleproject.env.analyser;
+package eu.cloudscaleproject.env.analyser.alternatives;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -12,92 +14,95 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryResourceImpl;
+import eu.cloudscaleproject.env.analyser.PCMModelType;
+import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class InputAlternative extends EditorInputFile{
+public class InputAlternative extends EditorInputFolder{
 			
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final String KEY_REPOSITORY = "repository";
-	public static final String KEY_SYSTEM = "system";
-	public static final String KEY_RESOURCES = "resources";
-	public static final String KEY_ALLOCATION = "allocation";
-	public static final String KEY_USAGE = "usage";
-	
-	public InputAlternative(IProject project, IFile file){
-		super(project, file);
-	}
-	
-	public String getProjectPath(){
-		return file.getProjectRelativePath().toString();
+	public InputAlternative(IProject project, IFolder folder){
+		super(project, folder);
 	}
 	
 	public IFile getRepository(){
-		String prop = source.getProperty(KEY_REPOSITORY);
-		if(prop == null){
-			return null;
-		}
-		return project.getFile(new Path(prop));
+		return getFileResource(ToolchainUtils.KEY_FILE_REPOSITORY);
 	}
 	
 	public IFile getSystem(){
-		String prop = source.getProperty(KEY_SYSTEM);
-		if(prop == null){
-			return null;
-		}
-		return project.getFile(new Path(prop));
+		return getFileResource(ToolchainUtils.KEY_FILE_SYSTEM);
 	}
 	
 	public IFile getResourceEnv(){
-		String prop = source.getProperty(KEY_RESOURCES);
-		if(prop == null){
-			return null;
-		}
-		return project.getFile(new Path(prop));
+		return getFileResource(ToolchainUtils.KEY_FILE_RESOURCEENV);
 	}
 	
 	public IFile getAllocation() {
-		String prop = source.getProperty(KEY_ALLOCATION);
-		if(prop == null){
-			return null;
-		}
-		return project.getFile(new Path(prop));
+		return getFileResource(ToolchainUtils.KEY_FILE_ALLOCATION);
 	}
 
 	public IFile getUsage() {
-		String prop = source.getProperty(KEY_USAGE);
-		if(prop == null){
-			return null;
-		}
-		return project.getFile(new Path(prop));
+		return getFileResource(ToolchainUtils.KEY_FILE_USAGE);
 	}
 	
 	public void setRepository(IFile repository) {
-		IFile old = getRepository();
-		source.setProperty(KEY_REPOSITORY, repository.getProjectRelativePath().toString());
-		firePropertyChange(KEY_REPOSITORY, old, repository);
+		setResource(ToolchainUtils.KEY_FILE_REPOSITORY, repository);
 	}
 	
 	public void setSystem(IFile system) {
-		IFile old = getSystem();
-		source.setProperty(KEY_SYSTEM, system.getProjectRelativePath().toString());
-		firePropertyChange(KEY_SYSTEM, old, system);
+		setResource(ToolchainUtils.KEY_FILE_SYSTEM, system);
 	}
 	
 	public void setResourceEnv(IFile resourceEnv) {
-		IFile old = getResourceEnv();
-		source.setProperty(KEY_RESOURCES, resourceEnv.getProjectRelativePath().toString());
-		firePropertyChange(KEY_RESOURCES, old, resourceEnv);
+		setResource(ToolchainUtils.KEY_FILE_RESOURCEENV, resourceEnv);
 	}
 	
 	public void setUsage(IFile usage) {
-		IFile old = getResourceEnv();
-		source.setProperty(KEY_USAGE, usage.getProjectRelativePath().toString());
-		firePropertyChange(KEY_USAGE, old, usage);
+		setResource(ToolchainUtils.KEY_FILE_USAGE, usage);
+	}
+	
+	public void importFromFolder(IFolder folder){
+		
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
+			if(!files.isEmpty()){
+				setRepository(files.get(0));
+			}
+		}
+		
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
+			if(!files.isEmpty()){
+				setSystem(files.get(0));
+			}
+		}
+		
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
+			if(!files.isEmpty()){
+				setResourceEnv(files.get(0));
+			}
+		}
+		
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.ALLOCATION.getFileExtension());
+			if(!files.isEmpty()){
+				setAllocation(files.get(0));
+			}
+		}
+		
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
+			if(!files.isEmpty()){
+				setUsage(files.get(0));
+			}
+		}
 	}
 	
 	/**
@@ -106,9 +111,8 @@ public class InputAlternative extends EditorInputFile{
 	 * @param alloc IFile that points to Allocation resource.
 	 */
 	public void setAllocation(IFile alloc) {
-		IFile old = getAllocation();
-		source.setProperty(KEY_ALLOCATION, alloc.getProjectRelativePath().toString());
-		firePropertyChange(KEY_ALLOCATION, old, alloc);
+		
+		setResource(ToolchainUtils.KEY_FILE_ALLOCATION, alloc);
 
 		try {
 			alloc.refreshLocal(IFile.DEPTH_ZERO, null);

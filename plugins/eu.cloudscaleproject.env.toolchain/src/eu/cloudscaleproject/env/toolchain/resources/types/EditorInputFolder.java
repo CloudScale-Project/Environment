@@ -20,6 +20,14 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	private IFolder folder;
 	
 	public static final String PROP_FILENAME = "prop.alt";
+	
+	public static final String PROP_SAVED = EditorInputFolder.class.getName() + ".propSaved";
+	public static final String PROP_LOADED = EditorInputFolder.class.getName() + ".propLoaded";
+	public static final String PROP_DELETED = EditorInputFolder.class.getName() + ".propDeleted";
+
+	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
+	public static final String PROP_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propResChanged";
+
 		
 	public EditorInputFolder(IProject project, IFolder folder ) {
 		super(folder);
@@ -41,71 +49,144 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return folder;
 	}
 	
-	public void setFileResource(String key, IFile file)
+	private boolean isResourceInternal(IResource res){
+		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
+		if(relative.equals(res.getFullPath())){
+			return false;
+		}
+		return true;
+	}
+	
+	private IPath getRelativePath(IResource res){
+		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
+		if(relative.equals(res.getFullPath())){
+			throw new IllegalArgumentException("Resource path can not be made relative to EditorInputFolder! Path: " 
+												+ res.getFullPath().toString());
+		}
+		return relative;
+	}
+	
+	public void setResource(String key, IResource res){
+		if(isResourceInternal(res)){
+			setInternalResource(key, res);
+		}
+		else{
+			setExternalResource(key, res);
+		}
+	}
+	
+	private void setInternalResource(String key, IResource file)
 	{
-		if (!file.exists()) throw new IllegalStateException();
-
-		// File must be relative to resource folder
-		IPath path = file.getLocation();
-		IPath relativePath = file.getLocation().makeRelativeTo(getResource().getLocation());
-		if (path.equals(relativePath)) throw new IllegalStateException();
-
+		String old = propertyInputFile.getProperty(key);
+		
+		if(file == null){
+			propertyInputFile.setProperty(key, "");
+			firePropertyChange(PROP_RESOURCE_CHANGED, old, "");
+			return;
+		}
+		
+		IPath relativePath = getRelativePath(file);
 		propertyInputFile.setProperty(key, relativePath.toPortableString());
+		
+		firePropertyChange(PROP_RESOURCE_CHANGED, old, relativePath.toPortableString());
+	}
+	
+	private void setExternalResource(String key, IResource file)
+	{
+		String old = propertyInputFile.getProperty(key);
+
+		if(file == null){
+			propertyInputFile.setProperty(key, "");
+			firePropertyChange(PROP_RESOURCE_CHANGED, old, "");
+			return;
+		}
+		
+		// File must be relative to project folder
+		IPath path = file.getProjectRelativePath();
+		propertyInputFile.setProperty(key, path.toPortableString());
+		firePropertyChange(PROP_RESOURCE_CHANGED, old, path.toPortableString());
 	}
 
 	public IFile getFileResource(String key)
 	{
 		String relPath = propertyInputFile.getProperty(key);
-		IResource res = getResource().findMember(relPath);
-		if (res instanceof IFile)
-			return (IFile) res;
-		else
+		if(relPath == null || relPath.isEmpty()){
 			return null;
+		}
+		
+		IResource res = getResource().findMember(relPath);
+		
+		//TODO: This could cause problems!
+		//try project relative path
+		if(res == null){
+			res = getResource().getProject().findMember(relPath);
+		}
+		
+		if (res instanceof IFile){
+			return (IFile) res;
+		}
+		else{
+			return null;
+		}
 	}
 	
-	public void setFolderResource(String key, IFolder folder)
-	{
-		if (!folder.exists() || !getResource().equals(folder.getParent()))
-			throw new IllegalStateException();
-
-		setProperty(key, folder.getName());
-	}
-
 	public IFolder getFolderResource(String key)
 	{
-		String foldername = getProperty(key);
-		if (foldername != null)
-		{
-			return getResource().getFolder(foldername);
+		String relPath = propertyInputFile.getProperty(key);
+		if(relPath == null || relPath.isEmpty()){
+			return null;
 		}
-		else
-		{
+		
+		IResource res = getResource().findMember(relPath);
+		
+		//TODO: This could cause problems!
+		//try project relative path
+		if(res == null){
+			res = getResource().getProject().findMember(relPath);
+		}
+		
+		if (res instanceof IFolder){
+			return (IFolder) res;
+		}
+		else{
 			return null;
 		}
 	}
-
-	
 	
 	@Override
-	public synchronized void save() {
+	public synchronized final void save() {
 
 		if(!folder.exists()){
-			if(!folder.exists()){
-				try {
-					folder.create(true, true, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
+			try {
+				folder.create(true, true, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
 		
 		propertyInputFile.save();
+		doSave();
+		firePropertyChange(PROP_SAVED, false, true);
+	}
+	
+	protected void doSave(){
+		//override
 	}
 
 	@Override
-	public synchronized  void load() {
+	public synchronized final void load() {
 
+		if(!folder.exists()){
+			throw new IllegalStateException("Can't load resource. Root folder does not exist: " + folder.getLocation().toString());
+		}
+		
 		propertyInputFile.load();
+		doLoad();
+		firePropertyChange(PROP_LOADED, false, true);
+	}
+	
+	protected void doLoad(){
+		//override
 	}
 
 	public void create() {
@@ -120,7 +201,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	}
 
 	@Override
-	public synchronized  void delete() {
+	public synchronized final void delete() {
 		if (folder.exists()) {
 			try {
 				folder.delete(true, null);
@@ -129,10 +210,16 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 				e.printStackTrace();
 			}
 		}
+		doDelete();
+		firePropertyChange(PROP_DELETED, false, true);
+	}
+	
+	protected void doDelete(){
+		//override
 	}
 
 	@Override
-	public synchronized  String getName(){
+	public synchronized String getName(){
 		String name = getProperty(EditorInputFile.KEY_NAME);
 		if (name == null)
 		{
@@ -143,7 +230,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	}
 	
 	@Override
-	public synchronized  void setName(String name){
+	public synchronized final void setName(String name){
 		propertyInputFile.setName(name);
 	}
 	
@@ -151,10 +238,11 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return propertyInputFile.getProperty(key);
 	}
 	
-	public synchronized  void setProperty(String key, String value){
+	public synchronized final void setProperty(String key, String value){
+		String old = getProperty(key);
 		propertyInputFile.setProperty(key, value);
+		firePropertyChange(PROP_CHANGED, old, value);
 	}
-	
 	
 	@Override
 	public synchronized void copyFrom(IResource src) {
@@ -174,7 +262,6 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		load();
 	}
-
 
 	////////////////////////////////////////////////////////////////////
 	// Properties wiring 

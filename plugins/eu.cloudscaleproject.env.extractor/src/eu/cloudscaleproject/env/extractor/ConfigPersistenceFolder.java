@@ -60,8 +60,8 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 			}
 			
 			
-			setFileResource(KEY_SOMOX_CONFIG, somoxConfig);
-			setFileResource(KEY_MODISCO_CONFIG, modiscoConfig);
+			setResource(KEY_SOMOX_CONFIG, somoxConfig);
+			setResource(KEY_MODISCO_CONFIG, modiscoConfig);
 
 		} catch (Exception e) {
 			e.printStackTrace();

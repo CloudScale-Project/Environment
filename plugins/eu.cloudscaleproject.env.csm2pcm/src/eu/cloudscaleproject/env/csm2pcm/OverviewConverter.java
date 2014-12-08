@@ -34,9 +34,10 @@ import org.scaledl.overview.converter.IOverviewConverter;
 import org.scaledl.overview.converter.IOverviewConverterCallback;
 import org.scaledl.overview.core.Entity;
 
-import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
 
@@ -44,6 +45,12 @@ public class OverviewConverter implements IOverviewConverter{
 	
 	private static final String ENTITY_ID_PREFIX = PalladioModel.DEFAULT_MODEL_ID;
 	private static final String CSM2PCM_QVTO = "transforms/csm2pcm.qvto";
+	
+	private static final PCMModelType[] ModelTypes = new PCMModelType[]{PCMModelType.REPOSITORY,
+																		PCMModelType.SYSTEM,
+																		PCMModelType.RESOURCE,
+																		PCMModelType.ALLOCATION,
+																		PCMModelType.USAGE};
 	
 	private HashMap<IProject, PCMResourceSet> resourceSetMap = new HashMap<IProject, PCMResourceSet>();
 	
@@ -75,7 +82,7 @@ public class OverviewConverter implements IOverviewConverter{
 			IFolder analyserGen = ExplorerProjectPaths.getProjectFolder(analyserInput, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
 			
 			resSet = new PCMResourceSet(analyserGen);
-			resSet.createAll();
+			resSet.createAll(ModelTypes);
 			
 			resourceSetMap.put(project, resSet);
 			
@@ -118,25 +125,25 @@ public class OverviewConverter implements IOverviewConverter{
 			
 			OverviewPackage.eINSTANCE.eClass();
 			
-			resSet.clearAll();
+			resSet.clearAll(ModelTypes);
 						
-			resSet.setRootObject(PCMResourceSet.ModelType.RESOURCE, 
+			resSet.setRootObject(PCMModelType.RESOURCE, 
 					outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0));
-			resSet.setRootObject(PCMResourceSet.ModelType.REPOSITORY, 
+			resSet.setRootObject(PCMModelType.REPOSITORY, 
 					outputRepository.getContents().isEmpty() ? null : outputRepository.getContents().get(0));
-			resSet.setRootObject(PCMResourceSet.ModelType.SYSTEM, 
+			resSet.setRootObject(PCMModelType.SYSTEM, 
 					outputSystem.getContents().isEmpty() ? null : outputSystem.getContents().get(0));
-			resSet.setRootObject(PCMResourceSet.ModelType.ALLOCATION, 
+			resSet.setRootObject(PCMModelType.ALLOCATION, 
 					outputAllocation.getContents().isEmpty() ? null : outputAllocation.getContents().get(0));
-			resSet.setRootObject(PCMResourceSet.ModelType.USAGE, 
+			resSet.setRootObject(PCMModelType.USAGE, 
 					outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0));
 			
-			resSet.saveAll();
+			resSet.saveAll(ModelTypes);
 			
 			//create or set analyser generated input alternative
 			InputAlternative ia = ResourceUtils.getGeneratedResourceInput(project);
-			ia.setAllocation(resSet.getModelFile(PCMResourceSet.ModelType.ALLOCATION));
-			ia.setUsage(resSet.getModelFile(PCMResourceSet.ModelType.USAGE));
+			ia.setAllocation(resSet.getModelFile(PCMModelType.ALLOCATION));
+			ia.setUsage(resSet.getModelFile(PCMModelType.USAGE));
 			ia.save();
 		} 
 

@@ -54,8 +54,8 @@ import org.scaledl.overview.core.Entity;
 
 import com.google.common.base.Predicate;
 
-import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
 

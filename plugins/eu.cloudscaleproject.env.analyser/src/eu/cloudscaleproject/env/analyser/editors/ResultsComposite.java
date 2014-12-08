@@ -81,7 +81,7 @@ public class ResultsComposite extends Composite{
 		IFile modelFile = null;
 		try {
 			for(IResource res : resFolder.members()){
-				if(res.getFileExtension().equals("edp2") && res instanceof IFile){
+				if("edp2".equals(res.getFileExtension()) && res instanceof IFile){
 					modelFile = (IFile)res;
 				}
 			}

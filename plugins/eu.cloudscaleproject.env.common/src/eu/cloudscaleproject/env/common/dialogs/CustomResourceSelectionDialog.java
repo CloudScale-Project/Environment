@@ -91,7 +91,7 @@ public class CustomResourceSelectionDialog extends ElementTreeSelectionDialog {
     	this(title, message, resourceClass, null);
     }
     public CustomResourceSelectionDialog(String title, String message, Class<?> resourceClass, String[] extensions) {
-    	this(title, message, resourceClass, null, null);
+    	this(title, message, resourceClass, extensions, null);
     }
 
     public CustomResourceSelectionDialog(String title, String message, Class<?> resourceClass, String[] extensions, IContainer root) {

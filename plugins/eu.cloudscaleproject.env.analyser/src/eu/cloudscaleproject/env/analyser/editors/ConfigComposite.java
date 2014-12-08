@@ -7,8 +7,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.analyser.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
+import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;

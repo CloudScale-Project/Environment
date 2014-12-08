@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.usageevolution;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -19,8 +21,11 @@ import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import tools.descartes.dlim.DlimFactory;
 import tools.descartes.dlim.ExponentialIncreaseLogarithmicDecline;
+
+import tools.descartes.dlim.Sequence;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class UsageEvolutionAlternative extends EditorInputFolder{
@@ -31,9 +36,6 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger logger = Logger.getLogger(UsageEvolutionAlternative.class.getName());
-	
-	public static final String KEY_FILE_USAGEEVOLUTION = "usageevolution_model";
-	public static final String KEY_FILE_LIMBO = "limbo_model";
 		
 	private final ResourceSet resSet = new ResourceSetImpl();
 
@@ -78,14 +80,14 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 			}
 		}
 		
-		setFileResource(KEY_FILE_USAGEEVOLUTION, usageFile);
-		setFileResource(KEY_FILE_LIMBO, limboFile);
+		setResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageFile);
+		setResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
 	}
 	
 	public void clear(){
 		
-		IFile limboFile = getFileResource(KEY_FILE_LIMBO);
-		IFile usageFile = getFileResource(KEY_FILE_USAGEEVOLUTION);
+		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
+		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");
@@ -116,8 +118,8 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	
 	public void createEILDPreset(){
 		
-		IFile limboFile = getFileResource(KEY_FILE_LIMBO);
-		IFile usageFile = getFileResource(KEY_FILE_USAGEEVOLUTION);
+		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
+		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");
@@ -132,10 +134,7 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 		
 		if(!limboFile.exists()){			
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);
-			ExponentialIncreaseLogarithmicDecline model = DlimFactory.eINSTANCE.createExponentialIncreaseLogarithmicDecline();
-			model.setBase(0);
-			model.setPeak(500);
-			model.setPeakTime(100);
+			Sequence model = DlimFactory.eINSTANCE.createSequence();
 			res.getContents().add(model);
 			
 			try {
@@ -153,6 +152,7 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 						
 			UsageEvolution ue = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
 			Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
+			usage.setLoadEvolution(getSequence());
 			ue.getUsages().add(usage);
 			
 			res.getContents().add(ue);
@@ -169,9 +169,31 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 		}
 	}
 	
+	public Usage getUsage(){
+		for(Resource res : resSet.getResources()){
+			if(!res.getContents().isEmpty()){
+				if(res.getContents().get(0) instanceof Usage){
+					return (Usage)res.getContents().get(0);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Sequence getSequence(){
+		for(Resource res : resSet.getResources()){
+			if(!res.getContents().isEmpty()){
+				if(res.getContents().get(0) instanceof Sequence){
+					return (Sequence)res.getContents().get(0);
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void openUsageEvolutionEditor(){
 		
-		IFile usageFile = getFileResource(KEY_FILE_USAGEEVOLUTION);
+		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(usageFile == null){
 			logger.warning("clear(): Usage evolution model file not set!");
@@ -186,7 +208,7 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	}
 	
 	public void openLimboEditor(){
-		IFile limboFile = getFileResource(KEY_FILE_LIMBO);
+		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");
@@ -198,5 +220,20 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean hasModel(String extension){
+		return getModels(extension).size() > 0 ? true : false;
+	}
+	
+	public List<Resource> getModels(String fileExtension) {
+		
+		List<Resource> out = new ArrayList<Resource>();
+		for(Resource res : resSet.getResources()){
+			if(res.getURI().lastSegment().endsWith(fileExtension)){
+				out.add(res);
+			}
+		}
+		return out;
 	}
 }

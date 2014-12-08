@@ -15,6 +15,7 @@ public class ToolchainUtils {
 	
 	private static final Logger logger = Logger.getLogger(ToolchainUtils.class.getName());
 
+	// tool folders
 	public static final String EXTRACTOR_INPUT_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput";
 	public static final String EXTRACTOR_CONF_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf";
 	public static final String EXTRACTOR_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes";
@@ -32,6 +33,30 @@ public class ToolchainUtils {
 	public static final String SPOTTER_STA_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes";
 	
 	public static final String USAGEEVOLUTION_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution";
+	
+	// folder serources
+	public static final String KEY_FOLDER_ANALYSER_INPUT_ALT = "path_analyser_alt";
+	public static final String KEY_FOLDER_USAGEEVOLUTION_ALT = "path_usageevolution_alt";
+	
+	// file resources
+	
+	// Analyser input
+	public static final String KEY_FILE_REPOSITORY		= "path_repository";
+	public static final String KEY_FILE_RESOURCEENV		= "path_resourceenvironment";
+	public static final String KEY_FILE_SYSTEM			= "path_system";
+	public static final String KEY_FILE_USAGE			= "path_usage";
+	public static final String KEY_FILE_ALLOCATION		= "path_allocation";
+	
+	// Analyser conf
+	public static final String KEY_FILE_EXPERIMENTS 	= "path_experiments";
+	public static final String KEY_FILE_PMS 			= "path_pms";
+	public static final String KEY_FILE_VARIATIONS 		= "path_variations";
+	public static final String KEY_FILE_MESURPOINTS 	= "path_pcmmeasuringpoint";
+	public static final String KEY_FILE_SLO 			= "path_slo";
+	
+	// Usage evolution
+	public static final String KEY_FILE_USAGEEVOLUTION	= "path_usageevolution";
+	public static final String KEY_FILE_LIMBO 			= "path_limbo_model";
 	
 	public static IEditorInputResource getToolSelectedResource(IProject project, String toolID){
 		IEditorInputResource selectedResource = null;

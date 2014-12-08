@@ -29,25 +29,42 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import eu.cloudscaleproject.env.analyser.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
 public class ConfigAlternativeEditComposite extends Composite {
 	
-	private final ResourceProvider inputResources;
-	private final ComboViewer comboViewer;
+	private final ResourceProvider inputResourceProvider;
+	private final ResourceProvider usageResourceProvider;
+
+	private final ComboViewer comboViewerInput;
+	private final ComboViewer comboViewerUsage;
 	
 	private final PropertyChangeListener inputResourceListener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
-				comboViewer.add(evt.getNewValue());
+				comboViewerInput.add(evt.getNewValue());
 			}
 			else if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
-				comboViewer.remove(evt.getOldValue());
+				comboViewerInput.remove(evt.getOldValue());
+			}
+		}
+	};
+	
+	private final PropertyChangeListener usageResourceListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
+				comboViewerUsage.add(evt.getNewValue());
+			}
+			else if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
+				comboViewerUsage.remove(evt.getOldValue());
 			}
 		}
 	};
@@ -61,19 +78,34 @@ public class ConfigAlternativeEditComposite extends Composite {
 		super(parent, style);
 		//this.project = project;
 		
-		this.inputResources = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		this.usageResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
 		
-		setLayout(new GridLayout(3, false));
+		setLayout(new GridLayout(2, false));
 		
 		Label lblSelectInput = new Label(this, SWT.NONE);
 		lblSelectInput.setText("Select input:");
-
-		comboViewer = new ComboViewer(this, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		{
+			comboViewerInput = new ComboViewer(this, SWT.READ_ONLY);
+			Combo combo = comboViewerInput.getCombo();
+			GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+			gd_combo.minimumWidth = 300;
+			combo.setLayoutData(gd_combo);
+		}
+		
+		Label lblSelectUsage = new Label(this, SWT.NONE);
+		lblSelectUsage.setText("Select usage evolution:");
+		{
+			comboViewerUsage = new ComboViewer(this, SWT.READ_ONLY);
+			Combo combo = comboViewerUsage.getCombo();
+			GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+			gd_combo.minimumWidth = 300;
+			combo.setLayoutData(gd_combo);
+		}
 		
 		Button btnRun = new Button(this, SWT.NONE);
-		btnRun.setText("Run");
+		btnRun.setText("Run simulation");
+		new Label(this, SWT.NONE);
 		btnRun.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -85,7 +117,7 @@ public class ConfigAlternativeEditComposite extends Composite {
 				try {
 					//System.out.println(ca.getExperiments().getURI().toString());
 					ILaunchConfigurationWorkingCopy lcwc = lct.newInstance((IFolder)ca.getResource(), ca.getResource().getName());
-					lcwc.setAttribute("Experiment Automation", ca.getExperiments().getURI().toString());
+					lcwc.setAttribute("Experiment Automation", ca.getExperiment().eResource().getURI().toString());
 					lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
 					lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
 					lcwc.doSave();
@@ -99,8 +131,8 @@ public class ConfigAlternativeEditComposite extends Composite {
 			
 		});
 		
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new LabelProvider() {
+		comboViewerInput.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewerInput.setLabelProvider(new LabelProvider() {
 			
 			@Override
 			public String getText(Object element) {
@@ -113,26 +145,60 @@ public class ConfigAlternativeEditComposite extends Composite {
 			
 		});
 		
+		comboViewerUsage.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewerUsage.setLabelProvider(new LabelProvider() {
+			
+			@Override
+			public String getText(Object element) {
+				if (element instanceof IEditorInput) {
+					return ((IEditorInput) element).getName();
+				}
+				return super.getText(element);
+			}
+			
+		});
+		
 		//init listeners
-		inputResources.addListener(inputResourceListener);
+		inputResourceProvider.addListener(inputResourceListener);
+		usageResourceProvider.addListener(usageResourceListener);
 		addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				inputResources.removeListener(inputResourceListener);
+				usageResourceProvider.removeListener(usageResourceListener);
+				inputResourceProvider.removeListener(inputResourceListener);
 			}
 		});
 		
 		//init combo viewer
-		comboViewer.setInput(inputResources.getResources());
-		if(ca.getInput() != null){
-			comboViewer.setSelection(new StructuredSelection(inputResources.getResource(ca.getInput().getResource().getName())), true);
+		comboViewerInput.setInput(inputResourceProvider.getResources());
+		comboViewerUsage.setInput(usageResourceProvider.getResources());
+		
+		IFolder inputAlt = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		if(inputAlt != null){
+			comboViewerInput.setSelection(
+					new StructuredSelection(inputResourceProvider.getResource(inputAlt)), 
+					true);
+		}
+		
+		IFolder ueAl = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
+		if(ueAl != null){
+			comboViewerUsage.setSelection(
+					new StructuredSelection(usageResourceProvider.getResource(ueAl)), true);
 		}
 
-		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		comboViewerInput.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				ca.setInput((InputAlternative)selection.getFirstElement());
+				ca.setInitialModel((EditorInputFolder)selection.getFirstElement());
+				ca.save();
+			}
+		});
+		comboViewerUsage.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				ca.setUsageEvolution((EditorInputFolder)selection.getFirstElement());
 				ca.save();
 			}
 		});

@@ -296,10 +296,10 @@ public class Util {
 				IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY_DIAGRAM);
 				IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM_DIAGRAM);
 				
-				rif.setFileResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
-				rif.setFileResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
-				rif.setFileResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
-				rif.setFileResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
+				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
+				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
+				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
+				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
 				
 				rif.save();
 				//ViewService.createDiagram(

@@ -21,5 +21,11 @@
             position="1000">
       </client>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.common.notification.validator">
+      <client
+            class="eu.cloudscaleproject.env.usageevolution.validation.UsageValidator">
+      </client>
+   </extension>
 
 </plugin>

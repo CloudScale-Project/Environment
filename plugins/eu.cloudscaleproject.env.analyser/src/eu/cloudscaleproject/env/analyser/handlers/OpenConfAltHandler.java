@@ -8,9 +8,9 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.analyser.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
+import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.SelectConfAltDialog;
 import eu.cloudscaleproject.env.analyser.editors.AnalyserTabItemExtension;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -66,7 +66,7 @@ public class OpenConfAltHandler {
 			
 			if(create){
 				ConfAlternative newConfAlt = (ConfAlternative)confResourceProvider.createNewResource(selectedInputResource.getName() + " conf.");
-				newConfAlt.setInput((InputAlternative)selectedInputResource);
+				newConfAlt.setInitialModel((InputAlternative)selectedInputResource);
 				newConfAlt.save();
 				
 				ex.execute("eu.cloudscaleproject.env.toolchain.command.openprojecteditor",

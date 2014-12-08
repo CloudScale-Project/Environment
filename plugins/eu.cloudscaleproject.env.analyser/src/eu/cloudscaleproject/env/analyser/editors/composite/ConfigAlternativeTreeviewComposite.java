@@ -26,7 +26,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
-import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
 import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
 
@@ -34,7 +33,7 @@ import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
 import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
-import eu.cloudscaleproject.env.analyser.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
 public class ConfigAlternativeTreeviewComposite extends Composite{
@@ -54,12 +53,6 @@ public class ConfigAlternativeTreeviewComposite extends Composite{
 	public ConfigAlternativeTreeviewComposite(IProject project, ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = ca;
-		
-		if(!this.alternative.hasModel(ConfAlternative.MODEL_EXPERIMENTS)){
-			Resource res = this.alternative.createModel(ConfAlternative.MODEL_EXPERIMENTS);
-			res.getContents().add(ExperimentsFactory.eINSTANCE.createExperiment());
-			this.alternative.save();
-		}
 		
 		setLayout(new GridLayout(1, false));
 		

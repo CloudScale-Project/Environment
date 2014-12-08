@@ -6,8 +6,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.analyser.InputAlternative;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;

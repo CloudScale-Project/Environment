@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
@@ -117,7 +117,7 @@ public class InputAlternativeEditComposite extends Composite{
 	public void update(){
 		if(!this.isDisposed()){			
 			textAlloc.setText(alternative.getAllocation() != null ? alternative.getAllocation().getProjectRelativePath().toString() : "");
-			//textReconfig.setText(alternative.getReconfigRules() != null ? alternative.getReconfigRules().getProjectRelativePath().toString() : "");
+			textUsage.setText(alternative.getUsage() != null ? alternative.getUsage().getProjectRelativePath().toString() : "");
 		}
 		super.update();
 	}

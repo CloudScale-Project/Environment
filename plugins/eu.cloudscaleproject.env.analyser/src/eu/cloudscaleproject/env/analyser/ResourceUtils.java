@@ -1,26 +1,28 @@
 package eu.cloudscaleproject.env.analyser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
-import eu.cloudscaleproject.env.analyser.experiments.CapacityExperiment;
+import eu.cloudscaleproject.env.analyser.alternatives.CapacityAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.FolderResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceUtils {
 	
 	public static final String ANALYSER_INPUT_GENERATED_RES_NAME = "overview.alt";
 	public static final String ANALYSER_CONF_CAPACITY_ANALYSES = "Capacity analyses";
+	public static final String KEY_TYPE = "alternative_type";
 
 	
 	public static InputAlternative getGeneratedResourceInput(IProject project){
@@ -46,23 +48,17 @@ public class ResourceUtils {
 	public static ConfAlternative getCapacityResourceConf(IProject project){
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
 												.getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_CONF_CAPACITY_ANALYSES);
 		
 		if(editorInput == null){
-			editorInput = resourceProvider.createNewResource(ANALYSER_CONF_CAPACITY_ANALYSES, "Capacity analyses");
-			try {
-				CapacityExperiment.init((ConfAlternative)editorInput);
-				editorInput.save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			editorInput = createCapacityResourceConf(resourceProvider);
 		}
 		
 		return (ConfAlternative)editorInput;
 	}
 	
 	/**
-	 * 
 	 * Creates capacity experiment configuration alternative resource inside specified <code>ResourceProvider</code>.
 	 * If capacity experiment configuration alternative already exist, this method does nothing.
 	 * 
@@ -73,16 +69,14 @@ public class ResourceUtils {
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_CONF_CAPACITY_ANALYSES);
 		
 		if(editorInput == null){
-			editorInput = resourceProvider.createNewResource(ANALYSER_CONF_CAPACITY_ANALYSES, "Capacity analyses");
-			try {
-				CapacityExperiment.init((ConfAlternative)editorInput);
-				editorInput.save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			IFolder folder = resourceProvider.getRootFolder().getFolder(ANALYSER_CONF_CAPACITY_ANALYSES);
+			
+			editorInput = new CapacityAlternative(resourceProvider.getRootFolder().getProject(), folder);
+			editorInput.setProperty(KEY_TYPE, CapacityAlternative.class.getName());
+			editorInput.save();
 		}
 		
-		return (ConfAlternative)editorInput;
+		return (CapacityAlternative)editorInput;
 	}
 	
 	public static List<ConfAlternative> getConfAlternatives(IProject project, InputAlternative inputAlt){
@@ -94,8 +88,13 @@ public class ResourceUtils {
 		
 		for(IEditorInputResource res : confResourceProvider.getResources()){
 			if(res instanceof ConfAlternative){
-				InputAlternative ia = ((ConfAlternative)res).getInput();
-				if(ia == inputAlt){
+				IFolder inputAltFolder = ((ConfAlternative)res).getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+				if(inputAltFolder == null){
+					continue;
+				}
+				IEditorInputResource inputResource = ResourceRegistry.getInstance()
+					.getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID).getResource(inputAltFolder);
+				if(inputResource == inputAlt){
 					out.add((ConfAlternative)res);
 				}
 			}
@@ -115,8 +114,8 @@ public class ResourceUtils {
 					
 					@Override
 					public boolean validateResource(IResource res) {
-						if(res instanceof IFile){
-							if(((IFile)res).getFileExtension().equals("alt")){
+						if(res instanceof IFolder){
+							if(((IFolder)res).getFile(EditorInputFolder.PROP_FILENAME).exists()){
 								return true;
 							}
 						}
@@ -125,12 +124,12 @@ public class ResourceUtils {
 					
 					@Override
 					public IEditorInputResource loadResource(IResource res) {
-						return new InputAlternative(res.getProject(), (IFile)res);
+						return new InputAlternative(res.getProject(), (IFolder)res);
 					}
 					
 					@Override
 					public IResource createResource(String resourceName) {
-						return getRootFolder().getFile(resourceName);
+						return getRootFolder().getFolder(resourceName);
 					}
 				};
 			}
@@ -146,13 +145,23 @@ public class ResourceUtils {
 					
 					@Override
 					public boolean validateResource(IResource res) {
-						//TODO: validate resource
-						return true;
+						if(res instanceof IFolder){
+							if(((IFolder)res).getFile(EditorInputFolder.PROP_FILENAME).exists()){
+								return true;
+							}
+						}
+						return false;
 					}
 					
 					@Override
 					public IEditorInputResource loadResource(IResource res) {
-						return new ConfAlternative(res.getProject(), (IFolder)res);
+						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res);
+						eif.load();
+						
+						if(eif.getProperty(KEY_TYPE).equals(CapacityAlternative.class.getName())){
+							return new CapacityAlternative(res.getProject(), (IFolder)res);
+						}
+						return eif;
 					}
 					
 					@Override
@@ -162,6 +171,7 @@ public class ResourceUtils {
 				};
 				
 				//create default configuration alternatives
+				//TODO: move this line to project creation
 				createCapacityResourceConf(resourceProvider);
 				
 				return resourceProvider;

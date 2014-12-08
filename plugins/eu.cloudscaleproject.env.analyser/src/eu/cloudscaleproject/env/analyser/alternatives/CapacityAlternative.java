@@ -1,12 +1,10 @@
-package eu.cloudscaleproject.env.analyser.experiments;
+package eu.cloudscaleproject.env.analyser.alternatives;
 
-import java.io.IOException;
-
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
@@ -14,7 +12,6 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
-import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
@@ -27,20 +24,21 @@ import org.palladiosimulator.simulizar.pms.PmsFactory;
 import org.palladiosimulator.simulizar.pms.StatisticalCharacterizationEnum;
 import org.palladiosimulator.simulizar.pms.impl.PmsFactoryImpl;
 
-import de.uka.ipd.sdq.pcm.repository.Repository;
-import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageScenario;
-import de.uka.ipd.sdq.pcm.usagemodel.UsagemodelFactory;
-import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class CapacityExperiment {
+public class CapacityAlternative extends ConfAlternative{
+
+	private static final long serialVersionUID = 1L;
 	
-	/*
-	public static void init(ConfAlternative ca) throws IOException{
+	public CapacityAlternative(IProject project, IFolder folder) {
+		super(project, folder);
+	}
 	
-		ca.setName("User capacity");
-		Experiment exp = ca.getExperiment();
+	@Override
+	protected void configureInput(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput) {
 		
 		exp.setRepetitions(1);
 		exp.setName("Capacity measurement");
@@ -58,27 +56,20 @@ public class CapacityExperiment {
 		exp.getStopConditions().add(tsc);
 		
 		//create and set simulation configuration
-		exp.getToolConfiguration().add(createConfiguration(ca.getResource().getProject(), ca, 1000, -1));
-		
-		InitialModel initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
-		exp.setInitialModel(initialModel);
+		exp.getToolConfiguration().add(createConfiguration(getResource().getProject(), this, 1000, -1));
 		
 		//retrieve usage scenario
-		UsageModel usageModel = UsagemodelFactory.eINSTANCE.createUsageModel();
-		UsageScenario usageScenario = UsagemodelFactory.eINSTANCE.createUsageScenario();
-		usageModel.getUsageScenario_UsageModel().add(usageScenario);
-		Resource resUsage = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.usagemodel"));
-		resUsage.getContents().clear();
-		resUsage.getContents().add(usageModel);
-		resUsage.save(null);
+		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
+		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
 		
 		//create measuring point
 		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
 		measurePoint.setUsageScenario(usageScenario);
-		Resource resMp = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.measuringpoint"));
+		IFile mesuringPointFile = ((IFolder)getResource()).getFile("analyser.measuringpoint");
+		setResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
+		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, mesuringPointFile);
 		resMp.getContents().clear();
 		resMp.getContents().add(measurePoint);
-		resMp.save(null);
 		
 		//create pms
 		PMSModel pms = PmsFactoryImpl.eINSTANCE.createPMSModel();
@@ -92,30 +83,15 @@ public class CapacityExperiment {
 		ms.setTemporalRestriction(intervall);
 		pm.getMeasurementSpecification().add(ms);
 		pms.getPerformanceMeasurements().add(pm);
-		Resource resPms = ExplorerProjectPaths.getEmfResource(ca.getResourceSet(), ((IFolder)ca.getResource()).getFile("analyser.pms"));
+		IFile pmsFile = ((IFolder)getResource()).getFile("analyser.pms");
+		setResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
+		Resource resPms = ExplorerProjectPaths.getEmfResource(resSet, pmsFile);
 		resPms.getContents().clear();
 		resPms.getContents().add(pms);
-		resPms.save(null);
-		
-		//load and set default resources from plugin	
-		URI uMiddleware = PathmapManager.denormalizeURI(URI.createURI("pathmap://PCM_MODELS/Glassfish.repository"));
-		URI uEventMiddleware = PathmapManager.denormalizeURI(URI.createURI("pathmap://PCM_MODELS/default_event_middleware.repository"));
-		
-		Resource resMRep = ca.getResourceSet().getResource(uMiddleware, true);
-		Resource resEMRep = ca.getResourceSet().getResource(uEventMiddleware, true);
-		
-		initialModel.setMiddlewareRepository((Repository)resMRep.getContents().get(0));
-		initialModel.setEventMiddleWareRepository((Repository)resEMRep.getContents().get(0));
-		
-		initialModel.setUsageModel(usageModel);
-		initialModel.setPlatformMonitoringSpecification(pms);		
-		
-		resExp.save(null);		
+		initialModel.setPlatformMonitoringSpecification(pms);
 	}
 	
-	//TIKAJ OSTAL V TOREK - TO SPODNJO METODO JE TREBA NEKAM DAT
-
-	private static SimuLizarConfiguration createConfiguration(IProject project, ConfAlternative ca, int mesurementCount, int timeStop){
+	private SimuLizarConfiguration createConfiguration(IProject project, ConfAlternative ca, int mesurementCount, int timeStop){
 		
 		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 		IFolder analyserResults = analyserFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
@@ -140,5 +116,5 @@ public class CapacityExperiment {
 	
 		return conf;
 	}
-	*/
+
 }

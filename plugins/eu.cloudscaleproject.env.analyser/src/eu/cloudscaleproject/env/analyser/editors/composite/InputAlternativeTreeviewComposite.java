@@ -45,8 +45,9 @@ import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.util.SystemResourceImpl;
 import de.uka.ipd.sdq.pcm.usagemodel.util.UsagemodelResourceImpl;
-import eu.cloudscaleproject.env.analyser.InputAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class InputAlternativeTreeviewComposite extends Composite{
 	
@@ -119,13 +120,9 @@ public class InputAlternativeTreeviewComposite extends Composite{
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if(evt.getPropertyName().equals(InputAlternative.KEY_REPOSITORY)
-					|| evt.getPropertyName().equals(InputAlternative.KEY_SYSTEM)
-					|| evt.getPropertyName().equals(InputAlternative.KEY_ALLOCATION)
-					|| evt.getPropertyName().equals(InputAlternative.KEY_RESOURCES)){
-						
-						updateTreeview();				
-					}
+				if(evt.getPropertyName().equals(EditorInputFolder.PROP_RESOURCE_CHANGED)){
+					updateTreeview();
+				}
 			}
 		});
 		

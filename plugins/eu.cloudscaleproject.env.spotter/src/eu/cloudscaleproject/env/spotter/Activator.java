@@ -1,14 +1,9 @@
 package eu.cloudscaleproject.env.spotter;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.FolderResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -16,7 +11,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin implements ISelectionListener{
+public class Activator extends AbstractUIPlugin{
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "eu.cloudscaleproject.env.spotter"; //$NON-NLS-1$
@@ -43,9 +38,14 @@ public class Activator extends AbstractUIPlugin implements ISelectionListener{
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, new FolderResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, new FolderResourceProviderFactory());		
 		
+		
+		/*
+		 * TODO: Execute this in the Dashboard and in workflow diagram!
+		 * Exception is thrown, because workspace is not initialized at this point.
 		for(IProject p : ExplorerProjectPaths.getProjects()){
 			ServerService.getInstance().fetchResults(p);
 		}
+		*/
 		
 		/*
 		new Thread(new Runnable() {
@@ -85,17 +85,5 @@ public class Activator extends AbstractUIPlugin implements ISelectionListener{
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		/*
-		IProject p = ExplorerProjectPaths.getProjectFromExplorerSelection();
-		if(p != null){
-			HashSet<IProject> proj = new HashSet<IProject>();
-			proj.add(p);
-			org.spotter.eclipse.ui.Activator.getDefault().setSelectedProjects(part, proj);
-		}
-		*/
 	}
 }
