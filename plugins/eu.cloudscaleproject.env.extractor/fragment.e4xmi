@@ -24,6 +24,6 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IUZ4kAzoEeSp8dUgDO-GmA" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:1">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_WliS0C3MEeSaD7cZMXxbKA" elementId="eu.cloudscaleproject.env.extractor.handledtoolitem.openeditor" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/html/ic-extractor.png" tooltip="Open Extractor Editor" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_WliS0C3MEeSaD7cZMXxbKA" elementId="eu.cloudscaleproject.env.extractor.handledtoolitem.openeditor" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/icons/ic-extractor-small.png" tooltip="Open Extractor Editor" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
   </fragments>
 </fragment:ModelFragments>

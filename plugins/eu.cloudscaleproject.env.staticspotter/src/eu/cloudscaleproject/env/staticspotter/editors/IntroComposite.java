@@ -32,10 +32,10 @@ public class IntroComposite extends Composite {
 			// Cache entire folder
 			// (needed in product export, to cache files, so it is possible to
 			// reference them)
-			URL folder = FileLocator.find(plugin, new Path("html/"), null);
+			URL folder = FileLocator.find(plugin, new Path("resources/html/"), null);
 			FileLocator.toFileURL(folder);
 			
-			IPath relativePagePath = new Path("html/intro.html");
+			IPath relativePagePath = new Path("resources/html/intro.html");
 			URL fileInPlugin = FileLocator.find(plugin, relativePagePath, null);
 			introUrl = FileLocator.toFileURL(fileInPlugin);
 			Browser browser = new Browser(this, SWT.NONE);
