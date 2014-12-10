@@ -38,13 +38,16 @@ import org.scaledl.overview.deployment.RuntimeDeployment;
 import org.scaledl.overview.specification.CloudEnvironmentDescriptor;
 import org.scaledl.overview.specification.CloudSpecification;
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
+import org.scaledl.overview.specification.PlatformServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformRuntimeServiceDescriptor;
+import org.scaledl.overview.specification.ServiceSpecification;
+import org.scaledl.overview.specification.Specification;
 import org.scaledl.overview.util.OverviewSpecificationUtil;
 
 import eu.cloudscaleproject.env.extractor.wizard.components.ServiceDeploymentComponent;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
-import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;
 import eu.cloudscaleproject.env.extractor.wizard.util.OverviewHelper;
+import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;
 import eu.cloudscaleproject.env.extractor.wizard.util.WizardData;
 
 public class DeploymentWizardPage extends WizardPage implements IWizardPageControll {
@@ -281,8 +284,8 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 		else if (rbPaaS.getSelection())
 			this.cloudSpecifications = OverviewHelper.getCloudSpecificationsPaaS();
 		
-		lblPlatformService.setEnabled(rbPaaS.getSelection());
-		cbPaaS.setEnabled(rbPaaS.getSelection());
+		//lblPlatformService.setEnabled(rbPaaS.getSelection());
+		//cbPaaS.setEnabled(rbPaaS.getSelection());
 		cvPaaS.setSelection(null);
 		
 		//
@@ -307,7 +310,11 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 	{
 		if (rbPaaS.getSelection())
 		{
-			initPaaS();
+			initPaaS(data.getCloudSpecification());
+		}
+		else
+		{
+			initPaaS(OverviewHelper.getServiceSpecifications().get(0));
 		}
 		
 		deploymentComposite.setComputingInfrastructureServiceDescriptor(getComputingInfrastructureServiceDescriptor());
@@ -318,9 +325,14 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 		deploymentComposite.setComputingInfrastructureServiceDescriptor(getComputingInfrastructureServiceDescriptor());
 	}
 	
-	private void initPaaS ()
+	private void initPaaS (Specification specification)
 	{
-		List<ProvidedPlatformRuntimeServiceDescriptor> paaSDescriptors = OverviewHelper.getPaaSRuntimeDescriptors(data.getCloudSpecification());
+		List<? extends PlatformServiceDescriptor> paaSDescriptors = null;
+
+		if (specification instanceof CloudSpecification)
+			paaSDescriptors = OverviewHelper.getPaaSRuntimeDescriptors((CloudSpecification)specification);
+		else if (specification instanceof ServiceSpecification)
+			paaSDescriptors = OverviewHelper.getPlatformDescriptors((ServiceSpecification)specification, false, true);
 
 		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
 		IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), ProvidedPlatformRuntimeServiceDescriptor.class, "name");

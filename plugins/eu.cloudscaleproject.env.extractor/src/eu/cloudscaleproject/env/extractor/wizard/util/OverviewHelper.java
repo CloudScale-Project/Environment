@@ -10,10 +10,16 @@ import org.scaledl.overview.specification.CloudSpecification;
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
 import org.scaledl.overview.specification.InfrastructureServiceDescriptor;
 import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
+import org.scaledl.overview.specification.PlatformRuntimeServiceDescriptor;
+import org.scaledl.overview.specification.PlatformServiceDescriptor;
+import org.scaledl.overview.specification.PlatformSupportServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformRuntimeServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformSupportServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedServiceDescriptor;
+import org.scaledl.overview.specification.ServiceDescriptor;
+import org.scaledl.overview.specification.ServiceSpecification;
+import org.scaledl.overview.specification.Specification;
 
 public class OverviewHelper {
 	
@@ -78,6 +84,21 @@ public class OverviewHelper {
 	public static List<? extends ProvidedPlatformServiceDescriptor> getPaaSDescriptors (CloudSpecification specification)
 	{
 		return getPaaSDescriptors(specification, true, true);
+	}
+
+	public static List<? extends PlatformServiceDescriptor> getPlatformDescriptors (ServiceSpecification specification, boolean support, boolean runtime)
+	{
+		LinkedList<PlatformServiceDescriptor> list = new LinkedList<PlatformServiceDescriptor>();
+		for (ServiceDescriptor sd : specification.getServiceDescriptors())
+		{
+			if ( runtime && sd instanceof PlatformRuntimeServiceDescriptor)
+				list.add((PlatformRuntimeServiceDescriptor)sd);
+
+			if ( support && sd instanceof PlatformSupportServiceDescriptor)
+				list.add((PlatformSupportServiceDescriptor)sd);
+		}
+		
+		return list;
 	}
 
 	public static List<? extends ProvidedPlatformServiceDescriptor> getPaaSDescriptors (CloudSpecification specification, boolean support, boolean runtime)
@@ -166,5 +187,19 @@ public class OverviewHelper {
 		}
 		
 		return list;
+	}
+	
+	public static List<ServiceSpecification> getServiceSpecifications()
+	{
+		List<ServiceSpecification> l = new LinkedList<ServiceSpecification>();
+		for (Specification specs : SpecificationProviderService.getInstance().getDefinitions())
+		{
+			if (specs instanceof ServiceSpecification)
+			{
+				l.add((ServiceSpecification)specs);
+			}
+		}
+		
+		return l;
 	}
 }

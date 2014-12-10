@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.dialogs.WorkbenchWizardElement;
 import org.eclipse.ui.internal.wizards.AbstractExtensionWizardRegistry;
 import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.wizards.IWizardCategory;
@@ -77,22 +78,35 @@ public class CloudScaleBranding {
 		IWizardCategory[] categories = PlatformUI.getWorkbench().getNewWizardRegistry().getRootCategory().getCategories();
 		for(IWizardDescriptor wizard : getAllWizards(categories)){
 			
-			/*
+			
 			System.out.println("ID: " + wizard.getId());
 			System.out.println("	Label: " + wizard.getLabel()); 
 			System.out.println("	Category label: " + wizard.getCategory().getLabel()); 
 			System.out.println("	Category ID: " + wizard.getCategory().getId());
-		    */
+		    
 		    
 			if(
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Basic") && 
 		    		!wizard.getCategory().getId().equals("org.eclipse.ui.Examples") && 
-		    		!wizard.getCategory().getId().startsWith("org.scaledl") && 
-		    		!wizard.getCategory().getId().startsWith("de.uka") && 
-		    		!wizard.getCategory().getId().startsWith("org.spotter") && 
-		    		!wizard.getCategory().getId().startsWith("org.palladiosimulator") && 
-		    		!wizard.getCategory().getId().contains("cloudscale") &&
 		    		
+		    		!wizard.getCategory().getId().startsWith("org.scaledl") && 
+		    		!wizard.getId().startsWith("org.scaledl") && 
+		    		
+		    		!wizard.getCategory().getId().startsWith("de.uka") && 
+		    		!wizard.getCategory().getId().startsWith("org.palladiosimulator") && 
+		    		!wizard.getId().startsWith("de.uka") && 
+		    		!wizard.getId().startsWith("org.palladiosimulator") && 
+		    		
+		    		!wizard.getCategory().getId().startsWith("org.spotter") && 
+		    		!wizard.getId().startsWith("org.spotter") && 
+		    		
+		    		!wizard.getCategory().getId().toLowerCase().contains("cloudscale") &&
+		    		!wizard.getId().toLowerCase().contains("cloudscale") &&
+		    		
+		    		!wizard.getCategory().getId().contains("dlim") 
+
+		    		
+		    		/*
 		    		!wizard.getLabel().contains("ServicelevelObjective Model") &&
 		    		!wizard.getLabel().contains("Pms Model") &&
 		    		!wizard.getLabel().contains("Experiments Model") &&
@@ -103,16 +117,13 @@ public class CloudScaleBranding {
 		    		!wizard.getLabel().contains("Usage Model") &&
 		    		!wizard.getLabel().contains("Variation Model") &&
 		    		!wizard.getLabel().contains("Allocation Model") &&
-
-		    		
-		    		!wizard.getCategory().getId().contains("Usageevolution") &&
-		    		!wizard.getCategory().getId().contains("dlim") 
-		    		)
+					*/
+		    		 		)
 		    		
 		    {
 		        // TODO: removed for now when new stuff are integrated on daily bases -- fix-it
-		        //WorkbenchWizardElement wizardElement = (WorkbenchWizardElement) wizard;
-		        // wizardRegistry.removeExtension(wizardElement.getConfigurationElement().getDeclaringExtension(), new Object[]{wizardElement});
+		        WorkbenchWizardElement wizardElement = (WorkbenchWizardElement) wizard;
+		        wizardRegistry.removeExtension(wizardElement.getConfigurationElement().getDeclaringExtension(), new Object[]{wizardElement});
 		    }
 		}
 		

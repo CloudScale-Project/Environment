@@ -1,22 +1,18 @@
 package eu.cloudscaleproject.env.extractor.editors;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.extractor.editors.composites.InputAlternativeComposite;
-import eu.cloudscaleproject.env.extractor.wizard.util.Util;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
 public class InputComposite extends SidebarEditorComposite {
 	
-	private final IProject project;
 	private final String[] sections = new String[]{"Inputs:"};
 	
 	/**
@@ -27,37 +23,7 @@ public class InputComposite extends SidebarEditorComposite {
 	public InputComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
-		this.project = project;
-		
-		IFolder extractorInputFolder = Util.getInputFolder(project);
-		
-		setResourceProvider(new ResourceProvider(extractorInputFolder, "Alternative.alt") {
-			
-			@Override
-			public boolean validateResource(IResource res) {
-				if(res instanceof IFile){
-					return true;
-				}
-				return false;
-			}
-			
-			@Override
-			public IEditorInputResource loadResource(IResource resource) {
-
-				InputPersitenceFile eif = new InputPersitenceFile(InputComposite.this.project, (IFile)resource);
-				if (!resource.exists())
-					eif.save();
-				return eif;
-			}
-			
-			@Override
-			public IResource createResource(String resourceName) {
-				IFile file = getRootFolder().getFile(resourceName);
-				InputPersitenceFile ipf = new InputPersitenceFile(InputComposite.this.project, file);
-				ipf.save();
-				return file;
-			}
-		});
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_INPUT_ID));
 		
 		setContentProvider(new SidebarContentProvider() {
 			

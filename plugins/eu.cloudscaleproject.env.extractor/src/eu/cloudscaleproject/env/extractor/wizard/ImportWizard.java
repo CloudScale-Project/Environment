@@ -290,7 +290,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			externalConnection.setSource(usageProxy);
 			overview.getArchitecture().getExternalConnections().add(externalConnection);
 		}
-
+		
 		// // // // // // // // //
 		// Other stuff
 		overview.getDataTypes().getTypes().addAll(overviewToMerge.getDataTypes().getTypes());
@@ -300,6 +300,12 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		// // // // // // // // //
 		// CloudEnvironment
 		CloudEnvironment ceToMerge = overviewToMerge.getArchitecture().getCloudEnvironments().get(0);
+		
+		if (overview.getArchitecture().getCloudEnvironments().isEmpty())
+		{ 
+			overview.getArchitecture().getCloudEnvironments().add(ceToMerge);
+		}
+
 		CloudEnvironment ce = overview.getArchitecture().getCloudEnvironments().get(0);
 			
 		ce.getSoftwareLayer().getServices().addAll(ceToMerge.getSoftwareLayer().getServices());
