@@ -96,6 +96,10 @@ public class CloudScaleBranding {
 		    		!wizard.getCategory().getId().startsWith("org.palladiosimulator") && 
 		    		!wizard.getId().startsWith("de.uka") && 
 		    		!wizard.getId().startsWith("org.palladiosimulator") && 
+
+		    		!wizard.getCategory().getId().startsWith("org.reclipse") && 
+		    		!wizard.getId().startsWith("org.reclipse") && 
+
 		    		
 		    		!wizard.getCategory().getId().startsWith("org.spotter") && 
 		    		!wizard.getId().startsWith("org.spotter") && 
