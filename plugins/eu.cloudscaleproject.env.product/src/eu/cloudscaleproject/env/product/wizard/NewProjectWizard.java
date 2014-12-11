@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.ISafeRunnable;
@@ -24,6 +25,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
 import eu.cloudscaleproject.env.product.Activator;
 
@@ -105,8 +107,13 @@ public class NewProjectWizard extends BasicNewProjectResourceWizard {
 
 				// refresh project for external changes
 				try {
-					p.refreshLocal(IProject.DEPTH_INFINITE,
-							new NullProgressMonitor());
+					p.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+					
+					//expand created project
+					for(IResource r : p.members()){
+						ExplorerUtils.selectAndReveal(r);
+					}
+					
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

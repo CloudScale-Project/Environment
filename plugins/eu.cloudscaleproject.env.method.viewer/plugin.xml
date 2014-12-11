@@ -77,7 +77,7 @@
    <extension
          point="eu.cloudscaleproject.env.product.newproject">
       <client
-            class="eu.cloudscaleproject.env.method.viewer.wizard.ProjectWizard">
+            class="eu.cloudscaleproject.env.method.viewer.wizard.ProjectWizardExtension">
       </client>
    </extension>
 </plugin>

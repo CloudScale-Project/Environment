@@ -107,22 +107,26 @@ public abstract class ResourceProvider{
 		return null;
 	}
 	
-	public final void checkRootFolder(){
-		if(!rootFolder.exists()){
-			try {
-				rootFolder.create(true, true, null);
-				resources.clear();
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public final boolean checkRootFolder(){
+		boolean modified = false;
+		try {
+			if(!rootFolder.exists()){
+				if(rootFolder.getParent().exists()){
+					rootFolder.create(true, true, null);
+					modified = true;
+				}
 			}
 		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		return modified;
 	}
 		
 	public final boolean reloadResources(){
-		checkRootFolder();
-		
-		boolean modified = false;
+	
+		boolean modified = checkRootFolder();
 
 		//remove missing
 		Iterator<IResource> iter = resources.keySet().iterator();
@@ -136,6 +140,10 @@ public abstract class ResourceProvider{
 				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
 				modified = true;
 			}
+		}
+		
+		if(!rootFolder.exists()){
+			return modified;
 		}
 		
 		//add new
@@ -261,7 +269,7 @@ public abstract class ResourceProvider{
 		IEditorInputResource eir = loadResource(res);
 		eir.setName(name);
 		eir.save();
-		
+				
 		pcs.firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
 		return eir;
 	}
@@ -269,7 +277,7 @@ public abstract class ResourceProvider{
 	public void deleteResource(String resourceName){
 		IEditorInputResource resource = getResource(resourceName);
 		resource.delete();
-		
+				
 		pcs.firePropertyChange(PROP_RESOURCE_DELETED, null, resource);
 	}
 	

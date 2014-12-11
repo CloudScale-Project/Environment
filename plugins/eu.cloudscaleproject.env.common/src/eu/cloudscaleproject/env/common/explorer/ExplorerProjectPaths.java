@@ -412,9 +412,16 @@ public class ExplorerProjectPaths {
 	}
 
 	public static IProject getProject(IEditorPart editor) {
-		if (editor == null)
+		if (editor == null || editor.getEditorInput() == null){
 			return null;
-		return ResourceUtil.getFile(editor.getEditorInput()).getProject();
+		}
+		
+		IFile editorFile = ResourceUtil.getFile(editor.getEditorInput());
+		if(editorFile == null){
+			return null;
+		}
+		
+		return editorFile.getProject();
 	}
 
 	public static IProject getProjectFromElement(Object element) {

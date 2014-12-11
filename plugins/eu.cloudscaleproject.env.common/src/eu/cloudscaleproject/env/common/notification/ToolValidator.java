@@ -36,7 +36,16 @@ public abstract class ToolValidator extends DIExtension{
 			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 			Display display = PlatformUI.getWorkbench().getDisplay();
 			
-			shell.setCursor(new Cursor(display, SWT.CURSOR_WAIT));
+			if(shell == null){
+				logger.severe("Shell is null! Wait cursor will not be shown!");
+			}
+			if(display == null){
+				logger.severe("Display is null! Wait cursor will not be shown!");
+			}
+			
+			if(shell != null && display != null){
+				shell.setCursor(new Cursor(display, SWT.CURSOR_WAIT));
+			}
 			
 			try{
 				if(statusManager == null){
@@ -59,6 +68,7 @@ public abstract class ToolValidator extends DIExtension{
 				}
 				
 				try{
+					logger.info("Validation triggered for: " + getToolID());
 					return doValidate(project, status);
 				}
 				catch(Exception e){
@@ -68,7 +78,9 @@ public abstract class ToolValidator extends DIExtension{
 				}
 			}
 			finally{
-				shell.setCursor(new Cursor(display, SWT.CURSOR_ARROW));
+				if(shell != null && display != null){
+					shell.setCursor(new Cursor(display, SWT.CURSOR_ARROW));
+				}
 			}
 		}
 		return false;

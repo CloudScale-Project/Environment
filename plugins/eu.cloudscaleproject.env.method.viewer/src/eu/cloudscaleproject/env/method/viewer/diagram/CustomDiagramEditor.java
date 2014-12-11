@@ -17,6 +17,8 @@ public class CustomDiagramEditor extends DiagramEditor{
 	private final Object lock = new Object();
 	private boolean resize = false;
 	
+	private IProject project = null;
+	
 	@Override
 	protected DiagramBehavior createDiagramBehavior() {
 		return new CustomDiagramBehavior(this);
@@ -29,9 +31,9 @@ public class CustomDiagramEditor extends DiagramEditor{
 	
 	@Override
 	public void dispose() {
-		IProject p = ExplorerProjectPaths.getProject(this);
-		StatusServiceImpl.getProjectStatusSrvice(p).registerDiagramEditor(null);
-		
+		if(this.project != null){
+			StatusServiceImpl.getProjectStatusSrvice(this.project).registerDiagramEditor(null);
+		}
 		super.dispose();
 	}
 	
@@ -45,8 +47,8 @@ public class CustomDiagramEditor extends DiagramEditor{
 		super.initializeGraphicalViewer();
 
 		//register editor
-		IProject p = ExplorerProjectPaths.getProject(this);
-		StatusServiceImpl.getProjectStatusSrvice(p).registerDiagramEditor(this);
+		this.project = ExplorerProjectPaths.getProject(this);
+		StatusServiceImpl.getProjectStatusSrvice(this.project).registerDiagramEditor(this);
 				
 		//set zoom
 		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);
