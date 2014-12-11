@@ -8,7 +8,6 @@ import org.eclipse.core.resources.IResource;
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.ToolValidator;
-import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;

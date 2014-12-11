@@ -52,7 +52,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.ServiceClientWrapper;
-import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.model.ExtensionItem;
 import org.spotter.eclipse.ui.model.IExtensionItem;
 import org.spotter.eclipse.ui.navigator.SpotterProjectParent;

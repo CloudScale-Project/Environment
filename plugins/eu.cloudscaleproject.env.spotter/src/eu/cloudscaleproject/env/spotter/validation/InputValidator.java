@@ -14,8 +14,8 @@ import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.shared.environment.model.XMeasurementEnvironment;
 
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.ToolValidator;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.ToolValidator;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
