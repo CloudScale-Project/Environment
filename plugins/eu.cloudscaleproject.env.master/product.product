@@ -43,8 +43,12 @@ Visit http://www.cloudscale-project.eu
    <plugins>
       <plugin id="LQNModel"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
+      <plugin id="ch.qos.logback.classic"/>
+      <plugin id="ch.qos.logback.core"/>
+      <plugin id="ch.qos.logback.slf4j" fragment="true"/>
       <plugin id="com.google.guava"/>
       <plugin id="com.google.inject"/>
+      <plugin id="com.google.inject.multibindings" fragment="true"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="de.desmoj"/>
       <plugin id="de.fzi.se.accuracy"/>
@@ -196,6 +200,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.commons.jxpath"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
+      <plugin id="org.apache.commons.logging.fragment" fragment="true"/>
       <plugin id="org.apache.commons.math"/>
       <plugin id="org.apache.derby"/>
       <plugin id="org.apache.jasper.glassfish"/>
@@ -492,6 +497,14 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.jst.server.core"/>
       <plugin id="org.eclipse.ltk.core.refactoring"/>
       <plugin id="org.eclipse.ltk.ui.refactoring"/>
+      <plugin id="org.eclipse.m2e.archetype.common"/>
+      <plugin id="org.eclipse.m2e.core"/>
+      <plugin id="org.eclipse.m2e.core.ui"/>
+      <plugin id="org.eclipse.m2e.logback.appender" fragment="true"/>
+      <plugin id="org.eclipse.m2e.maven.indexer"/>
+      <plugin id="org.eclipse.m2e.maven.runtime"/>
+      <plugin id="org.eclipse.m2e.maven.runtime.slf4j.simple"/>
+      <plugin id="org.eclipse.m2e.model.edit"/>
       <plugin id="org.eclipse.m2m.atl"/>
       <plugin id="org.eclipse.m2m.atl.adt.debug"/>
       <plugin id="org.eclipse.m2m.atl.adt.editor"/>
@@ -612,7 +625,9 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.wst.validation"/>
       <plugin id="org.eclipse.wst.web"/>
       <plugin id="org.eclipse.wst.xml.core"/>
+      <plugin id="org.eclipse.wst.xsd.core"/>
       <plugin id="org.eclipse.xpand"/>
+      <plugin id="org.eclipse.xsd"/>
       <plugin id="org.eclipse.xtend"/>
       <plugin id="org.eclipse.xtend.core"/>
       <plugin id="org.eclipse.xtend.lib"/>
