@@ -42,6 +42,8 @@ Visit http://www.cloudscale-project.eu
 
    <plugins>
       <plugin id="LQNModel"/>
+      <plugin id="ProfilesBlackBoxLibrary"/>
+      <plugin id="ThreeLayerBlackboxLibrary"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
       <plugin id="ch.qos.logback.classic"/>
       <plugin id="ch.qos.logback.core"/>
@@ -53,6 +55,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.desmoj"/>
       <plugin id="de.fzi.se.accuracy"/>
       <plugin id="de.fzi.se.quality"/>
+      <plugin id="de.ikv.medini.qvt.plugin"/>
       <plugin id="de.mdelab.sdm.interpreter.core"/>
       <plugin id="de.mdelab.sdm.interpreter.core.eclipse"/>
       <plugin id="de.mdelab.sdm.interpreter.ocl"/>
@@ -115,6 +118,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="de.uka.ipd.sdq.probfunction"/>
       <plugin id="de.uka.ipd.sdq.probfunction.edit"/>
       <plugin id="de.uka.ipd.sdq.probfunction.math"/>
+      <plugin id="de.uka.ipd.sdq.qvtrengine.medini"/>
       <plugin id="de.uka.ipd.sdq.reliability.core"/>
       <plugin id="de.uka.ipd.sdq.reliability.sensitivity"/>
       <plugin id="de.uka.ipd.sdq.reliability.sensitivity.edit"/>
@@ -661,10 +665,17 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.jscience"/>
       <plugin id="org.junit"/>
       <plugin id="org.modelversioning.emfprofile"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.gmf"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.reflective"/>
       <plugin id="org.modelversioning.emfprofile.application.registry"/>
+      <plugin id="org.modelversioning.emfprofile.application.registry.ui"/>
+      <plugin id="org.modelversioning.emfprofile.diagram"/>
       <plugin id="org.modelversioning.emfprofile.edit"/>
+      <plugin id="org.modelversioning.emfprofile.editor"/>
       <plugin id="org.modelversioning.emfprofile.project"/>
+      <plugin id="org.modelversioning.emfprofile.project.ui"/>
       <plugin id="org.modelversioning.emfprofile.registry"/>
+      <plugin id="org.modelversioning.emfprofile.registry.ui"/>
       <plugin id="org.objectweb.asm"/>
       <plugin id="org.palladiosimulator.commons"/>
       <plugin id="org.palladiosimulator.edp2"/>
