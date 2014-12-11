@@ -48,8 +48,8 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.help</module>
     <module>plugins/eu.cloudscaleproject.env.method.editor</module>
     
-    <!--module>plugins/eu.cloudscaleproject.env.spotter</module>
-    <module>externals/DynamicSpotter/org.spotter.eclipse.ui</module-->
+    <module>plugins/eu.cloudscaleproject.env.spotter</module>
+    <module>externals/DynamicSpotter/org.spotter.eclipse.ui</module>
     
 
     <!--
