@@ -2,9 +2,7 @@ package org.scaledl.overview.diagram.validation;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.scaledl.overview.Overview;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -61,10 +59,12 @@ public class OverviewValidator extends ToolValidator {
 			
 			status.setIsInProgress(true);
 			
-			Diagnostic diagnostic = Diagnostician.INSTANCE.validate(overviewRes.getContents().get(0));
-			boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
-			
-			status.handleWarning(ERR_OVERVIEW_INVALID, !modelValid, true, diagnostic.getMessage());
+			//
+			// Removed - problems with imported models (Extractor import) ...
+			// 
+			//Diagnostic diagnostic = Diagnostician.INSTANCE.validate(overviewRes.getContents().get(0));
+			//boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
+			//status.handleWarning(ERR_OVERVIEW_INVALID, !modelValid, true, diagnostic.getMessage());
 			
 			status.setIsDone(true);
 		}

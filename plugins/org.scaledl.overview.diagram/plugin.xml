@@ -22,13 +22,6 @@
             icon="icons/editor.png"
             name="ScaleDL Architectural Templates">
       </wizard>
-      <wizard
-            category="org.scaledl.overview.diagram.wizard.category"
-            class="org.scaledl.overview.diagram.wizard.NewScaleDLOverviewWizard"
-            id="org.scaledl.overview.diagram.wizard.NewScaleDLUsageEvolution"
-            icon="icons/editor.png"
-            name="ScaleDL Usage Evolution">
-      </wizard>
    </extension>
    
    <extension

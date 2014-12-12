@@ -38,6 +38,7 @@ import org.scaledl.overview.deployment.RuntimeDeployment;
 import org.scaledl.overview.specification.CloudEnvironmentDescriptor;
 import org.scaledl.overview.specification.CloudSpecification;
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
+import org.scaledl.overview.specification.PlatformRuntimeServiceDescriptor;
 import org.scaledl.overview.specification.PlatformServiceDescriptor;
 import org.scaledl.overview.specification.ProvidedPlatformRuntimeServiceDescriptor;
 import org.scaledl.overview.specification.ServiceSpecification;
@@ -189,8 +190,8 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 			ce.getInfrastructureLayer().getServices().add(cis);
 			ce.getPlatformLayer().getServices().add(pprs);
 
-			ProvidedPlatformRuntimeServiceDescriptor pprsd_org = (ProvidedPlatformRuntimeServiceDescriptor) ((StructuredSelection)cvPaaS.getSelection()).getFirstElement();
-		    ProvidedPlatformRuntimeServiceDescriptor pprsd = OverviewSpecificationUtil.getSystemDescriptor(data.getOverviewModel(), pprsd_org);
+			PlatformRuntimeServiceDescriptor pprsd_org = (PlatformRuntimeServiceDescriptor) ((StructuredSelection)cvPaaS.getSelection()).getFirstElement();
+		    PlatformRuntimeServiceDescriptor pprsd = OverviewSpecificationUtil.getSystemDescriptor(data.getOverviewModel(), pprsd_org);
 			pprs.setDescriptor(pprsd);
 			pprs.setName(pprsd.getName());
 
