@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_nlLzYC3jEeSFlZh2WowR_Q">
   <imports xsi:type="commands:Command" xmi:id="_cB6fwHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective"/>
+  <imports xsi:type="commands:Command" xmi:id="_P7ECAIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.control.start"/>
+  <imports xsi:type="commands:Command" xmi:id="_oVRuIIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.ui.OpenMatchingViews"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EsKJkC3kEeSFlZh2WowR_Q" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_O0RpEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.command.openeditor" commandName="Open Static Spotter Editor"/>
   </fragments>
@@ -14,6 +16,8 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_WXy1kXubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.staticspotter.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
       <children xsi:type="menu:Menu" xmi:id="_WXy1knubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.staticspotter.menu.staticspotter" label="Static Spotter">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_WXy1k3ubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.staticspotter.handledmenuitem.test" label="Perspective" command="_cB6fwHubEeSCzZgOtBwvkA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_V0MYkIGWEeSoC_STLYPGdw" elementId="eu.cloudscaleproject.env.staticspotter.handledmenuitem.startStructuralPatternDetection" label="Start Structural Pattern Detection" iconURI="platform:/plugin/org.reclipse.structure.inference.ui/icons/wizards/start.png" command="_P7ECAIGWEeSoC_STLYPGdw"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_pr90QIGWEeSoC_STLYPGdw" elementId="eu.cloudscaleproject.env.staticspotter.handledmenuitem.openMatchingViews" label="Open Matching Views" command="_oVRuIIGWEeSoC_STLYPGdw"/>
       </children>
     </elements>
   </fragments>

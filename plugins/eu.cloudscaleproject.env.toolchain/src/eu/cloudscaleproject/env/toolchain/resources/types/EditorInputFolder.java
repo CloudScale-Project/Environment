@@ -133,8 +133,12 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	public IFolder getFolderResource(String key)
 	{
 		String relPath = propertyInputFile.getProperty(key);
-		if(relPath == null || relPath.isEmpty()){
+		if(relPath == null){
 			return null;
+		}
+		else if (relPath.isEmpty())
+		{
+			return getResource();
 		}
 		
 		IResource res = getResource().findMember(relPath);

@@ -295,11 +295,14 @@ public class Util {
 				IFile systemModelFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM);
 				IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY_DIAGRAM);
 				IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM_DIAGRAM);
-				
+								
 				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
 				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
 				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
 				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
+
+				IFile sourceDecoratorFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SOURCEDECORATOR);
+				rif.setResource(ResultPersistenceFolder.KEY_SOURCEDECORATOR_MODEL, sourceDecoratorFile);
 				
 				rif.save();
 				//ViewService.createDiagram(
