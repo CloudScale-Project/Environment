@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.toolchain.util;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class AbstractSidebarMenuComposite extends AbstractSidebarEditorComposite{
@@ -13,10 +12,4 @@ public abstract class AbstractSidebarMenuComposite extends AbstractSidebarEditor
 		setRemoveButtonEnabled(false);
 	}
 	
-	/////////////////////////////////// Unused methods //////////////////////////////////////
-	
-	@Override
-	public IResource[] getDependentRootResource() {
-		return null;
-	}
 }

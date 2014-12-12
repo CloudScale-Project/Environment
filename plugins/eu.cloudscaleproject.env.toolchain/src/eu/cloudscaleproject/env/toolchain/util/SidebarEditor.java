@@ -1,9 +1,10 @@
 package eu.cloudscaleproject.env.toolchain.util;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
@@ -17,6 +18,27 @@ public class SidebarEditor extends AbstractSidebarEditor{
 
 	private SidebarContentProvider contentProvider = null;
 	private ResourceProvider resourceProvider = null;
+	
+	private final PropertyChangeListener rcl = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			
+			if(contentProvider == null){
+				return;
+			}
+			
+			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
+				IEditorInputResource res = (IEditorInputResource)evt.getNewValue();
+				String section = contentProvider.getSection(res);
+				SidebarEditor.this.addSidebarEditor(res, section);
+			}
+			if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
+				IEditorInputResource res = (IEditorInputResource)evt.getOldValue();
+				SidebarEditor.this.removeSidebarEditor(res);
+			}
+		}
+	};
 	
 	public SidebarEditor(Composite sidebar, Composite area) {
 		super(sidebar, area);
@@ -36,6 +58,7 @@ public class SidebarEditor extends AbstractSidebarEditor{
 	public void init() {
 		if(resourceProvider != null && contentProvider != null){
 			super.init();
+			resourceProvider.addListener(rcl);
 		}
 	}
 
@@ -75,16 +98,6 @@ public class SidebarEditor extends AbstractSidebarEditor{
 			return new String[]{};
 		}
 		return contentProvider.getSections();
-	}
-
-	@Override
-	public IResource[] getDependentRootResource() {
-		
-		if(resourceProvider == null){
-			return null;
-		}
-		
-		return new IResource[]{resourceProvider.getRootFolder()};
 	}
 
 	@Override
@@ -137,18 +150,10 @@ public class SidebarEditor extends AbstractSidebarEditor{
 	}
 	
 	@Override
-	public void update() {
-		
-		if(contentProvider == null || resourceProvider == null){
-			super.update();
-			return;
+	public void dispose() {
+		if(resourceProvider != null){
+			resourceProvider.removeListener(rcl);
 		}
-		
-		if(resourceProvider.reloadResources()){
-			init();
-		}
-		else{
-			super.update();
-		}
+		super.dispose();
 	}
 }

@@ -156,11 +156,15 @@ public class ResourceUtils {
 					@Override
 					public IEditorInputResource loadResource(IResource res) {
 						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res);
-						eif.load();
 						
-						if(eif.getProperty(KEY_TYPE).equals(CapacityAlternative.class.getName())){
-							return new CapacityAlternative(res.getProject(), (IFolder)res);
+						if(res.exists()){
+							eif.load();
+							
+							if(CapacityAlternative.class.getName().equals(eif.getProperty(KEY_TYPE))){
+								return new CapacityAlternative(res.getProject(), (IFolder)res);
+							}
 						}
+						
 						return eif;
 					}
 					

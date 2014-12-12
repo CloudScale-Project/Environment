@@ -28,12 +28,6 @@ public class ExplorerChangeNotifier implements IResourceChangeListener{
 		listeners.remove(r);
 	}
 	
-	public synchronized void fireListeners(){
-		for(ExplorerChangeListener r : listeners){
-			r.resourceChanged();
-		}
-	}
-	
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		if (event.getDelta() == null) {
@@ -59,7 +53,7 @@ public class ExplorerChangeNotifier implements IResourceChangeListener{
 						}
 						
 						if(update){
-							listener.resourceChanged();
+							listener.resourceChanged(delta);
 						}
 					}
 				}

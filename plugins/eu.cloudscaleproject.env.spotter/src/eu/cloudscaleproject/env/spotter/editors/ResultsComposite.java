@@ -156,10 +156,6 @@ public class ResultsComposite extends Composite{
 				return sectionsRes;
 			}
 
-			@Override
-			public IResource[] getDependentRootResource() {
-				return new IResource[]{editorInput.getResource()};
-			}
 		};
 		
 		editor.setNewButtonEnabled(false);

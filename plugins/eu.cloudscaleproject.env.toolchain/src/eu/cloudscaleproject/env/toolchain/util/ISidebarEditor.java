@@ -2,13 +2,11 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Color;
 
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public interface ISidebarEditor extends ExplorerChangeListener{
+public interface ISidebarEditor{
 	
 	public void init();
 	public void showInput(IEditorInput input);
@@ -18,7 +16,6 @@ public interface ISidebarEditor extends ExplorerChangeListener{
 	
 	public List<IEditorInput> getInputs(String section);
 	public String[] getSidebarSections();
-	public IResource[] getDependentRootResource();	
 	
 	public void update();
 	

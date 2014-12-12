@@ -2,7 +2,6 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -45,12 +44,6 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		compositeArea.setLayoutData(gd_compositeArea);
 		
 		sidebarBuilder = new SidebarEditor(compositeSidebar, compositeArea){
-			
-			@Override
-			public void resourceChanged() {
-				super.resourceChanged();
-				SidebarEditorComposite.this.resourceChanged();
-			}
 			
 			public Color getSidebarSectionBackgroundColor(){
 				return SidebarEditorComposite.this.getSidebarSectionBackgroundColor();
@@ -102,11 +95,6 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		sidebarBuilder.removeSidebarEditor(ei);
 	}
 	
-	public void update(){
-		sidebarBuilder.update();
-		super.update();
-	}
-	
 	public Color getSidebarSectionBackgroundColor(){
 		return CommonResources.COLOR_CS_BLUE;
 	}
@@ -136,15 +124,6 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	}
 
 	@Override
-	public IResource[] getResources() {
-		return sidebarBuilder.getResources();
-	}
-
-	@Override
-	public void resourceChanged() {		
-	}
-
-	@Override
 	public IPropertySheetPage getPropertySheetPage() {
 		return null;
 	}
@@ -158,9 +137,5 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	public String[] getSidebarSections() {
 		return sidebarBuilder.getSidebarSections();
 	}
-
-	@Override
-	public IResource[] getDependentRootResource() {
-		return sidebarBuilder.getDependentRootResource();
-	}
+	
 }

@@ -10,18 +10,23 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class ResourceProvider{
 	
 	public static final String PROP_RESOURCE_CREATED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.create";
 	public static final String PROP_RESOURCE_DELETED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.delete";
+	
 	public static final String PROP_RESOURCE_ADDED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.add";
 	public static final String PROP_RESOURCE_REMOVED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.remove";
-	
+	public static final String PROP_RESOURCE_MODIFIED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.modified";
+
 	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
 
 	private final IFolder rootFolder;
@@ -36,13 +41,38 @@ public abstract class ResourceProvider{
 	protected abstract IResource createResource(String resourceName);
 	protected abstract IEditorInputResource loadResource(IResource res);
 
-	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	
+	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
+		
+		@Override
+		public void resourceChanged(IResourceDelta delta) {
+			boolean modified = ResourceProvider.this.reloadResources();
+			if(!modified){
+				for(IResource res : resources.keySet()){
+					if(delta.findMember(res.getFullPath()) != null){
+						pcs.firePropertyChange(PROP_RESOURCE_MODIFIED, null, resources.get(res));
+					}
+				}
+			}
+		}
+		
+		@Override
+		public IResource[] getResources() {
+			return new IResource[]{ResourceProvider.this.getRootFolder()};
+		}
+	};
 	
 	public ResourceProvider(IFolder folder, String defaultResName){
 		this.rootFolder = folder;
 		this.defaultResName = defaultResName;
 		
 		reloadResources();
+		ExplorerChangeNotifier.getInstance().addListener(ecl);
+	}
+	
+	public void dispose(){
+		ExplorerChangeNotifier.getInstance().removeListener(ecl);
 	}
 	
 	public void tagResource(String tag, IEditorInputResource resource){

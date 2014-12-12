@@ -2,7 +2,6 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -65,11 +64,6 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 			@Override
 			public String[] getSidebarSections() {
 				return AbstractSidebarEditorComposite.this.getSidebarSections();
-			}
-
-			@Override
-			public IResource[] getDependentRootResource() {
-				return AbstractSidebarEditorComposite.this.getDependentRootResource();
 			}
 			
 			public Color getSidebarSectionBackgroundColor(){
@@ -167,16 +161,6 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	public void setRemoveButtonEnabled(boolean enable){
 		sidebarBuilder.setRemoveButtonEnabled(enable);
 
-	}
-	
-	@Override
-	public IResource[] getResources() {
-		return sidebarBuilder.getResources();
-	}
-	
-	@Override
-	public void resourceChanged() {
-		sidebarBuilder.resourceChanged();
 	}
 	
 	@Override

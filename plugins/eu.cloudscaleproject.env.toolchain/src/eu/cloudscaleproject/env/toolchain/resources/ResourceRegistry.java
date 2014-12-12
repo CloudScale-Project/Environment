@@ -27,6 +27,7 @@ public class ResourceRegistry {
 		while(iter.hasNext()){
 			IFolder folder = iter.next();
 			if(!folder.exists()){
+				instance.resourceProviders.get(folder).dispose();
 				iter.remove();
 			}
 		}

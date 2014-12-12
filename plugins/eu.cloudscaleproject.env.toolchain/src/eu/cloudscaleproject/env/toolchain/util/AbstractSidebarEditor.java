@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -21,7 +20,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
 import eu.cloudscaleproject.env.common.CommonResources;
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
 import eu.cloudscaleproject.env.common.ui.HoverToggleButton;
@@ -249,9 +247,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		
 		//rebuild controls composite
 		initControls();
-		
-		//register this object to explorer file-system changes notifier
-		ExplorerChangeNotifier.getInstance().addListener(this);
 
 		//layout recreated composites
 		if(compositeSidebar != null && !compositeSidebar.isDisposed()){
@@ -447,16 +442,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		return CommonResources.COLOR_CS_BLUE_DARK;
 	}
 	
-	@Override
-	public void resourceChanged() {
-		update();
-	}
-	
-	@Override
-	public IResource[] getResources() {
-		return getDependentRootResource();
-	}
-	
 	private Control getLastControlInSidebar(String section){
 		Control out = null;
 		boolean inSection = false;
@@ -516,8 +501,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	}
 	
 	public void dispose() {
-
-		ExplorerChangeNotifier.getInstance().removeListener(this);
 		
 		for(EditorItem item : entries.values()){
 			item.dispose();
