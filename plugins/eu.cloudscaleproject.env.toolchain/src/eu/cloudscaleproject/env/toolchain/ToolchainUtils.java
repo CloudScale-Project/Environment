@@ -150,7 +150,7 @@ public class ToolchainUtils {
 		//usage evolution
 		else if(USAGEEVOLUTION_ID.equals(id)){
 			folder = scaledlFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
+					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION));
 		}
 		
 		

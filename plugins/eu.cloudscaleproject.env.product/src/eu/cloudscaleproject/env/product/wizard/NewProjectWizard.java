@@ -38,6 +38,7 @@ public class NewProjectWizard extends BasicNewProjectResourceWizard {
 	private static final String DEFAULT_FOLDER_STATIC_SPOTTER = " Static Spotter";
 	private static final String DEFAULT_FOLDER_DYNAMIC_SPOTTER = " Dynamic Spotter";
 	private static final String DEFAULT_FOLDER_SCALEDL = "ScaleDL models";
+	private static final String DEFAULT_FOLDER_USAGE_EVOLUTION = "Usage Evolution";
 
 	private static final String DEFAULT_FOLDER_INPUT = " Input";
 	private static final String DEFAULT_FOLDER_CONFIGURATION = "Configuration";
@@ -213,6 +214,7 @@ public class NewProjectWizard extends BasicNewProjectResourceWizard {
 		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER, DEFAULT_FOLDER_STATIC_SPOTTER);
 
 		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_SCALEDL, DEFAULT_FOLDER_SCALEDL);
+		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, DEFAULT_FOLDER_USAGE_EVOLUTION);
 
 		return prop;
 	}

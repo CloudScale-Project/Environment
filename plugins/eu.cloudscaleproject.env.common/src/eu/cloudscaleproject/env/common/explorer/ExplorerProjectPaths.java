@@ -44,6 +44,7 @@ public class ExplorerProjectPaths {
 	public static final String KEY_FOLDER_GENERATED = "generated-folder";
 	public static final String KEY_FOLDER_SCALEDL = "scaledl-folder";
 	public static final String KEY_FOLDER_IMPORT = "imported-folder";
+	public static final String KEY_FOLDER_USAGE_EVOLUTION = "scaledl-usageevolution-folder";
 
 	public static final String KEY_FOLDER_ANALYSER = "analyser-folder";
 	public static final String KEY_FOLDER_EXTRACTOR = "extractor-folder";
