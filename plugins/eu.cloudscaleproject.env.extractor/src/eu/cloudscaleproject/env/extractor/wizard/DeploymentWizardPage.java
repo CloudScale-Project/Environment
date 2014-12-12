@@ -188,14 +188,20 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 
 			ce.getInfrastructureLayer().getServices().add(cis);
 			ce.getPlatformLayer().getServices().add(pprs);
-			cis.getPlatformServices().add(pprs);
+
+			ProvidedPlatformRuntimeServiceDescriptor pprsd_org = (ProvidedPlatformRuntimeServiceDescriptor) ((StructuredSelection)cvPaaS.getSelection()).getFirstElement();
+		    ProvidedPlatformRuntimeServiceDescriptor pprsd = OverviewSpecificationUtil.getSystemDescriptor(data.getOverviewModel(), pprsd_org);
+			pprs.setDescriptor(pprsd);
+			pprs.setName(pprsd.getName());
+
 			pprs.getSoftwareServices().add(this.data.getSoftwareService());
-			pprs.setName("TODO: descriptor");
+			cis.getPlatformServices().add(pprs);
 			
 			// Specification
 			ComputingInfrastructureServiceDescriptor cisd_org = getComputingInfrastructureServiceDescriptor();
 			ComputingInfrastructureServiceDescriptor cisd = OverviewSpecificationUtil.getSystemDescriptor(data.getOverviewModel(), cisd_org);
 			cis.setDescriptor(cisd);
+			cis.setName(cisd.getName());
 			
 			RuntimeDeployment runtimeDeployment = deploymentComposite.createAndInsertDeployment(this.data.getOverviewModel());
 			cis.setDeployment(runtimeDeployment);

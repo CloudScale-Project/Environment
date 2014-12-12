@@ -767,6 +767,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.scaledl.usageevolution"/>
       <plugin id="org.scaledl.usageevolution.edit"/>
       <plugin id="org.scaledl.usageevolution.editor"/>
+      <plugin id="org.scaledl.usageevolution.wizard"/>
       <plugin id="org.slf4j.api"/>
       <plugin id="org.somox.analyzer.sissymodelanalyzer"/>
       <plugin id="org.somox.analyzer.sissymodelanalyzer.ui"/>

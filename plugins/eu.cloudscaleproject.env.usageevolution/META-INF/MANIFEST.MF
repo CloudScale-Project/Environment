@@ -19,6 +19,14 @@ Require-Bundle: org.eclipse.ui,
  tools.descartes.dlim.exporter;bundle-version="0.14.10",
  tools.descartes.dlim.extractor;bundle-version="0.14.10",
  tools.descartes.dlim.generator;bundle-version="0.14.10",
- tools.descartes.dlim.generator.edit;bundle-version="0.14.10"
+ tools.descartes.dlim.generator.edit;bundle-version="0.14.10",
+ org.scaledl.usageevolution.wizard;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.completion.jobs;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.edit;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.editor;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.repositories.cloudscale;bundle-version="1.0.0",
+ ThreeLayerBlackboxLibrary;bundle-version="1.0.0",
+ ProfilesBlackBoxLibrary;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

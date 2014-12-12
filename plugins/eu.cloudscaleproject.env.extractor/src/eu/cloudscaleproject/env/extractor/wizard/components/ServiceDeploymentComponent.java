@@ -96,7 +96,7 @@ public class ServiceDeploymentComponent extends Composite {
 		rbClustered.setText("Clustered");
 		
 		rbScalable = new Button(composite_1, SWT.RADIO);
-		rbScalable.setText("Scalable");
+		rbScalable.setText("Replicable");
 		
 		Composite composite_2 = new Composite(composite, SWT.NONE);
 		composite_2.setLayout(new GridLayout(1, false));
