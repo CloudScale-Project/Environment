@@ -1,6 +1,6 @@
 
 html {
-	background-color: #9fb5c8 ;
+	background-color: #F3F4F6 ;
 }
 
 body {
@@ -8,6 +8,8 @@ body {
     color: #333333;
     background-color: #9fb5c8;
     
+    margin-right:50px;
+	margin-left:50px;
     }
   
   h1{

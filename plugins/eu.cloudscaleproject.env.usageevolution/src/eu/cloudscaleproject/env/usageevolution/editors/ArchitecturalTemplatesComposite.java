@@ -1,30 +1,28 @@
-package eu.cloudscaleproject.env.staticspotter.editors;
+package eu.cloudscaleproject.env.usageevolution.editors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
-import eu.cloudscaleproject.env.staticspotter.editors.composites.InputAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class InputComposite extends SidebarEditorComposite {
+public class ArchitecturalTemplatesComposite extends SidebarEditorComposite {
 	
-	private final String[] sections = new String[]{"Inputs:"};
+	private final String[] sections = new String[]{"Alternatives:"};
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public InputComposite(IProject project, Composite parent, int style) {
+	public ArchitecturalTemplatesComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
+
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID));
-		
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override
@@ -40,10 +38,10 @@ public class InputComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new InputAlternativeComposite(parent, style, (InputPersitenceFile)resource);
+				
+				return new Composite (parent, style);
 			}
 		});
-		
 		//init();
 	}
 	

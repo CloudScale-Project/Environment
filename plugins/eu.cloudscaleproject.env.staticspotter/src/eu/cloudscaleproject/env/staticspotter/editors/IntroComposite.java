@@ -13,6 +13,7 @@ import org.osgi.framework.Bundle;
 
 import eu.cloudscaleproject.env.staticspotter.Activator;
 
+
 public class IntroComposite extends Composite {
 
 	private URL introUrl;
@@ -40,6 +41,7 @@ public class IntroComposite extends Composite {
 			introUrl = FileLocator.toFileURL(fileInPlugin);
 			Browser browser = new Browser(this, SWT.NONE);
 			browser.setUrl(introUrl.toString());
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

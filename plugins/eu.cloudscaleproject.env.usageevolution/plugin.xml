@@ -17,7 +17,7 @@
    <extension
          point="eu.cloudscaleproject.env.toolchain.editors">
       <client
-            class="eu.cloudscaleproject.env.usageevolution.editors.UsageTabItemExtension"
+            class="eu.cloudscaleproject.env.usageevolution.editors.ScaleDLTabItemExtension"
             position="1000">
       </client>
    </extension>
