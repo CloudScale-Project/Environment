@@ -17,12 +17,11 @@
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_GM8WcIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="75">
             <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="70">
-              <children xsi:type="advanced:Placeholder" xmi:id="_imeVUKLIEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.placeholder.editor" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_imeVUKLIEeOVJP61i6fIgw" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.1" containerData="30">
               <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" ref="_mc-PMDZ_EeOUZvbZvEH41A"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_EJYPQMbvEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.placeholder.0" ref="__0KigMbuEeOONvcKIucoUw"/>
-              <children xsi:type="advanced:Placeholder" xmi:id="_GmP6UMbvEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.placeholder.1" ref="_lQGYgMbvEeOONvcKIucoUw"/>
             </children>
           </children>
         </children>
