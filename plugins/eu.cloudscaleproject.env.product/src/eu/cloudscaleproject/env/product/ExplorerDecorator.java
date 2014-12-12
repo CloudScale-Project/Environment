@@ -37,6 +37,7 @@ public class ExplorerDecorator extends LabelProvider implements
 	private static final String STATIC_SPOTTER_ICON = ICON_PATH + "dynamic-spotter.png";
 	
 	private static final String PROPERTIES_ICON = ICON_PATH + "projectProperties.png";
+	private static final String WORKFLOW_ICON = ICON_PATH + "workflow.png";
 
 	
 	@SuppressWarnings("unused") // How to detect if folder is expanded??
@@ -105,6 +106,10 @@ public class ExplorerDecorator extends LabelProvider implements
 		if (f.getName().endsWith(".cse"))
 		{
 			return getIcon(PROPERTIES_ICON);
+		}
+		if (f.getName().endsWith(".workflow"))
+		{
+			return getIcon(WORKFLOW_ICON);
 		}
 		
 		return image;
