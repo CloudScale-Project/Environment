@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
@@ -213,10 +215,26 @@ public class ExplorerProjectPaths {
 	public static String getProjectProperty(IProject project, String key) {
 		return getProjectProperty(project, key, null);
 	}
+	
+	/**
+	 * Create all parent folders including this folder if the resources does not exist jet.
+	 * 
+	 * @param folder Folder to create, including all parent folders.
+	 * @throws CoreException if the folder hierarchy can not be created.
+	 */
+	public static void prepareFolder(IFolder folder) throws CoreException {
+		IContainer parent = folder.getParent();
+		if (parent instanceof IFolder) {
+			prepareFolder((IFolder)parent);
+		}
+		if (!folder.exists()) {
+			folder.create(true, true, new NullProgressMonitor());
+		}
+	}
 
 	/**
 	 * Returns folder, which path is specified in project configuration file. If
-	 * folder doesn't exist jet, empty folder is created.
+	 * folder doesn't exist jet, empty folder or folder hierarchy is created.
 	 * 
 	 * @param project
 	 *            Project that should contain desired folder
@@ -228,52 +246,74 @@ public class ExplorerProjectPaths {
 
 		String folderpath = getProjectProperty(project, folderKey);
 
-		if (folderpath == null) {
-			logger.severe("Can't create or retieve folder. Specified folder key value does not exist!");
+		if (folderpath == null || folderpath.isEmpty()) {
+			logger.severe("Can't create or retieve folder. \n"
+					+ "Specified folder key value does not exist in the project configuration file! \n"
+					+ "Folder key: " + folderKey);
 			return null;
 		}
-
+		
 		IFolder folder = project.getFolder(folderpath);
 
-		if (!folder.exists()) {
-			try {
-				folder.create(true, true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		IStatus status = folder.getWorkspace().validateProjectLocation(project, folder.getFullPath());
+		if(!status.isOK()){
+			logger.severe("Can't create or retieve folder. \n"
+					+ "Specified folder key value is invalid in the project configuration file! \n"
+					+ "Folder path value: " + folder.getFullPath().toString());
+			return null;
+		}
+		
+		try {
+			prepareFolder(folder);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return null;
 		}
 
 		return folder;
 	}
 	
 	/**
-	 * Returns <code>IFolder</code>, located inside specified 'folder'.
-	 * Name of the folder is retrieved from the project properties, by the specified 'folderKey'.
-	 * If the folder doesn't exist jet, empty folder is created.
+	 * Returns <code>IFolder</code>, located on the path inside specified 'folder'.
+	 * Path of the folder is retrieved from the project properties, by the specified 'folderKey'.
+	 * If the folder doesn't exist jet, empty folder or folder hierarchy is created.
 	 * 
 	 * @param folder
-	 *            Folder from where to retrieve/create child folder.
+	 *            Folder from where to retrieve/create child folder. 
+	 *            This folder must already exist, or the IllegalArgumentException is thrown.
 	 * @param folderKey
 	 *            Key that identifies folder path in project configuration file
 	 * @return Generated folder
 	 */
 	public static IFolder getProjectFolder(IFolder folder, String folderKey){
-		String folederName = getProjectProperty(folder.getProject(), folderKey);
+		String folderpath = getProjectProperty(folder.getProject(), folderKey);
 		
 		if(!folder.exists()){
-			throw new IllegalArgumentException("getProjectFolder(): Specified folder does not exist!");
+			throw new IllegalArgumentException("Specified parent folder does not exist!");
 		}
 		
-		IFolder f = folder.getFolder(folederName);
+		if (folderpath == null || folderpath.isEmpty()) {
+			logger.severe("Can't create or retieve folder. \n"
+					+ "Specified folder key value does not exist in the project configuration file! \n"
+					+ "Folder key: " + folderKey);
+			return null;
+		}
 		
-		if (!f.exists()) {
-			try {
-				f.create(true, true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		IFolder f = folder.getFolder(folderpath);
+		
+		IStatus status = folder.getWorkspace().validateProjectLocation(folder.getProject(), folder.getFullPath());
+		if(!status.isOK()){
+			logger.severe("Can't create or retieve folder. \n"
+					+ "Specified folder key value is invalid in the project configuration file! \n"
+					+ "Folder path value: " + folder.getFullPath().toString());
+			return null;
+		}
+		
+		try {
+			prepareFolder(f);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return null;
 		}
 
 		return f;

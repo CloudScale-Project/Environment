@@ -160,32 +160,16 @@ public class ConfigAlternativeEditComposite extends Composite {
 			
 		});
 		
-		//init listeners
+		//configure input alternative combo-box
 		inputResourceProvider.addListener(inputResourceListener);
-		usageResourceProvider.addListener(usageResourceListener);
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				usageResourceProvider.removeListener(usageResourceListener);
-				inputResourceProvider.removeListener(inputResourceListener);
-			}
-		});
 		
-		//init combo viewer
 		comboViewerInput.setInput(inputResourceProvider.getResources());
-		comboViewerUsage.setInput(usageResourceProvider.getResources());
 		
 		IFolder inputAlt = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 		if(inputAlt != null){
 			comboViewerInput.setSelection(
 					new StructuredSelection(inputResourceProvider.getResource(inputAlt)), 
 					true);
-		}
-		
-		IFolder ueAl = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
-		if(ueAl != null){
-			comboViewerUsage.setSelection(
-					new StructuredSelection(usageResourceProvider.getResource(ueAl)), true);
 		}
 
 		comboViewerInput.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -196,12 +180,42 @@ public class ConfigAlternativeEditComposite extends Composite {
 				ca.save();
 			}
 		});
-		comboViewerUsage.addSelectionChangedListener(new ISelectionChangedListener() {
+		
+		//configure usage evolution combo-box
+		if(this.usageResourceProvider != null){
+			usageResourceProvider.addListener(usageResourceListener);
+			
+			comboViewerUsage.setInput(usageResourceProvider.getResources());
+			
+			IFolder ueAl = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
+			if(ueAl != null){
+				comboViewerUsage.setSelection(
+						new StructuredSelection(usageResourceProvider.getResource(ueAl)), true);
+			}
+			
+			comboViewerUsage.addSelectionChangedListener(new ISelectionChangedListener() {
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+					ca.setUsageEvolution((EditorInputFolder)selection.getFirstElement());
+					ca.save();
+				}
+			});
+			
+			comboViewerUsage.getCombo().setEnabled(true);
+		}
+		else {
+			comboViewerUsage.getCombo().setEnabled(false);
+		}
+		
+		//on dispose
+		addDisposeListener(new DisposeListener() {
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				ca.setUsageEvolution((EditorInputFolder)selection.getFirstElement());
-				ca.save();
+			public void widgetDisposed(DisposeEvent e) {
+				inputResourceProvider.removeListener(inputResourceListener);
+				if(usageResourceProvider != null){
+					usageResourceProvider.removeListener(usageResourceListener);
+				}
 			}
 		});
 	}

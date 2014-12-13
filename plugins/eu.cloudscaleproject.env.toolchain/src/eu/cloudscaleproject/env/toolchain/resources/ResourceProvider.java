@@ -308,7 +308,7 @@ public abstract class ResourceProvider{
 		IEditorInputResource resource = getResource(resourceName);
 		resource.delete();
 				
-		pcs.firePropertyChange(PROP_RESOURCE_DELETED, null, resource);
+		pcs.firePropertyChange(PROP_RESOURCE_DELETED, resource, null);
 	}
 	
 	public void addListener(PropertyChangeListener listener){

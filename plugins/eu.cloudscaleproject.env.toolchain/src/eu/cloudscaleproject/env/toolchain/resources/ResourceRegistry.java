@@ -46,18 +46,37 @@ public class ResourceRegistry {
 		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory());
 	}
 	
-	public void registerFactory(String id, IResourceProviderFactory factory){
-		resourceProviderFactories.put(id, factory);
+	/**
+	 * Register 'IResourceProviderFactory' under specified 'toolchainID'.
+	 * ToolchainID should be specified inside 'ToolchainUtils' class. 
+	 * 
+	 * @param toolchainID ID under which the specified 'IResourceProviderFactory' should be registered.
+	 * @param factory 'IResourceProviderFactory'
+	 */
+	public void registerFactory(String toolchainID, IResourceProviderFactory factory){
+		resourceProviderFactories.put(toolchainID, factory);
+		logger.info("IResourceProviderFactory registered uder toolchainID: " + toolchainID);
 	}
 	
-	public ResourceProvider getResourceProvider(String id, IFolder folder){
+	/**
+	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet),
+	 * using registered 'IResourceProviderFactory'.
+	 * If the 'ResourceProviderFactory' is not registered for the specified 'toolchainID', this method returns null.
+	 * Returned 'ResourceProvider' root folder is equal to the specified attribute 'folder'. 
+	 * 
+	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
+	 * @param folder The root folder of the returned 'ResourceProvider'. 
+	 * @return ResourceProvider
+	 */
+	public ResourceProvider getResourceProvider(String toolchainID, IFolder folder){
 		
 		ResourceProvider resourceProvider = resourceProviders.get(folder);
 		
 		if(resourceProvider == null){
-			IResourceProviderFactory resourceFactory = resourceProviderFactories.get(id);
+			IResourceProviderFactory resourceFactory = resourceProviderFactories.get(toolchainID);
 			if(resourceFactory == null){
-				logger.severe("Resource factory is not registered for the id:" + id);
+				//resource factory is not registered for the specified tool ID
+				return null;
 			}
 			else{
 				resourceProvider = resourceFactory.create(folder);
@@ -65,19 +84,52 @@ public class ResourceRegistry {
 			}			
 		}
 		
+		//resource factory should not return null resource
+		//note: this method can return null resource provider, if the resource factory is not registered for the specified ID!
 		assert(resourceProvider != null);
 		return resourceProvider;
 	}
 	
+	/**
+	 * Returns 'ResourceProvider', created from default 'FolderResourceProviderFactory'
+	 * This is convenient method for creating/retrieving 'ResourceProvider'.  
+	 * 
+	 * @param folder The root folder of the returned 'ResourceProvider'.
+	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
+	 */
 	public ResourceProvider getFolderResourceProvider(IFolder folder){
 		return getResourceProvider(FOLDER_RESOURCE_PROVIDER_ID, folder);
 	}
 	
+	/**
+	 * Returns 'ResourceProvider', created from default 'FileResourceProviderFactory'
+	 * This is convenient method for creating/retrieving 'ResourceProvider'.  
+	 * 
+	 * @param folder The root folder of the returned 'ResourceProvider'.
+	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
+	 */
 	public ResourceProvider getFileResourceProvider(IFolder folder){
 		return getResourceProvider(FILE_RESOURCE_PROVIDER_ID, folder);
 	}
 	
+	/**
+	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
+	 * If the 'ResourceProviderFactory' is not registered for the specified 'toolchainID', this method returns null.
+	 * 
+	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
+	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
+	 * @return ResourceProvider
+	 */
 	public ResourceProvider getResourceProvider(IProject project, String toolchainID){
+		
+		//Check if the resource factory is registered for the specified toolchainID
+		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
+		//because this method creates folders if they do not exist jet!
+		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(toolchainID);
+		if(resourceFactory == null){
+			return null;
+		}
+		
 		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
 	}
 

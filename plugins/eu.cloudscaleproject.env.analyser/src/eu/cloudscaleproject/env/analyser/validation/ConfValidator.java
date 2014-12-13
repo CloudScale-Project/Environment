@@ -137,11 +137,17 @@ public class ConfValidator extends ToolValidator {
 		ConfAlternative ca = (ConfAlternative)selectedResource;
 		
 		//select used usage-evolution
-		IEditorInputResource usageEvolutionAlt = ResourceRegistry.getInstance()
-			.getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID)
-			.getResource(ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT));
-		ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID)
-			.tagResource(ResourceProvider.TAG_SELECTED, usageEvolutionAlt);
+		IEditorInputResource usageEvolutionAlt = null;
+		{
+			ResourceProvider usageEvolutionResourceProvider = ResourceRegistry.getInstance()
+					.getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
+			
+			if(usageEvolutionResourceProvider != null){
+				usageEvolutionAlt = usageEvolutionResourceProvider.getResource(
+						ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT));
+				usageEvolutionResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, usageEvolutionAlt);
+			}
+		}
 		
 		try{
 			IFolder folder = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);

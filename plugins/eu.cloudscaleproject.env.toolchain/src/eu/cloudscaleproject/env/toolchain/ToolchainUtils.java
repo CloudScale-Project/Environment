@@ -82,89 +82,93 @@ public class ToolchainUtils {
 	}
 	
 	public static IFolder getToolFolder(IProject project, String id){
-		
-		//TODO: Don't expect, that all those folders exist!
-		
-		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-		IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
-		IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-		IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-
+				
+		String inputFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT, "Input");
+		String configFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION, "Configuration");
+		String resultFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS, "Result");
+		String usageEvFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, "Usage evolution");
 
 		IFolder folder = null;
-		
-		//TODO: Don't expect, that all those project properties exist!
-		
+				
 		//extractor
 		if(EXTRACTOR_INPUT_ID.equals(id)){
-			folder = extractorFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
+			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+			if(extractorFolder != null)
+				folder = extractorFolder.getFolder(inputFolderName);
 		}
 		else if(EXTRACTOR_CONF_ID.equals(id)){
-			folder = extractorFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION));
+			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+			if(extractorFolder != null)
+				folder = extractorFolder.getFolder(configFolderName);
 		}
 		else if(EXTRACTOR_RES_ID.equals(id)){
-			folder = extractorFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
+			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+			if(extractorFolder != null)
+				folder = extractorFolder.getFolder(resultFolderName);
 		}
 		
 		//analyzer
 		else if(ANALYSER_INPUT_ID.equals(id)){
-			folder = analyserFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
+			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
+			if(analyserFolder != null)
+				folder = analyserFolder.getFolder(inputFolderName);
 		}
 		else if(ANALYSER_CONF_ID.equals(id)){
-			folder = analyserFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION));
+			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
+			if(analyserFolder != null)
+				folder = analyserFolder.getFolder(configFolderName);
 		}
 		else if(ANALYSER_RES_ID.equals(id)){
-			folder = analyserFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
+			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
+			if(analyserFolder != null)
+				folder = analyserFolder.getFolder(resultFolderName);
 		}
 		
 		//dynamic spotter
 		else if(SPOTTER_DYN_INPUT_ID.equals(id)){
-			folder = spotterDynFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
+			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
+			if(spotterDynFolder != null)
+				folder = spotterDynFolder.getFolder(inputFolderName);
 		}
 		else if(SPOTTER_DYN_CONF_ID.equals(id)){
-			folder = spotterDynFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION));
+			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
+			if(spotterDynFolder != null)
+				folder = spotterDynFolder.getFolder(configFolderName);
 		}
 		else if(SPOTTER_DYN_RES_ID.equals(id)){
-			folder = spotterDynFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
+			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
+			if(spotterDynFolder != null)
+				folder = spotterDynFolder.getFolder(resultFolderName);
 		}
 		
 		//static spotter
 		else if(SPOTTER_STA_INPUT_ID.equals(id)){
-			folder = spotterStaFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT));
+			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
+			if(spotterStaFolder != null)
+				folder = spotterStaFolder.getFolder(inputFolderName);
 		}
 		else if(SPOTTER_STA_CONF_ID.equals(id)){
-			folder = spotterStaFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION));
+			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
+			if(spotterStaFolder != null)
+				folder = spotterStaFolder.getFolder(configFolderName);
 		}
 		else if(SPOTTER_STA_RES_ID.equals(id)){
-			folder = spotterStaFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
+			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
+			if(spotterStaFolder != null)
+				folder = spotterStaFolder.getFolder(resultFolderName);
 		}
 		
 		//usage evolution
 		else if(USAGEEVOLUTION_ID.equals(id)){
-			folder = scaledlFolder.getFolder(
-					ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION));
+			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
+			if(scaledlFolder != null)
+				folder = scaledlFolder.getFolder(usageEvFolderName);
+		}
+		else{
+			throw new IllegalArgumentException("getToolchainFolder(project, id): ID is not valid: " + id);
 		}
 		
-		
-		
-		if(folder == null){
-			throw new IllegalArgumentException("getToolchainFolder(project, id): ID is not valid: " + id);	
-		}
-		
-		if(!folder.exists()){
+		if(folder != null && !folder.exists()){
 			try {
 				folder.create(true, true, null);
 			} catch (CoreException e) {

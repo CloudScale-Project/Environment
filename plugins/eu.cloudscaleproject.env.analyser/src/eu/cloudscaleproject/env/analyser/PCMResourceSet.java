@@ -76,6 +76,10 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		List<IFile> files = new ArrayList<IFile>();
 		
+		if(!folder.exists()){
+			return files;
+		}
+		
 		try {
 			for(IResource r : folder.members()){
 				if(r instanceof IFolder){

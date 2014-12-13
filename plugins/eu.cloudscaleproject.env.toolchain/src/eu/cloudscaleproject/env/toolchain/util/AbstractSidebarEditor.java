@@ -64,7 +64,8 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		private Color color_hover;
 		
 		public boolean isSelected = false;
-				
+		
+		//TODO: name change should be handled differently! Fix this. 
 		final PropertyChangeListener inputListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent arg) {
@@ -365,6 +366,17 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		return -1;
 	}
 	
+	public void setCurrentSelectionIndex(int index){
+		int i = 0;
+		for(EditorItem ei : entries.values()){
+			if(i == index){
+				ei.select();
+				return;
+			}
+			i++;
+		}
+	}
+	
 	public Composite getCurrentSelection(){
 		EditorItem ei = getCurrentSelectionItem();
 		if(ei != null){
@@ -397,21 +409,34 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	}
 	
 	public void addSidebarEditor(IEditorInput ei, String section){
-		entries.put(ei, new EditorItem(ei, section, SWT.NONE));
+		EditorItem newEditorItem = new EditorItem(ei, section, SWT.NONE);
+		entries.put(ei, newEditorItem);
 		
 		compositeArea.layout(true);
 		compositeSidebarList.layout(true);
+		newEditorItem.select();
 	}
 	
-	public void removeSidebarEditor(IEditorInput ei){
-		EditorItem ic = entries.get(ei);
-		if(ic != null){
-			ic.dispose();
+	public void removeSidebarEditor(IEditorInput editorInput){
+		//select another item
+		int selIndex = getCurrentSelectionIndex();
+		int newIndex = selIndex > 0 ? selIndex - 1 : selIndex;
+				
+		EditorItem editorItem = entries.get(editorInput);
+		if(editorItem != null){
+			editorItem.dispose();
 		}
-		entries.remove(ei);
+		entries.remove(editorInput);
 
 		compositeArea.layout(true);
 		compositeSidebarList.layout(true);
+		
+		if(newIndex < entries.size()){
+			setCurrentSelectionIndex(newIndex);
+		}
+		else{
+			//TODO: show empty alternatives composite 
+		}
 	}
 	
 	public void update(){
@@ -497,6 +522,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			if(item != null){
 				item.select();
 			}
+		}
+		else{
+			//TODO: show empty alternatives composite
 		}
 	}
 	
