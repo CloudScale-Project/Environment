@@ -26,10 +26,17 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.scaledl.overview.Overview;
+import org.scaledl.overview.application.ApplicationFactory;
+import org.scaledl.overview.application.Operation;
+import org.scaledl.overview.application.OperationInterface;
 import org.scaledl.overview.architecture.ArchitectureFactory;
 import org.scaledl.overview.architecture.CloudEnvironment;
 import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.converter.ConverterService;
+import org.scaledl.overview.parametertype.Parameter;
+import org.scaledl.overview.parametertype.ParametertypeFactory;
+import org.scaledl.overview.parametertype.PrimitiveParameter;
+import org.scaledl.overview.parametertype.TypeEnum;
 import org.scaledl.overview.util.OverviewUtil;
 
 import de.uka.ipd.sdq.pcm.repository.Repository;
@@ -340,6 +347,8 @@ public class SelectModelWizardPage extends WizardPage implements
 		toImport.add(this.data.getSystemModel());
 
 		ConverterService.getInstance().addExternalModel(ss, toImport, null);
+		addFakeIneterfaces(ss);
+		
 	}
 
 	private void checkComplete() {
@@ -356,5 +365,41 @@ public class SelectModelWizardPage extends WizardPage implements
 		{
 			setPageComplete(resultsList.getSelection().length > 0);
 		}
+	}
+	
+	private void addFakeIneterfaces(SoftwareService ss)
+	{
+		if (ss.getRequiredInterfaces().isEmpty())
+		{
+			OperationInterface oi = ApplicationFactory.eINSTANCE.createOperationInterface();
+			oi.setName("I_Database");
+			
+			oi.getOperations().add(createFakeOperation("getBook", TypeEnum.STRING, TypeEnum.INT));
+			oi.getOperations().add(createFakeOperation("getUser", TypeEnum.STRING, TypeEnum.INT));
+			oi.getOperations().add(createFakeOperation("getChart", TypeEnum.STRING, TypeEnum.INT));
+			oi.getOperations().add(createFakeOperation("doCheckout", TypeEnum.BOOL, TypeEnum.INT, TypeEnum.STRING, TypeEnum.STRING));
+			
+			ss.getRequiredInterfaces().add(oi);
+		}
+		
+	}
+	
+	private Operation createFakeOperation(String name, TypeEnum ret, TypeEnum ... par)
+	{
+		Operation o = ApplicationFactory.eINSTANCE.createOperation();
+		o.setName(name);
+		for (TypeEnum tt : par)
+		{
+			PrimitiveParameter pp = ParametertypeFactory.eINSTANCE.createPrimitiveParameter();
+			pp.setType(tt);
+			o.getParameters().add(pp);
+		}
+		
+
+		PrimitiveParameter pp = ParametertypeFactory.eINSTANCE.createPrimitiveParameter();
+		pp.setType(ret);
+		o.setReturnParameter(pp);
+		
+		return o;
 	}
 }

@@ -39,8 +39,13 @@ import org.scaledl.overview.deployment.ComputingEnvironment;
 import org.scaledl.overview.deployment.DeploymentFactory;
 import org.scaledl.overview.deployment.DeploymentPackage;
 import org.scaledl.overview.deployment.DeploymentPackage.Literals;
+import org.scaledl.overview.deployment.LoadBalancer;
 import org.scaledl.overview.deployment.RuntimeDeployment;
 import org.scaledl.overview.deployment.ScalableComputingEnvironment;
+import org.scaledl.overview.deployment.ScalingCapacityType;
+import org.scaledl.overview.deployment.ScalingManager;
+import org.scaledl.overview.deployment.ScalingPolicy;
+import org.scaledl.overview.deployment.ScalingPolicyType;
 import org.scaledl.overview.deployment.SchedulingPolicy;
 import org.scaledl.overview.specification.ComputingInfrastructureServiceDescriptor;
 import org.scaledl.overview.specification.ComputingResourceDescriptor;
@@ -259,7 +264,7 @@ public class ServiceDeploymentComponent extends Composite {
                 if (rbClustered.getSelection())
                 {
                     ClusteredComputingEnvironment clusteredComputingEnvironment = DeploymentFactory.eINSTANCE.createClusteredComputingEnvironment();
-                    clusteredComputingEnvironment.setLoadBalancer(DeploymentFactory.eINSTANCE.createLoadBalancer());
+                    clusteredComputingEnvironment.setLoadBalancer(getDefaultLoadbalancer());
                     clusteredComputingEnvironment.getLoadBalancer().setSchedulingPolicy(org.scaledl.overview.deployment.SchedulingPolicy.ROUND_ROBIN);
                     clusteredComputingEnvironment.setSize(2);
                 	valueComputingEnvironment.setValue(clusteredComputingEnvironment);
@@ -267,12 +272,9 @@ public class ServiceDeploymentComponent extends Composite {
                 if (rbScalable.getSelection())
                 {
                     ScalableComputingEnvironment scalableComputingEnvironment = DeploymentFactory.eINSTANCE.createScalableComputingEnvironment();
-                    scalableComputingEnvironment.setScalingManager(DeploymentFactory.eINSTANCE.createScalingManager());
-                    scalableComputingEnvironment.setLoadBalancer(DeploymentFactory.eINSTANCE.createLoadBalancer());
-                    scalableComputingEnvironment.getLoadBalancer().setSchedulingPolicy(org.scaledl.overview.deployment.SchedulingPolicy.ROUND_ROBIN);
-                    scalableComputingEnvironment.setSize(2);
-                    scalableComputingEnvironment.getScalingManager().setMinimumSize(1);
-                    scalableComputingEnvironment.getScalingManager().setMaximumSize(4);
+                    scalableComputingEnvironment.setScalingManager(getDefaultScalingManager());
+                    scalableComputingEnvironment.setLoadBalancer(getDefaultLoadbalancer());
+                    scalableComputingEnvironment.setSize(2);                    
                 	valueComputingEnvironment.setValue(scalableComputingEnvironment);
                 }
                 
@@ -289,6 +291,41 @@ public class ServiceDeploymentComponent extends Composite {
 		rbScalable.addSelectionListener(rbListener);
 		
 		updateComponentEnable();
+	}
+	
+	private LoadBalancer getDefaultLoadbalancer()
+	{
+		LoadBalancer lb = DeploymentFactory.eINSTANCE.createLoadBalancer();
+        lb.setSchedulingPolicy(org.scaledl.overview.deployment.SchedulingPolicy.ROUND_ROBIN);
+        return lb;
+	}
+	
+	private ScalingManager getDefaultScalingManager()
+	{
+		 //Default scaling manager
+        ScalingManager sm = DeploymentFactory.eINSTANCE.createScalingManager();
+        
+        sm.setMinimumSize(1);
+        sm.setMaximumSize(4);
+        
+        ScalingPolicy sp = DeploymentFactory.eINSTANCE.createScalingPolicy();
+        sp.setAdjustment(2);
+        sp.setCooldown(300);
+        sp.setScalingPolicyType(ScalingPolicyType.SCALING_UP_POLICY);
+        sp.setScalingCapacityType(ScalingCapacityType.CHANGE_IN_CAPACITY);
+        sp.setTrigger("avg(CPU) > 0.8 AND avg(MEM) > 0.9 [5min] ");
+        
+        ScalingPolicy spDown = DeploymentFactory.eINSTANCE.createScalingPolicy();
+        spDown.setAdjustment(1);
+        spDown.setCooldown(300);
+        spDown.setScalingPolicyType(ScalingPolicyType.SCALING_DOWN_POLICY);
+        spDown.setScalingCapacityType(ScalingCapacityType.CHANGE_IN_CAPACITY);
+        spDown.setTrigger("avg(CPU) < 0.6 AND avg(MEM) < 0.7 [5min] ");
+        
+        sm.getScalingPolicy().add(sp);
+        sm.getScalingPolicy().add(spDown);
+        
+        return sm;
 	}
 	
 	private void updateComponentEnable ()
