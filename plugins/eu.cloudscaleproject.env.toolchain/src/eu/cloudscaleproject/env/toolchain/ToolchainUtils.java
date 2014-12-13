@@ -82,6 +82,9 @@ public class ToolchainUtils {
 	}
 	
 	public static IFolder getToolFolder(IProject project, String id){
+		
+		//TODO: Don't expect, that all those folders exist!
+		
 		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
 		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 		IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
@@ -90,6 +93,8 @@ public class ToolchainUtils {
 
 
 		IFolder folder = null;
+		
+		//TODO: Don't expect, that all those project properties exist!
 		
 		//extractor
 		if(EXTRACTOR_INPUT_ID.equals(id)){

@@ -6,15 +6,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
-import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
-import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
+import org.palladiosimulator.servicelevelobjective.HardThreshold;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
+import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.palladiosimulator.simulizar.pms.Intervall;
 import org.palladiosimulator.simulizar.pms.MeasurementSpecification;
 import org.palladiosimulator.simulizar.pms.PMSModel;
@@ -55,9 +58,6 @@ public class CapacityAlternative extends ConfAlternative{
 		tsc.setSimulationTime(-1);
 		exp.getStopConditions().add(tsc);
 		
-		//create and set simulation configuration
-		exp.getToolConfiguration().add(createConfiguration(getResource().getProject(), this, 1000, -1));
-		
 		//retrieve usage scenario
 		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
 		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
@@ -65,8 +65,9 @@ public class CapacityAlternative extends ConfAlternative{
 		//create measuring point
 		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
 		measurePoint.setUsageScenario(usageScenario);
+		
 		IFile mesuringPointFile = ((IFolder)getResource()).getFile("analyser.measuringpoint");
-		setResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
+		this.setResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
 		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, mesuringPointFile);
 		resMp.getContents().clear();
 		resMp.getContents().add(measurePoint);
@@ -83,38 +84,45 @@ public class CapacityAlternative extends ConfAlternative{
 		ms.setTemporalRestriction(intervall);
 		pm.getMeasurementSpecification().add(ms);
 		pms.getPerformanceMeasurements().add(pm);
+		
 		IFile pmsFile = ((IFolder)getResource()).getFile("analyser.pms");
-		setResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
+		this.setResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
 		Resource resPms = ExplorerProjectPaths.getEmfResource(resSet, pmsFile);
 		resPms.getContents().clear();
 		resPms.getContents().add(pms);
 		initialModel.setPlatformMonitoringSpecification(pms);
+		
+		//create slo
+		ServiceLevelObjectiveRepository sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
+		ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+		slo.setMeasuringPoint(measurePoint);
+		slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
+		
+		HardThreshold ht = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
+		//TODO: set limit to 'HardThreshold'
+		slo.setUpperThreshold(ht);
+		
+		IFile sloFile = ((IFolder)getResource()).getFile("analyser.slo");
+		this.setResource(ToolchainUtils.KEY_FILE_SLO, pmsFile);
+		Resource resSlo = ExplorerProjectPaths.getEmfResource(resSet, sloFile);
+		resSlo.getContents().clear();
+		resSlo.getContents().add(sloRep);
 	}
 	
-	private SimuLizarConfiguration createConfiguration(IProject project, ConfAlternative ca, int mesurementCount, int timeStop){
+	@Override
+	protected void configureTool(SimuLizarConfiguration simulizarConf) {
+		super.configureTool(simulizarConf);
 		
-		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-		IFolder analyserResults = analyserFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS));
-		
-		//create data source
-		FileDatasource ds = AbstractsimulationFactory.eINSTANCE.createFileDatasource();
-		ds.setLocation(analyserResults.getLocation().toString());
-	
 		//create measurement stop condition
 		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-		msc.setMeasurementCount(1000);
+		msc.setMeasurementCount(100);
 		
 		//create time stop condition
 		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-		tsc.setSimulationTime(timeStop);
+		tsc.setSimulationTime(-1);
 		
-		//tool configuration
-		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
-		conf.setDatasource(ds);
-		conf.getStopConditions().add(msc);
-		conf.getStopConditions().add(tsc);
-	
-		return conf;
+		simulizarConf.getStopConditions().add(msc);
+		simulizarConf.getStopConditions().add(tsc);
 	}
 
 }

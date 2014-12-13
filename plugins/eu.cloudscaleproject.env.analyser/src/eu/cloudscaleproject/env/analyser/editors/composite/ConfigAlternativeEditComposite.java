@@ -79,6 +79,8 @@ public class ConfigAlternativeEditComposite extends Composite {
 		//this.project = project;
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		
+		//TODO: Handle situation when usage evolution resource provider does not exist (==null)! 
 		this.usageResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
 		
 		setLayout(new GridLayout(2, false));

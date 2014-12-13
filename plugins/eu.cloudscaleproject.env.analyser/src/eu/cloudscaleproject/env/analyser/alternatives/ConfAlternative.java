@@ -14,6 +14,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
+import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
+import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
+import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
+import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
@@ -27,7 +31,10 @@ import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfAlternative extends EditorInputFolder{
 			
@@ -40,6 +47,10 @@ public class ConfAlternative extends EditorInputFolder{
 	
 	public ConfAlternative(IProject project, IFolder folder){
 		super(project, folder);
+		
+		//create and set defaults
+		Experiment exp = getExperiment();
+		configureExperiment(exp);
 	}
 	
 	public ResourceSet getResourceSet(){
@@ -156,6 +167,10 @@ public class ConfAlternative extends EditorInputFolder{
 		//override in sub-classes
 	}
 	
+	protected void configureTool(SimuLizarConfiguration simulizarConf){
+		//override in sub-classes
+	}
+	
 	public Experiment getExperiment() {
 		
 		IFile expFile = getFileResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
@@ -190,8 +205,30 @@ public class ConfAlternative extends EditorInputFolder{
 			firsExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
 			expRep.getExperiments().add(firsExperiment);
 		}
-		
+				
 		return (Experiment)firsExperiment;		
+	}
+	
+	private void configureExperiment(Experiment exp){
+		
+		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
+		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
+		
+		if(resultAlternative == null){
+			resultAlternative = resultResProvider.createNewResource(getResource().getName(), getName());
+			resultAlternative.save();
+		}
+		
+		//create data source - a.k.a where the result will be saved
+		FileDatasource ds = AbstractsimulationFactory.eINSTANCE.createFileDatasource();
+		ds.setLocation(resultAlternative.getResource().getLocation().toString());
+		
+		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
+		conf.setDatasource(ds);
+		configureTool(conf);
+		
+		exp.getToolConfiguration().clear();
+		exp.getToolConfiguration().add(conf);
 	}
 	
 	public IFile getPMS(){
