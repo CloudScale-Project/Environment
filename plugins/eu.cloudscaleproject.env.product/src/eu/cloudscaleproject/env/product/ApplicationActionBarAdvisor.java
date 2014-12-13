@@ -45,7 +45,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     private static final String ID_MENU_FILE = IWorkbenchActionConstants.M_FILE;
     private static final String ID_MENU_EDIT = IWorkbenchActionConstants.M_EDIT;
     private static final String ID_MENU_TOOLS = "cloudscale.environment.product.menu.tools";
-    private static final String ID_MENU_VIEW = "cloudscale.environment.product.menu.view";
     private static final String ID_MENU_HELP = IWorkbenchActionConstants.M_HELP;
     
 
@@ -110,14 +109,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         editMenu.add(new GroupMarker(IWorkbenchActionConstants.FIND_EXT));
         
         MenuManager toolsMenu = new MenuManager("&Tools", ID_MENU_TOOLS);
-        MenuManager viewMenu = new MenuManager("&View", ID_MENU_VIEW);
-        
         MenuManager helpMenu = new MenuManager("&Help", ID_MENU_HELP);
         
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(toolsMenu);
-        menuBar.add(viewMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(helpMenu);
@@ -133,16 +129,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         fileMenu.add(importAction);
         fileMenu.add(exportAction);
         fileMenu.add(new Separator());
+        fileMenu.add(quickAction);
+        fileMenu.add(new Separator());
         fileMenu.add(exitAction);
         
         editMenu.add(selectAllAction);
         editMenu.add(deleteAction);
+
         
         //tools
-        
         //view
-        viewMenu.add(quickAction);
-        viewMenu.add(showViews);
         showViews.update();
         
         // Help
