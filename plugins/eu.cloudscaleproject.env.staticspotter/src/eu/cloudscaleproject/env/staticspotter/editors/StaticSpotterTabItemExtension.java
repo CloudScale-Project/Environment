@@ -62,7 +62,7 @@ public class StaticSpotterTabItemExtension implements ProjectEditorExtension{
 				List<IEditorInput> out = new ArrayList<IEditorInput>();
 				if(SECTION_MAINMENU.equals(section)){
 					out.add(introInput);
-					out.add(inputInput);
+					//out.add(inputInput);
 					out.add(runInput);
 					out.add(resultsInput);
 				}

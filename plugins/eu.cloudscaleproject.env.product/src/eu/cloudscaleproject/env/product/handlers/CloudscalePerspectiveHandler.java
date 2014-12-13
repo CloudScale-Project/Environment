@@ -29,7 +29,9 @@ public class CloudscalePerspectiveHandler {
 		{
 			logger.warn("IGNORING ClassCastExeption when switching perspective : "+cce.getMessage());
 			
-		} catch (Exception e) {
+		} catch (IllegalStateException e) {
+			logger.warn("IGNORING IllegalStateException when switching perspective : "+e.getMessage());
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

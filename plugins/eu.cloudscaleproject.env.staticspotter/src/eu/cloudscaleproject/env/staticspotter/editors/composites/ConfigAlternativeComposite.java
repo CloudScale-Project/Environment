@@ -1,8 +1,8 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
-import java.util.List;
+import javax.inject.Inject;
 
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,14 +15,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
-import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 
 public class ConfigAlternativeComposite extends Composite {
 
+	@Optional @Inject
+	private CommandExecutor executor;
+	
 	private Combo combo;
-	private List<InputPersitenceFile> inputs;
 	private ConfigPersistenceFolder configPersistenceFolder;
 	/**
 	 * Create the composite.
@@ -31,7 +38,8 @@ public class ConfigAlternativeComposite extends Composite {
 	 */
 	public ConfigAlternativeComposite(Composite parent, int style, ConfigPersistenceFolder cif) {
 		super(parent, style);
-		
+		CloudscaleContext.inject(this);
+
 		this.configPersistenceFolder = cif;
 		
 		//this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -58,36 +66,6 @@ public class ConfigAlternativeComposite extends Composite {
 		gd_combo.widthHint = 170;
 		combo.setLayoutData(gd_combo);
 		
-		Label lblModiscoConfig = new Label(this, SWT.NONE);
-		lblModiscoConfig.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblModiscoConfig.setText("Modisco config:    ");
-		
-		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setText("modisco.conf");
-		
-		Button btnViewModisco = new Button(this, SWT.NONE);
-		btnViewModisco.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnViewModisco.setText("View");
-		
-		Label lblSomoxConfig = new Label(this, SWT.NONE);
-		lblSomoxConfig.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblSomoxConfig.setText("Somox config:    ");
-		
-		Label lblSomoxconf = new Label(this, SWT.NONE);
-		lblSomoxconf.setText("somox.conf");
-		
-		Button btnViewSomox = new Button(this, SWT.NONE);
-		btnViewSomox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnViewSomox.setText("View");
-		
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
@@ -97,6 +75,7 @@ public class ConfigAlternativeComposite extends Composite {
 		btnRunAlternative.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				executor.execute("org.reclipse.structure.inference.control.start");
 			}
 		});
 		new Label(this, SWT.NONE);
@@ -106,13 +85,37 @@ public class ConfigAlternativeComposite extends Composite {
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 			}
 		});
+		
+		loadInputs();
+	}
+	
+	private void loadInputs ()
+	{
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configPersistenceFolder.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
+		combo.removeAll();
+		String inputAlternative = configPersistenceFolder.getProperty(ConfigPersistenceFolder.KEY_INPUT_ALTERNATIVE);
+		int idx = -1;
+		// TODO: Inputs
+		for (IEditorInputResource input : resourceProvider.getResources())
+		{
+				combo.add(input.getName());
+				if (input.getName().equals(inputAlternative))
+				{
+					idx = combo.getItemCount()-1;
+				}
+		}
+		
+		if (idx >= 0)
+			combo.select(idx);
 	}
 	
 	@Override
 	public void update() {
 		this.configPersistenceFolder.load();
+		loadInputs();
 		super.update();
 	}
 

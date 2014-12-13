@@ -64,9 +64,12 @@ public class ArchitectureTreeRowFactory extends DeploymentTreeRowFactory{
 				unresolved.setChildListEditor(new EditorUnresolvedInterfaces(treeComposite, ce.getArchitecture()));
 				children.add(unresolved);
 
-				TreeRow infrastructureDescriptor = createNetworkInfrastructureDescriptor("Internal connectios", 
+				if (ce.getAvailabilityZoneDescriptor()!=null)
+				{
+					TreeRow infrastructureDescriptor = createNetworkInfrastructureDescriptor("Internal connectios", 
 													ce.getAvailabilityZoneDescriptor().getNetworkInfrastructureServiceDescriptor(), this);
-				children.add(infrastructureDescriptor);
+					children.add(infrastructureDescriptor);
+				}
 				
 				TreeRow infServices = createInfrastructureServiceList("Infrastructure services layer", 
 						ce.getInfrastructureLayer().getServices(), this);

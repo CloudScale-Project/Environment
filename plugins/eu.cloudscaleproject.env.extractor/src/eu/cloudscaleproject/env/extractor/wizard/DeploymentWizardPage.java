@@ -163,6 +163,9 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 		// Set CloudEnvironment Descriptor
 		CloudEnvironmentDescriptor csd = OverviewSpecificationUtil.getSystemDescriptor(data.getOverviewModel(), this.data.getCloudSpecification().getDescriptor());
 		ce.setCloudEnvironmentDescriptor(csd);
+		if (!csd.getAvailabilityZones().isEmpty())
+			ce.setAvailabilityZoneDescriptor(csd.getAvailabilityZones().get(0));
+		
 		ce.setName(csd.getName());
 
 		if (rbPaaS.getSelection())

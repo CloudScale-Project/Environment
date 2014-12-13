@@ -113,6 +113,45 @@ public class Activator extends AbstractUIPlugin {
 						};
 					}
 				});
+		
+		ResourceRegistry.getInstance().registerFactory(
+				ToolchainUtils.EXTRACTOR_RES_ID,
+				new IResourceProviderFactory() {
+					@Override
+					public ResourceProvider create(final IFolder folder) {
+						return new ResourceProvider(folder, "Result") {
+							
+							@Override
+							public boolean validateResource(IResource res) {
+								if(res instanceof IFolder){
+									return true;
+								}
+								return false;
+							}
+
+							@Override
+							public IEditorInputResource loadResource(IResource res) {
+								// TODO Auto-generated method stub
+								ResultPersistenceFolder rif = new ResultPersistenceFolder(folder.getProject(), (IFolder)res);
+								rif.load();
+								return rif;
+							}
+							
+							@Override
+							public IResource createResource(String name) {
+
+								IFolder folder = getRootFolder().getFolder(name); 
+								ResultPersistenceFolder rif = new ResultPersistenceFolder(folder.getProject(), folder);
+								rif.create();
+								rif.setProperty(ResultPersistenceFolder.KEY_IS_ALTERNATIVE, "True");
+								rif.save();
+								return folder;
+							}
+							
+						};
+					}
+				}
+				);
 
 	}
 

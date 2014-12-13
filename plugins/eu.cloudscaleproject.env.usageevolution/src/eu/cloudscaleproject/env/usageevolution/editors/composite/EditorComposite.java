@@ -15,7 +15,7 @@ public class EditorComposite extends Composite{
 		super(parent, style);
 		
 		Label lblPresets = new Label(this, SWT.NONE);
-		lblPresets.setBounds(10, 10, 162, 11);
+		lblPresets.setBounds(10, 10, 162, 15);
 		lblPresets.setText("Usage evolution presets:");
 		
 		Button buttonEild = new Button(this, SWT.NONE);
@@ -25,7 +25,7 @@ public class EditorComposite extends Composite{
 				alt.createEILDPreset();
 			}
 		});
-		buttonEild.setBounds(10, 27, 430, 15);
+		buttonEild.setBounds(10, 31, 258, 27);
 		buttonEild.setText("Exponential increase logarithmic decline");
 		
 		Button btnOpenUsageEditor = new Button(this, SWT.NONE);
@@ -35,11 +35,11 @@ public class EditorComposite extends Composite{
 				alt.openUsageEvolutionEditor();
 			}
 		});
-		btnOpenUsageEditor.setBounds(10, 140, 430, 15);
+		btnOpenUsageEditor.setBounds(10, 102, 179, 27);
 		btnOpenUsageEditor.setText("Edit Usage evolution model");
 		
 		Label lblActions = new Label(this, SWT.NONE);
-		lblActions.setBounds(10, 123, 54, 11);
+		lblActions.setBounds(10, 81, 54, 15);
 		lblActions.setText("Actions:");
 		
 		Button btnLimboEditor = new Button(this, SWT.NONE);
@@ -49,7 +49,7 @@ public class EditorComposite extends Composite{
 				alt.openLimboEditor();
 			}
 		});
-		btnLimboEditor.setBounds(10, 161, 430, 15);
+		btnLimboEditor.setBounds(10, 135, 179, 27);
 		btnLimboEditor.setText("Edit Limbo model");
 		
 		
