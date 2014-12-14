@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ASCII"?>
 <specification:CloudSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
-  <descriptor name="Private (OpenStack)" description="Private (OpenStack) cloud environment... " providerID="private">
-    <availabilityZones name="Private (OpenStack) zone" providerID="private" networkInfrastructureServiceDescriptor="//@infrastructureServiceDescriptors.0"/>
+  <descriptor id="_eMZ1AIMoEeSaC5--RFjh7A" name="Private (OpenStack)" description="Private (OpenStack) cloud environment... " providerID="private">
+    <availabilityZones id="_eMZ1AYMoEeSaC5--RFjh7A" name="Private (OpenStack) zone" providerID="private" networkInfrastructureServiceDescriptor="_eMacEIMoEeSaC5--RFjh7A"/>
   </descriptor>
-  <infrastructureServiceDescriptors xsi:type="specification:NetworkInfrastructureServiceDescriptor" name="Internal connection" bandwidth="1000" latency="50"/>
-  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" name="Private (OpenStack) Infrastructure" providerID="private" generalPurpose="true"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Ceph" providerID="private"/>
+  <infrastructureServiceDescriptors xsi:type="specification:NetworkInfrastructureServiceDescriptor" id="_eMacEIMoEeSaC5--RFjh7A" name="Internal connection" bandwidth="1000" latency="50"/>
+  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" id="_eMacEYMoEeSaC5--RFjh7A" name="Private (OpenStack) Infrastructure" providerID="private" generalPurpose="true"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_eMacEoMoEeSaC5--RFjh7A" name="Ceph" providerID="private"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformRuntimeServiceDescriptor" id="_gvL61oMoEeSaC5--RFjh7A" name="Swift" providerID="private" infrastructureServiceDescriptor="_eMacEYMoEeSaC5--RFjh7A"/>
 </specification:CloudSpecification>
