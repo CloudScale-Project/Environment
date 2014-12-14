@@ -1,12 +1,15 @@
 package eu.cloudscaleproject.env.method.viewer;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
@@ -21,7 +24,9 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
 
 public class ToolStatusImpl implements IToolStatus{
 	
-	private final HashSet<IToolStatusListener> listeners = new HashSet<IToolStatusListener>();
+	private final Object listenersLock = new Object();
+	
+	private final List<IToolStatusListener> listeners = new ArrayList<IToolStatusListener>();
 	
 	protected final IProject project;
 	protected final StatusNode statusNode;
@@ -116,12 +121,12 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 
 	@Override
-	public boolean hasWarnings() {
+	public synchronized boolean hasWarnings() {
 		return !statusNode.getWarnings().isEmpty();
 	}
 
 	@Override
-	public boolean isInProgress() {
+	public synchronized boolean isInProgress() {
 		if(this.statusNode instanceof Section){
 			return ((Section)this.statusNode).isInProgress();
 		}
@@ -129,16 +134,16 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 	
 	@Override
-	public boolean isDirty() {
+	public synchronized boolean isDirty() {
 		return statusNode.isDirty();
 	}
 
 	@Override
-	public boolean isDone() {
+	public synchronized boolean isDone() {
 		return statusNode.isDone() && hasMetRequirements() && statusNode.getWarnings().isEmpty();
 	}
 	
-	public String getWarningMessage(String id){
+	public synchronized String getWarningMessage(String id){
 		for(Warning w : statusNode.getWarnings()){
 			if(w.getId().equals(id)){
 				return w.getMessage();
@@ -147,7 +152,7 @@ public class ToolStatusImpl implements IToolStatus{
 		return null;
 	}
 	
-	public String getWarningCommand(String id){
+	public synchronized String getWarningCommand(String id){
 		for(Warning w : statusNode.getWarnings()){
 			if(w.getId().equals(id)){
 				return w.getCommands().get(0).getName();
@@ -156,11 +161,11 @@ public class ToolStatusImpl implements IToolStatus{
 		return null;
 	}
 	
-	public String[] getWarningCommandParam(String id){
+	public synchronized String[] getWarningCommandParam(String id){
 		return new String[]{};
 	}
 	
-	public Set<String> getWarningIDs(){
+	public synchronized Set<String> getWarningIDs(){
 		HashSet<String> ids = new HashSet<String>();
 		for(Warning w : statusNode.getWarnings()){
 			ids.add(w.getId());
@@ -227,17 +232,17 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 	
 	@Override
-	public void setInstanceName(String name){
+	public synchronized void setInstanceName(String name){
 		this.statusNode.setInstanceName(name);
 	}
 
 	@Override
-	public void setMetRequirements(boolean metRequ) {
+	public synchronized void setMetRequirements(boolean metRequ) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void setIsDone(boolean isDone) {
+	public synchronized void setIsDone(boolean isDone) {
 		
 		if(isDone == true){
 			if(this.statusNode instanceof Section){
@@ -262,7 +267,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 	
 	@Override
-	public void setIsDirty(boolean dirty) {
+	public synchronized void setIsDirty(boolean dirty) {
 		
 		if(isDirty() == dirty){
 			return;
@@ -272,7 +277,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 	
 	@Override
-	public void setIsDirtyNextRecursive(boolean dirty){
+	public synchronized void setIsDirtyNextRecursive(boolean dirty){
 		if(this.statusNode instanceof LinkedObject){
 			LinkedObject ln = (LinkedObject)this.statusNode;
 			
@@ -290,7 +295,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 
 	@Override
-	public void setIsInProgress(boolean inProgress) {
+	public synchronized void setIsInProgress(boolean inProgress) {
 		
 		if(isInProgress() == inProgress){
 			return;
@@ -314,26 +319,37 @@ public class ToolStatusImpl implements IToolStatus{
 
 	@Override
 	public void addListener(IToolStatusListener listener) {
-		this.listeners.add(listener);
+		synchronized (listenersLock) {
+			this.listeners.add(listener);
+		}
 	}
 
 	@Override
 	public void removeListener(IToolStatusListener listener) {
-		this.listeners.remove(listener);
-	}
-	
-	public void fireChange(String prop){
-		for(IToolStatusListener listener : listeners){
-			listener.notifie(prop, this);
+		synchronized (listenersLock) {
+			this.listeners.remove(listener);
 		}
 	}
 	
-	public void dispose(){
+	public void fireChange(final String prop){
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				synchronized (listenersLock) {
+					for(IToolStatusListener listener : listeners){
+						listener.notifie(prop, ToolStatusImpl.this);
+					}
+				}
+			}
+		});
+	}
+	
+	public synchronized void dispose(){
 		this.statusNode.eAdapters().remove(adapter);
 	}
 
 	@Override
-	public void handleWarning(String id, boolean expression,
+	public synchronized void handleWarning(String id, boolean expression,
 			boolean throwException, String message)
 			throws IllegalStateException {
 		
@@ -348,7 +364,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 
 	@Override
-	public void handleWarning(String id, boolean expression,
+	public synchronized void handleWarning(String id, boolean expression,
 			boolean throwException, String message, String command)
 			throws IllegalStateException {
 		
@@ -363,7 +379,7 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 
 	@Override
-	public void handleWarning(String id, boolean expression,
+	public synchronized void handleWarning(String id, boolean expression,
 			boolean throwException, String message, String command,
 			String... param) throws IllegalStateException {
 		

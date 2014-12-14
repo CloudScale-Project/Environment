@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.common.notification;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -63,6 +64,37 @@ public class StatusManager {
 	
 	private List<ToolValidator> validators = null;
 	private List<IStatusService> services = null;
+	
+	//validation thread
+	private static final ConcurrentLinkedQueue<Runnable> validationTasks = new ConcurrentLinkedQueue<Runnable>();
+	static {
+		Thread validationThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while(!Thread.interrupted()){
+										
+					synchronized (validationTasks) {
+						if(validationTasks.isEmpty()){
+							try {
+								validationTasks.wait();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					
+					Runnable r = validationTasks.poll();
+					if(r != null){
+						r.run();
+					}
+				
+				}
+			}
+			
+		}, "Validation thread");
+		validationThread.start();
+	}
 	
 	@Inject
 	private ExtensionRetriever er;
@@ -128,6 +160,36 @@ public class StatusManager {
 			}
 		}
 		return isValid;
+	}
+	
+	public void validateAsync(final IProject project, final String toolID){
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				validate(project, toolID);
+			}
+		};
+		
+		synchronized (validationTasks) {
+			validationTasks.add(r);
+			validationTasks.notify();
+		}
+	}
+	
+	public void validateAllAsync(final IProject project){
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				validateAll(project);
+			}
+		};
+		
+		synchronized (validationTasks) {
+			validationTasks.add(r);
+			validationTasks.notify();
+		}
 	}
 
 	public IToolStatus getStatus(IProject project, String toolID) {

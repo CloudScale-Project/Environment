@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
@@ -42,8 +41,7 @@ public class ResourceChangeReporter implements IResourceChangeListener {
 					if(status != null){
 						status.setIsDirtyNextRecursive(true);
 					}
-					
-					validator.validate(res.getProject());
+					sm.validateAsync(project, validator.getToolID());
 				}
 			}
 		}
@@ -72,12 +70,7 @@ public class ResourceChangeReporter implements IResourceChangeListener {
 				return;
 			}
 			
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					runValidators(project, event);
-				}
-			});
+			runValidators(project, event);	
 		}
 	}
 }

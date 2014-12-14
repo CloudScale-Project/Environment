@@ -34,7 +34,7 @@ public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
 			IProject project = ExplorerProjectPaths
 					.getProjectFromEmfResource(this.getDiagram().eResource());
 			if (project != null) {
-				statusManager.validateAll(project);
+				statusManager.validateAllAsync(project);
 
 			}
 		}

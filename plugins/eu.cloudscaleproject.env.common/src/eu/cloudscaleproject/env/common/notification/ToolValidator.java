@@ -7,11 +7,6 @@ import javax.inject.Inject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.DIExtension;
 
@@ -33,6 +28,7 @@ public abstract class ToolValidator extends DIExtension{
 		//synchronize to one validator at a time
 		synchronized (lock) {
 			
+			/*
 			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 			Display display = PlatformUI.getWorkbench().getDisplay();
 			
@@ -48,6 +44,7 @@ public abstract class ToolValidator extends DIExtension{
 			}
 			
 			try{
+			*/
 				if(statusManager == null){
 					logger.severe("Validation manager was not found! Skipping validation!");
 					return false;
@@ -76,12 +73,16 @@ public abstract class ToolValidator extends DIExtension{
 					status.addWarning(UNKNOWN_ERROR, e.getMessage());
 					e.printStackTrace();
 				}
+			
+			/*
 			}
+			
 			finally{
 				if(shell != null && display != null){
 					shell.setCursor(new Cursor(display, SWT.CURSOR_ARROW));
 				}
 			}
+			*/
 		}
 		return false;
 	}
