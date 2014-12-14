@@ -260,10 +260,12 @@ public abstract class ResourceProvider{
 		IResource res = createResource(resourceName);
 		if(res.exists()){
 			try {
-				res.delete(true, null);
+				IEditorInputResource eir = resources.get(res);
 				resources.remove(res);
-				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, res, null);		
-				pcs.firePropertyChange(PROP_RESOURCE_DELETED, res, null);		
+				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
+				
+				res.delete(true, null);
+				pcs.firePropertyChange(PROP_RESOURCE_DELETED, eir, null);		
 
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block

@@ -205,6 +205,10 @@ public class ConfAlternative extends EditorInputFolder{
 			firsExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
 			expRep.getExperiments().add(firsExperiment);
 		}
+		
+		if(firsExperiment.getToolConfiguration().isEmpty()){
+			configureExperiment(firsExperiment);
+		}
 				
 		return (Experiment)firsExperiment;		
 	}

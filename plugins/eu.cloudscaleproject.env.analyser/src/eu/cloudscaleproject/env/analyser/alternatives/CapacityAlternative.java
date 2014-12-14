@@ -46,7 +46,6 @@ public class CapacityAlternative extends ConfAlternative{
 		exp.setRepetitions(1);
 		exp.setName("Capacity measurement");
 		exp.getStopConditions().clear();
-		exp.getToolConfiguration().clear();
 		
 		//create and set measurement stop condition
 		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();

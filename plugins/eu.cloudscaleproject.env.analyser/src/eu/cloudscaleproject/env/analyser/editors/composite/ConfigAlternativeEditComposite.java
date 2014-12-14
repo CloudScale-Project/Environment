@@ -219,6 +219,13 @@ public class ConfigAlternativeEditComposite extends Composite {
 			}
 		});
 	}
+	
+	@Override
+	public void update() {
+		comboViewerInput.refresh(true);
+		comboViewerUsage.refresh(true);
+		super.update();
+	}
 
 	@Override
 	protected void checkSubclass() {

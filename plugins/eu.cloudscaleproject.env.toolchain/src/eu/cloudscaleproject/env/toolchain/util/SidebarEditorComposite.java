@@ -79,46 +79,63 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		sidebarBuilder.setResourceProvider(resourceProvider);
 	}
 
+	@Override
 	public void init(){
 		sidebarBuilder.init();
 	}
 	
+	@Override
+	public void update() {
+		sidebarBuilder.update();
+		super.update();
+	}
+	
+	@Override
 	public void showInput(IEditorInput input){
 		sidebarBuilder.showInput(input);
 	}
-	
+
+	@Override
 	public void addSidebarEditor(IEditorInput ei, String section){
 		sidebarBuilder.addSidebarEditor(ei, section);
 	}
-	
+
+	@Override
 	public void removeSidebarEditor(IEditorInput ei){
 		sidebarBuilder.removeSidebarEditor(ei);
 	}
-	
+
+	@Override
 	public Color getSidebarSectionBackgroundColor(){
 		return CommonResources.COLOR_CS_BLUE;
 	}
-	
+
+	@Override
 	public Color getSidebarSectionForegroundColor(){
 		return CommonResources.COLOR_BLACK;
 	}
-	
+
+	@Override
 	public Color getSidebarBackgroundColor(){
 		return CommonResources.COLOR_CS_BLUE_LIGHT;
 	}
-	
+
+	@Override
 	public Color getSidebarForegroundColor(){
 		return CommonResources.COLOR_CS_BLUE_DARK;
 	}
-	
+
+	@Override
 	public void setNewButtonEnabled(boolean enable){
 		sidebarBuilder.setNewButtonEnabled(enable);
 	}
-	
+
+	@Override
 	public void setNewFromButtonEnabled(boolean enable){
 		sidebarBuilder.setNewFromButtonEnabled(enable);
 	}
-	
+
+	@Override
 	public void setRemoveButtonEnabled(boolean enable){
 		sidebarBuilder.setRemoveButtonEnabled(enable);
 	}

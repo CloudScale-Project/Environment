@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.editors.composite;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
@@ -97,10 +98,23 @@ public class InputAlternativeTreeviewComposite extends Composite{
 					Resource res = eo.eResource();
 					IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
 					
-					String path = res.getURI().lastSegment() + "_diagram";
-					IFile diagramFile = file.getParent().getParent().getFile(new Path(path));
+					//find diagram file from model file
+					String diagramFilename = res.getURI().lastSegment() + "_diagram";
+					IFile diagramFile = null;
 					
-					if(diagramFile.exists()){
+					int i=0;
+					IContainer parent = file.getParent();
+					while(parent != null){
+						diagramFile = parent.getFile(new Path(diagramFilename));
+						if(diagramFile.exists()){
+							break;
+						}
+						parent = parent.getParent();
+						i++;
+						if(i >= 2){break;}
+					}
+										
+					if(diagramFile != null && diagramFile.exists()){
 						file = diagramFile;
 					}
 					

@@ -269,6 +269,15 @@ helper createProvidedServiceResourceSpecifications(in resourceRepository : Resou
 	var deployment : OVERVIEW::deployment::ServiceDeployment;
 	deployment := service.deployment;
 	
+	if(deployment.oclIsKindOf(OVERVIEW::deployment::RuntimeDeployment)) then{
+		var runtimeDeployment : OVERVIEW::deployment::RuntimeDeployment;
+		runtimeDeployment := deployment.oclAsType(OVERVIEW::deployment::RuntimeDeployment);
+		
+		resources := createSingleComputingEnvResourceSpecifications(
+						resourceRepository, container, service, runtimeDeployment.computingEnvironment);
+	}
+	else{
+	
 	//add one CPU
 	resources += object ProcessingResourceSpecification{
 		
@@ -311,7 +320,62 @@ helper createProvidedServiceResourceSpecifications(in resourceRepository : Resou
 		id := CSMID + service.id + '_createHDD';
 	};
 	
+	}endif;
+	
 	return resources;
+}
+
+helper createSingleComputingEnvResourceSpecifications(in resourceRepository : ResourceRepository,
+											 		  in container : ResourceContainer,
+													  in service : OVERVIEW::architecture::ProvidedService,
+													  in computingEnv : OVERVIEW::deployment::ComputingEnvironment)
+																	: Sequence(RESOURCE::ProcessingResourceSpecification){
+	var resources : Sequence(ProcessingResourceSpecification);
+	
+	//add one CPU
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := computingEnv.instanceDescriptor.cpuUnits;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := computingEnv.instanceDescriptor.cpu.toString();
+		};
+		id := CSMID + service.id + '_createCPU';
+	};
+	
+	//add one HDD
+	resources += object ProcessingResourceSpecification{
+		
+		activeResourceType_ActiveResourceSpecification 
+			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
+		
+		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
+		
+		MTTR := 0.0;
+		MTTF := 0.0;
+		requiredByContainer := false;
+		numberOfReplicas := 1;
+		resourceContainer_ProcessingResourceSpecification := container;
+		
+		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+			//TODO: fix/parse wsdl
+			specification := computingEnv.instanceDescriptor.storage.toString();
+		};
+		id := CSMID + service.id + '_createHDD';
+	};
+	
+	return resources;																	
+	
 }
 
 helper createProxyResourceSpecifications(in resourceRepository : ResourceRepository, 

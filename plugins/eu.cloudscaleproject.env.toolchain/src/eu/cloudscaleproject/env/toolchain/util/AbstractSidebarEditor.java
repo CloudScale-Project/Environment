@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -12,8 +13,12 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -33,6 +38,8 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	
 	private final Composite compositeSidebar;
 	private final Composite compositeArea;
+	
+	private Composite emptyPanel;
 
 	private Composite compositeSidebarList = null;
 	private Composite compositeSidebarControls = null;
@@ -235,6 +242,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			stackLayout = (StackLayout)areaLayout;
 		}
 		
+		//create empty panel
+		emptyPanel = createEmptyPanel(compositeArea);
+		
 		//create hover buttons and area composites from IEditorInput objects
 		String[] sections = getSidebarSections();
 		if(sections != null){
@@ -244,6 +254,17 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		else{
 			createSidebarSection(null, SWT.NONE);
+		}
+		
+		//select the first item or show the empty panel
+		{
+			Iterator<EditorItem> iter = entries.values().iterator();
+			if(iter.hasNext()){
+				iter.next().select();
+			}
+			else{
+				stackLayout.topControl = emptyPanel;
+			}
 		}
 		
 		//rebuild controls composite
@@ -346,6 +367,39 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 	}
 	
+	private Composite createEmptyPanel(Composite parent){
+		Composite c = new Composite(parent, SWT.NONE);
+		
+		FormLayout layout= new FormLayout();
+		layout.marginHeight = 5;
+		layout.marginWidth = 5;
+		c.setLayout(layout);
+		
+		Label label = new Label(c, SWT.NONE);
+		label.setText("Currently there are no entries to display. Create new one?");
+		
+		FormData lb_formData = new FormData();
+		lb_formData.top = new FormAttachment(0,30);
+		lb_formData.left = new FormAttachment(15,0);
+		label.setLayoutData(lb_formData);
+		
+		Button button = new Button(c, SWT.NONE);
+		button.setText("Create new...");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleNewInput(null);
+			}
+		});
+		
+		FormData b_formData = new FormData();
+		b_formData.top = new FormAttachment(label, 5);
+		b_formData.left = new FormAttachment(15,0);
+		button.setLayoutData(b_formData);
+		
+		return c;
+	}
+	
 	private EditorItem getCurrentSelectionItem(){
 		for(EditorItem ei : entries.values()){
 			if(ei.isSelected){
@@ -435,7 +489,8 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			setCurrentSelectionIndex(newIndex);
 		}
 		else{
-			//TODO: show empty alternatives composite 
+			stackLayout.topControl = emptyPanel;
+			compositeArea.layout();
 		}
 	}
 	
@@ -514,17 +569,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			for(IEditorInput input : inputs){
 				entries.put(input, new EditorItem(input, sectionName, style));
 			}
-		}
-		
-		//select first item
-		if(!inputs.isEmpty()){
-			EditorItem item = entries.get(inputs.get(0));
-			if(item != null){
-				item.select();
-			}
-		}
-		else{
-			//TODO: show empty alternatives composite
 		}
 	}
 	

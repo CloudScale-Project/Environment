@@ -17,7 +17,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 
 	private EditorInputFile propertyInputFile;
 
-	private IFolder folder;
+	private final IFolder folder;
 	
 	public static final String PROP_FILENAME = "prop.alt";
 	

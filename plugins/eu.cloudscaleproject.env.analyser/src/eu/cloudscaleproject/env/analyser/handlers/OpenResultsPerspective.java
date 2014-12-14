@@ -2,10 +2,7 @@
 package eu.cloudscaleproject.env.analyser.handlers;
 
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
 import eu.cloudscaleproject.env.product.branding.CloudScaleBranding;
@@ -16,13 +13,13 @@ public class OpenResultsPerspective {
 	// Duplication ftw
 
 	@Execute
-	public void execute(
-			IWorkbenchWindow window, MApplication application, EModelService service, EPartService partService) {
+	public void execute() {
 		
 		
 		//using old e3 show perspective call
 		try {
-			window.getWorkbench().showPerspective("org.palladiosimulator.edp2.ui.perspective", window);
+			PlatformUI.getWorkbench().showPerspective("org.palladiosimulator.edp2.ui.perspective", 
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 			CloudScaleBranding.initProjectExplorer();
 		} catch (WorkbenchException e) {
 			// TODO Auto-generated catch block

@@ -4,7 +4,9 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -95,7 +97,31 @@ public class CommandFeature extends AbstractCustomFeature{
 				Requirement req = (Requirement)statusNode;
 				if(req.getResource() != null && req.getResource() instanceof IFile){
 					try {
-						IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile)req.getResource());
+						
+						IFile file = (IFile)req.getResource();
+						
+						//try to find and open diagram file if it exists
+						String diagramFilename = file.getName() + "_diagram";
+						IFile diagramFile = null;
+						
+						int i=0;
+						IContainer parent = file.getParent();
+						while(parent != null){
+							diagramFile = parent.getFile(new Path(diagramFilename));
+							if(diagramFile.exists()){
+								break;
+							}
+							parent = parent.getParent();
+							i++;
+							if(i >= 2){break;}
+						}
+											
+						if(diagramFile != null && diagramFile.exists()){
+							file = diagramFile;
+						}
+						//
+						
+						IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
 						return;
 					} catch (PartInitException e) {
 						// TODO Auto-generated catch block

@@ -20,6 +20,8 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 @Singleton
 public class CommandExecutor {
 	
+	//TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
+	
 	private static final Logger logger = Logger.getLogger(CommandExecutor.class.getName());
 	
 	private ECommandService commandService;
@@ -31,6 +33,11 @@ public class CommandExecutor {
 		this.handlerService = handlerService;
 	}
 
+	/**
+	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
+	 * 
+	 * @param id
+	 */
 	public void execute(String id){
 		Command command = commandService.getCommand(id);
 		
@@ -49,6 +56,8 @@ public class CommandExecutor {
 	 * 
 	 * Execute command with parameters without parameter id.
 	 * Prameters are filled into command in order - from first to last.
+	 * 
+	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
 	 * 
 	 * @param id : command id
 	 * @param param : array of parameters
@@ -101,6 +110,8 @@ public class CommandExecutor {
 	 * 
 	 * Execute command with parameters.
 	 * Parameters must be specified as new String[]{new String[]{paramID, value}, new String[]{paramID, value}}
+	 * 
+	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
 	 * 
 	 * @param id : command id
 	 * @param param : command parameters
