@@ -43,8 +43,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -146,7 +146,7 @@ public class InterfacesEditor extends EditorPart implements IMenuListener, IEdit
 	public void createPartControl(Composite parent) {
 		
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
-	    ScrolledForm form = toolkit.createScrolledForm(parent);
+	    Form form = toolkit.createForm(parent);
 	    form.setText(input.getOperationInterfaceContainer().getName());
 	    FillLayout fillLayout = new FillLayout(SWT.HORIZONTAL);
 	    fillLayout.marginWidth = 5;
