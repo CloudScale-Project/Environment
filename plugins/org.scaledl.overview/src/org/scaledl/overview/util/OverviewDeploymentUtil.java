@@ -17,6 +17,7 @@ public class OverviewDeploymentUtil {
 		RuntimeDeployment rd = DeploymentFactoryImpl.eINSTANCE.createRuntimeDeployment();
 		
 		ComputingEnvironment ce = DeploymentFactoryImpl.eINSTANCE.createComputingEnvironment();
+		ce.setName("Single instance computing environment");
 		ce.setInstanceDescriptor(crd);
 		
 		rd.setComputingEnvironment(ce);

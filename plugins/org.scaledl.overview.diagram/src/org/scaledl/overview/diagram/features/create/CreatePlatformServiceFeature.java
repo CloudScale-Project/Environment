@@ -77,6 +77,7 @@ public abstract class CreatePlatformServiceFeature extends AbstractCreateFeature
 				
 				RuntimeDeployment rd = DeploymentFactory.eINSTANCE.createRuntimeDeployment();
 				ComputingEnvironment compEnv = DeploymentFactory.eINSTANCE.createComputingEnvironment();
+				compEnv.setName("Single instance computing environment");
 				compEnv.setInstanceDescriptor(cisd.getComputingResourceDescriptors().get(0));
 				rd.setComputingEnvironment(compEnv);
 				
