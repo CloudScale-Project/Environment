@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="ASCII"?>
 <specification:CloudSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
-  <descriptor name="Amazon Web Services (AWS)" description="Amazon Web Services (AWS) cloud environment... " providerID="aws">
-    <availabilityZones name="Amazon Web Services (AWS Zone)" providerID="aws" networkInfrastructureServiceDescriptor="//@infrastructureServiceDescriptors.0"/>
+  <descriptor id="_H6kugIMkEeS3ErMWA7p55Q" name="Amazon Web Services (AWS)" description="Amazon Web Services (AWS) cloud environment... " providerID="aws">
+    <availabilityZones id="_H6kugYMkEeS3ErMWA7p55Q" name="Amazon Web Services (AWS Zone)" providerID="aws" networkInfrastructureServiceDescriptor="_H6kugoMkEeS3ErMWA7p55Q"/>
   </descriptor>
-  <infrastructureServiceDescriptors xsi:type="specification:NetworkInfrastructureServiceDescriptor" name="Internal connection" bandwidth="1000" latency="50"/>
-  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" name="AWS EC2 Infrastructure" providerID="aws" generalPurpose="true">
-    <computingResourceDescriptors name="M1 Small Instance" providerID="aws" memory="1700" cpu="1200" cpuUnits="1" storage="160"/>
-    <computingResourceDescriptors name="M1 Medium Instance" providerID="aws" memory="3750" cpu="1200" cpuUnits="2" storage="375"/>
-    <computingResourceDescriptors name="M1 Large Instance" providerID="aws" memory="7500" cpu="1200" cpuUnits="4" storage="850"/>
+  <infrastructureServiceDescriptors xsi:type="specification:NetworkInfrastructureServiceDescriptor" id="_H6kugoMkEeS3ErMWA7p55Q" name="Internal connection" bandwidth="1000" latency="50"/>
+  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" id="_H6kug4MkEeS3ErMWA7p55Q" name="AWS EC2 Infrastructure" providerID="aws" generalPurpose="true">
+    <computingResourceDescriptors id="_H6kuhIMkEeS3ErMWA7p55Q" name="m1.small" description="M1 Small Instance" providerID="aws" memory="1024" cpu="1200" cpuUnits="1" storage="160"/>
+    <computingResourceDescriptors id="_H6kuhYMkEeS3ErMWA7p55Q" name="m1.medium" description="M1 Medium Instance" providerID="aws" memory="3750" cpu="1200" cpuUnits="2" storage="375"/>
+    <computingResourceDescriptors id="_H6kuhoMkEeS3ErMWA7p55Q" name="m1.large" description="M1 Large Instance" providerID="aws" memory="7500" cpu="1200" cpuUnits="4" storage="850"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="t2.micro" providerID="aws" memory="1024" cpu="2500" cpuUnits="1" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="t2.small" providerID="aws" memory="2048" cpu="2500" cpuUnits="1" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="t2.medium" providerID="aws" memory="4096" cpu="2500" cpuUnits="2" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="m3.medium" providerID="aws" memory="3750" cpu="2500" cpuUnits="1" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="m3.large" providerID="aws" memory="7500" cpu="2500" cpuUnits="2" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="m3.xlarge" providerID="aws" memory="15000" cpu="2500" cpuUnits="4" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="c3.large" providerID="aws" memory="7500" cpu="2500" cpuUnits="2" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="c3.xlarge" providerID="aws" memory="15000" cpu="2500" cpuUnits="4" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="c3.2xlarge" providerID="aws" memory="15000" cpu="2500" cpuUnits="4" storage="100"/>
+    <computingResourceDescriptors id="_LpNjcIMkEeS3ErMWA7p55Q" name="c3.4xlarge" providerID="aws" memory="30000" cpu="2500" cpuUnits="16" storage="100"/>
+  </infrastructureServiceDescriptors> 
+  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" id="_H6kuh4MkEeS3ErMWA7p55Q" name="AWS DB Infrastructure" providerID="aws">
+    <computingResourceDescriptors id="_H6kuiIMkEeS3ErMWA7p55Q" name="db.t1.micro" providerID="aws" memory="615" cpu="1200" cpuUnits="1" storage="160"/>
+    <computingResourceDescriptors id="_H6kuiYMkEeS3ErMWA7p55Q" name="db.m1.small" providerID="aws" memory="1700" cpu="1200" cpuUnits="1" storage="160"/>
+    <computingResourceDescriptors id="_H6kuiYMkEeS3ErMWA7p55Q" name="db.m3.medium" providerID="aws" memory="3750" cpu="1200" cpuUnits="1" storage="160"/>
+    <computingResourceDescriptors id="_H6kuiYMkEeS3ErMWA7p55Q" name="db.m3.large" providerID="aws" memory="7500" cpu="1200" cpuUnits="2" storage="160"/>
+    <computingResourceDescriptors id="_H6kuiYMkEeS3ErMWA7p55Q" name="db.m3.xlarge" providerID="aws" memory="15000" cpu="1200" cpuUnits="4" storage="160"/>
+    <computingResourceDescriptors id="_H6kuiYMkEeS3ErMWA7p55Q" name="db.m3.2xlarge" providerID="aws" memory="30000" cpu="1200" cpuUnits="8" storage="160"/>
   </infrastructureServiceDescriptors>
-  <infrastructureServiceDescriptors xsi:type="specification:ComputingInfrastructureServiceDescriptor" name="AWS DB Infrastructure" providerID="aws">
-    <computingResourceDescriptors name="DB Small Instance" providerID="aws" memory="1700" cpu="1200" cpuUnits="1" storage="160"/>
-    <computingResourceDescriptors name="DB Medium Instance" providerID="aws" memory="3750" cpu="1200" cpuUnits="2" storage="375"/>
-    <computingResourceDescriptors name="DB Large Instance" providerID="aws" memory="7500" cpu="1200" cpuUnits="4" storage="850"/>
-  </infrastructureServiceDescriptors>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformRuntimeServiceDescriptor" name="Elastic Beanstalk" providerID="aws" infrastructureServiceDescriptor="//@infrastructureServiceDescriptors.1">
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformRuntimeServiceDescriptor" id="_H6lVkIMkEeS3ErMWA7p55Q" name="Elastic Beanstalk" providerID="aws" infrastructureServiceDescriptor="_H6kug4MkEeS3ErMWA7p55Q">
     <sla/>
   </platformServiceDescriptors>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon RDS" providerID="aws" infrastructureServiceDescriptor="//@infrastructureServiceDescriptors.2"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon DynamoDB" providerID="aws"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon ElastiCache" providerID="aws"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon Redshift" providerID="aws"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon S3" providerID="aws"/>
-  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" name="Amazon CloudFront" providerID="aws"/>
-  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" name="SNS service" providerID="aws"/>
-  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" name="Cloud search" providerID="aws"/>
-  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" name="Elastic transcoder" providerID="aws"/>
-  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" name="Email sending service" providerID="aws"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVkYMkEeS3ErMWA7p55Q" name="Amazon RDS" providerID="aws" infrastructureServiceDescriptor="_H6kuh4MkEeS3ErMWA7p55Q"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVkoMkEeS3ErMWA7p55Q" name="Amazon DynamoDB" providerID="aws"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVk4MkEeS3ErMWA7p55Q" name="Amazon ElastiCache" providerID="aws"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVlIMkEeS3ErMWA7p55Q" name="Amazon Redshift" providerID="aws"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVlYMkEeS3ErMWA7p55Q" name="Amazon S3" providerID="aws"/>
+  <platformServiceDescriptors xsi:type="specification:ProvidedPlatformSupportServiceDescriptor" id="_H6lVloMkEeS3ErMWA7p55Q" name="Amazon CloudFront" providerID="aws"/>
+  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" id="_H6lVl4MkEeS3ErMWA7p55Q" name="SNS service" providerID="aws"/>
+  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" id="_H6lVmIMkEeS3ErMWA7p55Q" name="Cloud search" providerID="aws"/>
+  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" id="_H6lVmYMkEeS3ErMWA7p55Q" name="Elastic transcoder" providerID="aws"/>
+  <softwareServiceDescriptors xsi:type="specification:ProvidedSoftwareServiceDescriptor" id="_H6lVmoMkEeS3ErMWA7p55Q" name="Email sending service" providerID="aws"/>
 </specification:CloudSpecification>

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="ASCII"?>
 <specification:ServiceSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:specification="http://org.scaledl.overview/ScaleDLOverviewComponentModel/Specification/1.0">
-  <serviceDescriptors xsi:type="specification:PlatformRuntimeServiceDescriptor" name="Generic Application Server"/>
-  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic SQL Database"/>
-  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic NoSQL Database"/>
-  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" name="Generic Cache Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformRuntimeServiceDescriptor" id="_jb9VAIMmEeS3ErMWA7p55Q" name="Generic Application Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformRuntimeServiceDescriptor" id="_jb9VAIMmEeS3ErMWA7p55Q" name="Glassfish Application Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformRuntimeServiceDescriptor" id="_jb9VAIMmEeS3ErMWA7p55Q" name="Tomcat Application Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAYMmEeS3ErMWA7p55Q" name="Generic SQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAYMmEeS3ErMWA7p55Q" name="MySQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAYMmEeS3ErMWA7p55Q" name="PostgreSQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAYMmEeS3ErMWA7p55Q" name="Oracle Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAoMmEeS3ErMWA7p55Q" name="Generic NoSQL Database"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAoMmEeS3ErMWA7p55Q" name="MongoDB"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VAoMmEeS3ErMWA7p55Q" name="Casandra"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VA4MmEeS3ErMWA7p55Q" name="Generic Cache Server"/>
+  <serviceDescriptors xsi:type="specification:PlatformSupportServiceDescriptor" id="_jb9VA4MmEeS3ErMWA7p55Q" name="Generic Image Server"/>
 </specification:ServiceSpecification>

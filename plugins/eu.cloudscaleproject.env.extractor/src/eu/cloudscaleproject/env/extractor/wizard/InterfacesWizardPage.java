@@ -299,8 +299,8 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 			
 			// Create connection between these services 
 			InternalConnection internalConnection = ArchitectureFactory.eINSTANCE.createInternalConnection();
-			internalConnection.setSource(oic);
-			internalConnection.setTarget(softwareService);
+			internalConnection.setSource(softwareService);
+			internalConnection.setTarget(oic);
 			
 			CloudEnvironment cloudEnvironment = (CloudEnvironment) softwareService.eContainer().eContainer(); 
 			cloudEnvironment.getInternalConnections().add(internalConnection);
@@ -312,11 +312,7 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 				NetworkInfrastructureServiceDescriptor nisd = OverviewSpecificationUtil.getSystemDescriptor(cloudEnvironment, nisd_org);
 				internalConnection.setDescriptor(nisd);
 			}
-			else
-			{
-			}
-			
-			
+
 			
 			// Remember service for possible deletion if user comes back to this page
 			createdServices.add(service);

@@ -33,7 +33,6 @@ import org.scaledl.overview.architecture.ArchitectureFactory;
 import org.scaledl.overview.architecture.CloudEnvironment;
 import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.converter.ConverterService;
-import org.scaledl.overview.parametertype.Parameter;
 import org.scaledl.overview.parametertype.ParametertypeFactory;
 import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
