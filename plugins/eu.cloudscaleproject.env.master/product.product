@@ -42,8 +42,6 @@ Visit http://www.cloudscale-project.eu
 
    <plugins>
       <plugin id="LQNModel"/>
-      <plugin id="ProfilesBlackBoxLibrary"/>
-      <plugin id="ThreeLayerBlackboxLibrary"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
       <plugin id="ch.qos.logback.classic"/>
       <plugin id="ch.qos.logback.core"/>
