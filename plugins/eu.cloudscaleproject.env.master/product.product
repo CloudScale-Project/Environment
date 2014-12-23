@@ -734,7 +734,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.simulizar.ui.wizards"/>
       <plugin id="org.reclipse.generator"/>
       <plugin id="org.reclipse.generator.ui"/>
-      <plugin id="org.reclipse.help"/>
       <plugin id="org.reclipse.kdm2pcm"/>
       <plugin id="org.reclipse.math"/>
       <plugin id="org.reclipse.metrics"/>
