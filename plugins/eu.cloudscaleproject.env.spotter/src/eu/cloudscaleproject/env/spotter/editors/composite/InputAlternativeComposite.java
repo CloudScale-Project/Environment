@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -34,6 +35,19 @@ public class InputAlternativeComposite extends Composite{
 	
 	private final EditorInputFolder editorInput;
 	private Text textName;
+	
+	private Composite insComposite;
+	private Composite meaComposite;
+	
+	private InstrumentationEditor insEditor = new InstrumentationEditor(){
+		public String getContentDescription() {return "";};
+		protected void setContentDescription(String description) {};
+	};
+	
+	private MeasurementEditor meaEditor = new MeasurementEditor(){
+		public String getContentDescription() {return "";};
+		protected void setContentDescription(String description) {};
+	};
 		
 	public InputAlternativeComposite(Composite parent, int style, final EditorInputFolder editorInput) {
 		super(parent, style);
@@ -74,19 +88,14 @@ public class InputAlternativeComposite extends Composite{
 			CTabItem tabItemInstrumentation = new CTabItem(tabFolder, SWT.NONE);
 			tabItemInstrumentation.setText("Instrumentations");
 			
-			Composite c = new Composite(tabFolder, SWT.NONE);
-			c.setLayout(new FillLayout());
+			insComposite = new Composite(tabFolder, SWT.NONE);
+			insComposite.setLayout(new FillLayout());
 			
-			final InstrumentationEditor inEditor = new InstrumentationEditor(){
-				public String getContentDescription() {return "";};
-				protected void setContentDescription(String description) {};
-			};
-			
-			inEditor.addPropertyListener(new IPropertyListener() {
+			insEditor.addPropertyListener(new IPropertyListener() {
 				@Override
 				public void propertyChanged(Object source, int propId) {
 					if(EditorPart.PROP_DIRTY == propId){
-						inEditor.doSave(null);
+						insEditor.doSave(null);
 					}
 				}
 			});
@@ -101,10 +110,9 @@ public class InputAlternativeComposite extends Composite{
 			}
 			
 			InstrumentationEditorInput inEditorInput = new InstrumentationEditorInput(file);
-			inEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), inEditorInput);
-			inEditor.createPartControl(c);
+			insEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), inEditorInput);
 			
-			tabItemInstrumentation.setControl(c);
+			tabItemInstrumentation.setControl(insComposite);
 			tabFolder.setSelection(tabItemInstrumentation);
 
 		} catch (PartInitException e1) {
@@ -115,21 +123,16 @@ public class InputAlternativeComposite extends Composite{
 		//create measurements editor
 		try {
 			CTabItem tabItemMeasurement = new CTabItem(tabFolder, SWT.NONE);
-			tabItemMeasurement.setText("Instrumentations");
+			tabItemMeasurement.setText("Measurements");
 			
-			Composite c = new Composite(tabFolder, SWT.NONE);
-			c.setLayout(new FillLayout());
+			meaComposite = new Composite(tabFolder, SWT.NONE);
+			meaComposite.setLayout(new FillLayout());
 			
-			final MeasurementEditor measurementEditor = new MeasurementEditor(){
-				public String getContentDescription() {return "";};
-				protected void setContentDescription(String description) {};
-			};
-			
-			measurementEditor.addPropertyListener(new IPropertyListener() {
+			meaEditor.addPropertyListener(new IPropertyListener() {
 				@Override
 				public void propertyChanged(Object source, int propId) {
 					if(EditorPart.PROP_DIRTY == propId){
-						measurementEditor.doSave(null);
+						meaEditor.doSave(null);
 					}
 				}
 			});
@@ -144,10 +147,9 @@ public class InputAlternativeComposite extends Composite{
 			}
 			
 			MeasurementEditorInput measurementEditorInput = new MeasurementEditorInput(file);
-			measurementEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
-			measurementEditor.createPartControl(c);
+			meaEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
 			
-			tabItemMeasurement.setControl(c);
+			tabItemMeasurement.setControl(meaComposite);
 		} catch (PartInitException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -214,6 +216,20 @@ public class InputAlternativeComposite extends Composite{
 	public void update() {
 		editorInput.load();
 		load();
+		
+		for(Control c : meaComposite.getChildren()){
+			c.dispose();
+		}
+		for(Control c : insComposite.getChildren()){
+			c.dispose();
+		}
+		
+		meaEditor.createPartControl(meaComposite);
+		insEditor.createPartControl(insComposite);
+		
+		meaComposite.layout();
+		insComposite.layout();
+		
 		super.update();
 	}
 }

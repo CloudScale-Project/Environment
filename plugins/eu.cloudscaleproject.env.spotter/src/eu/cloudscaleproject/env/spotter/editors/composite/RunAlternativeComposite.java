@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -54,6 +55,23 @@ public class RunAlternativeComposite extends Composite{
 	
 	private Text textName;
 	private final ComboViewer comboViewer;
+	
+	private Composite confComposite;
+	private Composite workComposite;
+	private Composite hierComposite;
+	
+	private SpotterConfigEditor confEditor = new SpotterConfigEditor(){
+		public String getContentDescription() {return "";};
+		protected void setContentDescription(String description) {};
+	};
+	private WorkloadEditor workEditor = new WorkloadEditor(){
+		public String getContentDescription() {return "";};
+		protected void setContentDescription(String description) {};
+	};
+	private HierarchyEditor hierEditor = new HierarchyEditor(){
+		public String getContentDescription() {return "";};
+		protected void setContentDescription(String description) {};
+	};
 	
 	public RunAlternativeComposite(Composite parent, int style, final EditorInputFolder editorInput) {
 		super(parent, style);
@@ -140,19 +158,14 @@ public class RunAlternativeComposite extends Composite{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Confuguration");
 			
-			Composite c = new Composite(tabFolder, SWT.NONE);
-			c.setLayout(new FillLayout());
-			
-			final SpotterConfigEditor editorPart = new SpotterConfigEditor(){
-				public String getContentDescription() {return "";};
-				protected void setContentDescription(String description) {};
-			};
+			confComposite = new Composite(tabFolder, SWT.NONE);
+			confComposite.setLayout(new FillLayout());
 
-			editorPart.addPropertyListener(new IPropertyListener() {
+			confEditor.addPropertyListener(new IPropertyListener() {
 				@Override
 				public void propertyChanged(Object source, int propId) {
 					if(EditorPart.PROP_DIRTY == propId){
-						editorPart.doSave(null);
+						confEditor.doSave(null);
 					}
 				}
 			});
@@ -174,10 +187,9 @@ public class RunAlternativeComposite extends Composite{
 			}
 			
 			SpotterConfigEditorInput editorPartInput = new SpotterConfigEditorInput(file);
-			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
-			editorPart.createPartControl(c);
+			confEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
 			
-			tabItem.setControl(c);
+			tabItem.setControl(confComposite);
 			tabFolder.setSelection(tabItem);
 			
 		} catch (PartInitException e1) {
@@ -189,19 +201,14 @@ public class RunAlternativeComposite extends Composite{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Workload");
 			
-			Composite c = new Composite(tabFolder, SWT.NONE);
-			c.setLayout(new FillLayout());
+			workComposite = new Composite(tabFolder, SWT.NONE);
+			workComposite.setLayout(new FillLayout());
 			
-			final WorkloadEditor editorPart = new WorkloadEditor(){
-				public String getContentDescription() {return "";};
-				protected void setContentDescription(String description) {};
-			};
-			
-			editorPart.addPropertyListener(new IPropertyListener() {
+			workEditor.addPropertyListener(new IPropertyListener() {
 				@Override
 				public void propertyChanged(Object source, int propId) {
 					if(EditorPart.PROP_DIRTY == propId){
-						editorPart.doSave(null);
+						workEditor.doSave(null);
 					}
 				}
 			});
@@ -223,10 +230,9 @@ public class RunAlternativeComposite extends Composite{
 			}
 			
 			WorkloadEditorInput editorPartInput = new WorkloadEditorInput(file);
-			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
-			editorPart.createPartControl(c);
+			workEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
 			
-			tabItem.setControl(c);
+			tabItem.setControl(workComposite);
 		} catch (PartInitException e1) {
 			e1.printStackTrace();
 		}
@@ -236,19 +242,14 @@ public class RunAlternativeComposite extends Composite{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Hierarchy");
 			
-			Composite c = new Composite(tabFolder, SWT.NONE);
-			c.setLayout(new FillLayout());
+			hierComposite = new Composite(tabFolder, SWT.NONE);
+			hierComposite.setLayout(new FillLayout());
 			
-			final HierarchyEditor editorPart = new HierarchyEditor(){
-				public String getContentDescription() {return "";}
-				protected void setContentDescription(String description) {};
-			};
-			
-			editorPart.addPropertyListener(new IPropertyListener() {
+			hierEditor.addPropertyListener(new IPropertyListener() {
 				@Override
 				public void propertyChanged(Object source, int propId) {
 					if(EditorPart.PROP_DIRTY == propId){
-						editorPart.doSave(null);
+						hierEditor.doSave(null);
 					}
 				}
 			});
@@ -264,57 +265,12 @@ public class RunAlternativeComposite extends Composite{
 			}
 			
 			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
-			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
-			editorPart.createPartControl(c);
+			hierEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
 			
-			tabItem.setControl(c);
+			tabItem.setControl(hierComposite);
 		} catch (PartInitException e1) {
 			e1.printStackTrace();
 		}
-		
-		/*
-		Label lblConfigurationEditors = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		lblConfigurationEditors.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		lblConfigurationEditors.setText("Configuration Editors:");
-		
-		Button btnOpenSpotterConfiguration = new Button(this, SWT.NONE);
-		btnOpenSpotterConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnOpenSpotterConfiguration.setText("Open Spotter Configuration Editor...");
-		btnOpenSpotterConfiguration.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
-				AbstractSpotterEditor.openInstance(new SpotterConfigEditorInput(file), SpotterConfigEditor.ID);
-			}
-		});
-		
-		Button btnOpenHierarchy = new Button(this, SWT.NONE);
-		btnOpenHierarchy.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnOpenHierarchy.setText("Open Hierarchy Editor...");
-		btnOpenHierarchy.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(FileManager.HIERARCHY_FILENAME);
-				AbstractSpotterEditor.openInstance(new HierarchyEditorInput(file), HierarchyEditor.ID);
-			}
-		});
-		
-		Button btnOpenWorkloadSatellite = new Button(this, SWT.NONE);
-		btnOpenWorkloadSatellite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnOpenWorkloadSatellite.setText("Open Workload Satellite Adapter Editor...");
-		btnOpenWorkloadSatellite.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IFile file = RunAlternativeComposite.this.editorInput
-						.getResource().getFile(FileManager.ENVIRONMENT_FILENAME);
-				WorkloadEditor.openInstance(
-						(IEditorInput) ElementFactory.createEditorInput(WorkloadEditor.ID, file), 
-						WorkloadEditor.ID);
-			}
-		});
-		*/
 		
 		Button btnRunDynamicSpotter = new Button(this, SWT.CENTER);
 		btnRunDynamicSpotter.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false, 2, 1));
@@ -361,6 +317,25 @@ public class RunAlternativeComposite extends Composite{
 		editorInput.load();
 		load();
 		comboViewer.refresh(true);
+		
+		for(Control c : confComposite.getChildren()){
+			c.dispose();
+		}
+		for(Control c : workComposite.getChildren()){
+			c.dispose();
+		}
+		for(Control c : hierComposite.getChildren()){
+			c.dispose();
+		}
+		
+		confEditor.createPartControl(confComposite);
+		workEditor.createPartControl(workComposite);
+		hierEditor.createPartControl(hierComposite);
+		
+		confComposite.layout();
+		workComposite.layout();
+		hierComposite.layout();
+		
 		super.update();
 	}
 }
