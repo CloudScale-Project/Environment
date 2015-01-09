@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -41,6 +42,8 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	private CTabItem tabItem = null;
 	private AbstractSidebarMenuComposite spotterEditor;
 	
+	public static EditorPart editorPart;
+	
 	@Override
 	public String getID() {
 		return ID;
@@ -54,8 +57,9 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 		tabItem = new CTabItem(editor.getTabFolder(), SWT.NONE);
 		tabItem.setText("Dynamic Spotter");
 		
-		final IProject project = ExplorerProjectPaths.getProject(editor);
+		SpotterTabItemExtension.editorPart = editor;
 				
+		final IProject project = ExplorerProjectPaths.getProject(editor);
 		spotterEditor = new AbstractSidebarMenuComposite(editor.getTabFolder(), SWT.NONE) {
 			
 			@Override

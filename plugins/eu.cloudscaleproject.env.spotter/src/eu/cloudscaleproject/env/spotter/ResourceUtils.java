@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
@@ -25,6 +26,24 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class ResourceUtils {
 	
 	public static final String KEY_PARENT_EDITOR_RESOURCE = "parent.editor.resource";
+	
+	public static void createDefaultFile(IFile file, String string){
+		if (!file.exists()) {
+		    byte[] bytes = string.getBytes();
+		    
+		    java.io.InputStream source = new java.io.ByteArrayInputStream(bytes);
+		    try {
+				file.create(source, IResource.NONE, null);
+			} catch (CoreException e1) {
+				try {
+					source.close();
+				} catch (java.io.IOException e2) {
+					e2.printStackTrace();
+				}
+				e1.printStackTrace();
+			}
+		}
+	}
 	
 	public static List<EditorInputFolder> getConfAlternatives(IProject project, EditorInputFolder inputAlt){
 		

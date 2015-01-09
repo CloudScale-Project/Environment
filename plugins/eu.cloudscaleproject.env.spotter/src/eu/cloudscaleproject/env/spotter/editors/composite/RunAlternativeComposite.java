@@ -10,31 +10,36 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
+import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.editors.HierarchyEditorInput;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditorInput;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
-import org.spotter.eclipse.ui.editors.factory.ElementFactory;
+import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
 import org.spotter.eclipse.ui.util.DialogUtils;
-import org.spotter.shared.configuration.FileManager;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.ServerService;
+import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -118,8 +123,156 @@ public class RunAlternativeComposite extends Composite{
 				setInput(selectedEditorInput);
 			}
 		});
-		//
 		
+		//composite with tab folder
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+		composite.setLayoutData(gd_composite);
+		
+		CTabFolder tabFolder = new CTabFolder(composite, SWT.BORDER | SWT.FLAT);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		//tabFolder.setTabHeight(10);
+		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+		
+		//spotter configuration tab
+		try {
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setText("Confuguration");
+			
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new FillLayout());
+			
+			final SpotterConfigEditor editorPart = new SpotterConfigEditor(){
+				public String getContentDescription() {return "";};
+				protected void setContentDescription(String description) {};
+			};
+
+			editorPart.addPropertyListener(new IPropertyListener() {
+				@Override
+				public void propertyChanged(Object source, int propId) {
+					if(EditorPart.PROP_DIRTY == propId){
+						editorPart.doSave(null);
+					}
+				}
+			});
+			
+			IFile file = editorInput.getResource().getFile("spotter.conf");
+			
+			if(!file.exists()){
+				ResourceUtils.createDefaultFile(file,
+						"org.spotter.workload.experiment.cooldown.intervalLength=1" +
+						"org.spotter.measurement.environmentDescriptionFile=/home/vito/programs_projects/runtime-product.product/tpcw/ Dynamic Spotter/Configuration/Alternative/mEnv.xml" +
+						"org.spotter.resultDir=/home/vito/programs_projects/runtime-product.product/tpcw/ Dynamic Spotter/Results/Alternative" +
+						"org.spotter.conf.problemHierarchyFile=/home/vito/programs_projects/runtime-product.product/tpcw/ Dynamic Spotter/Configuration/Alternative/hierarchy.xml" +
+						"org.spotter.workload.maxusers=10" +
+						"org.spotter.workload.experiment.rampup.numUsersPerInterval=1" +
+						"org.spotter.workload.experiment.cooldown.numUsersPerInterval=1" +
+						"org.spotter.workload.experiment.duration=10" +
+						"org.spotter.workload.experiment.rampup.intervalLength=1"
+						);
+			}
+			
+			SpotterConfigEditorInput editorPartInput = new SpotterConfigEditorInput(file);
+			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			editorPart.createPartControl(c);
+			
+			tabItem.setControl(c);
+			tabFolder.setSelection(tabItem);
+			
+		} catch (PartInitException e1) {
+			e1.printStackTrace();
+		}
+		
+		//spotter workload editor tab
+		try {
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setText("Workload");
+			
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new FillLayout());
+			
+			final WorkloadEditor editorPart = new WorkloadEditor(){
+				public String getContentDescription() {return "";};
+				protected void setContentDescription(String description) {};
+			};
+			
+			editorPart.addPropertyListener(new IPropertyListener() {
+				@Override
+				public void propertyChanged(Object source, int propId) {
+					if(EditorPart.PROP_DIRTY == propId){
+						editorPart.doSave(null);
+					}
+				}
+			});
+			
+			IFile file = editorInput.getResource().getFile("mEnv.xml");
+			
+			if(!file.exists()){
+				ResourceUtils.createDefaultFile(file,
+						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+						"<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\">" +
+				    		"<workloadAdapter>" +
+				    		"<extensionName>workload.satellite.adapter.customized</extensionName>" +
+				    		"<config key=\"org.spotter.satellite.adapter.name\" value=\"Customized Workload Satellite Adapter\"/>" +
+				    		"<config key=\"org.spotter.workload.simple.userScriptClassName\" value=\"\"/>" +
+				    		"<config key=\"org.spotter.workload.simple.userScriptPath\" value=\"\"/>" +
+				    		"</workloadAdapter>" +
+				    	"</measurementEnvironment>"
+				);
+			}
+			
+			WorkloadEditorInput editorPartInput = new WorkloadEditorInput(file);
+			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			editorPart.createPartControl(c);
+			
+			tabItem.setControl(c);
+		} catch (PartInitException e1) {
+			e1.printStackTrace();
+		}
+		
+		//spotter hierarchy editor tab
+		try {
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setText("Hierarchy");
+			
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new FillLayout());
+			
+			final HierarchyEditor editorPart = new HierarchyEditor(){
+				public String getContentDescription() {return "";}
+				protected void setContentDescription(String description) {};
+			};
+			
+			editorPart.addPropertyListener(new IPropertyListener() {
+				@Override
+				public void propertyChanged(Object source, int propId) {
+					if(EditorPart.PROP_DIRTY == propId){
+						editorPart.doSave(null);
+					}
+				}
+			});
+			
+			IFile file = editorInput.getResource().getFile("hierarchy.xml");
+			
+			if(!file.exists()){
+				ResourceUtils.createDefaultFile(file,
+						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+						"<root xmlns=\"http://www.sopeco.org/PerformanceProblemHierarchySchema\">" +
+						"</root>"
+				);
+			}
+			
+			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
+			editorPart.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			editorPart.createPartControl(c);
+			
+			tabItem.setControl(c);
+		} catch (PartInitException e1) {
+			e1.printStackTrace();
+		}
+		
+		/*
 		Label lblConfigurationEditors = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblConfigurationEditors.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		lblConfigurationEditors.setText("Configuration Editors:");
@@ -161,16 +314,10 @@ public class RunAlternativeComposite extends Composite{
 						WorkloadEditor.ID);
 			}
 		});
-		
-		Label lblRunActions = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData gd_lblRunActions = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
-		gd_lblRunActions.widthHint = 78;
-		lblRunActions.setLayoutData(gd_lblRunActions);
-		lblRunActions.setText("Run actions:");
-		new Label(this, SWT.NONE);
+		*/
 		
 		Button btnRunDynamicSpotter = new Button(this, SWT.CENTER);
-		btnRunDynamicSpotter.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1));
+		btnRunDynamicSpotter.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false, 2, 1));
 		btnRunDynamicSpotter.setText("Run DynamicSpotter...");
 		btnRunDynamicSpotter.addSelectionListener(new SelectionAdapter() {
 			@Override
