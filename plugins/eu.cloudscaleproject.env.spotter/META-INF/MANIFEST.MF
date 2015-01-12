@@ -23,3 +23,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: lib/ds-server.jar,
+ .

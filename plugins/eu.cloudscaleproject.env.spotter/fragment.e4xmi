@@ -23,6 +23,7 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_4VzLsEPuEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.menucontribution.perspective" parentId="cloudscale.environment.product.menu.tools">
       <children xsi:type="menu:Menu" xmi:id="_yzpLIHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.dynamicspotter.menu.dynamicspotter" label="Dynamic Spotter">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_3NNzcHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.perspective" label="Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
+        <children xsi:type="menu:DirectMenuItem" xmi:id="_v2GKwJcMEeSimdM8YoQjuw" elementId="eu.cloudscaleproject.env.spotter.directmenuitem.startServer" label="Start server" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.ServerHandler"/>
       </children>
     </elements>
   </fragments>
