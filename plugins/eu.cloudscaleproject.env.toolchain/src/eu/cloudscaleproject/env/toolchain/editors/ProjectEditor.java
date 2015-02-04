@@ -22,12 +22,13 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
+import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 
 public class ProjectEditor extends EditorPart {
 
 	private static final Logger logger = Logger.getLogger(ProjectEditor.class.getName());	
 	public static final String ID = "eu.cloudscaleproject.env.toolchain.ToolchainEditorPart";
-	
+		
 	private CTabFolder tabFolder;
 	
 	@Inject
@@ -50,9 +51,7 @@ public class ProjectEditor extends EditorPart {
 		if (adapter.equals(IPropertySheetPage.class)) {
 			for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
 				if(tabFolder.getSelection() != null && tabFolder.getSelection().equals(pee.getTabItem())){
-					if(pee.getPropertySheetPage() != null){
-						return pee.getPropertySheetPage();
-					}
+					return pee.getPropertySheetPage();
 				}
 			}
 			return super.getAdapter(adapter);
@@ -125,6 +124,8 @@ public class ProjectEditor extends EditorPart {
 		if(!editorProvider.getToolExtensions().isEmpty()){
 			tabFolder.setSelection(editorProvider.getToolExtensions().get(0).getTabItem());
 		}
+		
+		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
 	}
 	
 	@Override

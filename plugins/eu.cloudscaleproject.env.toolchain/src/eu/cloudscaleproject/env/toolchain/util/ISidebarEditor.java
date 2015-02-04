@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
 
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public interface ISidebarEditor{
+public interface ISidebarEditor extends IPropertySheetPageProvider{
 	
 	public void init();
 	public void showInput(IEditorInput input);

@@ -2,21 +2,25 @@ package eu.cloudscaleproject.env.analyser.editors.composite;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,6 +36,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
@@ -48,16 +53,24 @@ import de.uka.ipd.sdq.pcm.system.util.SystemResourceImpl;
 import de.uka.ipd.sdq.pcm.usagemodel.util.UsagemodelResourceImpl;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
 
-public class InputAlternativeTreeviewComposite extends Composite{
+public class InputAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 	
 	private final InputAlternative alternative;
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
 	
-
+	private final ResourceSet resSet = new ResourceSetImpl();
+	private final AdapterFactoryEditingDomain editingDomain;
+	private final ComposedAdapterFactory adapterFactory;
+	private final AdapterFactoryContentProvider contentProvider;
+	private final EMFPopupMenuSupport menuSupport;
+		
 	public InputAlternativeTreeviewComposite(InputAlternative alternative, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = alternative;
@@ -68,7 +81,7 @@ public class InputAlternativeTreeviewComposite extends Composite{
 		this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		this.treeViewer = new TreeViewer(tree);
 		
-		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		
 		adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
@@ -83,7 +96,11 @@ public class InputAlternativeTreeviewComposite extends Composite{
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
 		
-		this.treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+		BasicCommandStack commandStack = new BasicCommandStack();
+		editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, resSet);
+		
+		this.contentProvider = new AdapterFactoryContentProvider(adapterFactory);
+		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 		this.treeViewer.addFilter(new ModelViewFilter());
 		
@@ -128,8 +145,10 @@ public class InputAlternativeTreeviewComposite extends Composite{
 			}
 		});
 		
-		new AdapterFactoryTreeEditor(tree, adapterFactory);
-		
+		menuSupport = new EMFPopupMenuSupport(editingDomain);
+		menuSupport.setViewer(treeViewer);
+				
+		new AdapterFactoryTreeEditor(tree, adapterFactory);		
 		alternative.addPropertyChangeListener(new PropertyChangeListener() {
 			
 			@Override
@@ -140,30 +159,61 @@ public class InputAlternativeTreeviewComposite extends Composite{
 			}
 		});
 		
-		updateTreeview();
+		updateTreeview();		
 	}
 	
 	private void updateTreeview(){
-			
-		ResourceSet resSet = new ResourceSetImpl();
+		
 		if(alternative.getRepository() != null){
-			ExplorerProjectPaths.getEmfResource(resSet, alternative.getRepository());
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, alternative.getRepository());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		if(alternative.getSystem() != null){
-			ExplorerProjectPaths.getEmfResource(resSet, alternative.getSystem());
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, alternative.getSystem());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		if(alternative.getAllocation() != null){
-			ExplorerProjectPaths.getEmfResource(resSet, alternative.getAllocation());
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, alternative.getAllocation());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		if(alternative.getResourceEnv() != null){
-			ExplorerProjectPaths.getEmfResource(resSet, alternative.getResourceEnv());
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, alternative.getResourceEnv());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(!this.tree.isDisposed()){
 			this.treeViewer.setInput(resSet);
 			this.treeViewer.expandToLevel(2);
 			this.treeViewer.refresh();
-		}
+		}		
 	}
 	
 	public void update(){
@@ -173,6 +223,8 @@ public class InputAlternativeTreeviewComposite extends Composite{
 		if(!this.isDisposed()){
 			updateTreeview();
 		}
+		
+		ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);
 		
 		super.update();
 	}
@@ -209,5 +261,12 @@ public class InputAlternativeTreeviewComposite extends Composite{
 			
 			return true;
 		}
+	}
+
+	@Override
+	public IPropertySheetPage getPropertySheetPage() {
+		ExtendedPropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain);
+		propertySheetPage.setPropertySourceProvider(contentProvider);
+		return propertySheetPage;
 	}
 }

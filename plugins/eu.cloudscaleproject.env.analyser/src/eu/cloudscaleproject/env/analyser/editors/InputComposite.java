@@ -5,11 +5,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -52,7 +54,7 @@ public class InputComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends Composite{
+	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
 		
 		private InputAlternativeEditComposite editComposite;
 		private InputAlternativeTreeviewComposite treeviewComposite;
@@ -78,6 +80,14 @@ public class InputComposite extends SidebarEditorComposite{
 			editComposite.update();
 			treeviewComposite.update();
 			super.update();
+		}
+
+		@Override
+		public IPropertySheetPage getPropertySheetPage() {
+			if(treeviewComposite != null && !treeviewComposite.isDisposed()){
+				return treeviewComposite.getPropertySheetPage();
+			}
+			return null;
 		}
 	}
 

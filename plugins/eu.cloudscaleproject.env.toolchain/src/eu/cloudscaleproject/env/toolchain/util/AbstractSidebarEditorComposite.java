@@ -165,6 +165,6 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		return null;
+		return sidebarBuilder.getPropertySheetPage();
 	}
 }

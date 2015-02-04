@@ -3,15 +3,18 @@ package eu.cloudscaleproject.env.analyser.editors.composite;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -25,6 +28,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
 import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
@@ -35,15 +40,21 @@ import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
+import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
 
-public class ConfigAlternativeTreeviewComposite extends Composite{
+public class ConfigAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 
 	private ConfAlternative alternative;
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
 	
-	private ComposedAdapterFactory adapterFactory;
+	private final ComposedAdapterFactory adapterFactory;
+	private final AdapterFactoryEditingDomain editingDomain;
+	private final AdapterFactoryContentProvider contentProvider;
+	private final EMFPopupMenuSupport menuSupport;
 	
 	/**
 	 * Create the composite.
@@ -101,12 +112,19 @@ public class ConfigAlternativeTreeviewComposite extends Composite{
 		
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
-				
-		this.treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+		
+		contentProvider = new AdapterFactoryContentProvider(adapterFactory);
+		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 		//this.treeViewer.addFilter(new ModelViewFilter());
 		
+		BasicCommandStack commandStack = new BasicCommandStack();
+		editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, alternative.getResourceSet());
+		
 		new AdapterFactoryTreeEditor(tree, adapterFactory);
+		
+		menuSupport = new EMFPopupMenuSupport(editingDomain);
+		menuSupport.setViewer(treeViewer);
 		
 		updateTreeview();
 	}
@@ -128,6 +146,15 @@ public class ConfigAlternativeTreeviewComposite extends Composite{
 			updateTreeview();
 		}
 		
+		ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);
+		
 		super.update();
+	}
+
+	@Override
+	public IPropertySheetPage getPropertySheetPage() {
+		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain);
+		propertySheetPage.setPropertySourceProvider(contentProvider);
+		return propertySheetPage;
 	}
 }

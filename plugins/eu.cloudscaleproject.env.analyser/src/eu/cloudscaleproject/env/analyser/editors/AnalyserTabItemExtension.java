@@ -36,6 +36,8 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 	private CTabItem tabItem = null;
 	private AbstractSidebarMenuComposite analyserEditor;
 	
+	public static ProjectEditor projectEditor;
+		
 	@Override
 	public String getID() {
 		return ID;
@@ -48,6 +50,7 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 	public void createTabItem(ProjectEditor editor) {
 		tabItem = new CTabItem(editor.getTabFolder(), SWT.NONE);
 		tabItem.setText("Analyser");
+		projectEditor = editor;
 		
 		final IProject project = ExplorerProjectPaths.getProject(editor);
 		

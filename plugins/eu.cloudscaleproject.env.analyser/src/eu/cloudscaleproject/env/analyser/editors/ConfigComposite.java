@@ -83,7 +83,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 
 		@Override
 		public IPropertySheetPage getPropertySheetPage() {
-			return null;
+			return treeviewComposite.getPropertySheetPage();
 		}
 	}
 }

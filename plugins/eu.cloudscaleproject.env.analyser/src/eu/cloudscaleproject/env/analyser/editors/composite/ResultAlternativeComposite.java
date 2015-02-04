@@ -57,6 +57,8 @@ public class ResultAlternativeComposite extends Composite{
 		this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		this.treeViewer = new TreeViewer(tree);
 		
+		//TODO: make EDP2 editor/view accessible to other modules
+		
 		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ExperimentDataItemProviderAdapterFactory());

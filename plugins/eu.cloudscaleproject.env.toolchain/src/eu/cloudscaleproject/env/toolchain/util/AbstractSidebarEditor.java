@@ -23,12 +23,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
 import eu.cloudscaleproject.env.common.ui.HoverToggleButton;
 import eu.cloudscaleproject.env.common.ui.util.ColorHelper;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -59,7 +64,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	public void handleSelect(IEditorInput selected){};
 	//////////////////////////////////////////////////
 	
-	private class EditorItem{
+	private class EditorItem implements IPropertySheetPageProvider{
 		
 		private final IEditorInput input;
 		private final String sectionName;
@@ -179,6 +184,23 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			handleSelect(input);
 			
 			compositeArea.layout();
+			
+			//trigger property sheet part re-fetch
+			@SuppressWarnings("deprecation")
+			//TODO: find out better solution for the problem
+			IViewPart[] views = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews();
+			for (IViewPart v : views){
+				if (v instanceof PropertySheet)
+				{
+					PropertySheet ps = (PropertySheet) v;
+					ps.partClosed(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
+					ps.partOpened(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
+					ps.setFocus();
+				}
+			}
+			//
+			
+			composite.setFocus();
 		}
 		
 		public void dispose() {
@@ -195,6 +217,15 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			if(color_select != null){
 				color_select.dispose();	
 			}
+		}
+
+		@Override
+		public IPropertySheetPage getPropertySheetPage() {
+			if(composite instanceof IPropertySheetPageProvider){
+				IPropertySheetPageProvider propProvider = (IPropertySheetPageProvider)composite;
+				return propProvider.getPropertySheetPage();
+			}
+			return null;
 		}
 	}
 	
@@ -400,7 +431,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		return c;
 	}
 	
-	private EditorItem getCurrentSelectionItem(){
+	public EditorItem getCurrentSelectionItem(){
 		for(EditorItem ei : entries.values()){
 			if(ei.isSelected){
 				return ei;
@@ -570,6 +601,15 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				entries.put(input, new EditorItem(input, sectionName, style));
 			}
 		}
+	}
+	
+	@Override
+	public IPropertySheetPage getPropertySheetPage() {
+		EditorItem ei = getCurrentSelectionItem();
+		if(ei != null){
+			return ei.getPropertySheetPage();
+		}
+		return null;
 	}
 	
 	public void dispose() {

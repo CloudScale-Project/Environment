@@ -142,7 +142,7 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		return null;
+		return sidebarBuilder.getPropertySheetPage();
 	}
 
 	@Override
