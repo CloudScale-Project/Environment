@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -272,7 +271,7 @@ public class ResultComposite extends Composite{
 
 			XPerformanceProblem root = resultsContainer.getRootProblem();
 			if (root != null) {
-				IProject project = resultFolder.getProject();
+				//IProject project = resultFolder.getProject();
 				//input = HierarchyEditor.createPerformanceProblemHierarchy(project.getName(), root);
 			}
 		} catch (CoreException e) {

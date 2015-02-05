@@ -6,16 +6,11 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.spotter.editors.composite.ConnectionComposite;
-import eu.cloudscaleproject.env.spotter.editors.composite.RunStatusComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
@@ -87,30 +82,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 					return new IntroComposite(parent, SWT.NONE);
 				}
 				else if(serverInput.equals(input)){
-					Composite c = new Composite(parent, style);
-					GridLayout gl = new GridLayout(1, true);
-					gl.marginWidth = 0;
-					gl.marginHeight = 0;
-					gl.verticalSpacing = 0;
-					gl.horizontalSpacing = 0;
-					c.setLayout(gl);
-					
-					ConnectionComposite connection = new ConnectionComposite(project, c, SWT.NONE);
-					GridData gdc = new GridData();
-					gdc.horizontalAlignment = SWT.FILL;
-					connection.setLayoutData(gdc);
-					
-					Label label = new Label(c, SWT.SEPARATOR | SWT.HORIZONTAL);
-					label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-					
-					RunStatusComposite status = new RunStatusComposite(project, c, SWT.NONE);
-					GridData gds = new GridData();
-					gds.horizontalAlignment = SWT.FILL;
-					gds.grabExcessHorizontalSpace = true;
-					gds.grabExcessVerticalSpace = true;
-					status.setLayoutData(gds);
-					
-					return c;
+					return new ServerClientComposite(project, parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
 					return new InputComposite(project, parent, SWT.NONE);
