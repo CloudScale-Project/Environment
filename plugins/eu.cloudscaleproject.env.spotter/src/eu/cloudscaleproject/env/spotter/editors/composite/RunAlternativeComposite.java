@@ -145,10 +145,10 @@ public class RunAlternativeComposite extends Composite{
 		//composite with tab folder
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-		composite.setLayoutData(gd_composite);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		
 		CTabFolder tabFolder = new CTabFolder(composite, SWT.BORDER | SWT.FLAT);
+		tabFolder.setTabHeight(32);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		//tabFolder.setTabHeight(10);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));

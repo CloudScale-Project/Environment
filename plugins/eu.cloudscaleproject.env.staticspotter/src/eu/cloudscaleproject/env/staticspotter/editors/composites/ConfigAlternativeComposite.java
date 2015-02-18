@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.reclipse.structure.generator.PrepareDetectionEnginesJob;
+import org.reclipse.structure.inference.DetectPatternsJob;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -76,6 +78,11 @@ public class ConfigAlternativeComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				executor.execute("org.reclipse.structure.inference.control.start");
+				
+				
+				//DetectPatternsJob j = new DetectPatternsJob(null, null, null, null);
+				
+				
 			}
 		});
 		new Label(this, SWT.NONE);

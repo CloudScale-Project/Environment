@@ -79,6 +79,7 @@ public class InputAlternativeComposite extends Composite{
 		composite.setLayoutData(gd_composite);
 		
 		CTabFolder tabFolder = new CTabFolder(composite, SWT.BORDER | SWT.FLAT);
+		tabFolder.setTabHeight(32);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		//tabFolder.setTabHeight(10);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));	
