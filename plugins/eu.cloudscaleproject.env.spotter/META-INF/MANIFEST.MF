@@ -4,7 +4,8 @@ Bundle-Name: Spotter
 Bundle-SymbolicName: eu.cloudscaleproject.env.spotter;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.cloudscaleproject.env.spotter.Activator
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.spotter.eclipse.ui;bundle-version="1.0.1",
+ org.eclipse.ui,
  org.eclipse.core.runtime,
  eu.cloudscaleproject.env.toolchain,
  org.eclipse.swt,
@@ -15,7 +16,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.ui.views,
- org.spotter.eclipse.ui;bundle-version="1.0.1",
  org.eclipse.ui.navigator;bundle-version="3.5.400",
  org.eclipse.ui.navigator.resources;bundle-version="3.4.700",
  org.eclipse.ui.ide;bundle-version="3.10.0",
@@ -23,5 +23,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: lib/ds-server.jar,
- .
+Bundle-ClassPath: .,
+ lib/org.spotter.service-1.0.1-server.jar
