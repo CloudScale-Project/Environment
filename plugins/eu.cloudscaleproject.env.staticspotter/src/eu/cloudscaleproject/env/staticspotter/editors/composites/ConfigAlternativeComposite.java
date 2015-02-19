@@ -78,9 +78,9 @@ public class ConfigAlternativeComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				executor.execute("org.reclipse.structure.inference.control.start");
+				org.fujaba.commons.console.ReportLevel rl;
 				
-				
-				//DetectPatternsJob j = new DetectPatternsJob(null, null, null, null);
+				// DetectPatternsJob j = new DetectPatternsJob(null, null, null, rl);
 				
 				
 			}

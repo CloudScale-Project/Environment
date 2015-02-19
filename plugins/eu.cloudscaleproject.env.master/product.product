@@ -709,12 +709,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint.edit"/>
       <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint.editor"/>
       <plugin id="org.palladiosimulator.probeframework"/>
-      <plugin id="org.palladiosimulator.protocom"/>
-      <plugin id="org.palladiosimulator.protocom.framework"/>
-      <plugin id="org.palladiosimulator.protocom.framework.java.ee"/>
-      <plugin id="org.palladiosimulator.protocom.resourcestrategies"/>
-      <plugin id="org.palladiosimulator.protocom.resourcestrategies.ee"/>
-      <plugin id="org.palladiosimulator.protocom.workflow"/>
       <plugin id="org.palladiosimulator.recorderframework"/>
       <plugin id="org.palladiosimulator.recorderframework.edp2"/>
       <plugin id="org.palladiosimulator.recorderframework.sensorframework"/>

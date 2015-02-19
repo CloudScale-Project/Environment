@@ -29,6 +29,7 @@ Require-Bundle: org.eclipse.ui,
  org.reclipse.structure.specification.editor;bundle-version="1.0.0",
  org.reclipse.structure.specification.navigator;bundle-version="1.0.0",
  org.reclipse.structure.specification.ui;bundle-version="1.0.0",
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.fujaba.commons;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
