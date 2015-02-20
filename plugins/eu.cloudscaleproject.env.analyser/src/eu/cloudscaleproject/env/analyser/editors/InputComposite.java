@@ -5,12 +5,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeTreeviewComposite;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -25,9 +27,9 @@ public class InputComposite extends SidebarEditorComposite{
 	
 	private final IProject project;
 		
-	public InputComposite(IProject project, Composite parent, int style) {
+	public InputComposite(final IEditorPart editor, Composite parent, int style) {
 		super(parent, style);
-		this.project = project;
+		this.project = ExplorerProjectPaths.getProject(editor);
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 		setContentProvider(new SidebarContentProvider() {
@@ -49,7 +51,7 @@ public class InputComposite extends SidebarEditorComposite{
 			
 			@Override
 			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
-				return new RightPanelComposite(InputComposite.this.project, (InputAlternative)resource, parent, SWT.NONE);
+				return new RightPanelComposite(editor, (InputAlternative)resource, parent, SWT.NONE);
 			}
 		});
 	}
@@ -59,13 +61,13 @@ public class InputComposite extends SidebarEditorComposite{
 		private InputAlternativeEditComposite editComposite;
 		private InputAlternativeTreeviewComposite treeviewComposite;
 
-		public RightPanelComposite(IProject project, InputAlternative input, Composite parent, int style) {
+		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style);
 			
 			GridLayout layout = new GridLayout(1, true);
 			this.setLayout(layout);
 			
-			editComposite = new InputAlternativeEditComposite(project, input, this, SWT.NONE);
+			editComposite = new InputAlternativeEditComposite(editor, input, this, SWT.NONE);
 			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();

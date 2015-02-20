@@ -28,6 +28,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
 	public static final String PROP_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propResChanged";
 
+	private boolean isDirty = false;
 		
 	public EditorInputFolder(IProject project, IFolder folder ) {
 		super(folder);
@@ -87,7 +88,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		IPath relativePath = getRelativePath(file);
 		propertyInputFile.setProperty(key, relativePath.toPortableString());
-		
+		isDirty = true;
 		firePropertyChange(PROP_RESOURCE_CHANGED, old, relativePath.toPortableString());
 	}
 	
@@ -104,6 +105,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		// File must be relative to project folder
 		IPath path = file.getProjectRelativePath();
 		propertyInputFile.setProperty(key, path.toPortableString());
+		isDirty = true;
 		firePropertyChange(PROP_RESOURCE_CHANGED, old, path.toPortableString());
 	}
 
@@ -158,7 +160,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	}
 	
 	@Override
-	public synchronized final void save() {
+	public synchronized void save() {
 
 		if(!folder.exists()){
 			try {
@@ -170,6 +172,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.save();
 		doSave();
+		isDirty = false;
 		firePropertyChange(PROP_SAVED, false, true);
 	}
 	
@@ -186,6 +189,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.load();
 		doLoad();
+		isDirty = false;
 		firePropertyChange(PROP_LOADED, false, true);
 	}
 	
@@ -292,5 +296,14 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			PropertyChangeListener listener) {
 		propertyInputFile.removePropertyChangeListener(propertyName, listener);
 		super.removePropertyChangeListener(propertyName, listener);
+	}
+	
+	public void setDirty(){
+		this.isDirty = true;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return isDirty || propertyInputFile.isDirty();
 	}
 }

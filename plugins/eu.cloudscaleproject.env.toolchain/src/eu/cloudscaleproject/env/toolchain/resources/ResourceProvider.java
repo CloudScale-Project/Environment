@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -16,6 +17,8 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class ResourceProvider{
@@ -28,6 +31,7 @@ public abstract class ResourceProvider{
 	public static final String PROP_RESOURCE_MODIFIED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.modified";
 
 	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
+	public static final String PROP_TYPE = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.type";
 
 	private final IFolder rootFolder;
 	private final String defaultResName;
@@ -39,7 +43,7 @@ public abstract class ResourceProvider{
 	
 	protected abstract boolean validateResource(IResource res);
 	protected abstract IResource createResource(String resourceName);
-	protected abstract IEditorInputResource loadResource(IResource res);
+	protected abstract IEditorInputResource loadResource(IResource res, String type);
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
@@ -183,8 +187,21 @@ public abstract class ResourceProvider{
 					continue;
 				}
 				
-				if(validateResource(res)){
-					IEditorInputResource prop = loadResource(res);
+				if(res.exists() && validateResource(res)){
+					
+					String type = null;
+					if(res instanceof IFile){
+						EditorInputFile tmp = new EditorInputFile(res.getProject(), (IFile)res);
+						tmp.load();
+						type = tmp.getProperty(PROP_TYPE);
+					}
+					else if(res instanceof IFolder){
+						EditorInputFile tmp = new EditorInputFile(res.getProject(), ((IFolder)res).getFile(EditorInputFolder.PROP_FILENAME));
+						tmp.load();
+						type = tmp.getProperty(PROP_TYPE);
+					}
+					
+					IEditorInputResource prop = loadResource(res, type);
 					
 					resources.put(prop.getResource(), prop);
 					pcs.firePropertyChange(PROP_RESOURCE_ADDED, null, prop);
@@ -254,7 +271,7 @@ public abstract class ResourceProvider{
 		return true;
 	}
 	
-	public IEditorInputResource createNewResource(String resourceName, String name){
+	public IEditorInputResource createNewResource(String resourceName, String name, String type){
 		checkRootFolder();
 		
 		IResource res = createResource(resourceName);
@@ -273,7 +290,8 @@ public abstract class ResourceProvider{
 			}
 		}
 		
-		IEditorInputResource eir = loadResource(res);
+		IEditorInputResource eir = loadResource(res, type);
+		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
 		eir.save();
 		
@@ -281,7 +299,7 @@ public abstract class ResourceProvider{
 		return eir;
 	}
 	
-	public IEditorInputResource createNewResource(String name){
+	public IEditorInputResource createNewResource(String name, String type){
 		
 		checkRootFolder();
 		
@@ -298,7 +316,8 @@ public abstract class ResourceProvider{
 		}
 		
 		IResource res = createResource(resourceName);
-		IEditorInputResource eir = loadResource(res);
+		IEditorInputResource eir = loadResource(res, type);
+		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
 		eir.save();
 				

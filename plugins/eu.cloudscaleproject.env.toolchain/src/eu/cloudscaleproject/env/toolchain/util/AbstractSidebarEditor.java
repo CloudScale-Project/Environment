@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,9 +73,12 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		private HoverToggleButton btnSelect;
 		private Composite composite;
 		
+		private List<ISaveableComposite> saveables = new ArrayList<ISaveableComposite>();
+		
 		private Color color_select;
 		private Color color_hover;
 		
+		public boolean isLoaded = false;
 		public boolean isSelected = false;
 		
 		//TODO: name change should be handled differently! Fix this. 
@@ -101,6 +105,45 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			this.input.addPropertyChangeListener(inputListener);
 		}
 		
+		public void collectSaveableComposites(List<ISaveableComposite> composites, Composite c){
+			for(Control control : c.getChildren()){
+				if(control instanceof Composite){
+					if(control instanceof ISaveableComposite){
+						composites.add((ISaveableComposite)control);
+					}
+					else{
+						collectSaveableComposites(composites, (Composite)control);
+					}
+				}
+			}
+		}
+		
+		public void save(){
+			for(ISaveableComposite c : saveables){
+				if(c.isDirty()){
+					c.save();
+				}
+			}
+		}
+		
+		public void load(){
+			if(!isLoaded){
+				for(ISaveableComposite c : saveables){
+					c.load();
+				}
+			}
+			isLoaded = true;
+		}
+		
+		public boolean isDirty(){
+			for(ISaveableComposite c : saveables){
+				if(c.isDirty()){
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		private void checkWidgets(){
 			initButton();
 			initComposite();
@@ -108,7 +151,10 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		
 		private void initComposite(){
 			if(composite == null || composite.isDisposed()){
+				saveables.clear();
 				composite = createInputComposite(input, compositeArea, SWT.NONE);
+				collectSaveableComposites(saveables, composite);
+				isLoaded = false;
 			}
 		}
 		
@@ -168,6 +214,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		
 		public void select(){
 			checkWidgets();
+			EditorItem.this.load();
 			
 			for(EditorItem ei : entries.values()){
 				ei.checkWidgets();
@@ -523,6 +570,27 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			stackLayout.topControl = emptyPanel;
 			compositeArea.layout();
 		}
+	}
+	
+	public void save(){
+		for(EditorItem ei : entries.values()){
+			ei.save();
+		}
+	}
+	
+	public void load(){
+		for(EditorItem ei : entries.values()){
+			ei.load();
+		}
+	}
+	
+	public boolean isDirty(){
+		for(EditorItem ei : entries.values()){
+			if(ei.isDirty()){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void update(){

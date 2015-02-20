@@ -51,7 +51,7 @@ public class Activator extends AbstractUIPlugin {
 
 							@Override
 							public IEditorInputResource loadResource(
-									IResource res) {
+									IResource res, String type) {
 								// TODO Auto-generated method stub
 								ConfigPersistenceFolder cif = new ConfigPersistenceFolder(
 										folder.getProject(),
@@ -92,7 +92,7 @@ public class Activator extends AbstractUIPlugin {
 
 							@Override
 							public IEditorInputResource loadResource(
-									IResource resource) {
+									IResource resource, String type) {
 
 								InputPersitenceFile eif = new InputPersitenceFile(
 										folder.getProject(), (IFile) resource);
@@ -130,7 +130,7 @@ public class Activator extends AbstractUIPlugin {
 							}
 
 							@Override
-							public IEditorInputResource loadResource(IResource res) {
+							public IEditorInputResource loadResource(IResource res, String type) {
 								// TODO Auto-generated method stub
 								ResultPersistenceFolder rif = new ResultPersistenceFolder(folder.getProject(), (IFolder)res);
 								rif.load();

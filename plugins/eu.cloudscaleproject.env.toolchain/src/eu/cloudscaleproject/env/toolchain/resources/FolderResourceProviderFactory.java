@@ -30,7 +30,7 @@ public class FolderResourceProviderFactory implements IResourceProviderFactory{
 			}
 
 			@Override
-			public IEditorInputResource loadResource(IResource res) {
+			public IEditorInputResource loadResource(IResource res, String type) {
 				return new EditorInputFolder(folder.getProject(), (IFolder)res);
 			}
 		};

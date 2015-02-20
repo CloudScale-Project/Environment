@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
+import java.net.UnknownServiceException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -8,6 +9,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -16,45 +19,78 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
+import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
+import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
+import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
+import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
+import org.palladiosimulator.servicelevelobjective.HardThreshold;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
+import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
+import org.palladiosimulator.simulizar.pms.Intervall;
+import org.palladiosimulator.simulizar.pms.MeasurementSpecification;
+import org.palladiosimulator.simulizar.pms.PMSModel;
+import org.palladiosimulator.simulizar.pms.PerformanceMeasurement;
+import org.palladiosimulator.simulizar.pms.PerformanceMetricEnum;
+import org.palladiosimulator.simulizar.pms.PmsFactory;
+import org.palladiosimulator.simulizar.pms.StatisticalCharacterizationEnum;
+import org.palladiosimulator.simulizar.pms.impl.PmsFactoryImpl;
 import org.scaledl.usageevolution.UsageEvolution;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
 import de.uka.ipd.sdq.pcm.repository.Repository;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
+import de.uka.ipd.sdq.pcm.usagemodel.UsageScenario;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ConfAlternative extends EditorInputFolder{
+public class ConfAlternative extends EditorInputEMF{
 			
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ConfAlternative.class.getName());
 	
-	public static final String KEY_NAME = "name";
+	public static final String KEY_NAME = "name";	
+	private final Type type;
 	
-	protected final ResourceSet resSet = new ResourceSetImpl();
-	
-	public ConfAlternative(IProject project, IFolder folder){
-		super(project, folder);
+	public enum Type {
+		NORMAL, CAPACITY, SCALABILITY;
+		
+		public String toString() {
+			switch (ConfAlternative.Type.this) {
+			case NORMAL:
+				return "Normal";
+			case CAPACITY:
+				return "Capacity";
+			case SCALABILITY:
+				return "Scalability";
+			default:
+				return "";
+			}
+		};
+	}
+		
+	public ConfAlternative(IProject project, IFolder folder, Type type, AdapterFactory factory){
+		super(project, folder, factory);
+		
+		this.type = type;
 		
 		//create and set defaults
 		Experiment exp = getExperiment();
 		configureExperiment(exp);
-	}
-	
-	public ResourceSet getResourceSet(){
-		return this.resSet;
 	}
 	
 	public UsageEvolution getUsageEvolution(){
@@ -163,12 +199,28 @@ public class ConfAlternative extends EditorInputFolder{
 		setResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, editorInput.getResource());
 	}
 	
-	protected void configureInput(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput){
-		//override in sub-classes
+	private void configureInput(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput){
+		if(Type.NORMAL.equals(type)){
+			
+		}
+		else if(Type.CAPACITY.equals(type)){
+			configureInputCapacity(exp, initialModel, editorInput);
+		}
+		else if(Type.SCALABILITY.equals(type)){
+			
+		}
 	}
 	
-	protected void configureTool(SimuLizarConfiguration simulizarConf){
-		//override in sub-classes
+	private void configureTool(SimuLizarConfiguration simulizarConf){
+		if(Type.NORMAL.equals(type)){
+			
+		}
+		else if(Type.CAPACITY.equals(type)){
+			configureToolCapacity(simulizarConf);
+		}
+		else if(Type.SCALABILITY.equals(type)){
+			
+		}
 	}
 	
 	public Experiment getExperiment() {
@@ -248,7 +300,7 @@ public class ConfAlternative extends EditorInputFolder{
 	}
 
 	@Override
-	public void doSave() {
+	protected void doSave() {
 
 		super.doSave();
 		for(Resource res : resSet.getResources()){
@@ -256,6 +308,8 @@ public class ConfAlternative extends EditorInputFolder{
 				if(!res.getContents().isEmpty()){
 					res.save(null);
 				}
+			} catch (UnknownServiceException e){
+				//ignore - file can not be saved
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				logger.severe("Conf alternative: "+ getResource().getLocation().toString() 
@@ -272,7 +326,7 @@ public class ConfAlternative extends EditorInputFolder{
 	}
 
 	@Override
-	public void doLoad(){
+	protected void doLoad(){
 		
 		super.doLoad();
 		
@@ -311,4 +365,99 @@ public class ConfAlternative extends EditorInputFolder{
 			res.load(null);		
 		}
 	}
+	
+	//
+	// Capacity measuring specifics
+	//
+	
+	protected void configureInputCapacity(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput) {
+		
+		exp.setRepetitions(1);
+		exp.setName("Capacity measurement");
+		exp.getStopConditions().clear();
+				
+		//create and set measurement stop condition
+		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+		msc.setMeasurementCount(100);
+		exp.getStopConditions().add(msc);
+		
+		//create and set time stop condition
+		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+		tsc.setSimulationTime(-1);
+		exp.getStopConditions().add(tsc);
+		
+		//retrieve usage scenario
+		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
+		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
+		
+		//create measuring point
+		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
+		measurePoint.setUsageScenario(usageScenario);
+		
+		IFile mesuringPointFile = ((IFolder)getResource()).getFile("analyser.measuringpoint");
+		this.setResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
+		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, mesuringPointFile);
+		resMp.getContents().clear();
+		resMp.getContents().add(measurePoint);
+		
+		//create pms
+		PMSModel pms = PmsFactoryImpl.eINSTANCE.createPMSModel();
+		PerformanceMeasurement pm = PmsFactoryImpl.eINSTANCE.createPerformanceMeasurement();
+		pm.setMeasuringPoint(measurePoint);
+		MeasurementSpecification ms = PmsFactory.eINSTANCE.createMeasurementSpecification();
+		ms.setPerformanceMetric(PerformanceMetricEnum.RESPONSE_TIME);
+		ms.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
+		Intervall intervall = PmsFactory.eINSTANCE.createIntervall();
+		intervall.setIntervall(10.0);
+		ms.setTemporalRestriction(intervall);
+		pm.getMeasurementSpecification().add(ms);
+		pms.getPerformanceMeasurements().add(pm);
+		
+		IFile pmsFile = ((IFolder)getResource()).getFile("analyser.pms");
+		this.setResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
+		Resource resPms = ExplorerProjectPaths.getEmfResource(resSet, pmsFile);
+		resPms.getContents().clear();
+		resPms.getContents().add(pms);
+		initialModel.setPlatformMonitoringSpecification(pms);
+		
+		//create slo
+		ServiceLevelObjectiveRepository sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
+		ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+		slo.setMeasuringPoint(measurePoint);
+		slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
+		
+		HardThreshold ht = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
+		//TODO: set limit to 'HardThreshold'
+		slo.setUpperThreshold(ht);
+		
+		IFile sloFile = ((IFolder)getResource()).getFile("analyser.slo");
+		this.setResource(ToolchainUtils.KEY_FILE_SLO, pmsFile);
+		Resource resSlo = ExplorerProjectPaths.getEmfResource(resSet, sloFile);
+		resSlo.getContents().clear();
+		resSlo.getContents().add(sloRep);
+	}
+	
+	protected void configureToolCapacity(SimuLizarConfiguration simulizarConf) {
+		
+		//create measurement stop condition
+		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+		msc.setMeasurementCount(100);
+		
+		//create time stop condition
+		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+		tsc.setSimulationTime(-1);
+		
+		//create variations
+		//TODO: create variation
+		//Variation var = VariationFactory.eINSTANCE.c
+		
+		simulizarConf.getStopConditions().add(msc);
+		simulizarConf.getStopConditions().add(tsc);
+	}
+	
+	//
+	// Scalability measuring specifics
+	//
+	
+	//TODO: implement scalability measurement
 }

@@ -33,7 +33,7 @@ public class StaticSpotterTabItemExtension implements ProjectEditorExtension{
 	private final EditorInput resultsInput = new EditorInput("Results");
 	
 	private CTabItem tabItem = null;
-	private AbstractSidebarMenuComposite extractorEditor;
+	private AbstractSidebarMenuComposite spotterEditor;
 	
 	@Override
 	public String getID() {
@@ -50,7 +50,7 @@ public class StaticSpotterTabItemExtension implements ProjectEditorExtension{
 		
 		final IProject project = ExplorerProjectPaths.getProject(editor);
 		
-		extractorEditor = new AbstractSidebarMenuComposite(editor.getTabFolder(), SWT.NONE) {
+		spotterEditor = new AbstractSidebarMenuComposite(editor.getTabFolder(), SWT.NONE) {
 			
 			@Override
 			public String[] getSidebarSections() {
@@ -89,36 +89,46 @@ public class StaticSpotterTabItemExtension implements ProjectEditorExtension{
 			}
 		};
 		
-		extractorEditor.init();
-		extractorEditor.showInput(introInput);
-		tabItem.setControl(extractorEditor);
+		spotterEditor.init();
+		spotterEditor.showInput(introInput);
+		tabItem.setControl(spotterEditor);
 	}
 
 	@Override
 	public CTabItem getTabItem() {
 		return tabItem;
 	}
+	
+	@Override
+	public void save() {
+		spotterEditor.save();	
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return spotterEditor.isDirty();
+	}
 
 	@Override
 	public void handleAction(String action) {
-		if(extractorEditor != null){
+		if(spotterEditor != null){
 			if(ACTION_OPEN_INTRO.equals(action)){
-				extractorEditor.showInput(introInput);
+				spotterEditor.showInput(introInput);
 			}
 			else if(ACTION_OPEN_INPUT.equals(action)){
-				extractorEditor.showInput(inputInput);
+				spotterEditor.showInput(inputInput);
 			}
 			else if(ACTION_OPEN_RUN.equals(action)){
-				extractorEditor.showInput(runInput);
+				spotterEditor.showInput(runInput);
 			}
 			else if(ACTION_OPEN_RESULTS.equals(action)){
-				extractorEditor.showInput(resultsInput);
+				spotterEditor.showInput(resultsInput);
 			}
 		}
 	}
 	
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		return extractorEditor.getPropertySheetPage();
+		return spotterEditor.getPropertySheetPage();
 	}
 }

@@ -6,8 +6,18 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
+import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
+import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
 
-import eu.cloudscaleproject.env.analyser.alternatives.CapacityAlternative;
+import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
+import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
+import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
+import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -22,7 +32,6 @@ public class ResourceUtils {
 	
 	public static final String ANALYSER_INPUT_GENERATED_RES_NAME = "overview.alt";
 	public static final String ANALYSER_CONF_CAPACITY_ANALYSES = "Capacity analyses";
-	public static final String KEY_TYPE = "alternative_type";
 
 	
 	public static InputAlternative getGeneratedResourceInput(IProject project){
@@ -45,6 +54,7 @@ public class ResourceUtils {
 	 * @param project Workbench project to retrieve <code>ResourceProvider</code> from.
 	 * @return Default capacity experiment configuration alternative.
 	 */
+	/*
 	public static ConfAlternative getCapacityResourceConf(IProject project){
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
 												.getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
@@ -57,6 +67,7 @@ public class ResourceUtils {
 		
 		return (ConfAlternative)editorInput;
 	}
+	*/
 	
 	/**
 	 * Creates capacity experiment configuration alternative resource inside specified <code>ResourceProvider</code>.
@@ -65,6 +76,7 @@ public class ResourceUtils {
 	 * @param resourceProvider ResourceProvider specifies, where to create alternative resource. 
 	 * @return Capacity experiment configuration alternative resource.
 	 */
+	/*
 	public static ConfAlternative createCapacityResourceConf(ResourceProvider resourceProvider){
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_CONF_CAPACITY_ANALYSES);
 		
@@ -78,6 +90,7 @@ public class ResourceUtils {
 		
 		return (CapacityAlternative)editorInput;
 	}
+	*/
 	
 	public static List<ConfAlternative> getConfAlternatives(IProject project, InputAlternative inputAlt){
 		
@@ -123,7 +136,7 @@ public class ResourceUtils {
 					}
 					
 					@Override
-					public IEditorInputResource loadResource(IResource res) {
+					public IEditorInputResource loadResource(IResource res, String type) {
 						return new InputAlternative(res.getProject(), (IFolder)res);
 					}
 					
@@ -141,6 +154,18 @@ public class ResourceUtils {
 			@Override
 			public ResourceProvider create(IFolder folder) {
 				
+				final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
+				adapterFactory.addAdapterFactory(new SystemAdapterFactory());
+				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
+				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
+				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new PmsItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new ExperimentsItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+				
 				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
 					@Override
@@ -154,15 +179,17 @@ public class ResourceUtils {
 					}
 					
 					@Override
-					public IEditorInputResource loadResource(IResource res) {
-						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res);
+					public IEditorInputResource loadResource(IResource res, String type) {
+						
+						if(type == null){
+							type = ConfAlternative.Type.NORMAL.name();
+						}
+						
+						ConfAlternative.Type typeEnum = ConfAlternative.Type.valueOf(type);
+						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res, typeEnum, adapterFactory);
 						
 						if(res.exists()){
 							eif.load();
-							
-							if(CapacityAlternative.class.getName().equals(eif.getProperty(KEY_TYPE))){
-								return new CapacityAlternative(res.getProject(), (IFolder)res);
-							}
 						}
 						
 						return eif;
@@ -176,7 +203,7 @@ public class ResourceUtils {
 				
 				//create default configuration alternatives
 				//TODO: move this line to project creation
-				createCapacityResourceConf(resourceProvider);
+				//createCapacityResourceConf(resourceProvider);
 				
 				return resourceProvider;
 			}

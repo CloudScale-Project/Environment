@@ -1,7 +1,5 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -32,22 +30,6 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 	
 	private boolean isDirty = false;
 	
-	public EditorInputFile(IProject project, IFile file, Properties prop){
-		super(file);
-		this.project = project;
-		this.file = file;
-		this.isDirty = true;
-		this.source = prop;
-		
-		addPropertyChangeListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				isDirty = true;
-			}
-		});
-	}
-	
 	public EditorInputFile(IProject project, IFile file) {
 		super(file);
 		this.project = project;
@@ -56,14 +38,6 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		if(file.exists()){
 			load();
 		}
-		
-		addPropertyChangeListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				isDirty = true;
-			}
-		});
 	}
 	
 	@Override
@@ -84,6 +58,7 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 	public synchronized  void setName(String name){
 		String old = getName();
 		source.setProperty(KEY_NAME, name);
+		isDirty = true;
 		firePropertyChange(KEY_NAME, old, name);
 	}
 	
@@ -94,6 +69,7 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 	public synchronized  void setProperty(String key, String value){
 		String old = getProperty(key);
 		source.setProperty(key, value);
+		isDirty = true;
 		firePropertyChange(key, old, value);
 	}
 	
@@ -185,6 +161,11 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 			e1.printStackTrace();
 		}
 	}
+	
+	@Override
+	public boolean isDirty() {
+		return isDirty;
+	}
 
 	@Override
 	public synchronized  void delete() {
@@ -198,4 +179,5 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 			}
 		}
 	}
+	
 }

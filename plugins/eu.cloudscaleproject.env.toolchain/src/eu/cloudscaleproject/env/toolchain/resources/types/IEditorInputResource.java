@@ -10,6 +10,8 @@ public interface IEditorInputResource extends IEditorInput{
 	public void load();
 	public void delete();
 	
+	public boolean isDirty();
+		
 	public String getProperty(String key);
 	public void setProperty(String key, String value);
 

@@ -14,22 +14,30 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorPart;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
+import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class InputAlternativeEditComposite extends Composite{
+public class InputAlternativeEditComposite extends Composite implements ISaveableComposite{
 	
 	private final InputAlternative alternative;
+	private final IDirtyAdapter dirtyAdapter;
 	
 	private final Text textAlloc;
 	private final Text textUsage;
 	private Text textName;
 
-	public InputAlternativeEditComposite(IProject project, InputAlternative ia, Composite parent, int style) {
+	public InputAlternativeEditComposite(IEditorPart editor, InputAlternative ia, Composite parent, int style) {
 		super(parent, style);
+		
+		IProject project = ExplorerProjectPaths.getProject(editor);
+		
 		this.alternative = ia;
+		this.dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
 		
 		setLayout(new GridLayout(3, false));
 		
@@ -46,7 +54,7 @@ public class InputAlternativeEditComposite extends Composite{
 			@Override
 			public void modifyText(ModifyEvent e) {
 				InputAlternativeEditComposite.this.alternative.setName(textName.getText());
-				InputAlternativeEditComposite.this.alternative.save();
+				dirtyAdapter.fireDirtyState();
 			}
 		});
 		
@@ -86,7 +94,7 @@ public class InputAlternativeEditComposite extends Composite{
 				if(selection != null){
 					textAlloc.setText(selection.getProjectRelativePath().toString());
 					InputAlternativeEditComposite.this.alternative.setAllocation(selection);
-					InputAlternativeEditComposite.this.alternative.save();
+					dirtyAdapter.fireDirtyState();
 				}
 			}
 		});
@@ -102,7 +110,7 @@ public class InputAlternativeEditComposite extends Composite{
 				if(selection != null){
 					textUsage.setText(selection.getProjectRelativePath().toString());
 		        	InputAlternativeEditComposite.this.alternative.setUsage(selection);
-		        	InputAlternativeEditComposite.this.alternative.save();
+					dirtyAdapter.fireDirtyState();
 				}
 			}
 		});
@@ -120,5 +128,20 @@ public class InputAlternativeEditComposite extends Composite{
 			textUsage.setText(alternative.getUsage() != null ? alternative.getUsage().getProjectRelativePath().toString() : "");
 		}
 		super.update();
+	}
+
+	@Override
+	public void save() {
+		alternative.save();
+	}
+
+	@Override
+	public void load() {
+		alternative.load();
+	}
+
+	@Override
+	public boolean isDirty() {
+		return alternative.isDirty();
 	}
 }

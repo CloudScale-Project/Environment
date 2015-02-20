@@ -32,7 +32,7 @@ public class FileResourceProviderFactory implements IResourceProviderFactory{
 			}
 
 			@Override
-			public IEditorInputResource loadResource(IResource res) {
+			public IEditorInputResource loadResource(IResource res, String type) {
 				return new EditorInputFile(folder.getProject(), (IFile)res);
 			}
 		};

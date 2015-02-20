@@ -3,14 +3,12 @@ package eu.cloudscaleproject.env.analyser.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.DIExtension;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
@@ -35,9 +33,7 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 	
 	private CTabItem tabItem = null;
 	private AbstractSidebarMenuComposite analyserEditor;
-	
-	public static ProjectEditor projectEditor;
-		
+			
 	@Override
 	public String getID() {
 		return ID;
@@ -47,13 +43,10 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 	 * @wbp.parser.entryPoint
 	 */
 	@Override
-	public void createTabItem(ProjectEditor editor) {
+	public void createTabItem(final ProjectEditor editor) {
 		tabItem = new CTabItem(editor.getTabFolder(), SWT.NONE);
 		tabItem.setText("Analyser");
-		projectEditor = editor;
-		
-		final IProject project = ExplorerProjectPaths.getProject(editor);
-		
+				
 		analyserEditor = new AbstractSidebarMenuComposite(editor.getTabFolder(), SWT.NONE) {
 			
 			@Override
@@ -77,16 +70,16 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 			public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
 				
 				if(introInput.equals(input)){
-					return new IntroComposite(parent, SWT.NONE);
+					return new IntroComposite(editor, parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
-					return new InputComposite(project, parent, SWT.NONE);
+					return new InputComposite(editor, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new ConfigComposite(project, parent, SWT.NONE);
+					return new ConfigComposite(editor, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
-					return new ResultsComposite(project, parent, SWT.NONE);
+					return new ResultsComposite(editor, parent, SWT.NONE);
 				}
 				
 				return null;
@@ -101,6 +94,14 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 	@Override
 	public CTabItem getTabItem() {
 		return tabItem;
+	}
+	
+	public void save(){
+		analyserEditor.save();
+	}
+	
+	public boolean isDirty(){
+		return analyserEditor.isDirty();
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public class ServerService {
 														  project, ToolchainUtils.SPOTTER_DYN_RES_ID);
 				
 				if(!resultResourceProvider.hasResource(runEditorInputName)){
-					resultEditorInput = resultResourceProvider.createNewResource(confEditorInput.getResource().getName());
+					resultEditorInput = resultResourceProvider.createNewResource(confEditorInput.getResource().getName(), null);
 				}
 				else{
 					resultEditorInput = resultResourceProvider.getResource(runEditorInputName);

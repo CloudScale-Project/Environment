@@ -64,7 +64,7 @@ public class OpenConfAltHandler {
 					"Configuration alternative for the specified input alternative does not exist! Create new configuration alternative?");
 			
 			if(create){
-				EditorInputFolder newConfAlt = (EditorInputFolder)confResourceProvider.createNewResource(selectedInputResource.getName() + " conf.");
+				EditorInputFolder newConfAlt = (EditorInputFolder)confResourceProvider.createNewResource(selectedInputResource.getName() + " conf.", null);
 				ResourceUtils.bindEditorInputs((EditorInputFolder)selectedInputResource, newConfAlt);
 				newConfAlt.save();
 				

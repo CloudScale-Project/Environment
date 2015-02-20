@@ -1,18 +1,13 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
-import java.io.IOException;
+import java.io.File;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -24,13 +19,27 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.palladiosimulator.edp2.datastream.IDataSource;
+import org.palladiosimulator.edp2.datastream.chaindescription.ChainDescription;
+import org.palladiosimulator.edp2.datastream.edp2source.Edp2DataTupleDataSource;
+import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.ExperimentData.Measurements;
+import org.palladiosimulator.edp2.models.ExperimentData.RawMeasurements;
 import org.palladiosimulator.edp2.models.ExperimentData.provider.ExperimentDataItemProviderAdapterFactory;
+import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
+import org.palladiosimulator.edp2.models.Repository.Repository;
+import org.palladiosimulator.edp2.visualization.IVisualisationInput;
+import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -41,7 +50,7 @@ public class ResultAlternativeComposite extends Composite{
 	private final Tree tree;
 	private final TreeViewer treeViewer;
 	private final EditorInputFolder alternative;
-	
+		
 	@Optional @Inject
 	private CommandExecutor commandExecutor;
 	
@@ -77,7 +86,7 @@ public class ResultAlternativeComposite extends Composite{
 				ISelection s = treeViewer.getSelection();
 				Object element = ((StructuredSelection)s).getFirstElement();
 				if (element instanceof Measurements) {
-					//openChainSelectionDialog(element);
+					openChainSelectionDialog(element);
 					
 					//for now just open edp2 perspective
 					//TODO: improve/better integrate results tree-view
@@ -106,33 +115,52 @@ public class ResultAlternativeComposite extends Composite{
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 		}
+			
+		LocalDirectoryRepository rep = findOrInitRepository(alternative.getResource().getLocation().toOSString());
 		
-		IFile modelFile = null;
-		try {
-			for(IResource res : alternative.getResource().members()){
-				if("edp2".equals(res.getFileExtension()) && res instanceof IFile){
-					modelFile = (IFile)res;
-				}
-			}
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!rep.getExperimentGroups().isEmpty()){
+			this.treeViewer.setInput(rep.getExperimentGroups().get(0));
+			this.treeViewer.expandToLevel(3);
+			this.treeViewer.refresh();
 		}
-		
-		if(modelFile != null){
-			ResourceSet resSet = new ResourceSetImpl();
-			Resource resource = resSet.createResource(
-					URI.createPlatformResourceURI(modelFile.getFullPath().toString(), true));
-			try {
-				resource.load(resSet.getLoadOptions());
-				this.treeViewer.setInput(resource.getContents().get(0));
-				this.treeViewer.expandToLevel(3);
-				this.treeViewer.refresh();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		else{
+			this.treeViewer.setInput(null);
+			this.treeViewer.refresh();
 		}
 	}
+	
+	/**
+     * Initializes the repository in which the data will be stored.
+     * 
+     * @param directory
+     *            Path to directory in which the data should be stored.
+     * @return the initialized repository.
+     */
+    private LocalDirectoryRepository findOrInitRepository(final String directory) {
+    	File dir = new File(directory);
+        final LocalDirectoryRepository repo = RepositoryManager.initializeLocalDirectoryRepository(dir);
+        
+        /*
+         * Add repository to a (optional) central directory of repositories. This can be useful to
+         * manage more than one repository or have links between different existing repositories. A
+         * repository must be connected to an instance of Repositories in order to be opened.
+         */
+        
+        String path = URI.createFileURI(dir.getAbsolutePath()).toString();
+        
+        for(Repository rep : RepositoryManager.getCentralRepository().getAvailableRepositories()){
+        	if(rep instanceof LocalDirectoryRepository){
+        		LocalDirectoryRepository ldr = (LocalDirectoryRepository)rep;
+        		if(ldr.getUri().equals(path)){
+        			return ldr;
+        		}
+        	}
+        }
+        
+        //if the repository for the specified path is not found
+        RepositoryManager.addRepository(RepositoryManager.getCentralRepository(), repo);
+        return repo;
+    }
 	
 	public void refresh(){
 		loadModel();
@@ -142,6 +170,8 @@ public class ResultAlternativeComposite extends Composite{
 	 * This is copy/paste from EDP2 NavigatorDoubleClickListener in a attempt to open graphs for the measurements.
 	 * Unfortunately the following code do not work (edp2Source.getDataStream() throws an exception).    
 	 * 
+	 * 
+	 */
     private void openChainSelectionDialog(final Object selectedObject) {
         final Measurements measurements = (Measurements) selectedObject;
         final RawMeasurements rawMeasurements = measurements.getMeasurementsRanges().get(0).getRawMeasurements();
@@ -186,5 +216,4 @@ public class ResultAlternativeComposite extends Composite{
             throw new RuntimeException(e);
         }
     }
-    */
 }

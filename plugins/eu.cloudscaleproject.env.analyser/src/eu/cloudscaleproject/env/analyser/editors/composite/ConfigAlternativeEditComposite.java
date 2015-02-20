@@ -36,14 +36,17 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigAlternativeEditComposite extends Composite {
+public class ConfigAlternativeEditComposite extends Composite implements ISaveableComposite{
 	
 	private final ResourceProvider inputResourceProvider;
 	private final ResourceProvider usageResourceProvider;
 
 	private final ComboViewer comboViewerInput;
 	private final ComboViewer comboViewerUsage;
+	
+	private final ConfAlternative alternative;
 	
 	private final PropertyChangeListener inputResourceListener = new PropertyChangeListener() {
 		@Override
@@ -76,7 +79,7 @@ public class ConfigAlternativeEditComposite extends Composite {
 	 */
 	public ConfigAlternativeEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
-		//this.project = project;
+		this.alternative = ca;
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		
@@ -229,5 +232,22 @@ public class ConfigAlternativeEditComposite extends Composite {
 
 	@Override
 	protected void checkSubclass() {
+	}
+
+	@Override
+	public void save() {
+		alternative.save();
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -110,7 +110,7 @@ public class SidebarEditor extends AbstractSidebarEditor{
 				if(resourceProvider == null){
 					throw new IllegalStateException("Sidebar resource provider not set!");
 				}
-				resourceProvider.createNewResource(text);				
+				resourceProvider.createNewResource(text, null);				
 			}
 		});
 		dialog.open();
@@ -131,7 +131,7 @@ public class SidebarEditor extends AbstractSidebarEditor{
 				if(resourceProvider == null){
 					throw new IllegalStateException("Sidebar resource provider not set!");
 				}
-				IEditorInputResource res = resourceProvider.createNewResource(text);
+				IEditorInputResource res = resourceProvider.createNewResource(text, null);
 				res.copyFrom(((IEditorInputResource)selected).getResource());
 				res.setName(text);
 				res.save();

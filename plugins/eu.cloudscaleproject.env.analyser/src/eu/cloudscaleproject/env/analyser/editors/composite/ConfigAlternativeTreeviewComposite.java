@@ -1,16 +1,13 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -21,38 +18,35 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
-import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
-import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
 
-import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
-import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
-import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
+import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider{
+public class ConfigAlternativeTreeviewComposite extends Composite implements ISaveableComposite, IPropertySheetPageProvider{
 
-	private ConfAlternative alternative;
+	private final IEditorPart editor;
+	private final IDirtyAdapter dirtyAdapter;
+	private final ConfAlternative alternative;
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
-	
-	private final ComposedAdapterFactory adapterFactory;
-	private final AdapterFactoryEditingDomain editingDomain;
 	private final AdapterFactoryContentProvider contentProvider;
 	private final EMFPopupMenuSupport menuSupport;
 	
@@ -61,8 +55,11 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements IPr
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigAlternativeTreeviewComposite(IProject project, ConfAlternative ca, Composite parent, int style) {
+	public ConfigAlternativeTreeviewComposite(IEditorPart editor, ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
+		
+		this.editor = editor;
+		this.dirtyAdapter = (IDirtyAdapter)ConfigAlternativeTreeviewComposite.this.editor.getAdapter(IDirtyAdapter.class);
 		this.alternative = ca;
 		
 		setLayout(new GridLayout(1, false));
@@ -97,36 +94,32 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements IPr
 				}
 			}
 		});
-				
-		adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		
-		adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
-		adapterFactory.addAdapterFactory(new SystemAdapterFactory());
-		adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
-		adapterFactory.addAdapterFactory(new SeffAdapterFactory());
-		adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new PmsItemProviderAdapterFactory());
-		//TODO: check if this is the right factory for experiment automation
-		adapterFactory.addAdapterFactory(new ExperimentsItemProviderAdapterFactory());
-		
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
-		
-		contentProvider = new AdapterFactoryContentProvider(adapterFactory);
+		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
 		this.treeViewer.setContentProvider(contentProvider);
-		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
 		//this.treeViewer.addFilter(new ModelViewFilter());
 		
-		BasicCommandStack commandStack = new BasicCommandStack();
-		editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, alternative.getResourceSet());
+		final PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				dirtyAdapter.fireDirtyState();
+			}
+		};
 		
-		new AdapterFactoryTreeEditor(tree, adapterFactory);
+		alternative.addPropertyChangeListener(listener);
+		addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				alternative.removePropertyChangeListener(listener);
+			}
+		});
+				
+		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 		
-		menuSupport = new EMFPopupMenuSupport(editingDomain);
-		menuSupport.setViewer(treeViewer);
-		
-		updateTreeview();
+		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain());
+		menuSupport.setViewer(treeViewer);		
 	}
 	
 	private void updateTreeview(){
@@ -153,8 +146,23 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements IPr
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain);
+		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain());
 		propertySheetPage.setPropertySourceProvider(contentProvider);
 		return propertySheetPage;
+	}
+
+	@Override
+	public void save() {
+		alternative.save();
+	}
+
+	@Override
+	public void load() {
+		updateTreeview();
+	}
+
+	@Override
+	public boolean isDirty() {
+		return alternative.isDirty();
 	}
 }

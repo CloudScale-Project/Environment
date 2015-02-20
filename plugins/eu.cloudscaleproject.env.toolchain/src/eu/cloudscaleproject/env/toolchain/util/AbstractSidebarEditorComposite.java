@@ -116,6 +116,18 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 		sidebarBuilder.init();
 	}
 	
+	public void save(){
+		sidebarBuilder.save();
+	}
+	
+	public void load(){
+		sidebarBuilder.load();
+	}
+	
+	public boolean isDirty(){
+		return sidebarBuilder.isDirty();
+	}
+	
 	public void showInput(IEditorInput input){
 		sidebarBuilder.showInput(input);
 	}
@@ -160,7 +172,6 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	
 	public void setRemoveButtonEnabled(boolean enable){
 		sidebarBuilder.setRemoveButtonEnabled(enable);
-
 	}
 	
 	@Override

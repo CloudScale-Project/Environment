@@ -43,7 +43,7 @@ public class ResultComposite extends SidebarEditorComposite {
 			}
 
 			@Override
-			public IEditorInputResource loadResource(IResource res) {
+			public IEditorInputResource loadResource(IResource res, String type) {
 				// TODO Auto-generated method stub
 				ResultPersistenceFolder rif = new ResultPersistenceFolder(ResultComposite.this.project, (IFolder)res);
 				rif.load();

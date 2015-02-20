@@ -11,8 +11,9 @@ import org.eclipse.ui.PlatformUI;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.dialogs.SelectConfAltDialog;
-import eu.cloudscaleproject.env.analyser.editors.AnalyserTabItemExtension;
+import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
@@ -45,8 +46,8 @@ public class OpenConfAltHandler {
 			return;
 		}
 		
-		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		final ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		final ResourceProvider confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
 
 		IEditorInputResource selectedInputResource = inputResourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
 		if(selectedInputResource == null && !inputResourceProvider.getResources().isEmpty()){
@@ -60,18 +61,19 @@ public class OpenConfAltHandler {
 		List<ConfAlternative> alternatives = ResourceUtils.getConfAlternatives(project, (InputAlternative)selectedInputResource);
 		
 		if(alternatives.isEmpty()){
-			//TODO: ask user to create new conf alternative
-			boolean create = DialogUtils.openConfirm("Analyser workflow diagram", 
-					"Configuration alternative for the specified input alternative does not exist! Create new configuration alternative?");
 			
-			if(create){
-				ConfAlternative newConfAlt = (ConfAlternative)confResourceProvider.createNewResource(selectedInputResource.getName() + " conf.");
-				newConfAlt.setInitialModel((InputAlternative)selectedInputResource);
-				newConfAlt.save();
+			NewConfigInputDialog dialog = new NewConfigInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+					new BasicCallback<String[]>() {
 				
-				ex.execute("eu.cloudscaleproject.env.toolchain.command.openprojecteditor",
-						AnalyserTabItemExtension.ID, AnalyserTabItemExtension.ACTION_OPEN_RUN);
-			}
+				@Override
+				public void handle(String[] data) {
+					if(confResourceProvider == null){
+						throw new IllegalStateException("Sidebar resource provider not set!");
+					}
+					confResourceProvider.createNewResource(data[0], data[1]);
+				}
+			});
+			dialog.open();
 			return;
 		}
 		

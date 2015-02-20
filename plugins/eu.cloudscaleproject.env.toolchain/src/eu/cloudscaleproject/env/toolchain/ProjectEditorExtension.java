@@ -11,4 +11,7 @@ public interface ProjectEditorExtension extends IPropertySheetPageProvider{
 	public void createTabItem(ProjectEditor editor);
 	public CTabItem getTabItem();
 	public void handleAction(String action);
+	
+	public void save();
+	public boolean isDirty();
 }

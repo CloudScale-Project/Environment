@@ -45,21 +45,35 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		
 		sidebarBuilder = new SidebarEditor(compositeSidebar, compositeArea){
 			
+			@Override
 			public Color getSidebarSectionBackgroundColor(){
 				return SidebarEditorComposite.this.getSidebarSectionBackgroundColor();
 			}
 			
+			@Override
 			public Color getSidebarSectionForegroundColor(){
 				return SidebarEditorComposite.this.getSidebarSectionForegroundColor();
 			}
 			
+			@Override
 			public Color getSidebarBackgroundColor(){
 				return SidebarEditorComposite.this.getSidebarBackgroundColor();
 			}
 			
+			@Override
 			public Color getSidebarForegroundColor(){
 				return SidebarEditorComposite.this.getSidebarForegroundColor();
 			}
+			
+			@Override
+			public void handleNewInput(IEditorInput selected) {
+				SidebarEditorComposite.this.handleNewInput(selected);
+			}
+			
+			@Override
+			public void handleNewInputFrom(IEditorInput selected) {
+				SidebarEditorComposite.this.handleNewInputFrom(selected);
+			};
 		};
 		
 		this.addDisposeListener(new DisposeListener() {
@@ -78,6 +92,14 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	public void setResourceProvider(ResourceProvider resourceProvider) {
 		sidebarBuilder.setResourceProvider(resourceProvider);
 	}
+	
+	public void handleNewInput(IEditorInput selected) {
+		sidebarBuilder.handleNewInput(selected);
+	}
+	
+	public void handleNewInputFrom(IEditorInput selected) {
+		sidebarBuilder.handleNewInputFrom(selected);
+	};
 
 	@Override
 	public void init(){

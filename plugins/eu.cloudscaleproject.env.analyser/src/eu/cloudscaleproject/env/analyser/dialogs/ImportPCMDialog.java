@@ -62,7 +62,7 @@ public class ImportPCMDialog extends Dialog{
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
 			ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-			InputAlternative ia = (InputAlternative)rp.createNewResource("Imported model");
+			InputAlternative ia = (InputAlternative)rp.createNewResource("Imported model", null);
 			
 			if(allocation != null && allocation.exists()){
 				ia.setAllocation(allocation);

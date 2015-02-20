@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.osgi.framework.Bundle;
 
 import eu.cloudscaleproject.env.analyser.Activator;
@@ -22,7 +23,7 @@ public class IntroComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public IntroComposite(Composite parent, int style) {
+	public IntroComposite(IEditorPart editor, Composite parent, int style) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		

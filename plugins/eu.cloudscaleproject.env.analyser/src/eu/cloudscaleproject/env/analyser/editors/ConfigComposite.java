@@ -5,15 +5,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeTreeviewComposite;
+import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -24,11 +31,13 @@ public class ConfigComposite extends SidebarEditorComposite{
 	private static final String SECTION_ALT = "Alternative conf:";
 	
 	private final IProject project;
-	
+	private final IEditorPart editor;
 			
-	public ConfigComposite(IProject project, Composite parent, int style) {
+	public ConfigComposite(IEditorPart editor, Composite parent, int style) {
 		super(parent, style);
-		this.project = project;
+		
+		this.editor = editor;
+		this.project = ExplorerProjectPaths.getProject(editor);
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID));
 		setContentProvider(new SidebarContentProvider() {
@@ -69,7 +78,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();
 			
-			treeviewComposite = new ConfigAlternativeTreeviewComposite(project, input, this, style);
+			treeviewComposite = new ConfigAlternativeTreeviewComposite(editor, input, this, style);
 			GridData iamc_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			treeviewComposite.setLayoutData(iamc_gd);
 		}
@@ -85,5 +94,22 @@ public class ConfigComposite extends SidebarEditorComposite{
 		public IPropertySheetPage getPropertySheetPage() {
 			return treeviewComposite.getPropertySheetPage();
 		}
+	}
+	
+	@Override
+	public void handleNewInput(IEditorInput selected) {
+		NewConfigInputDialog dialog = new NewConfigInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+				new BasicCallback<String[]>() {
+			
+			@Override
+			public void handle(String[] data) {
+				ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+				if(resourceProvider == null){
+					throw new IllegalStateException("Sidebar resource provider not set!");
+				}
+				resourceProvider.createNewResource(data[0], data[1]);
+			}
+		});
+		dialog.open();
 	}
 }

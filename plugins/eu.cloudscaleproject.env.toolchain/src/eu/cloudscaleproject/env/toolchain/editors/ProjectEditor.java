@@ -14,6 +14,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -21,10 +22,11 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.Activator;
+import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 
-public class ProjectEditor extends EditorPart {
+public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 
 	private static final Logger logger = Logger.getLogger(ProjectEditor.class.getName());	
 	public static final String ID = "eu.cloudscaleproject.env.toolchain.ToolchainEditorPart";
@@ -56,6 +58,9 @@ public class ProjectEditor extends EditorPart {
 			}
 			return super.getAdapter(adapter);
 		}
+		else if(adapter.equals(IDirtyAdapter.class)){
+			return this;
+		}
 		else {
 			return super.getAdapter(adapter);
 		}
@@ -77,17 +82,23 @@ public class ProjectEditor extends EditorPart {
 			}
 		}
 	}
+	
+	@Override
+	public void fireDirtyState() {
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
+		for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
+			pee.save();
+		}
+		fireDirtyState();
 	}
 
 	@Override
 	public void doSaveAs() {
-		// TODO Auto-generated method stub
-
+		// saveAs is not allowed!
 	}
 
 	@Override
@@ -100,13 +111,16 @@ public class ProjectEditor extends EditorPart {
 
 	@Override
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
+		for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
+			if(pee.isDirty()){
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

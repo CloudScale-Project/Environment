@@ -98,6 +98,16 @@ public class ExtractorTabItemExtension implements ProjectEditorExtension{
 	public CTabItem getTabItem() {
 		return tabItem;
 	}
+	
+	@Override
+	public void save() {
+		extractorEditor.save();
+	}
+
+	@Override
+	public boolean isDirty() {
+		return extractorEditor.isDirty();
+	}
 
 	@Override
 	public void handleAction(String action) {

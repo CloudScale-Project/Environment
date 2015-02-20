@@ -107,6 +107,16 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	public CTabItem getTabItem() {
 		return tabItem;
 	}
+	
+	@Override
+	public void save() {
+		spotterEditor.save();
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return spotterEditor.isDirty();
+	}
 
 	@Override
 	public void handleAction(String action) {

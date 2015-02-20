@@ -91,6 +91,16 @@ public class ScaleDLTabItemExtension extends DIExtension implements ProjectEdito
 	public CTabItem getTabItem() {
 		return tabItem;
 	}
+	
+	@Override
+	public void save() {
+		scaledlEditor.save();
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return scaledlEditor.isDirty();
+	}
 
 	@Override
 	public void handleAction(String action) {
