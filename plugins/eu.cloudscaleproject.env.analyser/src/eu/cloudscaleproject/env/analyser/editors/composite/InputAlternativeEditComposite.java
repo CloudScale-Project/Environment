@@ -94,6 +94,7 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 				if(selection != null){
 					textAlloc.setText(selection.getProjectRelativePath().toString());
 					InputAlternativeEditComposite.this.alternative.setAllocation(selection);
+					InputAlternativeEditComposite.this.alternative.load();
 					dirtyAdapter.fireDirtyState();
 				}
 			}
@@ -110,6 +111,7 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 				if(selection != null){
 					textUsage.setText(selection.getProjectRelativePath().toString());
 		        	InputAlternativeEditComposite.this.alternative.setUsage(selection);
+		        	InputAlternativeEditComposite.this.alternative.load();
 					dirtyAdapter.fireDirtyState();
 				}
 			}

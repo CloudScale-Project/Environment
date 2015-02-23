@@ -1,14 +1,11 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
-import java.net.UnknownServiceException;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -61,7 +58,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class ConfAlternative extends EditorInputEMF{
 			
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ConfAlternative.class.getName());
 	
 	public static final String KEY_NAME = "name";	
 	private final Type type;
@@ -91,6 +87,14 @@ public class ConfAlternative extends EditorInputEMF{
 		//create and set defaults
 		Experiment exp = getExperiment();
 		configureExperiment(exp);
+	}
+	
+	public Type getTypeEnum(){
+		String type = getType();
+		if(type == null){
+			return null;
+		}
+		return Type.valueOf(type);
 	}
 	
 	public UsageEvolution getUsageEvolution(){
@@ -297,32 +301,6 @@ public class ConfAlternative extends EditorInputEMF{
 	
 	public IFile getSLO(){
 		return getFileResource(ToolchainUtils.KEY_FILE_SLO);
-	}
-
-	@Override
-	protected void doSave() {
-
-		super.doSave();
-		for(Resource res : resSet.getResources()){
-			try {
-				if(!res.getContents().isEmpty()){
-					res.save(null);
-				}
-			} catch (UnknownServiceException e){
-				//ignore - file can not be saved
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				logger.severe("Conf alternative: "+ getResource().getLocation().toString() 
-								+" Can not save resource: "+ res.getURI().toString());
-				e.printStackTrace();
-			}
-		}
-
-		try {
-			getResource().refreshLocal(IFile.DEPTH_INFINITE, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

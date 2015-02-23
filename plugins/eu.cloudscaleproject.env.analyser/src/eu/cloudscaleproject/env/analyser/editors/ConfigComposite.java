@@ -5,17 +5,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigAlternativeTreeviewComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -27,7 +28,6 @@ import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
 public class ConfigComposite extends SidebarEditorComposite{
 	
-	private static final String SECTION_DEFAULT = "Default measurements:";
 	private static final String SECTION_ALT = "Alternative conf:";
 	
 	private final IProject project;
@@ -44,14 +44,11 @@ public class ConfigComposite extends SidebarEditorComposite{
 			
 			@Override
 			public String[] getSections() {
-				return new String[]{SECTION_DEFAULT, SECTION_ALT};
+				return new String[]{SECTION_ALT};
 			}
 			
 			@Override
 			public String getSection(IEditorInputResource resource) {
-				if(ResourceUtils.ANALYSER_CONF_CAPACITY_ANALYSES.equals(resource.getResource().getName())){
-					return SECTION_DEFAULT;
-				}
 				return SECTION_ALT;
 			}
 			
@@ -64,6 +61,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 	
 	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
 		
+		private GradientComposite typeComposite;
 		private ConfigAlternativeEditComposite editComposite;
 		private ConfigAlternativeTreeviewComposite treeviewComposite;
 
@@ -71,7 +69,33 @@ public class ConfigComposite extends SidebarEditorComposite{
 			super(parent, style);
 					
 			GridLayout layout = new GridLayout(1, true);
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
 			this.setLayout(layout);
+			
+			//display alternative type
+			{
+				typeComposite = new GradientComposite(this, SWT.NONE);
+				typeComposite.setGradientDirection(false);
+				typeComposite.setGradientColorStart(getSidebarSectionBackgroundColor());
+				typeComposite.setGradientColorEnd(getSidebarBackgroundColor());
+				
+				GridData type_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+				typeComposite.setLayoutData(type_gd);
+				typeComposite.pack();
+				
+				typeComposite.setLayout(new GridLayout(1, false));
+				GridData gd_c = new GridData(SWT.FILL, SWT.FILL, true, false);
+				gd_c.heightHint = 25;
+				typeComposite.setLayoutData(gd_c);
+				
+				Label label = new Label(typeComposite, SWT.NONE);
+				label.setForeground(getSidebarSectionForegroundColor());
+				
+				String name = input.getTypeEnum() != null ? input.getTypeEnum().toString() : "Normal";
+				label.setText(name + " measurement type");
+				label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+			}
 			
 			editComposite = new ConfigAlternativeEditComposite(project, input, this, SWT.NONE);
 			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);

@@ -17,6 +17,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+
 public class EditorInputFile extends PropertyChangeSupport implements IEditorInputResource{
 	
 	private static final long serialVersionUID = 1L;
@@ -38,6 +40,11 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		if(file.exists()){
 			load();
 		}
+	}
+	
+	@Override
+	public String getType() {
+		return getProperty(ResourceProvider.PROP_TYPE);
 	}
 	
 	@Override

@@ -51,7 +51,7 @@ public class NewConfigInputDialog extends Dialog{
 		combo.setLayoutData(gd_combo);
 		
 		for(ConfAlternative.Type type : ConfAlternative.Type.values()){
-			combo.add(type.name());
+			combo.add(type.toString());
 		}
 		combo.select(0);
 		
@@ -61,7 +61,7 @@ public class NewConfigInputDialog extends Dialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
-			callback.handle(new String[]{getText(), combo.getItem(combo.getSelectionIndex())});
+			callback.handle(new String[]{getText(), ConfAlternative.Type.values()[combo.getSelectionIndex()].name()});
 		}
 		super.buttonPressed(buttonId);
 	}

@@ -1,15 +1,15 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
@@ -18,17 +18,17 @@ import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class InputAlternative extends EditorInputFolder{
+public class InputAlternative extends EditorInputEMF{
 			
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public InputAlternative(IProject project, IFolder folder){
-		super(project, folder);
+	public InputAlternative(IProject project, IFolder folder, AdapterFactory factory){
+		super(project, folder, factory);
 	}
 	
 	public IFile getRepository(){
@@ -122,9 +122,7 @@ public class InputAlternative extends EditorInputFolder{
 		}
 		
 		//set other model file that are referenced inside allocation
-		ResourceSet resSet = new ResourceSetImpl();
 		Resource res = ExplorerProjectPaths.getEmfResource(resSet, alloc);
-		
 		EObject eo = res.getContents().get(0);
 		
 		if(eo instanceof Allocation){
@@ -143,6 +141,67 @@ public class InputAlternative extends EditorInputFolder{
 				if(loadedRes instanceof RepositoryResourceImpl){
 					setRepository(ExplorerProjectPaths.getFileFromEmfResource(loadedRes));
 				}
+			}
+		}
+	}
+	
+	@Override
+	protected void doLoad() {
+		super.doLoad();
+		
+		if(getRepository() != null){
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getRepository());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(getSystem() != null){
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getSystem());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(getAllocation() != null){
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getAllocation());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(getResourceEnv() != null){
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getResourceEnv());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(getUsage() != null){
+			try {
+				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getUsage());
+				if(r != null){
+					r.unload();
+					r.load(null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

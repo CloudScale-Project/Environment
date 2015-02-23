@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
 import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
@@ -123,7 +124,21 @@ public class ResourceUtils {
 
 			@Override
 			public ResourceProvider create(IFolder folder) {
-				return new ResourceProvider(folder, "input.alt") {
+				
+				final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+				
+				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
+				adapterFactory.addAdapterFactory(new SystemAdapterFactory());
+				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
+				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
+				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new PmsItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new ExperimentDataAdapterFactory());
+				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+				
+				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
 					@Override
 					public boolean validateResource(IResource res) {
@@ -137,7 +152,9 @@ public class ResourceUtils {
 					
 					@Override
 					public IEditorInputResource loadResource(IResource res, String type) {
-						return new InputAlternative(res.getProject(), (IFolder)res);
+						
+						InputAlternative eif = new InputAlternative(res.getProject(), (IFolder)res, adapterFactory);
+						return eif;
 					}
 					
 					@Override
@@ -145,6 +162,8 @@ public class ResourceUtils {
 						return getRootFolder().getFolder(resourceName);
 					}
 				};
+
+				return resourceProvider;
 			}
 			
 		});
@@ -187,11 +206,6 @@ public class ResourceUtils {
 						
 						ConfAlternative.Type typeEnum = ConfAlternative.Type.valueOf(type);
 						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res, typeEnum, adapterFactory);
-						
-						if(res.exists()){
-							eif.load();
-						}
-						
 						return eif;
 					}
 					

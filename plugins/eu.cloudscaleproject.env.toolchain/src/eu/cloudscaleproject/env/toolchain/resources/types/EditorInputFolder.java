@@ -10,6 +10,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+
 public class EditorInputFolder extends PropertyChangeSupport implements IEditorInputResource{
 	private static final long serialVersionUID = 1L;
 
@@ -48,6 +50,11 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	@Override
 	public IFolder getResource(){
 		return folder;
+	}
+	
+	@Override
+	public String getType() {
+		return getProperty(ResourceProvider.PROP_TYPE);
 	}
 	
 	private boolean isResourceInternal(IResource res){

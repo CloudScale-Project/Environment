@@ -29,6 +29,7 @@ public class InputComposite extends SidebarEditorComposite{
 		
 	public InputComposite(final IEditorPart editor, Composite parent, int style) {
 		super(parent, style);
+		
 		this.project = ExplorerProjectPaths.getProject(editor);
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
@@ -72,7 +73,7 @@ public class InputComposite extends SidebarEditorComposite{
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();
 			
-			treeviewComposite = new InputAlternativeTreeviewComposite(input, this, SWT.NONE);
+			treeviewComposite = new InputAlternativeTreeviewComposite(editor, input, this, SWT.NONE);
 			GridData iamc_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			treeviewComposite.setLayoutData(iamc_gd);
 		}

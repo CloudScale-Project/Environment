@@ -6,6 +6,8 @@ public interface IEditorInputResource extends IEditorInput{
 
 	public IResource getResource();
 	
+	public String getType();
+	
 	public void save();
 	public void load();
 	public void delete();
