@@ -2,6 +2,9 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -75,45 +78,70 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	}
 	
 	public void setResource(String key, IResource res){
+		
+		String oldPath = propertyInputFile.getProperty(key);
+		String path = "";
+		
 		if(isResourceInternal(res)){
-			setInternalResource(key, res);
+			path = getInternalResourcePath(res);
 		}
 		else{
-			setExternalResource(key, res);
-		}
-	}
-	
-	private void setInternalResource(String key, IResource file)
-	{
-		String old = propertyInputFile.getProperty(key);
-		
-		if(file == null){
-			propertyInputFile.setProperty(key, "");
-			firePropertyChange(PROP_RESOURCE_CHANGED, old, "");
-			return;
+			path = getExternalResourcePath(res);
 		}
 		
-		IPath relativePath = getRelativePath(file);
-		propertyInputFile.setProperty(key, relativePath.toPortableString());
+		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		firePropertyChange(PROP_RESOURCE_CHANGED, old, relativePath.toPortableString());
+		firePropertyChange(PROP_RESOURCE_CHANGED, oldPath, path);
 	}
 	
-	private void setExternalResource(String key, IResource file)
+	public void setResources(String key, List<IResource> resList){
+		
+		String oldValue = propertyInputFile.getProperty(key);
+		String value = "";
+		
+		Iterator<IResource> iter = resList.iterator();
+		
+		while(iter.hasNext()){
+			IResource res = iter.next();
+			
+			if(isResourceInternal(res)){
+				value += getInternalResourcePath(res);
+			}
+			else{
+				value += getExternalResourcePath(res);
+			}
+			
+			if(iter.hasNext()){
+				//TODO: find a better way to specify "multi-resource" key value!
+				value += ":";
+			}
+		}
+		
+		propertyInputFile.setProperty(key, value);
+		isDirty = true;
+		firePropertyChange(PROP_RESOURCE_CHANGED, oldValue, value);
+	}
+	
+	private String getInternalResourcePath(IResource file)
 	{
-		String old = propertyInputFile.getProperty(key);
-
 		if(file == null){
-			propertyInputFile.setProperty(key, "");
-			firePropertyChange(PROP_RESOURCE_CHANGED, old, "");
-			return;
+			return "";
+		}
+		
+		// File path must be relative to alternative folder
+		IPath relativePath = getRelativePath(file);
+		return relativePath.toPortableString();
+	}
+	
+	private String getExternalResourcePath(IResource file)
+	{
+		if(file == null){
+			return "";
 		}
 		
 		// File must be relative to project folder
 		IPath path = file.getProjectRelativePath();
-		propertyInputFile.setProperty(key, path.toPortableString());
-		isDirty = true;
-		firePropertyChange(PROP_RESOURCE_CHANGED, old, path.toPortableString());
+		return path.toPortableString();
 	}
 
 	public IFile getFileResource(String key)
@@ -121,6 +149,11 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		String relPath = propertyInputFile.getProperty(key);
 		if(relPath == null || relPath.isEmpty()){
 			return null;
+		}
+		
+		//check if this is multi-resource key
+		if(relPath.contains(":")){
+			relPath = relPath.split(":")[0];
 		}
 		
 		IResource res = getResource().findMember(relPath);
@@ -137,6 +170,42 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		else{
 			return null;
 		}
+	}
+	
+	public List<IFile> getFileResources(String key)
+	{
+		String relPath = propertyInputFile.getProperty(key);
+		if(relPath == null || relPath.isEmpty()){
+			return null;
+		}
+		
+		ArrayList<IFile> resources = new ArrayList<IFile>();
+		
+		//check if this is multi-resource key
+		if(relPath.contains(":")){
+			for(String path : relPath.split(":")){
+				
+				IResource res = getResource().findMember(path);
+				
+				//TODO: This could cause problems!
+				//try project relative path
+				if(res == null){
+					res = getResource().getProject().findMember(relPath);
+				}
+				
+				if (res instanceof IFile){
+					resources.add((IFile)res);
+				}
+			}
+		}
+		else{
+			IFile res = getFileResource(key);
+			if(res != null){
+				resources.add(res);
+			}
+		}
+		
+		return resources;
 	}
 	
 	public IFolder getFolderResource(String key)
