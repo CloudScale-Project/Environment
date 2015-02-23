@@ -179,7 +179,7 @@ public class ConfigAlternativeEditComposite extends Composite implements ISaveab
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				ca.setInitialModel((EditorInputFolder)selection.getFirstElement());
+				ca.setInitialModel((InputAlternative)selection.getFirstElement());
 				ca.save();
 			}
 		});

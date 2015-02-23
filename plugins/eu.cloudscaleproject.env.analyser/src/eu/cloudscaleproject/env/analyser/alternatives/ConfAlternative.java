@@ -136,12 +136,12 @@ public class ConfAlternative extends EditorInputEMF{
 		return null;
 	}
 	
-	public void setInitialModel(EditorInputFolder editorInput){
+	public void setInitialModel(InputAlternative inputAlt){
 		
 		Experiment exp = getExperiment();
 		
 		InitialModel initialModel = exp.getInitialModel();
-		if(editorInput == null && initialModel != null){
+		if(inputAlt == null && initialModel != null){
 			exp.setInitialModel(null);
 			return;
 		}
@@ -155,7 +155,7 @@ public class ConfAlternative extends EditorInputEMF{
 		{
 			//allocation
 			{
-				IFile file = editorInput.getFileResource(ToolchainUtils.KEY_FILE_ALLOCATION);
+				IFile file = inputAlt.getFileResource(ToolchainUtils.KEY_FILE_ALLOCATION);
 				if(file != null && file.exists()){
 					Resource res = ExplorerProjectPaths.getEmfResource(resSet, file);
 					if(!res.getContents().isEmpty()){
@@ -169,7 +169,7 @@ public class ConfAlternative extends EditorInputEMF{
 			
 			//usage			
 			{
-				IFile file = editorInput.getFileResource(ToolchainUtils.KEY_FILE_USAGE);
+				IFile file = inputAlt.getFileResource(ToolchainUtils.KEY_FILE_USAGE);
 				if(file != null && file.exists()){
 					Resource res = ExplorerProjectPaths.getEmfResource(resSet, file);
 					if(!res.getContents().isEmpty()){
@@ -198,17 +198,17 @@ public class ConfAlternative extends EditorInputEMF{
 		initialModel.setMiddlewareRepository((Repository)resMRep.getContents().get(0));
 		initialModel.setEventMiddleWareRepository((Repository)resEMRep.getContents().get(0));		
 		
-		configureInput(exp, initialModel, editorInput);
+		configureInput(exp, initialModel, inputAlt);
 		
-		setResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, editorInput.getResource());
+		setResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 	}
 	
-	private void configureInput(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput){
+	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
 		if(Type.NORMAL.equals(type)){
 			
 		}
 		else if(Type.CAPACITY.equals(type)){
-			configureInputCapacity(exp, initialModel, editorInput);
+			configureInputCapacity(exp, initialModel, inputAlt);
 		}
 		else if(Type.SCALABILITY.equals(type)){
 			
@@ -290,7 +290,7 @@ public class ConfAlternative extends EditorInputEMF{
 		exp.getToolConfiguration().clear();
 		exp.getToolConfiguration().add(conf);
 	}
-	
+		
 	public IFile getPMS(){
 		return getFileResource(ToolchainUtils.KEY_FILE_PMS);
 	}
@@ -316,28 +316,28 @@ public class ConfAlternative extends EditorInputEMF{
 	}
 	
 	private final void loadModels() throws IOException {
-		// find and load resources
-		for (IFile f : PCMResourceSet.findResource(getResource(), PCMModelType.EXPERIMENTS.getFileExtension())) {
+		
+		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_EXPERIMENTS)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
 			res.unload();
 			res.load(null);
 		}
-		for (IFile f : PCMResourceSet.findResource(getResource(), PCMModelType.PMS.getFileExtension())) {
+		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_PMS)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : PCMResourceSet.findResource(getResource(), PCMModelType.VARIATIONS.getFileExtension())) {
+		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_VARIATIONS)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : PCMResourceSet.findResource(getResource(), PCMModelType.MEASURING_POINT.getFileExtension())) {
+		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_MESURPOINTS)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : PCMResourceSet.findResource(getResource(), PCMModelType.SLO.getFileExtension())) {
+		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_SLO)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
 			res.unload();
 			res.load(null);		
@@ -348,7 +348,7 @@ public class ConfAlternative extends EditorInputEMF{
 	// Capacity measuring specifics
 	//
 	
-	protected void configureInputCapacity(Experiment exp, InitialModel initialModel, EditorInputFolder editorInput) {
+	protected void configureInputCapacity(Experiment exp, InitialModel initialModel, InputAlternative inputAlt) {
 		
 		exp.setRepetitions(1);
 		exp.setName("Capacity measurement");
