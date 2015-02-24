@@ -30,6 +30,9 @@ Require-Bundle: org.eclipse.ui,
  org.reclipse.structure.specification.navigator;bundle-version="1.0.0",
  org.reclipse.structure.specification.ui;bundle-version="1.0.0",
  org.eclipse.ui.ide,
- org.fujaba.commons;bundle-version="1.0.0"
+ org.fujaba.commons;bundle-version="1.0.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding.observable
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

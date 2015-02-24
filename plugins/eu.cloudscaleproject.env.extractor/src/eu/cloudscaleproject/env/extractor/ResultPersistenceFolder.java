@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ResultPersistenceFolder extends EditorInputFolder {
@@ -15,11 +16,12 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 
 	public static final String KEY_SOMOX_FOLDER = "somox";
 	public static final String KEY_MODISCO_FOLDER = "modisco";
-	public static final String KEY_SYSTEM_MODEL = "system_model";
+	public static final String KEY_SYSTEM_MODEL = ToolchainUtils.KEY_FILE_SYSTEM;
+	public static final String KEY_REPOSITORY_MODEL = ToolchainUtils.KEY_FILE_REPOSITORY;
+	public static final String KEY_SOURCEDECORATOR_MODEL = ToolchainUtils.KEY_FILE_SOURCEDECORATOR;
+
 	public static final String KEY_SYSTEM_DIAGRAM = "system_diagram";
-	public static final String KEY_REPOSITORY_MODEL = "repository_model";
 	public static final String KEY_REPOSITORY_DIAGRAM = "repositroy_diagram";
-	public static final String KEY_SOURCEDECORATOR_MODEL = "sourcedecorator_model";
 
 
 	public static final String RESULT_SOMOX_FOLDER = "somox/";
@@ -27,7 +29,7 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 	public static final String RESULT_MODEL_NAME = "internal_architecture_model";
 	public static final String RESULT_SYSTEM = RESULT_MODEL_NAME + ".system";
 	public static final String RESULT_REPOSITORY = RESULT_MODEL_NAME + ".repository";
-	public static final String RESULT_SOURCEDECORATOR = RESULT_MODEL_NAME + ".sourcedecorator";
+	public static final String RESULT_SOURCEDECORATOR = RESULT_MODEL_NAME + ".sourcecodedecorator";
 	public static final String RESULT_SYSTEM_DIAGRAM = RESULT_MODEL_NAME + ".system_diagram";
 	public static final String RESULT_REPOSITORY_DIAGRAM = RESULT_MODEL_NAME + ".repository_diagram";
 	

@@ -42,7 +42,7 @@ public class ToolchainUtils {
 	
 	// file resources
 	
-	// Analyser input
+	// Analyser input & Extractor results (repository&system)
 	public static final String KEY_FILE_REPOSITORY		= "path_repository";
 	public static final String KEY_FILE_RESOURCEENV		= "path_resourceenvironment";
 	public static final String KEY_FILE_SYSTEM			= "path_system";
@@ -59,6 +59,10 @@ public class ToolchainUtils {
 	// Usage evolution
 	public static final String KEY_FILE_USAGEEVOLUTION	= "path_usageevolution";
 	public static final String KEY_FILE_LIMBO 			= "path_limbo_model";
+
+	// Extractor results 
+	public static final String KEY_FILE_SOURCEDECORATOR = "path_sourcedecorator";
+	
 	
 	public static IEditorInputResource getToolSelectedResource(IProject project, String toolID){
 		IEditorInputResource selectedResource = null;

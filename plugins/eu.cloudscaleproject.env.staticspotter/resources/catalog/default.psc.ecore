@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:expr="http://www.storydriven.org/core/expressions/0.3.1"
+    xmlns:sda="http://www.storydriven.org/storydiagrams/activities/0.2.1" xmlns:sdc="http://www.storydriven.org/storydiagrams/calls/0.2.0"
+    xmlns:sdce="http://www.storydriven.org/storydiagrams/calls/expressions/0.2.0"
+    xmlns:sdp="http://www.storydriven.org/storydiagrams/patterns/0.2.1">
+  <ecore:EPackage name="annotations" nsURI="http://ns.reclipse.org/structure/generation/annotations"
+      nsPrefix="annotations">
+    <eClassifiers xsi:type="ecore:EClass" name="AcquireReleasePairAnnotation" eSuperTypes="http://org.reclipse.structure.inference.annotations#//ASGAnnotation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FindPrimitiveComponentsAnnotation"
+        eSuperTypes="http://org.reclipse.structure.inference.annotations#//ASGAnnotation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PoolAnnotation" eSuperTypes="http://org.reclipse.structure.inference.annotations#//ASGAnnotation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SynchronizedMethodAnnotation" eSuperTypes="http://org.reclipse.structure.inference.annotations#//ASGAnnotation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FindMethodsAnnotation" eSuperTypes="http://org.reclipse.structure.inference.annotations#//ASGAnnotation"/>
+  </ecore:EPackage>
+  <ecore:EPackage name="engines" nsURI="http://ns.reclipse.org/structure/generation/engines"
+      nsPrefix="engines">
+    <eClassifiers xsi:type="ecore:EClass" name="AcquireReleasePairEngine" eSuperTypes="http://org.reclipse.structure.inference.annotations#//AnnotationEngine">
+      <eOperations name="annotate" eType="ecore:EClass http://org.reclipse.structure.inference.annotations#//AnnotationSet">
+        <eAnnotations source="http://www.storydriven.org/core/extension">
+          <contents xsi:type="sda:OperationExtension">
+            <ownedActivity comment="annotate(AcquireReleasePairEngine, EObject, EBoolean) : AnnotationSet"
+                name="annotate(AcquireReleasePairEngine, EObject, EBoolean) : AnnotationSet">
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.0"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="SUCCESS"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="FAILURE"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="END"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"/>
+              <ownedActivityEdge target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.8"
+                  source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="END"/>
+              <ownedActivityNode xsi:type="sda:InitialNode" name="annotate(AcquireReleasePairEngine, EObject, EBoolean) : AnnotationSet"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2"/>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Match Core Nodes"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.10"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="behaviour" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.5"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingSEFF"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="acquireAction" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.3"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="releaseAction" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.2"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="passiveResource" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.2 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.3"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/PassiveResource"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
+                      bindingState="BOUND" outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation">
+                    <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/1/AcquireReleasePairEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
+                  </variable>
+                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.5"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="steps_Behaviour"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      targetEnd="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="steps_Behaviour"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.2"
+                      targetEnd="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="passiveResource_ReleaseAction"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.2"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.3"
+                      targetEnd="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction/passiveResource_ReleaseAction"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="passiveresource_AcquireAction"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.3"
+                      targetEnd="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction/passiveresource_AcquireAction"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.4"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.5"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="serviceEffectSpecifications__BasicComponent"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.5"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      targetEnd="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent/serviceEffectSpecifications__BasicComponent"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.5"
+                      bindingOperator="CREATE" classifier="#/0/AcquireReleasePairAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="behaviour" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingSEFF"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="acquireAction" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="releaseAction" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="passiveResource" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/PassiveResource"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.5"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'behaviour'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'acquireAction'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'releaseAction'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.4"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'passiveResource'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.5"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'annoPrimitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.6"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Check For Existing Annotation"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.1"
+                      classifier="#/0/AcquireReleasePairAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="releaseAction" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="acquireAction" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.1"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'release'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'acquire'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Add Annotation To Results"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="this" bindingState="BOUND"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      classifier="#/1/AcquireReleasePairEngine"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotationResultSet"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.3"
+                      classifier="#/0/AcquireReleasePairAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_releaseAction"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_acquireAction"
+                      incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.3"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationEngine/foundAnnotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotations" bindingOperator="CREATE"
+                      source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationSet/annotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'releaseAction'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.4"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'acquireAction'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Annotate Elements"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0 #/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.1"
+                      classifier="#/0/AcquireReleasePairAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_releaseAction"
+                      bindingState="BOUND" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_acquireAction"
+                      bindingState="BOUND" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.1"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'release'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'acquire'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Store Antecedent Relations"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
+                      classifier="#/0/AcquireReleasePairAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="antecedentAnnos"
+                      bindingOperator="CREATE" source="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.0"
+                      target="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/antecedentAnnos"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Destroy Invalid Annotation"
+                  outgoing="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingOperator="DESTROY"
+                      classifier="#/0/AcquireReleasePairAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ActivityFinalNode" incoming="#/1/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.10">
+                <returnValues xsi:type="expr:TextualExpression" expressionText="this.foundAnnotations"
+                    language="OCL" languageVersion="1.0"/>
+              </ownedActivityNode>
+            </ownedActivity>
+          </contents>
+        </eAnnotations>
+        <eParameters name="this" eType="#/1/AcquireReleasePairEngine"/>
+        <eParameters name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+          <eAnnotations source="http://www.storydriven.org/core/extension">
+            <contents xsi:type="sdc:ParameterExtension"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="searchForOptionalElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FindPrimitiveComponentsEngine" eSuperTypes="http://org.reclipse.structure.inference.annotations#//AnnotationEngine">
+      <eOperations name="annotate" eType="ecore:EClass http://org.reclipse.structure.inference.annotations#//AnnotationSet">
+        <eAnnotations source="http://www.storydriven.org/core/extension">
+          <contents xsi:type="sda:OperationExtension">
+            <ownedActivity comment="annotate(FindPrimitiveComponentsEngine, EObject, EBoolean) : AnnotationSet"
+                name="annotate(FindPrimitiveComponentsEngine, EObject, EBoolean) : AnnotationSet">
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.0"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="SUCCESS"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="FAILURE"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="END"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"/>
+              <ownedActivityEdge target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"
+                  source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="END"/>
+              <ownedActivityNode xsi:type="sda:InitialNode" name="annotate(FindPrimitiveComponentsEngine, EObject, EBoolean) : AnnotationSet"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2"/>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Match Core Nodes"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="componentImplementingClassesLink"
+                      bindingState="BOUND" outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://somox.org/SourceCodeDecorator/2.0#//ComponentImplementingClassesLink">
+                    <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/1/FindPrimitiveComponentsEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
+                  </variable>
+                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
+                      incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="component" source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      targetEnd="http://somox.org/SourceCodeDecorator/2.0#//ComponentImplementingClassesLink/component"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      bindingOperator="CREATE" classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="componentImplementingClassesLink"
+                      bindingState="BOUND" incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      classifier="http://somox.org/SourceCodeDecorator/2.0#//ComponentImplementingClassesLink"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'componentImplementingClassesLink'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Check For Existing Annotation"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Add Annotation To Results"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1 #/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="this" bindingState="BOUND"
+                      outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      classifier="#/1/FindPrimitiveComponentsEngine"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotationResultSet"
+                      incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_primitiveComponent"
+                      incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
+                      source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationEngine/foundAnnotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotations" bindingOperator="CREATE"
+                      source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationSet/annotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Annotate Elements"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_primitiveComponent"
+                      bindingState="BOUND" incomingLink="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Destroy Invalid Annotation"
+                  outgoing="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingOperator="DESTROY"
+                      classifier="#/0/FindPrimitiveComponentsAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ActivityFinalNode" incoming="#/1/FindPrimitiveComponentsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9">
+                <returnValues xsi:type="expr:TextualExpression" expressionText="this.foundAnnotations"
+                    language="OCL" languageVersion="1.0"/>
+              </ownedActivityNode>
+            </ownedActivity>
+          </contents>
+        </eAnnotations>
+        <eParameters name="this" eType="#/1/FindPrimitiveComponentsEngine"/>
+        <eParameters name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+          <eAnnotations source="http://www.storydriven.org/core/extension">
+            <contents xsi:type="sdc:ParameterExtension"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="searchForOptionalElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PoolEngine" eSuperTypes="http://org.reclipse.structure.inference.annotations#//AnnotationEngine">
+      <eOperations name="annotate" eType="ecore:EClass http://org.reclipse.structure.inference.annotations#//AnnotationSet">
+        <eAnnotations source="http://www.storydriven.org/core/extension">
+          <contents xsi:type="sda:OperationExtension">
+            <ownedActivity comment="annotate(PoolEngine, EObject, EBoolean) : AnnotationSet"
+                name="annotate(PoolEngine, EObject, EBoolean) : AnnotationSet">
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.0"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="SUCCESS"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="FAILURE"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="END"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"/>
+              <ownedActivityEdge target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"
+                  source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="END"/>
+              <ownedActivityNode xsi:type="sda:InitialNode" name="annotate(PoolEngine, EObject, EBoolean) : AnnotationSet"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2"/>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Match Core Nodes"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="obj1" bindingState="BOUND"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//ASTNode">
+                    <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/1/PoolEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
+                  </variable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      bindingOperator="CREATE" classifier="#/0/PoolAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="obj1" bindingState="BOUND"
+                      incomingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//ASTNode"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'obj1'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Check For Existing Annotation"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="any" classifier="#/0/PoolAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Add Annotation To Results"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1 #/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="this" bindingState="BOUND"
+                      outgoingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      classifier="#/1/PoolEngine"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotationResultSet"
+                      incomingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      incomingLink="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="#/0/PoolAnnotation"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
+                      source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
+                      target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationEngine/foundAnnotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotations" bindingOperator="CREATE"
+                      source="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      target="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationSet/annotations"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Annotate Elements"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      classifier="#/0/PoolAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Destroy Invalid Annotation"
+                  outgoing="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingOperator="DESTROY"
+                      classifier="#/0/PoolAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ActivityFinalNode" incoming="#/1/PoolEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9">
+                <returnValues xsi:type="expr:TextualExpression" expressionText="this.foundAnnotations"
+                    language="OCL" languageVersion="1.0"/>
+              </ownedActivityNode>
+            </ownedActivity>
+          </contents>
+        </eAnnotations>
+        <eParameters name="this" eType="#/1/PoolEngine"/>
+        <eParameters name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+          <eAnnotations source="http://www.storydriven.org/core/extension">
+            <contents xsi:type="sdc:ParameterExtension"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="searchForOptionalElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SynchronizedMethodEngine" eSuperTypes="http://org.reclipse.structure.inference.annotations#//AnnotationEngine">
+      <eOperations name="annotate" eType="ecore:EClass http://org.reclipse.structure.inference.annotations#//AnnotationSet">
+        <eAnnotations source="http://www.storydriven.org/core/extension">
+          <contents xsi:type="sda:OperationExtension">
+            <ownedActivity comment="annotate(SynchronizedMethodEngine, EObject, EBoolean) : AnnotationSet"
+                name="annotate(SynchronizedMethodEngine, EObject, EBoolean) : AnnotationSet">
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.0"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="SUCCESS"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="FAILURE"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="END"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"/>
+              <ownedActivityEdge target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.8"
+                  source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="END"/>
+              <ownedActivityNode xsi:type="sda:InitialNode" name="annotate(SynchronizedMethodEngine, EObject, EBoolean) : AnnotationSet"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2"/>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Match Core Nodes"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.10"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="method" incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="modifier" incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Modifier">
+                    <constraint>
+                      <constraintExpression xsi:type="expr:TextualExpression" expressionText="modifier.synchronized=true"
+                          language="OCL" languageVersion="1.0"/>
+                    </constraint>
+                  </variable>
+                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
+                      classifier="#/0/FindMethodsAnnotation">
+                    <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/1/SynchronizedMethodEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
+                  </variable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="modifier" source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      targetEnd="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//BodyDeclaration/modifier"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.2"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2"
+                      bindingOperator="CREATE" classifier="#/0/SynchronizedMethodAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="method" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="modifier" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Modifier"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'method'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'modifier'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Check For Existing Annotation"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="#/0/SynchronizedMethodAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="method" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'synchronizedMethods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Add Annotation To Results"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1 #/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="this" bindingState="BOUND"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      classifier="#/1/SynchronizedMethodEngine"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotationResultSet"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="#/0/SynchronizedMethodAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_method" incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationEngine/foundAnnotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotations" bindingOperator="CREATE"
+                      source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationSet/annotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'method'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Annotate Elements"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="#/0/SynchronizedMethodAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_method" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'synchronizedMethods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Store Antecedent Relations"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
+                      classifier="#/0/SynchronizedMethodAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                      incomingLink="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="antecedentAnnos"
+                      bindingOperator="CREATE" source="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.0"
+                      target="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/antecedentAnnos"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Destroy Invalid Annotation"
+                  outgoing="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingOperator="DESTROY"
+                      classifier="#/0/SynchronizedMethodAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ActivityFinalNode" incoming="#/1/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.10">
+                <returnValues xsi:type="expr:TextualExpression" expressionText="this.foundAnnotations"
+                    language="OCL" languageVersion="1.0"/>
+              </ownedActivityNode>
+            </ownedActivity>
+          </contents>
+        </eAnnotations>
+        <eParameters name="this" eType="#/1/SynchronizedMethodEngine"/>
+        <eParameters name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+          <eAnnotations source="http://www.storydriven.org/core/extension">
+            <contents xsi:type="sdc:ParameterExtension"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="searchForOptionalElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FindMethodsEngine" eSuperTypes="http://org.reclipse.structure.inference.annotations#//AnnotationEngine">
+      <eOperations name="annotate" eType="ecore:EClass http://org.reclipse.structure.inference.annotations#//AnnotationSet">
+        <eAnnotations source="http://www.storydriven.org/core/extension">
+          <contents xsi:type="sda:OperationExtension">
+            <ownedActivity comment="annotate(FindMethodsEngine, EObject, EBoolean) : AnnotationSet"
+                name="annotate(FindMethodsEngine, EObject, EBoolean) : AnnotationSet">
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.0"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="SUCCESS"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  guard="FAILURE"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="EACH_TIME"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4"
+                  guard="END"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6"/>
+              <ownedActivityEdge target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.7"
+                  source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1"
+                  guard="END"/>
+              <ownedActivityNode xsi:type="sda:InitialNode" name="annotate(FindMethodsEngine, EObject, EBoolean) : AnnotationSet"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2"/>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Match Core Nodes"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="methodLevelSourceCodeLink"
+                      bindingState="BOUND" outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://somox.org/SourceCodeDecorator/2.0#//MethodLevelSourceCodeLink">
+                    <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/1/FindMethodsEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
+                  </variable>
+                  <variable xsi:type="sdp:ObjectVariable" name="methodDeclaration"
+                      incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="function" source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      targetEnd="http://somox.org/SourceCodeDecorator/2.0#//MethodLevelSourceCodeLink/function"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      bindingOperator="CREATE" classifier="#/0/FindMethodsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="methodLevelSourceCodeLink"
+                      bindingState="BOUND" incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
+                      classifier="http://somox.org/SourceCodeDecorator/2.0#//MethodLevelSourceCodeLink"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="methodDeclaration"
+                      bindingState="BOUND" incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methodLevelSourceCodeLink'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methodDeclaration'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Check For Existing Annotation"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="methodDeclaration"
+                      bindingState="BOUND" incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Add Annotation To Results"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1 #/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
+                  forEach="true">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="this" bindingState="BOUND"
+                      outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      classifier="#/1/FindMethodsEngine"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotationResultSet"
+                      incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
+                      outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_methodDeclaration"
+                      incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
+                      source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationEngine/foundAnnotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotations" bindingOperator="CREATE"
+                      source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.1"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//AnnotationSet/annotations"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methodDeclaration'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Annotate Elements"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.1"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
+                      outgoingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_methodDeclaration"
+                      bindingState="BOUND" incomingLink="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.1"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Destroy Invalid Annotation"
+                  outgoing="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
+                  incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3">
+                <ownedRule>
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingOperator="DESTROY"
+                      classifier="#/0/FindMethodsAnnotation"/>
+                </ownedRule>
+              </ownedActivityNode>
+              <ownedActivityNode xsi:type="sda:ActivityFinalNode" incoming="#/1/FindMethodsEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9">
+                <returnValues xsi:type="expr:TextualExpression" expressionText="this.foundAnnotations"
+                    language="OCL" languageVersion="1.0"/>
+              </ownedActivityNode>
+            </ownedActivity>
+          </contents>
+        </eAnnotations>
+        <eParameters name="this" eType="#/1/FindMethodsEngine"/>
+        <eParameters name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+          <eAnnotations source="http://www.storydriven.org/core/extension">
+            <contents xsi:type="sdc:ParameterExtension"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="searchForOptionalElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+  </ecore:EPackage>
+</xmi:XMI>
