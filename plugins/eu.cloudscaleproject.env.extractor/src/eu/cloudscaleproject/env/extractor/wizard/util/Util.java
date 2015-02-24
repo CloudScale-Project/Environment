@@ -247,7 +247,7 @@ public class Util {
 				//
 				// Modisco output
 				//
-				IFolder modiscoFolder = rif.getFolderResource(ResultPersistenceFolder.KEY_MODISCO_FOLDER);
+				IFolder modiscoFolder = (IFolder)rif.getSubResource(ResultPersistenceFolder.KEY_MODISCO_FOLDER);
 				
 				// Java2kdmFraments folder
 				String fragments = "java2kdmFragments";
@@ -273,7 +273,7 @@ public class Util {
 				//
 				// Somox output
 				//
-				IFolder somoxFolder = rif.getFolderResource(ResultPersistenceFolder.KEY_SOMOX_FOLDER);
+				IFolder somoxFolder = (IFolder)rif.getSubResource(ResultPersistenceFolder.KEY_SOMOX_FOLDER);
 
 				IFolder modelFolder = outputProject.getFolder("model");
 
@@ -296,13 +296,13 @@ public class Util {
 				IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY_DIAGRAM);
 				IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM_DIAGRAM);
 								
-				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
-				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
-				rif.setResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
-				rif.setResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
 
 				IFile sourceDecoratorFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SOURCEDECORATOR);
-				rif.setResource(ResultPersistenceFolder.KEY_SOURCEDECORATOR_MODEL, sourceDecoratorFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_SOURCEDECORATOR_MODEL, sourceDecoratorFile);
 				
 				rif.save();
 				//ViewService.createDiagram(

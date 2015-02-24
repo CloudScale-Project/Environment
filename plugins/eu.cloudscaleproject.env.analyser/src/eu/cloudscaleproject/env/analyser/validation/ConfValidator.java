@@ -49,12 +49,23 @@ public class ConfValidator extends ToolValidator {
 		boolean pms = false;
 		boolean slo = false;
 		
-		mp = validateModel(project, ca != null ? ca.getMeasuringPoints() : null, "analyser_conf_measuringpoints");
-		pms = validateModel(project, ca != null ? ca.getPMS() : null, "analyser_conf_pms");
-		slo = validateModel(project, ca != null ? ca.getSLO() : null, "analyser_conf_slo");
+		if(ca != null){
+			List<IResource> mpFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
+			List<IResource> pmsFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_PMS);
+			List<IResource> sloFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_SLO);
+			
+			for(IResource file : mpFiles){
+				mp &= validateModel(project, ca != null ? (IFile)file : null, "analyser_conf_measuringpoints");
+			}
+			for(IResource file : pmsFiles){
+				pms &= validateModel(project, ca != null ? (IFile)file : null, "analyser_conf_pms");
+			}
+			for(IResource file : sloFiles){
+				pms &= validateModel(project, ca != null ? (IFile)file : null, "analyser_conf_slo");
+			}
+		}
 
 		return mp && pms && slo;
-		
 	}
 	
 	public boolean validateModel(IProject project, IFile file, String reqID) throws CoreException{
@@ -144,13 +155,13 @@ public class ConfValidator extends ToolValidator {
 			
 			if(usageEvolutionResourceProvider != null){
 				usageEvolutionAlt = usageEvolutionResourceProvider.getResource(
-						ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT));
+						ca.getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT));
 				usageEvolutionResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, usageEvolutionAlt);
 			}
 		}
 		
 		try{
-			IFolder folder = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+			IFolder folder = (IFolder)ca.getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 			status.handleWarning(ERROR, 
 					!inputResourceProvider.hasTag(ResourceProvider.TAG_SELECTED, 
 							inputResourceProvider.getResource(folder)), 

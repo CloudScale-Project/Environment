@@ -80,14 +80,14 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 			}
 		}
 		
-		setResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageFile);
-		setResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
+		setSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageFile);
+		setSubResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
 	}
 	
 	public void clear(){
 		
-		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
-		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
+		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");
@@ -118,8 +118,8 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	
 	public void createEILDPreset(){
 		
-		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
-		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
+		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");
@@ -193,7 +193,7 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	
 	public void openUsageEvolutionEditor(){
 		
-		IFile usageFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		if(usageFile == null){
 			logger.warning("clear(): Usage evolution model file not set!");
@@ -208,7 +208,7 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 	}
 	
 	public void openLimboEditor(){
-		IFile limboFile = getFileResource(ToolchainUtils.KEY_FILE_LIMBO);
+		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
 		
 		if(limboFile == null){
 			logger.warning("clear(): Limbo model file not set!");

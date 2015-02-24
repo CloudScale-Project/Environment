@@ -68,7 +68,7 @@ public class ImportPCMDialog extends Dialog{
 				ia.setAllocation(allocation);
 			}
 			if(usage != null && usage.exists()){
-				ia.setUsage(usage);
+				ia.setSubResource(ToolchainUtils.KEY_FILE_USAGE, usage);
 			}
 			
 			rp.tagResource(ResourceProvider.TAG_SELECTED, ia);

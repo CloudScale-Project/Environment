@@ -1,19 +1,23 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
@@ -98,12 +102,12 @@ public class ConfAlternative extends EditorInputEMF{
 	}
 	
 	public UsageEvolution getUsageEvolution(){
-		IFile ueFile = getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		IResource ueFile = getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		if(ueFile == null){
 			return null;
 		}
 		
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, ueFile);
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)ueFile);
 		EObject eobject = res.getContents().isEmpty() ? null : res.getContents().get(0);
 		
 		if(eobject instanceof UsageEvolution){
@@ -113,13 +117,13 @@ public class ConfAlternative extends EditorInputEMF{
 	}
 	
 	public void setUsageEvolution(EditorInputFolder res){
-		IFile fileUsageEvo = res.getFileResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		setResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT, res.getResource());
+		IResource fileUsageEvo = res.getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		setSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT, res.getResource());
 		if(fileUsageEvo == null){
 			return;
 		}
 		
-		Resource resUE = ExplorerProjectPaths.getEmfResource(resSet, fileUsageEvo);
+		Resource resUE = ExplorerProjectPaths.getEmfResource(resSet, (IFile)fileUsageEvo);
 		
 		EObject eobject = resUE.getContents().isEmpty() ? null : resUE.getContents().get(0);
 		Experiment exp = getExperiment();
@@ -155,9 +159,9 @@ public class ConfAlternative extends EditorInputEMF{
 		{
 			//allocation
 			{
-				IFile file = inputAlt.getFileResource(ToolchainUtils.KEY_FILE_ALLOCATION);
+				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_ALLOCATION);
 				if(file != null && file.exists()){
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, file);
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
 					if(!res.getContents().isEmpty()){
 						initialModel.setAllocation((Allocation)res.getContents().get(0));
 					}
@@ -169,9 +173,9 @@ public class ConfAlternative extends EditorInputEMF{
 			
 			//usage			
 			{
-				IFile file = inputAlt.getFileResource(ToolchainUtils.KEY_FILE_USAGE);
+				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
 				if(file != null && file.exists()){
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, file);
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
 					if(!res.getContents().isEmpty()){
 						initialModel.setUsageModel((UsageModel)res.getContents().get(0));
 					}
@@ -200,7 +204,7 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		configureInput(exp, initialModel, inputAlt);
 		
-		setResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
+		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 	}
 	
 	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
@@ -227,9 +231,11 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 	}
 	
+	// Helper methods for retrieving model objects ////////////////////
+	
 	public Experiment getExperiment() {
 		
-		IFile expFile = getFileResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
+		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
 		if(expFile == null || !expFile.exists()){
 			List<IFile> files = PCMResourceSet.findResource(getResource(), PCMModelType.EXPERIMENTS.getFileExtension());			
 			if(files.size() > 0){
@@ -239,11 +245,11 @@ public class ConfAlternative extends EditorInputEMF{
 			else{
 				//create new Experiment model file
 				expFile = getResource().getFile(PCMModelType.EXPERIMENTS.getFullName());
-				setResource(ToolchainUtils.KEY_FILE_EXPERIMENTS, expFile);
+				setSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS, expFile);
 			}			
 		}
 		
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, expFile);
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)expFile);
 		EObject root = res.getContents().size() > 0 ? res.getContents().get(0) : null;
 		if(root == null){
 			ExperimentRepository expRep = ExperimentsFactory.eINSTANCE.createExperimentRepository();
@@ -269,6 +275,39 @@ public class ConfAlternative extends EditorInputEMF{
 		return (Experiment)firsExperiment;		
 	}
 	
+	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz){
+
+		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
+		
+		for(Resource res : resSet.getResources()){
+			if(res != null && !res.getContents().isEmpty()){
+				EObject root = res.getContents().get(0);
+				if(clazz.equals(root.eClass())){
+					mps.add((MeasuringPoint)root);
+				}
+			}
+		}
+		return mps;
+	}
+	
+	public List<MeasuringPoint> getMeasuringPointObjects(){
+
+		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
+		
+		for(Resource res : resSet.getResources()){
+			if(res != null && !res.getContents().isEmpty()){
+				EObject root = res.getContents().get(0);
+				if(root instanceof MeasuringPoint){
+					mps.add((MeasuringPoint)root);
+				}
+			}
+		}
+		return mps;
+	}
+	
+	///////////////////////////////////////////////////////////////////
+
+	
 	private void configureExperiment(Experiment exp){
 		
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
@@ -290,18 +329,20 @@ public class ConfAlternative extends EditorInputEMF{
 		exp.getToolConfiguration().clear();
 		exp.getToolConfiguration().add(conf);
 	}
-		
+	
+	/*
 	public IFile getPMS(){
-		return getFileResource(ToolchainUtils.KEY_FILE_PMS);
+		return ()getSubResource(ToolchainUtils.KEY_FILE_PMS);
 	}
 	
-	public IFile getMeasuringPoints(){
-		return getFileResource(ToolchainUtils.KEY_FILE_MESURPOINTS);
+	public List<IFile> getMeasuringPoints(){
+		return getFileResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
 	}
 	
 	public IFile getSLO(){
 		return getFileResource(ToolchainUtils.KEY_FILE_SLO);
 	}
+	*/
 
 	@Override
 	protected void doLoad(){
@@ -317,31 +358,35 @@ public class ConfAlternative extends EditorInputEMF{
 	
 	private final void loadModels() throws IOException {
 		
-		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_EXPERIMENTS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);
 		}
-		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_PMS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_PMS)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_VARIATIONS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_MESURPOINTS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);		
 		}
-		for (IFile f : getFileResources(ToolchainUtils.KEY_FILE_SLO)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_SLO)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);		
 		}
+		
+		//load plugin models into resource set
+		URI metricDescriptions = PathmapManager.denormalizeURI(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
+		resSet.getResource(metricDescriptions, true);
 	}
 	
 	//
@@ -373,7 +418,7 @@ public class ConfAlternative extends EditorInputEMF{
 		measurePoint.setUsageScenario(usageScenario);
 		
 		IFile mesuringPointFile = ((IFolder)getResource()).getFile("analyser.measuringpoint");
-		this.setResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
+		this.setSubResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
 		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, mesuringPointFile);
 		resMp.getContents().clear();
 		resMp.getContents().add(measurePoint);
@@ -392,7 +437,7 @@ public class ConfAlternative extends EditorInputEMF{
 		pms.getPerformanceMeasurements().add(pm);
 		
 		IFile pmsFile = ((IFolder)getResource()).getFile("analyser.pms");
-		this.setResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
+		this.setSubResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
 		Resource resPms = ExplorerProjectPaths.getEmfResource(resSet, pmsFile);
 		resPms.getContents().clear();
 		resPms.getContents().add(pms);
@@ -409,7 +454,7 @@ public class ConfAlternative extends EditorInputEMF{
 		slo.setUpperThreshold(ht);
 		
 		IFile sloFile = ((IFolder)getResource()).getFile("analyser.slo");
-		this.setResource(ToolchainUtils.KEY_FILE_SLO, pmsFile);
+		this.setSubResource(ToolchainUtils.KEY_FILE_SLO, pmsFile);
 		Resource resSlo = ExplorerProjectPaths.getEmfResource(resSet, sloFile);
 		resSlo.getContents().clear();
 		resSlo.getContents().add(sloRep);

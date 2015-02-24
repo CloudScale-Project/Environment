@@ -29,12 +29,12 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 	
 	public IFile getModiscoConfigFile ()
 	{
-		return getFileResource(KEY_MODISCO_CONFIG);
+		return (IFile)getSubResource(KEY_MODISCO_CONFIG);
 	}
 	
 	public IFile getSomoxConfigFile()
 	{
-		return getFileResource(KEY_SOMOX_CONFIG);
+		return (IFile)getSubResource(KEY_SOMOX_CONFIG);
 	}
 	
 	@Override
@@ -60,8 +60,8 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 			}
 			
 			
-			setResource(KEY_SOMOX_CONFIG, somoxConfig);
-			setResource(KEY_MODISCO_CONFIG, modiscoConfig);
+			setSubResource(KEY_SOMOX_CONFIG, somoxConfig);
+			setSubResource(KEY_MODISCO_CONFIG, modiscoConfig);
 
 		} catch (Exception e) {
 			e.printStackTrace();

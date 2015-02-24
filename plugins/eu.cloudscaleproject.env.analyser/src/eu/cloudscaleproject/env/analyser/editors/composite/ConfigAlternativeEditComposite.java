@@ -168,7 +168,7 @@ public class ConfigAlternativeEditComposite extends Composite implements ISaveab
 		
 		comboViewerInput.setInput(inputResourceProvider.getResources());
 		
-		IFolder inputAlt = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		IFolder inputAlt = (IFolder)ca.getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 		if(inputAlt != null){
 			comboViewerInput.setSelection(
 					new StructuredSelection(inputResourceProvider.getResource(inputAlt)), 
@@ -190,7 +190,7 @@ public class ConfigAlternativeEditComposite extends Composite implements ISaveab
 			
 			comboViewerUsage.setInput(usageResourceProvider.getResources());
 			
-			IFolder ueAl = ca.getFolderResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
+			IFolder ueAl = (IFolder)ca.getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
 			if(ueAl != null){
 				comboViewerUsage.setSelection(
 						new StructuredSelection(usageResourceProvider.getResource(ueAl)), true);

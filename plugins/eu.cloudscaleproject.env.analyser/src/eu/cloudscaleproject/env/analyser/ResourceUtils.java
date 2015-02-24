@@ -102,7 +102,7 @@ public class ResourceUtils {
 		
 		for(IEditorInputResource res : confResourceProvider.getResources()){
 			if(res instanceof ConfAlternative){
-				IFolder inputAltFolder = ((ConfAlternative)res).getFolderResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+				IFolder inputAltFolder = (IFolder)((ConfAlternative)res).getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 				if(inputAltFolder == null){
 					continue;
 				}

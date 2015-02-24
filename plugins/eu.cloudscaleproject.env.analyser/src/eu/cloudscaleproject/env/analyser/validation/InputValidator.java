@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.analyser.validation;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -51,11 +53,27 @@ public class InputValidator extends ToolValidator {
 		boolean res = false;
 		boolean usa = false;
 		
-		rep = validateModel(project, ia != null ? ia.getRepository() : null, "analyser_input_repository");
-		sys = validateModel(project, ia != null ? ia.getSystem() : null, "analyser_input_system");
-		all = validateModel(project, ia != null ? ia.getAllocation() : null, "analyser_input_allocation");
-		res = validateModel(project, ia != null ? ia.getResourceEnv() : null, "analyser_input_resource");
-		usa = validateModel(project, ia != null ? ia.getUsage() : null, "analyser_input_usage");
+		List<IResource> repFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_REPOSITORY);
+		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
+		List<IResource> allFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_ALLOCATION);
+		List<IResource> resFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV);
+		List<IResource> usaFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGE);
+
+		for(IResource file : repFiles){
+			rep &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_repository");
+		}
+		for(IResource file : sysFiles){
+			sys &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_system");
+		}
+		for(IResource file : allFiles){
+			all &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_allocation");
+		}
+		for(IResource file : resFiles){
+			res &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_resource");
+		}
+		for(IResource file : usaFiles){
+			usa &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_usage");
+		}
 
 		return rep && sys && all && res && usa;
 		

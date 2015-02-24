@@ -285,8 +285,8 @@ public class SelectModelWizardPage extends WizardPage implements
 		if (this.resultsList.getSelection().length == 0)
 			throw new IllegalStateException();
 
-		IFile repositoryFile = this.result.getFileResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL);
-		IFile systemFile = this.result.getFileResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL);
+		IFile repositoryFile = (IFile)this.result.getSubResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL);
+		IFile systemFile = (IFile)this.result.getSubResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL);
 
 		final URI repositoryURI = URI.createPlatformResourceURI(repositoryFile
 				.getFullPath().toString(), true);

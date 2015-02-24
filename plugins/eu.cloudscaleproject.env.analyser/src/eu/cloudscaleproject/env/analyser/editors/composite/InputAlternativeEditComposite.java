@@ -20,6 +20,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
 public class InputAlternativeEditComposite extends Composite implements ISaveableComposite{
@@ -110,7 +111,7 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 				IFile selection = (IFile)dialog.getFirstResult();
 				if(selection != null){
 					textUsage.setText(selection.getProjectRelativePath().toString());
-		        	InputAlternativeEditComposite.this.alternative.setUsage(selection);
+		        	InputAlternativeEditComposite.this.alternative.setSubResource(ToolchainUtils.KEY_FILE_USAGE, selection);
 		        	InputAlternativeEditComposite.this.alternative.load();
 					dirtyAdapter.fireDirtyState();
 				}
@@ -125,9 +126,12 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 	}
 	
 	public void update(){
-		if(!this.isDisposed()){			
-			textAlloc.setText(alternative.getAllocation() != null ? alternative.getAllocation().getProjectRelativePath().toString() : "");
-			textUsage.setText(alternative.getUsage() != null ? alternative.getUsage().getProjectRelativePath().toString() : "");
+		if(!this.isDisposed()){
+			IFile alloc = (IFile)alternative.getSubResource(ToolchainUtils.KEY_FILE_ALLOCATION);
+			IFile usage = (IFile)alternative.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
+
+			textAlloc.setText(alloc != null ? alloc.getProjectRelativePath().toString() : "");
+			textUsage.setText(usage != null ? usage.getProjectRelativePath().toString() : "");
 		}
 		super.update();
 	}

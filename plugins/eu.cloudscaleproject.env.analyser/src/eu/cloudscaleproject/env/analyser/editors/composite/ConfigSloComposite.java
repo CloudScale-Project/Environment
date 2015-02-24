@@ -1,11 +1,8 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
 public class ConfigSloComposite extends Composite implements ISaveableComposite{
@@ -20,17 +17,22 @@ public class ConfigSloComposite extends Composite implements ISaveableComposite{
 	@Override
 	public void update() {
 		
+		/*
 		boolean hasMeasuringPoints = false;
 		
-		IFile file = alternative.getMeasuringPoints();
+		List<MeasuringPoint> mps = alternative.getMeasuringPoints(PcmmeasuringpointPackage.Literals.ACTIVE_RESOURCE_MEASURING_POINT);
+		
+		List<IFile> fileMPoints = alternative.getMeasuringPoints();
 
-		if(file != null && file.exists()){
-			Resource res = ExplorerProjectPaths.getEmfResource(alternative.getResourceSet(), file);
-			if(!res.getContents().isEmpty()){
-				res.getContents().get(0);
+		for(IFile file : fileMPoints){
+			if(file != null && file.exists()){
+				Resource res = ExplorerProjectPaths.getEmfResource(alternative.getResourceSet(), file);
+				if(!res.getContents().isEmpty()){
+					res.getContents().get(0);
+				}
 			}
 		}
-		
+		*/
 		super.update();
 	}
 

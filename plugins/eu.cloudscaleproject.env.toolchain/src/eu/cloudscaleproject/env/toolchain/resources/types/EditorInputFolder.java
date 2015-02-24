@@ -77,7 +77,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return relative;
 	}
 	
-	public void setResource(String key, IResource res){
+	public void setSubResource(String key, IResource res){
 		
 		String oldPath = propertyInputFile.getProperty(key);
 		String path = "";
@@ -94,12 +94,52 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		firePropertyChange(PROP_RESOURCE_CHANGED, oldPath, path);
 	}
 	
-	public void setResources(String key, List<IResource> resList){
+	public void addSubResource(String key, IResource res){
+		String oldPath = propertyInputFile.getProperty(key);
+		String path = "";
+		
+		if(isResourceInternal(res)){
+			path = getInternalResourcePath(res);
+		}
+		else{
+			path = getExternalResourcePath(res);
+		}
+		
+		if(oldPath != null){
+			String oldPathTrimed = oldPath.trim();
+			if(!oldPathTrimed.isEmpty()){
+				path = oldPathTrimed + "," + path;
+			}
+		}
+		
+		propertyInputFile.setProperty(key, path);
+		isDirty = true;
+		firePropertyChange(PROP_RESOURCE_CHANGED, oldPath, path);
+	}
+	
+	public void removeSubResource(String key, IResource res){
+		
+		List<IResource> resources = getSubResources(key);
+		IResource toRemove = null;
+		
+		for(IResource r : resources){
+			if(r.equals(res)){
+				toRemove = r;
+			}
+		}
+		
+		if(toRemove != null){
+			resources.remove(toRemove);
+		}
+		setSubResources(key, resources);
+	}
+	
+	public void setSubResources(String key, List<? extends IResource> resList){
 		
 		String oldValue = propertyInputFile.getProperty(key);
 		String value = "";
 		
-		Iterator<IResource> iter = resList.iterator();
+		Iterator<? extends IResource> iter = resList.iterator();
 		
 		while(iter.hasNext()){
 			IResource res = iter.next();
@@ -144,7 +184,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return path.toPortableString();
 	}
 
-	public IFile getFileResource(String key)
+	public IResource getSubResource(String key)
 	{
 		String relPath = propertyInputFile.getProperty(key);
 		if(relPath == null || relPath.isEmpty()){
@@ -164,23 +204,18 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			res = getResource().getProject().findMember(relPath);
 		}
 		
-		if (res instanceof IFile){
-			return (IFile) res;
-		}
-		else{
-			return null;
-		}
+		return res;
 	}
 	
-	public List<IFile> getFileResources(String key)
+	public List<IResource> getSubResources(String key)
 	{
+		ArrayList<IResource> resources = new ArrayList<IResource>();
+
 		String relPath = propertyInputFile.getProperty(key);
 		if(relPath == null || relPath.isEmpty()){
-			return null;
+			return resources;
 		}
-		
-		ArrayList<IFile> resources = new ArrayList<IFile>();
-		
+				
 		//check if this is multi-resource key
 		if(relPath.contains(":")){
 			for(String path : relPath.split(":")){
@@ -199,7 +234,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			}
 		}
 		else{
-			IFile res = getFileResource(key);
+			IResource res = getSubResource(key);
 			if(res != null){
 				resources.add(res);
 			}
@@ -208,6 +243,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return resources;
 	}
 	
+	/*
 	public IFolder getFolderResource(String key)
 	{
 		String relPath = propertyInputFile.getProperty(key);
@@ -234,6 +270,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			return null;
 		}
 	}
+	*/
 	
 	@Override
 	public synchronized void save() {

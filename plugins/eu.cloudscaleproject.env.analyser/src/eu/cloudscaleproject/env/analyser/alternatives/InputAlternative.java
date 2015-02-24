@@ -1,11 +1,13 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -31,8 +33,9 @@ public class InputAlternative extends EditorInputEMF{
 		super(project, folder, factory);
 	}
 	
+	/*
 	public IFile getRepository(){
-		return getFileResource(ToolchainUtils.KEY_FILE_REPOSITORY);
+		return getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
 	}
 	
 	public IFile getSystem(){
@@ -52,56 +55,38 @@ public class InputAlternative extends EditorInputEMF{
 	}
 	
 	public void setRepository(IFile repository) {
-		setResource(ToolchainUtils.KEY_FILE_REPOSITORY, repository);
+		setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repository);
 	}
 	
 	public void setSystem(IFile system) {
-		setResource(ToolchainUtils.KEY_FILE_SYSTEM, system);
+		setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, system);
 	}
 	
 	public void setResourceEnv(IFile resourceEnv) {
-		setResource(ToolchainUtils.KEY_FILE_RESOURCEENV, resourceEnv);
+		setSubResource(ToolchainUtils.KEY_FILE_RESOURCEENV, resourceEnv);
 	}
 	
 	public void setUsage(IFile usage) {
-		setResource(ToolchainUtils.KEY_FILE_USAGE, usage);
+		setSubResource(ToolchainUtils.KEY_FILE_USAGE, usage);
 	}
+	*/
 	
 	public void importFromFolder(IFolder folder){
-		
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
-			if(!files.isEmpty()){
-				setRepository(files.get(0));
-			}
+			setSubResources(ToolchainUtils.KEY_FILE_REPOSITORY, files);
 		}
-		
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
-			if(!files.isEmpty()){
-				setSystem(files.get(0));
-			}
-		}
-		
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
-			if(!files.isEmpty()){
-				setResourceEnv(files.get(0));
-			}
+			setSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV, files);
 		}
-		
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.ALLOCATION.getFileExtension());
-			if(!files.isEmpty()){
-				setAllocation(files.get(0));
-			}
+			setSubResources(ToolchainUtils.KEY_FILE_ALLOCATION, files);
 		}
-		
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
-			if(!files.isEmpty()){
-				setUsage(files.get(0));
-			}
+			setSubResources(ToolchainUtils.KEY_FILE_USAGE, files);
 		}
 	}
 	
@@ -112,7 +97,7 @@ public class InputAlternative extends EditorInputEMF{
 	 */
 	public void setAllocation(IFile alloc) {
 		
-		setResource(ToolchainUtils.KEY_FILE_ALLOCATION, alloc);
+		setSubResource(ToolchainUtils.KEY_FILE_ALLOCATION, alloc);
 
 		try {
 			alloc.refreshLocal(IFile.DEPTH_ZERO, null);
@@ -134,75 +119,58 @@ public class InputAlternative extends EditorInputEMF{
 			de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment resenv = allocModel.getTargetResourceEnvironment_Allocation();
 			EcoreUtil.resolveAll(resenv);
 			
-			setSystem(ExplorerProjectPaths.getFileFromEmfResource(sys.eResource()));
-			setResourceEnv(ExplorerProjectPaths.getFileFromEmfResource(resenv.eResource()));
+			setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, ExplorerProjectPaths.getFileFromEmfResource(sys.eResource()));
+			setSubResource(ToolchainUtils.KEY_FILE_RESOURCEENV, ExplorerProjectPaths.getFileFromEmfResource(resenv.eResource()));
 			
+			List<IFile> repositoryFiles = new ArrayList<IFile>();
 			for(Resource loadedRes : resSet.getResources()){
 				if(loadedRes instanceof RepositoryResourceImpl){
-					setRepository(ExplorerProjectPaths.getFileFromEmfResource(loadedRes));
+					repositoryFiles.add(ExplorerProjectPaths.getFileFromEmfResource(loadedRes));
 				}
 			}
+			setSubResources(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryFiles);
 		}
 	}
 	
 	@Override
 	protected void doLoad() {
+		
 		super.doLoad();
 		
-		if(getRepository() != null){
-			try {
-				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getRepository());
-				if(r != null){
-					r.unload();
-					r.load(null);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			loadModels();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		if(getSystem() != null){
-			try {
-				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getSystem());
-				if(r != null){
-					r.unload();
-					r.load(null);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	}
+	
+	private final void loadModels() throws IOException {
+		
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_REPOSITORY)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+			res.unload();
+			res.load(null);
 		}
-		if(getAllocation() != null){
-			try {
-				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getAllocation());
-				if(r != null){
-					r.unload();
-					r.load(null);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_SYSTEM)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+			res.unload();
+			res.load(null);		
 		}
-		if(getResourceEnv() != null){
-			try {
-				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getResourceEnv());
-				if(r != null){
-					r.unload();
-					r.load(null);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_ALLOCATION)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+			res.unload();
+			res.load(null);		
 		}
-		if(getUsage() != null){
-			try {
-				Resource r = ExplorerProjectPaths.getEmfResource(resSet, getUsage());
-				if(r != null){
-					r.unload();
-					r.load(null);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+			res.unload();
+			res.load(null);		
+		}
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_USAGE)) {
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+			res.unload();
+			res.load(null);		
 		}
 	}
 }

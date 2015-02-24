@@ -52,8 +52,8 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 				in.close();
 			}
 			
-			setResource(KEY_CATALOG, catalog);
-			setResource(KEY_ENGINES, engines);
+			setSubResource(KEY_CATALOG, catalog);
+			setSubResource(KEY_ENGINES, engines);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

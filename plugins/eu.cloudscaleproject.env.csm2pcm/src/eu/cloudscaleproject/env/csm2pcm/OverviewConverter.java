@@ -40,6 +40,7 @@ import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class OverviewConverter implements IOverviewConverter{
 	
@@ -143,7 +144,7 @@ public class OverviewConverter implements IOverviewConverter{
 			//create or set analyser generated input alternative
 			InputAlternative ia = ResourceUtils.getGeneratedResourceInput(project);
 			ia.setAllocation(resSet.getModelFile(PCMModelType.ALLOCATION));
-			ia.setUsage(resSet.getModelFile(PCMModelType.USAGE));
+			ia.setSubResource(ToolchainUtils.KEY_FILE_USAGE, resSet.getModelFile(PCMModelType.USAGE));
 			ia.save();
 		} 
 

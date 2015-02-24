@@ -50,13 +50,13 @@ public class Util
 		assert (extractorResult != null);
 
 		ResourceSet resSet = new ResourceSetImpl();
-		IFile catalogFile = configFolder.getFileResource(ConfigPersistenceFolder.KEY_CATALOG);
+		IFile catalogFile = (IFile)configFolder.getSubResource(ConfigPersistenceFolder.KEY_CATALOG);
 		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
 
-		IFile enginesFile = configFolder.getFileResource(ConfigPersistenceFolder.KEY_ENGINES);
+		IFile enginesFile = (IFile)configFolder.getSubResource(ConfigPersistenceFolder.KEY_ENGINES);
 		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
 
-		IFile sdFile = extractorResult.getFileResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		IFile sdFile = (IFile)extractorResult.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
 		URI sdURI = URI.createPlatformResourceURI(sdFile.getFullPath().toString(), true);
 
 		//
@@ -135,7 +135,7 @@ public class Util
 		try
 		{
 			res.save(Collections.emptyMap());
-			rif.setResource(ResultPersistenceFolder.KEY_PSA, file);
+			rif.setSubResource(ResultPersistenceFolder.KEY_PSA, file);
 			rif.save();
 		}
 		catch (IOException e)
@@ -198,7 +198,7 @@ public class Util
 	//
 	public static Collection<ASGAnnotation> loadAnnotations(ResultPersistenceFolder resultFolder)
 	{
-		IFile resultFile = resultFolder.getFileResource(ResultPersistenceFolder.KEY_PSA);
+		IFile resultFile = (IFile)resultFolder.getSubResource(ResultPersistenceFolder.KEY_PSA);
 		URI resultUri = URI.createPlatformResourceURI(resultFile.getFullPath().toString(), true);
 
 		ResourceSet ress = new ResourceSetImpl();

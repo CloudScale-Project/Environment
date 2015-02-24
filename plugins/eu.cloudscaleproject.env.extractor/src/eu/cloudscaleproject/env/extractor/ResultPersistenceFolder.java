@@ -54,8 +54,8 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 			e.printStackTrace();
 		}
 		
-		setResource(KEY_MODISCO_FOLDER, modiscoFolder);
-		setResource(KEY_SOMOX_FOLDER, somoxFolder);
+		setSubResource(KEY_MODISCO_FOLDER, modiscoFolder);
+		setSubResource(KEY_SOMOX_FOLDER, somoxFolder);
 		
 		save();
 	}

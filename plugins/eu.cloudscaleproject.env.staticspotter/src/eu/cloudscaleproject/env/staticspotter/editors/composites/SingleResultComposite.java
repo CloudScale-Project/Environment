@@ -57,6 +57,7 @@ public class SingleResultComposite extends TitleComposite {
 			public IWorkbenchPartSite getSite()
 			{
 				return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
+
 			}
 		};
 

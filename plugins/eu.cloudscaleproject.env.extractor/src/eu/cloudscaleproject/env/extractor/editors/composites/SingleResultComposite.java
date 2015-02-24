@@ -81,7 +81,7 @@ public class SingleResultComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					IFile diagramFile = resultPersistenceFolder.getFileResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM);
+					IFile diagramFile = (IFile)resultPersistenceFolder.getSubResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM);
 					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), diagramFile);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -93,7 +93,7 @@ public class SingleResultComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					IFile diagramFile = resultPersistenceFolder.getFileResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM);
+					IFile diagramFile = (IFile)resultPersistenceFolder.getSubResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM);
 					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), diagramFile);
 				} catch (Exception e1) {
 					e1.printStackTrace();
