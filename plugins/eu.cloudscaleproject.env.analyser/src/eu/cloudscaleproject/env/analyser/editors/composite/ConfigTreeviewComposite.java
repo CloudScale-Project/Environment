@@ -17,9 +17,12 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,9 +40,8 @@ import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigAlternativeTreeviewComposite extends Composite implements ISaveableComposite, IPropertySheetPageProvider{
+public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 
 	private final IEditorPart editor;
 	private final IDirtyAdapter dirtyAdapter;
@@ -55,11 +57,11 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements ISa
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigAlternativeTreeviewComposite(IEditorPart editor, ConfAlternative ca, Composite parent, int style) {
+	public ConfigTreeviewComposite(IEditorPart editor, ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
 		
 		this.editor = editor;
-		this.dirtyAdapter = (IDirtyAdapter)ConfigAlternativeTreeviewComposite.this.editor.getAdapter(IDirtyAdapter.class);
+		this.dirtyAdapter = (IDirtyAdapter)ConfigTreeviewComposite.this.editor.getAdapter(IDirtyAdapter.class);
 		this.alternative = ca;
 		
 		setLayout(new GridLayout(1, false));
@@ -98,7 +100,6 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements ISa
 		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
 		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
-		//this.treeViewer.addFilter(new ModelViewFilter());
 		
 		final PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
@@ -119,29 +120,27 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements ISa
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 		
 		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain());
-		menuSupport.setViewer(treeViewer);		
+		menuSupport.setViewer(treeViewer);
+		
+		tree.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);				
+			}
+		});
+		
+		this.treeViewer.setInput(alternative.getResourceSet());
+		this.treeViewer.expandToLevel(2);
+		this.treeViewer.refresh();
 	}
 	
-	private void updateTreeview(){
-		
-		alternative.load();
-		
-		if(!this.tree.isDisposed()){
-			this.treeViewer.setInput(alternative.getResourceSet());
-			this.treeViewer.expandToLevel(2);
-			this.treeViewer.refresh();
-		}
-	}
-	
-	public void update(){
-		alternative.load();
-		if(!this.isDisposed()){
-			updateTreeview();
-		}
-		
-		ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);
-		
-		super.update();
+	public void addFilter(ViewerFilter filter){
+		this.treeViewer.addFilter(filter);
 	}
 
 	@Override
@@ -149,20 +148,5 @@ public class ConfigAlternativeTreeviewComposite extends Composite implements ISa
 		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain());
 		propertySheetPage.setPropertySourceProvider(contentProvider);
 		return propertySheetPage;
-	}
-
-	@Override
-	public void save() {
-		alternative.save();
-	}
-
-	@Override
-	public void load() {
-		updateTreeview();
-	}
-
-	@Override
-	public boolean isDirty() {
-		return alternative.isDirty();
 	}
 }

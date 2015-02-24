@@ -33,44 +33,6 @@ public class InputAlternative extends EditorInputEMF{
 		super(project, folder, factory);
 	}
 	
-	/*
-	public IFile getRepository(){
-		return getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
-	}
-	
-	public IFile getSystem(){
-		return getFileResource(ToolchainUtils.KEY_FILE_SYSTEM);
-	}
-	
-	public IFile getResourceEnv(){
-		return getFileResource(ToolchainUtils.KEY_FILE_RESOURCEENV);
-	}
-	
-	public IFile getAllocation() {
-		return getFileResource(ToolchainUtils.KEY_FILE_ALLOCATION);
-	}
-
-	public IFile getUsage() {
-		return getFileResource(ToolchainUtils.KEY_FILE_USAGE);
-	}
-	
-	public void setRepository(IFile repository) {
-		setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repository);
-	}
-	
-	public void setSystem(IFile system) {
-		setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, system);
-	}
-	
-	public void setResourceEnv(IFile resourceEnv) {
-		setSubResource(ToolchainUtils.KEY_FILE_RESOURCEENV, resourceEnv);
-	}
-	
-	public void setUsage(IFile usage) {
-		setSubResource(ToolchainUtils.KEY_FILE_USAGE, usage);
-	}
-	*/
-	
 	public void importFromFolder(IFolder folder){
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());

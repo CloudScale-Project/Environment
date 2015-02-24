@@ -38,7 +38,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigAlternativeEditComposite extends Composite implements ISaveableComposite{
+public class ConfigEditComposite extends Composite implements ISaveableComposite{
 	
 	private final ResourceProvider inputResourceProvider;
 	private final ResourceProvider usageResourceProvider;
@@ -77,7 +77,7 @@ public class ConfigAlternativeEditComposite extends Composite implements ISaveab
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigAlternativeEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
+	public ConfigEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = ca;
 		

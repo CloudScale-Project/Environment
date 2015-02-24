@@ -32,6 +32,8 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 
 	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
 	public static final String PROP_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propResChanged";
+	
+	public static final String DIRTY_CHANGED = EditorInputFolder.class.getName() + ".dirtyChanged";
 
 	private boolean isDirty = false;
 		
@@ -411,8 +413,8 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		super.removePropertyChangeListener(propertyName, listener);
 	}
 	
-	public void setDirty(){
-		this.isDirty = true;
+	public void setDirty(boolean param){
+		firePropertyChange(DIRTY_CHANGED, this.isDirty, this.isDirty = param);
 	}
 
 	@Override

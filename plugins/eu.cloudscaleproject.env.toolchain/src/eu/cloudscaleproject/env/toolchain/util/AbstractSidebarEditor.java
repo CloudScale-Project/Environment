@@ -210,6 +210,21 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			composite.update();
 			btnSelect.setText(this.input.getName());
 			btnSelect.update();
+			
+			//trigger property sheet part re-fetch
+			@SuppressWarnings("deprecation")
+			//TODO: find out better solution for the problem
+			IViewPart[] views = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews();
+			for (IViewPart v : views){
+				if (v instanceof PropertySheet)
+				{
+					PropertySheet ps = (PropertySheet) v;
+					ps.partClosed(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
+					ps.partOpened(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
+					ps.setFocus();
+				}
+			}
+			//
 		}
 		
 		public void select(){
@@ -231,22 +246,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			handleSelect(input);
 			
 			compositeArea.layout();
-			
-			//trigger property sheet part re-fetch
-			@SuppressWarnings("deprecation")
-			//TODO: find out better solution for the problem
-			IViewPart[] views = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews();
-			for (IViewPart v : views){
-				if (v instanceof PropertySheet)
-				{
-					PropertySheet ps = (PropertySheet) v;
-					ps.partClosed(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
-					ps.partOpened(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
-					ps.setFocus();
-				}
-			}
-			//
-			
 			composite.setFocus();
 		}
 		

@@ -1,7 +1,15 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.conversion.NumberToStringConverter;
+import org.eclipse.core.databinding.conversion.StringToNumberConverter;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,6 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.uml2.common.edit.command.ChangeCommand;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
@@ -25,13 +34,16 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 	
 	private final ConfAlternative alternative;
 	
+	private final Button btnCheckSimTime;
+	private final Button btnCheckMeasureCount;
+	
 	private Text textSimTime;
 	private Text textMeasureCount;
 	
-	SimTimeStopCondition simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-	MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+	private SimTimeStopCondition simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+	private MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 	
-	DataBindingContext bindingContext = new DataBindingContext();
+	private DataBindingContext bindingContext = new DataBindingContext();
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -70,14 +82,14 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		gl_compositeConf.marginLeft = 10;
 		compositeConf.setLayout(gl_compositeConf);
 		
-		final Button btnCheckSimTime = new Button(compositeConf, SWT.CHECK);
+		btnCheckSimTime = new Button(compositeConf, SWT.CHECK);
 		btnCheckSimTime.setText("Simulation time stop condition:");
 		btnCheckSimTime.setSelection(true);
 		
 		textSimTime = new Text(compositeConf, SWT.BORDER);
 		textSimTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		final Button btnCheckMeasureCount = new Button(compositeConf, SWT.CHECK);
+		btnCheckMeasureCount = new Button(compositeConf, SWT.CHECK);
 		btnCheckMeasureCount.setText("Measurement count stop condition:");
 		
 		textMeasureCount = new Text(compositeConf, SWT.BORDER);
@@ -87,11 +99,20 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(btnCheckSimTime.getSelection()){
-					textSimTime.setEditable(true);
+					textSimTime.setEnabled(true);
 				}
 				else{
-					textSimTime.setEditable(false);
-					simTime.setSimulationTime(-1);
+					textSimTime.setEnabled(false);
+
+					alternative.getEditingDomain().getCommandStack().execute(new ChangeCommand(alternative.getEditingDomain(), 
+							new Runnable() {
+						@Override
+						public void run() {
+							if(simTime.getSimulationTime() != -1){
+								simTime.setSimulationTime(-1);
+							}
+						}
+					}));
 				}
 			}
 		});
@@ -99,11 +120,20 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(btnCheckMeasureCount.getSelection()){
-					textMeasureCount.setEditable(true);
+					textMeasureCount.setEnabled(true);
 				}
 				else{
-					textMeasureCount.setEditable(false);
-					measureCount.setMeasurementCount(-1);
+					textMeasureCount.setEnabled(false);
+
+					alternative.getEditingDomain().getCommandStack().execute(new ChangeCommand(alternative.getEditingDomain(), 
+							new Runnable() {
+						@Override
+						public void run() {
+							if(measureCount.getMeasurementCount() != -1){
+								measureCount.setMeasurementCount(-1);
+							}
+						}
+					}));
 				}
 			}
 		});
@@ -132,22 +162,77 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 			simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 			simTime.setSimulationTime(-1);
 			alternative.getExperiment().getStopConditions().add(simTime);
+			alternative.save();
 		}
 		
 		if(measureCount == null){
 			measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 			measureCount.setMeasurementCount(-1);
 			alternative.getExperiment().getStopConditions().add(measureCount);
+			alternative.save();
 		}
-		alternative.save();
 		
-		bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textSimTime),
-		        EMFProperties.value(AbstractsimulationPackage.Literals.SIM_TIME_STOP_CONDITION__SIMULATION_TIME)
-		            .observe(simTime));
+		//data binding
+		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		t2mStrategy.setConverter(StringToNumberConverter.toInteger(true));
 		
-		bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textMeasureCount),
-		        EMFProperties.value(AbstractsimulationPackage.Literals.MEASUREMENT_COUNT_STOP_CONDITION__MEASUREMENT_COUNT)
-		            .observe(measureCount));
+		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		m2tStrategy.setConverter(NumberToStringConverter.fromInteger(true));
+		
+		IObservableValue simTimeObs = EMFEditProperties.value(alternative.getEditingDomain(),
+				AbstractsimulationPackage.Literals.SIM_TIME_STOP_CONDITION__SIMULATION_TIME).observe(simTime);
+		IObservableValue measureCountObs = EMFEditProperties.value(alternative.getEditingDomain(),
+				AbstractsimulationPackage.Literals.MEASUREMENT_COUNT_STOP_CONDITION__MEASUREMENT_COUNT).observe(measureCount);
+		
+		Binding simTimeBind = bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textSimTime),
+		        simTimeObs, t2mStrategy, m2tStrategy);
+		
+		Binding measureCountBind = bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textMeasureCount),
+		        measureCountObs, t2mStrategy, m2tStrategy);
+		
+		ControlDecorationSupport.create(simTimeBind, SWT.TOP | SWT.LEFT);
+		ControlDecorationSupport.create(measureCountBind, SWT.TOP | SWT.LEFT);
+		
+		simTimeObs.addChangeListener(new IChangeListener() {
+			@Override
+			public void handleChange(ChangeEvent event) {
+				updateSimTimeGUI();
+			}
+		});
+		
+		measureCountObs.addChangeListener(new IChangeListener() {
+			@Override
+			public void handleChange(ChangeEvent event) {
+				updateMeasureCountGUI();
+			}
+		});
+		
+		updateSimTimeGUI();
+		updateMeasureCountGUI();
+		
+		bindingContext.updateTargets();
+	}
+	
+	private void updateSimTimeGUI(){
+		if(simTime.getSimulationTime() == -1){
+			btnCheckSimTime.setSelection(false);
+			textSimTime.setEnabled(false);
+		}
+		else{
+			btnCheckSimTime.setSelection(true);
+			textSimTime.setEnabled(true);
+		}
+	}
+	
+	private void updateMeasureCountGUI(){
+		if(measureCount.getMeasurementCount() == -1){
+			btnCheckMeasureCount.setSelection(false);
+			textMeasureCount.setEnabled(false);
+		}
+		else{
+			btnCheckMeasureCount.setSelection(true);
+			textMeasureCount.setEnabled(true);
+		}
 	}
 
 

@@ -329,20 +329,6 @@ public class ConfAlternative extends EditorInputEMF{
 		exp.getToolConfiguration().clear();
 		exp.getToolConfiguration().add(conf);
 	}
-	
-	/*
-	public IFile getPMS(){
-		return ()getSubResource(ToolchainUtils.KEY_FILE_PMS);
-	}
-	
-	public List<IFile> getMeasuringPoints(){
-		return getFileResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
-	}
-	
-	public IFile getSLO(){
-		return getFileResource(ToolchainUtils.KEY_FILE_SLO);
-	}
-	*/
 
 	@Override
 	protected void doLoad(){
