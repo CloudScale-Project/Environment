@@ -1,15 +1,14 @@
 package eu.cloudscaleproject.env.common.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
-import org.eclipse.swt.layout.FillLayout;
 
 public class TitleComposite extends Composite
 {

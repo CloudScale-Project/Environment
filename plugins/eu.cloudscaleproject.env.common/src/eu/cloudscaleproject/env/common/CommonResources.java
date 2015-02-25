@@ -1,10 +1,7 @@
 package eu.cloudscaleproject.env.common;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-
-import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 
 public class CommonResources {
 

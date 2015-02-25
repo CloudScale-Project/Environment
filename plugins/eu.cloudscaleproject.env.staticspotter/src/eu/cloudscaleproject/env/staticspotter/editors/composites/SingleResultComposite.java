@@ -46,6 +46,7 @@ public class SingleResultComposite extends TitleComposite {
                 annotationView.loadAnnotations(annotations);
 		
 		layout();
+		getContainer().layout(true);
 	}
 
 	private void initAnnotationView()
