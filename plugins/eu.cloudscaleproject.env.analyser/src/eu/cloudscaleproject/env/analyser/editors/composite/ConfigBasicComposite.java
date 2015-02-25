@@ -32,8 +32,9 @@ import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
 public class ConfigBasicComposite extends Composite implements ISaveableComposite{
 	
-	private final ConfAlternative alternative;
+	protected final ConfAlternative alternative;
 	
+	private final Composite extensionComposite;
 	private final Button btnCheckSimTime;
 	private final Button btnCheckMeasureCount;
 	
@@ -43,7 +44,7 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 	private SimTimeStopCondition simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 	private MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 	
-	private DataBindingContext bindingContext = new DataBindingContext();
+	protected final DataBindingContext bindingContext = new DataBindingContext();
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -95,6 +96,10 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		textMeasureCount = new Text(compositeConf, SWT.BORDER);
 		textMeasureCount.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
+		extensionComposite = new Composite(this, SWT.NONE);
+		extensionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		initExtensions(extensionComposite);
+		
 		btnCheckSimTime.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -139,6 +144,9 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		});
 	}
 
+	protected void initExtensions(Composite parent){
+		//override in subclasses
+	}
 
 	@Override
 	public void save() {

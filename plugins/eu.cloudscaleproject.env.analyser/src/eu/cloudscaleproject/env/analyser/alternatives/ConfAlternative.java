@@ -28,6 +28,8 @@ import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
+import org.palladiosimulator.experimentautomation.experiments.Variation;
 import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
@@ -303,6 +305,31 @@ public class ConfAlternative extends EditorInputEMF{
 			}
 		}
 		return mps;
+	}
+	
+	public List<Variation> getVariationObjects(){
+		
+		List<Variation> out = new ArrayList<Variation>();
+		
+		Experiment experiment = getExperiment();
+		for(Variation v : experiment.getVariations()){
+			out.add(v);
+		}
+		
+		return out;
+	}
+	
+	public List<ValueProvider> getVariationValueProviders(EClass clazz){
+		
+		List<ValueProvider> out = new ArrayList<ValueProvider>();
+		
+		for(Variation v : getExperiment().getVariations()){
+			if(v.getValueProvider().getClass().equals(clazz)){
+				out.add(v.getValueProvider());
+			}
+		}
+		
+		return out;
 	}
 	
 	///////////////////////////////////////////////////////////////////

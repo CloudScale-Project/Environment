@@ -23,6 +23,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigBasicComposite;
+import eu.cloudscaleproject.env.analyser.editors.composite.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigTreeviewComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -145,9 +146,24 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Basic settings");
 				
-				Composite basicComposite = new ConfigBasicComposite(input, tabFolder, SWT.NONE);
-				tabItem.setControl(basicComposite);
+				if(ConfAlternative.Type.NORMAL.equals(alternative.getTypeEnum())){
+					Composite basicComposite = new ConfigBasicComposite(input, tabFolder, SWT.NONE);
+					tabItem.setControl(basicComposite);
+				}
+				else if(ConfAlternative.Type.CAPACITY.equals(alternative.getTypeEnum())){
+					Composite capacityComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
+					tabItem.setControl(capacityComposite);
+				}
+				else if(ConfAlternative.Type.SCALABILITY.equals(alternative.getTypeEnum())){
+					Composite capacityComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
+					tabItem.setControl(capacityComposite);
+				}
 				tabFolder.setSelection(tabItem);
+			}
+			
+			//measurements settings
+			{
+				
 			}
 			
 			//slo settings
