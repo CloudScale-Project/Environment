@@ -8,14 +8,11 @@ import org.spotter.eclipse.ui.view.ActiveRunView;
 
 public class RunStatusComposite extends Composite{
 
-	private final IProject project;
 	private final ActiveRunView activeRunView;
 	
 	public RunStatusComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 	
-		this.project = project;
-		
 		this.activeRunView = new ActiveRunViewExtended();
 		this.activeRunView.createPartControl(this);
 		//this.activeRunView.updateContent(project);
