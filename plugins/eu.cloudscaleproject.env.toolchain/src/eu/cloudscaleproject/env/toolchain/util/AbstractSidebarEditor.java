@@ -29,7 +29,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
 import eu.cloudscaleproject.env.common.ui.HoverToggleButton;

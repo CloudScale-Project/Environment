@@ -12,7 +12,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.editors.composite.ResultDataComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -117,8 +116,6 @@ public class ResultsComposite extends Composite{
 			@Override
 			public Composite createInputComposite(IEditorInput input,
 					Composite parent, int style) {
-				
-				String selectedInputName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 				
 				//TODO: test is this is correct! Wait until DynamicSpotter bug is fixed!
 				ResultDataComposite rc = new ResultDataComposite(parent, style);

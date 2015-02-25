@@ -23,7 +23,6 @@ import org.osgi.framework.Bundle;
 
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.resources.ResourceManager;
 import eu.cloudscaleproject.env.product.Activator;
 

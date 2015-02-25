@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;

@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.Activator;
 import eu.cloudscaleproject.env.spotter.BuiltinServerController;
