@@ -1,31 +1,26 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-import org.eclipse.wb.swt.SWTResourceManager;
+import org.reclipse.structure.inference.annotations.ASGAnnotation;
+import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
 import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
-import org.eclipse.swt.layout.FillLayout;
+import eu.cloudscaleproject.env.staticspotter.util.Util;
 
 
 
 public class SingleResultComposite extends TitleComposite {
 
-
-	private ResultPersistenceFolder resultPersistenceFolder;
+	private ResultPersistenceFolder resultFolder;
+	private AnnotationView annotationView;
+	private Collection<ASGAnnotation> annotations;
 
 	/**
 	 * Create the composite.
@@ -36,28 +31,50 @@ public class SingleResultComposite extends TitleComposite {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		
+		this.resultFolder = rif;
 		
 		init();
+		initAnnotationView();
 	}
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yy hh:mm:ss");
 	private void init()
 	{
-		try
+		setTitle(this.resultFolder.getName());
+
+		this.annotations = Util.loadAnnotations(this.resultFolder);
+		if (annotationView != null)
+                annotationView.loadAnnotations(annotations);
+		
+		layout();
+	}
+
+	private void initAnnotationView()
+	{
+		this.annotationView = new AnnotationView()
 		{
-			long timestamp = Long.parseLong(resultPersistenceFolder.getProperty(ResultPersistenceFolder.KEY_TIMESTAMP));
-			Date date = new Date(timestamp);
-		}
-		catch (Exception e)
+			@Override
+			public IWorkbenchPartSite getSite()
+			{
+				return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
+			}
+		};
+
+		Display.getDefault().asyncExec(new Runnable()
 		{
-			//lblAlternativeName.setText("n/a");
-		}
+			@Override
+			public void run()
+			{
+				annotationView.createPartControl(getContainer());
+				annotationView.loadAnnotations(annotations);
+			}
+
+		});
 	}
 	
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		resultPersistenceFolder.load();
+		resultFolder.load();
 		init();
 		super.update();
 	}

@@ -2,7 +2,6 @@ package eu.cloudscaleproject.env.staticspotter;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 

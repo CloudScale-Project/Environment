@@ -1,25 +1,12 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -27,33 +14,23 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.fujaba.commons.console.ReportLevel;
 import org.reclipse.structure.inference.DetectPatternsJob;
-import org.reclipse.structure.inference.annotations.ASGAnnotation;
-import org.reclipse.structure.inference.annotations.AnnotationsPackage;
-import org.reclipse.structure.inference.annotations.SetInstanceAnnotation;
-import org.reclipse.structure.inference.annotations.TemporaryAnnotation;
-import org.reclipse.structure.inference.notification.InferenceProgressListener;
 import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
-import org.reclipse.structure.inference.util.InferenceExtensionsHelper;
-import org.reclipse.structure.inference.util.InferenceExtensionsHelper.AnnotationEvaluatorItem;
-import org.reclipse.structure.specification.PSPatternSpecification;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -62,9 +39,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-import org.eclipse.swt.layout.FillLayout;
-
-public class ConfigAlternativeComposite extends Composite
+public class ConfigAlternativeComposite extends TitleComposite
 {
 
 	@Optional
@@ -93,45 +68,32 @@ public class ConfigAlternativeComposite extends Composite
 
 		this.configPersistenceFolder = cif;
 
-		// this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-		// 1));
-		this.setLayout(new GridLayout(3, false));
+		getContainer().setLayout(new GridLayout(3, false));
 
-		Label lblConfigurationalternative = new Label(this, SWT.NONE);
-		lblConfigurationalternative.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblConfigurationalternative.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
-		lblConfigurationalternative.setText("Configuration (" + configPersistenceFolder.getName() + ")");
-
-		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
-		GridData gd_label = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
-		gd_label.widthHint = 167;
-		label.setLayoutData(gd_label);
-
-		Label lblInput = new Label(this, SWT.NONE);
+		Label lblInput = new Label(getContainer(), SWT.NONE);
 		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblInput.setText("Input:");
 
-		comboViewer = new ComboViewer(this, SWT.NONE);
+		comboViewer = new ComboViewer(getContainer(), SWT.NONE);
 		combo = comboViewer.getCombo();
 		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
 		gd_combo.widthHint = 170;
 		combo.setLayoutData(gd_combo);
 
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 
-		Button btnRunAlternative = new Button(this, SWT.NONE);
+		Button btnRunAlternative = new Button(getContainer(), SWT.NONE);
 		btnRunAlternative.setText("Run alternative");
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 
-		annotationViewComposite = new Composite(this, SWT.NONE);
+		annotationViewComposite = new Composite(getContainer(), SWT.NONE);
 		annotationViewComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		annotationViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
@@ -146,12 +108,15 @@ public class ConfigAlternativeComposite extends Composite
 
 		loadInputs();
 		initAnnotationView();
+		setTitle(configPersistenceFolder.getName());
 	}
+	
 
 	@Override
 	public void update()
 	{
 		this.configPersistenceFolder.load();
+		setTitle(configPersistenceFolder.getName());
 		loadInputs();
 		super.update();
 	}
@@ -195,9 +160,6 @@ public class ConfigAlternativeComposite extends Composite
 			public void run()
 			{
 				annotationView.createPartControl(annotationViewComposite);
-				
-				annotationViewComposite.getChildren()[1].setParent(annotationViewComposite);
-
 			}
 
 		});

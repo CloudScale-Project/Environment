@@ -7,17 +7,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.fujaba.commons.console.ReportLevel;
 import org.reclipse.structure.inference.DetectPatternsJob;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
@@ -72,7 +80,8 @@ public class Util
 		return job;
 	}
 
-	public static IFolder getResultsFolder(IProject project) {
+	public static IFolder getResultsFolder(IProject project)
+	{
 		IFolder staticSpotterFolder = ExplorerProjectPaths.getProjectFolder(
 				project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
 		String resultsFolderString = ExplorerProjectPaths
@@ -82,6 +91,9 @@ public class Util
 		return resultsFolder;
 	}
 
+	//
+	// Saving annotations
+	//
 	public static void saveAnnotations(EditorInputFolder configFolder, DetectPatternsJob job)
 	{
 		IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
@@ -89,7 +101,7 @@ public class Util
 		rif.setName(resultFolder.getName());
 
 		List<ASGAnnotation> annotations = getAnnotations(job);
-		
+
 		IFile file = rif.getResource().getFile(ResultPersistenceFolder.RESULT_PSA_FILE);
 		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 
@@ -162,12 +174,13 @@ public class Util
 	}
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
-	private static IFolder createResultFolder (IProject project, String name) 
-	{
-        IFolder resultsFolder = getResultsFolder(project);
-        IFolder resultFolder = resultsFolder.getFolder(name+" "+sdf.format(new Date())); 
 
-        try
+	private static IFolder createResultFolder(IProject project, String name)
+	{
+		IFolder resultsFolder = getResultsFolder(project);
+		IFolder resultFolder = resultsFolder.getFolder(name + " " + sdf.format(new Date()));
+
+		try
 		{
 			resultFolder.create(true, false, null);
 		}
@@ -176,8 +189,59 @@ public class Util
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        return resultFolder;
+
+		return resultFolder;
 	}
+
+	/////////////////////////////////////////
+	// Loading annotations
+	//
+	public static Collection<ASGAnnotation> loadAnnotations(ResultPersistenceFolder resultFolder)
+	{
+		IFile resultFile = resultFolder.getFileResource(ResultPersistenceFolder.KEY_PSA);
+		URI resultUri = URI.createPlatformResourceURI(resultFile.getFullPath().toString(), true);
+
+		ResourceSet ress = new ResourceSetImpl();
+		Resource res = ress.getResource(resultUri, true);
+
+		// load resource
+		try
+		{
+			res.load(getLoadOptions((XMIResourceImpl) res));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return new TreeSet<ASGAnnotation>();
+		}
+
+		// get annotations
+		Set<ASGAnnotation> annos = new HashSet<ASGAnnotation>();
+		for (EObject element : res.getContents())
+		{
+			if (element instanceof ASGAnnotation)
+			{
+				annos.add((ASGAnnotation) element);
+			}
+		}
+		
+		return annos;
+	}
+
+   protected static Map<Object, Object> getLoadOptions(XMIResourceImpl resource)
+   {
+      Map<Object, Object> options = resource.getDefaultLoadOptions();
+
+      options.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
+      options.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
+      options.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.TRUE);
+      options.put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl());
+      options.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP,
+            new HashMap<Object, Object>());
+
+      resource.setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
+
+      return options;
+   }
 
 }
