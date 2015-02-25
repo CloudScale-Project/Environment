@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
@@ -538,19 +539,19 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	}
 	
 	public Color getSidebarSectionBackgroundColor(){
-		return CommonResources.COLOR_CS_BLUE;
+		return ColorResources.COLOR_CS_BLUE;
 	}
 	
 	public Color getSidebarSectionForegroundColor(){
-		return CommonResources.COLOR_BLACK;
+		return ColorResources.COLOR_BLACK;
 	}
 	
 	public Color getSidebarBackgroundColor(){
-		return CommonResources.COLOR_CS_BLUE_LIGHT;
+		return ColorResources.COLOR_CS_BLUE_LIGHT;
 	}
 	
 	public Color getSidebarForegroundColor(){
-		return CommonResources.COLOR_CS_BLUE_DARK;
+		return ColorResources.COLOR_CS_BLUE_DARK;
 	}
 	
 	private Control getLastControlInSidebar(String section){

@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.Bundle;
 
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.resources.ResourceManager;
@@ -61,7 +62,7 @@ public class IntroPart {
 		parent.setLayout(gl_parent);
 		
 		Composite header = new Composite(parent, SWT.NONE);
-		header.setBackground(CommonResources.getColor(80, 114, 149));
+		header.setBackground(ColorResources.getColor(80, 114, 149));
 		header.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		header.setLayout(new FillLayout(SWT.HORIZONTAL));
 		

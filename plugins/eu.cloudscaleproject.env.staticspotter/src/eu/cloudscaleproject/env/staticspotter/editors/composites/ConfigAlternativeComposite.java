@@ -32,6 +32,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IViewPart;
@@ -54,11 +55,13 @@ import org.reclipse.structure.specification.PSPatternSpecification;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+
 import org.eclipse.swt.layout.FillLayout;
 
 public class ConfigAlternativeComposite extends Composite
@@ -192,6 +195,9 @@ public class ConfigAlternativeComposite extends Composite
 			public void run()
 			{
 				annotationView.createPartControl(annotationViewComposite);
+				
+				annotationViewComposite.getChildren()[1].setParent(annotationViewComposite);
+
 			}
 
 		});
@@ -201,7 +207,7 @@ public class ConfigAlternativeComposite extends Composite
 	{
 		// Prepare it outside - SWT thread bullshit
 		EditorInputFolder extractorResult = (EditorInputFolder) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
-		final DetectPatternsJob detectPaternJob = createDetectPaternJob(extractorResult);
+		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configPersistenceFolder, extractorResult);
 
 		annotationView.switchToInference(detectPaternJob.getEngine());
 		annotationView.init();
@@ -219,7 +225,7 @@ public class ConfigAlternativeComposite extends Composite
 				if (status.isOK())
 				{
 					// Collect results
-					saveAnnotations(detectPaternJob);
+					Util.saveAnnotations(configPersistenceFolder, detectPaternJob);
 				}
 
 				return status;
@@ -229,177 +235,7 @@ public class ConfigAlternativeComposite extends Composite
 		job.schedule();
 	}
 
-	private DetectPatternsJob createDetectPaternJob(EditorInputFolder extractorResult)
-	{
-		assert (extractorResult != null);
 
-		ResourceSet resSet = new ResourceSetImpl();
-		IFile catalogFile = configPersistenceFolder.getFileResource(ConfigPersistenceFolder.KEY_CATALOG);
-		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
-
-		IFile enginesFile = configPersistenceFolder.getFileResource(ConfigPersistenceFolder.KEY_ENGINES);
-		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
-
-		IFile sdFile = extractorResult.getFileResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
-		URI sdURI = URI.createPlatformResourceURI(sdFile.getFullPath().toString(), true);
-
-		//
-		// Run resources
-		//
-		Resource catalogResource = resSet.createResource(catalogURI);
-		Resource enginesResource = resSet.createResource(enginesURI);
-		Resource sourcedecoratorResource = resSet.createResource(sdURI);
-
-		//
-		// Configurations
-		//
-		ReportLevel reportLevel = ReportLevel.INFO;
-		AnnotationEvaluatorItem evaluator = InferenceExtensionsHelper.getRegisteredEvaluators().get(0);
-		boolean searchForAdditionalElements = false;
-
-		DetectPatternsJob job = new DetectPatternsJob(catalogResource, enginesResource, sourcedecoratorResource, reportLevel);
-		job.setAnnotateAdditionalElements(searchForAdditionalElements);
-		job.setEvaluator(evaluator.getEvaluator());
-
-		return job;
-	}
-
-	private void saveAnnotations(DetectPatternsJob job)
-	{
-		List<ASGAnnotation> annotations = getAnnotations(job);
-
-		IFile file = configPersistenceFolder.getResource().getFile("test.res");
-		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-		ResourceSet ress = new ResourceSetImpl();
-		Resource res = ress.createResource(uri);
-
-		// fill resource
-		for (ASGAnnotation anno : annotations)
-		{
-			// rename annotation type (due to usage of specific created
-			// annotation classes)
-			// TODO: this is evil!
-			String name = AnnotationsPackage.eINSTANCE.getASGAnnotation().getName();
-			if (anno instanceof SetInstanceAnnotation)
-			{
-				name = AnnotationsPackage.eINSTANCE.getSetInstanceAnnotation().getName();
-			}
-			else if (anno instanceof TemporaryAnnotation)
-			{
-				name = AnnotationsPackage.eINSTANCE.getTemporaryAnnotation().getName();
-			}
-
-			anno.eClass().setName(name);
-			anno.eClass().getEPackage().setName(AnnotationsPackage.eNAME);
-			anno.eClass().getEPackage().setNsPrefix(AnnotationsPackage.eNS_PREFIX);
-			anno.eClass().getEPackage().setNsURI(AnnotationsPackage.eNS_URI);
-
-			res.getContents().add(anno);
-		}
-
-		try
-		{
-			res.save(Collections.emptyMap());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
-	private List<ASGAnnotation> getAnnotations(DetectPatternsJob job)
-	{
-		Map<PSPatternSpecification, Collection<ASGAnnotation>> results = job.getEngine().getResults();
-		ArrayList<ASGAnnotation> annotations = new ArrayList<ASGAnnotation>();
-
-		if (results != null)
-		{
-			for (PSPatternSpecification key : results.keySet())
-			{
-				for (ASGAnnotation anno : results.get(key))
-				{
-					annotations.add(anno);
-				}
-			}
-		}
-
-		// sort them (by pattern)
-		Collections.sort(annotations, new Comparator<ASGAnnotation>()
-		{
-			@Override
-			public int compare(ASGAnnotation one, ASGAnnotation two)
-			{
-				return one.getPattern().getName().compareTo(two.getPattern().getName());
-			}
-		});
-		return annotations;
-	}
-
-	/**
-	 * Tries to open the annotations view when the DetectPatternsJob is run.
-	 * 
-	 * @param job
-	 *            The DetectPatternsJob
-	 * @throws PartInitException
-	 *             If the view that is registered under the corresponding ID is
-	 *             not the correct one.
-	 */
-	protected void configureAnnotationsView(final DetectPatternsJob job)
-	{
-
-		IViewPart part = null;
-		try
-		{
-			part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(AnnotationView.ID);
-		}
-		catch (PartInitException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-
-		final AnnotationView annotations = (AnnotationView) part;
-		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (annotations != null)
-				{
-					annotations.switchToInference(job.getEngine());
-				}
-			}
-		});
-	}
-
-	/**
-	 * Configures the matching views that visualize the matched patterns and the
-	 * matched objects after the detection.
-	 */
-	private static final String VID_MATCHED_PATTERNS = "org.reclipse.ui.views.structure.inference.matching.pattern"; //$NON-NLS-1$
-	private static final String VID_MATCHED_OBJECTS = "org.reclipse.ui.views.structure.inference.matching.ast"; //$NON-NLS-1$
-
-	protected void configureMatchingViews()
-	{
-		final InferenceProgressListener mPatternView = (InferenceProgressListener) getMatchingView(VID_MATCHED_PATTERNS);
-		if (mPatternView != null)
-		{
-			mPatternView.init();
-		}
-
-		final InferenceProgressListener mObjectsView = (InferenceProgressListener) getMatchingView(VID_MATCHED_OBJECTS);
-		if (mObjectsView != null)
-		{
-			mObjectsView.init();
-		}
-	}
-
-	protected IViewPart getMatchingView(String id)
-	{
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
-	}
 
 	@Override
 	protected void checkSubclass()

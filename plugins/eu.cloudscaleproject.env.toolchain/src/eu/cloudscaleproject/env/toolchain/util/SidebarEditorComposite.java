@@ -11,7 +11,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -107,22 +107,22 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 
 	@Override
 	public Color getSidebarSectionBackgroundColor(){
-		return CommonResources.COLOR_CS_BLUE;
+		return ColorResources.COLOR_CS_BLUE;
 	}
 
 	@Override
 	public Color getSidebarSectionForegroundColor(){
-		return CommonResources.COLOR_BLACK;
+		return ColorResources.COLOR_BLACK;
 	}
 
 	@Override
 	public Color getSidebarBackgroundColor(){
-		return CommonResources.COLOR_CS_BLUE_LIGHT;
+		return ColorResources.COLOR_CS_BLUE_LIGHT;
 	}
 
 	@Override
 	public Color getSidebarForegroundColor(){
-		return CommonResources.COLOR_CS_BLUE_DARK;
+		return ColorResources.COLOR_CS_BLUE_DARK;
 	}
 
 	@Override

@@ -1,0 +1,183 @@
+package eu.cloudscaleproject.env.staticspotter.util;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.fujaba.commons.console.ReportLevel;
+import org.reclipse.structure.inference.DetectPatternsJob;
+import org.reclipse.structure.inference.annotations.ASGAnnotation;
+import org.reclipse.structure.inference.annotations.AnnotationsPackage;
+import org.reclipse.structure.inference.annotations.SetInstanceAnnotation;
+import org.reclipse.structure.inference.annotations.TemporaryAnnotation;
+import org.reclipse.structure.inference.util.InferenceExtensionsHelper;
+import org.reclipse.structure.inference.util.InferenceExtensionsHelper.AnnotationEvaluatorItem;
+import org.reclipse.structure.specification.PSPatternSpecification;
+
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+
+public class Util
+{
+
+	public static DetectPatternsJob createDetectPaternJob(EditorInputFolder configFolder, EditorInputFolder extractorResult)
+	{
+		assert (extractorResult != null);
+
+		ResourceSet resSet = new ResourceSetImpl();
+		IFile catalogFile = configFolder.getFileResource(ConfigPersistenceFolder.KEY_CATALOG);
+		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
+
+		IFile enginesFile = configFolder.getFileResource(ConfigPersistenceFolder.KEY_ENGINES);
+		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
+
+		IFile sdFile = extractorResult.getFileResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		URI sdURI = URI.createPlatformResourceURI(sdFile.getFullPath().toString(), true);
+
+		//
+		// Run resources
+		//
+		Resource catalogResource = resSet.createResource(catalogURI);
+		Resource enginesResource = resSet.createResource(enginesURI);
+		Resource sourcedecoratorResource = resSet.createResource(sdURI);
+
+		//
+		// Configurations
+		//
+		ReportLevel reportLevel = ReportLevel.MINIMAL;
+		AnnotationEvaluatorItem evaluator = InferenceExtensionsHelper.getRegisteredEvaluators().get(0);
+		boolean searchForAdditionalElements = false;
+
+		DetectPatternsJob job = new DetectPatternsJob(catalogResource, enginesResource, sourcedecoratorResource, reportLevel);
+		job.setAnnotateAdditionalElements(searchForAdditionalElements);
+		job.setEvaluator(evaluator.getEvaluator());
+
+		return job;
+	}
+
+	public static IFolder getResultsFolder(IProject project) {
+		IFolder staticSpotterFolder = ExplorerProjectPaths.getProjectFolder(
+				project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
+		String resultsFolderString = ExplorerProjectPaths
+				.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS);
+		IFolder resultsFolder = staticSpotterFolder.getFolder(resultsFolderString);
+
+		return resultsFolder;
+	}
+
+	public static void saveAnnotations(EditorInputFolder configFolder, DetectPatternsJob job)
+	{
+		IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
+		ResultPersistenceFolder rif = new ResultPersistenceFolder(configFolder.getProject(), resultFolder);
+		rif.setName(resultFolder.getName());
+
+		List<ASGAnnotation> annotations = getAnnotations(job);
+		
+		IFile file = rif.getResource().getFile(ResultPersistenceFolder.RESULT_PSA_FILE);
+		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+
+		ResourceSet ress = new ResourceSetImpl();
+		Resource res = ress.createResource(uri);
+
+		// fill resource
+		for (ASGAnnotation anno : annotations)
+		{
+			// rename annotation type (due to usage of specific created
+			// annotation classes)
+			// TODO: this is evil!
+			String name = AnnotationsPackage.eINSTANCE.getASGAnnotation().getName();
+			if (anno instanceof SetInstanceAnnotation)
+			{
+				name = AnnotationsPackage.eINSTANCE.getSetInstanceAnnotation().getName();
+			}
+			else if (anno instanceof TemporaryAnnotation)
+			{
+				name = AnnotationsPackage.eINSTANCE.getTemporaryAnnotation().getName();
+			}
+
+			anno.eClass().setName(name);
+			anno.eClass().getEPackage().setName(AnnotationsPackage.eNAME);
+			anno.eClass().getEPackage().setNsPrefix(AnnotationsPackage.eNS_PREFIX);
+			anno.eClass().getEPackage().setNsURI(AnnotationsPackage.eNS_URI);
+
+			res.getContents().add(anno);
+		}
+
+		try
+		{
+			res.save(Collections.emptyMap());
+			rif.setResource(ResultPersistenceFolder.KEY_PSA, file);
+			rif.save();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+	private static List<ASGAnnotation> getAnnotations(DetectPatternsJob job)
+	{
+		Map<PSPatternSpecification, Collection<ASGAnnotation>> results = job.getEngine().getResults();
+		ArrayList<ASGAnnotation> annotations = new ArrayList<ASGAnnotation>();
+
+		if (results != null)
+		{
+			for (PSPatternSpecification key : results.keySet())
+			{
+				for (ASGAnnotation anno : results.get(key))
+				{
+					annotations.add(anno);
+				}
+			}
+		}
+
+		// sort them (by pattern)
+		Collections.sort(annotations, new Comparator<ASGAnnotation>()
+		{
+			@Override
+			public int compare(ASGAnnotation one, ASGAnnotation two)
+			{
+				return one.getPattern().getName().compareTo(two.getPattern().getName());
+			}
+		});
+		return annotations;
+	}
+
+	private static SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
+	private static IFolder createResultFolder (IProject project, String name) 
+	{
+        IFolder resultsFolder = getResultsFolder(project);
+        IFolder resultFolder = resultsFolder.getFolder(name+" "+sdf.format(new Date())); 
+
+        try
+		{
+			resultFolder.create(true, false, null);
+		}
+		catch (CoreException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return resultFolder;
+	}
+
+}

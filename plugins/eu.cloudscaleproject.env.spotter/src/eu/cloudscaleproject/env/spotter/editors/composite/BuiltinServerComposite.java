@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.Activator;
@@ -170,7 +171,7 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 								StyleRange styleRange = new StyleRange();
 								styleRange.start = start;
 								styleRange.length = newLog.length();
-								styleRange.foreground = CommonResources.COLOR_RED;
+								styleRange.foreground = ColorResources.COLOR_RED;
 								txtServerLog.setStyleRange(styleRange);
 							}
 						}

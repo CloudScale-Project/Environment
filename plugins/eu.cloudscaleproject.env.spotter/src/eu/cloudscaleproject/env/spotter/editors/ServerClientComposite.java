@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
@@ -64,13 +65,13 @@ public class ServerClientComposite extends Composite
 		composite_2.setLayout(new GridLayout(1, false));
 		
 		composite_2.setGradientDirection(false);
-		composite_2.setGradientColorStart(CommonResources.COLOR_CS_BLUE);
-		composite_2.setGradientColorEnd(CommonResources.COLOR_CS_BLUE_LIGHT);
+		composite_2.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
+		composite_2.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
 		
 		Label lblSpotterClient = new Label(composite_2, SWT.NONE);
 		lblSpotterClient.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblSpotterClient.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblSpotterClient.setForeground(CommonResources.COLOR_CS_BLUE_DARK);
+		lblSpotterClient.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
 		lblSpotterClient.setText("Client");
 		
 		Composite composite_1 = new Composite(this, SWT.NONE);
@@ -98,13 +99,13 @@ public class ServerClientComposite extends Composite
 		composite_3.setLayout(new GridLayout(1, false));
 
 		composite_3.setGradientDirection(false);
-		composite_3.setGradientColorStart(CommonResources.COLOR_CS_BLUE);
-		composite_3.setGradientColorEnd(CommonResources.COLOR_CS_BLUE_LIGHT);
+		composite_3.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
+		composite_3.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
 		
 		Label lblSpotterServer = new Label(composite_3, SWT.NONE);
 		lblSpotterServer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		lblSpotterServer.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblSpotterServer.setForeground(CommonResources.COLOR_CS_BLUE_DARK);
+		lblSpotterServer.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
 		lblSpotterServer.setText("Server");
 		
 		serverComposite = new Composite(this, SWT.NONE);
