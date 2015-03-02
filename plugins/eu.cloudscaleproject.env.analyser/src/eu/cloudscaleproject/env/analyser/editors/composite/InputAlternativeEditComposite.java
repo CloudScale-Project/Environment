@@ -21,9 +21,9 @@ import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
+import eu.cloudscaleproject.env.toolchain.util.ISaveable;
 
-public class InputAlternativeEditComposite extends Composite implements ISaveableComposite{
+public class InputAlternativeEditComposite extends Composite implements ISaveable{
 	
 	private final InputAlternative alternative;
 	private final IDirtyAdapter dirtyAdapter;
@@ -142,7 +142,7 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 	}
 
 	@Override
-	public void load() {
+	public void load(boolean force) {
 		alternative.load();
 	}
 

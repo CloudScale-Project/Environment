@@ -51,7 +51,7 @@ public class ToolchainUtils {
 	
 	// Analyser conf
 	public static final String KEY_FILE_EXPERIMENTS 	= "path_experiments";
-	public static final String KEY_FILE_PMS 			= "path_pms";
+	public static final String KEY_FILE_MONITOR 			= "path_pms";
 	public static final String KEY_FILE_VARIATIONS 		= "path_variations";
 	public static final String KEY_FILE_MESURPOINTS 	= "path_pcmmeasuringpoint";
 	public static final String KEY_FILE_SLO 			= "path_slo";

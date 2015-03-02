@@ -245,35 +245,6 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return resources;
 	}
 	
-	/*
-	public IFolder getFolderResource(String key)
-	{
-		String relPath = propertyInputFile.getProperty(key);
-		if(relPath == null){
-			return null;
-		}
-		else if (relPath.isEmpty())
-		{
-			return getResource();
-		}
-		
-		IResource res = getResource().findMember(relPath);
-		
-		//TODO: This could cause problems!
-		//try project relative path
-		if(res == null){
-			res = getResource().getProject().findMember(relPath);
-		}
-		
-		if (res instanceof IFolder){
-			return (IFolder) res;
-		}
-		else{
-			return null;
-		}
-	}
-	*/
-	
 	@Override
 	public synchronized void save() {
 
@@ -296,7 +267,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	}
 
 	@Override
-	public synchronized final void load() {
+	public synchronized void load() {
 
 		if(!folder.exists()){
 			throw new IllegalStateException("Can't load resource. Root folder does not exist: " + folder.getLocation().toString());
@@ -304,6 +275,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.load();
 		doLoad();
+				
 		isDirty = false;
 		firePropertyChange(PROP_LOADED, false, true);
 	}

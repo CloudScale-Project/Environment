@@ -1,8 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
@@ -19,8 +16,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
@@ -36,15 +31,12 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
 
 public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 
-	private final IEditorPart editor;
-	private final IDirtyAdapter dirtyAdapter;
 	private final ConfAlternative alternative;
 	
 	private final Tree tree;
@@ -60,8 +52,6 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 	public ConfigTreeviewComposite(IEditorPart editor, ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
 		
-		this.editor = editor;
-		this.dirtyAdapter = (IDirtyAdapter)ConfigTreeviewComposite.this.editor.getAdapter(IDirtyAdapter.class);
 		this.alternative = ca;
 		
 		setLayout(new GridLayout(1, false));
@@ -100,22 +90,6 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
 		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
-		
-		final PropertyChangeListener listener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				dirtyAdapter.fireDirtyState();
-			}
-		};
-		
-		alternative.addPropertyChangeListener(listener);
-		addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				alternative.removePropertyChangeListener(listener);
-			}
-		});
 				
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 		

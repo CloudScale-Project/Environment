@@ -35,7 +35,6 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -44,12 +43,10 @@ public class ConfigComposite extends SidebarEditorComposite{
 	private static final String SECTION_ALT = "Alternative conf:";
 	
 	private final IProject project;
-	private final IEditorPart editor;
-			
-	public ConfigComposite(IEditorPart editor, Composite parent, int style) {
+				
+	public ConfigComposite(final IEditorPart editor, Composite parent, int style) {
 		super(parent, style);
 		
-		this.editor = editor;
 		this.project = ExplorerProjectPaths.getProject(editor);
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID));
@@ -67,12 +64,12 @@ public class ConfigComposite extends SidebarEditorComposite{
 			
 			@Override
 			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
-				return new RightPanelComposite(ConfigComposite.this.project, (ConfAlternative)resource, parent, SWT.NONE);
+				return new RightPanelComposite(editor, (ConfAlternative)resource, parent, SWT.NONE);
 			}
 		});
 	}
 	
-	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider, ISaveableComposite{
+	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
 		
 		private GradientComposite typeComposite;
 		private ConfigEditComposite editComposite;
@@ -84,9 +81,11 @@ public class ConfigComposite extends SidebarEditorComposite{
 		
 		private final ConfAlternative alternative;
 
-		public RightPanelComposite(IProject project, final ConfAlternative input, Composite parent, int style) {
+		public RightPanelComposite(IEditorPart editor, final ConfAlternative input, Composite parent, int style) {
 			super(parent, style);
 			
+			IProject project = ExplorerProjectPaths.getProject(editor);
+
 			this.alternative = input;
 					
 			GridLayout layout = new GridLayout(1, true);
@@ -213,21 +212,6 @@ public class ConfigComposite extends SidebarEditorComposite{
 				return currentTreeview.getPropertySheetPage();
 			}
 			return null;
-		}
-
-		@Override
-		public void save() {
-			alternative.save();
-		}
-
-		@Override
-		public void load() {
-			alternative.load();
-		}
-
-		@Override
-		public boolean isDirty() {
-			return alternative.isDirty();
 		}
 	}
 	

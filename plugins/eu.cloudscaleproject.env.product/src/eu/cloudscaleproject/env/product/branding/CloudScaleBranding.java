@@ -79,10 +79,10 @@ public class CloudScaleBranding {
 		for(IWizardDescriptor wizard : getAllWizards(categories)){
 			
 			
-			//System.out.println("ID: " + wizard.getId());
-			//System.out.println("	Label: " + wizard.getLabel()); 
-			//System.out.println("	Category label: " + wizard.getCategory().getLabel()); 
-			//System.out.println("	Category ID: " + wizard.getCategory().getId());
+			System.out.println("ID: " + wizard.getId());
+			System.out.println("	Label: " + wizard.getLabel()); 
+			System.out.println("	Category label: " + wizard.getCategory().getLabel()); 
+			System.out.println("	Category ID: " + wizard.getCategory().getId());
 		    
 		    
 			if(

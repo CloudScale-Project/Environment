@@ -40,6 +40,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     //edit
     private IWorkbenchAction deleteAction;
     private IWorkbenchAction selectAllAction;
+	private IWorkbenchAction undoAction;
+	private IWorkbenchAction redoAction;
     
     //print action required in file menu : class: PalladioComponentModelDiagramActionBarContributor
     private static final String ID_MENU_FILE = IWorkbenchActionConstants.M_FILE;
@@ -99,6 +101,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         
         deleteAction = ActionFactory.DELETE.create(window);
         register(deleteAction);
+        
+        undoAction = ActionFactory.UNDO.create(window);
+        register(deleteAction);
+        redoAction = ActionFactory.REDO.create(window);
+        register(deleteAction);
+        
+        
     }
     
     protected void fillMenuBar(IMenuManager menuBar) {
@@ -133,6 +142,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         fileMenu.add(new Separator());
         fileMenu.add(exitAction);
         
+        editMenu.add(undoAction);
+        editMenu.add(redoAction);
         editMenu.add(selectAllAction);
         editMenu.add(deleteAction);
 

@@ -51,7 +51,7 @@ public class ConfValidator extends ToolValidator {
 		
 		if(ca != null){
 			List<IResource> mpFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
-			List<IResource> pmsFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_PMS);
+			List<IResource> pmsFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MONITOR);
 			List<IResource> sloFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_SLO);
 			
 			for(IResource file : mpFiles){

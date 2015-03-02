@@ -30,6 +30,9 @@ import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.Variation;
+import org.palladiosimulator.metricspec.MetricDescription;
+import org.palladiosimulator.metricspec.MetricDescriptionRepository;
+import org.palladiosimulator.metricspec.MetricSpecPackage;
 import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
@@ -37,14 +40,12 @@ import org.palladiosimulator.servicelevelobjective.HardThreshold;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
-import org.palladiosimulator.simulizar.pms.Intervall;
-import org.palladiosimulator.simulizar.pms.MeasurementSpecification;
-import org.palladiosimulator.simulizar.pms.PMSModel;
-import org.palladiosimulator.simulizar.pms.PerformanceMeasurement;
-import org.palladiosimulator.simulizar.pms.PerformanceMetricEnum;
-import org.palladiosimulator.simulizar.pms.PmsFactory;
-import org.palladiosimulator.simulizar.pms.StatisticalCharacterizationEnum;
-import org.palladiosimulator.simulizar.pms.impl.PmsFactoryImpl;
+import org.palladiosimulator.simulizar.monitorrepository.Intervall;
+import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
+import org.palladiosimulator.simulizar.monitorrepository.Monitor;
+import org.palladiosimulator.simulizar.monitorrepository.MonitorRepository;
+import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
+import org.palladiosimulator.simulizar.monitorrepository.StatisticalCharacterizationEnum;
 import org.scaledl.usageevolution.UsageEvolution;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
@@ -67,6 +68,10 @@ public class ConfAlternative extends EditorInputEMF{
 	
 	public static final String KEY_NAME = "name";	
 	private final Type type;
+	
+	public static final String PROP_INPUT_ALT_SET = ConfAlternative.class.getName() + "propInputAltSet";
+	public static final String PROP_USAGE_EVOLUTION_SET = ConfAlternative.class.getName() + "propUsageEvolutionSet";
+
 	
 	public enum Type {
 		NORMAL, CAPACITY, SCALABILITY;
@@ -132,6 +137,8 @@ public class ConfAlternative extends EditorInputEMF{
 		if(exp.getInitialModel() != null && eobject instanceof UsageEvolution){
 			exp.getInitialModel().setUsageEvolution((UsageEvolution)eobject);
 		}
+		
+		firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
 	}
 	
 	public InitialModel getInitialModel(){
@@ -207,6 +214,8 @@ public class ConfAlternative extends EditorInputEMF{
 		configureInput(exp, initialModel, inputAlt);
 		
 		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
+		
+		firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 	}
 	
 	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
@@ -332,6 +341,39 @@ public class ConfAlternative extends EditorInputEMF{
 		return out;
 	}
 	
+	public List<MetricDescription> getMetricDescriptions(){
+		
+		List<MetricDescription> out = new ArrayList<MetricDescription>();
+		
+		Resource res = getResourceSet().getResource(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"), true);
+		EObject object = res.getContents().isEmpty() ? null : res.getContents().get(0);
+		
+		if(object instanceof MetricDescriptionRepository){
+			MetricDescriptionRepository mdRep = (MetricDescriptionRepository)object;
+			for(MetricDescription md : mdRep.getMetricDescriptions()){
+				out.add(md);
+			}
+		}
+		
+		return out;
+	}
+	
+	public List<MetricDescription> getMetricDescriptions(EClass clazz){
+		
+		List<MetricDescription> out = new ArrayList<MetricDescription>();
+
+		for(MetricDescription md : getMetricDescriptions()){
+			if(md.getClass().equals(clazz)){
+				out.add(md);
+			}
+		}
+		return out;
+	}
+	
+	public MetricDescription getMetricDescription(EClass clazz){
+		List<MetricDescription> metDescriptions = getMetricDescriptions(clazz);
+		return metDescriptions.isEmpty() ? null : metDescriptions.get(0);
+	}
 	///////////////////////////////////////////////////////////////////
 
 	
@@ -376,7 +418,7 @@ public class ConfAlternative extends EditorInputEMF{
 			res.unload();
 			res.load(null);
 		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_PMS)) {
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MONITOR)) {
 			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
 			res.unload();
 			res.load(null);		
@@ -437,8 +479,26 @@ public class ConfAlternative extends EditorInputEMF{
 		resMp.getContents().add(measurePoint);
 		
 		//create pms
-		PMSModel pms = PmsFactoryImpl.eINSTANCE.createPMSModel();
-		PerformanceMeasurement pm = PmsFactoryImpl.eINSTANCE.createPerformanceMeasurement();
+		MonitorRepository monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
+		Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+		monitorRep.getMonitors().add(monitor);
+		
+		monitor.setMeasuringPoint(measurePoint);
+		
+		MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+		
+		MetricDescription md = getMetricDescription(MetricSpecPackage.Literals.METRIC_DESCRIPTION);
+		if(md != null){
+			specification.setMetricDescription(md);
+		}
+		specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
+		Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
+		interval.setIntervall(10.0);
+		specification.setTemporalRestriction(interval);
+		
+		monitor.getMeasurementSpecification().add(specification);
+		
+		/*
 		pm.setMeasuringPoint(measurePoint);
 		MeasurementSpecification ms = PmsFactory.eINSTANCE.createMeasurementSpecification();
 		ms.setPerformanceMetric(PerformanceMetricEnum.RESPONSE_TIME);
@@ -448,13 +508,14 @@ public class ConfAlternative extends EditorInputEMF{
 		ms.setTemporalRestriction(intervall);
 		pm.getMeasurementSpecification().add(ms);
 		pms.getPerformanceMeasurements().add(pm);
+		*/
 		
-		IFile pmsFile = ((IFolder)getResource()).getFile("analyser.pms");
-		this.setSubResource(ToolchainUtils.KEY_FILE_PMS, pmsFile);
-		Resource resPms = ExplorerProjectPaths.getEmfResource(resSet, pmsFile);
-		resPms.getContents().clear();
-		resPms.getContents().add(pms);
-		initialModel.setPlatformMonitoringSpecification(pms);
+		IFile monitorFile = ((IFolder)getResource()).getFile("analyser.monitorrepository");
+		this.setSubResource(ToolchainUtils.KEY_FILE_MONITOR, monitorFile);
+		Resource resMonitor = ExplorerProjectPaths.getEmfResource(resSet, monitorFile);
+		resMonitor.getContents().clear();
+		resMonitor.getContents().add(monitorRep);
+		initialModel.setMonitorRepository(monitorRep);
 		
 		//create slo
 		ServiceLevelObjectiveRepository sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
@@ -467,7 +528,7 @@ public class ConfAlternative extends EditorInputEMF{
 		slo.setUpperThreshold(ht);
 		
 		IFile sloFile = ((IFolder)getResource()).getFile("analyser.slo");
-		this.setSubResource(ToolchainUtils.KEY_FILE_SLO, pmsFile);
+		this.setSubResource(ToolchainUtils.KEY_FILE_SLO, sloFile);
 		Resource resSlo = ExplorerProjectPaths.getEmfResource(resSet, sloFile);
 		resSlo.getContents().clear();
 		resSlo.getContents().add(sloRep);

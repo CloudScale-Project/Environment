@@ -94,11 +94,11 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	}
 	
 	public void handleNewInput(IEditorInput selected) {
-		sidebarBuilder.handleNewInput(selected);
+		sidebarBuilder.doHandleNewInput(selected);
 	}
 	
 	public void handleNewInputFrom(IEditorInput selected) {
-		sidebarBuilder.handleNewInputFrom(selected);
+		sidebarBuilder.doHandleNewInputFrom(selected);
 	};
 
 	@Override
@@ -175,6 +175,21 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	@Override
 	public String[] getSidebarSections() {
 		return sidebarBuilder.getSidebarSections();
+	}
+
+	@Override
+	public void save() {
+		sidebarBuilder.save();
+	}
+
+	@Override
+	public void load(boolean force) {
+		sidebarBuilder.load(force);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return sidebarBuilder.isDirty();
 	}
 	
 }

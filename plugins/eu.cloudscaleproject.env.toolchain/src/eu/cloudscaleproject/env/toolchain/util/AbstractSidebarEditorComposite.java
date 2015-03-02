@@ -120,8 +120,8 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 		sidebarBuilder.save();
 	}
 	
-	public void load(){
-		sidebarBuilder.load();
+	public void load(boolean force){
+		sidebarBuilder.load(force);
 	}
 	
 	public boolean isDirty(){

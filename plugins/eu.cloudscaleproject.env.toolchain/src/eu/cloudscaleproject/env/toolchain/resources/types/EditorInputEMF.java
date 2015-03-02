@@ -14,7 +14,6 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -29,7 +28,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected final AdapterFactoryEditingDomain editingDomain;
 	protected final AdapterFactory factory;
 	
-	protected final ResourceSet resSet = new ResourceSetImpl();
+	protected final ResourceSet resSet;
 
 	public EditorInputEMF(IProject project, IFolder folder, AdapterFactory factory) {
 		super(project, folder);
@@ -44,12 +43,12 @@ public class EditorInputEMF extends EditorInputFolder{
 			}
 		});
 		
-		editingDomain = new AdapterFactoryEditingDomain(factory, commandStack, resSet);
-
+		editingDomain = new AdapterFactoryEditingDomain(factory, commandStack);
+		resSet = editingDomain.getResourceSet();
 	}
 	
 	public ResourceSet getResourceSet(){
-		return this.resSet;
+		return editingDomain.getResourceSet();
 	}
 	
 	public EditingDomain getEditingDomain(){
@@ -70,7 +69,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected void doSave() {
 
 		super.doSave();
-		for(Resource res : resSet.getResources()){
+		for(Resource res : editingDomain.getResourceSet().getResources()){
 			try {
 				if(!res.getContents().isEmpty()){
 					res.save(null);

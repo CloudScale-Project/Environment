@@ -36,9 +36,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigEditComposite extends Composite implements ISaveableComposite{
+public class ConfigEditComposite extends Composite{
 	
 	private final ResourceProvider inputResourceProvider;
 	private final ResourceProvider usageResourceProvider;
@@ -46,7 +45,6 @@ public class ConfigEditComposite extends Composite implements ISaveableComposite
 	private final ComboViewer comboViewerInput;
 	private final ComboViewer comboViewerUsage;
 	
-	private final ConfAlternative alternative;
 	
 	private final PropertyChangeListener inputResourceListener = new PropertyChangeListener() {
 		@Override
@@ -79,7 +77,6 @@ public class ConfigEditComposite extends Composite implements ISaveableComposite
 	 */
 	public ConfigEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
-		this.alternative = ca;
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		
@@ -232,22 +229,5 @@ public class ConfigEditComposite extends Composite implements ISaveableComposite
 
 	@Override
 	protected void checkSubclass() {
-	}
-
-	@Override
-	public void save() {
-		alternative.save();
-	}
-
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isDirty() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

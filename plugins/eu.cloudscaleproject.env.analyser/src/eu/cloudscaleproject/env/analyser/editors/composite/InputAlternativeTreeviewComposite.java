@@ -32,7 +32,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.palladiosimulator.simulizar.pms.util.PmsResourceImpl;
+import org.palladiosimulator.simulizar.monitorrepository.util.MonitorrepositoryResourceImpl;
 
 import de.uka.ipd.sdq.pcm.allocation.util.AllocationResourceImpl;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryResourceImpl;
@@ -45,9 +45,9 @@ import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
+import eu.cloudscaleproject.env.toolchain.util.ISaveable;
 
-public class InputAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider, ISaveableComposite{
+public class InputAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider, ISaveable{
 	
 	private final InputAlternative alternative;
 	
@@ -175,7 +175,7 @@ public class InputAlternativeTreeviewComposite extends Composite implements IPro
 				if(element instanceof UsagemodelResourceImpl){
 					return true;
 				}	
-				if(element instanceof PmsResourceImpl){
+				if(element instanceof MonitorrepositoryResourceImpl){
 					return true;
 				}
 			
@@ -200,7 +200,7 @@ public class InputAlternativeTreeviewComposite extends Composite implements IPro
 	}
 
 	@Override
-	public void load() {
+	public void load(boolean force) {
 		alternative.load();
 	}
 

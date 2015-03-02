@@ -37,6 +37,14 @@ public class SidebarEditor extends AbstractSidebarEditor{
 				IEditorInputResource res = (IEditorInputResource)evt.getOldValue();
 				SidebarEditor.this.removeSidebarEditor(res);
 			}
+			if(ResourceProvider.PROP_RESOURCE_MODIFIED.equals(evt.getPropertyName())){
+				IEditorInputResource res = (IEditorInputResource)evt.getNewValue();
+				Composite current = getCurrentSelection();
+				if(current != null && !current.isDisposed() && current.isVisible()){
+					return;
+				}
+				load(res);
+			}
 		}
 	};
 	
@@ -102,6 +110,10 @@ public class SidebarEditor extends AbstractSidebarEditor{
 
 	@Override
 	public void handleNewInput(IEditorInput selected) {
+		doHandleNewInput(selected);
+	}
+	
+	public void doHandleNewInput(IEditorInput selected) {
 		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 				new BasicCallback<String>() {
 			
@@ -118,6 +130,10 @@ public class SidebarEditor extends AbstractSidebarEditor{
 
 	@Override
 	public void handleNewInputFrom(final IEditorInput selected) {
+		doHandleNewInputFrom(selected);
+	}
+	
+	public void doHandleNewInputFrom(final IEditorInput selected) {
 		
 		if(!(selected instanceof IEditorInputResource)){
 			return;

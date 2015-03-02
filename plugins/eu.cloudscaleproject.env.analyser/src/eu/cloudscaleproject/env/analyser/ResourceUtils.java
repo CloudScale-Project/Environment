@@ -13,7 +13,7 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
-import org.palladiosimulator.simulizar.pms.provider.PmsItemProviderAdapterFactory;
+import org.palladiosimulator.simulizar.monitorrepository.provider.MonitorrepositoryItemProviderAdapterFactory;
 
 import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
@@ -133,7 +133,7 @@ public class ResourceUtils {
 				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
 				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
 				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new PmsItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new ExperimentDataAdapterFactory());
 				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
@@ -180,7 +180,7 @@ public class ResourceUtils {
 				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
 				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
 				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new PmsItemProviderAdapterFactory());
+				adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new ExperimentsItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());

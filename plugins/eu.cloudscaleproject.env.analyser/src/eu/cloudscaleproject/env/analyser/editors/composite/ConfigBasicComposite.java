@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.analyser.editors.composite;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -12,6 +15,8 @@ import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -28,9 +33,8 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.toolchain.util.ISaveableComposite;
 
-public class ConfigBasicComposite extends Composite implements ISaveableComposite{
+public class ConfigBasicComposite extends Composite{
 	
 	protected final ConfAlternative alternative;
 	
@@ -44,7 +48,17 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 	private SimTimeStopCondition simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 	private MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 	
-	protected final DataBindingContext bindingContext = new DataBindingContext();
+	private DataBindingContext bindingContext = null;
+	
+	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(ConfAlternative.PROP_INPUT_ALT_SET.equals(evt.getPropertyName())){
+				load();
+			}
+		}
+	};
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -66,12 +80,18 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		//TODO: Wire those when the Analyser is ready
 		Button btnCheckNumContainers = new Button(compositeMetDesc, SWT.CHECK);
 		btnCheckNumContainers.setText("Number of containers");
+		btnCheckNumContainers.setSelection(true);
+		btnCheckNumContainers.setEnabled(false);
 		
 		Button btnCheckRespTime = new Button(compositeMetDesc, SWT.CHECK);
 		btnCheckRespTime.setText("Response time");
+		btnCheckRespTime.setSelection(true);
+		btnCheckRespTime.setEnabled(false);
 		
 		Button btnCheckCost = new Button(compositeMetDesc, SWT.CHECK);
 		btnCheckCost.setText("Cost");
+		btnCheckCost.setSelection(false);
+		btnCheckCost.setEnabled(false);
 		//
 		
 		Label lblConfiguration = new Label(this, SWT.NONE);
@@ -142,20 +162,31 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 				}
 			}
 		});
+		
+		this.alternative.addPropertyChangeListener(alternativeListener);
+		
+		this.addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				
+				alternative.removePropertyChangeListener(alternativeListener);
+				
+				if(bindingContext != null){
+					bindingContext.dispose();
+					bindingContext = null;
+				}
+			}
+		});
+		
+		load();
 	}
 
 	protected void initExtensions(Composite parent){
 		//override in subclasses
 	}
 
-	@Override
-	public void save() {
-		alternative.save();
-	}
-
-	@Override
 	public void load() {
-		alternative.load();
 		
 		for(StopCondition sc : alternative.getExperiment().getStopConditions()){
 			if(sc instanceof SimTimeStopCondition){
@@ -181,6 +212,11 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		}
 		
 		//data binding
+		if(bindingContext != null){
+			bindingContext.dispose();
+		}
+		bindingContext = new DataBindingContext();
+		
 		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
 		t2mStrategy.setConverter(StringToNumberConverter.toInteger(true));
 		
@@ -204,14 +240,18 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 		simTimeObs.addChangeListener(new IChangeListener() {
 			@Override
 			public void handleChange(ChangeEvent event) {
-				updateSimTimeGUI();
+				if(!isDisposed()){
+					updateSimTimeGUI();
+				}
 			}
 		});
 		
 		measureCountObs.addChangeListener(new IChangeListener() {
 			@Override
 			public void handleChange(ChangeEvent event) {
-				updateMeasureCountGUI();
+				if(!isDisposed()){
+					updateMeasureCountGUI();
+				}
 			}
 		});
 		
@@ -242,11 +282,4 @@ public class ConfigBasicComposite extends Composite implements ISaveableComposit
 			textMeasureCount.setEnabled(true);
 		}
 	}
-
-
-	@Override
-	public boolean isDirty() {
-		return alternative.isDirty();
-	}
-
 }

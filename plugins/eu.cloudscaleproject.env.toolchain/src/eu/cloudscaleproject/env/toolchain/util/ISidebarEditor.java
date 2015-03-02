@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.Color;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public interface ISidebarEditor extends IPropertySheetPageProvider{
+public interface ISidebarEditor extends IPropertySheetPageProvider, ISaveable{
 	
 	public void init();
 	public void showInput(IEditorInput input);

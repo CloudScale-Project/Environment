@@ -31,11 +31,13 @@ public abstract class ResourceProvider{
 	public static final String PROP_RESOURCE_MODIFIED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.modified";
 
 	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
-	public static final String PROP_TYPE = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.type";
+	
+	public static final String PROP_TYPE = "resourceType";
+	public static final String PROP_ID = "providerId";
 
 	private final IFolder rootFolder;
 	private final String defaultResName;
-	
+		
 	private final LinkedHashMap<IResource, IEditorInputResource> resources 
 			= new LinkedHashMap<IResource, IEditorInputResource>();
 	

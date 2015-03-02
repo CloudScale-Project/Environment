@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.editors.composite;
 import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.NumberToStringConverter;
 import org.eclipse.core.databinding.conversion.StringToNumberConverter;
@@ -17,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsPackage;
-import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsValueProvider;
+import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsDoubleValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -26,6 +27,8 @@ public class ConfigCapacity extends ConfigBasicComposite{
 	
 	private Text textMinValue;
 	private Text textMaxValue;
+	
+	private DataBindingContext bindingContext = null;
 	
 	public ConfigCapacity(ConfAlternative input, Composite parent, int style) {
 		super(input, parent, style);
@@ -55,6 +58,8 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		
 		textMaxValue = new Text(compositeConf, SWT.BORDER);
 		textMaxValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		load();
 	}
 
 	@Override
@@ -63,7 +68,7 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		super.load();
 		
 		List<ValueProvider> nestedIntValProviders 
-			= alternative.getVariationValueProviders(ExperimentsPackage.Literals.NESTED_INTERVALS_VALUE_PROVIDER);
+			= alternative.getVariationValueProviders(ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER);
 		
 		if(nestedIntValProviders.isEmpty()){
 			textMaxValue.setEnabled(false);
@@ -71,19 +76,24 @@ public class ConfigCapacity extends ConfigBasicComposite{
 			return;
 		}
 		
-		NestedIntervalsValueProvider valueProvider = (NestedIntervalsValueProvider)nestedIntValProviders.get(0);
+		NestedIntervalsDoubleValueProvider valueProvider = (NestedIntervalsDoubleValueProvider)nestedIntValProviders.get(0);
 		
 		//data binding
+		if(bindingContext != null){
+			bindingContext.dispose();
+		}
+		bindingContext = new DataBindingContext();
+		
 		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		t2mStrategy.setConverter(StringToNumberConverter.toLong(true));
+		t2mStrategy.setConverter(StringToNumberConverter.toDouble(true));
 		
 		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		m2tStrategy.setConverter(NumberToStringConverter.fromLong(true));
+		m2tStrategy.setConverter(NumberToStringConverter.fromDouble(true));
 		
 		IObservableValue minValObs = EMFEditProperties.value(alternative.getEditingDomain(),
-				ExperimentsPackage.Literals.NESTED_INTERVALS_VALUE_PROVIDER__MIN_VALUE).observe(valueProvider);
+				ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER__MIN_VALUE).observe(valueProvider);
 		IObservableValue maxValObs = EMFEditProperties.value(alternative.getEditingDomain(),
-				ExperimentsPackage.Literals.NESTED_INTERVALS_VALUE_PROVIDER__MAX_VALUE).observe(valueProvider);
+				ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER__MAX_VALUE).observe(valueProvider);
 		
 		Binding minValBind = bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textMinValue),
 		        minValObs, t2mStrategy, m2tStrategy);
