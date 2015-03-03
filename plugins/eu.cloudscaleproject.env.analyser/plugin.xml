@@ -25,6 +25,13 @@
             class="eu.cloudscaleproject.env.analyser.validation.ConfValidator">
       </client>
    </extension>
+   <extension
+         point="org.eclipse.emf.ecore.uri_mapping">
+      <mapping
+            source="pathmap://ENVIRONMENT_ANALYSER/"
+            target="platform:/plugin/eu.cloudscaleproject.env.analyser/src/eu/cloudscaleproject/env/analyser/models/">
+      </mapping>
+   </extension>
 
 
 </plugin>

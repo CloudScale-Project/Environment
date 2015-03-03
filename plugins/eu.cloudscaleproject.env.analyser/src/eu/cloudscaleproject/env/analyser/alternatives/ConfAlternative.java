@@ -19,22 +19,27 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
+import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
+import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsDoubleValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.Variation;
+import org.palladiosimulator.experimentautomation.variation.VariationRepository;
+import org.palladiosimulator.experimentautomation.variation.VariationType;
 import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.metricspec.MetricDescriptionRepository;
-import org.palladiosimulator.metricspec.MetricSpecPackage;
 import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
+import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
 import org.palladiosimulator.servicelevelobjective.HardThreshold;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
@@ -50,10 +55,14 @@ import org.scaledl.usageevolution.UsageEvolution;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
 import de.uka.ipd.sdq.pcm.repository.Repository;
+import de.uka.ipd.sdq.pcm.usagemodel.ClosedWorkload;
+import de.uka.ipd.sdq.pcm.usagemodel.OpenWorkload;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageScenario;
+import de.uka.ipd.sdq.pcm.usagemodel.Workload;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -98,6 +107,18 @@ public class ConfAlternative extends EditorInputEMF{
 		//create and set defaults
 		Experiment exp = getExperiment();
 		configureExperiment(exp);
+		
+		initializeCommon(exp);
+		
+		if(Type.NORMAL.equals(type)){
+			initializeNormal(exp);
+		}
+		else if(Type.CAPACITY.equals(type)){
+			initializeCapacity(exp);
+		}
+		else if(Type.SCALABILITY.equals(type)){
+			initializeScalability(exp);
+		}
 	}
 	
 	public Type getTypeEnum(){
@@ -138,15 +159,8 @@ public class ConfAlternative extends EditorInputEMF{
 			exp.getInitialModel().setUsageEvolution((UsageEvolution)eobject);
 		}
 		
+		setDirty(true);
 		firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
-	}
-	
-	public InitialModel getInitialModel(){
-		Experiment exp = getExperiment();
-		if(exp != null){
-			return exp.getInitialModel();
-		}
-		return null;
 	}
 	
 	public void setInitialModel(InputAlternative inputAlt){
@@ -215,6 +229,7 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 		
+		setDirty(true);
 		firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 	}
 	
@@ -223,10 +238,10 @@ public class ConfAlternative extends EditorInputEMF{
 			
 		}
 		else if(Type.CAPACITY.equals(type)){
-			configureInputCapacity(exp, initialModel, inputAlt);
+			configureCapacity(exp, initialModel);
 		}
 		else if(Type.SCALABILITY.equals(type)){
-			
+			configureCapacity(exp, initialModel);
 		}
 	}
 	
@@ -238,11 +253,19 @@ public class ConfAlternative extends EditorInputEMF{
 			configureToolCapacity(simulizarConf);
 		}
 		else if(Type.SCALABILITY.equals(type)){
-			
+			configureToolScalability(simulizarConf);
 		}
 	}
 	
 	// Helper methods for retrieving model objects ////////////////////
+	
+	public void createEMFResource(String newFilename, String key, EObject rootObject){
+		IFile file = ((IFolder)getResource()).getFile(newFilename);
+		this.setSubResource(key, file);
+		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, file);
+		resMp.getContents().clear();
+		resMp.getContents().add(rootObject);
+	}
 	
 	public Experiment getExperiment() {
 		
@@ -276,14 +299,20 @@ public class ConfAlternative extends EditorInputEMF{
 		Experiment firsExperiment = expRep.getExperiments().isEmpty() ? null : expRep.getExperiments().get(0);
 		if(firsExperiment == null){
 			firsExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
+			firsExperiment.setRepetitions(1);
 			expRep.getExperiments().add(firsExperiment);
 		}
 		
 		if(firsExperiment.getToolConfiguration().isEmpty()){
 			configureExperiment(firsExperiment);
 		}
-				
+						
 		return (Experiment)firsExperiment;		
+	}
+	
+	public InitialModel getInitialModel(){
+		Experiment exp = getExperiment();
+		return exp != null ? exp.getInitialModel() : null;
 	}
 	
 	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz){
@@ -328,12 +357,50 @@ public class ConfAlternative extends EditorInputEMF{
 		return out;
 	}
 	
+	public List<VariationType> getVariationTypes(){
+		
+		List<VariationType> out = new ArrayList<VariationType>();
+		
+		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+		Resource resource = resSet.getResource(variations, true);
+		List<EObject> content = resource.getContents();
+		if(!content.isEmpty()){
+			EObject object = content.get(0);
+			if(object instanceof VariationRepository){
+				VariationRepository vRep = (VariationRepository)object;
+				for(VariationType v : vRep.getVariation()){
+					out.add(v);
+				}
+			}
+		}
+		return out;
+	}
+	
+	public VariationType getVariationType(String id){
+		
+		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+		Resource resource = resSet.getResource(variations, true);
+		List<EObject> content = resource.getContents();
+		if(!content.isEmpty()){
+			EObject object = content.get(0);
+			if(object instanceof VariationRepository){
+				VariationRepository vRep = (VariationRepository)object;
+				for(VariationType v : vRep.getVariation()){
+					if(id.equals(v.getId())){
+						return v;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public List<ValueProvider> getVariationValueProviders(EClass clazz){
 		
 		List<ValueProvider> out = new ArrayList<ValueProvider>();
 		
 		for(Variation v : getExperiment().getVariations()){
-			if(v.getValueProvider().getClass().equals(clazz)){
+			if(v.getValueProvider().eClass().equals(clazz)){
 				out.add(v.getValueProvider());
 			}
 		}
@@ -358,21 +425,57 @@ public class ConfAlternative extends EditorInputEMF{
 		return out;
 	}
 	
-	public List<MetricDescription> getMetricDescriptions(EClass clazz){
+	public MetricDescription getMetricDescription(){
+		List<MetricDescription> metDescriptions = getMetricDescriptions();
+		return metDescriptions.isEmpty() ? null : metDescriptions.get(0);
+	}
+	
+	public List<StopCondition> getStopConditions(EClass clazz){
+		List<StopCondition> out = new ArrayList<StopCondition>();
 		
-		List<MetricDescription> out = new ArrayList<MetricDescription>();
-
-		for(MetricDescription md : getMetricDescriptions()){
-			if(md.getClass().equals(clazz)){
-				out.add(md);
+		for(StopCondition stopCon : getExperiment().getStopConditions()){
+			if(stopCon.getClass().equals(clazz)){
+				out.add(stopCon);
 			}
 		}
+		
 		return out;
 	}
 	
-	public MetricDescription getMetricDescription(EClass clazz){
-		List<MetricDescription> metDescriptions = getMetricDescriptions(clazz);
-		return metDescriptions.isEmpty() ? null : metDescriptions.get(0);
+	public List<MonitorRepository> getMonitorRepositories(){
+		List<MonitorRepository> out = new ArrayList<MonitorRepository>();
+		
+		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_MONITOR)){
+			if(file instanceof IFile && file.exists()){
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
+				for(EObject eobj : res.getContents()){
+					if(eobj instanceof MonitorRepository){
+						MonitorRepository rep = (MonitorRepository)eobj;
+						out.add(rep);
+					}
+				}
+			}
+		}
+		
+		return out;
+	}
+	
+	public List<ServiceLevelObjectiveRepository> getSLORepositories(){
+		List<ServiceLevelObjectiveRepository> out = new ArrayList<ServiceLevelObjectiveRepository>();
+		
+		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_SLO)){
+			if(file instanceof IFile && file.exists()){
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
+				for(EObject eobj : res.getContents()){
+					if(eobj instanceof ServiceLevelObjectiveRepository){
+						ServiceLevelObjectiveRepository rep = (ServiceLevelObjectiveRepository)eobj;
+						out.add(rep);
+					}
+				}
+			}
+		}
+		
+		return out;
 	}
 	///////////////////////////////////////////////////////////////////
 
@@ -444,97 +547,211 @@ public class ConfAlternative extends EditorInputEMF{
 		resSet.getResource(metricDescriptions, true);
 	}
 	
-	//
-	// Capacity measuring specifics
-	//
-	
-	protected void configureInputCapacity(Experiment exp, InitialModel initialModel, InputAlternative inputAlt) {
+	private void initializeCommon(Experiment exp){
 		
-		exp.setRepetitions(1);
-		exp.setName("Capacity measurement");
-		exp.getStopConditions().clear();
+		InitialModel initialModel = getInitialModel();
+		if(initialModel == null){
+			initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
+			exp.setInitialModel(initialModel);
+		}
 				
 		//create and set measurement stop condition
-		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-		msc.setMeasurementCount(100);
-		exp.getStopConditions().add(msc);
+		{
+			List<StopCondition> stopConditions = getStopConditions(AbstractsimulationPackage.Literals.MEASUREMENT_COUNT_STOP_CONDITION);
+			if(stopConditions.isEmpty()){
+				MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+				msc.setMeasurementCount(100);
+				exp.getStopConditions().add(msc);
+			}
+		}
 		
 		//create and set time stop condition
-		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-		tsc.setSimulationTime(-1);
-		exp.getStopConditions().add(tsc);
+		{
+			List<StopCondition> stopConditions = getStopConditions(AbstractsimulationPackage.Literals.SIM_TIME_STOP_CONDITION);
+			if(stopConditions.isEmpty()){
+				SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+				tsc.setSimulationTime(-1);
+				exp.getStopConditions().add(tsc);
+			}
+		}
 		
+		//create measuring point repository
+		//TODO: feature is not supported jet by the analyser
+	
+		//create monitor
+		{
+			List<MonitorRepository> monitorReps = getMonitorRepositories();
+			MonitorRepository monitorRep = null;
+			if(monitorReps.isEmpty()){
+				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
+				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
+				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				monitorRep.getMonitors().add(monitor);
+				initialModel.setMonitorRepository(monitorRep);
+			}
+		}
+		
+		//create slo
+		{
+			List<ServiceLevelObjectiveRepository> sloReps = getSLORepositories();
+			ServiceLevelObjectiveRepository sloRep = null;
+			if(sloReps.isEmpty()){
+				sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
+				createEMFResource("analyser.slo", ToolchainUtils.KEY_FILE_SLO, sloRep);
+				
+				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+				slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
+				sloRep.getServicelevelobjectives().add(slo);
+			}
+		}
+	}
+	
+	private void initializeNormal(Experiment exp){
+		
+	}
+	
+	private void initializeCapacity(Experiment exp) {
+		
+		exp.setName("Capacity measurement");
+		
+		//create measuring point
+		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
+		createEMFResource("analyser.measuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS, measurePoint);
+		
+		//create variation
+		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
+		exp.getVariations().clear();
+		NestedIntervalsDoubleValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsDoubleValueProvider();
+		dvp.setMinValue(0);
+		dvp.setMaxValue(400);
+		var.setValueProvider(dvp);
+		//TODO: set type var.setType();
+		exp.getVariations().clear();
+		exp.getVariations().add(var);
+		
+		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+		resSet.getResource(variations, true);
+	}
+	
+	private void initializeScalability(Experiment exp){
+		//TODO: implement
+	}
+	
+	private void configureCapacity(Experiment exp, InitialModel initialModel){
 		//retrieve usage scenario
 		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
 		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
 		
-		//create measuring point
-		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
-		measurePoint.setUsageScenario(usageScenario);
-		
-		IFile mesuringPointFile = ((IFolder)getResource()).getFile("analyser.measuringpoint");
-		this.setSubResource(ToolchainUtils.KEY_FILE_MESURPOINTS, mesuringPointFile);
-		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, mesuringPointFile);
-		resMp.getContents().clear();
-		resMp.getContents().add(measurePoint);
-		
-		//create pms
-		MonitorRepository monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
-		Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
-		monitorRep.getMonitors().add(monitor);
-		
-		monitor.setMeasuringPoint(measurePoint);
-		
-		MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
-		
-		MetricDescription md = getMetricDescription(MetricSpecPackage.Literals.METRIC_DESCRIPTION);
-		if(md != null){
-			specification.setMetricDescription(md);
+		if(usageScenario == null){
+			DialogUtils.openWarning("Usage scenario can not be found. Please configure all properties regarding this model manually.");
 		}
-		specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
-		Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
-		interval.setIntervall(10.0);
-		specification.setTemporalRestriction(interval);
 		
-		monitor.getMeasurementSpecification().add(specification);
+		List<MeasuringPoint> mps = getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT);
+		UsageScenarioMeasuringPoint usmp = null;
+		if(!mps.isEmpty()){
+			usmp = (UsageScenarioMeasuringPoint)mps.get(0);
+			usmp.setUsageScenario(usageScenario);
+		}
+		else{
+			DialogUtils.openWarning("Usage scenario measuring point has been removed! Please create and configure it manually.");
+		}
 		
-		/*
-		pm.setMeasuringPoint(measurePoint);
-		MeasurementSpecification ms = PmsFactory.eINSTANCE.createMeasurementSpecification();
-		ms.setPerformanceMetric(PerformanceMetricEnum.RESPONSE_TIME);
-		ms.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
-		Intervall intervall = PmsFactory.eINSTANCE.createIntervall();
-		intervall.setIntervall(10.0);
-		ms.setTemporalRestriction(intervall);
-		pm.getMeasurementSpecification().add(ms);
-		pms.getPerformanceMeasurements().add(pm);
-		*/
+		List<MonitorRepository> monitorReps = getMonitorRepositories();
+		if(!monitorReps.isEmpty()){
+			MonitorRepository monitorRep = monitorReps.get(0);
+			if(!monitorRep.getMonitors().isEmpty()){		
+				Monitor monitor = monitorRep.getMonitors().get(0);
+
+				if(usmp != null){
+					monitor.setMeasuringPoint(usmp);
+				}
+				
+				monitor.getMeasurementSpecification().clear();
+				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
+				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
+				interval.setIntervall(10.0);
+				
+				MetricDescription metric = null;
+				for(MetricDescription md : getMetricDescriptions()){
+					if("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId())){
+						metric = md;
+					}
+				}
+				
+				if(metric == null){
+					DialogUtils.openError("Required metric description (Response time) can not be found!");
+				}
+				else{
+					specification.setMetricDescription(metric);					
+				}
+				
+				specification.setTemporalRestriction(interval);
+				monitor.getMeasurementSpecification().add(specification);
+			}
+			else{
+				DialogUtils.openWarning("Monitor object has been removed! Please create and configure it manually.");
+			}
+		}
+		else{
+			DialogUtils.openWarning("Monitor repository has been removed! Please create and configure it manually.");
+		}
+				
+		List<Variation> variations = getVariationObjects();
+		if(!variations.isEmpty()){
+			Variation v = variations.get(0);
+
+			if(usageScenario != null){
+				Workload workload = usageScenario.getWorkload_UsageScenario();
+				if(workload == null){
+					DialogUtils.openWarning("Usage scenario workload can not be found! Please configure it manually.");
+				}
+				
+				VariationType type = null;
+				if(workload instanceof ClosedWorkload){
+					type = getVariationType("_zUZqID5zEeCEPJs72ZSOBg");
+				}
+				else if(workload instanceof OpenWorkload){
+					type = getVariationType("_59qtgBU-EeKgFO0nt5OPnA");
+				}
+				
+				if(type != null){
+					v.setType(type);
+				}
+				else{
+					DialogUtils.openError("Required variation type can not be found! Please configure it manually.");
+				}
+			
+				v.setVariedObjectId(usageScenario.getId());
+			}
+		}
+		else{
+			DialogUtils.openWarning("Variation has been removed! Please create and configure it manually.");
+		}
 		
-		IFile monitorFile = ((IFolder)getResource()).getFile("analyser.monitorrepository");
-		this.setSubResource(ToolchainUtils.KEY_FILE_MONITOR, monitorFile);
-		Resource resMonitor = ExplorerProjectPaths.getEmfResource(resSet, monitorFile);
-		resMonitor.getContents().clear();
-		resMonitor.getContents().add(monitorRep);
-		initialModel.setMonitorRepository(monitorRep);
-		
-		//create slo
-		ServiceLevelObjectiveRepository sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
-		ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
-		slo.setMeasuringPoint(measurePoint);
-		slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
-		
-		HardThreshold ht = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
-		//TODO: set limit to 'HardThreshold'
-		slo.setUpperThreshold(ht);
-		
-		IFile sloFile = ((IFolder)getResource()).getFile("analyser.slo");
-		this.setSubResource(ToolchainUtils.KEY_FILE_SLO, sloFile);
-		Resource resSlo = ExplorerProjectPaths.getEmfResource(resSet, sloFile);
-		resSlo.getContents().clear();
-		resSlo.getContents().add(sloRep);
+		List<ServiceLevelObjectiveRepository> sloReps = getSLORepositories();
+		if(!sloReps.isEmpty()){
+			ServiceLevelObjectiveRepository sloRep = sloReps.get(0);
+			if(!sloRep.getServicelevelobjectives().isEmpty()){
+				ServiceLevelObjective slo = sloRep.getServicelevelobjectives().get(0);
+				if(usmp != null){
+					slo.setMeasuringPoint(usmp);
+				}
+				
+				HardThreshold ut = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
+				//TODO: set limit to 'HardThreshold'
+				slo.setUpperThreshold(ut);
+			}
+			else{
+				DialogUtils.openWarning("Service level objective has been removed! Please create and configure it manually.");
+			}
+		}
+		else{
+			DialogUtils.openWarning("SLO repository has been removed! Please create and configure it manually.");
+		}
 	}
 	
-	protected void configureToolCapacity(SimuLizarConfiguration simulizarConf) {
+	private void configureToolCapacity(SimuLizarConfiguration simulizarConf) {
 		
 		//create measurement stop condition
 		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
@@ -544,17 +761,21 @@ public class ConfAlternative extends EditorInputEMF{
 		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 		tsc.setSimulationTime(-1);
 		
-		//create variations
-		//TODO: create variation
-		//Variation var = VariationFactory.eINSTANCE.c
-		
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
 	}
 	
-	//
-	// Scalability measuring specifics
-	//
-	
-	//TODO: implement scalability measurement
+	private void configureToolScalability(SimuLizarConfiguration simulizarConf) {
+		
+		//create measurement stop condition
+		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+		msc.setMeasurementCount(100);
+		
+		//create time stop condition
+		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+		tsc.setSimulationTime(-1);
+		
+		simulizarConf.getStopConditions().add(msc);
+		simulizarConf.getStopConditions().add(tsc);
+	}
 }

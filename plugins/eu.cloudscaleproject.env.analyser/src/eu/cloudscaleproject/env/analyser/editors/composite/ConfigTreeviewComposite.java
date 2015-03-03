@@ -22,22 +22,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
 
 public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 
-	private final ConfAlternative alternative;
+	private final EditorInputEMF alternative;
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
@@ -49,7 +48,7 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigTreeviewComposite(IEditorPart editor, ConfAlternative ca, Composite parent, int style) {
+	public ConfigTreeviewComposite(EditorInputEMF ca, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = ca;

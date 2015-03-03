@@ -170,7 +170,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Service level objectives");
 				
-				sloTreeview = new ConfigTreeviewComposite(editor, input, tabFolder, style);
+				sloTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
 				sloTreeview.addFilter(new ViewerFilter() {
 					@Override
 					public boolean select(Viewer viewer, Object parentElement, Object element) {
@@ -201,7 +201,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Advanced editor");
 				
-				advancedTreeview = new ConfigTreeviewComposite(editor, input, tabFolder, style);
+				advancedTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
 				tabItem.setControl(advancedTreeview);
 			}
 		}
