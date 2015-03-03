@@ -10,6 +10,8 @@ import org.eclipse.ui.PlatformUI;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
 import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
+import com.sun.org.apache.xerces.internal.impl.RevalidationHandler;
+
 import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
@@ -44,9 +46,6 @@ public class SingleResultComposite extends TitleComposite {
 		this.annotations = Util.loadAnnotations(this.resultFolder);
 		if (annotationView != null)
                 annotationView.loadAnnotations(annotations);
-		
-		layout();
-		getContainer().layout(true);
 	}
 
 	private void initAnnotationView()
@@ -68,6 +67,7 @@ public class SingleResultComposite extends TitleComposite {
 			{
 				annotationView.createPartControl(getContainer());
 				annotationView.loadAnnotations(annotations);
+				getContainer().layout();
 			}
 
 		});

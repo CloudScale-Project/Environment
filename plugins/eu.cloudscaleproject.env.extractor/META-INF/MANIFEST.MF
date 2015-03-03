@@ -124,4 +124,5 @@ Require-Bundle: javax.inject;bundle-version="1.0.0",
  org.eclipse.gmf.runtime.diagram.core,
  de.uka.ipd.sdq.pcm.gmf.repository,
  de.uka.ipd.sdq.pcm.gmf.composite,
- org.eclipse.swt
+ org.eclipse.swt,
+ de.uka.ipd.sdq.workflow.launchconfig;bundle-version="2.1.0"

@@ -17,9 +17,10 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
+import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 
-public class SingleResultComposite extends Composite {
+public class SingleResultComposite extends TitleComposite {
 
 
 	private ResultPersistenceFolder resultPersistenceFolder;
@@ -35,42 +36,26 @@ public class SingleResultComposite extends Composite {
 		
 		this.resultPersistenceFolder = rif;
 
-		this.setLayout(new GridLayout(3, false));
+		getContainer().setLayout(new GridLayout(3, false));
 		
-		Label lblTitle = new Label(this, SWT.NONE);
-		lblTitle.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblTitle.setText("Result");
-		
-		lblAlternativeName = new Label(this, SWT.NONE);
-		lblAlternativeName.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-
-		new Label(this, SWT.NONE);
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
-		GridData gd_label = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
-		gd_label.widthHint = 167;
-		label.setLayoutData(gd_label);
-		
-		
-		Label lblRepositoryTitle = new Label(this, SWT.NONE);
+		Label lblRepositoryTitle = new Label(getContainer(), SWT.NONE);
 		lblRepositoryTitle.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblRepositoryTitle.setText("Repository:");
 		
-		Label lblRepositoryModel = new Label(this, SWT.NONE);
+		Label lblRepositoryModel = new Label(getContainer(), SWT.NONE);
 		lblRepositoryModel.setText(ResultPersistenceFolder.RESULT_REPOSITORY);
 		
-		Button btnViewRepository = new Button(this, SWT.NONE);
+		Button btnViewRepository = new Button(getContainer(), SWT.NONE);
 		btnViewRepository.setText("View");
 		
-		Label lblSystemTitle = new Label(this, SWT.NONE);
+		Label lblSystemTitle = new Label(getContainer(), SWT.NONE);
 		lblSystemTitle.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblSystemTitle.setText("System:");
 		
-		Label lblSystemModel = new Label(this, SWT.NONE);
+		Label lblSystemModel = new Label(getContainer(), SWT.NONE);
 		lblSystemModel.setText(ResultPersistenceFolder.RESULT_SYSTEM);
 		
-		Button btnViewSystem = new Button(this, SWT.NONE);
+		Button btnViewSystem = new Button(getContainer(), SWT.NONE);
 		btnViewSystem.setText("View");
 		
 		
@@ -101,13 +86,6 @@ public class SingleResultComposite extends Composite {
 			}
 		});
 		
-		
-		
-		
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
 		init();
 	}
 	
@@ -116,9 +94,7 @@ public class SingleResultComposite extends Composite {
 	{
 		try
 		{
-			long timestamp = Long.parseLong(resultPersistenceFolder.getProperty(ResultPersistenceFolder.KEY_TIMESTAMP));
-			Date date = new Date(timestamp);
-			lblAlternativeName.setText(resultPersistenceFolder.getName() +"  --  "+sdf.format(date));
+			setTitle(this.resultPersistenceFolder.getName());
 			layout();
 		}
 		catch (Exception e)

@@ -72,7 +72,7 @@ public class ConfigAlternativeComposite extends TitleComposite
 
 		Label lblInput = new Label(getContainer(), SWT.NONE);
 		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblInput.setText("Input:");
+		lblInput.setText("Extractor result:");
 
 		comboViewer = new ComboViewer(getContainer(), SWT.NONE);
 		combo = comboViewer.getCombo();

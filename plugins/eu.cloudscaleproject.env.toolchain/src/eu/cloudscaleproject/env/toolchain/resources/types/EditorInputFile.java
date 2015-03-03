@@ -75,7 +75,15 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 	
 	public synchronized  void setProperty(String key, String value){
 		String old = getProperty(key);
-		source.setProperty(key, value);
+		if (value == null) 
+		{
+			source.remove(key);
+		}
+		else
+		{
+			source.setProperty(key, value);
+		}
+		
 		isDirty = true;
 		firePropertyChange(key, old, value);
 	}

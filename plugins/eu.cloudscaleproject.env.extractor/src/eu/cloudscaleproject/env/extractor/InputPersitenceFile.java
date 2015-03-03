@@ -5,6 +5,7 @@ import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
 
+
 public class InputPersitenceFile extends EditorInputFile {
 
 	private static final long serialVersionUID = 1L;

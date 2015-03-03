@@ -2,9 +2,6 @@ package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,11 +14,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.extractor.wizard.util.Util;
 
-public class ConfigAlternativeComposite extends Composite {
+public class ConfigAlternativeComposite extends TitleComposite {
 
 	private Combo combo;
 	private List<InputPersitenceFile> inputs;
@@ -37,37 +35,28 @@ public class ConfigAlternativeComposite extends Composite {
 		this.configPersistenceFolder = cif;
 		
 		//this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.setLayout(new GridLayout(3, false));
+		getContainer().setLayout(new GridLayout(3, false));
+
+		setTitle(configPersistenceFolder.getName());
 		
-		Label lblConfigurationalternative = new Label(this, SWT.NONE);
-		lblConfigurationalternative.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblConfigurationalternative.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
-		lblConfigurationalternative.setText("Configuration ("+configPersistenceFolder.getName()+")");
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
-		GridData gd_label = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
-		gd_label.widthHint = 167;
-		label.setLayoutData(gd_label);
-		
-		Label lblInput = new Label(this, SWT.NONE);
+		Label lblInput = new Label(getContainer(), SWT.NONE);
 		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblInput.setText("Input:");
 		
-		ComboViewer comboViewer = new ComboViewer(this, SWT.NONE);
+		ComboViewer comboViewer = new ComboViewer(getContainer(), SWT.NONE);
 		combo = comboViewer.getCombo();
 		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
 		gd_combo.widthHint = 170;
 		combo.setLayoutData(gd_combo);
 		
-		Label lblModiscoConfig = new Label(this, SWT.NONE);
+		Label lblModiscoConfig = new Label(getContainer(), SWT.NONE);
 		lblModiscoConfig.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblModiscoConfig.setText("Modisco config:    ");
 		
-		Label lblNewLabel = new Label(this, SWT.NONE);
+		Label lblNewLabel = new Label(getContainer(), SWT.NONE);
 		lblNewLabel.setText("modisco.conf");
 		
-		Button btnViewModisco = new Button(this, SWT.NONE);
+		Button btnViewModisco = new Button(getContainer(), SWT.NONE);
 		btnViewModisco.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -76,14 +65,14 @@ public class ConfigAlternativeComposite extends Composite {
 		});
 		btnViewModisco.setText("View");
 		
-		Label lblSomoxConfig = new Label(this, SWT.NONE);
+		Label lblSomoxConfig = new Label(getContainer(), SWT.NONE);
 		lblSomoxConfig.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblSomoxConfig.setText("Somox config:    ");
 		
-		Label lblSomoxconf = new Label(this, SWT.NONE);
+		Label lblSomoxconf = new Label(getContainer(), SWT.NONE);
 		lblSomoxconf.setText("somox.conf");
 		
-		Button btnViewSomox = new Button(this, SWT.NONE);
+		Button btnViewSomox = new Button(getContainer(), SWT.NONE);
 		btnViewSomox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -92,20 +81,19 @@ public class ConfigAlternativeComposite extends Composite {
 		});
 		btnViewSomox.setText("View");
 		
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 		
-		Button btnRunAlternative = new Button(this, SWT.NONE);
+		Button btnRunAlternative = new Button(getContainer(), SWT.NONE);
 		btnRunAlternative.setText("Run alternative");
 		btnRunAlternative.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+
 				Util.runConfigurationAlternative(configPersistenceFolder);
 			}
 		});
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
 		
 		loadInputs();
 
@@ -145,51 +133,6 @@ public class ConfigAlternativeComposite extends Composite {
         InputPersitenceFile eif = this.inputs.get(combo.getSelectionIndex());
         configPersistenceFolder.setProperty(ConfigPersistenceFolder.KEY_INPUT_ALTERNATIVE, eif.getName());
         configPersistenceFolder.save();
-
-        String projectURI = eif.getProperty(InputPersitenceFile.KEY_PROJECT_URL);
-		
-		//////////////////////////
-		// MODISCO
-		//
-		ILaunchConfiguration modisco = Util.getLaunchConfiguration(configPersistenceFolder.getModiscoConfigFile());
-		String modiscoKey = "discoverer_launch_model";
-		String modiscoResourceKey = "org.eclipse.core.resources.IResource";
-		String modiscoResourceRegex = modiscoResourceKey + ":/\\w*";
-		try {
-			// This is XML
-			// For now we find resource property with regex and replace with selected value
-			String value = modisco.getAttribute(modiscoKey, "");
-			value = value.replaceAll(modiscoResourceRegex, modiscoResourceKey + ":"+projectURI);
-
-			// Save property
-			ILaunchConfigurationWorkingCopy workingCopy = modisco.getWorkingCopy();
-			workingCopy.setAttribute(modiscoKey, value);
-			workingCopy.doSave();
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//////////////////////////////
-		// SOMOX
-		//
-		ILaunchConfiguration somox = Util.getLaunchConfiguration(configPersistenceFolder.getSomoxConfigFile());
-		String somoxInputFileKey = "org.somox.analyzer.inputfile";
-		String somoxProjectKey = "org.somox.project";
-		String fileExtension = "_java2kdm.xmi";
-		try{
-			ILaunchConfigurationWorkingCopy workingCopy = somox.getWorkingCopy();
-
-			if (projectURI.charAt(0) == '/') projectURI = projectURI.substring(1);
-
-			workingCopy.setAttribute(somoxInputFileKey, projectURI+"/"+projectURI+fileExtension);
-			workingCopy.setAttribute(somoxProjectKey, projectURI);
-			workingCopy.doSave();
-			
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	@Override

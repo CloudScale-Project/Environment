@@ -25,7 +25,7 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 
 
 	public static final String RESULT_SOMOX_FOLDER = "somox/";
-	public static final String RESULT_MODISCO_FOLDER = "./";
+	public static final String RESULT_MODISCO_FOLDER = "modisco/";
 	public static final String RESULT_MODEL_NAME = "internal_architecture_model";
 	public static final String RESULT_SYSTEM = RESULT_MODEL_NAME + ".system";
 	public static final String RESULT_REPOSITORY = RESULT_MODEL_NAME + ".repository";
@@ -47,7 +47,7 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 		IFolder somoxFolder = getResource().getFolder(RESULT_SOMOX_FOLDER);
 		
 		try {
-			//modiscoFolder.create(true, true, null);
+			modiscoFolder.create(true, true, null);
 			somoxFolder.create(true, true, null);
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

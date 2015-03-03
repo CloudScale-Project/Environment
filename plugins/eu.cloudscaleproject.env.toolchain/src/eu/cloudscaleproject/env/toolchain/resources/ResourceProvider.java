@@ -238,6 +238,15 @@ public abstract class ResourceProvider{
 		}
 		return null;
 	}
+
+	public IEditorInputResource getResourceByName(String name){
+		for(IEditorInputResource prop : resources.values()){
+			if(name.equals(prop.getName())){
+				return prop;
+			}
+		}
+		return null;
+	}
 	
 	public IEditorInputResource getResource(IResource resource){
 		if(resource == null){

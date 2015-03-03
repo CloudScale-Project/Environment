@@ -13,9 +13,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
+import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 
-public class InputAlternativeComposite extends Composite {
+public class InputAlternativeComposite extends TitleComposite {
 
 	private Text txtInput;
 	private InputPersitenceFile editorInput;
@@ -27,32 +28,23 @@ public class InputAlternativeComposite extends Composite {
 	 */
 	public InputAlternativeComposite(Composite parent, int style, final InputPersitenceFile editorInput) {
 		super(parent, SWT.NONE);
-		this.setLayout(new GridLayout(4, false));
 		this.editorInput = editorInput;
 		
-		Label lblConfigurationalternative = new Label(this, SWT.NONE);
-		lblConfigurationalternative.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblConfigurationalternative.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
-		lblConfigurationalternative.setText("Input (Alternative "+editorInput.getName()+")");
+		setTitle(editorInput.getName());
 		
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
-		GridData gd_label = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
-		gd_label.widthHint = 167;
-		label.setLayoutData(gd_label);
-		
-		Label lblInput = new Label(this, SWT.NONE);
+		getContainer().setLayout(new GridLayout(4, false));
+
+		Label lblInput = new Label(getContainer(), SWT.NONE);
 		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
 		lblInput.setText("Project: ");
 		
-		txtInput = new Text(this, SWT.BORDER);
+		txtInput = new Text(getContainer(), SWT.BORDER);
 		txtInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button btnChoose = new Button(this, SWT.NONE);
+		Button btnChoose = new Button(getContainer(), SWT.NONE);
 		btnChoose.setText("...");
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 		
 		btnChoose.addSelectionListener(new SelectionAdapter() {
 			@Override
