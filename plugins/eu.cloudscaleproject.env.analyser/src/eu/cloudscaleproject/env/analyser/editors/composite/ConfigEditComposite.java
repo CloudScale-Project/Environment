@@ -177,7 +177,6 @@ public class ConfigEditComposite extends Composite{
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				ca.setInitialModel((InputAlternative)selection.getFirstElement());
-				ca.save();
 			}
 		});
 		

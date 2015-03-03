@@ -602,6 +602,7 @@ public class ConfAlternative extends EditorInputEMF{
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 				slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
 				sloRep.getServicelevelobjectives().add(slo);
+				initialModel.setServiceLevelObjectives(sloRep);
 			}
 		}
 	}
