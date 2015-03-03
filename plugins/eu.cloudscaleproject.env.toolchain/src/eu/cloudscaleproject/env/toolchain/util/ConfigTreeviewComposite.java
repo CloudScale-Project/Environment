@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.analyser.editors.composite;
+package eu.cloudscaleproject.env.toolchain.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
@@ -32,7 +32,6 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
-import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
 
 public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 

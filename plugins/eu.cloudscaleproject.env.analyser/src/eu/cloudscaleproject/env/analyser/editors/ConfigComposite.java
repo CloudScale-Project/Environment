@@ -25,7 +25,6 @@ import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigEditComposite;
-import eu.cloudscaleproject.env.analyser.editors.composite.ConfigTreeviewComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
@@ -35,6 +34,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.ConfigTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
