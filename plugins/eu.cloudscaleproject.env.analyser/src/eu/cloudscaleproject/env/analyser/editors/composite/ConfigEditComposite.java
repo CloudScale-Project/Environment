@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -37,6 +38,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
+import org.eclipse.swt.widgets.ProgressBar;
+
 public class ConfigEditComposite extends Composite{
 	
 	private final ResourceProvider inputResourceProvider;
@@ -45,6 +48,9 @@ public class ConfigEditComposite extends Composite{
 	private final ComboViewer comboViewerInput;
 	private final ComboViewer comboViewerUsage;
 	
+	private final Button btnRun;
+	private final Button btnStop;
+	private final ProgressBar progressBar;
 	
 	private final PropertyChangeListener inputResourceListener = new PropertyChangeListener() {
 		@Override
@@ -70,6 +76,56 @@ public class ConfigEditComposite extends Composite{
 		}
 	};
 	
+	private final IProgressMonitor progress = new IProgressMonitor() {
+
+		private boolean isCanceled = false;
+		
+		@Override
+		public void worked(int work) {
+			progressBar.setSelection(work);
+		}
+
+		@Override
+		public void subTask(String name) {
+		}
+
+		@Override
+		public void setTaskName(String name) {
+		}
+
+		@Override
+		public void setCanceled(boolean value) {
+			isCanceled = value;
+		}
+
+		@Override
+		public boolean isCanceled() {
+			return isCanceled;
+		}
+
+		@Override
+		public void internalWorked(double work) {
+		}
+
+		@Override
+		public void done() {
+			progressBar.setSelection(0);
+			progressBar.setEnabled(false);
+			
+			btnRun.setEnabled(true);
+			btnStop.setEnabled(false);
+		}
+
+		@Override
+		public void beginTask(String name, int totalWork) {
+			progressBar.setEnabled(true);
+			progressBar.setMinimum(0);
+			btnRun.setEnabled(false);
+			btnStop.setEnabled(true);
+			progressBar.setMaximum(totalWork);
+		}
+	};
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -83,10 +139,11 @@ public class ConfigEditComposite extends Composite{
 		//TODO: Handle situation when usage evolution resource provider does not exist (==null)! 
 		this.usageResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
 		
-		setLayout(new GridLayout(2, false));
+		setLayout(new GridLayout(3, false));
 		
 		Label lblSelectInput = new Label(this, SWT.NONE);
 		lblSelectInput.setText("Select input:");
+		new Label(this, SWT.NONE);
 		{
 			comboViewerInput = new ComboViewer(this, SWT.READ_ONLY);
 			Combo combo = comboViewerInput.getCombo();
@@ -97,6 +154,7 @@ public class ConfigEditComposite extends Composite{
 		
 		Label lblSelectUsage = new Label(this, SWT.NONE);
 		lblSelectUsage.setText("Select usage evolution:");
+		new Label(this, SWT.NONE);
 		{
 			comboViewerUsage = new ComboViewer(this, SWT.READ_ONLY);
 			Combo combo = comboViewerUsage.getCombo();
@@ -105,9 +163,20 @@ public class ConfigEditComposite extends Composite{
 			combo.setLayoutData(gd_combo);
 		}
 		
-		Button btnRun = new Button(this, SWT.NONE);
+		btnRun = new Button(this, SWT.NONE);
 		btnRun.setText("Run simulation");
-		new Label(this, SWT.NONE);
+		
+		btnStop = new Button(this, SWT.NONE);
+		btnStop.setText("Stop");
+		btnStop.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				progress.setCanceled(true);
+			}
+		});
+		
+		progressBar = new ProgressBar(this, SWT.NONE);
+		progressBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnRun.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -124,9 +193,9 @@ public class ConfigEditComposite extends Composite{
 					lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
 					lcwc.doSave();
 					
-					lcwc.launch(ILaunchManager.DEBUG_MODE, null);
+					progress.setCanceled(false);
+					lcwc.launch(ILaunchManager.DEBUG_MODE, progress);
 				} catch (CoreException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -177,7 +246,6 @@ public class ConfigEditComposite extends Composite{
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				ca.setInitialModel((InputAlternative)selection.getFirstElement());
-				ca.save();
 			}
 		});
 		
