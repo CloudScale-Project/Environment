@@ -9,6 +9,10 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -33,90 +37,191 @@ import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider{
+public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider
+{
 
 	private final EditorInputEMF alternative;
-	
+
 	private final Tree tree;
 	private final TreeViewer treeViewer;
 	private final AdapterFactoryContentProvider contentProvider;
 	private final EMFPopupMenuSupport menuSupport;
-	
+
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigTreeviewComposite(EditorInputEMF ca, Composite parent, int style) {
+	public ConfigTreeviewComposite(EditorInputEMF ca, Composite parent, int style)
+	{
 		super(parent, style);
-		
+
 		this.alternative = ca;
-		
+
 		setLayout(new GridLayout(1, false));
-		
+
 		this.tree = new Tree(this, SWT.BORDER | SWT.V_SCROLL);
 		this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		this.treeViewer = new TreeViewer(tree);
-		this.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			
+		this.treeViewer.addDoubleClickListener(new IDoubleClickListener()
+		{
 			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				ISelection s = treeViewer.getSelection();
-				Object element = ((StructuredSelection)s).getFirstElement();
-				if (element instanceof EObject) {
-					EObject eo = (EObject)element;
-					Resource res = eo.eResource();
-					IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
-					
-					String path = res.getURI().lastSegment() + "_diagram";
-					IFile diagramFile = file.getParent().getParent().getFile(new Path(path));
-					
-					if(diagramFile.exists()){
-						file = diagramFile;
-					}
-					
-					try {
-						IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-					} catch (PartInitException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+			public void doubleClick(DoubleClickEvent event)
+			{
+				IFile file = getSelectedDiagramFile();
+				if (file == null)
+					file = getSelectedModelFile();
+
+				if (file != null)
+					openEditor(file);
 			}
 		});
-		
+
 		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
 		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
-				
+
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
-		
-		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain());
-		menuSupport.setViewer(treeViewer);
-		
-		tree.addFocusListener(new FocusListener() {
+
+		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain())
+		{
 			@Override
-			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
+			public void menuAboutToShow(IMenuManager menuManager)
+			{
+				menuManager.add(createOpenMenuManager());
+				menuManager.add(new Separator("default"));
+				super.menuAboutToShow(menuManager);
+
 			}
-			
+		};
+		menuSupport.setViewer(treeViewer);
+
+		tree.addFocusListener(new FocusListener()
+		{
 			@Override
-			public void focusGained(FocusEvent e) {
-				ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);				
+			public void focusLost(FocusEvent e)
+			{
+			}
+
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+				ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);
 			}
 		});
-		
+
 		this.treeViewer.setInput(alternative.getResourceSet());
 		this.treeViewer.expandToLevel(2);
 		this.treeViewer.refresh();
 	}
+
+	private MenuManager createOpenMenuManager()
+	{
+		MenuManager mm = new MenuManager("Open");
+
+		mm.add(new Action("Editor")
+		{
+			@Override
+			public void run()
+			{
+				openEditor(getSelectedModelFile());
+			}
+			@Override
+			public boolean isEnabled()
+			{
+				return getSelectedModelFile() != null;
+			}
+		});
+
+		mm.add(new Action("Diagram")
+		{
+			@Override
+			public void run()
+			{
+				openEditor(getSelectedDiagramFile());
+			}
+			
+			@Override
+			public boolean isEnabled()
+			{
+				return getSelectedDiagramFile() != null;
+			}
+		});
+
+		return mm;
+	}
 	
-	public void addFilter(ViewerFilter filter){
+	private IFile getSelectedModelFile()
+	{
+		ISelection s = treeViewer.getSelection();
+		Object element = ((StructuredSelection) s).getFirstElement();
+		
+		System.out.println(element);
+		
+		if (element instanceof Resource)
+		{
+			return ExplorerProjectPaths.getFileFromEmfResource((Resource)element);
+		}
+
+		if (element instanceof EObject)
+		{
+			EObject eo = (EObject) element;
+			Resource res = eo.eResource();
+			return ExplorerProjectPaths.getFileFromEmfResource(res);
+		}
+		
+
+		return null;
+	}
+
+	private IFile getSelectedDiagramFile ()
+	{
+		IFile modelFile = getSelectedModelFile();
+
+		if (modelFile == null) return null;
+
+		String path = modelFile.getName() + "_diagram";
+
+        IFile diagramFile = modelFile.getParent().getFile(new Path(path));
+        if (diagramFile.exists())
+        {
+                return diagramFile;
+        }
+        else
+        {
+                diagramFile = modelFile.getParent().getParent().getFile(new Path(path));
+                if (diagramFile.exists())
+                {
+                	return diagramFile;
+                }
+        }
+        
+        return null;
+	}
+
+
+	private void openEditor(IFile file)
+	{
+        try
+        {
+                IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+        }
+        catch (PartInitException e)
+        {
+                e.printStackTrace();
+        }
+
+	}
+
+	public void addFilter(ViewerFilter filter)
+	{
 		this.treeViewer.addFilter(filter);
 	}
 
 	@Override
-	public IPropertySheetPage getPropertySheetPage() {
+	public IPropertySheetPage getPropertySheetPage()
+	{
 		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain());
 		propertySheetPage.setPropertySourceProvider(contentProvider);
 		return propertySheetPage;

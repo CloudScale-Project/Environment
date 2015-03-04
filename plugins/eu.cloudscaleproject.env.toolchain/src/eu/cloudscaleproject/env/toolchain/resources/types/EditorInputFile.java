@@ -24,7 +24,6 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EditorInputFile.class.getName());
 	
-	public static final String KEY_NAME = "name";
 	
 	protected Properties source = new Properties();
 	protected final IProject project;
@@ -96,6 +95,7 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		}
 
 		if (!file.exists()) {
+			source.setProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
 			try (InputStream is = new ByteArrayInputStream(new byte[0])) {
 				file.create(is, true, null);
 			} catch (CoreException e) {
@@ -107,6 +107,7 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {
+			source.setProperty(KEY_TIMESTAMP_MODIFIED, ""+System.currentTimeMillis());
 			source.storeToXML(os, "");
 			isDirty = false;
 		} catch (FileNotFoundException e) {

@@ -1,9 +1,27 @@
 package eu.cloudscaleproject.env.extractor.wizard.util;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.somox.common.MetricsDetails;
+import org.somox.common.MetricsDetails.GroupID;
+import org.somox.common.SoMoXProjectPreferences;
 import org.somox.configuration.SoMoXConfiguration;
 
 public class SomoxConfigurationUtil
 {
+	private static SoMoXProjectPreferences somoxPreferences = new SoMoXProjectPreferences();
+	private static Map<String, MetricsDetails> mapMetrics = new LinkedHashMap<String, MetricsDetails>();
+	static 
+	{
+		for (MetricsDetails md : somoxPreferences.orderedMetricDetails)
+		{
+			mapMetrics.put(md.metricWeightPeferenceName, md);
+		}
+	}
+	
 	
 	public static SoMoXConfiguration createDefaultSomoxConfiguration ()
 	{
@@ -59,6 +77,141 @@ public class SomoxConfigurationUtil
 		
 
 		return somoxConfiguration;
+	}
+	
+	public static MetricsDetails getMetricDescription (String key)
+	{
+		return mapMetrics.get(key);
+	}
+	
+	public static List<MetricsDetails> getMetricsDetails()
+	{
+		return new LinkedList<>(mapMetrics.values());
+	}
+
+	public static List<MetricsDetails> getMetricsDetails(GroupID group)
+	{
+		LinkedList<MetricsDetails> l = new LinkedList<MetricsDetails>();
+		for (MetricsDetails md : mapMetrics.values())
+		{
+			if (md.group == group)
+			{
+				l.add(md);
+			}
+		}
+		
+		return l;
+	}
+
+	public static List<String> getMetricsKeys()
+	{
+		return new LinkedList<>(mapMetrics.keySet());
+	}
+	
+	
+	public static void setValueByKey (String key, double value, SoMoXConfiguration conf)
+	{
+		switch (key)
+		{
+		    // Clustering
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_DECREMENT_COMPOSE:
+				conf.getClusteringConfig().setClusteringComposeThresholdDecrement(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_DECREMENT_MERGE:
+				conf.getClusteringConfig().setClusteringMergeThresholdDecrement(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MAX_COMPOSE:
+				conf.getClusteringConfig().setMaxComposeClusteringThreshold(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MAX_MERGE:
+				conf.getClusteringConfig().setMaxMergeClusteringThreshold(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MIN_COMPOSE:
+				conf.getClusteringConfig().setMinComposeClusteringThreshold(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MIN_MERGE:
+				conf.getClusteringConfig().setMinMergeClusteringThreshold(value); break;
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_DIRECTORY_MAPPING:
+				conf.setWeightDirectoryMapping(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_DMS:
+				conf.setWeightDMS(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_COUPLING:
+				conf.setWeightHighCoupling(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_COUPLING:
+				conf.setWeightLowCoupling(value); break;
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_SLAQ:
+				conf.setWeightHighSLAQ(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_SLAQ:
+				conf.setWeightLowSLAQ(value); break;
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_NAME_RESEMBLANCE:
+				conf.setWeightHighNameResemblance(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGHEST_NAME_RESEMBLANCE:
+				conf.setWeightHighestNameResemblance(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_MID_NAME_RESEMBLANCE:
+				conf.setWeightMidNameResemblance(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_NAME_RESEMBLANCE:
+				conf.setWeightLowNameResemblance(value); break;
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_INTERFACE_VIOLATION_IRRELEVANT:
+				conf.setWeightInterfaceViolationIrrelevant(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_INTERFACE_VIOLATION_RELEVANT:
+				conf.setWeightInterfaceViolationRelevant(value); break;
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_PACKAGE_MAPPING:
+				conf.setWeightPackageMapping(value); break;
+			
+			default: throw new IllegalStateException();
+		}
+		
+	}
+
+	public static double getValueByKey (String key, SoMoXConfiguration conf)
+	{
+		switch (key)
+		{
+		    // Clustering
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_DECREMENT_COMPOSE:
+				return conf.getClusteringConfig().getClusteringComposeThresholdDecrement();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_DECREMENT_MERGE:
+				return conf.getClusteringConfig().getClusteringMergeThresholdDecrement();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MAX_COMPOSE:
+				return conf.getClusteringConfig().getMaxComposeClusteringThreshold();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MAX_MERGE:
+				return conf.getClusteringConfig().getMaxMergeClusteringThreshold();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MIN_COMPOSE:
+				return conf.getClusteringConfig().getMinComposeClusteringThreshold();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_CLUSTERING_THRESHOLD_MIN_MERGE:
+				return conf.getClusteringConfig().getMinMergeClusteringThreshold();
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_DIRECTORY_MAPPING:
+				return conf.getWeightDirectoryMapping();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_DMS:
+				return conf.getWeightDMS();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_COUPLING:
+				return conf.getWeightHighCoupling();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_COUPLING:
+				return conf.getWeightLowCoupling();
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_SLAQ:
+				return conf.getWeightHighSLAQ();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_SLAQ:
+				return conf.getWeightLowSLAQ();
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGH_NAME_RESEMBLANCE:
+				return conf.getWeightHighNameResemblance();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_HIGHEST_NAME_RESEMBLANCE:
+				return conf.getWeightHighestNameResemblance();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_MID_NAME_RESEMBLANCE:
+				return conf.getWeightMidNameResemblance();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_LOW_NAME_RESEMBLANCE:
+				return conf.getWeightLowNameResemblance();
+
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_INTERFACE_VIOLATION_IRRELEVANT:
+				return conf.getWeightInterfaceViolationIrrelevant();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_INTERFACE_VIOLATION_RELEVANT:
+				return conf.getWeightInterfaceViolationRelevant();
+			case SoMoXProjectPreferences.SOMOX_WEIGHT_PACKAGE_MAPPING:
+				return conf.getWeightPackageMapping();
+			
+			default: throw new IllegalStateException();
+		}
 	}
 
 }

@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
@@ -57,7 +58,7 @@ public abstract class ResourceProvider{
 			if(!modified){
 				for(IResource res : resources.keySet()){
 					if(delta.findMember(res.getFullPath()) != null){
-						pcs.firePropertyChange(PROP_RESOURCE_MODIFIED, null, resources.get(res));
+						firePropertyChange(PROP_RESOURCE_MODIFIED, null, resources.get(res));
 					}
 				}
 			}
@@ -173,7 +174,7 @@ public abstract class ResourceProvider{
 				IEditorInputResource eir = resources.get(res);
 				iter.remove();
 
-				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
+				firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
 				modified = true;
 			}
 		}
@@ -206,7 +207,7 @@ public abstract class ResourceProvider{
 					IEditorInputResource prop = loadResource(res, type);
 					
 					resources.put(prop.getResource(), prop);
-					pcs.firePropertyChange(PROP_RESOURCE_ADDED, null, prop);
+					this.firePropertyChange(PROP_RESOURCE_ADDED, null, prop);
 					
 					modified = true;
 				}
@@ -286,28 +287,40 @@ public abstract class ResourceProvider{
 		checkRootFolder();
 		
 		IResource res = createResource(resourceName);
-		if(res.exists()){
-			try {
-				IEditorInputResource eir = resources.get(res);
-				resources.remove(res);
-				pcs.firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
-				
-				res.delete(true, null);
-				pcs.firePropertyChange(PROP_RESOURCE_DELETED, eir, null);		
-
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if(res.exists()){
+//			try {
+//				IEditorInputResource eir = resources.get(res);
+//				resources.remove(res);
+//				firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
+//				
+//				res.delete(true, null);
+//				firePropertyChange(PROP_RESOURCE_DELETED, eir, null);		
+//
+//			} catch (CoreException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		IEditorInputResource eir = loadResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
 		eir.save();
 		
-		pcs.firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
+		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
 		return eir;
+	}
+	
+	private void firePropertyChange(final String prop, final Object oldValue, final Object newValue)
+	{
+		Display.getDefault().syncExec(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				pcs.firePropertyChange(prop, oldValue, newValue);
+			}
+		});
 	}
 	
 	public IEditorInputResource createNewResource(String name, String type){
@@ -332,7 +345,7 @@ public abstract class ResourceProvider{
 		eir.setName(name);
 		eir.save();
 				
-		pcs.firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
+		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);		
 		return eir;
 	}
 	
@@ -340,7 +353,7 @@ public abstract class ResourceProvider{
 		IEditorInputResource resource = getResource(resourceName);
 		resource.delete();
 				
-		pcs.firePropertyChange(PROP_RESOURCE_DELETED, resource, null);
+		firePropertyChange(PROP_RESOURCE_DELETED, resource, null);
 	}
 	
 	public void addListener(PropertyChangeListener listener){

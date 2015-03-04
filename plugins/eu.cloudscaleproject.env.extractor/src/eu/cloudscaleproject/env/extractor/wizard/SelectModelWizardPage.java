@@ -40,10 +40,14 @@ import org.scaledl.overview.util.OverviewUtil;
 
 import de.uka.ipd.sdq.pcm.repository.Repository;
 import de.uka.ipd.sdq.pcm.system.System;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
-import eu.cloudscaleproject.env.extractor.wizard.util.Util;
 import eu.cloudscaleproject.env.extractor.wizard.util.WizardData;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class SelectModelWizardPage extends WizardPage implements
 		IWizardPageControll {
@@ -137,15 +141,19 @@ public class SelectModelWizardPage extends WizardPage implements
 		resultsList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 
-		final List<ResultPersistenceFolder> results = Util.getResults(this.data.getProject());
-		for (ResultPersistenceFolder rpf : results)
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(
+				this.data.getProject(),
+				ToolchainUtils.EXTRACTOR_RES_ID);
+
+		final List<IEditorInputResource> results = resourceProvider.getResources();
+		for (IEditorInputResource rpf : results)
 		{
 			resultsList.add(rpf.getName());
 		}
 		resultsList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (resultsList.getSelection().length > 0)
-					setResult(results.get(resultsList.getSelectionIndex()));
+					setResult((ResultPersistenceFolder)results.get(resultsList.getSelectionIndex()));
 					checkComplete();
 			};
 		});
@@ -278,25 +286,27 @@ public class SelectModelWizardPage extends WizardPage implements
 		final URI repositoryURI = URI.createFileURI(repositoryLoc);
 		final URI systemURI = URI.createFileURI(systemLoc);
 
-		loadModels(repositoryURI, systemURI);
+		loadExternalModels(repositoryURI, systemURI);
 	}
 
 	private void initResultsModel() {
 		if (this.resultsList.getSelection().length == 0)
 			throw new IllegalStateException();
 
-		IFile repositoryFile = (IFile)this.result.getSubResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL);
-		IFile systemFile = (IFile)this.result.getSubResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL);
+		IFile repositoryFile = (IFile)this.result.getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
+		IFile systemFile = (IFile)this.result.getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
 
-		final URI repositoryURI = URI.createPlatformResourceURI(repositoryFile
-				.getFullPath().toString(), true);
-		final URI systemURI = URI.createPlatformResourceURI(systemFile
-				.getFullPath().toString(), true);
+		Resource repositoryResource = (ExplorerProjectPaths.getEmfResource(result.getResourceSet(), repositoryFile));
+		Resource systemResource = (ExplorerProjectPaths.getEmfResource(result.getResourceSet(), systemFile));
 
-		loadModels(repositoryURI, systemURI);
+		EObject rep = repositoryResource.getContents().get(0);
+		EObject sys = systemResource.getContents().get(0);
+
+		this.data.setRepositoryModel((Repository) rep);
+		this.data.setSystemModel((System) sys);
 	}
 
-	private void loadModels(URI repositoryURI, URI systemURI) {
+	private void loadExternalModels(URI repositoryURI, URI systemURI) {
 		ResourceSet resSet = new ResourceSetImpl();
 		final Resource systemRes = resSet.createResource(systemURI);
 		final Resource repositoryRes = resSet.createResource(repositoryURI);
@@ -316,7 +326,6 @@ public class SelectModelWizardPage extends WizardPage implements
 
 		this.data.setRepositoryModel((Repository) rep);
 		this.data.setSystemModel((System) sys);
-
 	}
 
 	private void prepareOverviewModel() {

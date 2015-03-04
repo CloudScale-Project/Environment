@@ -4,6 +4,10 @@ import org.eclipse.core.resources.IResource;
 
 public interface IEditorInputResource extends IEditorInput{
 
+	public final String KEY_NAME = "name";
+	public final String KEY_TIMESTAMP_CREATED = "created";
+	public final String KEY_TIMESTAMP_MODIFIED = "modified";
+
 	public IResource getResource();
 	
 	public String getType();

@@ -43,8 +43,8 @@ import org.scaledl.overview.util.OverviewSpecificationUtil;
 
 import eu.cloudscaleproject.env.extractor.wizard.components.ProvidedServiceComposite;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
-import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;
 import eu.cloudscaleproject.env.extractor.wizard.util.OverviewHelper;
+import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;
 import eu.cloudscaleproject.env.extractor.wizard.util.WizardData;
 
 public class InterfacesWizardPage extends WizardPage implements IWizardPageControll, Listener{

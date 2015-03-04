@@ -5,7 +5,9 @@ import java.io.InputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.somox.configuration.SoMoXConfiguration;
 
+import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ConfigPersistenceFolder extends EditorInputFolder {
@@ -16,25 +18,33 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 
 	public static final String KEY_INPUT_ALTERNATIVE= "input_alternative";
 
-	public static final String KEY_SOMOX_CONFIG= "somox";
 	public static final String KEY_MODISCO_CONFIG= "modisco";
-
-	private static final String FILE_SOMOX_CONFIG= "somox.launch";
 	private static final String FILE_MODISCO_CONFIG= "modisco.launch";
+
+	private SoMoXConfiguration somoxConfiguration;
 	
 	public ConfigPersistenceFolder(IProject project, IFolder folder) {
 		// TODO Auto-generated constructor stub
 		super (project, folder);
+
+		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
+	}
+	
+	public SoMoXConfiguration getSomoxConfiguration()
+	{
+		return somoxConfiguration;
 	}
 	
 	public IFile getModiscoConfigFile ()
 	{
 		return (IFile)getSubResource(KEY_MODISCO_CONFIG);
 	}
-	
-	public IFile getSomoxConfigFile()
+
+	@Override
+	public synchronized void load()
 	{
-		return (IFile)getSubResource(KEY_SOMOX_CONFIG);
+		// TODO Auto-generated method stub
+		super.load();
 	}
 	
 	@Override
@@ -42,15 +52,6 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 		super.create();
 
 		try {
-			IFile somoxConfig = getResource().getFile(FILE_SOMOX_CONFIG);
-			if (!somoxConfig.exists()) {
-				
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FOLDER + FILE_SOMOX_CONFIG);
-				somoxConfig.create(in, false, null);
-				in.close();
-			}
-			
-
 			IFile modiscoConfig = getResource().getFile(FILE_MODISCO_CONFIG);
 			if (!modiscoConfig.exists()) {
 
@@ -59,8 +60,6 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 				in.close();
 			}
 			
-			
-			setSubResource(KEY_SOMOX_CONFIG, somoxConfig);
 			setSubResource(KEY_MODISCO_CONFIG, modiscoConfig);
 
 		} catch (Exception e) {

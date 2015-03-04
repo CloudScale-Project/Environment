@@ -1,8 +1,6 @@
 package eu.cloudscaleproject.env.extractor.wizard.util;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -52,83 +50,83 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class Util
 {
 
-	// //////////////////////////////////
-	// Input/Config/Run Alternatives
-	//
-
-	public static IFolder getInputFolder(IProject project)
-	{
-		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-		IFolder extractorInputFolder = extractorFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project,
-				ExplorerProjectPaths.KEY_FOLDER_INPUT));
-
-		return extractorInputFolder;
-	}
-
-	public static List<InputPersitenceFile> getInputAlternatives(IProject project)
-	{
-		List<InputPersitenceFile> out = new ArrayList<InputPersitenceFile>();
-
-		IFolder extractorInputFolder = getInputFolder(project);
-
-		try
-		{
-			for (IResource res : extractorInputFolder.members())
-			{
-				if (res instanceof IFile)
-				{
-					InputPersitenceFile ipf = new InputPersitenceFile(project, (IFile) res);
-					out.add(ipf);
-				}
-			}
-		}
-		catch (CoreException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return out;
-	}
-
-	public static IFolder getConfigurationFolder(IProject project)
-	{
-		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(
-				project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-		String configurationFolderString = ExplorerProjectPaths
-				.getProjectProperty(project,
-						ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION);
-		IFolder configurationFolder = extractorFolder
-				.getFolder(configurationFolderString);
-
-		return configurationFolder;
-	}
-
-	public static List<ConfigPersistenceFolder> getConfigurations(IProject project)
-	{
-		List<ConfigPersistenceFolder> out = new ArrayList<ConfigPersistenceFolder>();
-
-		IFolder extractorConfigurationFolder = Util.getConfigurationFolder(project);
-
-		try
-		{
-			for (IResource res : extractorConfigurationFolder.members())
-			{
-				if (res instanceof IFolder)
-				{
-					ConfigPersistenceFolder cpf = new ConfigPersistenceFolder(project, (IFolder) res);
-					out.add(cpf);
-				}
-			}
-		}
-		catch (CoreException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return out;
-	}
+//	// //////////////////////////////////
+//	// Input/Config/Run Alternatives
+//	//
+//
+//	public static IFolder getInputFolder(IProject project)
+//	{
+//		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+//		IFolder extractorInputFolder = extractorFolder.getFolder(ExplorerProjectPaths.getProjectProperty(project,
+//				ExplorerProjectPaths.KEY_FOLDER_INPUT));
+//
+//		return extractorInputFolder;
+//	}
+//
+//	public static List<InputPersitenceFile> getInputAlternatives(IProject project)
+//	{
+//		List<InputPersitenceFile> out = new ArrayList<InputPersitenceFile>();
+//
+//		IFolder extractorInputFolder = getInputFolder(project);
+//
+//		try
+//		{
+//			for (IResource res : extractorInputFolder.members())
+//			{
+//				if (res instanceof IFile)
+//				{
+//					InputPersitenceFile ipf = new InputPersitenceFile(project, (IFile) res);
+//					out.add(ipf);
+//				}
+//			}
+//		}
+//		catch (CoreException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		return out;
+//	}
+//
+//	public static IFolder getConfigurationFolder(IProject project)
+//	{
+//		IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(
+//				project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+//		String configurationFolderString = ExplorerProjectPaths
+//				.getProjectProperty(project,
+//						ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION);
+//		IFolder configurationFolder = extractorFolder
+//				.getFolder(configurationFolderString);
+//
+//		return configurationFolder;
+//	}
+//
+//	public static List<ConfigPersistenceFolder> getConfigurations(IProject project)
+//	{
+//		List<ConfigPersistenceFolder> out = new ArrayList<ConfigPersistenceFolder>();
+//
+//		IFolder extractorConfigurationFolder = Util.getConfigurationFolder(project);
+//
+//		try
+//		{
+//			for (IResource res : extractorConfigurationFolder.members())
+//			{
+//				if (res instanceof IFolder)
+//				{
+//					ConfigPersistenceFolder cpf = new ConfigPersistenceFolder(project, (IFolder) res);
+//					out.add(cpf);
+//				}
+//			}
+//		}
+//		catch (CoreException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		return out;
+//	}
 
 	public static IFolder getResultsFolder(IProject project)
 	{
@@ -143,31 +141,31 @@ public class Util
 		return resultsFolder;
 	}
 
-	public static List<ResultPersistenceFolder> getResults(IProject project)
-	{
-		List<ResultPersistenceFolder> out = new ArrayList<ResultPersistenceFolder>();
-
-		IFolder extractorInputFolder = Util.getResultsFolder(project);
-
-		try
-		{
-			for (IResource res : extractorInputFolder.members())
-			{
-				if (res instanceof IFolder)
-				{
-					ResultPersistenceFolder ipf = new ResultPersistenceFolder(project, (IFolder) res);
-					out.add(ipf);
-				}
-			}
-		}
-		catch (CoreException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return out;
-	}
+//	public static List<ResultPersistenceFolder> getResults(IProject project)
+//	{
+//		List<ResultPersistenceFolder> out = new ArrayList<ResultPersistenceFolder>();
+//
+//		IFolder extractorInputFolder = Util.getResultsFolder(project);
+//
+//		try
+//		{
+//			for (IResource res : extractorInputFolder.members())
+//			{
+//				if (res instanceof IFolder)
+//				{
+//					ResultPersistenceFolder ipf = new ResultPersistenceFolder(project, (IFolder) res);
+//					out.add(ipf);
+//				}
+//			}
+//		}
+//		catch (CoreException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		return out;
+//	}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	// Other stuff / running, viewing, ...
@@ -201,7 +199,6 @@ public class Util
 	{
 		private IProject project;
 		private IFile modiscoConfig;
-		private IFile somoxConfig;
 		private ConfigPersistenceFolder configInputFolder;
 		private IProject projectToExtract;
 
@@ -212,7 +209,6 @@ public class Util
 			this.configInputFolder = configInputFolder;
 			this.project = configInputFolder.getProject();
 			this.modiscoConfig = configInputFolder.getModiscoConfigFile();
-			this.somoxConfig = configInputFolder.getSomoxConfigFile();
 
 			this.projectToExtract = getProjectToExtract();
 
@@ -279,7 +275,7 @@ public class Util
 
 		private void runSomox(IProgressMonitor monitor)
 		{
-			SoMoXConfiguration somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
+			SoMoXConfiguration somoxConfiguration = configInputFolder.getSomoxConfiguration();
 
 			somoxConfiguration.getFileLocations().setProjectName(projectToExtract.getName());
 			somoxConfiguration.getFileLocations().setAnalyserInputFile(
@@ -311,30 +307,28 @@ public class Util
 
 		private SimpleDateFormat sdf_name = new SimpleDateFormat("hh:mm:ss");
 
-		private IFolder createResultFolder() throws CoreException
+		private ResultPersistenceFolder createResultPersistenceFolder() throws CoreException
 		{
-			IFolder resultsFolder = getResultsFolder(project);
-			IFolder resultFolder = resultsFolder.getFolder(configInputFolder.getName() + " [" + sdf_name.format(new Date()) + "]");
-			resultFolder.create(true, false, null);
+			ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(
+					this.configInputFolder.getProject(),
+					ToolchainUtils.EXTRACTOR_RES_ID);
 
-			return resultFolder;
+			String name = configInputFolder.getName() + " [" + sdf_name.format(new Date()) + "]";
+			return (ResultPersistenceFolder) resourceProvider.createNewResource(name, name, null);
 		}
 
 		private void copyFilesToResultFolder(IProject outputProject)
 		{
 			try
 			{
-				IFolder resultFolder = createResultFolder();
-				ResultPersistenceFolder rif = new ResultPersistenceFolder(outputProject, resultFolder);
-				rif.setName(rif.getName());
-				rif.create();
+				ResultPersistenceFolder rif = createResultPersistenceFolder(); 
 
 				IPath projectPath = new Path("/" + project.getName());
 
 				//
 				// Modisco output
 				//
-				IFolder modiscoFolder = (IFolder) rif.getSubResource(ResultPersistenceFolder.KEY_MODISCO_FOLDER);
+				IFolder modiscoFolder = (IFolder) rif.getSubResource(ResultPersistenceFolder.KEY_FOLDER_MODISCO);
 
 				// Java2kdmFraments folder
 				String fragments = "java2kdmFragments";
@@ -360,7 +354,7 @@ public class Util
 				//
 				// Somox output
 				//
-				IFolder somoxFolder = (IFolder) rif.getSubResource(ResultPersistenceFolder.KEY_SOMOX_FOLDER);
+				IFolder somoxFolder = (IFolder) rif.getSubResource(ResultPersistenceFolder.KEY_FOLDER_SOMOX);
 
 				IFolder modelFolder = outputProject.getFolder("model");
 
@@ -378,18 +372,18 @@ public class Util
 
 				initializeDiagrams(somoxFolder);
 
-				IFile repositoryModelFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY);
-				IFile systemModelFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM);
-				IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY_DIAGRAM);
-				IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM_DIAGRAM);
+				IFile repositoryModelFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_REPOSITORY);
+				IFile systemModelFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_SYSTEM);
+				IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_REPOSITORY_DIAGRAM);
+				IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_SYSTEM_DIAGRAM);
 
-				rif.setSubResource(ResultPersistenceFolder.KEY_REPOSITORY_MODEL, repositoryModelFile);
-				rif.setSubResource(ResultPersistenceFolder.KEY_SYSTEM_MODEL, systemModelFile);
-				rif.setSubResource(ResultPersistenceFolder.KEY_REPOSITORY_DIAGRAM, repositoryDiagramFile);
-				rif.setSubResource(ResultPersistenceFolder.KEY_SYSTEM_DIAGRAM, systemDiagramFile);
+				rif.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryModelFile);
+				rif.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, systemModelFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_FILE_REPOSITORY_DIAGRAM, repositoryDiagramFile);
+				rif.setSubResource(ResultPersistenceFolder.KEY_FILE_SYSTEM_DIAGRAM, systemDiagramFile);
 
-				IFile sourceDecoratorFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SOURCEDECORATOR);
-				rif.setSubResource(ResultPersistenceFolder.KEY_SOURCEDECORATOR_MODEL, sourceDecoratorFile);
+				IFile sourceDecoratorFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_SOURCEDECORATOR);
+				rif.setSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, sourceDecoratorFile);
 
 				rif.save();
 				// ViewService.createDiagram(
@@ -407,8 +401,8 @@ public class Util
 
 		private void initializeDiagrams(IFolder somoxFolder)
 		{
-			IFile repositoryFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY);
-			IFile systemFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM);
+			IFile repositoryFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_REPOSITORY);
+			IFile systemFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_SYSTEM);
 
 			final URI resourceURI = URI.createPlatformResourceURI(repositoryFile.getFullPath().toString(), true);
 			final URI systemURI = URI.createPlatformResourceURI(systemFile.getFullPath().toString(), true);
@@ -417,8 +411,8 @@ public class Util
 			final Resource systemRes = resSet.createResource(systemURI);
 			final Resource repositoryRes = resSet.createResource(resourceURI);
 
-			IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_REPOSITORY_DIAGRAM);
-			IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_SYSTEM_DIAGRAM);
+			IFile repositoryDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_REPOSITORY_DIAGRAM);
+			IFile systemDiagramFile = somoxFolder.getFile(ResultPersistenceFolder.RESULT_FILE_SYSTEM_DIAGRAM);
 
 			final URI resourceDiagramURI = URI.createPlatformResourceURI(repositoryDiagramFile.getFullPath().toString(), true);
 			final URI systemDiagramURI = URI.createPlatformResourceURI(systemDiagramFile.getFullPath().toString(), true);

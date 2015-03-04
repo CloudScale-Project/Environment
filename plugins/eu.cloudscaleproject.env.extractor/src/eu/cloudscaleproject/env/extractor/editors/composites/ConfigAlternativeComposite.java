@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -18,11 +19,15 @@ import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.extractor.wizard.util.Util;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfigAlternativeComposite extends TitleComposite {
 
 	private Combo combo;
-	private List<InputPersitenceFile> inputs;
+	private List<IEditorInputResource> inputs;
 	private ConfigPersistenceFolder configPersistenceFolder;
 	/**
 	 * Create the composite.
@@ -65,35 +70,25 @@ public class ConfigAlternativeComposite extends TitleComposite {
 		});
 		btnViewModisco.setText("View");
 		
-		Label lblSomoxConfig = new Label(getContainer(), SWT.NONE);
-		lblSomoxConfig.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblSomoxConfig.setText("Somox config:    ");
+		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
+		containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));
+		containerConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		
-		Label lblSomoxconf = new Label(getContainer(), SWT.NONE);
-		lblSomoxconf.setText("somox.conf");
-		
-		Button btnViewSomox = new Button(getContainer(), SWT.NONE);
-		btnViewSomox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Util.showConfigurationFile(configPersistenceFolder.getSomoxConfigFile());
-			}
-		});
-		btnViewSomox.setText("View");
-		
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
+		new SomoxConfigurationComposite(configPersistenceFolder.getSomoxConfiguration(), containerConfiguration, SWT.NONE);
 		
 		Button btnRunAlternative = new Button(getContainer(), SWT.NONE);
+		GridData gd_btnRunAlternative = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1);
+		gd_btnRunAlternative.heightHint = 36;
+		btnRunAlternative.setLayoutData(gd_btnRunAlternative);
 		btnRunAlternative.setText("Run alternative");
-		btnRunAlternative.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				Util.runConfigurationAlternative(configPersistenceFolder);
-			}
-		});
+		
+				btnRunAlternative.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+		
+						Util.runConfigurationAlternative(configPersistenceFolder);
+					}
+				});
 		
 		loadInputs();
 
@@ -110,9 +105,14 @@ public class ConfigAlternativeComposite extends TitleComposite {
 		combo.removeAll();
 		String inputAlternative = configPersistenceFolder.getProperty(ConfigPersistenceFolder.KEY_INPUT_ALTERNATIVE);
 		int idx = -1;
-		// TODO: Inputs
-		this.inputs = Util.getInputAlternatives(this.configPersistenceFolder.getProject());
-		for (InputPersitenceFile input : this.inputs)
+
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(
+				this.configPersistenceFolder.getProject(),
+					ToolchainUtils.EXTRACTOR_INPUT_ID);
+
+		this.inputs = resourceProvider.getResources();
+
+		for (IEditorInputResource input : this.inputs)
 		{
 			if (input.getProperty(InputPersitenceFile.KEY_PROJECT_URL) != null)
 			{
@@ -130,7 +130,7 @@ public class ConfigAlternativeComposite extends TitleComposite {
 	
 	private void saveInputConfig()
 	{
-        InputPersitenceFile eif = this.inputs.get(combo.getSelectionIndex());
+        IEditorInputResource eif = this.inputs.get(combo.getSelectionIndex());
         configPersistenceFolder.setProperty(ConfigPersistenceFolder.KEY_INPUT_ALTERNATIVE, eif.getName());
         configPersistenceFolder.save();
 	}

@@ -160,6 +160,7 @@ public class ConfigAlternativeComposite extends TitleComposite
 			public void run()
 			{
 				annotationView.createPartControl(annotationViewComposite);
+				annotationViewComposite.layout();
 			}
 
 		});
