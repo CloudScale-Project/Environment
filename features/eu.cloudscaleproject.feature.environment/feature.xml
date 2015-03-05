@@ -17,7 +17,23 @@
    </license>
 
    <includes
-         id="eu.cloudscaleproject.feature.environment.dev"
+         id="eu.cloudscaleproject.feature.analyser"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.cloudscaleproject.feature.dynamicspotter"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.cloudscaleproject.feature.environment.deps"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.cloudscaleproject.feature.extractor"
+         version="0.0.0"/>
+
+   <includes
+         id="eu.cloudscaleproject.feature.staticspotter"
          version="0.0.0"/>
 
    <plugin
