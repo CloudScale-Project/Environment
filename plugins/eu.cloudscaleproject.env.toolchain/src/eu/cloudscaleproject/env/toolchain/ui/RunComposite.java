@@ -5,23 +5,21 @@ import java.util.HashMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.ProgressBar;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.custom.StackLayout;
 
 public abstract class RunComposite extends Composite
 {
@@ -79,7 +77,15 @@ public abstract class RunComposite extends Composite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				run();
+				if (currentJob != null && currentJob.getResult() == null)
+				{
+					stop();
+				}
+				else
+				{
+					run();
+				}
+
 			}
 		});
 		GridData gd_btnNewButton = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
@@ -107,12 +113,6 @@ public abstract class RunComposite extends Composite
 
 	private void run()
 	{
-		if (this.currentJob != null && this.currentJob.getResult() == null)
-		{
-			stop();
-			return;
-		}
-
 		this.currentJob = new Job("Job - " + getTitle())
 		{
 			private RunProgressMonitor internalMonitor;
