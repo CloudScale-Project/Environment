@@ -55,7 +55,6 @@ Package : mvn install
     <!--
      Features and Update sites
  	-->
-    <module>features/eu.cloudscaleproject.feature.environment.dev</module>
     <module>features/eu.cloudscaleproject.feature.environment</module>
     <module>features/eu.cloudscaleproject.updatesite.environment</module>
     
