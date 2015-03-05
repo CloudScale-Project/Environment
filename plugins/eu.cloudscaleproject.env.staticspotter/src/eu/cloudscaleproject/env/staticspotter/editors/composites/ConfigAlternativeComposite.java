@@ -5,21 +5,21 @@ import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -30,7 +30,6 @@ import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -38,8 +37,9 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
-public class ConfigAlternativeComposite extends TitleComposite
+public class ConfigAlternativeComposite extends RunComposite
 {
 
 	@Optional
@@ -54,6 +54,8 @@ public class ConfigAlternativeComposite extends TitleComposite
 	private Composite annotationViewComposite;
 
 	private AnnotationView annotationView;
+
+	private EditorInputFolder extractorResult;
 
 	/**
 	 * Create the composite.
@@ -84,33 +86,48 @@ public class ConfigAlternativeComposite extends TitleComposite
 		new Label(getContainer(), SWT.NONE);
 		new Label(getContainer(), SWT.NONE);
 
-		Button btnRunAlternative = new Button(getContainer(), SWT.NONE);
-		btnRunAlternative.setText("Run alternative");
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
-
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
-
 		annotationViewComposite = new Composite(getContainer(), SWT.NONE);
 		annotationViewComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		annotationViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		btnRunAlternative.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				runDetectionJob();
-			}
-		});
-
 		loadInputs();
 		initAnnotationView();
 		setTitle(configPersistenceFolder.getName());
+		
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				extractorResult = (EditorInputFolder) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
+			}
+		});
 	}
-	
+
+	@Override
+	protected IStatus doRun(IProgressMonitor m)
+	{
+		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configPersistenceFolder, extractorResult);
+		
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				annotationView.switchToInference(detectPaternJob.getEngine());
+				annotationView.init();
+			}
+		});
+
+		IStatus status = detectPaternJob.run(m);
+		if (status.isOK())
+		{
+			// Collect results
+			Util.saveAnnotations(configPersistenceFolder, detectPaternJob);
+		}
+
+		return status;
+	}
 
 	@Override
 	public void update()
@@ -149,7 +166,6 @@ public class ConfigAlternativeComposite extends TitleComposite
 			@Override
 			public IWorkbenchPartSite getSite()
 			{
-				// TODO Auto-generated method stub
 				return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
 			}
 		};
@@ -159,46 +175,19 @@ public class ConfigAlternativeComposite extends TitleComposite
 			@Override
 			public void run()
 			{
+				StackLayout stackLayout = new StackLayout();
+				annotationViewComposite.setLayout(stackLayout);
 				annotationView.createPartControl(annotationViewComposite);
+
+				Control annotationTable = ((Composite)annotationViewComposite.getChildren()[0]).getChildren()[0];
+				annotationTable.setParent(annotationViewComposite);
+				
+				stackLayout.topControl = annotationTable;
 				annotationViewComposite.layout();
 			}
 
 		});
 	}
-
-	private void runDetectionJob()
-	{
-		// Prepare it outside - SWT thread bullshit
-		EditorInputFolder extractorResult = (EditorInputFolder) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
-		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configPersistenceFolder, extractorResult);
-
-		annotationView.switchToInference(detectPaternJob.getEngine());
-		annotationView.init();
-		// configureMatchingViews();
-
-		Job job = new Job("StaticSpotter : spotting")
-		{
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor)
-			{
-				// TODO Auto-generated method stub
-				IStatus status = detectPaternJob.run(monitor);
-
-				if (status.isOK())
-				{
-					// Collect results
-					Util.saveAnnotations(configPersistenceFolder, detectPaternJob);
-				}
-
-				return status;
-			}
-		};
-
-		job.schedule();
-	}
-
-
 
 	@Override
 	protected void checkSubclass()

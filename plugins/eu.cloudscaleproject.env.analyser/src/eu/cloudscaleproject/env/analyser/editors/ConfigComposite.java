@@ -1,7 +1,16 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.Viewer;
@@ -15,7 +24,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -27,13 +35,13 @@ import eu.cloudscaleproject.env.analyser.editors.composite.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.composite.ConfigEditComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 import eu.cloudscaleproject.env.toolchain.util.ConfigTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -69,9 +77,8 @@ public class ConfigComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
+	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider{
 		
-		private GradientComposite typeComposite;
 		private ConfigEditComposite editComposite;
 		
 		private ConfigTreeviewComposite sloTreeview;
@@ -80,6 +87,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 		private ConfigTreeviewComposite currentTreeview;
 		
 		private final ConfAlternative alternative;
+		
 
 		public RightPanelComposite(IEditorPart editor, final ConfAlternative input, Composite parent, int style) {
 			super(parent, style);
@@ -91,39 +99,17 @@ public class ConfigComposite extends SidebarEditorComposite{
 			GridLayout layout = new GridLayout(1, true);
 			layout.marginWidth = 0;
 			layout.marginHeight = 0;
-			this.setLayout(layout);
+			getContainer().setLayout(layout);
 			
-			//display alternative type
-			{
-				typeComposite = new GradientComposite(this, SWT.NONE);
-				typeComposite.setGradientDirection(false);
-				typeComposite.setGradientColorStart(getSidebarSectionBackgroundColor());
-				typeComposite.setGradientColorEnd(getSidebarBackgroundColor());
-				
-				GridData type_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-				typeComposite.setLayoutData(type_gd);
-				typeComposite.pack();
-				
-				typeComposite.setLayout(new GridLayout(1, false));
-				GridData gd_c = new GridData(SWT.FILL, SWT.FILL, true, false);
-				gd_c.heightHint = 25;
-				typeComposite.setLayoutData(gd_c);
-				
-				Label label = new Label(typeComposite, SWT.NONE);
-				label.setForeground(getSidebarSectionForegroundColor());
-				
-				String name = input.getTypeEnum() != null ? input.getTypeEnum().toString() : "Normal";
-				label.setText(name + " measurement type");
-				label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-			}
-			//
+			String name = input.getTypeEnum() != null ? input.getTypeEnum().toString() : "Normal";
+			setTitle(name + " measurement type");
 			
-			editComposite = new ConfigEditComposite(project, input, this, SWT.NONE);
+			editComposite = new ConfigEditComposite(project, input, getContainer(), SWT.NONE);
 			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();
 			
-			final CTabFolder tabFolder = new CTabFolder(this, SWT.NONE);
+			final CTabFolder tabFolder = new CTabFolder(getContainer(), SWT.NONE);
 			GridData tabFolder_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			tabFolder.setLayoutData(tabFolder_gd);
 			
@@ -135,7 +121,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 					if(c instanceof ConfigTreeviewComposite){
 						currentTreeview = (ConfigTreeviewComposite)c;
 						currentTreeview.setFocus();
-						ConfigComposite.this.update();
+						getContainer().update();
 					}
 				}
 			});
@@ -212,6 +198,27 @@ public class ConfigComposite extends SidebarEditorComposite{
 				return currentTreeview.getPropertySheetPage();
 			}
 			return null;
+		}
+
+		@Override
+		protected IStatus doRun(IProgressMonitor m)
+		{
+				ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
+				ILaunchConfigurationType lct = mgr.getLaunchConfigurationType("org.palladiosimulator.experimentautomation.application.launchConfigurationType");
+				
+				try {
+					//System.out.println(ca.getExperiments().getURI().toString());
+					ILaunchConfigurationWorkingCopy lcwc = lct.newInstance((IFolder)alternative.getResource(), alternative.getResource().getName());
+					lcwc.setAttribute("Experiment Automation", alternative.getExperiment().eResource().getURI().toString());
+					lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
+					lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
+					lcwc.doSave();
+					
+					lcwc.launch(ILaunchManager.DEBUG_MODE, m);
+					return Status.OK_STATUS;
+				} catch (CoreException e1) {
+					return new Status(Status.ERROR, "", e1.getLocalizedMessage());
+				}
 		}
 	}
 	

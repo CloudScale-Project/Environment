@@ -2,8 +2,10 @@ package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import java.util.Collection;
 
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
@@ -63,8 +65,14 @@ public class SingleResultComposite extends TitleComposite {
 			@Override
 			public void run()
 			{
+				StackLayout stackLayout = new StackLayout();
+				getContainer().setLayout(stackLayout);
 				annotationView.createPartControl(getContainer());
-				annotationView.loadAnnotations(annotations);
+
+				Control annotationTable = ((Composite)getContainer().getChildren()[0]).getChildren()[0];
+				annotationTable.setParent(getContainer());
+				
+				stackLayout.topControl = annotationTable;
 				getContainer().layout();
 			}
 
