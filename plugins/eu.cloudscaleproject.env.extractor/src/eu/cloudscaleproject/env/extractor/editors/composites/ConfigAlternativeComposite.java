@@ -2,6 +2,9 @@ package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,16 +18,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.extractor.wizard.util.Util;
+import eu.cloudscaleproject.env.extractor.wizard.util.Util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
-public class ConfigAlternativeComposite extends TitleComposite {
+public class ConfigAlternativeComposite extends RunComposite {
 
 	private Combo combo;
 	private List<IEditorInputResource> inputs;
@@ -69,26 +73,13 @@ public class ConfigAlternativeComposite extends TitleComposite {
 			}
 		});
 		btnViewModisco.setText("View");
+		btnViewModisco.setEnabled(false);
 		
 		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
 		containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));
 		containerConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		
 		new SomoxConfigurationComposite(configPersistenceFolder.getSomoxConfiguration(), containerConfiguration, SWT.NONE);
-		
-		Button btnRunAlternative = new Button(getContainer(), SWT.NONE);
-		GridData gd_btnRunAlternative = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1);
-		gd_btnRunAlternative.heightHint = 36;
-		btnRunAlternative.setLayoutData(gd_btnRunAlternative);
-		btnRunAlternative.setText("Run alternative");
-		
-				btnRunAlternative.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-		
-						Util.runConfigurationAlternative(configPersistenceFolder);
-					}
-				});
 		
 		loadInputs();
 
@@ -141,6 +132,13 @@ public class ConfigAlternativeComposite extends TitleComposite {
 		loadInputs();
 		super.update();
 	}
+	
+	@Override
+	protected IStatus doRun(IProgressMonitor m)
+	{
+		Util.ExtractorRunJob job = new Util.ExtractorRunJob(this.configPersistenceFolder);
+		return job.run(m);
+	}	
 
 	@Override
 	protected void checkSubclass() {

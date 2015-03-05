@@ -74,6 +74,7 @@ public class ConfigEditComposite extends Composite{
 				comboViewerUsage.remove(evt.getOldValue());
 			}
 		}
+		
 	};
 	
 	private final IProgressMonitor progress = new IProgressMonitor() {

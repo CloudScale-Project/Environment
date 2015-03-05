@@ -195,7 +195,7 @@ public class Util
 				);
 	}
 
-	private static class ExtractorRunJob extends Job
+	public static class ExtractorRunJob extends Job
 	{
 		private IProject project;
 		private IFile modiscoConfig;
@@ -228,7 +228,7 @@ public class Util
 		}
 
 		@Override
-		protected IStatus run(IProgressMonitor monitor)
+		public IStatus run(IProgressMonitor monitor)
 		{
 
 			// Infinite progress: -1
