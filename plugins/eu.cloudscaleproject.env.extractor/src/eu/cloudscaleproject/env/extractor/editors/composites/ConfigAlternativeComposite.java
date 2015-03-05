@@ -73,7 +73,6 @@ public class ConfigAlternativeComposite extends RunComposite {
 			}
 		});
 		btnViewModisco.setText("View");
-		btnViewModisco.setEnabled(false);
 		
 		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
 		containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));

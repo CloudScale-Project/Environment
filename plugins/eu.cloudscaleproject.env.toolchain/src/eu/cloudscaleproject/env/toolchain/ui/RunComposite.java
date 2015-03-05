@@ -69,7 +69,7 @@ public abstract class RunComposite extends Composite
 
 		lblStatus = new Label(progressBarNone, SWT.NONE);
 		lblStatus.setBounds(10, 10, 379, 15);
-		lblStatus.setText("New Label");
+		lblStatus.setText("");
 
 		btnRun = new Button(composite, SWT.NONE);
 		btnRun.addSelectionListener(new SelectionAdapter()
