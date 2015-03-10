@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.analyser.editors.composite;
+package eu.cloudscaleproject.env.analyser.editors.config;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

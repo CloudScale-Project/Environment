@@ -30,9 +30,10 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
-import eu.cloudscaleproject.env.analyser.editors.composite.ConfigBasicComposite;
-import eu.cloudscaleproject.env.analyser.editors.composite.ConfigCapacity;
-import eu.cloudscaleproject.env.analyser.editors.composite.ConfigEditComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorsComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -82,6 +83,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 		private ConfigEditComposite editComposite;
 		
 		private ConfigTreeviewComposite sloTreeview;
+		private ConfigMonitorsComposite monitorsComposite;
 		private ConfigTreeviewComposite advancedTreeview;
 		
 		private ConfigTreeviewComposite currentTreeview;
@@ -148,7 +150,11 @@ public class ConfigComposite extends SidebarEditorComposite{
 			
 			//measurements settings
 			{
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Monitors");
 				
+				monitorsComposite = new ConfigMonitorsComposite(input, tabFolder, style);
+				tabItem.setControl(monitorsComposite);
 			}
 			
 			//slo settings
