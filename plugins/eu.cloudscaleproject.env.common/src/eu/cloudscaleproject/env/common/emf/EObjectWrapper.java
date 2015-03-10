@@ -1,0 +1,167 @@
+package eu.cloudscaleproject.env.common.emf;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
+public class EObjectWrapper
+{
+	private EObject master;
+	private List<? extends EObject> slaves;
+
+	public EObjectWrapper(List<? extends EObject> slaves)
+	{
+		this(EcoreUtil.copy(slaves.get(0)), slaves);
+	}
+
+	public EObjectWrapper(EObject master, List<? extends EObject> slaves)
+	{
+		this.slaves = slaves;
+		this.master = master;
+
+		this.master.eAdapters().add(new EContentAdapter()
+		{
+			@Override
+			public void notifyChanged(Notification notification)
+			{
+				super.notifyChanged(notification);
+				
+				// Mind only 1-6 : SET, UNSET, ADD, REMOVE, ADD_ALL, REMOVE_ALL
+				if (notification.getEventType() > 6 || notification.getEventType()<1)
+					return;
+				
+				for (EObject slave : EObjectWrapper.this.slaves)
+				{
+					if (notification.getNotifier() != EObjectWrapper.this.master)
+					{
+						try
+						{
+						String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(
+								EObjectWrapper.this.master,
+								(EObject) notification.getNotifier());
+
+						EObject subSlave = EcoreUtil.getEObject(slave, relativeURIFragmentPath);
+						pushToSlave(subSlave, notification);
+						}
+						catch (Exception e)
+						{
+							System.out.println("No fragment path - object already removed ?? : "+e.getMessage());
+						}
+					}
+					else
+					{
+						pushToSlave(slave, notification);
+					}
+
+				}
+			}
+		});
+	}
+
+	private void pushToSlave(EObject obj, Notification notification)
+	{
+		EStructuralFeature feature = (EStructuralFeature) notification.getFeature();
+		switch (notification.getEventType())
+		{
+		case Notification.SET:
+			if (feature instanceof EReference && ((EReference) feature).isContainment())
+			{
+				obj.eSet(feature, EcoreUtil.copy((EObject) notification.getNewValue()));
+			}
+			else
+			{
+				obj.eSet(feature, notification.getNewValue());
+			}
+			break;
+
+		case Notification.UNSET:
+			obj.eUnset(feature);
+			break;
+
+		case Notification.ADD:
+		case Notification.ADD_MANY:
+			addToSlave(obj, notification);
+			break;
+
+		case Notification.REMOVE:
+		case Notification.REMOVE_MANY:
+			removeFromSlave(obj, notification);
+			break;
+
+		default:
+			throw new IllegalStateException();
+
+		}
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void addToSlave(EObject slave, Notification notification)
+	{
+		EReference eReference = (EReference) notification.getFeature();
+		Collection refCollection = (Collection) slave.eGet(eReference);
+
+		List<Object> masterRefs = new ArrayList<>();
+		if (notification.getOldValue() instanceof Collection)
+			masterRefs.addAll((Collection<? extends Object>) notification.getNewValue());
+		else
+			masterRefs.add(notification.getNewValue());
+
+		for (Object masterToAdd : masterRefs)
+		{
+			if (eReference.isContainment())
+				refCollection.add(EcoreUtil.copy((EObject) masterToAdd));
+			else
+				refCollection.add(masterToAdd);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void removeFromSlave(EObject slave, Notification notification)
+	{
+		EReference eReference = (EReference) notification.getFeature();
+		Collection refCollection = (Collection) slave.eGet(eReference);
+
+		List<Object> masterRefs = new ArrayList<>();
+		if (notification.getOldValue() instanceof Collection)
+			masterRefs.addAll((Collection<? extends Object>) notification.getOldValue());
+		else
+			masterRefs.add(notification.getOldValue());
+
+		for (Object masterToRemove : masterRefs)
+		{
+			System.out.println("---> "+masterToRemove);
+			for (Object o : new ArrayList(refCollection))
+			{
+				System.out.println(o);
+				if (EcoreUtil.equals((EObject)masterToRemove, (EObject)o))
+				{
+					refCollection.remove(o);
+					break;
+				}
+			}
+		}
+	}
+
+	public EObject getMaster()
+	{
+		return master;
+	}
+	
+	public List<? extends EObject> getSlaves()
+	{
+		return slaves;
+	}
+	
+	public void setSlaves(List<? extends EObject> slaves)
+	{
+		this.slaves = slaves;
+	}
+}
