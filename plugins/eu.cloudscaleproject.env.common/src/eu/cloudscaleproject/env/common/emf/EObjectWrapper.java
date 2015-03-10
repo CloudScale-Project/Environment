@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 
 public class EObjectWrapper
 {
@@ -36,24 +37,19 @@ public class EObjectWrapper
 				// Mind only 1-6 : SET, UNSET, ADD, REMOVE, ADD_ALL, REMOVE_ALL
 				if (notification.getEventType() > 6 || notification.getEventType()<1)
 					return;
-				
+
 				for (EObject slave : EObjectWrapper.this.slaves)
 				{
 					if (notification.getNotifier() != EObjectWrapper.this.master)
 					{
-						try
-						{
+						if (((EObject)notification.getNotifier()).eContainer() == null) return;
+
 						String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(
 								EObjectWrapper.this.master,
 								(EObject) notification.getNotifier());
 
 						EObject subSlave = EcoreUtil.getEObject(slave, relativeURIFragmentPath);
 						pushToSlave(subSlave, notification);
-						}
-						catch (Exception e)
-						{
-							System.out.println("No fragment path - object already removed ?? : "+e.getMessage());
-						}
 					}
 					else
 					{
@@ -123,6 +119,23 @@ public class EObjectWrapper
 		}
 	}
 
+	private EqualityHelper specialEqualityHelper = new EqualityHelper(){
+		private static final long serialVersionUID = 1L;
+		protected boolean haveEqualFeature(EObject eObject1, EObject eObject2, EStructuralFeature feature) {
+                
+                if (feature instanceof EReference)
+                {
+                        EReference ref = (EReference) feature;
+                        if (ref.isContainer()) return true;
+                }
+                
+                if (feature.getName().equals("id")) return true;
+                
+                boolean res = super.haveEqualFeature(eObject1, eObject2, feature);
+                return res;
+        };
+	};
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void removeFromSlave(EObject slave, Notification notification)
 	{
@@ -137,11 +150,10 @@ public class EObjectWrapper
 
 		for (Object masterToRemove : masterRefs)
 		{
-			System.out.println("---> "+masterToRemove);
 			for (Object o : new ArrayList(refCollection))
 			{
-				System.out.println(o);
-				if (EcoreUtil.equals((EObject)masterToRemove, (EObject)o))
+				specialEqualityHelper.clear();
+				if (specialEqualityHelper.equals((EObject)masterToRemove, (EObject)o))
 				{
 					refCollection.remove(o);
 					break;
