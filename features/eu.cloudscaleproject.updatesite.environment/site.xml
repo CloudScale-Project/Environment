@@ -3,9 +3,13 @@
    <feature url="features/eu.cloudscaleproject.feature.environment_1.0.0.201411061520.jar" id="eu.cloudscaleproject.feature.environment" version="1.0.0.201411061520">
       <category name="eu.cloudscaleproject.environment"/>
    </feature>
+   <feature url="features/eu.cloudscaleproject.feature.method_1.0.0.qualifier.jar" id="eu.cloudscaleproject.feature.method" version="1.0.0.qualifier">
+      <category name="eu.cloudscaleproject.method"/>
+   </feature>
    <category-def name="eu.cloudscaleproject.environment" label="CloudScale Environment">
       <description>
          CloudScale Environment update site - includes CSE plugins and Toolchain features
       </description>
    </category-def>
+   <category-def name="eu.cloudscaleproject.method" label="CloudScale Method"/>
 </site>
