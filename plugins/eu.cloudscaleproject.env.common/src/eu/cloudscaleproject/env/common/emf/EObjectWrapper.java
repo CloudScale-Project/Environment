@@ -161,21 +161,10 @@ public class EObjectWrapper
 		this.slaves = slaves;
 	}
 	
-	public EqualityHelper getEqualityHelper()
-	{
-		return equalityHelper;
-	}
-	
-	public void setEqualityHelper(EqualityHelper equalityHelper)
-	{
-		this.equalityHelper = equalityHelper;
-	}
-	
-	
 	/**
 	 * Ignore PCM id attribute and back/opposite references
 	 */
-	public static class SpecialEqualityHelper extends EqualityHelper
+	private static class SpecialEqualityHelper extends EqualityHelper
 	{
 		private static final long serialVersionUID = 1L;
 		protected boolean haveEqualFeature(EObject eObject1, EObject eObject2, EStructuralFeature feature) {
