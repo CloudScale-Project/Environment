@@ -16,6 +16,7 @@ public class EObjectWrapper
 {
 	private EObject master;
 	private List<? extends EObject> slaves;
+	private EqualityHelper equalityHelper = new SpecialEqualityHelper();
 
 	public EObjectWrapper(List<? extends EObject> slaves)
 	{
@@ -95,7 +96,6 @@ public class EObjectWrapper
 			throw new IllegalStateException();
 
 		}
-
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -119,22 +119,6 @@ public class EObjectWrapper
 		}
 	}
 
-	private EqualityHelper specialEqualityHelper = new EqualityHelper(){
-		private static final long serialVersionUID = 1L;
-		protected boolean haveEqualFeature(EObject eObject1, EObject eObject2, EStructuralFeature feature) {
-                
-                if (feature instanceof EReference)
-                {
-                        EReference ref = (EReference) feature;
-                        if (ref.isContainer()) return true;
-                }
-                
-                if (feature.getName().equals("id")) return true;
-                
-                boolean res = super.haveEqualFeature(eObject1, eObject2, feature);
-                return res;
-        };
-	};
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void removeFromSlave(EObject slave, Notification notification)
@@ -152,8 +136,8 @@ public class EObjectWrapper
 		{
 			for (Object o : new ArrayList(refCollection))
 			{
-				specialEqualityHelper.clear();
-				if (specialEqualityHelper.equals((EObject)masterToRemove, (EObject)o))
+				equalityHelper.clear();
+				if (equalityHelper.equals((EObject)masterToRemove, (EObject)o))
 				{
 					refCollection.remove(o);
 					break;
@@ -175,5 +159,37 @@ public class EObjectWrapper
 	public void setSlaves(List<? extends EObject> slaves)
 	{
 		this.slaves = slaves;
+	}
+	
+	public EqualityHelper getEqualityHelper()
+	{
+		return equalityHelper;
+	}
+	
+	public void setEqualityHelper(EqualityHelper equalityHelper)
+	{
+		this.equalityHelper = equalityHelper;
+	}
+	
+	
+	/**
+	 * Ignore PCM id attribute and back/opposite references
+	 */
+	public static class SpecialEqualityHelper extends EqualityHelper
+	{
+		private static final long serialVersionUID = 1L;
+		protected boolean haveEqualFeature(EObject eObject1, EObject eObject2, EStructuralFeature feature) {
+                
+                if (feature instanceof EReference)
+                {
+                        EReference ref = (EReference) feature;
+                        if (ref.isContainer()) return true;
+                }
+                
+                if (feature.getName().equals("id")) return true;
+                
+                boolean res = super.haveEqualFeature(eObject1, eObject2, feature);
+                return res;
+        };
 	}
 }
