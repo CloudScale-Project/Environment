@@ -33,7 +33,7 @@ import org.palladiosimulator.edp2.datastream.IDataSource;
 import org.palladiosimulator.edp2.datastream.chaindescription.ChainDescription;
 import org.palladiosimulator.edp2.datastream.edp2source.Edp2DataTupleDataSource;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
-import org.palladiosimulator.edp2.models.ExperimentData.Measurements;
+import org.palladiosimulator.edp2.models.ExperimentData.Measurement;
 import org.palladiosimulator.edp2.models.ExperimentData.RawMeasurements;
 import org.palladiosimulator.edp2.models.ExperimentData.provider.ExperimentDataItemProviderAdapterFactory;
 import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
@@ -85,7 +85,7 @@ public class ResultAlternativeComposite extends Composite{
 			public void doubleClick(DoubleClickEvent event) {
 				ISelection s = treeViewer.getSelection();
 				Object element = ((StructuredSelection)s).getFirstElement();
-				if (element instanceof Measurements) {
+				if (element instanceof Measurement) {
 					openChainSelectionDialog(element);
 					
 					//for now just open edp2 perspective
@@ -173,8 +173,8 @@ public class ResultAlternativeComposite extends Composite{
 	 * 
 	 */
     private void openChainSelectionDialog(final Object selectedObject) {
-        final Measurements measurements = (Measurements) selectedObject;
-        final RawMeasurements rawMeasurements = measurements.getMeasurementsRanges().get(0).getRawMeasurements();
+        final Measurement measurements = (Measurement) selectedObject;
+        final RawMeasurements rawMeasurements = measurements.getMeasurementRanges().get(0).getRawMeasurements();
 
         if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
             final IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);

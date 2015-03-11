@@ -667,7 +667,7 @@ public class ConfAlternative extends EditorInputEMF{
 					monitor.setMeasuringPoint(usmp);
 				}
 				
-				monitor.getMeasurementSpecification().clear();
+				monitor.getMeasurementSpecifications().clear();
 				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
 				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
@@ -688,7 +688,7 @@ public class ConfAlternative extends EditorInputEMF{
 				}
 				
 				specification.setTemporalRestriction(interval);
-				monitor.getMeasurementSpecification().add(specification);
+				monitor.getMeasurementSpecifications().add(specification);
 			}
 			else{
 				DialogUtils.openWarning("Monitor object has been removed! Please create and configure it manually.");
