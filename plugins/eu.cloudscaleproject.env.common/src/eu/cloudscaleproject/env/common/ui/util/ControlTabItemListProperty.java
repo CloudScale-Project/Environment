@@ -9,6 +9,7 @@ import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.property.INativePropertyListener;
 import org.eclipse.core.databinding.property.ISimplePropertyListener;
 import org.eclipse.jface.databinding.swt.WidgetListProperty;
+import org.eclipse.jface.internal.databinding.swt.WidgetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -37,8 +38,8 @@ public class ControlTabItemListProperty extends WidgetListProperty {
 	}
 
 	public INativePropertyListener adaptListener(
-			ISimplePropertyListener listener) {
-		return null;
+			final ISimplePropertyListener listener) {
+		return new WidgetListener(this, listener, new int[]{1 << 2}, new int[]{});
 	}
 	
 	protected void doUpdateControlList(final Control control, ListDiff diff) {
@@ -47,7 +48,7 @@ public class ControlTabItemListProperty extends WidgetListProperty {
 			CTabFolder tf = (CTabFolder) control;
 
 			public void handleAdd(int index, Object element) {
-				CTabItem item = new CTabItem(tf, SWT.NONE);
+				CTabItem item = new CTabItem(tf, SWT.CLOSE);
 				item.setText("Neki");
 				item.setControl((Composite)element);
 				tf.redraw();

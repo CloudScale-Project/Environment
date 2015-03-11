@@ -8,6 +8,7 @@ import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -24,7 +25,7 @@ public class ConfigMonitorComposite extends Composite{
 	private final Monitor monitorWrapper;
 	private final CTabFolder folder;
 	private DataBindingContext bindingContext = null;
-
+	
 	public ConfigMonitorComposite(EditingDomain editingDomain, Monitor monitorWrapper, Composite parent, int style) {
 		super(parent, style);
 		
@@ -59,7 +60,7 @@ public class ConfigMonitorComposite extends Composite{
 		IObservableList obsMeasurSpec = EMFProperties.list(
 				MonitorrepositoryPackage.Literals.MONITOR__MEASUREMENT_SPECIFICATION).observe(monitorWrapper);
 		
-		UpdateListStrategy i2mStrategy = new UpdateListStrategy(UpdateListStrategy.POLICY_ON_REQUEST);
+		UpdateListStrategy i2mStrategy = new UpdateListStrategy(UpdateListStrategy.POLICY_UPDATE);
 		i2mStrategy.setConverter(new IConverter() {
 			
 			@Override
@@ -94,20 +95,31 @@ public class ConfigMonitorComposite extends Composite{
 			
 			@Override
 			public Object convert(Object fromObject) {
-				MeasurementSpecification ms = (MeasurementSpecification)fromObject;
-				MeasurementSpecComposite msc = new MeasurementSpecComposite(editingDomain, ms, folder, SWT.NONE);
-				
-				ConfigMonitorComposite.this.layout();
-				ConfigMonitorComposite.this.redraw();
-				
-				return msc;
+				if(fromObject == null){
+					return null;
+				}
+				for(CTabItem item : folder.getItems()){
+					if(fromObject.equals(((MeasurementSpecComposite)item.getControl()).getMeasurementSpecification())){
+						return item.getControl();
+					}
+				}
+				return createMeasurementSpecComposite((MeasurementSpecification)fromObject);
 			}
 		});
 		
 		ControlTabItemListProperty controlListProp = new ControlTabItemListProperty();
 		IObservableList obsList = controlListProp.observe(folder);
-		
+				
 		bindingContext.bindList(obsList, obsMeasurSpec, i2mStrategy, m2iStrategy);
 		bindingContext.updateTargets();
+	}
+	
+	private MeasurementSpecComposite createMeasurementSpecComposite(MeasurementSpecification ms){
+		MeasurementSpecComposite msc = new MeasurementSpecComposite(editingDomain, ms, folder, SWT.NONE);
+		
+		ConfigMonitorComposite.this.layout();
+		ConfigMonitorComposite.this.redraw();
+		
+		return msc;
 	}
 }
