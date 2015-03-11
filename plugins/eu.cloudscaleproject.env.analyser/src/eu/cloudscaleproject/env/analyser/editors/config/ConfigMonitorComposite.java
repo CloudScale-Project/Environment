@@ -58,7 +58,7 @@ public class ConfigMonitorComposite extends Composite{
 		bindingContext = new DataBindingContext();
 		
 		IObservableList obsMeasurSpec = EMFProperties.list(
-				MonitorrepositoryPackage.Literals.MONITOR__MEASUREMENT_SPECIFICATION).observe(monitorWrapper);
+				MonitorrepositoryPackage.Literals.MONITOR__MEASUREMENT_SPECIFICATIONS).observe(monitorWrapper);
 		
 		UpdateListStrategy i2mStrategy = new UpdateListStrategy(UpdateListStrategy.POLICY_UPDATE);
 		i2mStrategy.setConverter(new IConverter() {
