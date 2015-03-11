@@ -156,11 +156,6 @@ public class EObjectWrapper
 		return slaves;
 	}
 	
-	public void setSlaves(List<? extends EObject> slaves)
-	{
-		this.slaves = slaves;
-	}
-	
 	/**
 	 * Ignore PCM id attribute and back/opposite references
 	 */
