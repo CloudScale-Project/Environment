@@ -31,7 +31,7 @@ import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 
-public class ConfigMonitorsComposite extends Composite{
+public class ConfigMonitorItemsComposite extends Composite{
 	
 	private final ConfAlternative alternative;
 	private List<MonitorCollection> monitorCollections = new ArrayList<MonitorCollection>();
@@ -40,13 +40,13 @@ public class ConfigMonitorsComposite extends Composite{
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if(!ConfigMonitorsComposite.this.isDisposed()){
+			if(!ConfigMonitorItemsComposite.this.isDisposed()){
 				update();
 			}
 		}
 	};
 		
-	public ConfigMonitorsComposite(ConfAlternative input, Composite parent, int style) {
+	public ConfigMonitorItemsComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = input;
 		
@@ -164,9 +164,9 @@ public class ConfigMonitorsComposite extends Composite{
 			
 			expComposite.addExpansionListener(new ExpansionAdapter() {
 				public void expansionStateChanged(ExpansionEvent e) {
-					ConfigMonitorsComposite.this.layout();
-					ConfigMonitorsComposite.this.redraw();
-					ConfigMonitorsComposite.this.pack();
+					ConfigMonitorItemsComposite.this.layout();
+					ConfigMonitorItemsComposite.this.redraw();
+					ConfigMonitorItemsComposite.this.pack();
 				}
 			});
 		}

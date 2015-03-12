@@ -502,6 +502,31 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		return out;
 	}
+	
+	public ServiceLevelObjectiveRepository getUsedSloRepository(){
+		Experiment exp = getExperiment();
+		InitialModel initialModel = exp.getInitialModel();
+		
+		ServiceLevelObjectiveRepository sloRep = null;
+		
+		if(getMonitorRepositories().isEmpty()){
+			sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
+			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, sloRep);
+			
+			InitialModel initalModel = exp.getInitialModel();
+			initalModel.setServiceLevelObjectives(sloRep);
+		}
+		else{
+			sloRep = initialModel.getServiceLevelObjectives();
+			if(sloRep == null){
+				sloRep = getSLORepositories().get(0);				
+				initialModel.setServiceLevelObjectives(sloRep);
+			}
+		}
+		
+		assert(sloRep != null);
+		return sloRep;
+	}
 	///////////////////////////////////////////////////////////////////
 
 	

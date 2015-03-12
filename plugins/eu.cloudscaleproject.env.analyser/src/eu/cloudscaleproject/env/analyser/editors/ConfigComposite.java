@@ -34,7 +34,7 @@ import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
-import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorsComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorItemsComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -84,7 +84,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 		private ConfigEditComposite editComposite;
 		
 		private ConfigTreeviewComposite sloTreeview;
-		private ConfigMonitorsComposite monitorsComposite;
+		private ConfigMonitorItemsComposite monitorsComposite;
 		private ConfigTreeviewComposite advancedTreeview;
 		
 		private ConfigTreeviewComposite currentTreeview;
@@ -155,7 +155,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 				tabItem.setText("Monitors");
 				
 				ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
-				monitorsComposite = new ConfigMonitorsComposite(input, scrolledComposite, style);
+				monitorsComposite = new ConfigMonitorItemsComposite(input, scrolledComposite, style);
 				scrolledComposite.setContent(monitorsComposite);
 				monitorsComposite.pack();
 				scrolledComposite.setExpandHorizontal(true);
