@@ -1,12 +1,19 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -14,8 +21,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.simulizar.monitorrepository.Monitor;
 import org.palladiosimulator.simulizar.monitorrepository.MonitorRepository;
+import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
+import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
 
 import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -26,6 +36,16 @@ public class ConfigMonitorsComposite extends Composite{
 	private final ConfAlternative alternative;
 	private List<MonitorCollection> monitorCollections = new ArrayList<MonitorCollection>();
 	
+	private PropertyChangeListener pcl = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(!ConfigMonitorsComposite.this.isDisposed()){
+				update();
+			}
+		}
+	};
+		
 	public ConfigMonitorsComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = input;
@@ -49,15 +69,40 @@ public class ConfigMonitorsComposite extends Composite{
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		gd_composite.heightHint = 1;
 		composite.setLayoutData(gd_composite);
-		
+				
 		Button btnNewButton = new Button(toolbarComposite, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				super.widgetSelected(e);
+				
+				MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
+				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				
+				MeasurementSpecification spec = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				monitor.getMeasurementSpecifications().add(spec);
+				
+				monitorRep.getMonitors().add(monitor);
+				monitor.setEntityName("Monitor group" + Integer.toString(monitorCollections.size()+1));
+				
+				alternative.setDirty(true);
+			}
+		});
 		btnNewButton.setText("Create new Monitor");
-		
-		
+				
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				alternative.removePropertyChangeListener(pcl);
+			}
+		});
+		alternative.addPropertyChangeListener(pcl);
 		update();
 	}
 	
 	public void update(){
+		
+		super.update();
 		
 		for(int i=1; i<this.getChildren().length; i++){
 			this.getChildren()[i].dispose();
@@ -65,26 +110,30 @@ public class ConfigMonitorsComposite extends Composite{
 		
 		monitorCollections.clear();
 		
-		for(MonitorRepository mr : alternative.getMonitorRepositories()){
-			for(Monitor m : mr.getMonitors()){
-				boolean hasBeenAdded = false;
-				for(MonitorCollection mc : monitorCollections){
-					if(mc.add(m)){
-						hasBeenAdded = true;
-						break;
-					}
+		for(Monitor m : alternative.getUsedMonitorRepository().getMonitors()){
+			boolean hasBeenAdded = false;
+			for(MonitorCollection mc : monitorCollections){
+				if(mc.add(m)){
+					hasBeenAdded = true;
+					break;
 				}
-				
-				if(!hasBeenAdded){
-					MonitorCollection newMc = new MonitorCollection(m);
-					monitorCollections.add(newMc);
-				}
+			}
+			
+			if(!hasBeenAdded){
+				MonitorCollection newMc = new MonitorCollection(m);
+				monitorCollections.add(newMc);
+			}
+		}
+		
+		for(int i=0; i<monitorCollections.size(); i++){
+			MonitorCollection mc = monitorCollections.get(i);
+			for(Monitor m : mc.getMonitors()){
+				m.setEntityName("Monitor group " + Integer.toString(i+1));
 			}
 		}
 		
 		//create new composites
-		
-		for(MonitorCollection mc : monitorCollections){
+		for(final MonitorCollection mc : monitorCollections){
 			EObjectWrapper monitorsWrapper = new EObjectWrapper(mc.getMonitors());
 			
 			ExpandableComposite expComposite = new ExpandableComposite(this, SWT.BORDER,
@@ -95,10 +144,21 @@ public class ConfigMonitorsComposite extends Composite{
 			
 			expComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			ConfigMonitorComposite cmc = new ConfigMonitorComposite(alternative, monitorsWrapper, expComposite, SWT.NONE);
-			expComposite.setText(cmc.getName());
+			expComposite.setText(cmc.getMonitorName());
 			
 			Button btnDelete = new Button(expComposite, SWT.NONE);
+			btnDelete.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					super.widgetSelected(e);
+					for(Monitor m : mc.getMonitors()){
+						EcoreUtil.remove(m);
+					}
+					alternative.setDirty(true);
+				}
+			});
 			btnDelete.setText("Delete");
+			
 			expComposite.setClient(cmc);
 			expComposite.setTextClient(btnDelete);
 			
@@ -164,13 +224,14 @@ public class ConfigMonitorsComposite extends Composite{
 		    		if(c.getFeatureID() == IdentifierPackage.IDENTIFIER__ID){
 		    			return true;
 		    		}
+		    		if(c.getFeatureID() == MonitorrepositoryPackage.MONITOR__MEASURING_POINT){
+		    			return true;
+		    		}
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);
 		    	}
 		    };
-
-			@SuppressWarnings("unchecked")
-			boolean isEqual = equalityHelper.equals((List<EObject>)(List<? extends EObject>)monitorExample.getMeasurementSpecifications(), 
-					(List<EObject>)(List<? extends EObject>)monitor.getMeasurementSpecifications());
+		    
+		    boolean isEqual = equalityHelper.equals(monitorExample, monitor);
 			
 			if(isEqual){
 				monitors.add(monitor);

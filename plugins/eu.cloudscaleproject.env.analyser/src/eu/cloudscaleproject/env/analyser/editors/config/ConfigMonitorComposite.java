@@ -112,7 +112,7 @@ public class ConfigMonitorComposite extends Composite{
 				if(bindingContext != null){
 					bindingContext.dispose();
 					bindingContext = null;
-				}
+				}				
 			}
 		});
 		
@@ -124,7 +124,7 @@ public class ConfigMonitorComposite extends Composite{
 		}
 	}
 	
-	public String getName(){
+	public String getMonitorName(){
 		Monitor monitor = (Monitor)monitorWrapper.getMaster();
 		String entityName = monitor.getEntityName();
 		//String description = monitor.getMeasurementSpecifications().isEmpty() != null ? monitor.getMeasurementSpecifications().get(0).getMetricDescription()
@@ -216,7 +216,7 @@ public class ConfigMonitorComposite extends Composite{
 		for(EObject obj : monitorWrapper.getSlaves()){
 			if(obj instanceof Monitor){
 				MeasuringPoint mp = ((Monitor)obj).getMeasuringPoint();
-				if(!measuringPoints.contains(mp)){
+				if(mp != null && !measuringPoints.contains(mp)){
 					measuringPoints.add(mp);
 				}
 			}

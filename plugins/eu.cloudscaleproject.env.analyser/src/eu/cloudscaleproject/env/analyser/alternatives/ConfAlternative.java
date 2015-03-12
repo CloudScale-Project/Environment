@@ -460,6 +460,31 @@ public class ConfAlternative extends EditorInputEMF{
 		return out;
 	}
 	
+	public MonitorRepository getUsedMonitorRepository(){
+		Experiment exp = getExperiment();
+		InitialModel initialModel = exp.getInitialModel();
+		
+		MonitorRepository monitorRep = null;
+		
+		if(getMonitorRepositories().isEmpty()){
+			monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
+			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
+			
+			InitialModel initalModel = exp.getInitialModel();
+			initalModel.setMonitorRepository(monitorRep);
+		}
+		else{
+			monitorRep = initialModel.getMonitorRepository();
+			if(monitorRep == null){
+				monitorRep = getMonitorRepositories().get(0);				
+				initialModel.setMonitorRepository(monitorRep);
+			}
+		}
+		
+		assert(monitorRep != null);
+		return monitorRep;
+	}
+	
 	public List<ServiceLevelObjectiveRepository> getSLORepositories(){
 		List<ServiceLevelObjectiveRepository> out = new ArrayList<ServiceLevelObjectiveRepository>();
 		
