@@ -39,10 +39,10 @@ public class IntroPart {
 			
 			// Cache entire folder 
 			//(needed in product export, to cache files, so it is possible to reference them)
-			URL folder = FileLocator.find(plugin, new Path("html/"), null);
+			URL folder = FileLocator.find(plugin, new Path("resources/html/"), null);
 			FileLocator.toFileURL(folder);
 			
-			IPath relativePagePath = new Path("html/intro.html");
+			IPath relativePagePath = new Path("resources/html/intro.html");
 			URL fileInPlugin = FileLocator.find(plugin, relativePagePath, null);
 			introUrl = FileLocator.toFileURL(fileInPlugin);
 			
@@ -80,7 +80,7 @@ public class IntroPart {
 		c_image.setLayoutData(gd_c_image);
 		
 		Composite imageLogo = new Composite(c_image, SWT.NONE);
-		imageLogo.setBackgroundImage(ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/img-logo.png"));
+		imageLogo.setBackgroundImage(ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/img-logo.png"));
 		imageLogo.setBounds(0, 0, 241, 50);
 		imageLogo.setLocation(40, 20);
 		
@@ -91,23 +91,23 @@ public class IntroPart {
 		composite_1.setLayoutData(gd_composite_1);
 		
 		ButtonImg back = new ButtonImg(c_header, 
-				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-back.png"),
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/ic-back.png"),
 				60, 90);
 		
 		ButtonImg forward = new ButtonImg(c_header, 
-				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-next.png"),
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/ic-next.png"),
 				60, 90);
 		
 		ButtonImg home = new ButtonImg(c_header, 
-				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-home.png"),
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/ic-home.png"),
 				60, 90);
 		
 		ButtonImg newProject = new ButtonImg(c_header, 
-				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/ic-newProject.png"),
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/ic-newProject.png"),
 				60, 90);
 		
 		ButtonImg workspace = new ButtonImg(c_header, 
-				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "html/button_enter.png"),
+				ResourceManager.getPluginImage("eu.cloudscaleproject.env.product", "resources/html/button_enter.png"),
 				75, 90);
 		new Label(c_header, SWT.NONE);
 		new Label(c_header, SWT.NONE);

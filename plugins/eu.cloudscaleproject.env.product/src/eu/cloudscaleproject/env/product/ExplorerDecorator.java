@@ -20,7 +20,7 @@ public class ExplorerDecorator extends LabelProvider implements
 		ILabelDecorator {
 
 	private static final String PLUGIN_ID = "eu.cloudscaleproject.env.product";
-	private static final String ICON_PATH = "icons/explorer/";
+	private static final String ICON_PATH = "resources/icons/explorer/";
 	
 	private static final String PROJECT_ICON = ICON_PATH + "project.png";
 	private static final String GENERATED_ICON = ICON_PATH + "generated_models.png";
