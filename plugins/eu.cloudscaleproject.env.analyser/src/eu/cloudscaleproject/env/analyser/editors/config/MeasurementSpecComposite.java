@@ -85,6 +85,7 @@ public class MeasurementSpecComposite extends Composite{
 	private ComboViewer comboViewer;
 	private Combo comboStatType;
 	private ComboViewer comboViewer_1;
+	private Composite composite;
 	
 	public MeasurementSpecComposite(EditingDomain ed, MeasurementSpecification ms, Composite parent, int style) {
 		super(parent, style);
@@ -95,13 +96,13 @@ public class MeasurementSpecComposite extends Composite{
 		this.ed = ed;
 		this.ms = ms;
 		
-		setLayout(new GridLayout(3, true));
+		setLayout(new GridLayout(1, true));
 		
 		typeComposite = new Composite(this, SWT.NONE);
 		typeComposite.setLayout(new GridLayout(2, false));
-		typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
+		typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
-		Resource res = ms.eResource().getResourceSet().getResource(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"), true);
+		Resource res = ed.getResourceSet().getResource(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"), true);
 		Iterator<EObject> iter = res.getAllContents();
 		while(iter.hasNext()){
 			EObject obj = iter.next();
@@ -113,38 +114,54 @@ public class MeasurementSpecComposite extends Composite{
 		
 		comboViewer = new ComboViewer(typeComposite, SWT.NONE);
 		comboMetricDesc = comboViewer.getCombo();
-		comboMetricDesc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_comboMetricDesc = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_comboMetricDesc.widthHint = 150;
+		comboMetricDesc.setLayoutData(gd_comboMetricDesc);
 		
 		comboViewer_1 = new ComboViewer(typeComposite, SWT.NONE);
 		comboStatType = comboViewer_1.getCombo();
-		comboStatType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_comboStatType = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_comboStatType.widthHint = 150;
+		comboStatType.setLayoutData(gd_comboStatType);
 		
-		btnDInterval = new Button(this, SWT.RADIO);
+		composite = new Composite(this, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		composite.setLayout(new GridLayout(3, false));
+		
+		btnDInterval = new Button(composite, SWT.RADIO);
 		btnDInterval.setText("Delayed interval");
 		
-		btnTimeFrame = new Button(this, SWT.RADIO);
+		btnTimeFrame = new Button(composite, SWT.RADIO);
 		btnTimeFrame.setText("Time frame");
 		
-		btnInterval = new Button(this, SWT.RADIO);
+		btnInterval = new Button(composite, SWT.RADIO);
 		btnInterval.setText("Interval");
 		
 		valuesComposite = new Composite(this, SWT.NONE);
 		valuesComposite.setLayout(new GridLayout(2, false));
-		valuesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+		valuesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		lblFirst = new Label(valuesComposite, SWT.NONE);
-		lblFirst.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		GridData gd_lblFirst = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_lblFirst.widthHint = 50;
+		lblFirst.setLayoutData(gd_lblFirst);
 		lblFirst.setText("Start:");
 		
 		textFirst = new Text(valuesComposite, SWT.BORDER);
-		textFirst.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_textFirst = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_textFirst.widthHint = 100;
+		textFirst.setLayoutData(gd_textFirst);
 		
 		lblSecond = new Label(valuesComposite, SWT.NONE);
-		lblSecond.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		GridData gd_lblSecond = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_lblSecond.widthHint = 50;
+		lblSecond.setLayoutData(gd_lblSecond);
 		lblSecond.setText("Stop:");
 		
 		textSecond = new Text(valuesComposite, SWT.BORDER);
-		textSecond.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_textSecond = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_textSecond.widthHint = 100;
+		textSecond.setLayoutData(gd_textSecond);
 		
 		addDisposeListener(new DisposeListener() {
 			

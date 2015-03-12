@@ -48,8 +48,8 @@ public class ControlTabItemListProperty extends WidgetListProperty {
 			CTabFolder tf = (CTabFolder) control;
 
 			public void handleAdd(int index, Object element) {
-				CTabItem item = new CTabItem(tf, SWT.CLOSE);
-				item.setText("Neki");
+				CTabItem item = new CTabItem(tf, SWT.NONE);
+				item.setText("  " + Integer.toString(index+1) + "  ");
 				item.setControl((Composite)element);
 				tf.redraw();
 				tf.layout(true, true);

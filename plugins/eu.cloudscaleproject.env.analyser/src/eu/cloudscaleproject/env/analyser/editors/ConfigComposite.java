@@ -18,8 +18,10 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -153,8 +155,13 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Monitors");
 				
-				monitorsComposite = new ConfigMonitorsComposite(input, tabFolder, style);
-				tabItem.setControl(monitorsComposite);
+				ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
+				monitorsComposite = new ConfigMonitorsComposite(input, scrolledComposite, style);
+				scrolledComposite.setContent(monitorsComposite);
+				monitorsComposite.pack();
+				scrolledComposite.setExpandHorizontal(true);
+				
+				tabItem.setControl(scrolledComposite);
 			}
 			
 			//slo settings
