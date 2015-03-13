@@ -587,7 +587,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.junit"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
-      <plugin id="org.freejava.javasourceattacher" fragment="true"/>
       <plugin id="org.fujaba.commons"/>
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.hibernate"/>
