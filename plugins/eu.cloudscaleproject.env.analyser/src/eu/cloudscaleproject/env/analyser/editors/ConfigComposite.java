@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -11,10 +10,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -35,6 +30,7 @@ import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorItemsComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOItemsComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -83,8 +79,11 @@ public class ConfigComposite extends SidebarEditorComposite{
 		
 		private ConfigEditComposite editComposite;
 		
-		private ConfigTreeviewComposite sloTreeview;
+		//private ConfigTreeviewComposite sloTreeview;
+		
 		private ConfigMonitorItemsComposite monitorsComposite;
+		private ConfigSLOItemsComposite sloComposite;
+
 		private ConfigTreeviewComposite advancedTreeview;
 		
 		private ConfigTreeviewComposite currentTreeview;
@@ -168,6 +167,18 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Service level objectives");
 				
+				ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
+				sloComposite = new ConfigSLOItemsComposite(input, scrolledComposite, style);
+				scrolledComposite.setContent(sloComposite);
+				sloComposite.pack();
+				scrolledComposite.setExpandHorizontal(true);
+				
+				tabItem.setControl(scrolledComposite);
+				
+				/*
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Service level objectives");
+				
 				sloTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
 				sloTreeview.addFilter(new ViewerFilter() {
 					@Override
@@ -193,6 +204,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 					}
 				});
 				tabItem.setControl(sloTreeview);
+				*/
 			}
 			//advance settings
 			{
@@ -202,6 +214,25 @@ public class ConfigComposite extends SidebarEditorComposite{
 				advancedTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
 				tabItem.setControl(advancedTreeview);
 			}
+			
+			tabFolder.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					CTabItem selectedItem = tabFolder.getSelection();
+					if(selectedItem != null && selectedItem.getControl() != null){
+						Control c = selectedItem.getControl();
+						if(c instanceof ScrolledComposite){
+							c = ((ScrolledComposite)c).getContent();
+						}
+						if(c instanceof ConfigSLOItemsComposite){
+							((ConfigSLOItemsComposite)c).reload();
+						}
+						if(c instanceof ConfigMonitorItemsComposite){
+							((ConfigMonitorItemsComposite)c).reload();
+						}
+					}
+				}
+			});
 		}
 
 		@Override

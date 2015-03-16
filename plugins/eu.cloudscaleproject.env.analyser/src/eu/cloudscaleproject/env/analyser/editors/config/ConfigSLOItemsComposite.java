@@ -1,7 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,43 +7,33 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
-import org.palladiosimulator.simulizar.monitorrepository.Monitor;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorRepository;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
+import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
+import org.palladiosimulator.servicelevelobjective.ServicelevelObjectivePackage;
 
 import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 
 public class ConfigSLOItemsComposite extends Composite{
 	
 	private final ConfAlternative alternative;
 	private List<SloCollection> sloCollections = new ArrayList<SloCollection>();
-	
-	private PropertyChangeListener pcl = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(!ConfigSLOItemsComposite.this.isDisposed()){
-				update();
-			}
-		}
-	};
 		
 	public ConfigSLOItemsComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -77,36 +65,30 @@ public class ConfigSLOItemsComposite extends Composite{
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
 				
-				MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
-				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				TextInputDialog dialog = new TextInputDialog(Display.getDefault().getActiveShell());
+				dialog.open();
 				
-				MeasurementSpecification spec = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
-				monitor.getMeasurementSpecifications().add(spec);
-				
-				monitorRep.getMonitors().add(monitor);
-				monitor.setEntityName("Monitor group" + Integer.toString(sloCollections.size()+1));
-				
-				alternative.setDirty(true);
+				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
+					ServiceLevelObjectiveRepository sloRep = alternative.getUsedSloRepository();
+					ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+					
+					sloRep.getServicelevelobjectives().add(slo);
+					slo.setName(dialog.getText());
+					
+					alternative.setDirty(true);
+					reload();
+				}
 			}
 		});
 		btnNewButton.setText("Create new Monitor");
-				
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				alternative.removePropertyChangeListener(pcl);
-			}
-		});
-		alternative.addPropertyChangeListener(pcl);
-		update();
+		reload();
 	}
 	
-	public void update(){
-		
-		super.update();
-		
-		for(int i=1; i<this.getChildren().length; i++){
-			this.getChildren()[i].dispose();
+	public void reload(){
+				
+		Control[] children = this.getChildren();
+		for(int i=1; i<children.length; i++){
+			children[i].dispose();
 		}
 		
 		sloCollections.clear();
@@ -126,16 +108,9 @@ public class ConfigSLOItemsComposite extends Composite{
 			}
 		}
 		
-		for(int i=0; i<sloCollections.size(); i++){
-			SloCollection mc = sloCollections.get(i);
-			for(ServiceLevelObjective m : mc.getSlos()){
-				m.setName("SLO group " + Integer.toString(i+1));
-			}
-		}
-		
 		//create new composites
 		for(final SloCollection sloCollection : sloCollections){
-			EObjectWrapper monitorsWrapper = new EObjectWrapper(sloCollection.getSlos());
+			EObjectWrapper sloWrapper = new EObjectWrapper(sloCollection.getSlos());
 			
 			ExpandableComposite expComposite = new ExpandableComposite(this, SWT.BORDER,
 					ExpandableComposite.CLIENT_INDENT
@@ -144,8 +119,8 @@ public class ConfigSLOItemsComposite extends Composite{
 					| ExpandableComposite.TWISTIE);
 			
 			expComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-			ConfigSLOComposite sloComposite = new ConfigSLOComposite(alternative, monitorsWrapper, expComposite, SWT.NONE);
-			//TODO: expComposite.setText(sloComposite.());
+			ConfigSLOComposite sloComposite = new ConfigSLOComposite(alternative, sloWrapper, expComposite, SWT.NONE);
+			expComposite.setText(sloComposite.getSLOName());
 			
 			Button btnDelete = new Button(expComposite, SWT.NONE);
 			btnDelete.addSelectionListener(new SelectionAdapter() {
@@ -156,6 +131,7 @@ public class ConfigSLOItemsComposite extends Composite{
 						EcoreUtil.remove(slo);
 					}
 					alternative.setDirty(true);
+					reload();
 				}
 			});
 			btnDelete.setText("Delete");
@@ -174,6 +150,7 @@ public class ConfigSLOItemsComposite extends Composite{
 		
 		this.layout();
 		this.redraw();
+		this.pack();
 	}
 	
 	/*
@@ -222,10 +199,10 @@ public class ConfigSLOItemsComposite extends Composite{
 
 				@Override
 		    	protected boolean haveEqualAttribute(EObject eObject1, EObject eObject2, EAttribute c) {
-		    		if(c.getFeatureID() == IdentifierPackage.IDENTIFIER__ID){
+		    		if(c == IdentifierPackage.Literals.IDENTIFIER__ID){
 		    			return true;
 		    		}
-		    		if(c.getFeatureID() == MonitorrepositoryPackage.MONITOR__MEASURING_POINT){
+		    		if(c == ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASURING_POINT){
 		    			return true;
 		    		}
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);

@@ -5,10 +5,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -114,18 +114,15 @@ public class SidebarEditor extends AbstractSidebarEditor{
 	}
 	
 	public void doHandleNewInput(IEditorInput selected) {
-		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-				new BasicCallback<String>() {
-			
-			@Override
-			public void handle(String text) {
-				if(resourceProvider == null){
-					throw new IllegalStateException("Sidebar resource provider not set!");
-				}
-				resourceProvider.createNewResource(text, null);				
-			}
-		});
+		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 		dialog.open();
+		
+		if(IDialogConstants.OK_ID == dialog.getReturnCode()){
+			if(resourceProvider == null){
+				throw new IllegalStateException("Sidebar resource provider not set!");
+			}
+			resourceProvider.createNewResource(dialog.getText(), null);
+		}
 	}
 
 	@Override
@@ -139,21 +136,18 @@ public class SidebarEditor extends AbstractSidebarEditor{
 			return;
 		}
 		
-		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-				new BasicCallback<String>() {
-			
-			@Override
-			public void handle(String text) {
-				if(resourceProvider == null){
-					throw new IllegalStateException("Sidebar resource provider not set!");
-				}
-				IEditorInputResource res = resourceProvider.createNewResource(text, null);
-				res.copyFrom(((IEditorInputResource)selected).getResource());
-				res.setName(text);
-				res.save();
-			}
-		});
+		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 		dialog.open();
+		
+		if(IDialogConstants.OK_ID == dialog.getReturnCode()){
+			if(resourceProvider == null){
+				throw new IllegalStateException("Sidebar resource provider not set!");
+			}
+			IEditorInputResource res = resourceProvider.createNewResource(dialog.getText(), null);
+			res.copyFrom(((IEditorInputResource)selected).getResource());
+			res.setName(dialog.getText());
+			res.save();
+		}
 	}
 
 	@Override

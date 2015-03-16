@@ -1,7 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +7,16 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -29,22 +28,13 @@ import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackag
 
 import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 
 public class ConfigMonitorItemsComposite extends Composite{
 	
 	private final ConfAlternative alternative;
 	private List<MonitorCollection> monitorCollections = new ArrayList<MonitorCollection>();
-	
-	private PropertyChangeListener pcl = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(!ConfigMonitorItemsComposite.this.isDisposed()){
-				update();
-			}
-		}
-	};
 		
 	public ConfigMonitorItemsComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -76,36 +66,33 @@ public class ConfigMonitorItemsComposite extends Composite{
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
 				
-				MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
-				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				TextInputDialog dialog = new TextInputDialog(Display.getDefault().getActiveShell());
+				dialog.open();
 				
-				MeasurementSpecification spec = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
-				monitor.getMeasurementSpecifications().add(spec);
-				
-				monitorRep.getMonitors().add(monitor);
-				monitor.setEntityName("Monitor group" + Integer.toString(monitorCollections.size()+1));
-				
-				alternative.setDirty(true);
+				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
+					MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
+					Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+					
+					MeasurementSpecification spec = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+					monitor.getMeasurementSpecifications().add(spec);
+					monitor.setEntityName(dialog.getText());
+					
+					monitorRep.getMonitors().add(monitor);
+					
+					alternative.setDirty(true);
+					reload();
+				}
 			}
 		});
 		btnNewButton.setText("Create new Monitor");
-				
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				alternative.removePropertyChangeListener(pcl);
-			}
-		});
-		alternative.addPropertyChangeListener(pcl);
-		update();
+		reload();
 	}
 	
-	public void update(){
-		
-		super.update();
-		
-		for(int i=1; i<this.getChildren().length; i++){
-			this.getChildren()[i].dispose();
+	public void reload(){
+				
+		Control[] children = this.getChildren();
+		for(int i=1; i<children.length; i++){
+			children[i].dispose();
 		}
 		
 		monitorCollections.clear();
@@ -122,13 +109,6 @@ public class ConfigMonitorItemsComposite extends Composite{
 			if(!hasBeenAdded){
 				MonitorCollection newMc = new MonitorCollection(m);
 				monitorCollections.add(newMc);
-			}
-		}
-		
-		for(int i=0; i<monitorCollections.size(); i++){
-			MonitorCollection mc = monitorCollections.get(i);
-			for(Monitor m : mc.getMonitors()){
-				m.setEntityName("Monitor group " + Integer.toString(i+1));
 			}
 		}
 		
@@ -155,6 +135,7 @@ public class ConfigMonitorItemsComposite extends Composite{
 						EcoreUtil.remove(m);
 					}
 					alternative.setDirty(true);
+					reload();
 				}
 			});
 			btnDelete.setText("Delete");
@@ -173,6 +154,7 @@ public class ConfigMonitorItemsComposite extends Composite{
 		
 		this.layout();
 		this.redraw();
+		this.pack();
 	}
 	
 	/*
@@ -221,10 +203,10 @@ public class ConfigMonitorItemsComposite extends Composite{
 
 				@Override
 		    	protected boolean haveEqualAttribute(EObject eObject1, EObject eObject2, EAttribute c) {
-		    		if(c.getFeatureID() == IdentifierPackage.IDENTIFIER__ID){
+		    		if(c == IdentifierPackage.Literals.IDENTIFIER__ID){
 		    			return true;
 		    		}
-		    		if(c.getFeatureID() == MonitorrepositoryPackage.MONITOR__MEASURING_POINT){
+		    		if(c == MonitorrepositoryPackage.Literals.MONITOR__MEASURING_POINT){
 		    			return true;
 		    		}
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);

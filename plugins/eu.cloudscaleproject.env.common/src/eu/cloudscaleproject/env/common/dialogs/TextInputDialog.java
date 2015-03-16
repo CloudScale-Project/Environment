@@ -5,25 +5,21 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.cloudscaleproject.env.common.BasicCallback;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridLayout;
-
 public class TextInputDialog extends Dialog{
 	
-	private final BasicCallback<String> callback;
 	private Text text = null;
+	private String out = null;
 
-	public TextInputDialog(Shell parentShell, BasicCallback<String> callback) {
+	public TextInputDialog(Shell parentShell) {
 		super(parentShell);
-		this.setBlockOnOpen(true);
-		this.callback = callback;
-		
+		this.setBlockOnOpen(true);		
 	}
 
 	@Override
@@ -44,13 +40,13 @@ public class TextInputDialog extends Dialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
-			callback.handle(getText());
+			out = (text != null && !text.isDisposed()) ? text.getText() : "No name";
 		}
 		super.buttonPressed(buttonId);
 	}
 	
-	private String getText(){
-		return (text != null && !text.isDisposed()) ? text.getText() : "No name";
+	public String getText(){
+		return out;
 	}
 	
 	@Override
