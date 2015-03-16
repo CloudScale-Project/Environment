@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,12 +39,10 @@ import de.uka.ipd.sdq.pcm.gmf.repository.edit.parts.RepositoryEditPart;
 import de.uka.ipd.sdq.pcm.gmf.repository.part.PalladioComponentModelRepositoryDiagramEditorPlugin;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
-import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class Util
 {
@@ -210,21 +207,9 @@ public class Util
 			this.project = configInputFolder.getProject();
 			this.modiscoConfig = configInputFolder.getModiscoConfigFile();
 
-			this.projectToExtract = getProjectToExtract();
+			this.projectToExtract = configInputFolder.getExtractedProject();
 
 			setUser(true);
-		}
-
-		private IProject getProjectToExtract()
-		{
-			ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configInputFolder.getProject(),
-					ToolchainUtils.EXTRACTOR_INPUT_ID);
-
-			String input = configInputFolder.getProperty(ConfigPersistenceFolder.KEY_INPUT_ALTERNATIVE);
-			IEditorInputResource resource = resourceProvider.getResourceByName(input);
-			String projectToExtractURL = resource.getProperty(InputPersitenceFile.KEY_PROJECT_URL);
-			IProject projectToExtract = ResourcesPlugin.getWorkspace().getRoot().getProject(projectToExtractURL);
-			return projectToExtract;
 		}
 
 		@Override
@@ -259,13 +244,13 @@ public class Util
 
 			String modiscoKey = "discoverer_launch_model";
 			String modiscoResourceKey = "org.eclipse.core.resources.IResource";
-			String modiscoResourceRegex = modiscoResourceKey + ":/\\w*";
+			String modiscoResourceRegex = modiscoResourceKey + ":/[^\"]*";
 
 			// This is XML
 			// For now we find resource property with regex and replace with
 			// selected value
 			String value = modisco.getAttribute(modiscoKey, "");
-			value = value.replaceAll(modiscoResourceRegex, modiscoResourceKey + ":/" + getProjectToExtract().getName());
+			value = value.replaceAll(modiscoResourceRegex, modiscoResourceKey + ":/" + this.projectToExtract.getName());
 
 			// Save property
 			ILaunchConfigurationWorkingCopy workingCopy = modisco.getWorkingCopy();

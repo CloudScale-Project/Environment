@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,6 +47,7 @@ public class InputAlternativeComposite extends TitleComposite {
 		btnChoose.setText("...");
 		new Label(getContainer(), SWT.NONE);
 		
+
 		btnChoose.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
