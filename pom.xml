@@ -68,6 +68,7 @@ Package : mvn install
 
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
+	<repository><id>Eclipse 4.4 Recomenders</id><layout>p2</layout><url>http://download.eclipse.org/recommenders/updates/stable</url></repository>
 	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
 	<repository><id>Eclipse Modeling Framework (EMF) Releases Site</id><layout>p2</layout><url>http://download.eclipse.org/modeling/emf/emf/updates/releases/</url></repository>
 	<repository><id>Xtext All In One (Releases)</id><layout>p2</layout><url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url></repository>
