@@ -69,6 +69,19 @@ Package : mvn install
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
 	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
+	<repository><id>Eclipse Modeling Framework (EMF) Releases Site</id><layout>p2</layout><url>http://download.eclipse.org/modeling/emf/emf/updates/releases/</url></repository>
+	<repository><id>Xtext All In One (Releases)</id><layout>p2</layout><url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url></repository>
+	<repository><id>QVTo Build Site</id><layout>p2</layout><url>http://download.eclipse.org/mmt/qvto/updates/releases/3.4.0</url></repository>
+	<repository><id>modeling.gmt.modisco Update Site</id><layout>p2</layout><url>http://download.eclipse.org/modeling/gmt/modisco/updates/release/</url></repository>
+	<repository><id>Composite Artifact Repository</id><layout>p2</layout><url>http://download.eclipse.org/modeling/m2t/xpand/updates/releases</url></repository>
+	<repository><id>EclipseLabs Update Site</id><layout>p2</layout><url>http://svn.codespot.com/a/eclipselabs.org/free-plugins/trunk/site/</url></repository>
+
+	<repository><id>Orbit-R20120526062928</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url></repository>
+	<repository><id>Orbit-R20130827064939</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20130827064939/repository/</url></repository>
+	<repository><id>Orbit-R20140114142710</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140114142710/repository/</url></repository>
+	<repository><id>Orbit-R20140525021250</id><layout>p2</layout><url>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</url></repository>
+
+	<repository><id>osgi-jax-rs-connector</id><layout>p2</layout><url>http://hstaudacher.github.io/osgi-jax-rs-connector</url></repository>
 
 	<!-- Tycho M2 Connectors - Dev update site -->
 	<repository><id>org.sonatype.tycho.repository</id><layout>p2</layout><url>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/0.8.0.201409231215/</url></repository>
