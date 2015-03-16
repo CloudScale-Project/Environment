@@ -174,6 +174,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="javax.annotation"/>
       <plugin id="javax.el"/>
       <plugin id="javax.inject"/>
+      <plugin id="javax.inject.source"/>
       <plugin id="javax.servlet-api"/>
       <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
