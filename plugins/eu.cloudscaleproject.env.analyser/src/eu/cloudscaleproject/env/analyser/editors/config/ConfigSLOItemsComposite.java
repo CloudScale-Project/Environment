@@ -34,7 +34,10 @@ public class ConfigSLOItemsComposite extends Composite{
 	
 	private final ConfAlternative alternative;
 	private List<SloCollection> sloCollections = new ArrayList<SloCollection>();
-		
+	
+	private final Button btnRadioList;
+	private final Button btnRadioGroup;
+			
 	public ConfigSLOItemsComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = input;
@@ -45,14 +48,14 @@ public class ConfigSLOItemsComposite extends Composite{
 		toolbarComposite.setLayout(new GridLayout(4, false));
 		toolbarComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
-		Button btnRadioButton = new Button(toolbarComposite, SWT.RADIO);
-		btnRadioButton.setEnabled(false);
-		btnRadioButton.setText("List");
+		btnRadioList = new Button(toolbarComposite, SWT.RADIO);
+		btnRadioList.setEnabled(false);
+		btnRadioList.setText("List");
 		
-		Button btnRadioButton_1 = new Button(toolbarComposite, SWT.RADIO);
-		btnRadioButton_1.setSelection(true);
-		btnRadioButton_1.setEnabled(false);
-		btnRadioButton_1.setText("Group");
+		btnRadioGroup = new Button(toolbarComposite, SWT.RADIO);
+		btnRadioGroup.setSelection(true);
+		btnRadioGroup.setEnabled(false);
+		btnRadioGroup.setText("Group");
 		
 		Composite composite = new Composite(toolbarComposite, SWT.NONE);
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
