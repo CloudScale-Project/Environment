@@ -192,8 +192,9 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
       <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
       <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util.gui" version="1.7.0.v201011041433"/>
+      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
       <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
+      
       <plugin id="org.apache.batik.dom"/>
       <plugin id="org.apache.batik.dom.svg"/>
       <plugin id="org.apache.batik.ext.awt"/>
