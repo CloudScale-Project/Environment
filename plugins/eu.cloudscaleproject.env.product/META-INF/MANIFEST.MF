@@ -30,7 +30,6 @@ Require-Bundle: org.eclipse.swt;bundle-version="3.102.1",
  org.eclipse.e4.ui.workbench.addons.swt;bundle-version="1.0.1",
  org.eclipse.e4.ui.services;bundle-version="1.0.1",
  org.eclipse.e4.core.contexts,
- javax.annotation,
  eu.cloudscaleproject.env.common;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javax.annotation,
