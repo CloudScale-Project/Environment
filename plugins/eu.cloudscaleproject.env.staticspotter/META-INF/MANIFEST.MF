@@ -37,3 +37,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore.xmi
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: javax.annotation;version="1.2.0",
+ javax.inject

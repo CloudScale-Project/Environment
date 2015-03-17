@@ -20,7 +20,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.transaction,
  com.google.guava,
  org.eclipse.e4.core.di,
- javax.inject,
  eu.cloudscaleproject.env.common,
  eu.cloudscaleproject.env.analyser,
  org.eclipse.e4.core.contexts,
@@ -40,3 +39,5 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: javax.annotation;version="1.2.0",
+ javax.inject
