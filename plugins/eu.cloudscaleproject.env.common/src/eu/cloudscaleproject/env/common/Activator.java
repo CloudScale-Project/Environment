@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.common;
 
+import java.util.logging.Logger;
+
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -38,8 +40,16 @@ public class Activator extends AbstractUIPlugin {
 				ExplorerChangeNotifier.getInstance(), IResourceChangeEvent.POST_BUILD);
 		
 		if(listener == null){
+			try
+			{
 			listener = CloudscaleContext.createInstance(ResourceChangeReporter.class);
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_BUILD);
+			}
+			catch (Exception e)
+			{
+				Logger.getLogger(getClass().getName()).severe("Unable to use CloudScale Context functionality. Product will not work as predicted.");
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -22,7 +22,7 @@ Visit http://www.cloudscale-project.eu
       </vmArgs>
    </launcherArgs>
 
-   <windowImages i16="/eu.cloudscaleproject.env.product/icons/cse-icon_16.png" i32="/eu.cloudscaleproject.env.product/icons/cse-icon_32.png" i48="/eu.cloudscaleproject.env.product/icons/cse-icon_48.png" i64="/eu.cloudscaleproject.env.product/icons/cse-icon_64.png"/>
+   <windowImages i16="/eu.cloudscaleproject.env.product/resources/icons/cse-icon_16.png" i32="/eu.cloudscaleproject.env.product/resources/icons/cse-icon_32.png" i48="/eu.cloudscaleproject.env.product/resources/icons/cse-icon_48.png" i64="/eu.cloudscaleproject.env.product/resources/icons/cse-icon_64.png"/>
 
    <splash
       location="eu.cloudscaleproject.env.product"
@@ -37,10 +37,22 @@ Visit http://www.cloudscale-project.eu
       </win>
    </launcher>
 
+
    <vm>
    </vm>
 
+
    <plugins>
+      <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
+      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
+      <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
+      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
+      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
+      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
+      <plugin id="org.eclipse.jdt.annotation" version="1.1.0.v20140129-1625"/>
+
       <plugin id="LQNModel"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
       <plugin id="ch.qos.logback.classic"/>
@@ -183,18 +195,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="javax.xml"/>
       <plugin id="lpg.runtime.java"/>
       <plugin id="net.sourceforge.secondstring"/>
-      <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
-      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.batik.bridge"/>
-      <plugin id="org.apache.batik.css"/>
-      <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
-      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
-      
       <plugin id="org.apache.batik.dom"/>
       <plugin id="org.apache.batik.dom.svg"/>
       <plugin id="org.apache.batik.ext.awt"/>
@@ -464,7 +466,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.help.ui"/>
       <plugin id="org.eclipse.help.webapp"/>
       <plugin id="org.eclipse.jdt"/>
-      <plugin id="org.eclipse.jdt.annotation"/>
       <plugin id="org.eclipse.jdt.apt.core"/>
       <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
       <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
@@ -777,5 +778,13 @@ Visit http://www.cloudscale-project.eu
       <plugin id="tools.descartes.dlim.generator.editor"/>
    </plugins>
 
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+   </configurations>
 
 </product>
