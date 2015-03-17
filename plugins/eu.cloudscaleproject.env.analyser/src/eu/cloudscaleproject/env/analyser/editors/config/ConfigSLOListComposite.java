@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
@@ -102,6 +103,13 @@ public class ConfigSLOListComposite extends Composite{
 					
 					alternative.setDirty(true);
 					calcSLOGroups();
+					
+					//show it
+					Control control = stackLayout.topControl;
+					if(control instanceof ListComposite){
+						ListComposite lc = (ListComposite)control;
+						lc.showChild(slo);
+					}
 				}
 			}
 		});

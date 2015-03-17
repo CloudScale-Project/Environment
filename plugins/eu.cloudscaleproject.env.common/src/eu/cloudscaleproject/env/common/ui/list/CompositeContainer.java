@@ -8,6 +8,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
 public class CompositeContainer extends ScrolledComposite{
 	
@@ -26,6 +27,23 @@ public class CompositeContainer extends ScrolledComposite{
 	
 	public Composite getCompositeArea(){
 		return composite;
+	}
+	
+	public void showChild(Object childSource){
+		for(CompositeContainerChild child : getChilds()){
+			if(childSource.equals(child.getSource())){
+				Composite childComposite = child.getComposite();
+				if(childComposite instanceof ExpandableComposite){
+					ExpandableComposite ec = (ExpandableComposite)childComposite;
+					ec.setExpanded(true);
+					
+					composite.layout();
+					composite.redraw();
+					composite.pack();
+				}
+				showControl(child.getComposite());
+			}
+		}
 	}
 	
 	public void addChild(int index, CompositeContainerChild child){

@@ -36,12 +36,14 @@ public class ConfigCapacity extends ConfigBasicComposite{
 	
 	@Override
 	protected void initExtensions(Composite parent) {
-		setLayout(new GridLayout(1, false));
+		GridLayout gl_parent = new GridLayout(1, true);
+		gl_parent.marginWidth = 0;
+		parent.setLayout(gl_parent);
 		
-		Label lblDescription = new Label(this, SWT.NONE);
+		Label lblDescription = new Label(parent, SWT.NONE);
 		lblDescription.setText("Capacity measurements settings:");
 		
-		Composite compositeConf = new Composite(this, SWT.NONE);
+		Composite compositeConf = new Composite(parent, SWT.NONE);
 		compositeConf.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_compositeConf = new GridLayout(2, false);
 		gl_compositeConf.marginLeft = 10;
