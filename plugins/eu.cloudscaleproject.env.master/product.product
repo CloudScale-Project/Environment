@@ -52,6 +52,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
       <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
       <plugin id="org.eclipse.jdt.annotation" version="1.1.0.v20140129-1625"/>
+      
 
       <plugin id="LQNModel"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
