@@ -1,7 +1,5 @@
-package eu.cloudscaleproject.env.common.ui.util;
+package eu.cloudscaleproject.env.common.ui.list;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.list.ListDiff;
@@ -11,13 +9,7 @@ import org.eclipse.core.databinding.property.ISimplePropertyListener;
 import org.eclipse.jface.databinding.swt.WidgetListProperty;
 import org.eclipse.jface.internal.databinding.swt.WidgetListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
-import eu.cloudscaleproject.env.common.ui.CompositeContainer;
-import eu.cloudscaleproject.env.common.ui.CompositeContainerChild;
 
 public class CompositeContainerChildProperty extends WidgetListProperty {
 		
@@ -36,8 +28,8 @@ public class CompositeContainerChildProperty extends WidgetListProperty {
 	
 	@SuppressWarnings("rawtypes")
 	protected List doGetList(Object source) {
-		Composite[] list = doGetControlList((Control) source);
-		return Arrays.asList(list);
+		CompositeContainer composite = (CompositeContainer)source;
+		return composite.getChilds();
 	}
 
 	public INativePropertyListener adaptListener(
@@ -73,18 +65,5 @@ public class CompositeContainerChildProperty extends WidgetListProperty {
 				handleAdd(index, newElement);
 			}
 		});
-	}
-	
-	protected Composite[] doGetControlList(Control control) {
-		CTabItem[] items = ((CTabFolder)control).getItems();		
-		List<Composite> composites = new ArrayList<Composite>();
-		
-		for(int i=0; i<items.length; i++){
-			if(items[i].isDisposed()){
-				continue;
-			}
-			composites.add((Composite)items[i].getControl());
-		}
-		return composites.toArray(new Composite[composites.size()]);
 	}
 }

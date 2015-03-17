@@ -29,8 +29,8 @@ import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
-import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorItemsComposite;
-import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOItemsComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -81,8 +81,8 @@ public class ConfigComposite extends SidebarEditorComposite{
 		
 		//private ConfigTreeviewComposite sloTreeview;
 		
-		private ConfigMonitorItemsComposite monitorsComposite;
-		private ConfigSLOItemsComposite sloComposite;
+		private ConfigMonitorListComposite monitorsComposite;
+		private ConfigSLOListComposite sloComposite;
 
 		private ConfigTreeviewComposite advancedTreeview;
 		
@@ -153,13 +153,9 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Monitors");
 				
-				ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
-				monitorsComposite = new ConfigMonitorItemsComposite(input, scrolledComposite, style);
-				scrolledComposite.setContent(monitorsComposite);
-				monitorsComposite.pack();
-				scrolledComposite.setExpandHorizontal(true);
-				
-				tabItem.setControl(scrolledComposite);
+				monitorsComposite = new ConfigMonitorListComposite(input, tabFolder, style);
+				monitorsComposite.pack();				
+				tabItem.setControl(monitorsComposite);
 			}
 			
 			//slo settings
@@ -167,44 +163,9 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Service level objectives");
 				
-				ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.V_SCROLL);
-				sloComposite = new ConfigSLOItemsComposite(input, scrolledComposite, style);
-				scrolledComposite.setContent(sloComposite);
-				sloComposite.pack();
-				scrolledComposite.setExpandHorizontal(true);
-				
-				tabItem.setControl(scrolledComposite);
-				
-				/*
-				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-				tabItem.setText("Service level objectives");
-				
-				sloTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
-				sloTreeview.addFilter(new ViewerFilter() {
-					@Override
-					public boolean select(Viewer viewer, Object parentElement, Object element) {
-						
-						Resource resource = null;
-						
-						if(element instanceof Resource){
-							resource = (Resource)element;
-						}
-						if(element instanceof EObject){
-							EObject object = (EObject) element;
-							resource = object.eResource();
-						}
-						if(resource != null){
-							IFile file = ExplorerProjectPaths.getFileFromEmfResource(resource);
-							if(input.getSubResources(ToolchainUtils.KEY_FILE_SLO).contains(file)){
-								return true;
-							}
-						}
-						
-						return false;
-					}
-				});
-				tabItem.setControl(sloTreeview);
-				*/
+				sloComposite = new ConfigSLOListComposite(input, tabFolder, style);
+				sloComposite.pack();				
+				tabItem.setControl(sloComposite);
 			}
 			//advance settings
 			{
@@ -224,11 +185,11 @@ public class ConfigComposite extends SidebarEditorComposite{
 						if(c instanceof ScrolledComposite){
 							c = ((ScrolledComposite)c).getContent();
 						}
-						if(c instanceof ConfigSLOItemsComposite){
-							((ConfigSLOItemsComposite)c).reload();
+						if(c instanceof ConfigSLOListComposite){
+							((ConfigSLOListComposite)c).calcSLOGroups();
 						}
-						if(c instanceof ConfigMonitorItemsComposite){
-							((ConfigMonitorItemsComposite)c).reload();
+						if(c instanceof ConfigMonitorListComposite){
+							((ConfigMonitorListComposite)c).calcMonitorGroups();
 						}
 					}
 				}

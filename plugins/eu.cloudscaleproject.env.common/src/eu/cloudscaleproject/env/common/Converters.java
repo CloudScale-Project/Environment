@@ -9,71 +9,7 @@ import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import eu.cloudscaleproject.env.common.ui.CompositeContainerChild;
-
-
 public class Converters {
-	
-	public static IConverter[] getCompositeContainerChildConverter(final Class<? extends CompositeContainerChild> clazz){
-				
-		IConverter[] converter = new IConverter[2];
-		
-		//t2m
-		converter[0] = new IConverter() {
-			
-			@Override
-			public Object getToType() {
-				return Object.class;
-			}
-			
-			@Override
-			public Object getFromType() {
-				return CompositeContainerChild.class;
-			}
-			
-			@Override
-			public Object convert(Object fromObject) {
-				
-				if(fromObject == null){
-					return null;
-				}
-				
-				CompositeContainerChild child = (CompositeContainerChild)fromObject;
-				return child.getSource();
-			}
-		};
-		
-		//m2t
-		converter[1] = new IConverter() {
-			
-			@Override
-			public Object getToType() {
-				return CompositeContainerChild.class;
-			}
-			
-			@Override
-			public Object getFromType() {
-				return Object.class;
-			}
-			
-			@Override
-			public Object convert(Object fromObject) {
-				try {
-					CompositeContainerChild out = (CompositeContainerChild)clazz.newInstance();
-					out.setSource(fromObject);
-					return out;
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				
-				return null;
-			}
-		};
-		
-		return converter;
-	}
 	
 	public static IConverter[] getBoolEObjectConverter(final EObject eObject){
 		IConverter[] converter = new IConverter[2];
