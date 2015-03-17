@@ -23,8 +23,8 @@ Develop CloudScale Environment
 1. Download and install [Eclipse Luna for RCP and RAP][1]
 2. Download and install Eclipse plugin dependencies for CloudScale developement.
 	- Go to Eclipse->Help->Install New Software
-	- Add CloudScale Environment update site: "http://cloudscale.xlab.si/cse/updatesites/environment/nightly/".
-	- Install CloudScale Environment Developement feature.
+	- Add CloudScale Toolchain update site: "http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/".
+	- Install CloudScale Dependencies and than Toolchain features (Analyser, Extractor, Static Spotter and Dynamic Spotter).
 3. Clone repository
 	$ git clone https://github.com/CloudScale-Project/Environment.git
 4. Import CloudScale Environment plugins, under "plugins/" directory, into the workbench.
