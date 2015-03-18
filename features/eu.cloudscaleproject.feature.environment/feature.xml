@@ -16,25 +16,13 @@
       [Enter License Description here.]
    </license>
 
-   <includes
-         id="eu.cloudscaleproject.feature.analyser"
-         version="0.0.0"/>
-
-   <includes
-         id="eu.cloudscaleproject.feature.dynamicspotter"
-         version="0.0.0"/>
-
-   <includes
-         id="eu.cloudscaleproject.feature.environment.deps"
-         version="0.0.0"/>
-
-   <includes
-         id="eu.cloudscaleproject.feature.extractor"
-         version="0.0.0"/>
-
-   <includes
-         id="eu.cloudscaleproject.feature.staticspotter"
-         version="0.0.0"/>
+   <requires>
+      <import feature="eu.cloudscaleproject.feature.analyser" version="1.0.0.qualifier"/>
+      <import feature="eu.cloudscaleproject.feature.dynamicspotter" version="1.0.0.qualifier"/>
+      <import feature="eu.cloudscaleproject.feature.environment.deps" version="1.0.0.qualifier"/>
+      <import feature="eu.cloudscaleproject.feature.extractor" version="1.0.0.qualifier"/>
+      <import feature="eu.cloudscaleproject.feature.staticspotter" version="1.0.0.qualifier"/>
+   </requires>
 
    <plugin
          id="org.scaledl.overview"
