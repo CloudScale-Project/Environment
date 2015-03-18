@@ -30,11 +30,11 @@ Visit http://www.cloudscale-project.eu
       startupMessageRect="50,295,445,20"
       startupForegroundColor="FFFFFF" />
    <launcher name="Environment">
-      <linux icon="resources/icons/launcher.xpm"/>
-      <macosx icon="resources/icons/launcher.icns"/>
+      <linux icon="/resources/icons/launcher.xpm"/>
+      <macosx icon="/resources/icons/launcher.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="resources/icons/launcher.ico"/>
+         <ico path="/resources/icons/launcher.ico"/>
          <bmp/>
       </win>
    </launcher>
