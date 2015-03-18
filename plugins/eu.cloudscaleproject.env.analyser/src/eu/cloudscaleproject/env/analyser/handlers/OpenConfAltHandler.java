@@ -11,7 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
+import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
 import eu.cloudscaleproject.env.analyser.dialogs.SelectConfAltDialog;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -62,7 +62,7 @@ public class OpenConfAltHandler {
 		
 		if(alternatives.isEmpty()){
 			
-			NewConfigInputDialog dialog = new NewConfigInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+			NewConfigAlternativeDialog dialog = new NewConfigAlternativeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					new BasicCallback<String[]>() {
 				
 				@Override

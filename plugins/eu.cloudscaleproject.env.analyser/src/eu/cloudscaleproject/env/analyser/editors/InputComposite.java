@@ -10,13 +10,15 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeEditComposite;
-import eu.cloudscaleproject.env.analyser.editors.composite.InputAlternativeTreeviewComposite;
+import eu.cloudscaleproject.env.analyser.dialogs.NewInputAlternativeDialog;
+import eu.cloudscaleproject.env.analyser.editors.input.InputAlternativeEditComposite;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -60,7 +62,7 @@ public class InputComposite extends SidebarEditorComposite{
 	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
 		
 		private InputAlternativeEditComposite editComposite;
-		private InputAlternativeTreeviewComposite treeviewComposite;
+		private EMFEditableTreeviewComposite treeviewComposite;
 
 		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style);
@@ -73,16 +75,9 @@ public class InputComposite extends SidebarEditorComposite{
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();
 			
-			treeviewComposite = new InputAlternativeTreeviewComposite(editor, input, this, SWT.NONE);
+			treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE);
 			GridData iamc_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			treeviewComposite.setLayoutData(iamc_gd);
-		}
-		
-		@Override
-		public void update() {
-			editComposite.update();
-			treeviewComposite.update();
-			super.update();
 		}
 
 		@Override
@@ -94,6 +89,12 @@ public class InputComposite extends SidebarEditorComposite{
 		}
 	}
 
+	@Override
+	public void handleNewInput(IEditorInput selected) {
+		NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, getShell());
+		dialog.open();
+	}
+	
 	/*
 	@Override
 	public Composite createInputComposite(IEditorInput input, Composite parent, int style) {

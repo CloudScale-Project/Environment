@@ -16,14 +16,14 @@ import org.eclipse.swt.widgets.Text;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
 
-public class NewConfigInputDialog extends Dialog{
+public class NewConfigAlternativeDialog extends Dialog{
 	
 	private final BasicCallback<String[]> callback;
 	
 	private Text text = null;
 	private CCombo combo = null;
 	
-	public NewConfigInputDialog(Shell parentShell, BasicCallback<String[]> callback) {
+	public NewConfigAlternativeDialog(Shell parentShell, BasicCallback<String[]> callback) {
 		super(parentShell);
 		this.setBlockOnOpen(true);
 		this.callback = callback;

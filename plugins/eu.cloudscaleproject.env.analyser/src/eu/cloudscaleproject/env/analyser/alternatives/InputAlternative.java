@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -24,19 +25,20 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class InputAlternative extends EditorInputEMF{
 			
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public InputAlternative(IProject project, IFolder folder, AdapterFactory factory){
 		super(project, folder, factory);
 	}
 	
-	public void importFromFolder(IFolder folder){
+	public void importFromFolder(IContainer folder){
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
 			setSubResources(ToolchainUtils.KEY_FILE_REPOSITORY, files);
+		}
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
+			setSubResources(ToolchainUtils.KEY_FILE_SYSTEM, files);
 		}
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
@@ -50,6 +52,25 @@ public class InputAlternative extends EditorInputEMF{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
 			setSubResources(ToolchainUtils.KEY_FILE_USAGE, files);
 		}
+	}
+	
+	public void createEmpty(){
+		
+		PCMModelType[] types = new PCMModelType[]{
+				PCMModelType.REPOSITORY,
+				PCMModelType.SYSTEM,
+				PCMModelType.ALLOCATION,
+				PCMModelType.RESOURCE,
+				PCMModelType.USAGE};
+		
+		PCMResourceSet resSet = new PCMResourceSet(getResource());
+		resSet.createAll(types);
+		resSet.saveAll(types);
+		
+		importFromFolder(getResource());		
+		
+		save();
+		load();
 	}
 	
 	/**

@@ -1,9 +1,14 @@
-package eu.cloudscaleproject.env.analyser.editors.composite;
+package eu.cloudscaleproject.env.analyser.editors.input;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,9 +26,9 @@ import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.util.ISaveable;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class InputAlternativeEditComposite extends Composite implements ISaveable{
+public class InputAlternativeEditComposite extends Composite{
 	
 	private final InputAlternative alternative;
 	private final IDirtyAdapter dirtyAdapter;
@@ -31,6 +36,14 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 	private final Text textAlloc;
 	private final Text textUsage;
 	private Text textName;
+	
+	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			load();
+		}
+	};
 
 	public InputAlternativeEditComposite(IEditorPart editor, InputAlternative ia, Composite parent, int style) {
 		super(parent, style);
@@ -118,14 +131,18 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 			}
 		});
 		
-		update();
+		alternative.addPropertyChangeListener(EditorInputFolder.PROP_SUB_RESOURCE_CHANGED, alternativeListener);
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				alternative.removePropertyChangeListener(alternativeListener);
+			}
+		});
+		
+		load();
 	}
 	
-	public InputAlternative getAlternative(){
-		return alternative;
-	}
-	
-	public void update(){
+	private void load(){
 		if(!this.isDisposed()){
 			IFile alloc = (IFile)alternative.getSubResource(ToolchainUtils.KEY_FILE_ALLOCATION);
 			IFile usage = (IFile)alternative.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
@@ -133,21 +150,5 @@ public class InputAlternativeEditComposite extends Composite implements ISaveabl
 			textAlloc.setText(alloc != null ? alloc.getProjectRelativePath().toString() : "");
 			textUsage.setText(usage != null ? usage.getProjectRelativePath().toString() : "");
 		}
-		super.update();
-	}
-
-	@Override
-	public void save() {
-		alternative.save();
-	}
-
-	@Override
-	public void load(boolean force) {
-		alternative.load();
-	}
-
-	@Override
-	public boolean isDirty() {
-		return alternative.isDirty();
 	}
 }

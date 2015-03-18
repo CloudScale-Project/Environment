@@ -20,13 +20,13 @@ import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.util.ConfigTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
 public class SingleResultComposite extends TitleComposite implements IPropertySheetPageProvider{
 
 
 	private ResultPersistenceFolder resultPersistenceFolder;
-	private ConfigTreeviewComposite treeViewComposite;
+	private EMFEditableTreeviewComposite treeViewComposite;
 
 	/**
 	 * Create the composite.
@@ -70,7 +70,7 @@ public class SingleResultComposite extends TitleComposite implements IPropertySh
 		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		this.treeViewComposite = new ConfigTreeviewComposite(resultPersistenceFolder, containerEditor, SWT.NONE);
+		this.treeViewComposite = new EMFEditableTreeviewComposite(resultPersistenceFolder, containerEditor, SWT.NONE);
 		
         btnViewRepositoryEditor.addSelectionListener(new SelectionAdapter() {
                 @Override

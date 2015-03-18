@@ -2,17 +2,13 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -29,23 +25,16 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class ConfigTreeviewComposite extends Composite implements IPropertySheetPageProvider
+public class EMFTreeviewComposite extends Composite
 {
-
-	private final EditorInputEMF alternative;
 
 	private final Tree tree;
 	private final TreeViewer treeViewer;
 	private final AdapterFactoryContentProvider contentProvider;
-	private final EMFPopupMenuSupport menuSupport;
 
 	/**
 	 * Create the composite.
@@ -53,12 +42,9 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigTreeviewComposite(EditorInputEMF ca, Composite parent, int style)
+	public EMFTreeviewComposite(AdapterFactory adapterFactory, ResourceSet resSet, Composite parent, int style)
 	{
 		super(parent, style);
-
-		this.alternative = ca;
-
 		setLayout(new GridLayout(1, false));
 
 		this.tree = new Tree(this, SWT.BORDER | SWT.V_SCROLL);
@@ -78,24 +64,11 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 			}
 		});
 
-		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
+		contentProvider = new AdapterFactoryContentProvider(adapterFactory);
 		this.treeViewer.setContentProvider(contentProvider);
-		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
+		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 
-		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
-
-		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain())
-		{
-			@Override
-			public void menuAboutToShow(IMenuManager menuManager)
-			{
-				menuManager.add(createOpenMenuManager());
-				menuManager.add(new Separator("default"));
-				super.menuAboutToShow(menuManager);
-
-			}
-		};
-		menuSupport.setViewer(treeViewer);
+		new AdapterFactoryTreeEditor(tree, adapterFactory);
 
 		tree.addFocusListener(new FocusListener()
 		{
@@ -111,45 +84,16 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 			}
 		});
 
-		this.treeViewer.setInput(alternative.getResourceSet());
+		this.treeViewer.setInput(resSet);
 		this.treeViewer.expandToLevel(2);
 		this.treeViewer.refresh();
 	}
-
-	private MenuManager createOpenMenuManager()
-	{
-		MenuManager mm = new MenuManager("Open");
-
-		mm.add(new Action("Editor")
-		{
-			@Override
-			public void run()
-			{
-				openEditor(getSelectedModelFile());
-			}
-			@Override
-			public boolean isEnabled()
-			{
-				return getSelectedModelFile() != null;
-			}
-		});
-
-		mm.add(new Action("Diagram")
-		{
-			@Override
-			public void run()
-			{
-				openEditor(getSelectedDiagramFile());
-			}
-			
-			@Override
-			public boolean isEnabled()
-			{
-				return getSelectedDiagramFile() != null;
-			}
-		});
-
-		return mm;
+	
+	public void reload(){
+		if(!this.tree.isDisposed()){
+			this.treeViewer.expandToLevel(2);
+			this.treeViewer.refresh();
+		}
 	}
 	
 	private IFile getSelectedModelFile()
@@ -217,13 +161,5 @@ public class ConfigTreeviewComposite extends Composite implements IPropertySheet
 	public void addFilter(ViewerFilter filter)
 	{
 		this.treeViewer.addFilter(filter);
-	}
-
-	@Override
-	public IPropertySheetPage getPropertySheetPage()
-	{
-		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain());
-		propertySheetPage.setPropertySourceProvider(contentProvider);
-		return propertySheetPage;
 	}
 }

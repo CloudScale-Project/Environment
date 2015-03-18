@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.analyser.editors.composite;
+package eu.cloudscaleproject.env.analyser.editors.input;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -45,9 +47,8 @@ import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.util.EMFPopupMenuSupport;
-import eu.cloudscaleproject.env.toolchain.util.ISaveable;
 
-public class InputAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider, ISaveable{
+public class InputAlternativeTreeviewComposite extends Composite implements IPropertySheetPageProvider{
 	
 	private final InputAlternative alternative;
 	
@@ -136,22 +137,24 @@ public class InputAlternativeTreeviewComposite extends Composite implements IPro
 				InputAlternativeTreeviewComposite.this.alternative.removePropertyChangeListener(listener);
 			}
 		});
-	}
-	
-	public void update(){
 		
-		if(!this.isDisposed()){
-			if(!this.tree.isDisposed()){
-				this.treeViewer.setInput(alternative.getResourceSet());
-				this.treeViewer.expandToLevel(2);
-				this.treeViewer.refresh();
-			}	
-		}
+		addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(null);				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);				
+			}
+		});
 		
-		ProjectEditorSelectionService.getInstance().setSelectionProviderDelegate(treeViewer);
-		super.update();
+		this.treeViewer.setInput(alternative.getResourceSet());
+		this.treeViewer.expandToLevel(2);
+		this.treeViewer.refresh();
 	}
-
 	
 	private class ModelViewFilter extends ViewerFilter{
 
@@ -192,20 +195,5 @@ public class InputAlternativeTreeviewComposite extends Composite implements IPro
 				(AdapterFactoryEditingDomain)alternative.getEditingDomain());
 		propertySheetPage.setPropertySourceProvider(contentProvider);
 		return propertySheetPage;
-	}
-
-	@Override
-	public void save() {
-		alternative.save();
-	}
-
-	@Override
-	public void load(boolean force) {
-		alternative.load();
-	}
-
-	@Override
-	public boolean isDirty() {
-		return alternative.isDirty();
 	}
 }

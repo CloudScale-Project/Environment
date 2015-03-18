@@ -29,7 +29,7 @@
          point="org.eclipse.emf.ecore.uri_mapping">
       <mapping
             source="pathmap://ENVIRONMENT_ANALYSER/"
-            target="platform:/plugin/eu.cloudscaleproject.env.analyser/src/eu/cloudscaleproject/env/analyser/models/">
+            target="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/">
       </mapping>
    </extension>
 

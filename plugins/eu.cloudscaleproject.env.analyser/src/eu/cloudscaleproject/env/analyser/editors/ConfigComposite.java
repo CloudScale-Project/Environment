@@ -25,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.NewConfigInputDialog;
+import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
@@ -40,7 +40,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
-import eu.cloudscaleproject.env.toolchain.util.ConfigTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -84,9 +84,9 @@ public class ConfigComposite extends SidebarEditorComposite{
 		private ConfigMonitorListComposite monitorsComposite;
 		private ConfigSLOListComposite sloComposite;
 
-		private ConfigTreeviewComposite advancedTreeview;
+		private EMFEditableTreeviewComposite advancedTreeview;
 		
-		private ConfigTreeviewComposite currentTreeview;
+		private EMFEditableTreeviewComposite currentTreeview;
 		
 		private final ConfAlternative alternative;
 		
@@ -120,8 +120,8 @@ public class ConfigComposite extends SidebarEditorComposite{
 				public void widgetSelected(SelectionEvent e) {
 					super.widgetSelected(e);
 					Control c = tabFolder.getSelection().getControl();
-					if(c instanceof ConfigTreeviewComposite){
-						currentTreeview = (ConfigTreeviewComposite)c;
+					if(c instanceof EMFEditableTreeviewComposite){
+						currentTreeview = (EMFEditableTreeviewComposite)c;
 						currentTreeview.setFocus();
 						getContainer().update();
 					}
@@ -172,7 +172,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Advanced editor");
 				
-				advancedTreeview = new ConfigTreeviewComposite(input, tabFolder, style);
+				advancedTreeview = new EMFEditableTreeviewComposite(input, tabFolder, style);
 				tabItem.setControl(advancedTreeview);
 			}
 			
@@ -228,7 +228,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 	
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		NewConfigInputDialog dialog = new NewConfigInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+		NewConfigAlternativeDialog dialog = new NewConfigAlternativeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 				new BasicCallback<String[]>() {
 			
 			@Override

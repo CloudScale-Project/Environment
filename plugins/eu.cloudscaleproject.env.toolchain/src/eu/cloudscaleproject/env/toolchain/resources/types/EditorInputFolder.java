@@ -31,7 +31,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	public static final String PROP_DELETED = EditorInputFolder.class.getName() + ".propDeleted";
 
 	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
-	public static final String PROP_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propResChanged";
+	public static final String PROP_SUB_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propSubResChanged";
 	
 	public static final String DIRTY_CHANGED = EditorInputFolder.class.getName() + ".dirtyChanged";
 
@@ -93,7 +93,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		firePropertyChange(PROP_RESOURCE_CHANGED, oldPath, path);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
 	}
 	
 	public void addSubResource(String key, IResource res){
@@ -116,7 +116,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		firePropertyChange(PROP_RESOURCE_CHANGED, oldPath, path);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
 	}
 	
 	public void removeSubResource(String key, IResource res){
@@ -161,7 +161,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		
 		propertyInputFile.setProperty(key, value);
 		isDirty = true;
-		firePropertyChange(PROP_RESOURCE_CHANGED, oldValue, value);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldValue, value);
 	}
 	
 	private String getInternalResourcePath(IResource file)

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -72,7 +73,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 	
-	public static List<IFile> findResource(IFolder folder, String extension){
+	public static List<IFile> findResource(IContainer folder, String extension){
 		
 		List<IFile> files = new ArrayList<IFile>();
 		
@@ -82,8 +83,8 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		try {
 			for(IResource r : folder.members()){
-				if(r instanceof IFolder){
-					IFolder f = (IFolder)r;
+				if(r instanceof IContainer){
+					IContainer f = (IContainer)r;
 					files.addAll(findResource(f, extension));
 				}
 				if(r instanceof IFile){
