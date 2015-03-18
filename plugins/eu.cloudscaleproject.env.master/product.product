@@ -6,7 +6,7 @@
    <aboutInfo>
       <text>
          CloudScale Environment
-Version: 0.1
+Version: 0.8
 
 Visit http://www.cloudscale-project.eu
       </text>
@@ -29,19 +29,23 @@ Visit http://www.cloudscale-project.eu
       startupProgressRect="50,280,445,10"
       startupMessageRect="50,295,445,20"
       startupForegroundColor="FFFFFF" />
-   <launcher>
+   <launcher name="Environment">
+      <linux icon="/eu.cloudscaleproject.env.product/resources/icons/launcher.xpm"/>
+      <macosx icon="/eu.cloudscaleproject.env.product/resources/icons/launcher.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="/eu.cloudscaleproject.env.product/icons/launcher.ico"/>
+         <ico path="/eu.cloudscaleproject.env.product/resources/icons/launcher.ico"/>
          <bmp/>
       </win>
    </launcher>
 
-
    <vm>
+      <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</linux>
+      <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</macos>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
 
-   <plugins>
+<plugins>
       <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
       <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
       <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
