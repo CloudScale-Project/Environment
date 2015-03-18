@@ -1,45 +1,71 @@
 package eu.cloudscaleproject.env.extractor;
 
-import java.io.InputStream;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.modisco.infra.discovery.catalog.DiscovererDescription;
+import org.eclipse.modisco.infra.discovery.core.IDiscoveryManager;
+import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
+import org.eclipse.modisco.infra.discovery.ui.internal.util.LaunchModelUtils;
 import org.somox.configuration.SoMoXConfiguration;
 
 import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class ConfigPersistenceFolder extends EditorInputFolder {
+public class ConfigPersistenceFolder extends EditorInputFolder
+{
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PLUGIN_FOLDER = "resources/configurations/";
+	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
 
-	public static final String KEY_INPUT_ALTERNATIVE= "input_alternative";
+	public static final String KEY_INPUT_PROJECT = "extracted_project";
 
-	public static final String KEY_INPUT_PROJECT= "extracted_project";
-
-	public static final String KEY_MODISCO_CONFIG= "modisco";
-	private static final String FILE_MODISCO_CONFIG= "modisco.launch";
+	public static final String KEY_MODISCO_CONFIG = "modisco";
 
 	private SoMoXConfiguration somoxConfiguration;
-	
-	public ConfigPersistenceFolder(IProject project, IFolder folder) {
-		// TODO Auto-generated constructor stub
-		super (project, folder);
+	private LaunchConfiguration modiscoConfiguration;
 
-		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
+	public ConfigPersistenceFolder(IProject project, IFolder folder)
+	{
+		// TODO Auto-generated constructor stub
+		super(project, folder);
+		
+		_temp_init();
 	}
-	
+
+	private void _temp_init()
+	{
+		// Should be persisted
+		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
+
+		this.modiscoConfiguration = LaunchModelUtils.createLaunchConfigurationModel();
+		this.modiscoConfiguration.setOpenModelAfterDiscovery(false);
+
+		String ID_DISCOVERER = "org.eclipse.modisco.java.composition.discoverer.fromProject";
+		DiscovererDescription discoverer = IDiscoveryManager.INSTANCE.getDiscovererDescription(ID_DISCOVERER);
+		this.modiscoConfiguration.setDiscoverer(discoverer);
+
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
+				discoverer.getParameterDefinition("SERIALIZE_TARGET"),
+				Boolean.TRUE);
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
+				discoverer.getParameterDefinition("DEEP_ANALYSIS"),
+				Boolean.TRUE);
+	}
+
 	public SoMoXConfiguration getSomoxConfiguration()
 	{
 		return somoxConfiguration;
 	}
-	
-	public IProject getExtractedProject ()
+
+	public LaunchConfiguration getModiscoConfiguration()
+	{
+		return modiscoConfiguration;
+	}
+
+	public IProject getExtractedProject()
 	{
 		String projectName = getProperty(KEY_INPUT_PROJECT);
 
@@ -49,17 +75,12 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 			return root.getProject(projectName);
 		}
 
-        return null;
+		return null;
 	}
-	
-	public void setExtractedProject (IProject project)
+
+	public void setExtractedProject(IProject project)
 	{
 		setProperty(KEY_INPUT_PROJECT, project.getName());
-	}
-	
-	public IFile getModiscoConfigFile ()
-	{
-		return (IFile)getSubResource(KEY_MODISCO_CONFIG);
 	}
 
 	@Override
@@ -68,28 +89,4 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 		// TODO Auto-generated method stub
 		super.load();
 	}
-	
-	@Override
-	public void create() {
-		super.create();
-
-		try {
-			IFile modiscoConfig = getResource().getFile(FILE_MODISCO_CONFIG);
-			if (!modiscoConfig.exists()) {
-
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FOLDER + FILE_MODISCO_CONFIG);
-				modiscoConfig.create(in, false, null);
-				in.close();
-			}
-			
-			setSubResource(KEY_MODISCO_CONFIG, modiscoConfig);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-		}
-		
-		save();
-	}
-
 }

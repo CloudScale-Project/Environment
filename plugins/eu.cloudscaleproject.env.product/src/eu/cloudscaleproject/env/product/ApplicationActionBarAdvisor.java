@@ -23,6 +23,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	
 	//file
     private IWorkbenchAction exitAction;
+    private IWorkbenchAction newAction;
     private IWorkbenchAction saveAction;
     private IWorkbenchAction printAction;
     private IWorkbenchAction saveAllAction;
@@ -54,6 +55,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         super(configurer);
     }
     
+    /* (non-Javadoc)
+     * @see org.eclipse.ui.application.ActionBarAdvisor#makeActions(org.eclipse.ui.IWorkbenchWindow)
+     */
     protected void makeActions(final IWorkbenchWindow window) {
         // Creates the actions and registers them.
         // Registering is needed to ensure that key bindings work.
@@ -68,6 +72,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         printAction = ActionFactory.PRINT.create(window);
         register(printAction);
         
+        newAction = ActionFactory.NEW.create(window);
+        newAction.setText("New");
+        register(newAction);
+
         saveAction = ActionFactory.SAVE.create(window);
         register(saveAction);
         
@@ -131,6 +139,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         
         //printAction.setEnabled(false);
         
+        fileMenu.add(newAction);
+        fileMenu.add(new Separator());
         fileMenu.add(saveAction);
         fileMenu.add(saveAllAction);
         fileMenu.add(printAction);

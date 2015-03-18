@@ -22,28 +22,20 @@ import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
-import eu.cloudscaleproject.env.extractor.wizard.util.Util;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
 public class ConfigAlternativeComposite extends RunComposite
 {
 	private DataBindingContext m_bindingContext;
-
-	private Combo combo;
-	private List<IEditorInputResource> inputs;
 	private ConfigPersistenceFolder configPersistenceFolder;
 
 	/**
@@ -73,25 +65,6 @@ public class ConfigAlternativeComposite extends RunComposite
 		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		gd_combo.widthHint = 250;
 		combo.setLayoutData(gd_combo);
-		}
-
-		{
-		 Label lblModiscoConfig = new Label(getContainer(), SWT.NONE);
-		 lblModiscoConfig.setFont(SWTResourceManager.getFont("Sans", 11,
-		 SWT.NORMAL));
-		 lblModiscoConfig.setText("Modisco config:    ");
-		
-		 Label lblNewLabel = new Label(getContainer(), SWT.NONE);
-		 lblNewLabel.setText("modisco.conf");
-		
-		 Button btnViewModisco = new Button(getContainer(), SWT.NONE);
-		 btnViewModisco.addSelectionListener(new SelectionAdapter() {
-		 @Override
-		 public void widgetSelected(SelectionEvent e) {
-		 Util.showConfigurationFile(configPersistenceFolder.getModiscoConfigFile());
-		 }
-		 });
-		 btnViewModisco.setText("View");
 		}
 
 		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
@@ -140,7 +113,7 @@ public class ConfigAlternativeComposite extends RunComposite
 	@Override
 	protected IStatus doRun(IProgressMonitor m)
 	{
-		Util.ExtractorRunJob job = new Util.ExtractorRunJob(this.configPersistenceFolder);
+		ExtractorRunJob job = new ExtractorRunJob(this.configPersistenceFolder);
 		return job.run(m);
 	}
 
