@@ -73,6 +73,30 @@ public class InputAlternative extends EditorInputEMF{
 		load();
 	}
 	
+	public void addSubResourceModel(IResource res) {
+		
+		String ext = res.getFileExtension();
+		String key = null;
+		
+		if (PCMModelType.REPOSITORY.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_REPOSITORY;
+		} else if (PCMModelType.SYSTEM.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_SYSTEM;
+		} else if (PCMModelType.RESOURCE.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_RESOURCEENV;
+		} else if (PCMModelType.ALLOCATION.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_ALLOCATION;
+		} else if (PCMModelType.USAGE.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_USAGE;
+		}
+		
+		if(key == null){
+			throw new UnsupportedOperationException("Specified resource model file is not supported!");
+		}
+		
+		super.addSubResource(key, res);
+	}
+	
 	/**
 	 * Set's Allocation model and all referenced models (Repository, System and ResourceEnv).
 	 * 

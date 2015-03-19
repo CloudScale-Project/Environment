@@ -4,13 +4,17 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,19 +40,19 @@ import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.util.EMFTreeviewComposite;
 
 public class ImportInputAlternativeDialog extends Dialog{
 		
 	private boolean copyIntoProject;
-	private IContainer selectedFolder;
+	private IFile[] selectedFiles;
 	
 	PCMResourceSet resSet = new PCMResourceSet();
-	EMFTreeviewComposite treeView;
+	CheckboxTableViewer tableView;
 	Button btnCheckCopy;
 	
 	public ImportInputAlternativeDialog(Shell parentShell) {
 		super(parentShell);
+		setShellStyle(getShellStyle() | SWT.RESIZE); 
 	}
 
 	@Override
@@ -62,11 +66,9 @@ public class ImportInputAlternativeDialog extends Dialog{
 			@Override
 			public void handle(IContainer folder) {
 				resSet.getResources().clear();
-				findAndLoadResources(folder, resSet);
-				selectedFolder = folder;
-				
-				treeView.reload();
-				treeView.update();
+				findAndLoadResources(folder, resSet);				
+				tableView.refresh(true);				
+				tableView.setCheckedElements(resSet.getResources().toArray());
 			}
 			
 		});
@@ -83,9 +85,12 @@ public class ImportInputAlternativeDialog extends Dialog{
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
 		
-		treeView = new EMFTreeviewComposite(adapterFactory, resSet, container, SWT.NONE);
-		treeView.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3 , 1));
-
+		tableView = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+		tableView.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3 , 1));
+		tableView.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+		tableView.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		tableView.setInput(resSet);
+		
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		
@@ -100,16 +105,24 @@ public class ImportInputAlternativeDialog extends Dialog{
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
-			if(resSet.getResources().isEmpty()){
-				selectedFolder = null;
+			Object[] selection = tableView.getCheckedElements();
+			selectedFiles = new IFile[selection.length];
+			
+			for(int i=0; i<selection.length; i++){
+				Object o = selection[i];
+				if(o instanceof Resource){
+					Resource res = (Resource)o;
+					selectedFiles[i] = ExplorerProjectPaths.getFileFromEmfResource(res);
+				}
 			}
+			
 			copyIntoProject = btnCheckCopy.getSelection();
 		}
 		super.buttonPressed(buttonId);
 	}
 	
-	public IContainer getSelectedFolder(){
-		return selectedFolder;
+	public IFile[] getSelectedFiles(){
+		return selectedFiles;
 	}
 	
 	public boolean copyIntoProject(){

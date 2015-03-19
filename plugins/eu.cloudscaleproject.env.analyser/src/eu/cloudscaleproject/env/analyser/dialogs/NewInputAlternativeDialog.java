@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.analyser.dialogs;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -90,7 +91,9 @@ public class NewInputAlternativeDialog extends Dialog{
 				
 				if(IDialogConstants.OK_ID == importDialog.getReturnCode()){
 					InputAlternative alternative = (InputAlternative)resourceProvider.createNewResource(name, null);
-					alternative.importFromFolder(importDialog.getSelectedFolder());
+					for(IFile file : importDialog.getSelectedFiles()){
+						alternative.addSubResourceModel(file);
+					}
 					alternative.save();
 					alternative.load();
 				}
