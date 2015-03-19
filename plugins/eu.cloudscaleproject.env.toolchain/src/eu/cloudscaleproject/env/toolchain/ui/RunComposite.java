@@ -113,7 +113,7 @@ public abstract class RunComposite extends Composite
 
 	private void run()
 	{
-		this.currentJob = new Job("Job - " + getTitle())
+		this.currentJob = new Job("CloudScale Run [" + getTitle()+"]")
 		{
 			private RunProgressMonitor internalMonitor;
 

@@ -22,12 +22,15 @@ import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.somox.common.MetricsDetails.GroupID;
 
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
@@ -68,13 +71,48 @@ public class ConfigAlternativeComposite extends RunComposite
 		}
 
 		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
-		containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));
+		//containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));
 		containerConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		containerConfiguration.setLayout(new GridLayout(1, false));
 
-		new SomoxConfigurationComposite(configPersistenceFolder.getSomoxConfiguration(), containerConfiguration, SWT.NONE);
+		//new SomoxConfigurationComposite(configPersistenceFolder.getSomoxConfiguration(), containerConfiguration, SWT.NONE);
+
+		CTabFolder tabFolder = new CTabFolder(containerConfiguration, SWT.BORDER);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabFolder.setTabHeight(32);
+		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+
+		{
+			SomoxConfigurationComposite composite = new SomoxConfigurationComposite(tabFolder, SWT.NONE, 
+					configPersistenceFolder, GroupID.GROUP_CLUSTERING, GroupID.GROUP_MERGING);
+
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setControl(composite);
+			tabItem.setText("Clustering / Merging");
+			tabFolder.setSelection(tabItem);
+		}
+		{
+			SomoxConfigurationComposite composite = new SomoxConfigurationComposite(tabFolder, SWT.NONE, 
+					configPersistenceFolder, GroupID.GROUP_METRICS);
+
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setControl(composite);
+			tabItem.setText("Other metrics");
+			tabFolder.setSelection(tabItem);
+		}
+		{
+			ModiscoConfigurationComposite composite = new ModiscoConfigurationComposite(tabFolder, SWT.NONE, configPersistenceFolder);
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setControl(composite);
+			tabItem.setText("Modisco configuration");
+			tabFolder.setSelection(tabItem);
+		}
+		
+		tabFolder.setSelection(0);
 
 		m_bindingContext = initDataBindings();
 	}
+
 
 	private static String JAVA_NATURE_ID = "org.eclipse.jdt.core.javanature";
 	private ComboViewer comboViewer;

@@ -5,13 +5,11 @@ import java.util.HashMap;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -19,66 +17,36 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.somox.common.MetricsDetails;
 import org.somox.common.MetricsDetails.GroupID;
-import org.somox.configuration.SoMoXConfiguration;
 
+import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
 
 public class SomoxConfigurationComposite extends Composite
 {
 	private HashMap<String, Scale> mapScales = new HashMap<>();
-	private SoMoXConfiguration conf;
+	private ConfigPersistenceFolder alternative;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public SomoxConfigurationComposite(SoMoXConfiguration conf, Composite parent, int style)
+	public SomoxConfigurationComposite(Composite parent, int style, ConfigPersistenceFolder alternative, GroupID ... groups)
 	{
 		super(parent, style);
-
-		this.conf = conf;
-		setLayout(new GridLayout(1, false));
-//		{
-//			Label lblSomoxConfiguration = new Label(this, SWT.NONE);
-//			lblSomoxConfiguration.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-//			lblSomoxConfiguration.setText("SoMoX Configuration");
-//		}
-//		{
-//			Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-//			label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-//			label.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
-//		}
-//		
 		
-		CTabFolder tabFolder = new CTabFolder(this, SWT.BORDER);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		tabFolder.setTabHeight(32);
-		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
-		
-		
-		{
-			Composite composite = createGroupComposite(tabFolder, GroupID.GROUP_CLUSTERING, GroupID.GROUP_MERGING);
-			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-			tabItem.setControl(composite);
-			tabItem.setText("Clustering and Merging metrics");
-			tabFolder.setSelection(tabItem);
-		}
-		{
-			Composite composite = createGroupComposite(tabFolder, GroupID.GROUP_METRICS);
-			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-			tabItem.setControl(composite);
-			tabItem.setText("Other metrics");
-		}
+		this.alternative = alternative;
+        this.setLayout(new FillLayout());
+        initialize(groups);
 
 		load();
 	}
 	
 	DataBindingContext bindingContext = new DataBindingContext();
 	
-	private Composite createGroupComposite (Composite parent, GroupID ... groups)
+	private void initialize (GroupID ... groups)
 	{
-		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
@@ -117,8 +85,6 @@ public class SomoxConfigurationComposite extends Composite
 		
 		scrolledComposite.setContent(composite);
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
-		return scrolledComposite;
 	}
 
 	private void createSlider (final String metricKey, Composite parent)
@@ -149,7 +115,7 @@ public class SomoxConfigurationComposite extends Composite
 
 	    scale.addListener(SWT.Selection, new Listener() {
 	        public void handleEvent(Event event) {
-	        	SomoxConfigurationUtil.setValueByKey(metricKey, scale.getSelection()/100d, conf);
+	        	SomoxConfigurationUtil.setValueByKey(metricKey, scale.getSelection()/100d, alternative.getSomoxConfiguration());
 	        }
 	      });
 	    
@@ -166,7 +132,7 @@ public class SomoxConfigurationComposite extends Composite
 		for (String key : mapScales.keySet())
 		{
 			Scale scale = mapScales.get(key);
-			int value = (int)(100*SomoxConfigurationUtil.getValueByKey(key, conf));
+			int value = (int)(100*SomoxConfigurationUtil.getValueByKey(key, alternative.getSomoxConfiguration()));
 			scale.setSelection(value);
 		}
 

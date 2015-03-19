@@ -61,6 +61,7 @@ public class ExtractorRunJob extends Job
 
 		setUser(true);
 	}
+	
 
 	@Override
 	public IStatus run(IProgressMonitor monitor)
@@ -73,13 +74,16 @@ public class ExtractorRunJob extends Job
 		{
 			runModisco(monitor);
 			runSomox(monitor);
-
 			copyFilesToResultFolder(projectToExtract);
 
 		} catch (CoreException e)
 		{
 			e.printStackTrace();
-			return new Status(Status.ERROR, "", "Extraction failed...");
+			return e.getStatus();
+		}
+		catch (Exception e)
+		{
+			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Message : "+e.getMessage());
 		}
 
 		monitor.done();
@@ -113,7 +117,7 @@ public class ExtractorRunJob extends Job
 
 	}
 
-	private void runSomox(IProgressMonitor monitor)
+	private void runSomox(IProgressMonitor monitor) throws CoreException
 	{
 		SoMoXConfiguration somoxConfiguration = configInputFolder.getSomoxConfiguration();
 
@@ -136,10 +140,10 @@ public class ExtractorRunJob extends Job
 			saveJob.setBlackboard(blackboard);
 
 			saveJob.execute(monitor);
-		} catch (Exception e1)
+		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Please, check your discoverer and SoMoX configuration.", e); //$NON-NLS-1$
+			throw new CoreException(status);
 		}
 
 	}
@@ -155,7 +159,7 @@ public class ExtractorRunJob extends Job
 		return (ResultPersistenceFolder) resourceProvider.createNewResource(name, name, null);
 	}
 
-	private void copyFilesToResultFolder(IProject outputProject)
+	private void copyFilesToResultFolder(IProject outputProject) throws CoreException
 	{
 		try
 		{
@@ -227,8 +231,8 @@ public class ExtractorRunJob extends Job
 
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Please, check your discoverer configuration.", e); //$NON-NLS-1$
+			throw new CoreException(status);
 		}
 	}
 
