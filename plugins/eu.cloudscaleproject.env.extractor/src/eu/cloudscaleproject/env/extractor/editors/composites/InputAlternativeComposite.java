@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
-import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
 public class InputAlternativeComposite extends TitleComposite {
 

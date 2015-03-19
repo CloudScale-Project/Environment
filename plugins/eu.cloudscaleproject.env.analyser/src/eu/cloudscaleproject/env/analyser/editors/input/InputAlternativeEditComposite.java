@@ -27,8 +27,9 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
-public class InputAlternativeEditComposite extends Composite{
+public class InputAlternativeEditComposite extends TitleComposite{
 	
 	private final InputAlternative alternative;
 	private final IDirtyAdapter dirtyAdapter;
@@ -50,18 +51,20 @@ public class InputAlternativeEditComposite extends Composite{
 		
 		IProject project = ExplorerProjectPaths.getProject(editor);
 		
+		setTitle(ia.getName());
+
 		this.alternative = ia;
 		this.dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
 		
-		setLayout(new GridLayout(3, false));
+		getContainer().setLayout(new GridLayout(3, false));
 		
-		Label lblName = new Label(this, SWT.NONE);
+		Label lblName = new Label(getContainer(), SWT.NONE);
 		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblName.setText("Name:");
 		
-		textName = new Text(this, SWT.BORDER);
+		textName = new Text(getContainer(), SWT.BORDER);
 		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(this, SWT.NONE);
+		new Label(getContainer(), SWT.NONE);
 		
 		textName.setText(ia.getName());
 		textName.addModifyListener(new ModifyListener() {
@@ -72,26 +75,26 @@ public class InputAlternativeEditComposite extends Composite{
 			}
 		});
 		
-		Label lblRepository = new Label(this, SWT.NONE);
+		Label lblRepository = new Label(getContainer(), SWT.NONE);
 		lblRepository.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblRepository.setText("Allocation model:");
 		
-		textAlloc = new Text(this, SWT.BORDER);
+		textAlloc = new Text(getContainer(), SWT.BORDER);
 		textAlloc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textAlloc.setEditable(false);
 		
-		Button btnAlloc = new Button(this, SWT.NONE);
+		Button btnAlloc = new Button(getContainer(), SWT.NONE);
 		btnAlloc.setText("Browse...");
 		
-		Label lblUsage = new Label(this, SWT.NONE);
+		Label lblUsage = new Label(getContainer(), SWT.NONE);
 		lblUsage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblUsage.setText("Usage model:");
 		
-		textUsage = new Text(this, SWT.BORDER);
+		textUsage = new Text(getContainer(), SWT.BORDER);
 		textUsage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textUsage.setEditable(false);
 		
-		Button btnUsage = new Button(this, SWT.NONE);
+		Button btnUsage = new Button(getContainer(), SWT.NONE);
 		btnUsage.setText("Browse...");
 		
 		final IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);

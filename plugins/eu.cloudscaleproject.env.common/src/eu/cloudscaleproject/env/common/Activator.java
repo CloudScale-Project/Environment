@@ -47,8 +47,8 @@ public class Activator extends AbstractUIPlugin
 		{
 			try
 			{
-				//listener = CloudscaleContext.createInstance(ResourceChangeReporter.class);
-				//ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_BUILD);
+				listener = CloudscaleContext.createInstance(ResourceChangeReporter.class);
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_BUILD);
 			} catch (Exception e)
 			{
 				Logger.getLogger(getClass().getName()).severe(

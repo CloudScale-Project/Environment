@@ -12,9 +12,9 @@ import org.eclipse.ui.PlatformUI;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
 import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
-import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
 
 

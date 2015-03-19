@@ -44,7 +44,7 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 public class ImportInputAlternativeDialog extends Dialog{
 		
 	private boolean copyIntoProject;
-	private IFile[] selectedFiles;
+	private Resource[] selectedResources;
 	
 	PCMResourceSet resSet = new PCMResourceSet();
 	CheckboxTableViewer tableView;
@@ -97,7 +97,6 @@ public class ImportInputAlternativeDialog extends Dialog{
 		btnCheckCopy = new Button(container, SWT.CHECK);
 		btnCheckCopy.setText("Copy in project");
 		btnCheckCopy.setSelection(false);
-		btnCheckCopy.setEnabled(false);
 		
 		return container;
 	}
@@ -106,13 +105,13 @@ public class ImportInputAlternativeDialog extends Dialog{
 	protected void buttonPressed(int buttonId) {
 		if (IDialogConstants.OK_ID == buttonId) {
 			Object[] selection = tableView.getCheckedElements();
-			selectedFiles = new IFile[selection.length];
+			selectedResources = new Resource[selection.length];
 			
 			for(int i=0; i<selection.length; i++){
 				Object o = selection[i];
 				if(o instanceof Resource){
 					Resource res = (Resource)o;
-					selectedFiles[i] = ExplorerProjectPaths.getFileFromEmfResource(res);
+					selectedResources[i] = res;
 				}
 			}
 			
@@ -121,8 +120,9 @@ public class ImportInputAlternativeDialog extends Dialog{
 		super.buttonPressed(buttonId);
 	}
 	
-	public IFile[] getSelectedFiles(){
-		return selectedFiles;
+	public Resource[] getSelectedResources()
+	{
+		return selectedResources;
 	}
 	
 	public boolean copyIntoProject(){

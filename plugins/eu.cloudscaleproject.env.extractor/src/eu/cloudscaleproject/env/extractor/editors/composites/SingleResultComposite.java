@@ -16,10 +16,10 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import eu.cloudscaleproject.env.common.ui.TitleComposite;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
 public class SingleResultComposite extends TitleComposite implements IPropertySheetPageProvider{
