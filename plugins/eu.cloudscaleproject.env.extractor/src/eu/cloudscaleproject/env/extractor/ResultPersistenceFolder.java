@@ -82,7 +82,7 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 	private final void loadModels() throws IOException {
 		
 		IResource repository = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
-		IResource system = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
+		IResource system = getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
 		
 		if (repository != null)
 		{
