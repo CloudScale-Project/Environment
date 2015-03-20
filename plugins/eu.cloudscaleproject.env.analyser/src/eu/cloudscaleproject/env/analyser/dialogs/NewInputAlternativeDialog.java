@@ -1,15 +1,8 @@
 package eu.cloudscaleproject.env.analyser.dialogs;
 
-import java.io.IOException;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -113,7 +106,7 @@ public class NewInputAlternativeDialog extends Dialog
 
 					if (importDialog.copyIntoProject())
 					{
-						_copyResources(alternative.getResource(), selectedResources);
+						ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
 					}
 
 					for (Resource resource : selectedResources)
@@ -125,53 +118,6 @@ public class NewInputAlternativeDialog extends Dialog
 					alternative.save();
 					alternative.load();
 				}
-			}
-		}
-	}
-
-	private void _copyResources(IFolder root, Resource[] selectedResources)
-	{
-		for (Resource res : selectedResources)
-		{
-			EcoreUtil.resolveAll(res);
-		}
-
-		for (Resource resource : selectedResources)
-		{
-			String[] segments = resource.getURI().segments();
-			String segment = segments[segments.length - 1];
-			IFile file = root.getFile(segment);
-
-			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-			resource.setURI(uri);
-		}
-
-		for (Resource resource : selectedResources)
-		{
-			TreeIterator<Object> allContents = EcoreUtil.getAllContents(resource, false);
-			while (allContents.hasNext())
-			{
-				Object object = (Object) allContents.next();
-
-				if (object instanceof InternalEObject)
-				{
-					InternalEObject eobj = (InternalEObject) object;
-					if (eobj.eIsProxy())
-					{
-						eobj.eSetProxyURI(null);
-					}
-				}
-			}
-		}
-
-		for (Resource resource : selectedResources)
-		{
-			try
-			{
-				resource.save(null);
-			} catch (IOException e)
-			{
-				e.printStackTrace();
 			}
 		}
 	}

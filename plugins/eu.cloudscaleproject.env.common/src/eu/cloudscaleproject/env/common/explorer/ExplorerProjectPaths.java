@@ -19,10 +19,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -448,6 +451,53 @@ public class ExplorerProjectPaths {
 		}
 		return res;
 
+	}
+	
+	public static void copyEMFResources(IContainer folder, Resource[] resources)
+	{
+		for (Resource res : resources)
+		{
+			EcoreUtil.resolveAll(res);
+		}
+
+		for (Resource resource : resources)
+		{
+			String[] segments = resource.getURI().segments();
+			String segment = segments[segments.length - 1];
+			IFile file = folder.getFile(new Path(segment));
+
+			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+			resource.setURI(uri);
+		}
+
+		for (Resource resource : resources)
+		{
+			TreeIterator<Object> allContents = EcoreUtil.getAllContents(resource, false);
+			while (allContents.hasNext())
+			{
+				Object object = (Object) allContents.next();
+
+				if (object instanceof InternalEObject)
+				{
+					InternalEObject eobj = (InternalEObject) object;
+					if (eobj.eIsProxy())
+					{
+						eobj.eSetProxyURI(null);
+					}
+				}
+			}
+		}
+
+		for (Resource resource : resources)
+		{
+			try
+			{
+				resource.save(null);
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static IProject getProject(IEditorPart editor) {

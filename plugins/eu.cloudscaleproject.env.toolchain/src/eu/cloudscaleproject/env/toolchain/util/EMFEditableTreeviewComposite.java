@@ -56,7 +56,9 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			treeViewer.refresh();
+			if(!treeViewer.getTree().isDisposed()){
+				treeViewer.refresh();
+			}
 		}
 	};
 
@@ -92,9 +94,11 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		});
 
 		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
+		
 		this.treeViewer.setContentProvider(contentProvider);
-		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(alternative.getAdapterFactory()));
-
+		this.treeViewer.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
+				new AdapterFactoryLabelProvider.StyledLabelProvider(alternative.getAdapterFactory(), this.treeViewer)));
+		
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 
 		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain())

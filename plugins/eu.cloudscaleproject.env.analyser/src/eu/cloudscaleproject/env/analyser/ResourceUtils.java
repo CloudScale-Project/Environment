@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
 import org.palladiosimulator.simulizar.monitorrepository.provider.MonitorrepositoryItemProviderAdapterFactory;
@@ -122,21 +121,10 @@ public class ResourceUtils {
 		//register resource provider factories		
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_INPUT_ID, new IResourceProviderFactory(){
 
+			InputAltAdapterFactory adapterFactory = new InputAltAdapterFactory();
+			
 			@Override
 			public ResourceProvider create(IFolder folder) {
-				
-				final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-				
-				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
-				adapterFactory.addAdapterFactory(new SystemAdapterFactory());
-				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
-				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
-				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new ExperimentDataAdapterFactory());
-				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
 				
 				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
