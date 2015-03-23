@@ -129,7 +129,6 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		});
 
 		this.treeViewer.setInput(alternative.getResourceSet());
-		this.treeViewer.expandToLevel(2);
 		this.treeViewer.refresh();
 		
 		alternative.addPropertyChangeListener(EditorInputEMF.PROP_LOADED, editorInputListener);

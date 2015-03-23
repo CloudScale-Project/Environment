@@ -150,10 +150,7 @@ public class InputAltAdapterFactory extends ComposedAdapterFactory{
 		@Override
 		public Object getStyledText(Object object) {
 			NamedElement nm = (NamedElement)object;
-			StyledString out = new StyledString();
-			out.append(nm.getEntityName());
-			out.append(" [ Resource: " + nm.eResource().getURI().lastSegment() + " ] ", StyledString.COUNTER_STYLER);
-			return out;
+			return composeStyledString("Repository Model", nm.getEntityName(), ((EObject)object).eResource().getURI().lastSegment());
 		}
 	}
 	
@@ -166,10 +163,7 @@ public class InputAltAdapterFactory extends ComposedAdapterFactory{
 		@Override
 		public Object getStyledText(Object object) {
 			NamedElement nm = (NamedElement)object;
-			StyledString out = new StyledString();
-			out.append(nm.getEntityName());
-			out.append(" [ Resource: " + nm.eResource().getURI().lastSegment() + " ] ", StyledString.COUNTER_STYLER);
-			return out;
+			return composeStyledString("System Model", nm.getEntityName(), ((EObject)object).eResource().getURI().lastSegment());
 		}
 	}
 	
@@ -182,10 +176,7 @@ public class InputAltAdapterFactory extends ComposedAdapterFactory{
 		@Override
 		public Object getStyledText(Object object) {
 			NamedElement nm = (NamedElement)object;
-			StyledString out = new StyledString();
-			out.append(nm.getEntityName());
-			out.append(" [ Resource: " + nm.eResource().getURI().lastSegment() + " ] ", StyledString.COUNTER_STYLER);
-			return out;
+			return composeStyledString("Resource Model", nm.getEntityName(), ((EObject)object).eResource().getURI().lastSegment());
 		}
 	}
 	
@@ -198,10 +189,7 @@ public class InputAltAdapterFactory extends ComposedAdapterFactory{
 		@Override
 		public Object getStyledText(Object object) {
 			NamedElement nm = (NamedElement)object;
-			StyledString out = new StyledString();
-			out.append(nm.getEntityName());
-			out.append(" [ Resource: " + nm.eResource().getURI().lastSegment() + " ] ", StyledString.COUNTER_STYLER);
-			return out;
+			return composeStyledString("Allocation Model", nm.getEntityName(), ((EObject)object).eResource().getURI().lastSegment());
 		}
 	}
 	
@@ -213,11 +201,17 @@ public class InputAltAdapterFactory extends ComposedAdapterFactory{
 		
 		@Override
 		public Object getStyledText(Object object) {
-			StyledString out = new StyledString();
-			out.append(getText(object));
-			out.append(" [ Resource: " + ((EObject)object).eResource().getURI().lastSegment() + " ] ", StyledString.COUNTER_STYLER);
-			return out;
+			return composeStyledString("Usage Model", "usage model", ((EObject)object).eResource().getURI().lastSegment());
 		}
+	}
+	
+	private static StyledString composeStyledString (String type, String name, String resourceName)
+	{
+			StyledString out = new StyledString();
+			out.append(String.format("%-25s", type));
+			out.append(name);
+			out.append(" [ Resource: " + resourceName + " ] ", StyledString.COUNTER_STYLER);
+			return out;
 	}
 
 }

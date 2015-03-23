@@ -85,13 +85,11 @@ public class EMFTreeviewComposite extends Composite
 		});
 
 		this.treeViewer.setInput(resSet);
-		this.treeViewer.expandToLevel(2);
 		this.treeViewer.refresh();
 	}
 	
 	public void reload(){
 		if(!this.tree.isDisposed()){
-			this.treeViewer.expandToLevel(2);
 			this.treeViewer.refresh();
 		}
 	}
