@@ -10,7 +10,9 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -40,18 +42,23 @@ public class PCMResourceSet extends ResourceSetImpl{
 	private final IFile[] modelFiles;
 	private final IFile[] diagramFiles;
 	
+	private final IFolder rootFolder;
+	private final IFolder rootFolderModels;
+	
 	public PCMResourceSet(){
-		modelFiles = new IFile[PCMModelType.values().length];
-		diagramFiles = new IFile[PCMModelType.values().length];
+		this(ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path("temp")));
 	}
 	
 	public PCMResourceSet(IFolder rootFolder) {
 		
-		this();
+		modelFiles = new IFile[PCMModelType.values().length];
+		diagramFiles = new IFile[PCMModelType.values().length];
 		
-		IFolder rootFolderModels = rootFolder.getFolder("models");
+		this.rootFolder = rootFolder;
+		this.rootFolderModels = rootFolder.getFolder("models");
 		
 		//create folders if they don't exist jet
+		/*
 		try{
 			if(!rootFolder.exists()){
 				rootFolder.create(true, true, null);
@@ -63,14 +70,28 @@ public class PCMResourceSet extends ResourceSetImpl{
 		catch(CoreException e){
 			e.printStackTrace();
 		}
+		*/
 		
 		for(PCMModelType mt : PCMModelType.values()){
-			this.modelFiles[mt.ordinal()] = rootFolderModels.getFile("pcm." + mt.getFileExtension());
+			this.modelFiles[mt.ordinal()] = this.rootFolderModels.getFile("pcm." + mt.getFileExtension());
 		}
 		
 		for(PCMModelType mt : PCMModelType.values()){
-			this.diagramFiles[mt.ordinal()] = rootFolder.getFile("pcm." + mt.getFileExtension() + "_diagram");
+			this.diagramFiles[mt.ordinal()] = this.rootFolder.getFile("pcm." + mt.getFileExtension() + "_diagram");
 		}
+	}
+		
+	public static PCMModelType getTypeFromResource(Resource res){
+		PCMModelType type = null;
+		
+		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
+		for(PCMModelType t : PCMModelType.values()){
+			if(t.getFileExtension().equals(file.getFileExtension())){
+				return t;
+			}
+		}
+		
+		return type;
 	}
 	
 	public static List<IFile> findResource(IContainer folder, String extension){
@@ -224,6 +245,18 @@ public class PCMResourceSet extends ResourceSetImpl{
 	}
 	
 	public void save(PCMModelType model){
+		
+		try{
+			if(!rootFolder.exists()){
+				rootFolder.create(true, true, null);
+			}
+			if(!rootFolderModels.exists()){
+				rootFolderModels.create(true, true, null);
+			}
+		}
+		catch(CoreException e){
+			e.printStackTrace();
+		}
 		
 		try{
 			if(getModelFile(model) != null){

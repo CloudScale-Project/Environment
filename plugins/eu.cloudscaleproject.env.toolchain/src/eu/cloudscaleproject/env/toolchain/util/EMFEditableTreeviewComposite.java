@@ -76,7 +76,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 
 		setLayout(new GridLayout(1, false));
 
-		this.tree = new Tree(this, SWT.BORDER | SWT.V_SCROLL);
+		this.tree = new Tree(this, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		this.tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		this.treeViewer = new TreeViewer(tree);
 		this.treeViewer.addDoubleClickListener(new IDoubleClickListener()

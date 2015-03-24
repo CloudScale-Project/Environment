@@ -34,23 +34,23 @@ public class InputAlternative extends EditorInputEMF{
 	public void importFromFolder(IContainer folder){
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
-			setSubResources(ToolchainUtils.KEY_FILE_REPOSITORY, files);
+			setSubResources(PCMModelType.REPOSITORY.getToolchainFileID(), files);
 		}
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
-			setSubResources(ToolchainUtils.KEY_FILE_SYSTEM, files);
+			setSubResources(PCMModelType.SYSTEM.getToolchainFileID(), files);
 		}
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
-			setSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV, files);
+			setSubResources(PCMModelType.RESOURCE.getToolchainFileID(), files);
 		}
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.ALLOCATION.getFileExtension());
-			setSubResources(ToolchainUtils.KEY_FILE_ALLOCATION, files);
+			setSubResources(PCMModelType.ALLOCATION.getToolchainFileID(), files);
 		}
 		{
 			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
-			setSubResources(ToolchainUtils.KEY_FILE_USAGE, files);
+			setSubResources(PCMModelType.USAGE.getToolchainFileID(), files);
 		}
 	}
 	
@@ -63,14 +63,18 @@ public class InputAlternative extends EditorInputEMF{
 				PCMModelType.RESOURCE,
 				PCMModelType.USAGE};
 		
+		createEmpty(types);
+	}
+	
+	public void createEmpty(PCMModelType[] types){
+		
 		PCMResourceSet resSet = new PCMResourceSet(getResource());
 		resSet.createAll(types);
-		resSet.saveAll(types);
 		
-		importFromFolder(getResource());		
-		
-		save();
-		load();
+		for(PCMModelType type : types){
+			IFile file = resSet.getModelFile(type);
+			setSubResource(type.getToolchainFileID(), file);
+		}
 	}
 	
 	public void addSubResourceModel(IResource res) {

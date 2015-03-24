@@ -2,8 +2,7 @@ package eu.cloudscaleproject.env.analyser.editors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -11,14 +10,14 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewInputAlternativeDialog;
-import eu.cloudscaleproject.env.analyser.editors.input.InputAlternativeEditComposite;
+import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -59,25 +58,15 @@ public class InputComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends Composite implements IPropertySheetPageProvider{
+	private class RightPanelComposite extends TitleComposite implements IPropertySheetPageProvider{
 		
-		private InputAlternativeEditComposite editComposite;
-		private EMFEditableTreeviewComposite treeviewComposite;
+		private InputTreeViewComposite treeviewComposite;
 
 		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style);
-			
-			GridLayout layout = new GridLayout(1, true);
-			this.setLayout(layout);
-			
-			editComposite = new InputAlternativeEditComposite(editor, input, this, SWT.NONE);
-			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-			editComposite.setLayoutData(iac_gd);
-			editComposite.pack();
-			
-			treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE);
-			GridData iamc_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-			treeviewComposite.setLayoutData(iamc_gd);
+			getContainer().setLayout(new FillLayout());
+			setTitle(input.getName());
+			treeviewComposite = new InputTreeViewComposite(input, getContainer(), SWT.NONE);
 		}
 
 		@Override

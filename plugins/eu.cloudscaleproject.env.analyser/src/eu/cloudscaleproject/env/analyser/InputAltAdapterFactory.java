@@ -17,11 +17,13 @@ import org.eclipse.jface.viewers.StyledString;
 
 import de.uka.ipd.sdq.pcm.allocation.provider.AllocationItemProvider;
 import de.uka.ipd.sdq.pcm.allocation.provider.AllocationItemProviderAdapterFactory;
+import de.uka.ipd.sdq.pcm.core.composition.provider.CompositionItemProviderAdapterFactory;
 import de.uka.ipd.sdq.pcm.core.entity.NamedElement;
 import de.uka.ipd.sdq.pcm.repository.provider.RepositoryItemProvider;
 import de.uka.ipd.sdq.pcm.repository.provider.RepositoryItemProviderAdapterFactory;
 import de.uka.ipd.sdq.pcm.resourceenvironment.provider.ResourceEnvironmentItemProvider;
 import de.uka.ipd.sdq.pcm.resourceenvironment.provider.ResourceenvironmentItemProviderAdapterFactory;
+import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.provider.SystemItemProvider;
 import de.uka.ipd.sdq.pcm.system.provider.SystemItemProviderAdapterFactory;
 import de.uka.ipd.sdq.pcm.usagemodel.provider.UsageModelItemProvider;
@@ -30,11 +32,13 @@ import de.uka.ipd.sdq.pcm.usagemodel.provider.UsagemodelItemProviderAdapterFacto
 public class InputAltAdapterFactory extends ComposedAdapterFactory{
 	
 	public InputAltAdapterFactory() {
-		//super(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		super(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		
 		addAdapterFactory(new ResourceSetAdapterFactory());
 		addAdapterFactory(new RepositoryAdapterFactory());
 		addAdapterFactory(new SystemAdapterFactory());
+		addAdapterFactory(new CompositionItemProviderAdapterFactory());
+		addAdapterFactory(new SeffAdapterFactory());
 		addAdapterFactory(new ResourceAdapterFactory());
 		addAdapterFactory(new AllocationAdapterFactory());
 		addAdapterFactory(new UsageAdapterFactory());

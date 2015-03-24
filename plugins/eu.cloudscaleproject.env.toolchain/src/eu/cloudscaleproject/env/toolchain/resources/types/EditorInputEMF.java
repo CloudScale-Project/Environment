@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -45,6 +46,11 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		editingDomain = new AdapterFactoryEditingDomain(factory, commandStack);
 		resSet = editingDomain.getResourceSet();
+	}
+	
+	public void addSubResourceModel(IResource res) {
+		//TODO: make abstract
+		throw new UnsupportedOperationException();
 	}
 	
 	public ResourceSet getResourceSet(){
