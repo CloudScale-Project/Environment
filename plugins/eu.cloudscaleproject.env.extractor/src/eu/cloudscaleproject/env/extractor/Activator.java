@@ -3,22 +3,15 @@ package eu.cloudscaleproject.env.extractor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
-import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
-import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -122,15 +115,7 @@ public class Activator extends AbstractUIPlugin {
 					}
 				});
 		
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-				
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-        adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
-        adapterFactory.addAdapterFactory(new SystemAdapterFactory());
-		adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
-		adapterFactory.addAdapterFactory(new SeffAdapterFactory());
-        adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-        adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+		final CustomAdapterFactory adapterFactory = new CustomAdapterFactory();
 
 		ResourceRegistry.getInstance().registerFactory(
 				ToolchainUtils.EXTRACTOR_RES_ID,

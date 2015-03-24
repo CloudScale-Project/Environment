@@ -18,24 +18,17 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final String KEY_FOLDER_SOMOX = "somox";
-	public static final String KEY_FOLDER_MODISCO = "modisco";
+	public static final String KEY_FOLDER_SOMOX = "folder_somox";
+	public static final String KEY_FOLDER_MODISCO = "folder_modisco";
 
-	public static final String KEY_FILE_SYSTEM_DIAGRAM = "system_diagram";
-	public static final String KEY_FILE_REPOSITORY_DIAGRAM = "repositroy_diagram";
+	public static final String KEY_FILE_MODISCO_JAVA2KDM = "file_modisco_java2kdm";
+	public static final String KEY_FILE_MODISCO_JAVA = "file_modisco_java";
+	public static final String KEY_FILE_MODISCO_KDM = "file_modisco_kdm";
+	public static final String KEY_FILE_SYSTEM_DIAGRAM = "file_system_diagram";
+	public static final String KEY_FILE_REPOSITORY_DIAGRAM = "file_repositroy_diagram";
 
-
-	public static final String RESULT_FOLDER_SOMOX = "somox/";
-	public static final String RESULT_FOLDER_MODISCO = "modisco/";
-
-	public static final String RESULT_MODEL_NAME = "internal_architecture_model";
-
-	public static final String RESULT_FILE_SYSTEM = RESULT_MODEL_NAME + ".system";
-	public static final String RESULT_FILE_REPOSITORY = RESULT_MODEL_NAME + ".repository";
-	public static final String RESULT_FILE_SOURCEDECORATOR = RESULT_MODEL_NAME + ".sourcecodedecorator";
-	public static final String RESULT_FILE_SYSTEM_DIAGRAM = RESULT_MODEL_NAME + ".system_diagram";
-	public static final String RESULT_FILE_REPOSITORY_DIAGRAM = RESULT_MODEL_NAME + ".repository_diagram";
-	
+	private static final String RESULT_FOLDER_SOMOX = "somox/";
+	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
 	public ResultPersistenceFolder(IProject project, IFolder folder, AdapterFactory factory){
 		super(project, folder, factory);
@@ -48,7 +41,6 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 		//
 		// Prepare folder structure
 		//
-
 		IFolder modiscoFolder = getResource().getFolder(RESULT_FOLDER_MODISCO);
 		IFolder somoxFolder = getResource().getFolder(RESULT_FOLDER_SOMOX);
 		
@@ -83,19 +75,18 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 		
 		IResource repository = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
 		IResource system = getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
+		IResource sourceDecorator = getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		IResource java2kdm = getSubResource(ResultPersistenceFolder.KEY_FILE_MODISCO_JAVA2KDM);
 		
-		if (repository != null)
+		for (IResource res : new IResource[]{repository, system, sourceDecorator, java2kdm})
 		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)repository);
-			res.unload();
-			res.load(null);
-		}
-
-		if (system != null)
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)system);
-			res.unload();
-			res.load(null);
+			if (res != null)
+			{
+				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				emfRes.unload();
+				emfRes.load(null);
+			}
+			
 		}
 	}
 }
