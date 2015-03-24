@@ -2,45 +2,50 @@ package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.reclipse.structure.inference.DetectPatternsJob;
-import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
+import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class ConfigAlternativeComposite extends RunComposite
+public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider
 {
+	private DataBindingContext m_bindingContext;
 
 	@Optional
 	@Inject
@@ -51,11 +56,11 @@ public class ConfigAlternativeComposite extends RunComposite
 
 	private ComboViewer comboViewer;
 
-	private Composite annotationViewComposite;
-
-	private AnnotationView annotationView;
-
 	private EditorInputFolder extractorResult;
+
+	private EMFEditableTreeviewComposite treeViewComposite;
+
+	private WritableList extractorResults = new WritableList();
 
 	/**
 	 * Create the composite.
@@ -82,16 +87,13 @@ public class ConfigAlternativeComposite extends RunComposite
 		gd_combo.widthHint = 170;
 		combo.setLayoutData(gd_combo);
 
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
+		Group containerEditor = new Group(getContainer(), SWT.NONE);
+		containerEditor.setText("Catalog and Engine models");
+		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
+		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		annotationViewComposite = new Composite(getContainer(), SWT.NONE);
-		annotationViewComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
-		annotationViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		this.treeViewComposite = new EMFEditableTreeviewComposite(configPersistenceFolder, containerEditor, SWT.NONE);
 
-		loadInputs();
-		initAnnotationView();
 		setTitle(configPersistenceFolder.getName());
 		
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
@@ -102,6 +104,7 @@ public class ConfigAlternativeComposite extends RunComposite
 				extractorResult = (EditorInputFolder) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
 			}
 		});
+		m_bindingContext = initDataBindings();
 	}
 
 	@Override
@@ -109,16 +112,6 @@ public class ConfigAlternativeComposite extends RunComposite
 	{
 		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configPersistenceFolder, extractorResult);
 		
-		Display.getDefault().asyncExec(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				annotationView.switchToInference(detectPaternJob.getEngine());
-				annotationView.init();
-			}
-		});
-
 		IStatus status = detectPaternJob.run(m);
 		if (status.isOK())
 		{
@@ -134,59 +127,24 @@ public class ConfigAlternativeComposite extends RunComposite
 	{
 		this.configPersistenceFolder.load();
 		setTitle(configPersistenceFolder.getName());
-		loadInputs();
+		updateExtractorResults();
+		m_bindingContext.updateTargets();
 		super.update();
 	}
-
-	private void loadInputs()
+	
+	private void updateExtractorResults()
 	{
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configPersistenceFolder.getProject(),
 				ToolchainUtils.EXTRACTOR_RES_ID);
-
-		WritableList list = new WritableList();
-		list.addAll(resourceProvider.getResources());
-
-		comboViewer.setContentProvider(new ObservableListContentProvider());
-		comboViewer.setLabelProvider(new LabelProvider()
-		{
-			@Override
-			public String getText(Object element)
-			{
-				IEditorInputResource eir = (IEditorInputResource) element;
-				return eir.getName();
-			}
-		});
-		comboViewer.setInput(list);
+		
+		this.extractorResults.clear();
+		this.extractorResults.addAll(resourceProvider.getResources());
 	}
 
-	private void initAnnotationView()
+	@Override
+	public IPropertySheetPage getPropertySheetPage()
 	{
-		this.annotationView = new AnnotationView()
-		{
-			@Override
-			public IWorkbenchPartSite getSite()
-			{
-				return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
-			}
-		};
-
-		Display.getDefault().asyncExec(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				StackLayout stackLayout = new StackLayout();
-				annotationViewComposite.setLayout(stackLayout);
-				annotationView.createPartControl(annotationViewComposite);
-
-				Control annotationTable = ((Composite)annotationViewComposite.getChildren()[0]).getChildren()[0];
-				annotationTable.setParent(annotationViewComposite);
-				
-				stackLayout.topControl = annotationTable;
-				annotationViewComposite.layout();
-			}
-
-		});
+		return treeViewComposite.getPropertySheetPage();
 	}
 
 	@Override
@@ -194,5 +152,20 @@ public class ConfigAlternativeComposite extends RunComposite
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
-
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
+		IObservableMap observeMap = BeansObservables.observeMap(listContentProvider.getKnownElements(), IEditorInputResource.class, "name");
+		comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
+		comboViewer.setContentProvider(listContentProvider);
+		//
+		comboViewer.setInput(extractorResults);
+		//
+		IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
+		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("extractorResult").observe(configPersistenceFolder);
+		bindingContext.bindValue(observeSingleSelectionComboViewer, extractorResultConfigPersistenceFolderObserveValue, null, null);
+		//
+		return bindingContext;
+	}
 }

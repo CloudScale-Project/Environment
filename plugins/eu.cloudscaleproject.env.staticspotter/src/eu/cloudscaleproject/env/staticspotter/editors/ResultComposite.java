@@ -16,7 +16,7 @@ import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 public class ResultComposite extends SidebarEditorComposite {
 	
 	private final IProject project;
-	private final String[] sections = new String[]{"Results:", "Alternatives:"};
+	private final String[] sections = new String[]{"Results:"};
 	
 	/**
 	 * Create the composite.
@@ -56,7 +56,6 @@ public class ResultComposite extends SidebarEditorComposite {
 				IFolder folder = getRootFolder().getFolder(name); 
 				ResultPersistenceFolder rif = new ResultPersistenceFolder(ResultComposite.this.project, folder);
 				rif.create();
-				rif.setProperty(ResultPersistenceFolder.KEY_IS_ALTERNATIVE, "True");
 				rif.save();
 				return folder;
 			}
@@ -72,12 +71,7 @@ public class ResultComposite extends SidebarEditorComposite {
 			
 			@Override
 			public String getSection(IEditorInputResource resource) {
-				ResultPersistenceFolder rif = (ResultPersistenceFolder) resource;
-				boolean isAlterntive = Boolean.parseBoolean(rif.getProperty(ResultPersistenceFolder.KEY_IS_ALTERNATIVE));
-				if (isAlterntive)
-					return sections[1];
-				else
-					return sections[0];
+				return sections[0];
 			}
 			
 			@Override

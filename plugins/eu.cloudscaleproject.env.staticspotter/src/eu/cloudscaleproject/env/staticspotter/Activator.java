@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.staticspotter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -11,6 +12,7 @@ import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -36,6 +38,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		final AdapterFactory factory = new CustomAdapterFactory();
 
 		ResourceRegistry.getInstance().registerFactory(
 				ToolchainUtils.SPOTTER_STA_CONF_ID,
@@ -57,8 +61,7 @@ public class Activator extends AbstractUIPlugin {
 									IResource res, String type) {
 								// TODO Auto-generated method stub
 								ConfigPersistenceFolder cif = new ConfigPersistenceFolder(
-										folder.getProject(),
-										(IFolder) res);
+										folder.getProject(), (IFolder)res, factory);
 								return cif;
 							}
 
@@ -68,7 +71,7 @@ public class Activator extends AbstractUIPlugin {
 								IFolder folder = getRootFolder()
 										.getFolder(name);
 								ConfigPersistenceFolder cif = new ConfigPersistenceFolder(
-										folder.getProject(), folder);
+										folder.getProject(), folder, factory);
 								cif.create();
 								return folder;
 							}

@@ -9,9 +9,6 @@ public class ResultPersistenceFolder extends EditorInputFolder {
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final String KEY_IS_ALTERNATIVE = "is_alternative";
-	public static final String KEY_TIMESTAMP = "timestamp";
-
 	public static final String KEY_PSA = "key_output";
 	public static final String RESULT_PSA_FILE = "result.psa";
 

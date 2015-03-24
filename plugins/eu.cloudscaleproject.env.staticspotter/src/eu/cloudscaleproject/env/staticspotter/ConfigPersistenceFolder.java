@@ -1,14 +1,23 @@
 package eu.cloudscaleproject.env.staticspotter;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.resource.Resource;
 
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ConfigPersistenceFolder extends EditorInputFolder {
+public class ConfigPersistenceFolder extends EditorInputEMF {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,13 +32,27 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 	public static final String KEY_CATALOG = "catalog";
 	public static final String KEY_ENGINES = "engines_ecore";
 
+	public static final String KEY_EXTRACTOR_RESULT = "extractor_result";
 
 	
-	public ConfigPersistenceFolder(IProject project, IFolder folder) {
-		// TODO Auto-generated constructor stub
-		super (project, folder);
+	public ConfigPersistenceFolder(IProject project, IFolder folder, AdapterFactory adapterFactory) {
+		super (project, folder, adapterFactory);
 	}
 
+	public IEditorInputResource getExtractorResult()
+	{
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().
+				getResourceProvider(getProject(),
+				ToolchainUtils.EXTRACTOR_RES_ID);
+		
+		String resourceName = getProperty(KEY_EXTRACTOR_RESULT);
+		return resourceProvider.getResource(resourceName);
+	}
+
+	public void setExtractorResult(IEditorInputResource project)
+	{
+		setProperty(KEY_EXTRACTOR_RESULT, project.getResource().getName());
+	}
 	
 	@Override
 	public void create() {
@@ -61,5 +84,34 @@ public class ConfigPersistenceFolder extends EditorInputFolder {
 		
 		save();
 	}
-
+	
+	@Override
+	protected void doLoad() {
+		
+		super.doLoad();
+		
+		try {
+			loadModels();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private final void loadModels() throws IOException {
+		
+		IResource catalog = getSubResource(ConfigPersistenceFolder.KEY_CATALOG);
+		IResource engines = getSubResource(ConfigPersistenceFolder.KEY_ENGINES);
+		
+		for (IResource res : new IResource[]{catalog, engines})
+		{
+			if (res != null)
+			{
+				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				emfRes.unload();
+				emfRes.load(null);
+			}
+			
+		}
+	}
 }
