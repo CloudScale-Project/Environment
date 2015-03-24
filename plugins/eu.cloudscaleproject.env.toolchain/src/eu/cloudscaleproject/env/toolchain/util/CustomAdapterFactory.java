@@ -120,7 +120,7 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 					repo = eobj.eResource().getURI().lastSegment();
 				}
 
-				return composeStyledString("Model " + model, name, repo);
+				return composeStyledString(model, name, repo);
 			}
 
 			return super.getStyledText(object);
