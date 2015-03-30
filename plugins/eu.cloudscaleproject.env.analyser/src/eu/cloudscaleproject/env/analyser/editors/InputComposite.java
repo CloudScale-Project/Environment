@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -9,8 +10,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.NewInputAlternativeDialog;
 import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
+import eu.cloudscaleproject.env.analyser.wizard.CreateInputAltWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -80,8 +81,12 @@ public class InputComposite extends SidebarEditorComposite{
 
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, getShell());
-		dialog.open();
+		//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, getShell());
+		//dialog.open();
+		
+		CreateInputAltWizard createInputAltWizard = new CreateInputAltWizard(project);
+		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createInputAltWizard);
+		wizardDialog.open();
 	}
 	
 	/*

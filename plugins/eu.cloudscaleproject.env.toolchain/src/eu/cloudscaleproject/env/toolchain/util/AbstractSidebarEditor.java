@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -43,6 +44,8 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class AbstractSidebarEditor implements ISidebarEditor{
+	
+	private static final Logger logger = Logger.getLogger(AbstractSidebarEditor.class.getName());
 	
 	private StackLayout stackLayout;
 	
@@ -91,13 +94,18 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 					btnSelect.setText((String)arg.getNewValue());
 					btnSelect.redraw();
 				}
-				
-				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				if(editor != null){
-					IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
-					if(dirtyAdapter != null){
-						dirtyAdapter.fireDirtyState();
+
+				try{
+					IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+					if(editor != null){
+						IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
+						if(dirtyAdapter != null){
+							dirtyAdapter.fireDirtyState();
+						}
 					}
+				}
+				catch(NullPointerException e){
+					logger.severe("Resource change listener: Can not trigger editor dirty state check. Can not find editor!");
 				}
 			}
 		};

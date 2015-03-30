@@ -166,16 +166,19 @@ public class ConfigSLOComposite extends Composite{
 			bindingContext.bindValue(observeSingleSelectionComboViewer, msMetricDescriptionObserveValue, null, null);
 		}
 		
+		Binding upperThresholdBinding = null;
+		Binding lowerThresholdBinding = null;
+		
 		//bind upper bound checkbox
 		{
-			bindCreateThresholdCheck(btnUpperBound, FeaturePath.fromList(
+			upperThresholdBinding = bindCreateThresholdCheck(btnUpperBound, FeaturePath.fromList(
 					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__UPPER_THRESHOLD), 
 					ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold());
 		}
 		
 		//bind lower bound checkbox
 		{
-			bindCreateThresholdCheck(btnLowerBound, FeaturePath.fromList(
+			lowerThresholdBinding = bindCreateThresholdCheck(btnLowerBound, FeaturePath.fromList(
 					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__LOWER_THRESHOLD), 
 					ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold());
 		}
@@ -200,15 +203,13 @@ public class ConfigSLOComposite extends Composite{
 		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
 		listViewer.setContentProvider(listContentProvider);
 		listViewer.setInput(mpObs);
-		
-		bindingContext.updateTargets();
-		
-		//bind GUI components
-		IObservableValue btnUpperCheckObs = WidgetProperties.selection().observe(btnUpperBound);
+				
+		//bind GUI components		
+		IObservableValue btnUpperCheckObs = (IObservableValue)upperThresholdBinding.getTarget();
 		IObservableValue textUpperObs = WidgetProperties.enabled().observe(textUpperBound);
 		bindingContext.bindValue(textUpperObs, btnUpperCheckObs);
 		
-		IObservableValue btnLowerCheckObs = WidgetProperties.selection().observe(btnLowerBound);
+		IObservableValue btnLowerCheckObs = (IObservableValue)lowerThresholdBinding.getTarget();
 		IObservableValue textLowerObs = WidgetProperties.enabled().observe(textLowerBound);
 		bindingContext.bindValue(textLowerObs, btnLowerCheckObs);
 		
@@ -233,9 +234,9 @@ public class ConfigSLOComposite extends Composite{
 		IObservableValue textObserve = WidgetProperties.text(SWT.FocusOut).observe(text);
 		
 		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		t2mStrategy.setConverter(Converters.getStringMeasureConverter()[0]);
+		t2mStrategy.setConverter(Converters.getStringMeasureSecondsConverter()[0]);
 		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		m2tStrategy.setConverter(Converters.getStringMeasureConverter()[1]);
+		m2tStrategy.setConverter(Converters.getStringMeasureSecondsConverter()[1]);
 		return bindingContext.bindValue(textObserve, thresholdMeasureObserve, t2mStrategy, m2tStrategy);
 	}
 	
@@ -243,9 +244,14 @@ public class ConfigSLOComposite extends Composite{
 		
 		measuringPoints.clear();
 		
+		MeasuringPoint mp = ((ServiceLevelObjective)sloWrapper.getMaster()).getMeasuringPoint();
+		if(mp != null && !measuringPoints.contains(mp)){
+			measuringPoints.add(mp);
+		}
+		
 		for(EObject obj : sloWrapper.getSlaves()){
 			if(obj instanceof ServiceLevelObjective){
-				MeasuringPoint mp = ((ServiceLevelObjective)obj).getMeasuringPoint();
+				mp = ((ServiceLevelObjective)obj).getMeasuringPoint();
 				if(mp != null && !measuringPoints.contains(mp)){
 					measuringPoints.add(mp);
 				}

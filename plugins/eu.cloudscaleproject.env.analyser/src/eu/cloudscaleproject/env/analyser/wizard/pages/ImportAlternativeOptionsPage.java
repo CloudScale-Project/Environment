@@ -8,11 +8,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-public class ImportAlternativeOptions extends WizardPage{
+public class ImportAlternativeOptionsPage extends WizardPage{
 	
 	private boolean copyIntoProject = false;
 
-	public ImportAlternativeOptions(String title) {
+	public ImportAlternativeOptionsPage(String title) {
 		super(title);
 	}
 	
@@ -26,7 +26,7 @@ public class ImportAlternativeOptions extends WizardPage{
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
 		
-		final Button btnCopyIntoProject = new Button(composite, SWT.NONE);
+		final Button btnCopyIntoProject = new Button(composite, SWT.CHECK);
 		btnCopyIntoProject.setText("Copy selected models into alternative");
 		
 		btnCopyIntoProject.addSelectionListener(new SelectionAdapter() {
@@ -36,6 +36,8 @@ public class ImportAlternativeOptions extends WizardPage{
 				super.widgetSelected(e);
 			}
 		});
+		
+		setControl(composite);
 	}
 
 }

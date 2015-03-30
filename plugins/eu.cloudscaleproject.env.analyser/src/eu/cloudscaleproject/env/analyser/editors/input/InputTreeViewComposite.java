@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.analyser.editors.input;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -8,12 +10,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.ImportInputAlternativeDialog;
-import eu.cloudscaleproject.env.analyser.dialogs.NewInputAlternativeDialog;
+import eu.cloudscaleproject.env.analyser.wizard.CreatePCMModelWizard;
+import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
@@ -22,9 +24,8 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 	private Composite buttonsComposite;
 	private EMFEditableTreeviewComposite treeviewComposite;
 	
-	public InputTreeViewComposite(InputAlternative input, Composite parent, int style) {
+	public InputTreeViewComposite(final InputAlternative input, Composite parent, int style) {
 		super(parent, style);		
-		final IProject project = input.getProject();
 		
 		setLayout(new GridLayout(2, false));
 		
@@ -40,8 +41,21 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, Display.getDefault().getActiveShell());
-				dialog.open();
+				//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, Display.getDefault().getActiveShell());
+				//dialog.open();
+				
+				PCMModelType[] types = new PCMModelType[]{
+						PCMModelType.REPOSITORY,
+						PCMModelType.SYSTEM,
+						PCMModelType.RESOURCE,
+						PCMModelType.ALLOCATION,
+						PCMModelType.USAGE
+				};
+				
+				CreatePCMModelWizard createEmptyModelWizard = new CreatePCMModelWizard(input, types);
+				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
+				wizardDialog.open();
+				
 				super.widgetSelected(e);
 			}
 		});
@@ -50,8 +64,13 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ImportInputAlternativeDialog dialog = new ImportInputAlternativeDialog(Display.getDefault().getActiveShell());
-				dialog.open();
+				//ImportInputAlternativeDialog dialog = new ImportInputAlternativeDialog(Display.getDefault().getActiveShell());
+				//dialog.open();
+				
+				ImportPCMModelWizard createEmptyModelWizard = new ImportPCMModelWizard(input);
+				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
+				wizardDialog.open();
+				
 				super.widgetSelected(e);
 			}
 		});
@@ -60,8 +79,13 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//TODO: delete selected resource
-				super.widgetSelected(e);
+				IFile file = treeviewComposite.getSelectedModelFile();
+				input.removeSubResourceModel(file);
+				try {
+					file.delete(true, null);
+				} catch (CoreException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

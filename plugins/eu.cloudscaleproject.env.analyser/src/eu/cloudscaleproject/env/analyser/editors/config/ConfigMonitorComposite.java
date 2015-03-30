@@ -213,12 +213,15 @@ public class ConfigMonitorComposite extends Composite{
 		
 		measuringPoints.clear();
 		
+		MeasuringPoint mp = ((Monitor)monitorWrapper.getMaster()).getMeasuringPoint();
+		if(mp != null && !measuringPoints.contains(mp)){
+			measuringPoints.add(mp);
+		}
+		
 		for(EObject obj : monitorWrapper.getSlaves()){
-			if(obj instanceof Monitor){
-				MeasuringPoint mp = ((Monitor)obj).getMeasuringPoint();
-				if(mp != null && !measuringPoints.contains(mp)){
-					measuringPoints.add(mp);
-				}
+			mp = ((Monitor)obj).getMeasuringPoint();
+			if(mp != null && !measuringPoints.contains(mp)){
+				measuringPoints.add(mp);
 			}
 		}
 	}

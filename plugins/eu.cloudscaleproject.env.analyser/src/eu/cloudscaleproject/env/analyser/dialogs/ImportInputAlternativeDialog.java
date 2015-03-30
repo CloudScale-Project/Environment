@@ -6,6 +6,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -46,7 +47,7 @@ public class ImportInputAlternativeDialog extends Dialog{
 	private boolean copyIntoProject;
 	private Resource[] selectedResources;
 	
-	PCMResourceSet resSet = new PCMResourceSet();
+	ResourceSet resSet = new ResourceSetImpl();
 	CheckboxTableViewer tableView;
 	Button btnCheckCopy;
 	

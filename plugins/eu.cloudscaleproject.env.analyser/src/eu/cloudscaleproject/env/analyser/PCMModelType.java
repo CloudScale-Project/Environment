@@ -4,18 +4,18 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public enum PCMModelType{
 	
-	 REPOSITORY("repository", ToolchainUtils.KEY_FILE_REPOSITORY), 
-	 SYSTEM("system", ToolchainUtils.KEY_FILE_SYSTEM),
-	 RESOURCE("resourceenvironment", ToolchainUtils.KEY_FILE_RESOURCEENV),
-	 ALLOCATION("allocation", ToolchainUtils.KEY_FILE_ALLOCATION),
-	 USAGE("usagemodel", ToolchainUtils.KEY_FILE_USAGE),
+	 REPOSITORY(ToolchainUtils.KEY_FILE_REPOSITORY, "repository"), 
+	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
+	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "resourceenvironment"),
+	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "allocation"),
+	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "usagemodel"),
 	 
-	 USAGE_EVOLUTION("usageevolution", ToolchainUtils.KEY_FILE_USAGEEVOLUTION),
-	 PMS("pms", ToolchainUtils.KEY_FILE_MONITOR),
-	 VARIATIONS("variations", ToolchainUtils.KEY_FILE_VARIATIONS),
-	 MEASURING_POINT("pcmmeasuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS),
-	 SLO("slo", ToolchainUtils.KEY_FILE_SLO),
-	 EXPERIMENTS("experiments", ToolchainUtils.KEY_FILE_EXPERIMENTS);
+	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "usageevolution"),
+	 PMS(ToolchainUtils.KEY_FILE_MONITOR, "monitor"),
+	 VARIATIONS(ToolchainUtils.KEY_FILE_VARIATIONS, "variations"),
+	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "pcmmeasuringpoint"),
+	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
+	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments");
 	 
 	 private final String extension;
 	 private final String name;

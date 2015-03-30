@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.measure.Measure;
+import javax.measure.unit.Unit;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -18,6 +21,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
@@ -30,7 +35,7 @@ import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
-import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsDoubleValueProvider;
+import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsLongValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.Variation;
 import org.palladiosimulator.experimentautomation.variation.VariationRepository;
@@ -216,6 +221,24 @@ public class ConfAlternative extends EditorInputEMF{
 			
 		}
 		
+		//set usage measuring point
+		{			
+			IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
+			if(file != null && file.exists()){
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
+				if(!res.getContents().isEmpty()){
+					UsageModel usageModel = (UsageModel)res.getContents().get(0);
+					List<UsageScenario> usageScenarios = usageModel.getUsageScenario_UsageModel();
+					if(usageScenarios != null && !usageScenarios.isEmpty()){
+						UsageScenario us = usageScenarios.get(0);
+						for(MeasuringPoint mp : getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT)){
+							((UsageScenarioMeasuringPoint)mp).setUsageScenario(us);
+						}
+					}
+				}
+			}
+		}
+		
 		//load and set default resources from plugin
 		ResourceSet tmpResSet = new ResourceSetImpl();
 		URI uMiddleware = PathmapManager.denormalizeURI(URI.createURI("pathmap://PCM_MODELS/Glassfish.repository"));
@@ -325,6 +348,14 @@ public class ConfAlternative extends EditorInputEMF{
 				if(clazz.equals(root.eClass())){
 					mps.add((MeasuringPoint)root);
 				}
+				else if(root instanceof MeasuringPointRepository){
+					MeasuringPointRepository mpr = (MeasuringPointRepository)root;
+					for(MeasuringPoint mp : mpr.getMeasuringPoints()){
+						if(clazz.equals(mp.eClass())){
+							mps.add((MeasuringPoint)mp);
+						}
+					}
+				}
 			}
 		}
 		return mps;
@@ -342,6 +373,11 @@ public class ConfAlternative extends EditorInputEMF{
 				}
 			}
 		}
+		
+		for(MeasuringPointRepository mpr : getMeasuringPointRepositories()){
+			mps.addAll(mpr.getMeasuringPoints());
+		}
+		
 		return mps;
 	}
 	
@@ -436,6 +472,24 @@ public class ConfAlternative extends EditorInputEMF{
 		for(StopCondition stopCon : getExperiment().getStopConditions()){
 			if(stopCon.getClass().equals(clazz)){
 				out.add(stopCon);
+			}
+		}
+		
+		return out;
+	}
+	
+	public List<MeasuringPointRepository> getMeasuringPointRepositories(){
+		List<MeasuringPointRepository> out = new ArrayList<MeasuringPointRepository>();
+		
+		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS)){
+			if(file instanceof IFile && file.exists()){
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
+				for(EObject eobj : res.getContents()){
+					if(eobj instanceof MeasuringPointRepository){
+						MeasuringPointRepository rep = (MeasuringPointRepository)eobj;
+						out.add(rep);
+					}
+				}
 			}
 		}
 		
@@ -625,8 +679,19 @@ public class ConfAlternative extends EditorInputEMF{
 			}
 		}
 		
+		UsageScenarioMeasuringPoint usageMeasurePoint = null;
 		//create measuring point repository
-		//TODO: feature is not supported jet by the analyser
+		{
+			List<MeasuringPointRepository> measureReps = getMeasuringPointRepositories();
+			MeasuringPointRepository measureRep = null;
+			if(measureReps.isEmpty()){
+				measureRep = MeasuringpointFactory.eINSTANCE.createMeasuringPointRepository();
+				createEMFResource("analyser.measuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS, measureRep);
+				usageMeasurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
+				measureRep.getMeasuringPoints().add(usageMeasurePoint);
+			}
+			
+		}
 	
 		//create monitor
 		{
@@ -636,6 +701,7 @@ public class ConfAlternative extends EditorInputEMF{
 				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
 				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				monitor.setMeasuringPoint(usageMeasurePoint);
 				monitorRep.getMonitors().add(monitor);
 				initialModel.setMonitorRepository(monitorRep);
 			}
@@ -650,7 +716,14 @@ public class ConfAlternative extends EditorInputEMF{
 				createEMFResource("analyser.slo", ToolchainUtils.KEY_FILE_SLO, sloRep);
 				
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
-				slo.setMetricDescription(MetricDescriptionConstants.RESPONSE_TIME_METRIC);
+				
+				for(MetricDescription md : getMetricDescriptions()){
+					if(md.getId().equals(MetricDescriptionConstants.RESPONSE_TIME_METRIC.getId())){
+						slo.setMetricDescription(md);
+					}
+				}
+				
+				slo.setMeasuringPoint(usageMeasurePoint);
 				sloRep.getServicelevelobjectives().add(slo);
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
@@ -665,16 +738,17 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		exp.setName("Capacity measurement");
 		
-		//create measuring point
-		UsageScenarioMeasuringPoint measurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
-		createEMFResource("analyser.measuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS, measurePoint);
-		
 		//create variation
 		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
 		exp.getVariations().clear();
-		NestedIntervalsDoubleValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsDoubleValueProvider();
-		dvp.setMinValue(0);
-		dvp.setMaxValue(400);
+		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
+		dvp.setMinValue(1);
+		dvp.setMaxValue(100);
+		
+		var.setMinValue(1);
+		var.setMaxValue(100);
+		var.setMaxVariations(10);
+		
 		var.setValueProvider(dvp);
 		//TODO: set type var.setType();
 		exp.getVariations().clear();
@@ -790,6 +864,7 @@ public class ConfAlternative extends EditorInputEMF{
 				}
 				
 				HardThreshold ut = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
+				ut.setThresholdLimit(Measure.valueOf(500.0, Unit.valueOf("s")));
 				//TODO: set limit to 'HardThreshold'
 				slo.setUpperThreshold(ut);
 			}

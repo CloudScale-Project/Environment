@@ -10,9 +10,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -44,10 +42,6 @@ public class PCMResourceSet extends ResourceSetImpl{
 	
 	private final IFolder rootFolder;
 	private final IFolder rootFolderModels;
-	
-	public PCMResourceSet(){
-		this(ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path("temp")));
-	}
 	
 	public PCMResourceSet(IFolder rootFolder) {
 		
@@ -188,7 +182,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		if(getDiagramFile(model) != null){
 			Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 			resD.getContents().clear();
-			resD.getContents().add(createDiagramRootObject(model));
+			resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
 		}
 	}
 	
@@ -241,7 +235,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		res.getContents().add(object);
 		//recreate diagram for the new root object
-		resD.getContents().add(createDiagramRootObject(model));
+		resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
 	}
 	
 	public void save(PCMModelType model){
@@ -318,7 +312,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 	
-	private EObject createModelRootObject(PCMModelType id){
+	public static EObject createModelRootObject(PCMModelType id){
 		EObject model = null;
 		
 		switch(id){
@@ -346,12 +340,12 @@ public class PCMResourceSet extends ResourceSetImpl{
 		return model;
 	}
 	
-	private Diagram createDiagramRootObject(PCMModelType id){
+	public static Diagram createDiagramRootObject(EObject model){
 		Diagram diagram = null;
 		
-		EObject model = getModelRootObject(id);
-		if(model == null){
-			String msg = "createDiagramRootObject(): Model object is null! Can not create diagram from null.";
+		PCMModelType id = getTypeFromResource(model.eResource());
+		if(id == null){
+			String msg = "createDiagramRootObject(): Model type can not be determined!";
 			logger.severe(msg);
 			throw new NullPointerException(msg);
 		}
@@ -398,57 +392,4 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		return diagram;
 	}
-	
-	/*
-	@Override
-	public Resource createResource(URI uri, String contentType) {		
-	
-		Resource res =  super.createResource(uri, contentType);
-
-		//TODO: Don't do this if file already set
-		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
-		ModelType mt = getModelType(file);
-		
-		if(mt == null){
-			throw new IllegalArgumentException("createResource(): Specified URI is invalid for this ResourceSet! URI: " + uri.toString());
-		}
-		
-		if(isModelDiagram(file)){
-			if(getDiagramFile(mt) == null){
-				setDiagramFile(mt, file);
-			}
-		}
-		else{
-			if(getModelFile(mt) == null){
-				setModelFile(mt, file);
-			}
-		}
-		
-		return res;
-	}
-	
-	public static ModelType getModelType(IFile file){
-		String ext = file.getFileExtension();
-		for(ModelType mt : ModelType.values()){
-			if(ext.startsWith(mt.getFileExtension())){
-				return mt;
-			}
-		}
-		
-		return null;
-	}
-	
-	public static boolean isModelDiagram(IFile file){
-		ModelType mt = getModelType(file);
-		if(mt == null){
-			throw new IllegalArgumentException("isModelDiagram(): Specified file is invalid for this ResourceSet! URI: " 
-						+ file.getRawLocationURI().toString());
-		}
-		
-		if(file.getFileExtension().endsWith("diagram")){
-			return true;
-		}
-		return false;
-	}
-	*/
 }

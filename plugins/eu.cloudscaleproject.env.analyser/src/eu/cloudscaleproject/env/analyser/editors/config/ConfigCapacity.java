@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsPackage;
-import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsDoubleValueProvider;
+import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsLongValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -70,7 +70,7 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		super.load();
 		
 		List<ValueProvider> nestedIntValProviders 
-			= alternative.getVariationValueProviders(ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER);
+			= alternative.getVariationValueProviders(ExperimentsPackage.Literals.NESTED_INTERVALS_LONG_VALUE_PROVIDER);
 		
 		if(nestedIntValProviders.isEmpty()){
 			textMaxValue.setEnabled(false);
@@ -78,7 +78,7 @@ public class ConfigCapacity extends ConfigBasicComposite{
 			return;
 		}
 		
-		NestedIntervalsDoubleValueProvider valueProvider = (NestedIntervalsDoubleValueProvider)nestedIntValProviders.get(0);
+		NestedIntervalsLongValueProvider valueProvider = (NestedIntervalsLongValueProvider)nestedIntValProviders.get(0);
 		
 		//data binding
 		if(bindingContext != null){
@@ -93,9 +93,9 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		m2tStrategy.setConverter(NumberToStringConverter.fromDouble(true));
 		
 		IObservableValue minValObs = EMFEditProperties.value(alternative.getEditingDomain(),
-				ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER__MIN_VALUE).observe(valueProvider);
+				ExperimentsPackage.Literals.NESTED_INTERVALS_LONG_VALUE_PROVIDER__MIN_VALUE).observe(valueProvider);
 		IObservableValue maxValObs = EMFEditProperties.value(alternative.getEditingDomain(),
-				ExperimentsPackage.Literals.NESTED_INTERVALS_DOUBLE_VALUE_PROVIDER__MAX_VALUE).observe(valueProvider);
+				ExperimentsPackage.Literals.NESTED_INTERVALS_LONG_VALUE_PROVIDER__MAX_VALUE).observe(valueProvider);
 		
 		Binding minValBind = bindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(textMinValue),
 		        minValObs, t2mStrategy, m2tStrategy);

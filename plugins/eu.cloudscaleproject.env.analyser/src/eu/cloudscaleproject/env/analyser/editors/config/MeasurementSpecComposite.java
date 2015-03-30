@@ -45,12 +45,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.palladiosimulator.metricspec.MetricDescription;
+import org.palladiosimulator.simulizar.monitorrepository.DelayedIntervall;
+import org.palladiosimulator.simulizar.monitorrepository.Intervall;
 import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
 import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
 import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage.Literals;
 import org.palladiosimulator.simulizar.monitorrepository.StatisticalCharacterizationEnum;
 import org.palladiosimulator.simulizar.monitorrepository.TemporalCharacterization;
+import org.palladiosimulator.simulizar.monitorrepository.TimeFrame;
 
 public class MeasurementSpecComposite extends Composite{
 	
@@ -218,22 +221,42 @@ public class MeasurementSpecComposite extends Composite{
 		
 		//bind radio buttons
 		{
+			TemporalCharacterization interval = null;
+			if(ms != null){
+				interval = ms.getTemporalRestriction();
+			}
+			
 			SelectObservableValue intervalObservable = new SelectObservableValue(TemporalCharacterization.class);
 			
 			IObservableValue btnIntervalObserveSelection = SWTObservables  
-		            .observeSelection(btnInterval);  
-			intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createIntervall(), btnIntervalObserveSelection);
+		            .observeSelection(btnInterval);
+			
+			if(interval instanceof Intervall){
+				intervalObservable.addOption(interval, btnIntervalObserveSelection);
+			}
+			else{
+				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createIntervall(), btnIntervalObserveSelection);
+			}
 			
 			IObservableValue btnDIntervalObserveSelection = SWTObservables  
 		            .observeSelection(btnDInterval);  
-			intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createDelayedIntervall(), btnDIntervalObserveSelection);
+			
+			if(interval instanceof DelayedIntervall){
+				intervalObservable.addOption(interval, btnDIntervalObserveSelection);
+			}
+			else{
+				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createDelayedIntervall(), btnDIntervalObserveSelection);
+			}
 			
 			IObservableValue btnTimeFrameObserveSelection = SWTObservables  
-		            .observeSelection(btnTimeFrame);  
-			intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createTimeFrame(), btnTimeFrameObserveSelection);
+		            .observeSelection(btnTimeFrame);
 			
-			bindingContext.bindValue(intervalObservable, 
-					EMFEditProperties.value(ed, MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION).observe(ms));
+			if(interval instanceof TimeFrame){
+				intervalObservable.addOption(interval, btnTimeFrameObserveSelection);
+			}
+			else{
+				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createTimeFrame(), btnTimeFrameObserveSelection);
+			}
 			
 			intervalObservable.addChangeListener(new IChangeListener() {
 				
@@ -285,6 +308,9 @@ public class MeasurementSpecComposite extends Composite{
 					MeasurementSpecComposite.this.valuesComposite.redraw();
 				}
 			});
+			
+			bindingContext.bindValue(intervalObservable, 
+					EMFEditProperties.value(ed, MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION).observe(ms));
 		}
 		
 		//bind textbox
@@ -318,6 +344,8 @@ public class MeasurementSpecComposite extends Composite{
 			dInterBinding = bindingContext.bindValue(textSecondObservable, dIntervalDelayProp.observe(ms), t2mStrategy, m2tStrategy);
 			timeStartBinding = bindingContext.bindValue(textFirstObservable, timeFrameStartProp.observe(ms), t2mStrategy, m2tStrategy);
 			timeStopBinding = bindingContext.bindValue(textSecondObservable, timeFrameStopProp.observe(ms), t2mStrategy, m2tStrategy);
+			
+			bindingContext.updateTargets();
 		}
 	}
 

@@ -4,24 +4,27 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptions;
+import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportModelSelectionPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class ImportInputModelWizard extends Wizard{
+public class ImportPCMModelWizard extends Wizard{
 	
-	private EditorInputEMF input = null;
+	private EditorInputEMF alternative = null;
 	
 	private ImportModelSelectionPage modelSelectionPage;
-	private ImportAlternativeOptions importOptionsPage;
+	private ImportAlternativeOptionsPage importOptionsPage;
 
-	public ImportInputModelWizard(EditorInputEMF input){
-		this.input = input;
+	public ImportPCMModelWizard(EditorInputEMF alternative){
+		this.alternative = alternative;
 		
 		modelSelectionPage = new ImportModelSelectionPage("Select model to import");
-		importOptionsPage = new ImportAlternativeOptions("Import options");
-		
+		importOptionsPage = new ImportAlternativeOptionsPage("Import options");
+	}
+	
+	@Override
+	public void addPages() {
 		addPage(modelSelectionPage);
 		addPage(importOptionsPage);
 	}
@@ -33,19 +36,15 @@ public class ImportInputModelWizard extends Wizard{
 
 		if (importOptionsPage.getCopyIntoProjectParam())
 		{
-			ExplorerProjectPaths.copyEMFResources(input.getResource(), selectedResources);
+			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
 		}
 
 		for (Resource resource : selectedResources)
 		{
 			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			input.addSubResourceModel(f);
+			alternative.addSubResourceModel(f);
 		}
-
-		input.save();
-		input.load();
 		
 		return true;
 	}
-
 }

@@ -30,6 +30,7 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -55,10 +56,19 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	private final PropertyChangeListener editorInputListener = new PropertyChangeListener() {
 		
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(!treeViewer.getTree().isDisposed()){
-				treeViewer.refresh();
-			}
+		public void propertyChange(final PropertyChangeEvent evt) {
+			
+			Display.getDefault().asyncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					if(EditorInputEMF.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())
+							|| EditorInputEMF.PROP_LOADED.equals(evt.getPropertyName()))
+					if(!treeViewer.getTree().isDisposed()){
+						treeViewer.refresh();
+					}
+				}
+			});
 		}
 	};
 
@@ -131,7 +141,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		this.treeViewer.setInput(alternative.getResourceSet());
 		this.treeViewer.refresh();
 		
-		alternative.addPropertyChangeListener(EditorInputEMF.PROP_LOADED, editorInputListener);
+		alternative.addPropertyChangeListener(editorInputListener);
 		addDisposeListener(new DisposeListener() {
 			
 			@Override
@@ -177,7 +187,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		return mm;
 	}
 	
-	private IFile getSelectedModelFile()
+	public IFile getSelectedModelFile()
 	{
 		ISelection s = treeViewer.getSelection();
 		Object element = ((StructuredSelection) s).getFirstElement();
@@ -200,7 +210,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		return null;
 	}
 
-	private IFile getSelectedDiagramFile ()
+	public IFile getSelectedDiagramFile ()
 	{
 		IFile modelFile = getSelectedModelFile();
 

@@ -60,19 +60,24 @@ public class InputValidator extends ToolValidator {
 		List<IResource> usaFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGE);
 
 		for(IResource file : repFiles){
-			rep &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_repository");
+			rep = validateModel(project, ia != null ? (IFile)file : null, "analyser_input_repository");
+			if(rep == false){break;}
 		}
 		for(IResource file : sysFiles){
-			sys &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_system");
+			sys = validateModel(project, ia != null ? (IFile)file : null, "analyser_input_system");
+			if(sys == false){break;}
 		}
 		for(IResource file : allFiles){
-			all &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_allocation");
+			all = validateModel(project, ia != null ? (IFile)file : null, "analyser_input_allocation");
+			if(all == false){break;}
 		}
 		for(IResource file : resFiles){
-			res &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_resource");
+			res = validateModel(project, ia != null ? (IFile)file : null, "analyser_input_resource");
+			if(res == false){break;}
 		}
 		for(IResource file : usaFiles){
-			usa &= validateModel(project, ia != null ? (IFile)file : null, "analyser_input_usage");
+			usa = validateModel(project, ia != null ? (IFile)file : null, "analyser_input_usage");
+			if(usa == false){break;}
 		}
 
 		return rep && sys && all && res && usa;

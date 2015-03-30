@@ -25,13 +25,13 @@ public class NameSelectionPage extends WizardPage{
 	@Override
 	public void createControl(Composite parent) {
 		
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout(2, false));
 		
-		Label lblName = new Label(composite, SWT.NONE);
+		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Alternative name:");
 		
-		final Text text = new Text(composite, SWT.NONE);
+		final Text text = new Text(container, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		text.addModifyListener(new ModifyListener() {
@@ -41,6 +41,8 @@ public class NameSelectionPage extends WizardPage{
 				name = text.getText();
 			}
 		});
+		
+		setControl(container);
 	}
 
 }

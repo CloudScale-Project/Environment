@@ -62,7 +62,7 @@ public class Converters {
 		return converter;
 	}
 	
-	public static IConverter[] getStringMeasureConverter(){
+	public static IConverter[] getStringMeasureSecondsConverter(){
 		IConverter[] converter = new IConverter[2];
 		
 		//t2m
@@ -85,6 +85,8 @@ public class Converters {
 					return null;
 				}
 				
+				//double value = Double.parseDouble(str);
+				//return Measure.valueOf(value, Unit.valueOf("s"));
 				try {
 					return MeasureFormat.getInstance().parseObject(str);
 				} catch (ParseException e) {

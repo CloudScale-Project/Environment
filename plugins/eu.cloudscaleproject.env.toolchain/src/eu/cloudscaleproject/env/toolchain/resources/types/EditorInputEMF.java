@@ -53,6 +53,11 @@ public class EditorInputEMF extends EditorInputFolder{
 		throw new UnsupportedOperationException();
 	}
 	
+	public void removeSubResourceModel(IResource res) {
+		//TODO: make abstract
+		throw new UnsupportedOperationException();
+	}
+	
 	public ResourceSet getResourceSet(){
 		return editingDomain.getResourceSet();
 	}

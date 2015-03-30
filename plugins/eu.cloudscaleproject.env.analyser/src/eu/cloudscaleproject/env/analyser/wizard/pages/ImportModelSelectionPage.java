@@ -6,13 +6,16 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -39,11 +42,10 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
 public class ImportModelSelectionPage extends WizardPage{
 		
-	private Resource[] selectedResources;
+	private Resource[] selectedResources = new Resource[0];
 	
-	PCMResourceSet resSet = new PCMResourceSet();
+	ResourceSet resSet = new ResourceSetImpl();
 	CheckboxTableViewer tableView;
-	Button btnCheckCopy;
 
 	public ImportModelSelectionPage(String title) {
 		super(title);
@@ -67,6 +69,7 @@ public class ImportModelSelectionPage extends WizardPage{
 				findAndLoadResources(folder, resSet);				
 				tableView.refresh(true);				
 				tableView.setCheckedElements(resSet.getResources().toArray());
+				selectedResources = (Resource[])resSet.getResources().toArray();
 			}
 			
 		});
@@ -89,13 +92,24 @@ public class ImportModelSelectionPage extends WizardPage{
 		tableView.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
 		tableView.setInput(resSet);
 		
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
+		tableView.addCheckStateListener(new ICheckStateListener() {
+			
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				Object[] selection = tableView.getCheckedElements();
+				selectedResources = new Resource[selection.length];
+				
+				for(int i=0; i<selection.length; i++){
+					Object o = selection[i];
+					if(o instanceof Resource){
+						Resource res = (Resource)o;
+						selectedResources[i] = res;
+					}
+				}
+			}
+		});
 		
-		btnCheckCopy = new Button(container, SWT.CHECK);
-		btnCheckCopy.setText("Copy in project");
-		btnCheckCopy.setSelection(false);
-		
+		setControl(container);
 	}
 
 	private void findAndLoadResources(IContainer folder, ResourceSet resSet){
