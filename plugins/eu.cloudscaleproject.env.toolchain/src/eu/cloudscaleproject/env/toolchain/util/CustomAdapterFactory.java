@@ -15,7 +15,9 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemStyledLabelProvider;
+import org.eclipse.emf.edit.provider.ITableItemLabelProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.StyledString;
@@ -24,6 +26,8 @@ import org.eclipse.emf.edit.provider.resource.ResourceSetItemProvider;
 
 public class CustomAdapterFactory extends ComposedAdapterFactory
 {
+	private static final ComposedAdapterFactory HELPER_ADAPTER_FACTORY 
+	= new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 	public CustomAdapterFactory()
 	{
@@ -39,11 +43,14 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 	private class CustomReflectiveAdapterFactory extends ReflectiveItemProviderAdapterFactory
 	{
 
-		private CustomReflectiveItemProvider adapter = new CustomReflectiveItemProvider(this);
+		private final CustomReflectiveItemProvider adapter;
 
 		public CustomReflectiveAdapterFactory()
 		{
 			supportedTypes.add(IItemStyledLabelProvider.class);
+			supportedTypes.add(ITableItemLabelProvider.class);
+			adapter = new CustomReflectiveItemProvider(this);
+			//supportedTypes.remove(ITableItemLabelProvider.class);
 		}
 
 		@Override
@@ -94,13 +101,44 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 			return children;
 		}
 	}
+	
+	
 
-	private class CustomReflectiveItemProvider extends ReflectiveItemProvider implements IItemStyledLabelProvider
+	private class CustomReflectiveItemProvider extends ReflectiveItemProvider implements IItemStyledLabelProvider, ITableItemLabelProvider
 	{
-
 		public CustomReflectiveItemProvider(AdapterFactory factory)
 		{
 			super(factory);
+		}
+		
+		@Override
+		protected Object overlayImage(Object object, Object image)
+		{
+			// TODO Auto-generated method stub
+			return super.overlayImage(object, image);
+		}
+
+		@Override
+		public String getColumnText(Object object, int columnIndex)
+		{
+			if (object instanceof EObject)
+			{
+				EObject eobj = (EObject) object;
+				String model = eobj.eClass().getName();
+
+				String name = getName(eobj);
+				
+				return model + " - " + name;
+			}
+
+			return super.getColumnText(object, columnIndex);
+		}
+
+		@Override
+		public Object getColumnImage(Object object, int columnIndex)
+		{
+			IItemLabelProvider itemLabelProvider = (IItemLabelProvider)HELPER_ADAPTER_FACTORY.adapt(object, IItemLabelProvider.class);
+			return itemLabelProvider.getImage(object);
 		}
 
 		@Override
@@ -114,7 +152,7 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 				String name = getName(eobj);
 				String repo = null;
 
-				if (eobj.eContainer() == null)
+				if (eobj.eContainer() == null && eobj.eResource().getURI() != null)
 				{
 					model += "Model " + model;
 					repo = eobj.eResource().getURI().lastSegment();
@@ -144,7 +182,8 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 		@Override
 		protected EStructuralFeature getLabelFeature(EClass eClass)
 		{
-			// Try to find attribute with name containing 'name' ignoring case (ie. PCM entities - entityName)
+			// Try to find attribute with name containing 'name' ignoring case
+			// (ie. PCM entities - entityName)
 			for (EAttribute eAttribute : eClass.getEAllAttributes())
 			{
 				if (!eAttribute.isMany() && eAttribute.getEType().getInstanceClass() != FeatureMap.Entry.class)
