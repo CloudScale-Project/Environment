@@ -27,6 +27,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class ResourceUtils {
 	
@@ -121,7 +122,7 @@ public class ResourceUtils {
 		//register resource provider factories		
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_INPUT_ID, new IResourceProviderFactory(){
 
-			InputAltAdapterFactory adapterFactory = new InputAltAdapterFactory();
+			CustomAdapterFactory adapterFactory = new CustomAdapterFactory();
 			
 			@Override
 			public ResourceProvider create(IFolder folder) {

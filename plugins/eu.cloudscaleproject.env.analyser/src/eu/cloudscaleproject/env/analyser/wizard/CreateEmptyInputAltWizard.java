@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.analyser.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.analyser.InputAltAdapterFactory;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
@@ -11,6 +10,7 @@ import eu.cloudscaleproject.env.analyser.wizard.pages.NameSelectionPage;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class CreateEmptyInputAltWizard extends Wizard{
 	
@@ -31,7 +31,7 @@ public class CreateEmptyInputAltWizard extends Wizard{
 				
 		nameSelectionPage = new NameSelectionPage("New input alternative");
 		modelSelectionPage = new ModelSelectionPage("Select PCM models to start with",
-				new InputAltAdapterFactory(), types);
+				new CustomAdapterFactory(), types);
 	}
 	
 	@Override
