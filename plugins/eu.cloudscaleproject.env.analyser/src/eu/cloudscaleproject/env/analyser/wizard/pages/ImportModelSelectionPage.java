@@ -7,10 +7,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -26,19 +23,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
-import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
-import org.palladiosimulator.simulizar.monitorrepository.provider.MonitorrepositoryItemProviderAdapterFactory;
 
-import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
-import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
-import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class ImportModelSelectionPage extends WizardPage{
 		
@@ -74,22 +65,13 @@ public class ImportModelSelectionPage extends WizardPage{
 			
 		});
 		
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
-		adapterFactory.addAdapterFactory(new SystemAdapterFactory());
-		adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
-		adapterFactory.addAdapterFactory(new SeffAdapterFactory());
-		adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ExperimentDataAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+		final ComposedAdapterFactory adapterFactory = new CustomAdapterFactory();
 		
 		tableView = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
 		tableView.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3 , 1));
 		tableView.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-		tableView.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		tableView.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
+				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, this.tableView)));
 		tableView.setInput(resSet);
 		
 		tableView.addCheckStateListener(new ICheckStateListener() {

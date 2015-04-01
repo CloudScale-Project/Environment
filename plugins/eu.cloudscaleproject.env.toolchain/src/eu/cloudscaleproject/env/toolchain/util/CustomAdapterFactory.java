@@ -26,8 +26,8 @@ import org.eclipse.emf.edit.provider.resource.ResourceSetItemProvider;
 
 public class CustomAdapterFactory extends ComposedAdapterFactory
 {
-	private static final ComposedAdapterFactory HELPER_ADAPTER_FACTORY 
-	= new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+	private static final ComposedAdapterFactory HELPER_ADAPTER_FACTORY = new ComposedAdapterFactory(
+			ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 	public CustomAdapterFactory()
 	{
@@ -50,7 +50,6 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 			supportedTypes.add(IItemStyledLabelProvider.class);
 			supportedTypes.add(ITableItemLabelProvider.class);
 			adapter = new CustomReflectiveItemProvider(this);
-			//supportedTypes.remove(ITableItemLabelProvider.class);
 		}
 
 		@Override
@@ -101,21 +100,12 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 			return children;
 		}
 	}
-	
-	
 
 	private class CustomReflectiveItemProvider extends ReflectiveItemProvider implements IItemStyledLabelProvider, ITableItemLabelProvider
 	{
 		public CustomReflectiveItemProvider(AdapterFactory factory)
 		{
 			super(factory);
-		}
-		
-		@Override
-		protected Object overlayImage(Object object, Object image)
-		{
-			// TODO Auto-generated method stub
-			return super.overlayImage(object, image);
 		}
 
 		@Override
@@ -124,11 +114,12 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 			if (object instanceof EObject)
 			{
 				EObject eobj = (EObject) object;
-				String model = eobj.eClass().getName();
 
+				String model = eobj.eClass().getName();
 				String name = getName(eobj);
-				
-				return model + " - " + name;
+				String resource = getResource(eobj);
+
+				return composeString(model, name, resource, eobj.eContainer() == null);
 			}
 
 			return super.getColumnText(object, columnIndex);
@@ -137,7 +128,7 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 		@Override
 		public Object getColumnImage(Object object, int columnIndex)
 		{
-			IItemLabelProvider itemLabelProvider = (IItemLabelProvider)HELPER_ADAPTER_FACTORY.adapt(object, IItemLabelProvider.class);
+			IItemLabelProvider itemLabelProvider = (IItemLabelProvider) HELPER_ADAPTER_FACTORY.adapt(object, IItemLabelProvider.class);
 			return itemLabelProvider.getImage(object);
 		}
 
@@ -150,15 +141,9 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 
 				String model = eobj.eClass().getName();
 				String name = getName(eobj);
-				String repo = null;
+				String resource = getResource(eobj);
 
-				if (eobj.eContainer() == null && eobj.eResource().getURI() != null)
-				{
-					model += "Model " + model;
-					repo = eobj.eResource().getURI().lastSegment();
-				}
-
-				return composeStyledString(model, name, repo);
+				return composeStyledString(model, name, resource, eobj.eContainer() == null);
 			}
 
 			return super.getStyledText(object);
@@ -174,6 +159,16 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 
 				if (name != null)
 					return name.toString();
+			}
+
+			return null;
+		}
+
+		private String getResource(EObject eobj)
+		{
+			if (eobj.eContainer() == null && eobj.eResource() != null && eobj.eResource().getURI() != null)
+			{
+				return eobj.eResource().getURI().lastSegment();
 			}
 
 			return null;
@@ -196,17 +191,40 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 		}
 	}
 
-	private static StyledString composeStyledString(String type, String name, String resourceName)
+	private static String composeString(String type, String name, String resourceName, boolean isContainer)
+	{
+		String composition = "";
+
+		if (type != null)
+		{
+			if (isContainer)
+				composition += "Model ";
+			composition += type;
+		}
+
+		if (name != null)
+			composition += String.format(" <%s>", name);
+
+		if (resourceName != null && isContainer)
+			composition += " [ Resource: " + resourceName + " ]";
+
+		return composition;
+	}
+
+	private static StyledString composeStyledString(String type, String name, String resourceName, boolean isContainer)
 	{
 		StyledString out = new StyledString();
 
 		if (type != null)
-			out.append(String.format("%s ", type));
+			if (isContainer)
+				out.append(String.format("Model %s ", type));
+			else
+				out.append(String.format("%s ", type));
 
 		if (name != null)
 			out.append("  " + name + "  ", StyledString.Style.COUNTER_STYLER);
 
-		if (resourceName != null)
+		if (resourceName != null && isContainer)
 			out.append(" [ Resource: " + resourceName + " ]", StyledString.Style.QUALIFIER_STYLER);
 
 		return out;

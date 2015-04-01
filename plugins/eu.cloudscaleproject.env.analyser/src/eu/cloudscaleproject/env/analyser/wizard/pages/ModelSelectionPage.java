@@ -54,7 +54,9 @@ public class ModelSelectionPage extends WizardPage{
 		final CheckboxTableViewer tableView = 
 				CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
 		tableView.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-		tableView.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		tableView.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
+				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, tableView)));
+
 		tableView.setInput(resource);
 		
 		tableView.addCheckStateListener(new ICheckStateListener() {
