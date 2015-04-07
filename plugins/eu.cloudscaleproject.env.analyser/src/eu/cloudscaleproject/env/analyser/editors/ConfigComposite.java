@@ -13,7 +13,6 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +32,7 @@ import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposi
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -115,6 +115,9 @@ public class ConfigComposite extends SidebarEditorComposite{
 			GridData tabFolder_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			tabFolder.setLayoutData(tabFolder_gd);
 			
+			//Why was that needed?
+			//TODO: find out if the functionality is broken
+			/*
 			tabFolder.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -127,6 +130,7 @@ public class ConfigComposite extends SidebarEditorComposite{
 					}
 				}
 			});
+			*/
 
 			//basic settings
 			{
@@ -182,14 +186,9 @@ public class ConfigComposite extends SidebarEditorComposite{
 					CTabItem selectedItem = tabFolder.getSelection();
 					if(selectedItem != null && selectedItem.getControl() != null){
 						Control c = selectedItem.getControl();
-						if(c instanceof ScrolledComposite){
-							c = ((ScrolledComposite)c).getContent();
-						}
-						if(c instanceof ConfigSLOListComposite){
-							((ConfigSLOListComposite)c).calcSLOGroups();
-						}
-						if(c instanceof ConfigMonitorListComposite){
-							((ConfigMonitorListComposite)c).calcMonitorGroups();
+						
+						if(c instanceof IRefreshable){
+							((IRefreshable)c).refresh();
 						}
 					}
 				}

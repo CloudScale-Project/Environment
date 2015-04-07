@@ -1,25 +1,16 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoObservables;
-import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.observable.list.ListDiff;
-import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -31,18 +22,17 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectivePackage;
 import org.palladiosimulator.servicelevelobjective.Threshold;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.Converters;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 
-public class ConfigSLOComposite extends Composite{
+public class ConfigSLOComposite extends Composite implements IRefreshable{
 	
 	private final ConfAlternative alternative;
 	private final EditingDomain editingDomain;
@@ -59,7 +49,6 @@ public class ConfigSLOComposite extends Composite{
 	private Button btnUpperBound;
 	private Button btnLowerBound;
 	
-	private java.util.List<MetricDescription> measuringSpecList = new ArrayList<MetricDescription>();
 	private Label lblNewLabel;
 	
 	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper sloWrapper, Composite parent, int style) {
@@ -76,6 +65,9 @@ public class ConfigSLOComposite extends Composite{
 		lblNewLabel.setText("Measurement specification:");
 		
 		comboMeasurementSpecViewer = new ComboViewer(this, SWT.NONE);
+		comboMeasurementSpecViewer.setContentProvider(new ArrayContentProvider());
+		comboMeasurementSpecViewer.setInput(alternative.getMeasurementSpecifications());
+
 		Combo comboMeasuremntSpec = comboMeasurementSpecViewer.getCombo();
 		GridData gd_comboMeasuremntSpec = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_comboMeasuremntSpec.widthHint = 320;
@@ -126,14 +118,14 @@ public class ConfigSLOComposite extends Composite{
 		
 		//bind combo metric description
 		{
-			ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MeasurementSpecification.class, "name");
+			//ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
+			//IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MeasurementSpecification.class, "name");
 			
-			comboMeasurementSpecViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-			comboMeasurementSpecViewer.setContentProvider(listContentProvider);
+			//comboMeasurementSpecViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
+			//comboMeasurementSpecViewer.setContentProvider(listContentProvider);
 						
-			IObservableList selfList = Properties.selfList(MeasurementSpecification.class).observe(measuringSpecList);
-			comboMeasurementSpecViewer.setInput(selfList);
+			//IObservableList selfList = Properties.selfList(MeasurementSpecification.class).observe(measuringSpecList);
+			//comboMeasurementSpecViewer.setInput(selfList);
 			
 			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboMeasurementSpecViewer);
 			IObservableValue measurementSpecObserveValue = EMFEditObservables.observeValue(editingDomain, sloWrapper.getMaster(), 
@@ -210,9 +202,12 @@ public class ConfigSLOComposite extends Composite{
 		return bindingContext.bindValue(textObserve, thresholdMeasureObserve, t2mStrategy, m2tStrategy);
 	}
 	
-	public void update(){
+	public void refresh(){
 		
-		ListDiff diff = Diffs.computeListDiff(measuringSpecList, alternative.getMeasurementSpecifications());
-		diff.applyTo(measuringSpecList);
+		//ListDiff diff = Diffs.computeListDiff(measuringSpecList, alternative.getMeasurementSpecifications());
+		//diff.applyTo(measuringSpecList);
+		if(comboMeasurementSpecViewer != null){
+			comboMeasurementSpecViewer.setInput(alternative.getMeasurementSpecifications());
+		}
 	}
 }

@@ -1,17 +1,11 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.core.databinding.beans.PojoObservables;
-import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -29,22 +23,22 @@ import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveReposito
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectivePackage;
 
-import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.list.ListComposite;
 
-public class ConfigSLOListComposite extends Composite{
+public class ConfigSLOListComposite extends Composite implements IRefreshable{
 
 	private final Composite stackedComposite;
 	private final StackLayout stackLayout;
 	
-	private final ListComposite groupsComposite;
+	private final ListComposite groupsComposite = null;
 	private final ListComposite listComposite;
 	
 	private final ConfAlternative alternative;
-	private List<SloGroup> sloGroups = new ArrayList<SloGroup>();
+	//private List<SloGroup> sloGroups = new ArrayList<SloGroup>();
 	
 	public ConfigSLOListComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -127,6 +121,7 @@ public class ConfigSLOListComposite extends Composite{
 		
 		//group view
 		{
+			/*
 			groupsComposite = new ListComposite(stackedComposite, SWT.NONE){
 
 				@Override
@@ -148,6 +143,7 @@ public class ConfigSLOListComposite extends Composite{
 
 			IObservableList monitorsGroupsObs = PojoObservables.observeList(this, "sloGroups");
 			groupsComposite.initBindings(monitorsGroupsObs);
+			*/
 		}
 		
 		//list view
@@ -185,6 +181,7 @@ public class ConfigSLOListComposite extends Composite{
 		calcSLOGroups();
 	}
 	
+	/*
 	public List<SloGroup> getSloGroups() {
 		return sloGroups;
 	}
@@ -192,9 +189,11 @@ public class ConfigSLOListComposite extends Composite{
 	public void setSloGroups(List<SloGroup> sloGroups) {
 		this.sloGroups = sloGroups;
 	}
+	*/
 
 	public void calcSLOGroups(){
 		
+		/*
 		List<SloGroup> sloGroupsNew = new ArrayList<SloGroup>();
 				
 		for(ServiceLevelObjective slo : alternative.getUsedSloRepository().getServicelevelobjectives()){
@@ -216,8 +215,20 @@ public class ConfigSLOListComposite extends Composite{
 		diff.applyTo(sloGroups);
 		
 		groupsComposite.updateTarget();
+		*/
+	}
+
+	@Override
+	public void refresh() {
+		if(listComposite != null){
+			listComposite.refresh();
+		}
+		if(groupsComposite != null){
+			groupsComposite.refresh();
+		}
 	}
 	
+	/*
 	private static class SloGroup{
 		private List<ServiceLevelObjective> sloList = new ArrayList<ServiceLevelObjective>();
 		
@@ -240,11 +251,11 @@ public class ConfigSLOListComposite extends Composite{
 		    		if(c == IdentifierPackage.Literals.IDENTIFIER__ID){
 		    			return true;
 		    		}
-		    		/*
-		    		if(c == ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASURING_POINT){
-		    			return true;
-		    		}
-		    		*/
+		    		
+		    		//if(c == ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASURING_POINT){
+		    		//	return true;
+		    		//}
+		    		
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);
 		    	}
 		    };
@@ -259,5 +270,6 @@ public class ConfigSLOListComposite extends Composite{
 			return false;
 		}
 	}
+	*/
 
 }

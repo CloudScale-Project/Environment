@@ -34,9 +34,10 @@ import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.list.ListComposite;
 
-public class ConfigMonitorListComposite extends Composite{
+public class ConfigMonitorListComposite extends Composite implements IRefreshable{
 
 	private final Composite stackedComposite;
 	private final StackLayout stackLayout;
@@ -191,7 +192,7 @@ public class ConfigMonitorListComposite extends Composite{
 		this.monitorGroups = monitorGroups;
 	}
 
-	public void calcMonitorGroups(){
+	private void calcMonitorGroups(){
 		
 		List<MonitorGroup> monitorGroupsNew = new ArrayList<MonitorGroup>();
 				
@@ -214,6 +215,10 @@ public class ConfigMonitorListComposite extends Composite{
 		diff.applyTo(monitorGroups);
 		
 		groupsComposite.updateTarget();
+	}
+	
+	public void refresh(){
+		calcMonitorGroups();
 	}
 	
 	private static class MonitorGroup{

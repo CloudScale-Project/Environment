@@ -13,8 +13,10 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 public abstract class CompositeContainerChild {
 	
 	private Object data;
+	
 	private Composite composite = null;
-
+	private Composite clientComposite = null;
+	
 	protected abstract Composite doCreateComposite(ExpandableComposite parent, Object source);
 	
 	public Composite createComposite(final CompositeContainer container){
@@ -31,7 +33,7 @@ public abstract class CompositeContainerChild {
 				| ExpandableComposite.TWISTIE);
 		
 		expComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));		
-		Composite cmc = doCreateComposite(expComposite, data);
+		clientComposite = doCreateComposite(expComposite, data);
 		
 		Button btnDelete = new Button(expComposite, SWT.NONE);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
@@ -43,7 +45,7 @@ public abstract class CompositeContainerChild {
 		});
 		btnDelete.setText("Delete");
 		
-		expComposite.setClient(cmc);
+		expComposite.setClient(clientComposite);
 		expComposite.setTextClient(btnDelete);
 		
 		expComposite.addExpansionListener(new ExpansionAdapter() {
@@ -69,6 +71,10 @@ public abstract class CompositeContainerChild {
 	
 	public Composite getComposite(){
 		return composite;
+	}
+	
+	public Composite getClient(){
+		return clientComposite;
 	}
 	
 	public Object getSource(){

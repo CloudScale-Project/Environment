@@ -7,7 +7,9 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-public abstract class ListComposite extends CompositeContainer{
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
+
+public abstract class ListComposite extends CompositeContainer implements IRefreshable{
 	
 	private DataBindingContext bindingContext = null;	
 	protected abstract Composite createComposite(ExpandableComposite parent, Object source);
@@ -109,5 +111,14 @@ public abstract class ListComposite extends CompositeContainer{
 		};
 		
 		return converter;
+	}
+	
+	public void refresh(){
+		for(CompositeContainerChild child : getChilds()){
+			Composite clientComposite = child.getClient();
+			if(clientComposite instanceof IRefreshable){
+				((IRefreshable)clientComposite).refresh();
+			}
+		}
 	}
 }

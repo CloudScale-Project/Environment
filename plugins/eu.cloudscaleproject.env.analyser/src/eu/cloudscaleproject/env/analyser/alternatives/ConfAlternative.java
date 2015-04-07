@@ -716,6 +716,30 @@ public class ConfAlternative extends EditorInputEMF{
 				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
 				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				
+				//create default specification
+				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
+				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
+				interval.setIntervall(10.0);
+				
+				MetricDescription metric = null;
+				for(MetricDescription md : getMetricDescriptions()){
+					if("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId())){
+						metric = md;
+					}
+				}
+				
+				if(metric == null){
+					DialogUtils.openError("Required metric description (Response time) can not be found!");
+				}
+				else{
+					specification.setMetricDescription(metric);					
+				}
+				specification.setTemporalRestriction(interval);
+				monitor.getMeasurementSpecifications().add(specification);
+				//
+				
 				monitor.setMeasuringPoint(usageMeasurePoint);
 				monitorRep.getMonitors().add(monitor);
 				initialModel.setMonitorRepository(monitorRep);
