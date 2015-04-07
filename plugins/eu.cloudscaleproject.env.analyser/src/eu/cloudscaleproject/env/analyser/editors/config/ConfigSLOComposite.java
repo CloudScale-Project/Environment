@@ -49,7 +49,6 @@ public class ConfigSLOComposite extends Composite{
 	
 	private final EObjectWrapper sloWrapper;
 	private final ServiceLevelObjective slo;
-	private final Composite composite;
 	private final ComboViewer comboMeasurementSpecViewer;
 	
 	private DataBindingContext bindingContext = null;
@@ -61,6 +60,7 @@ public class ConfigSLOComposite extends Composite{
 	private Button btnLowerBound;
 	
 	private java.util.List<MetricDescription> measuringSpecList = new ArrayList<MetricDescription>();
+	private Label lblNewLabel;
 	
 	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper sloWrapper, Composite parent, int style) {
 		super(parent, style);
@@ -70,31 +70,32 @@ public class ConfigSLOComposite extends Composite{
 		this.sloWrapper = sloWrapper;
 		this.slo = (ServiceLevelObjective)sloWrapper.getMaster();
 		
-		setLayout(new GridLayout(1, false));
+		setLayout(new GridLayout(2, false));
 		
-		Label lblFolder = new Label(this, SWT.NONE);
-		lblFolder.setText("Service level objective specifications:");
+		lblNewLabel = new Label(this, SWT.NONE);
+		lblNewLabel.setText("Measurement specification:");
 		
-		composite = new Composite(this, SWT.BORDER);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		comboMeasurementSpecViewer = new ComboViewer(this, SWT.NONE);
+		Combo comboMeasuremntSpec = comboMeasurementSpecViewer.getCombo();
+		GridData gd_comboMeasuremntSpec = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_comboMeasuremntSpec.widthHint = 320;
+		comboMeasuremntSpec.setLayoutData(gd_comboMeasuremntSpec);
 		
-		btnUpperBound = new Button(composite, SWT.CHECK);
-		btnUpperBound.setBounds(10, 35, 93, 19);
+		btnUpperBound = new Button(this, SWT.CHECK);
 		btnUpperBound.setText("Upper bound:");
 		
-		textUpperBound = new Text(composite, SWT.BORDER);
-		textUpperBound.setBounds(109, 35, 123, 19);
+		textUpperBound = new Text(this, SWT.BORDER);
+		GridData gd_textUpperBound = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_textUpperBound.widthHint = 100;
+		textUpperBound.setLayoutData(gd_textUpperBound);
 		
-		btnLowerBound = new Button(composite, SWT.CHECK);
-		btnLowerBound.setBounds(10, 60, 93, 19);
+		btnLowerBound = new Button(this, SWT.CHECK);
 		btnLowerBound.setText("Lower bound:");
 		
-		textLowerBound = new Text(composite, SWT.BORDER);
-		textLowerBound.setBounds(109, 60, 123, 19);
-		
-		comboMeasurementSpecViewer = new ComboViewer(composite, SWT.NONE);
-		Combo comboMeasuremntSpec = comboMeasurementSpecViewer.getCombo();
-		comboMeasuremntSpec.setBounds(10, 10, 222, 19);
+		textLowerBound = new Text(this, SWT.BORDER);
+		GridData gd_textLowerBound = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_textLowerBound.widthHint = 100;
+		textLowerBound.setLayoutData(gd_textLowerBound);
 		
 		addDisposeListener(new DisposeListener() {
 			
