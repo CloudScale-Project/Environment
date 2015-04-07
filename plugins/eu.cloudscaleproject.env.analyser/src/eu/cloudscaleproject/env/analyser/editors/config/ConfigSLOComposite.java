@@ -1,22 +1,20 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.property.Properties;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -42,6 +40,7 @@ import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectivePackage;
 import org.palladiosimulator.servicelevelobjective.Threshold;
+import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.Converters;
@@ -49,6 +48,7 @@ import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 
 public class ConfigSLOComposite extends Composite{
 	
+	private final ConfAlternative alternative;
 	private final EditingDomain editingDomain;
 	
 	private final EObjectWrapper sloWrapper;
@@ -56,11 +56,11 @@ public class ConfigSLOComposite extends Composite{
 
 	private final ListViewer listViewer;
 	private final Composite composite;
-	private final ComboViewer comboViewer;
+	private final ComboViewer comboMeasurementSpecViewer;
 	
 	private DataBindingContext bindingContext = null;
 	
-	private final ArrayList<MeasuringPoint> measuringPoints = new ArrayList<MeasuringPoint>();
+	private final ArrayList<MeasurementSpecification> measuringPoints = new ArrayList<MeasurementSpecification>();
 	
 	private Text textUpperBound;
 	private Text textLowerBound;
@@ -68,11 +68,12 @@ public class ConfigSLOComposite extends Composite{
 	private Button btnUpperBound;
 	private Button btnLowerBound;
 	
-	private java.util.List<MetricDescription> metricDescList = new ArrayList<MetricDescription>();
+	private java.util.List<MetricDescription> measuringSpecList = new ArrayList<MetricDescription>();
 	
 	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper sloWrapper, Composite parent, int style) {
 		super(parent, style);
 		
+		this.alternative = alt;
 		this.editingDomain = alt.getEditingDomain();
 		this.sloWrapper = sloWrapper;
 		this.slo = (ServiceLevelObjective)sloWrapper.getMaster();
@@ -101,9 +102,9 @@ public class ConfigSLOComposite extends Composite{
 		textLowerBound = new Text(composite, SWT.BORDER);
 		textLowerBound.setBounds(109, 60, 123, 19);
 		
-		comboViewer = new ComboViewer(composite, SWT.NONE);
-		Combo comboMetricDesc = comboViewer.getCombo();
-		comboMetricDesc.setBounds(10, 10, 222, 19);
+		comboMeasurementSpecViewer = new ComboViewer(composite, SWT.NONE);
+		Combo comboMeasuremntSpec = comboMeasurementSpecViewer.getCombo();
+		comboMeasuremntSpec.setBounds(10, 10, 222, 19);
 		
 		listViewer = new ListViewer(this, SWT.BORDER | SWT.V_SCROLL);
 		List list = listViewer.getList();
@@ -123,6 +124,7 @@ public class ConfigSLOComposite extends Composite{
 			}
 		});
 		
+		/*
 		Resource res = editingDomain.getResourceSet().getResource(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"), true);
 		Iterator<EObject> iter = res.getAllContents();
 		while(iter.hasNext()){
@@ -132,6 +134,8 @@ public class ConfigSLOComposite extends Composite{
 				metricDescList.add(md);
 			}
 		}
+		*/
+		//TODO: fill measurement spec list
 		
 		update();
 		initBindings();
@@ -153,17 +157,18 @@ public class ConfigSLOComposite extends Composite{
 		//bind combo metric description
 		{
 			ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MetricDescription.class, "name");
+			IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MeasurementSpecification.class, "name");
 			
-			comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-			comboViewer.setContentProvider(listContentProvider);
-						IObservableList selfList = Properties.selfList(MetricDescription.class).observe(metricDescList);
-			comboViewer.setInput(selfList);
+			comboMeasurementSpecViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
+			comboMeasurementSpecViewer.setContentProvider(listContentProvider);
+						
+			IObservableList selfList = Properties.selfList(MeasurementSpecification.class).observe(measuringSpecList);
+			comboMeasurementSpecViewer.setInput(selfList);
 			
-			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
-			IObservableValue msMetricDescriptionObserveValue = EMFEditObservables.observeValue(editingDomain, sloWrapper.getMaster(), 
-					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__METRIC_DESCRIPTION);
-			bindingContext.bindValue(observeSingleSelectionComboViewer, msMetricDescriptionObserveValue, null, null);
+			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboMeasurementSpecViewer);
+			IObservableValue measurementSpecObserveValue = EMFEditObservables.observeValue(editingDomain, sloWrapper.getMaster(), 
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASUREMENT_SPECIFICATION);
+			bindingContext.bindValue(observeSingleSelectionComboViewer, measurementSpecObserveValue, null, null);
 		}
 		
 		Binding upperThresholdBinding = null;
@@ -242,6 +247,10 @@ public class ConfigSLOComposite extends Composite{
 	
 	public void update(){
 		
+		ListDiff diff = Diffs.computeListDiff(measuringSpecList, alternative.getMeasurementSpecifications());
+		diff.applyTo(measuringSpecList);
+		
+		/*
 		measuringPoints.clear();
 		
 		MeasuringPoint mp = ((ServiceLevelObjective)sloWrapper.getMaster()).getMeasuringPoint();
@@ -257,5 +266,6 @@ public class ConfigSLOComposite extends Composite{
 				}
 			}
 		}
+		*/
 	}
 }

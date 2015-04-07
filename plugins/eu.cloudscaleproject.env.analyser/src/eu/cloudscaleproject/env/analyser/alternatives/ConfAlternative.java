@@ -42,7 +42,6 @@ import org.palladiosimulator.experimentautomation.variation.VariationRepository;
 import org.palladiosimulator.experimentautomation.variation.VariationType;
 import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.metricspec.MetricDescriptionRepository;
-import org.palladiosimulator.metricspec.constants.MetricDescriptionConstants;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
@@ -539,6 +538,22 @@ public class ConfAlternative extends EditorInputEMF{
 		return monitorRep;
 	}
 	
+	public List<MeasurementSpecification> getMeasurementSpecifications(){
+		
+		List<MeasurementSpecification> out = new ArrayList<MeasurementSpecification>();
+		
+		MonitorRepository mr = getUsedMonitorRepository();
+		if(mr == null){
+			return out;
+		}
+		
+		for(Monitor monitor : mr.getMonitors()){
+			out.addAll(monitor.getMeasurementSpecifications());
+		}
+		
+		return out;
+	}
+	
 	public List<ServiceLevelObjectiveRepository> getSLORepositories(){
 		List<ServiceLevelObjectiveRepository> out = new ArrayList<ServiceLevelObjectiveRepository>();
 		
@@ -717,6 +732,7 @@ public class ConfAlternative extends EditorInputEMF{
 				
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 				
+				/*
 				for(MetricDescription md : getMetricDescriptions()){
 					if(md.getId().equals(MetricDescriptionConstants.RESPONSE_TIME_METRIC.getId())){
 						slo.setMetricDescription(md);
@@ -724,6 +740,8 @@ public class ConfAlternative extends EditorInputEMF{
 				}
 				
 				slo.setMeasuringPoint(usageMeasurePoint);
+				*/
+				
 				sloRep.getServicelevelobjectives().add(slo);
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
@@ -763,6 +781,10 @@ public class ConfAlternative extends EditorInputEMF{
 	}
 	
 	private void configureCapacity(Experiment exp, InitialModel initialModel){
+
+		UsageScenarioMeasuringPoint usmp = null;
+		MeasurementSpecification usageMeasurementSpec = null;
+		
 		//retrieve usage scenario
 		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
 		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
@@ -772,7 +794,6 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		
 		List<MeasuringPoint> mps = getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT);
-		UsageScenarioMeasuringPoint usmp = null;
 		if(!mps.isEmpty()){
 			usmp = (UsageScenarioMeasuringPoint)mps.get(0);
 			usmp.setUsageScenario(usageScenario);
@@ -813,6 +834,7 @@ public class ConfAlternative extends EditorInputEMF{
 				
 				specification.setTemporalRestriction(interval);
 				monitor.getMeasurementSpecifications().add(specification);
+				usageMeasurementSpec = specification;
 			}
 			else{
 				DialogUtils.openWarning("Monitor object has been removed! Please create and configure it manually.");
@@ -859,8 +881,8 @@ public class ConfAlternative extends EditorInputEMF{
 			ServiceLevelObjectiveRepository sloRep = sloReps.get(0);
 			if(!sloRep.getServicelevelobjectives().isEmpty()){
 				ServiceLevelObjective slo = sloRep.getServicelevelobjectives().get(0);
-				if(usmp != null){
-					slo.setMeasuringPoint(usmp);
+				if(usageMeasurementSpec != null){
+					slo.setMeasurementSpecification(usageMeasurementSpec);
 				}
 				
 				HardThreshold ut = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();

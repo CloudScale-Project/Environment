@@ -79,6 +79,11 @@ public class ConfigSLOListComposite extends Composite{
 			}
 		});
 		
+		//Disable grouping - wait for further PCM model changes
+		//TODO: remove grouping support or reimplement it!
+		btnRadioGroup.setEnabled(false);
+		btnRadioList.setEnabled(false);
+		
 		//used as expander
 		Composite composite = new Composite(toolbarComposite, SWT.NONE);
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
@@ -235,9 +240,11 @@ public class ConfigSLOListComposite extends Composite{
 		    		if(c == IdentifierPackage.Literals.IDENTIFIER__ID){
 		    			return true;
 		    		}
+		    		/*
 		    		if(c == ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASURING_POINT){
 		    			return true;
 		    		}
+		    		*/
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);
 		    	}
 		    };
