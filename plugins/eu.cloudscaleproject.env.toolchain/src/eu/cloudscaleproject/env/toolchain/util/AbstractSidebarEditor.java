@@ -28,10 +28,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheet;
 
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
@@ -40,6 +38,7 @@ import eu.cloudscaleproject.env.common.ui.HoverToggleButton;
 import eu.cloudscaleproject.env.common.ui.util.ColorHelper;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -278,21 +277,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			composite.update();
 			btnSelect.setText(this.input.getName());
 			btnSelect.update();
-			
-			//trigger property sheet part re-fetch
-			@SuppressWarnings("deprecation")
-			//TODO: find out better solution for the problem
-			IViewPart[] views = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews();
-			for (IViewPart v : views){
-				if (v instanceof PropertySheet)
-				{
-					PropertySheet ps = (PropertySheet) v;
-					ps.partClosed(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
-					ps.partOpened(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
-					ps.setFocus();
-				}
-			}
-			//
 		}
 		
 		public void select(){
@@ -304,16 +288,18 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				ei.isSelected = false;
 			}
 			
-			update();
-			
 			btnSelect.setSelection(true);
 			stackLayout.topControl = composite;
 			isSelected = true;
 			
+			update();
+
 			handleSelect(input);
 			
 			compositeArea.layout();
 			composite.setFocus();
+			
+			ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 		}
 		
 		public void dispose() {

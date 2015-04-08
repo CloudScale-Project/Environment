@@ -32,11 +32,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -71,6 +71,8 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			});
 		}
 	};
+
+	private ExtendedPropertySheetPage propertySheetPage;
 
 	/**
 	 * Create the composite.
@@ -257,8 +259,33 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	@Override
 	public IPropertySheetPage getPropertySheetPage()
 	{
-		PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain());
-		propertySheetPage.setPropertySourceProvider(contentProvider);
+		if (propertySheetPage == null)
+		{
+			propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) alternative.getEditingDomain())
+			{
+				private ISelection selection;
+				private IWorkbenchPart part;
+
+				@Override
+				public void createControl(Composite parent)
+				{
+					super.createControl(parent);
+
+					if (selection != null) super.selectionChanged(part, selection);
+				}
+				
+				@Override
+				public void selectionChanged(IWorkbenchPart part, ISelection selection)
+				{
+					super.selectionChanged(part, selection);
+					this.part = part;
+					this.selection = selection;
+				}
+			};
+
+			propertySheetPage.setPropertySourceProvider(contentProvider);
+		}
+
 		return propertySheetPage;
 	}
 }
