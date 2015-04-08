@@ -32,6 +32,7 @@ import org.reclipse.structure.inference.DetectPatternsJob;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -43,7 +44,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider
+public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable
 {
 	private DataBindingContext m_bindingContext;
 
@@ -123,13 +124,12 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	}
 
 	@Override
-	public void update()
+	public void refresh()
 	{
 		this.configPersistenceFolder.load();
 		setTitle(configPersistenceFolder.getName());
 		updateExtractorResults();
 		m_bindingContext.updateTargets();
-		super.update();
 	}
 	
 	private void updateExtractorResults()

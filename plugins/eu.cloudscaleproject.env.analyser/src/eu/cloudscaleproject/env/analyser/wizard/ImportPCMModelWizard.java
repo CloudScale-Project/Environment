@@ -18,9 +18,10 @@ public class ImportPCMModelWizard extends Wizard{
 
 	public ImportPCMModelWizard(EditorInputEMF alternative){
 		this.alternative = alternative;
+		setWindowTitle("Analyser - Import wizard");
 		
-		modelSelectionPage = new ImportModelSelectionPage("Select model to import");
-		importOptionsPage = new ImportAlternativeOptionsPage("Import options");
+		modelSelectionPage = new ImportModelSelectionPage();
+		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	
 	@Override
@@ -47,4 +48,14 @@ public class ImportPCMModelWizard extends Wizard{
 		
 		return true;
 	}
+	
+	@Override
+	public boolean canFinish()
+	{
+		if (getContainer().getCurrentPage() == getPages()[getPageCount()-1])
+			return true;
+
+		return false;
+	}
+
 }

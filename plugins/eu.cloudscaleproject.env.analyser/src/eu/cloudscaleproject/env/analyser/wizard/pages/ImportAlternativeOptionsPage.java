@@ -12,8 +12,11 @@ public class ImportAlternativeOptionsPage extends WizardPage{
 	
 	private boolean copyIntoProject = false;
 
-	public ImportAlternativeOptionsPage(String title) {
-		super(title);
+	public ImportAlternativeOptionsPage() {
+		super("Import options");
+
+		setTitle("Import options");
+		setDescription("Please select import options.");
 	}
 	
 	public boolean getCopyIntoProjectParam(){

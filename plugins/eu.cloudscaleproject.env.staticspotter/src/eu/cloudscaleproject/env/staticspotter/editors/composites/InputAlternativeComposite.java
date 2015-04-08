@@ -13,9 +13,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
 
-public class InputAlternativeComposite extends Composite {
+public class InputAlternativeComposite extends Composite implements IRefreshable {
 
 	private Text txtInput;
 	private InputPersitenceFile editorInput;
@@ -85,9 +86,8 @@ public class InputAlternativeComposite extends Composite {
 	}
 	
 	@Override
-	public void update() {
+	public void refresh() {
 		editorInput.load();
 		load();
-		super.update();
 	}
 }

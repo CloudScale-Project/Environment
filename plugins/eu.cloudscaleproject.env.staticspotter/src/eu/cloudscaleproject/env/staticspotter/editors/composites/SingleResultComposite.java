@@ -12,13 +12,14 @@ import org.eclipse.ui.PlatformUI;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
 import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
 
 
-public class SingleResultComposite extends TitleComposite {
+public class SingleResultComposite extends TitleComposite implements IRefreshable{
 
 	private ResultPersistenceFolder resultFolder;
 	private AnnotationView annotationView;
@@ -80,10 +81,9 @@ public class SingleResultComposite extends TitleComposite {
 	}
 	
 	@Override
-	public void update() {
+	public void refresh() {
 		// TODO Auto-generated method stub
 		resultFolder.load();
 		init();
-		super.update();
 	}
 }

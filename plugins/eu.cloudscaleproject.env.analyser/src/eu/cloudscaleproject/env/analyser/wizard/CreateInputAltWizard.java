@@ -24,4 +24,14 @@ public class CreateInputAltWizard extends Wizard{
 		return true;
 	}
 
+	@Override
+	public boolean canFinish()
+	{
+		if (getContainer().getCurrentPage() == getPages()[getPageCount()-1])
+			return true;
+
+		return false;
+	}
+
+
 }

@@ -31,7 +31,7 @@ public class NameSelectionPage extends WizardPage{
 		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Alternative name:");
 		
-		final Text text = new Text(container, SWT.NONE);
+		final Text text = new Text(container, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		text.addModifyListener(new ModifyListener() {

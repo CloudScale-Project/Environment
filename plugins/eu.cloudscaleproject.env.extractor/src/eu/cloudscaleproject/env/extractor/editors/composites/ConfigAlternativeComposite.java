@@ -32,11 +32,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.somox.common.MetricsDetails.GroupID;
 
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
-public class ConfigAlternativeComposite extends RunComposite
+public class ConfigAlternativeComposite extends RunComposite implements IRefreshable
 {
 	private DataBindingContext m_bindingContext;
 	private ConfigPersistenceFolder configPersistenceFolder;
@@ -139,15 +140,14 @@ public class ConfigAlternativeComposite extends RunComposite
 		return javaProjects;
 	}
 
+	
 	@Override
-	public void update()
+	public void refresh()
 	{
 		this.configPersistenceFolder.load();
 		m_bindingContext.updateTargets();
-
-		super.update();
 	}
-
+	
 	@Override
 	protected IStatus doRun(IProgressMonitor m)
 	{

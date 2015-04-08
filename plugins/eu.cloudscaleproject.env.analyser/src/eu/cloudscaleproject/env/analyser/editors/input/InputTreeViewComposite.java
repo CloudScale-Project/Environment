@@ -69,6 +69,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				
 				ImportPCMModelWizard createEmptyModelWizard = new ImportPCMModelWizard(input);
 				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
+				wizardDialog.setTitle("asdf");
 				wizardDialog.open();
 				
 				super.widgetSelected(e);

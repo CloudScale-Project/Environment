@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -38,14 +39,17 @@ public class ImportModelSelectionPage extends WizardPage{
 	ResourceSet resSet = new ResourceSetImpl();
 	CheckboxTableViewer tableView;
 
-	public ImportModelSelectionPage(String title) {
-		super(title);
+	public ImportModelSelectionPage() {
+		super("Model selection");
+		
+		setTitle("Model selection");
+		setDescription("Please select models to be imported");
 	}
 	
 	public Resource[] getSelectedResources(){
 		return selectedResources;
 	}
-
+	
 	@Override
 	public void createControl(Composite parent) {
 		
@@ -83,6 +87,13 @@ public class ImportModelSelectionPage extends WizardPage{
 				
 				for(int i=0; i<selection.length; i++){
 					Object o = selection[i];
+
+					if (o instanceof EObject)
+					{
+						EObject eobj = (EObject) o;
+						o = eobj.eResource();
+					}
+
 					if(o instanceof Resource){
 						Resource res = (Resource)o;
 						selectedResources[i] = res;

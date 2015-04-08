@@ -66,7 +66,8 @@ public class EMFTreeviewComposite extends Composite
 
 		contentProvider = new AdapterFactoryContentProvider(adapterFactory);
 		this.treeViewer.setContentProvider(contentProvider);
-		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		this.treeViewer.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
+				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, this.treeViewer)));
 
 		new AdapterFactoryTreeEditor(tree, adapterFactory);
 

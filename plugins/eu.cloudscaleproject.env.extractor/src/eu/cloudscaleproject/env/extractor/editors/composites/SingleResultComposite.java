@@ -8,12 +8,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class SingleResultComposite extends TitleComposite implements IPropertySheetPageProvider{
+public class SingleResultComposite extends TitleComposite implements IPropertySheetPageProvider, IRefreshable{
 
 
 	private ResultPersistenceFolder resultPersistenceFolder;
@@ -51,11 +52,10 @@ public class SingleResultComposite extends TitleComposite implements IPropertySh
 	}
 	
 	@Override
-	public void update() {
+	public void refresh() {
 		// TODO Auto-generated method stub
 		resultPersistenceFolder.load();
 		init();
-		super.update();
 	}
 
 	@Override

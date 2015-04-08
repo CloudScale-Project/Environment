@@ -8,10 +8,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -35,7 +32,6 @@ import org.palladiosimulator.edp2.datastream.edp2source.Edp2DataTupleDataSource;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.ExperimentData.Measurement;
 import org.palladiosimulator.edp2.models.ExperimentData.RawMeasurements;
-import org.palladiosimulator.edp2.models.ExperimentData.provider.ExperimentDataItemProviderAdapterFactory;
 import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
 import org.palladiosimulator.edp2.visualization.IVisualisationInput;
@@ -45,6 +41,7 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class ResultAlternativeComposite extends Composite implements IRefreshable{
 	
@@ -69,16 +66,11 @@ public class ResultAlternativeComposite extends Composite implements IRefreshabl
 		
 		//TODO: make EDP2 editor/view accessible to other modules
 		
-		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ExperimentDataItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+		ComposedAdapterFactory adapterFactory = new CustomAdapterFactory();
 		
 		this.treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-		this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
-		//this.treeViewer.setContentProvider(new DatasourceListContentProvider());
-		//this.treeViewer.setLabelProvider(new DatasourceListLabelProvider());
+		this.treeViewer.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
+				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, this.treeViewer)));
 		
 		this.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			
