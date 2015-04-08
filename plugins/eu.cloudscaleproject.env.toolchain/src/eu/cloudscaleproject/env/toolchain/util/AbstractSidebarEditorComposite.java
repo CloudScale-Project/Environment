@@ -12,10 +12,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.ColorResources;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public abstract class AbstractSidebarEditorComposite extends Composite implements ISidebarEditor, IPropertySheetPageProvider{
+public abstract class AbstractSidebarEditorComposite extends Composite implements ISidebarEditor, IRefreshable, IPropertySheetPageProvider{
 	
 	private AbstractSidebarEditor sidebarBuilder;
 	
@@ -172,6 +173,11 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	
 	public void setRemoveButtonEnabled(boolean enable){
 		sidebarBuilder.setRemoveButtonEnabled(enable);
+	}
+	
+	@Override
+	public void refresh() {
+		sidebarBuilder.update();
 	}
 	
 	@Override

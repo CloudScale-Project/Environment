@@ -35,6 +35,7 @@ import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
 import eu.cloudscaleproject.env.common.ui.HoverToggleButton;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.util.ColorHelper;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -274,7 +275,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		public void update() {
 			checkWidgets();
 			
-			composite.update();
+			if(composite instanceof IRefreshable){
+				((IRefreshable)composite).refresh(); 
+			}
 			btnSelect.setText(this.input.getName());
 			btnSelect.update();
 		}

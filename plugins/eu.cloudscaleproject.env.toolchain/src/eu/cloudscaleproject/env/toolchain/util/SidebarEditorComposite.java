@@ -12,11 +12,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.ColorResources;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public class SidebarEditorComposite extends Composite implements ISidebarEditor, IPropertySheetPageProvider{
+public class SidebarEditorComposite extends Composite implements ISidebarEditor, IRefreshable, IPropertySheetPageProvider{
 
 	private SidebarEditor sidebarBuilder;
 
@@ -185,6 +186,11 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	@Override
 	public void load(boolean force) {
 		sidebarBuilder.load(force);
+	}
+	
+	@Override
+	public void refresh() {
+		sidebarBuilder.update();
 	}
 
 	@Override

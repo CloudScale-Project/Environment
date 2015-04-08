@@ -43,9 +43,10 @@ import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class ResultAlternativeComposite extends Composite{
+public class ResultAlternativeComposite extends Composite implements IRefreshable{
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
@@ -96,12 +97,6 @@ public class ResultAlternativeComposite extends Composite{
 		});
 		
 		loadModel();
-	}
-	
-	@Override
-	public void update() {
-		loadModel();
-		super.update();
 	}
 	
 	private void loadModel(){

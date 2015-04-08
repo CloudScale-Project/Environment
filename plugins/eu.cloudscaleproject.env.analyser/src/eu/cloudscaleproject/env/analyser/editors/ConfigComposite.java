@@ -82,8 +82,7 @@ public class ConfigComposite extends SidebarEditorComposite
 		});
 	}
 
-	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider
-	{
+	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable{
 
 		private ConfigEditComposite editComposite;
 
@@ -98,8 +97,7 @@ public class ConfigComposite extends SidebarEditorComposite
 
 		private CTabFolder tabFolder;
 
-		public RightPanelComposite(IEditorPart editor, final ConfAlternative input, Composite parent, int style)
-		{
+		public RightPanelComposite(IEditorPart editor, final ConfAlternative input, Composite parent, int style){
 			super(parent, style);
 
 			IProject project = ExplorerProjectPaths.getProject(editor);
@@ -187,6 +185,21 @@ public class ConfigComposite extends SidebarEditorComposite
 					ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 				}
 			});
+		}
+		
+		@Override
+		public void refresh() {
+			
+			if(tabFolder.isDisposed()){
+				return;
+			}
+			
+			Control c = tabFolder.getSelection().getControl();
+			if (c instanceof IRefreshable)
+			{
+				((IRefreshable) c).refresh();
+			}
+			ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 		}
 
 		@Override
