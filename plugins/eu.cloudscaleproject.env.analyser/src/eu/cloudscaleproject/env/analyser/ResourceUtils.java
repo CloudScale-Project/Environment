@@ -6,18 +6,8 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
-import org.palladiosimulator.experimentautomation.experiments.provider.ExperimentsItemProviderAdapterFactory;
-import org.palladiosimulator.simulizar.monitorrepository.provider.MonitorrepositoryItemProviderAdapterFactory;
 
-import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
-import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
-import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -162,17 +152,8 @@ public class ResourceUtils {
 			@Override
 			public ResourceProvider create(IFolder folder) {
 				
-				final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-				adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new RepositoryAdapterFactory());
-				adapterFactory.addAdapterFactory(new SystemAdapterFactory());
-				adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
-				adapterFactory.addAdapterFactory(new SeffAdapterFactory());
-				adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new ExperimentsItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-				adapterFactory.addAdapterFactory(new EcoreAdapterFactory());
+
+				final ComposedAdapterFactory adapterFactory = new CustomAdapterFactory();
 				
 				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
