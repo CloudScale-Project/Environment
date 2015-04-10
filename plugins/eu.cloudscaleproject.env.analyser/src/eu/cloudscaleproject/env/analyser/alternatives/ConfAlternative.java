@@ -722,6 +722,7 @@ public class ConfAlternative extends EditorInputEMF{
 				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
 				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				monitor.setEntityName("Usage response time monitor");
 				
 				//create default specification
 				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
@@ -761,6 +762,7 @@ public class ConfAlternative extends EditorInputEMF{
 				createEMFResource("analyser.slo", ToolchainUtils.KEY_FILE_SLO, sloRep);
 				
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+				slo.setName("Usage response time SLO");
 				
 				/*
 				for(MetricDescription md : getMetricDescriptions()){
