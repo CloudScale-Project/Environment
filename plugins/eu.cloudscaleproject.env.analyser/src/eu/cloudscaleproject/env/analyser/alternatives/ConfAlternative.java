@@ -109,9 +109,7 @@ public class ConfAlternative extends EditorInputEMF{
 		this.type = type;
 		
 		//create and set defaults
-		Experiment exp = getExperiment();
-		configureExperiment(exp);
-		
+		Experiment exp = getExperiment();		
 		initializeCommon(exp);
 		
 		if(Type.NORMAL.equals(type)){
@@ -324,18 +322,14 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		
 		ExperimentRepository expRep = (ExperimentRepository)root;
-		Experiment firsExperiment = expRep.getExperiments().isEmpty() ? null : expRep.getExperiments().get(0);
-		if(firsExperiment == null){
-			firsExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
-			firsExperiment.setRepetitions(1);
-			expRep.getExperiments().add(firsExperiment);
-		}
-		
-		if(firsExperiment.getToolConfiguration().isEmpty()){
-			configureExperiment(firsExperiment);
+		Experiment firstExperiment = expRep.getExperiments().isEmpty() ? null : expRep.getExperiments().get(0);
+		if(firstExperiment == null){
+			firstExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
+			firstExperiment.setRepetitions(1);
+			expRep.getExperiments().add(firstExperiment);
 		}
 						
-		return (Experiment)firsExperiment;		
+		return (Experiment)firstExperiment;		
 	}
 	
 	public InitialModel getInitialModel(){
@@ -605,13 +599,14 @@ public class ConfAlternative extends EditorInputEMF{
 	///////////////////////////////////////////////////////////////////
 
 	
-	private void configureExperiment(Experiment exp){
-		
+	public void configureResults(){
+		Experiment exp = getExperiment();
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
 		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
 		
 		if(resultAlternative == null){
-			resultAlternative = resultResProvider.createNewResource(getResource().getName(), getName());
+			resultAlternative = resultResProvider.createNewResource(
+					this.getResource().getName(), "Result ["+getName()+"]", type.toString());
 			resultAlternative.save();
 		}
 		
@@ -637,6 +632,18 @@ public class ConfAlternative extends EditorInputEMF{
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void doDelete() {
+		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
+		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
+		
+		if(resultAlternative != null){
+			resultAlternative.delete();
+		}
+		
+		super.doDelete();
 	}
 	
 	private final void loadModels() throws IOException {

@@ -225,6 +225,8 @@ public class ConfigComposite extends SidebarEditorComposite
 			}
 			
 			alternative.getInputAlternative().save();
+			
+			alternative.configureResults();
 			alternative.save();
 			
 			ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
