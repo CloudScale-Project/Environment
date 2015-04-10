@@ -17,7 +17,9 @@ public class CreatePCMModelWizard extends Wizard{
 	
 	public CreatePCMModelWizard(EditorInputEMF alternative, PCMModelType[] types) {
 		this.alternative = alternative;
-		modelSelectionPage = new ModelSelectionPage("Select PCM models to create", alternative.getAdapterFactory(), types);
+		
+		modelSelectionPage = new ModelSelectionPage("Empty model creation", alternative.getAdapterFactory(), types);
+		modelSelectionPage.setDescription("Please select desired PCM model types");
 	}
 	
 	@Override

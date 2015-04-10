@@ -152,6 +152,10 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			}
 		});
 	}
+	
+	public TreeViewer getTreeViewer(){
+		return this.treeViewer;
+	}
 
 	private MenuManager createOpenMenuManager()
 	{
@@ -192,10 +196,13 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	public IFile getSelectedModelFile()
 	{
 		ISelection s = treeViewer.getSelection();
+		
+		if(s == null){
+			return null;
+		}
+		
 		Object element = ((StructuredSelection) s).getFirstElement();
-		
-		System.out.println(element);
-		
+				
 		if (element instanceof Resource)
 		{
 			return ExplorerProjectPaths.getFileFromEmfResource((Resource)element);

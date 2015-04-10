@@ -118,15 +118,6 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 		
 		//bind combo metric description
 		{
-			//ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			//IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MeasurementSpecification.class, "name");
-			
-			//comboMeasurementSpecViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-			//comboMeasurementSpecViewer.setContentProvider(listContentProvider);
-						
-			//IObservableList selfList = Properties.selfList(MeasurementSpecification.class).observe(measuringSpecList);
-			//comboMeasurementSpecViewer.setInput(selfList);
-			
 			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboMeasurementSpecViewer);
 			IObservableValue measurementSpecObserveValue = EMFEditObservables.observeValue(editingDomain, sloWrapper.getMaster(), 
 					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASUREMENT_SPECIFICATION);
@@ -203,11 +194,11 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 	}
 	
 	public void refresh(){
-		
-		//ListDiff diff = Diffs.computeListDiff(measuringSpecList, alternative.getMeasurementSpecifications());
-		//diff.applyTo(measuringSpecList);
 		if(comboMeasurementSpecViewer != null){
 			comboMeasurementSpecViewer.setInput(alternative.getMeasurementSpecifications());
+		}
+		if(bindingContext != null){
+			bindingContext.updateTargets();
 		}
 	}
 }

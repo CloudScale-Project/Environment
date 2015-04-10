@@ -31,6 +31,7 @@ import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -217,6 +218,15 @@ public class ConfigComposite extends SidebarEditorComposite
 		@Override
 		protected IStatus doRun(IProgressMonitor m)
 		{
+			//save alternative before simulation run
+			if(alternative.getInputAlternative() == null){
+				DialogUtils.openError("Can not run this configuration. Input alternative is not set.");
+				return Status.CANCEL_STATUS;
+			}
+			
+			alternative.getInputAlternative().save();
+			alternative.save();
+			
 			ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
 			ILaunchConfigurationType lct = mgr
 					.getLaunchConfigurationType("org.palladiosimulator.experimentautomation.application.launchConfigurationType");

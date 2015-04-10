@@ -125,6 +125,12 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 	}
 	
+	public InputAlternative getInputAlternative(){
+		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		return (InputAlternative)rp.getResource(res);
+	}
+	
 	public Type getTypeEnum(){
 		String type = getType();
 		if(type == null){

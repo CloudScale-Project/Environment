@@ -29,8 +29,10 @@ public class ModelSelectionPage extends WizardPage{
 	private PCMModelType[] types;
 	private Resource resource = new ResourceImpl();
 	
-	public ModelSelectionPage(String title, AdapterFactory adapterFacoty, PCMModelType[] types) {
-		super(title);
+	public ModelSelectionPage(String name, AdapterFactory adapterFacoty, PCMModelType[] types) {
+		super(name, name, null);
+		
+		setTitle(name);
 
 		this.types = types;
 		this.adapterFactory = adapterFacoty;

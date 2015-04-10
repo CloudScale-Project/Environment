@@ -20,7 +20,8 @@ public class ImportPCMModelWizard extends Wizard{
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
 		
-		modelSelectionPage = new ImportModelSelectionPage();
+		modelSelectionPage = new ImportModelSelectionPage("Select PCM model to import");
+		modelSelectionPage.setDescription("Please select project and then desired PCM models to import");
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	

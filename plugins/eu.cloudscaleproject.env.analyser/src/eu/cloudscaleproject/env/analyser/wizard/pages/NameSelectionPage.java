@@ -15,7 +15,8 @@ public class NameSelectionPage extends WizardPage{
 	private String name = "";
 
 	public NameSelectionPage(String title) {
-		super(title);
+		super(title, title, null);
+		setTitle(title);
 	}
 	
 	public String getName(){

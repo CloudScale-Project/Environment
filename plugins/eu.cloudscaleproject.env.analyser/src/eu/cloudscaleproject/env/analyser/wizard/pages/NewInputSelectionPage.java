@@ -37,7 +37,6 @@ public class NewInputSelectionPage extends WizardSelectionPage{
 		setTitle("New input alternative selection page");
 		setDescription("Create new input alternative");
 
-
 		nodes.add(new CreateEmptyInputAltNode(project));
 		nodes.add(new CreateImportInputAltNode(project));
 	}

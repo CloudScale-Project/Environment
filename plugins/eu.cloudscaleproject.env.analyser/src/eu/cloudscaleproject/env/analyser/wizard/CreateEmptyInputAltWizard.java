@@ -29,9 +29,10 @@ public class CreateEmptyInputAltWizard extends Wizard{
 	public CreateEmptyInputAltWizard(IProject project) {
 		this.project = project;
 				
-		nameSelectionPage = new NameSelectionPage("New input alternative");
-		modelSelectionPage = new ModelSelectionPage("Select PCM models to start with",
-				new CustomAdapterFactory(), types);
+		nameSelectionPage = new NameSelectionPage("New input alternative name");
+		nameSelectionPage.setDescription("Please type in name for the new alternative");
+		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
+		modelSelectionPage.setDescription("Please select PCM models to start with");
 	}
 	
 	@Override

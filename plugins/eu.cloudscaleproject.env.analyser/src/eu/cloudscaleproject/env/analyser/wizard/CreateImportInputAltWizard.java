@@ -27,7 +27,10 @@ public class CreateImportInputAltWizard extends Wizard{
 		this.project = project;
 		
 		nameSelectionPage = new NameSelectionPage("New input alternative name");
-		importModelSelectionPage = new ImportModelSelectionPage();
+		nameSelectionPage.setDescription("Please type in name for the new alternative");
+		importModelSelectionPage = new ImportModelSelectionPage("Import existing models");
+		importModelSelectionPage.setDescription("Please select project and then desired PCM models to import");
+		
 		optionsPage = new ImportAlternativeOptionsPage();
 	}
 	

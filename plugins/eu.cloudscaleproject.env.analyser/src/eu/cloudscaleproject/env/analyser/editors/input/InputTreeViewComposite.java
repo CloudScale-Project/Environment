@@ -2,8 +2,13 @@ package eu.cloudscaleproject.env.analyser.editors.input;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -23,6 +28,27 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 
 	private Composite buttonsComposite;
 	private EMFEditableTreeviewComposite treeviewComposite;
+	private final Button btnDelete;
+	
+	ISelectionChangedListener treeViewSelectionListener = new ISelectionChangedListener() {
+		
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			ISelection selection = event.getSelection();
+			
+			if(btnDelete == null || btnDelete.isDisposed()){
+				return;
+			}
+			
+			if(selection.isEmpty()){
+				btnDelete.setEnabled(false);
+			}
+			else{
+				btnDelete.setEnabled(true);
+			}
+			
+		}
+	};
 	
 	public InputTreeViewComposite(final InputAlternative input, Composite parent, int style) {
 		super(parent, style);		
@@ -75,21 +101,35 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				super.widgetSelected(e);
 			}
 		});
-		Button btnDelete = new Button(buttonsComposite, SWT.NONE);
-		btnDelete.setText("Delete...");
+		btnDelete = new Button(buttonsComposite, SWT.NONE);
+		btnDelete.setText("Delete");
+		btnDelete.setEnabled(false);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = treeviewComposite.getSelectedModelFile();
-				input.removeSubResourceModel(file);
-				try {
-					file.delete(true, null);
-				} catch (CoreException e1) {
-					e1.printStackTrace();
+				if(file != null){
+					input.removeSubResourceModel(file);
+					try {
+						file.delete(true, null);
+					} catch (CoreException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
+		
+		treeviewComposite.getTreeViewer().addSelectionChangedListener(treeViewSelectionListener);
+		addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				treeviewComposite.getTreeViewer().removeSelectionChangedListener(treeViewSelectionListener);
+			}
+		});
 	}
+	
+	
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {

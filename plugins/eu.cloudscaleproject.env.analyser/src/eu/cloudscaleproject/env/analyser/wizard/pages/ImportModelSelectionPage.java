@@ -39,11 +39,9 @@ public class ImportModelSelectionPage extends WizardPage{
 	ResourceSet resSet = new ResourceSetImpl();
 	CheckboxTableViewer tableView;
 
-	public ImportModelSelectionPage() {
-		super("Model selection");
-		
-		setTitle("Model selection");
-		setDescription("Please select models to be imported");
+	public ImportModelSelectionPage(String name) {
+		super(name, name, null);
+		setTitle(name);
 	}
 	
 	public Resource[] getSelectedResources(){
