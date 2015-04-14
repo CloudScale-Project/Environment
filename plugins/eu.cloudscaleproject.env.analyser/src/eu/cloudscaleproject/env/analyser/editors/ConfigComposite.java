@@ -86,6 +86,7 @@ public class ConfigComposite extends SidebarEditorComposite
 	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable{
 
 		private ConfigEditComposite editComposite;
+		private Composite configComposite;
 
 		// private ConfigTreeviewComposite sloTreeview;
 
@@ -129,16 +130,16 @@ public class ConfigComposite extends SidebarEditorComposite
 
 				if (ConfAlternative.Type.NORMAL.equals(alternative.getTypeEnum()))
 				{
-					Composite basicComposite = new ConfigBasicComposite(input, tabFolder, SWT.NONE);
-					tabItem.setControl(basicComposite);
+					configComposite = new ConfigBasicComposite(input, tabFolder, SWT.NONE);
+					tabItem.setControl(configComposite);
 				} else if (ConfAlternative.Type.CAPACITY.equals(alternative.getTypeEnum()))
 				{
-					Composite capacityComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
-					tabItem.setControl(capacityComposite);
+					configComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
+					tabItem.setControl(configComposite);
 				} else if (ConfAlternative.Type.SCALABILITY.equals(alternative.getTypeEnum()))
 				{
-					Composite capacityComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
-					tabItem.setControl(capacityComposite);
+					configComposite = new ConfigCapacity(input, tabFolder, SWT.NONE);
+					tabItem.setControl(configComposite);
 				}
 				tabFolder.setSelection(tabItem);
 			}

@@ -1,7 +1,10 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.measure.Measure;
@@ -602,13 +605,14 @@ public class ConfAlternative extends EditorInputEMF{
 	public void configureResults(){
 		Experiment exp = getExperiment();
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
-		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
+		//IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
 		
-		if(resultAlternative == null){
-			resultAlternative = resultResProvider.createNewResource(
-					this.getResource().getName(), "Result ["+getName()+"]", type.toString());
-			resultAlternative.save();
-		}
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		
+		ResultAlternative resultAlternative = (ResultAlternative)resultResProvider
+				.createNewResource(dateFormat.format(date) + " [" +getName()+ "]", type.name());
+		resultAlternative.save();
 		
 		//create data source - a.k.a where the result will be saved
 		FileDatasource ds = AbstractsimulationFactory.eINSTANCE.createFileDatasource();

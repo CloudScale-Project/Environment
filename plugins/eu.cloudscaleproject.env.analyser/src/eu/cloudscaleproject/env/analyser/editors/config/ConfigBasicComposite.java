@@ -42,13 +42,14 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public class ConfigBasicComposite extends Composite{
+public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
 	protected final ConfAlternative alternative;
 	
@@ -73,7 +74,7 @@ public class ConfigBasicComposite extends Composite{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ConfAlternative.PROP_INPUT_ALT_SET.equals(evt.getPropertyName())){
-				load();
+				refresh();
 			}
 		}
 	};
@@ -250,14 +251,14 @@ public class ConfigBasicComposite extends Composite{
 			}
 		});
 		
-		load();
+		refresh();
 	}
 
 	protected void initExtensions(Composite parent){
 		//override in subclasses
 	}
 
-	public void load() {
+	public void refresh() {
 		
 		for(StopCondition sc : alternative.getExperiment().getStopConditions()){
 			if(sc instanceof SimTimeStopCondition){

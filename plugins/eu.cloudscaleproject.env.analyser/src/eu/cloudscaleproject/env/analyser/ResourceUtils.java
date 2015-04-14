@@ -10,8 +10,8 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.FolderResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -185,16 +185,49 @@ public class ResourceUtils {
 					}
 				};
 				
-				//create default configuration alternatives
-				//TODO: move this line to project creation
-				//createCapacityResourceConf(resourceProvider);
-				
 				return resourceProvider;
 			}
 			
 		});
 		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_RES_ID, new FolderResourceProviderFactory());
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_RES_ID, new IResourceProviderFactory() {
+			
+			@Override
+			public ResourceProvider create(IFolder folder) {
+				
+				ResourceProvider resourceProvider = new ResourceProvider(folder, "Result") {
+					
+					@Override
+					public boolean validateResource(IResource res) {
+						if(res instanceof IFolder){
+							if(((IFolder)res).getFile(EditorInputFolder.PROP_FILENAME).exists()){
+								return true;
+							}
+						}
+						return false;
+					}
+					
+					@Override
+					public IEditorInputResource loadResource(IResource res, String type) {
+						
+						if(type == null){
+							type = ConfAlternative.Type.NORMAL.name();
+						}
+						
+						ConfAlternative.Type typeEnum = ConfAlternative.Type.valueOf(type);
+						ResultAlternative eif = new ResultAlternative(res.getProject(), (IFolder)res, typeEnum);
+						return eif;
+					}
+					
+					@Override
+					public IResource createResource(String resourceName) {
+						return getRootFolder().getFolder(resourceName);
+					}
+				};
+				
+				return resourceProvider;
+			}
+		});
 	}
 
 }

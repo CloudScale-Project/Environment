@@ -61,13 +61,13 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		textMaxValue = new Text(compositeConf, SWT.BORDER);
 		textMaxValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		load();
+		refresh();
 	}
 
 	@Override
-	public void load() {
+	public void refresh() {
 		
-		super.load();
+		super.refresh();
 		
 		List<ValueProvider> nestedIntValProviders 
 			= alternative.getVariationValueProviders(ExperimentsPackage.Literals.NESTED_INTERVALS_LONG_VALUE_PROVIDER);
@@ -83,14 +83,15 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		//data binding
 		if(bindingContext != null){
 			bindingContext.dispose();
+			bindingContext = null;
 		}
 		bindingContext = new DataBindingContext();
 		
 		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		t2mStrategy.setConverter(StringToNumberConverter.toDouble(true));
+		t2mStrategy.setConverter(StringToNumberConverter.toLong(true));
 		
 		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
-		m2tStrategy.setConverter(NumberToStringConverter.fromDouble(true));
+		m2tStrategy.setConverter(NumberToStringConverter.fromLong(true));
 		
 		IObservableValue minValObs = EMFEditProperties.value(alternative.getEditingDomain(),
 				ExperimentsPackage.Literals.NESTED_INTERVALS_LONG_VALUE_PROVIDER__MIN_VALUE).observe(valueProvider);

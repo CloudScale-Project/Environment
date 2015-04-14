@@ -62,7 +62,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		return getProperty(ResourceProvider.PROP_TYPE);
 	}
 	
-	private boolean isResourceInternal(IResource res){
+	public boolean isResourceInternal(IResource res){
 		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
 		if(relative.equals(res.getFullPath())){
 			return false;
@@ -297,6 +297,9 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 
 	@Override
 	public synchronized final void delete() {
+		
+		doDelete();
+		
 		if (folder.exists()) {
 			try {
 				folder.delete(true, null);
@@ -305,7 +308,6 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 				e.printStackTrace();
 			}
 		}
-		doDelete();
 		firePropertyChange(PROP_DELETED, false, true);
 	}
 	

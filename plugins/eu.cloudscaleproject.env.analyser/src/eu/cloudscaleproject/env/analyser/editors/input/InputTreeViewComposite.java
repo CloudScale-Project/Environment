@@ -109,11 +109,15 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = treeviewComposite.getSelectedModelFile();
 				if(file != null){
+					boolean isInternal = input.isResourceInternal(file);
 					input.removeSubResourceModel(file);
-					try {
-						file.delete(true, null);
-					} catch (CoreException e1) {
-						e1.printStackTrace();
+					
+					if(isInternal){
+						try {
+							file.delete(true, null);
+						} catch (CoreException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}

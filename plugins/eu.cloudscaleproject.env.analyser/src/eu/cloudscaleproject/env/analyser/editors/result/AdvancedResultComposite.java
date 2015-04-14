@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.analyser.editors.composite;
+package eu.cloudscaleproject.env.analyser.editors.result;
 
 import java.io.File;
 
@@ -43,7 +43,7 @@ import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
-public class ResultAlternativeComposite extends Composite implements IRefreshable{
+public class AdvancedResultComposite extends Composite implements IRefreshable{
 	
 	private final Tree tree;
 	private final TreeViewer treeViewer;
@@ -52,7 +52,7 @@ public class ResultAlternativeComposite extends Composite implements IRefreshabl
 	@Optional @Inject
 	private CommandExecutor commandExecutor;
 	
-	public ResultAlternativeComposite(EditorInputFolder alternative, Composite parent, int style) {
+	public AdvancedResultComposite(EditorInputFolder alternative, Composite parent, int style) {
 		super(parent, style);
 		
 		CloudscaleContext.inject(this);
