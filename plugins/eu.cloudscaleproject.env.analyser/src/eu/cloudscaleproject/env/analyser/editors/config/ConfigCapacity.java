@@ -52,14 +52,22 @@ public class ConfigCapacity extends ConfigBasicComposite{
 		Label lblMinVal = new Label(compositeConf, SWT.NONE);
 		lblMinVal.setText("Minimum number of users:");
 		
+		{
 		textMinValue = new Text(compositeConf, SWT.BORDER);
-		textMinValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
+		gd.widthHint = 80;
+		textMinValue.setLayoutData(gd);
+		}
 		
 		Label lblMaxVal = new Label(compositeConf, SWT.NONE);
 		lblMaxVal.setText("Maximum number of users:");
 		
+		{
 		textMaxValue = new Text(compositeConf, SWT.BORDER);
-		textMaxValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
+		gd.widthHint = 80;
+		textMaxValue.setLayoutData(gd);
+		}
 		
 		refresh();
 	}

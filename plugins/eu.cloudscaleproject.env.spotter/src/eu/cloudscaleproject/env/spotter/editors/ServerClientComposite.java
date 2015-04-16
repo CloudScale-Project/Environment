@@ -216,12 +216,12 @@ public class ServerClientComposite extends Composite
 		SpotterClientController clientController = SpotterClientController.getController(project);
 		boolean connected = clientController.isConnected();
 		
+		
 		if (connected)
 		{
-			ISpotterServer selectedSpotterServer = getSelectedSpotterServer();
 			lblStatus.setText(String.format("Client is connected to %s:%s.",
-							selectedSpotterServer.getHostname(), 
-							selectedSpotterServer.getPort()));
+							clientController.getClient().getHost(), 
+							clientController.getClient().getPort()));
 
 			btnConnectClient.setText("Disconnect client");
 

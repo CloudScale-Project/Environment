@@ -246,10 +246,12 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 
 	private void updateState()
 	{
-		boolean running = BuiltinServerController.getInstance(this.project).isServerRunning();
+		BuiltinServerController bsc = BuiltinServerController.getInstance(this.project);
+		boolean running = bsc.isServerRunning();
 
 		String btnText = running ? "Stop server" : "Start server";
 		this.btnConnect.setText(btnText);
+		
 		
 		String statusText = running ? 
 				"<Server is up and running>" : 
@@ -257,5 +259,6 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		lblStatus.setText(statusText);
 
 		txtPort.setEnabled(!running);
+		txtPort.setText(""+bsc.getServerPort());
 	}
 }

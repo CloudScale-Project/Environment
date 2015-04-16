@@ -119,9 +119,10 @@ public class ConfigComposite extends SidebarEditorComposite
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();
 
-			tabFolder = new CTabFolder(getContainer(), SWT.NONE);
+			tabFolder = new CTabFolder(getContainer(), SWT.BORDER);
 			GridData tabFolder_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			tabFolder.setLayoutData(tabFolder_gd);
+			tabFolder.setTabHeight(32);
 
 			// basic settings
 			{

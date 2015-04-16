@@ -202,6 +202,7 @@ public class BuiltinServerController
 
 		String command = String.format("java -jar %s start port=%s", this.serverJar.getName(), port);
 		this.serverProcess = Runtime.getRuntime().exec(command, null, this.serverJar.getParentFile());
+		this.serverPort = port;
 
 		streamRedirectThread = new StreamRedirectThread(serverProcess.getInputStream(), logger);
 		streamRedirectThread.start();

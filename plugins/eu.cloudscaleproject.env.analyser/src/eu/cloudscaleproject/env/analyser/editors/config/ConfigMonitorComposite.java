@@ -82,6 +82,7 @@ public class ConfigMonitorComposite extends Composite{
 				MeasurementSpecification ms = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
 				masterMonitor.getMeasurementSpecifications().add(ms);
+				folder.setSelection(folder.getItemCount()-1);
 			};
 		});
 		

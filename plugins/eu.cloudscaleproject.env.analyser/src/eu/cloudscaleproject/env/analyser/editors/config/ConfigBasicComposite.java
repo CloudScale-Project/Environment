@@ -175,14 +175,22 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		btnCheckSimTime.setText("Simulation time stop condition:");
 		btnCheckSimTime.setSelection(true);
 		
-		textSimTime = new Text(compositeConf, SWT.BORDER);
-		textSimTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		{
+		textSimTime  = new Text(compositeConf, SWT.BORDER);
+		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
+		gd.widthHint = 80;
+		textSimTime.setLayoutData(gd);
+		}
 		
 		btnCheckMeasureCount = new Button(compositeConf, SWT.CHECK);
 		btnCheckMeasureCount.setText("Measurement count stop condition:");
 		
+		{
 		textMeasureCount = new Text(compositeConf, SWT.BORDER);
-		textMeasureCount.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
+		gd.widthHint = 80;
+		textMeasureCount.setLayoutData(gd);
+		}
 		
 		extensionComposite = new Composite(this, SWT.NONE);
 		extensionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
