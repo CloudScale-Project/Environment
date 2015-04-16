@@ -132,5 +132,5 @@ public class ResourceRegistry {
 		
 		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
 	}
-
+	
 }

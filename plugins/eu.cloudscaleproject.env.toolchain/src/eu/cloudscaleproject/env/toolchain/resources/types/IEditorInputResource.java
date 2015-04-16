@@ -16,6 +16,7 @@ public interface IEditorInputResource extends IEditorInput{
 	public void load();
 	public void delete();
 	
+	public boolean validate();
 	public boolean isDirty();
 		
 	public String getProperty(String key);

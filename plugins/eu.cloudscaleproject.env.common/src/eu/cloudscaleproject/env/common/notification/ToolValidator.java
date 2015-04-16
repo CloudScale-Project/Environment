@@ -27,62 +27,34 @@ public abstract class ToolValidator extends DIExtension{
 		
 		//synchronize to one validator at a time
 		synchronized (lock) {
-			
-			/*
-			Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-			Display display = PlatformUI.getWorkbench().getDisplay();
-			
-			if(shell == null){
-				logger.severe("Shell is null! Wait cursor will not be shown!");
-			}
-			if(display == null){
-				logger.severe("Display is null! Wait cursor will not be shown!");
+			if(statusManager == null){
+				logger.severe("Validation manager was not found! Skipping validation!");
+				return false;
 			}
 			
-			if(shell != null && display != null){
-				shell.setCursor(new Cursor(display, SWT.CURSOR_WAIT));
+			IToolStatus status = statusManager.getStatus(project, getToolID());
+			if(status == null){
+				logger.severe("Tool status with id '" + getToolID() + "' was not found! Skipping validation!");
+				return false;
+			}
+			
+			status.setInstanceName(null);
+			
+			if(!status.hasMetRequirements()){
+				status.setIsInProgress(false);
+				status.setIsDone(false);
+				return false;
 			}
 			
 			try{
-			*/
-				if(statusManager == null){
-					logger.severe("Validation manager was not found! Skipping validation!");
-					return false;
-				}
-				
-				IToolStatus status = statusManager.getStatus(project, getToolID());
-				if(status == null){
-					logger.severe("Tool status with id '" + getToolID() + "' was not found! Skipping validation!");
-					return false;
-				}
-				
-				status.setInstanceName(null);
-				
-				if(!status.hasMetRequirements()){
-					status.setIsInProgress(false);
-					status.setIsDone(false);
-					return false;
-				}
-				
-				try{
-					logger.info("Validation triggered for: " + getToolID());
-					return doValidate(project, status);
-				}
-				catch(Exception e){
-					status.setIsDone(false);
-					status.addWarning(UNKNOWN_ERROR, e.getMessage());
-					e.printStackTrace();
-				}
-			
-			/*
+				logger.info("Validation triggered for: " + getToolID());
+				return doValidate(project, status);
 			}
-			
-			finally{
-				if(shell != null && display != null){
-					shell.setCursor(new Cursor(display, SWT.CURSOR_ARROW));
-				}
+			catch(Exception e){
+				status.setIsDone(false);
+				status.addWarning(UNKNOWN_ERROR, e.getMessage());
+				e.printStackTrace();
 			}
-			*/
 		}
 		return false;
 	}

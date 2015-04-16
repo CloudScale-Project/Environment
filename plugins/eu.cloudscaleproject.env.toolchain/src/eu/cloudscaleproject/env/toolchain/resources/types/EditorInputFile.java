@@ -195,5 +195,10 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 			}
 		}
 	}
+
+	@Override
+	public boolean validate() {
+		return true;
+	}
 	
 }

@@ -395,4 +395,9 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	public boolean isDirty() {
 		return isDirty || propertyInputFile.isDirty();
 	}
+
+	@Override
+	public boolean validate() {
+		return true;
+	}
 }

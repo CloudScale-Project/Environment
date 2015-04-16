@@ -26,7 +26,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 public class InputAlternative extends EditorInputEMF{
 			
 	private static final long serialVersionUID = 1L;
-	
+		
 	public InputAlternative(IProject project, IFolder folder, AdapterFactory factory){
 		super(project, folder, factory);
 	}
@@ -213,5 +213,16 @@ public class InputAlternative extends EditorInputEMF{
 			res.unload();
 			res.load(null);		
 		}
+	}
+	
+	@Override
+	public boolean validate() {
+		boolean valid = super.validate();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_REPOSITORY).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_SYSTEM).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_ALLOCATION).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_USAGE).isEmpty();
+		return valid;
 	}
 }

@@ -36,7 +36,6 @@ import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.edp2.visualization.IVisualisationInput;
 import org.palladiosimulator.edp2.visualization.jfreechart.input.JFreeChartVisualizationInput;
 import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
-import org.palladiosimulator.metricspec.MetricDescription;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
@@ -93,14 +92,15 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 		
 		private final Measurement measurement;
 		private final MeasuringPoint measuringPoint;
-		private final MetricDescription metricDescription;
+		//private final MetricDescription metricDescription;
 
+		@SuppressWarnings("unchecked")
 		public ResultItem(final ExperimentSetting setting, final Measurement measurement, Composite parent, int style) {
 			super(parent, style);
 			
 			this.measurement = measurement;
 			this.measuringPoint = measurement.getMeasuringType().getMeasuringPoint();
-			this.metricDescription = measurement.getMeasuringType().getMetric();
+			//this.metricDescription = measurement.getMeasuringType().getMetric();
 			
 			GridLayout gridLayout = new GridLayout(1, true);
 			setLayout(gridLayout);
@@ -141,6 +141,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 					
 					ChainDescription chainDescription = ResultUtils.getApplicableChainDescriptionsFromExtensions(edp2Source).get(1);
 					
+					@SuppressWarnings("rawtypes")
 					IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
 			        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
 			        

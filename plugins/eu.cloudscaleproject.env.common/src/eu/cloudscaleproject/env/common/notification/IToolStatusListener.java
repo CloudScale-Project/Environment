@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.common.notification;
 
-public interface IToolStatusListener {
+import java.beans.PropertyChangeListener;
+
+public interface IToolStatusListener extends PropertyChangeListener{
 	
 	public static final String PROP_REQ = "eu.cloudscaleproject.env.common.notification.toolstatus.req";
 	public static final String PROP_VALID = "eu.cloudscaleproject.env.common.notification.toolstatus.valid";
@@ -16,6 +18,4 @@ public interface IToolStatusListener {
 	public static final String PROP_UPDATE_ALL = "eu.cloudscaleproject.env.common.notification.toolstatus.updateall";
 	public static final String PROP_REQUIREMENT_UPDATE = "eu.cloudscaleproject.env.common.notification.toolstatus.updatereq";
 	
-	public void notifie(String prop, IToolStatus status);
-
 }

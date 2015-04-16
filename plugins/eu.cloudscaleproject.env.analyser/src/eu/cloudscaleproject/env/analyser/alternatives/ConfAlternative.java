@@ -255,7 +255,6 @@ public class ConfAlternative extends EditorInputEMF{
 		initialModel.setEventMiddleWareRepository((Repository)resEMRep.getContents().get(0));		
 		
 		configureInput(exp, initialModel, inputAlt);
-		
 		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 		
 		setDirty(true);
@@ -264,13 +263,13 @@ public class ConfAlternative extends EditorInputEMF{
 	
 	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
 		if(Type.NORMAL.equals(type)){
-			
+			//TODO:?
 		}
 		else if(Type.CAPACITY.equals(type)){
 			configureCapacity(exp, initialModel);
 		}
 		else if(Type.SCALABILITY.equals(type)){
-			configureCapacity(exp, initialModel);
+			configureScalability(exp, initialModel);
 		}
 	}
 	
@@ -820,7 +819,28 @@ public class ConfAlternative extends EditorInputEMF{
 	}
 	
 	private void initializeScalability(Experiment exp){
-		//TODO: implement
+		exp.setName("Scalability measurement");
+		
+		//create variation
+		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
+		exp.getVariations().clear();
+		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
+		dvp.setMinValue(1);
+		dvp.setMaxValue(100);
+		
+		var.setMinValue(1);
+		var.setMaxValue(100);
+		var.setMaxVariations(10);
+		
+		var.setValueProvider(dvp);
+		//TODO: set type var.setType();
+		exp.getVariations().clear();
+		exp.getVariations().add(var);
+		
+		exp.getModifications().add(ExperimentsFactory.eINSTANCE.createSchedulingPolicy2DelayModification());
+		
+		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+		resSet.getResource(variations, true);
 	}
 	
 	private void configureCapacity(Experiment exp, InitialModel initialModel){
@@ -942,6 +962,10 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 	}
 	
+	private void configureScalability(Experiment exp, InitialModel initialModel){
+		configureCapacity(exp, initialModel);
+	}
+	
 	private void configureToolCapacity(SimuLizarConfiguration simulizarConf) {
 		
 		//create measurement stop condition
@@ -968,5 +992,15 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
+	}
+	
+	@Override
+	public boolean validate() {
+		boolean valid = super.validate();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_MONITOR).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS).isEmpty();
+		valid &= getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS).isEmpty();
+		return valid;
 	}
 }

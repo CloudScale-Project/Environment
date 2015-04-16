@@ -3,6 +3,8 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -23,11 +25,16 @@ import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
-public class ConfigEditComposite extends Composite{
+public class SelectInputAltComposite extends Composite{
+	
+	@Inject
+	private StatusManager statusManager;
 	
 	private final ResourceProvider inputResourceProvider;
 	private final ComboViewer comboViewerInput;
@@ -49,8 +56,10 @@ public class ConfigEditComposite extends Composite{
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigEditComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
+	public SelectInputAltComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
+		
+		CloudscaleContext.inject(this);
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		
@@ -97,7 +106,11 @@ public class ConfigEditComposite extends Composite{
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				ca.setInitialModel((InputAlternative)selection.getFirstElement());
+				InputAlternative ia = (InputAlternative)selection.getFirstElement();
+				
+				//statusManager.getResourceStatus(project, resourceID);
+				
+				ca.setInitialModel(ia);
 			}
 		});
 		

@@ -13,8 +13,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -105,5 +107,16 @@ public class EditorInputEMF extends EditorInputFolder{
 	@Override
 	public boolean isDirty() {
 		return super.isDirty() || ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
+	}
+	
+	@Override
+	public boolean validate() {
+		for(Resource res : resSet.getResources()){
+			Diagnostic diagnostic = Diagnostician.INSTANCE.validate(res.getContents().get(0));
+			if(diagnostic.getSeverity() != Diagnostic.OK){
+				return false;
+			}
+		}
+		return true;
 	}
 }

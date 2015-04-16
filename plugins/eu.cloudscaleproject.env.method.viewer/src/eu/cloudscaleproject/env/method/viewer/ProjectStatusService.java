@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.method.viewer;
 
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -16,7 +17,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
@@ -77,7 +77,7 @@ public class ProjectStatusService {
 				
 				status.addListener(new IToolStatusListener() {
 					@Override
-					public void notifie(String prop, IToolStatus status) {
+					public void propertyChange(PropertyChangeEvent arg0) {
 						synchronized (editorLock) {
 							if(ProjectStatusService.this.editor != null){
 								ProjectStatusService.this.editor.getDiagramBehavior().refreshContent();

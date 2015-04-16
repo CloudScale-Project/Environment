@@ -40,9 +40,15 @@ public class NameSelectionPage extends WizardPage{
 			@Override
 			public void modifyText(ModifyEvent e) {
 				name = text.getText();
+				if(!name.isEmpty()){
+					setPageComplete(true);
+				}
+				else{
+					setPageComplete(false);
+				}
 			}
 		});
-		
+		setPageComplete(false);
 		setControl(container);
 	}
 

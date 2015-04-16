@@ -27,7 +27,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
-import eu.cloudscaleproject.env.analyser.editors.config.ConfigEditComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.SelectInputAltComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -85,7 +85,7 @@ public class ConfigComposite extends SidebarEditorComposite
 
 	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable{
 
-		private ConfigEditComposite editComposite;
+		private SelectInputAltComposite editComposite;
 		private Composite configComposite;
 
 		// private ConfigTreeviewComposite sloTreeview;
@@ -114,7 +114,7 @@ public class ConfigComposite extends SidebarEditorComposite
 			String name = input.getTypeEnum() != null ? input.getTypeEnum().toString() : "Normal";
 			setTitle(name + " measurement type");
 
-			editComposite = new ConfigEditComposite(project, input, getContainer(), SWT.NONE);
+			editComposite = new SelectInputAltComposite(project, input, getContainer(), SWT.NONE);
 			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 			editComposite.setLayoutData(iac_gd);
 			editComposite.pack();

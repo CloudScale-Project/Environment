@@ -1,9 +1,8 @@
 package eu.cloudscaleproject.env.method.viewer;
 
-import java.util.ArrayList;
+import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -25,8 +24,7 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
 public class ToolStatusImpl implements IToolStatus{
 	
 	private final Object listenersLock = new Object();
-	
-	private final List<IToolStatusListener> listeners = new ArrayList<IToolStatusListener>();
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	protected final IProject project;
 	protected final StatusNode statusNode;
@@ -38,36 +36,36 @@ public class ToolStatusImpl implements IToolStatus{
 			int type = msg.getEventType();
 			
 			if(feature == MethodPackage.Literals.SECTION__VALID){
-				fireChange(IToolStatusListener.PROP_VALID);
+				fireChange(IToolStatusListener.PROP_VALID, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.SECTION__IN_PROGRESS){
-				fireChange(IToolStatusListener.PROP_PROGRESS);
+				fireChange(IToolStatusListener.PROP_PROGRESS, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__DONE){
-				fireChange(IToolStatusListener.PROP_DONE);
+				fireChange(IToolStatusListener.PROP_DONE, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__DIRTY){
-				fireChange(IToolStatusListener.PROP_DIRTY);
+				fireChange(IToolStatusListener.PROP_DIRTY, msg.getOldValue(), msg.getNewValue());
 			}
 			else if (feature == MethodPackage.Literals.STATUS_NODE__INSTANCE_NAME) {
-				fireChange(IToolStatusListener.PROP_INSTANCE);
+				fireChange(IToolStatusListener.PROP_INSTANCE, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__WARNINGS){
 				if(type == Notification.ADD){
-					fireChange(IToolStatusListener.PROP_WARNING_ADD);
+					fireChange(IToolStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.ADD_MANY){
-					fireChange(IToolStatusListener.PROP_WARNING_ADD);
+					fireChange(IToolStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.REMOVE){
-					fireChange(IToolStatusListener.PROP_WARNING_REMOVE);
+					fireChange(IToolStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.REMOVE_MANY){
-					fireChange(IToolStatusListener.PROP_WARNING_REMOVE);
+					fireChange(IToolStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
 				}
 			}
 			else if(feature == MethodPackage.Literals.REQUIREMENT){
-				fireChange(IToolStatusListener.PROP_REQUIREMENT_UPDATE);
+				fireChange(IToolStatusListener.PROP_REQUIREMENT_UPDATE, msg.getOldValue(), msg.getNewValue());
 			}
 		};
 	};
@@ -320,25 +318,23 @@ public class ToolStatusImpl implements IToolStatus{
 	@Override
 	public void addListener(IToolStatusListener listener) {
 		synchronized (listenersLock) {
-			this.listeners.add(listener);
+			pcs.addPropertyChangeListener(listener);
 		}
 	}
 
 	@Override
 	public void removeListener(IToolStatusListener listener) {
 		synchronized (listenersLock) {
-			this.listeners.remove(listener);
+			pcs.removePropertyChangeListener(listener);
 		}
 	}
 	
-	public void fireChange(final String prop){
+	public void fireChange(final String prop, final Object oldValue, final Object newValue){
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				synchronized (listenersLock) {
-					for(IToolStatusListener listener : listeners){
-						listener.notifie(prop, ToolStatusImpl.this);
-					}
+					pcs.firePropertyChange(prop, oldValue, newValue);
 				}
 			}
 		});
