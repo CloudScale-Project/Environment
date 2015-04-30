@@ -10,8 +10,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.method.common.method.Command;
 import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.LinkedObject;
@@ -21,7 +21,7 @@ import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
 
-public class ToolStatusImpl implements IToolStatus{
+public class ToolStatusImpl implements IValidationStatus{
 	
 	private final Object listenersLock = new Object();
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -36,36 +36,36 @@ public class ToolStatusImpl implements IToolStatus{
 			int type = msg.getEventType();
 			
 			if(feature == MethodPackage.Literals.SECTION__VALID){
-				fireChange(IToolStatusListener.PROP_VALID, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_VALID, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.SECTION__IN_PROGRESS){
-				fireChange(IToolStatusListener.PROP_PROGRESS, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_PROGRESS, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__DONE){
-				fireChange(IToolStatusListener.PROP_DONE, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_DONE, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__DIRTY){
-				fireChange(IToolStatusListener.PROP_DIRTY, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_DIRTY, msg.getOldValue(), msg.getNewValue());
 			}
 			else if (feature == MethodPackage.Literals.STATUS_NODE__INSTANCE_NAME) {
-				fireChange(IToolStatusListener.PROP_INSTANCE, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_INSTANCE, msg.getOldValue(), msg.getNewValue());
 			}
 			else if(feature == MethodPackage.Literals.STATUS_NODE__WARNINGS){
 				if(type == Notification.ADD){
-					fireChange(IToolStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
+					fireChange(IValidationStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.ADD_MANY){
-					fireChange(IToolStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
+					fireChange(IValidationStatusListener.PROP_WARNING_ADD, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.REMOVE){
-					fireChange(IToolStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
+					fireChange(IValidationStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
 				}
 				else if(type == Notification.REMOVE_MANY){
-					fireChange(IToolStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
+					fireChange(IValidationStatusListener.PROP_WARNING_REMOVE, msg.getOldValue(), msg.getNewValue());
 				}
 			}
 			else if(feature == MethodPackage.Literals.REQUIREMENT){
-				fireChange(IToolStatusListener.PROP_REQUIREMENT_UPDATE, msg.getOldValue(), msg.getNewValue());
+				fireChange(IValidationStatusListener.PROP_REQUIREMENT_UPDATE, msg.getOldValue(), msg.getNewValue());
 			}
 		};
 	};
@@ -316,14 +316,14 @@ public class ToolStatusImpl implements IToolStatus{
 	}
 
 	@Override
-	public void addListener(IToolStatusListener listener) {
+	public void addListener(IValidationStatusListener listener) {
 		synchronized (listenersLock) {
 			pcs.addPropertyChangeListener(listener);
 		}
 	}
 
 	@Override
-	public void removeListener(IToolStatusListener listener) {
+	public void removeListener(IValidationStatusListener listener) {
 		synchronized (listenersLock) {
 			pcs.removePropertyChangeListener(listener);
 		}

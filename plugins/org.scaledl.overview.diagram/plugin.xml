@@ -66,7 +66,7 @@
          point="org.eclipse.ui.editors">
       
       <editor
-            class="org.eclipse.graphiti.ui.editor.DiagramEditor"
+            class="org.scaledl.overview.diagram.diagram.OverviewDiagramEditor"
             contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
             default="true"
             extensions="sdlo_diagram"

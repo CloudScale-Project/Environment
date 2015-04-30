@@ -63,6 +63,7 @@ public class NodeItemProvider
 			super.getPropertyDescriptors(object);
 
 			addIdPropertyDescriptor(object);
+			addSourcePropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
 			addTooltipPropertyDescriptor(object);
@@ -91,6 +92,28 @@ public class NodeItemProvider
 				 getString("_UI_Node_id_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Node_id_feature", "_UI_Node_type"),
 				 MethodPackage.Literals.NODE__ID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Source feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSourcePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Node_source_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Node_source_feature", "_UI_Node_type"),
+				 MethodPackage.Literals.NODE__SOURCE,
 				 true,
 				 false,
 				 false,
@@ -358,6 +381,7 @@ public class NodeItemProvider
 
 		switch (notification.getFeatureID(Node.class)) {
 			case MethodPackage.NODE__ID:
+			case MethodPackage.NODE__SOURCE:
 			case MethodPackage.NODE__NAME:
 			case MethodPackage.NODE__DESCRIPTION:
 			case MethodPackage.NODE__TOOLTIP:

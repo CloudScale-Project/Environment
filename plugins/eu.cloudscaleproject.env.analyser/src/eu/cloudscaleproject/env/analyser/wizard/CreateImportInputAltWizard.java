@@ -10,6 +10,7 @@ import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPa
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportModelSelectionPage;
 import eu.cloudscaleproject.env.analyser.wizard.pages.NameSelectionPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -62,6 +63,8 @@ public class CreateImportInputAltWizard extends Wizard{
 			alternative.addSubResourceModel(f);
 		}
 		alternative.save();
+		
+		ValidationDiagramService.showStatus(project, alternative);
 		
 		return true;
 	}

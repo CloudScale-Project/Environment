@@ -7,6 +7,12 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class FolderResourceProviderFactory implements IResourceProviderFactory{
+	
+	private final String validationID;
+	
+	public FolderResourceProviderFactory(String validationID) {
+		this.validationID = validationID;
+	}
 
 	@Override
 	public ResourceProvider create(final IFolder folder) {
@@ -31,7 +37,7 @@ public class FolderResourceProviderFactory implements IResourceProviderFactory{
 
 			@Override
 			public IEditorInputResource loadResource(IResource res, String type) {
-				return new EditorInputFolder(folder.getProject(), (IFolder)res);
+				return new EditorInputFolder(folder.getProject(), (IFolder)res, validationID);
 			}
 		};
 		

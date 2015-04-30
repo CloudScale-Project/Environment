@@ -10,15 +10,12 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
 
 public class CustomDiagramEditor extends DiagramEditor{
 		
 	private final Object lock = new Object();
 	private boolean resize = false;
-	
-	private IProject project = null;
-	
+		
 	@Override
 	protected DiagramBehavior createDiagramBehavior() {
 		return new CustomDiagramBehavior(this);
@@ -30,14 +27,6 @@ public class CustomDiagramEditor extends DiagramEditor{
 	}
 	
 	@Override
-	public void dispose() {
-		if(this.project != null){
-			StatusServiceImpl.getProjectStatusSrvice(this.project).registerDiagramEditor(null);
-		}
-		super.dispose();
-	}
-	
-	@Override
 	public String getPartName() {
 		IProject p = ExplorerProjectPaths.getProject(this);
 		return "Workflow ("+p.getName()+")";
@@ -45,10 +34,6 @@ public class CustomDiagramEditor extends DiagramEditor{
 	
 	public void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
-
-		//register editor
-		this.project = ExplorerProjectPaths.getProject(this);
-		StatusServiceImpl.getProjectStatusSrvice(this.project).registerDiagramEditor(this);
 				
 		//set zoom
 		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);

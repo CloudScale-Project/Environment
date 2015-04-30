@@ -39,7 +39,7 @@ import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public class MonitorResultsComposite extends Composite implements IRefreshable{
 	

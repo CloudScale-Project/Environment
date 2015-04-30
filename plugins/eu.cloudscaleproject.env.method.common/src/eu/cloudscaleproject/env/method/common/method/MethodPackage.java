@@ -122,13 +122,22 @@ public interface MethodPackage extends EPackage {
 	int NODE__ID = 0;
 
 	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__SOURCE = 1;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__NAME = 1;
+	int NODE__NAME = 2;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -137,7 +146,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__DESCRIPTION = 2;
+	int NODE__DESCRIPTION = 3;
 
 	/**
 	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
@@ -146,7 +155,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__TOOLTIP = 3;
+	int NODE__TOOLTIP = 4;
 
 	/**
 	 * The feature id for the '<em><b>Color Text</b></em>' attribute.
@@ -155,7 +164,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__COLOR_TEXT = 4;
+	int NODE__COLOR_TEXT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Color Foreground</b></em>' attribute.
@@ -164,7 +173,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__COLOR_FOREGROUND = 5;
+	int NODE__COLOR_FOREGROUND = 6;
 
 	/**
 	 * The feature id for the '<em><b>Color Background</b></em>' attribute.
@@ -173,7 +182,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__COLOR_BACKGROUND = 6;
+	int NODE__COLOR_BACKGROUND = 7;
 
 	/**
 	 * The feature id for the '<em><b>Image</b></em>' attribute.
@@ -182,7 +191,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__IMAGE = 7;
+	int NODE__IMAGE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Layout</b></em>' attribute.
@@ -191,7 +200,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__LAYOUT = 8;
+	int NODE__LAYOUT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Command Id</b></em>' attribute.
@@ -200,7 +209,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__COMMAND_ID = 9;
+	int NODE__COMMAND_ID = 10;
 
 	/**
 	 * The feature id for the '<em><b>Command Param</b></em>' attribute list.
@@ -209,7 +218,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE__COMMAND_PARAM = 10;
+	int NODE__COMMAND_PARAM = 11;
 
 	/**
 	 * The number of structural features of the '<em>Node</em>' class.
@@ -218,7 +227,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NODE_FEATURE_COUNT = 11;
+	int NODE_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Node</em>' class.
@@ -293,6 +302,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTAINER__ID = NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__SOURCE = NODE__SOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -438,6 +456,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int STATUS_NODE__ID = NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATUS_NODE__SOURCE = NODE__SOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -601,6 +628,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTION__ID = STATUS_NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION__SOURCE = STATUS_NODE__SOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -782,6 +818,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int SECTION__ID = STATUS_NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SECTION__SOURCE = STATUS_NODE__SOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -999,6 +1044,15 @@ public interface MethodPackage extends EPackage {
 	 * @ordered
 	 */
 	int REQUIREMENT__ID = STATUS_NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REQUIREMENT__SOURCE = STATUS_NODE__SOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1237,6 +1291,15 @@ public interface MethodPackage extends EPackage {
 	int COMMAND__ID = NODE__ID;
 
 	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMAND__SOURCE = NODE__SOURCE;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1460,6 +1523,17 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getNode_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Node#getSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Source</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.Node#getSource()
+	 * @see #getNode()
+	 * @generated
+	 */
+	EAttribute getNode_Source();
 
 	/**
 	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Node#getName <em>Name</em>}'.
@@ -1958,6 +2032,14 @@ public interface MethodPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NODE__ID = eINSTANCE.getNode_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NODE__SOURCE = eINSTANCE.getNode_Source();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.

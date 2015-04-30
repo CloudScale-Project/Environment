@@ -2,8 +2,6 @@ package eu.cloudscaleproject.env.toolchain.resources.dialogs;
 
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -12,13 +10,11 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.StatusManager.Tool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -27,9 +23,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class ResourceSelectionDialog extends Dialog{
 	
 	private static final Logger logger = Logger.getLogger(ResourceSelectionDialog.class.getName());
-
-	@Inject
-	private StatusManager statusManager;
 			
 	private List list = null;
 	
@@ -81,6 +74,8 @@ public class ResourceSelectionDialog extends Dialog{
 			int selectionIndex = list.getSelectionIndex();
 			if(selectionIndex >= 0){
 				
+				//TODO: reimplement this in method module!
+				/*
 				final IEditorInputResource selectedResource = editorInputs[selectionIndex];
 				resProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
 				
@@ -89,6 +84,7 @@ public class ResourceSelectionDialog extends Dialog{
 						statusManager.validate(selectedResource.getResource().getProject(), toolEnum.getID());
 					};
 				});
+				*/
 			}
 		}
 		super.buttonPressed(buttonId);

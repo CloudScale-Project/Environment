@@ -12,18 +12,18 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 
-public class EObjectWrapper
+public class EObjectWrapper<T extends EObject>
 {
-	private EObject master;
-	private List<? extends EObject> slaves;
+	private T master;
+	private List<T> slaves;
 	private EqualityHelper equalityHelper = new SpecialEqualityHelper();
 
-	public EObjectWrapper(List<? extends EObject> slaves)
+	public EObjectWrapper(List<T> slaves)
 	{
 		this(EcoreUtil.copy(slaves.get(0)), slaves);
 	}
 
-	public EObjectWrapper(EObject master, List<? extends EObject> slaves)
+	public EObjectWrapper(T master, List<T> slaves)
 	{
 		this.slaves = slaves;
 		this.master = master;
@@ -146,12 +146,12 @@ public class EObjectWrapper
 		}
 	}
 
-	public EObject getMaster()
+	public T getMaster()
 	{
 		return master;
 	}
 	
-	public List<? extends EObject> getSlaves()
+	public List<T> getSlaves()
 	{
 		return slaves;
 	}

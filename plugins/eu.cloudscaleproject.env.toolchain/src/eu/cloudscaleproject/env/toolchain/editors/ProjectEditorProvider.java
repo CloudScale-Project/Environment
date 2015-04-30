@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 
-@Singleton
 @Creatable
 public class ProjectEditorProvider {
 	

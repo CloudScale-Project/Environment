@@ -1,14 +1,11 @@
 package eu.cloudscaleproject.env.spotter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.spotter.eclipse.ui.UICoreException;
@@ -17,11 +14,7 @@ import org.spotter.eclipse.ui.util.SpotterUtils;
 import org.spotter.shared.environment.model.XMeasurementEnvObject;
 import org.spotter.shared.environment.model.XMeasurementEnvironment;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceUtils {
 	
@@ -45,6 +38,7 @@ public class ResourceUtils {
 		}
 	}
 	
+	/*
 	public static List<EditorInputFolder> getConfAlternatives(IProject project, EditorInputFolder inputAlt){
 		
 		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().
@@ -63,6 +57,7 @@ public class ResourceUtils {
 		
 		return out;
 	}
+	*/
 	
 	public static void bindEditorInputs(EditorInputFolder inputAlternative, EditorInputFolder runAlternative){
 		

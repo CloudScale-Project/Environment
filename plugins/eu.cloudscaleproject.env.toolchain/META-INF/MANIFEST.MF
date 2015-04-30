@@ -10,7 +10,6 @@ Export-Package: eu.cloudscaleproject.env.toolchain,
  eu.cloudscaleproject.env.toolchain.resources,
  eu.cloudscaleproject.env.toolchain.resources.dialogs,
  eu.cloudscaleproject.env.toolchain.resources.types,
- eu.cloudscaleproject.env.toolchain.resources.validation,
  eu.cloudscaleproject.env.toolchain.ui,
  eu.cloudscaleproject.env.toolchain.util
 Require-Bundle: org.eclipse.ui,

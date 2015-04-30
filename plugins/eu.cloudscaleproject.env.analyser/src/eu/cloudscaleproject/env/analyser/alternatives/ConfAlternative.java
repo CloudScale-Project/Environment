@@ -79,15 +79,14 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfAlternative extends EditorInputEMF{
-			
-	private static final long serialVersionUID = 1L;
-	
+				
 	public static final String KEY_NAME = "name";	
 	private final Type type;
 	
 	public static final String PROP_INPUT_ALT_SET = ConfAlternative.class.getName() + "propInputAltSet";
 	public static final String PROP_USAGE_EVOLUTION_SET = ConfAlternative.class.getName() + "propUsageEvolutionSet";
-
+	
+	private final String ERR_INVALID_INPUT_ALTERNATIVE = "eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.invalidInputAlt";
 	
 	public enum Type {
 		NORMAL, CAPACITY, SCALABILITY;
@@ -123,13 +122,24 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		else if(Type.SCALABILITY.equals(type)){
 			initializeScalability(exp);
-		}
+		}		
+	}
+	
+	@Override
+	public String getID() {
+		return ToolchainUtils.ANALYSER_CONF_ID;
 	}
 	
 	public InputAlternative getInputAlternative(){
 		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		return (InputAlternative)rp.getResource(res);
+	}
+	
+	public IEditorInputResource getUsageAlternative(){
+		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
+		return rp.getResource(res);
 	}
 	
 	public Type getTypeEnum(){
@@ -171,18 +181,32 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		
 		setDirty(true);
-		firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
+		pcs.firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
 	}
 	
-	public void setInitialModel(InputAlternative inputAlt){
+	public boolean setInputAlternative(InputAlternative inputAlt){
 		
 		Experiment exp = getExperiment();
 		
 		InitialModel initialModel = exp.getInitialModel();
+		
 		if(inputAlt == null && initialModel != null){
 			exp.setInitialModel(null);
-			return;
+			return true;
 		}
+		
+		inputAlt.validate();
+		if(inputAlt.getSelfStatus().isDone()){
+			getSelfStatus().removeWarning(ERR_INVALID_INPUT_ALTERNATIVE);
+		}
+		else{
+			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, "Invalid input alternative!");
+			setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
+			setDirty(true);
+			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+			return false;
+		}
+		
 		
 		if(initialModel == null){
 			initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
@@ -255,10 +279,13 @@ public class ConfAlternative extends EditorInputEMF{
 		initialModel.setEventMiddleWareRepository((Repository)resEMRep.getContents().get(0));		
 		
 		configureInput(exp, initialModel, inputAlt);
+		
 		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 		
 		setDirty(true);
-		firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+		pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+		
+		return true;
 	}
 	
 	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
@@ -992,15 +1019,5 @@ public class ConfAlternative extends EditorInputEMF{
 		
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
-	}
-	
-	@Override
-	public boolean validate() {
-		boolean valid = super.validate();
-		valid &= getSubResources(ToolchainUtils.KEY_FILE_MONITOR).isEmpty();
-		valid &= getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS).isEmpty();
-		valid &= getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS).isEmpty();
-		valid &= getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS).isEmpty();
-		return valid;
 	}
 }

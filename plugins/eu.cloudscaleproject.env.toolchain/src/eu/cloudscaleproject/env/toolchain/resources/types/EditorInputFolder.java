@@ -1,11 +1,15 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
+import org.eclipse.core.databinding.observable.Diffs;
+import org.eclipse.core.databinding.observable.set.SetDiff;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -13,38 +17,46 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
-public class EditorInputFolder extends PropertyChangeSupport implements IEditorInputResource{
-	private static final long serialVersionUID = 1L;
+public class EditorInputFolder extends EditorInputResource{
 
 	protected final IProject project;
-
+	
 	private EditorInputFile propertyInputFile;
-
 	private final IFolder folder;
 	
-	public static final String PROP_FILENAME = "prop.alt";
+	private final String validationID;
 	
-	public static final String PROP_SAVED = EditorInputFolder.class.getName() + ".propSaved";
-	public static final String PROP_LOADED = EditorInputFolder.class.getName() + ".propLoaded";
-	public static final String PROP_DELETED = EditorInputFolder.class.getName() + ".propDeleted";
-
+	public static final String PROP_FILENAME = "prop.alt";
 	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
 	public static final String PROP_SUB_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propSubResChanged";
 	
 	public static final String DIRTY_CHANGED = EditorInputFolder.class.getName() + ".dirtyChanged";
 
+	private boolean isLoaded = false;
 	private boolean isDirty = false;
+	
+	private HashMap<String, List<IResource>> subResources = new HashMap<String, List<IResource>>();
 		
-	public EditorInputFolder(IProject project, IFolder folder ) {
-		super(folder);
+	public EditorInputFolder(IProject project, IFolder folder) {
+		this(project, folder, null);
+	}
+	
+	public EditorInputFolder(IProject project, IFolder folder, String validationID) {
 		this.project = project;
 		this.folder = folder;
-		
+		this.validationID = validationID;
 
 		IFile file = folder.getFile(PROP_FILENAME);
 		this.propertyInputFile = new EditorInputFile(project, file);
+	}
+	
+	@Override
+	public String getID() {
+		return validationID;
 	}
 	
 	public IProject getProject()
@@ -91,9 +103,19 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			path = getExternalResourcePath(res);
 		}
 		
+		List<IResource> resources = subResources.get(key);
+		if(resources == null){
+			resources = new ArrayList<IResource>();
+			subResources.put(key, resources);
+		}
+		resources.clear();
+		resources.add(res);
+		
 		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
+		
+		updateStatusList();
 	}
 	
 	public void addSubResource(String key, IResource res){
@@ -114,9 +136,18 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			}
 		}
 		
+		List<IResource> resources = subResources.get(key);
+		if(resources == null){
+			resources = new ArrayList<IResource>();
+			subResources.put(key, resources);
+		}
+		resources.add(res);
+		
 		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
+		
+		updateStatusList();
 	}
 	
 	public void removeSubResource(String key, IResource res){
@@ -133,7 +164,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		if(toRemove != null){
 			resources.remove(toRemove);
 		}
-		setSubResources(key, resources);
+		setSubResources(key, resources);		
 	}
 	
 	public void setSubResources(String key, List<? extends IResource> resList){
@@ -159,9 +190,19 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 			}
 		}
 		
+		List<IResource> resources = subResources.get(key);
+		if(resources == null){
+			resources = new ArrayList<IResource>();
+			subResources.put(key, resources);
+		}
+		resources.clear();
+		resources.addAll(resList);
+		
 		propertyInputFile.setProperty(key, value);
 		isDirty = true;
-		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldValue, value);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldValue, value);
+		
+		updateStatusList();
 	}
 	
 	private String getInternalResourcePath(IResource file)
@@ -259,7 +300,8 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		propertyInputFile.save();
 		doSave();
 		isDirty = false;
-		firePropertyChange(PROP_SAVED, false, true);
+		
+		pcs.firePropertyChange(PROP_SAVED, false, true);
 	}
 	
 	protected void doSave(){
@@ -274,14 +316,31 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		}
 		
 		propertyInputFile.load();
+		
+		subResources.clear();
+		for(String key : propertyInputFile.getKeys()){
+			List<IResource> resources = getSubResources(key);
+			if(!resources.isEmpty()){
+				subResources.put(key, getSubResources(key));
+			}
+		}
+		
 		doLoad();
-				
+		
 		isDirty = false;
-		firePropertyChange(PROP_LOADED, false, true);
+		isLoaded = true;
+		updateStatusList();
+		
+		pcs.firePropertyChange(PROP_LOADED, false, true);
 	}
 	
 	protected void doLoad(){
 		//override
+	}
+	
+	@Override
+	public boolean isLoaded() {
+		return isLoaded;
 	}
 
 	public void create() {
@@ -308,7 +367,8 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 				e.printStackTrace();
 			}
 		}
-		firePropertyChange(PROP_DELETED, false, true);
+		pcs.firePropertyChange(PROP_DELETED, false, true);
+		updateStatusList();
 	}
 	
 	protected void doDelete(){
@@ -329,6 +389,10 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	@Override
 	public synchronized final void setName(String name){
 		propertyInputFile.setName(name);
+		IValidationStatus status = getSelfStatus();
+		if(status != null){
+			status.setName(name);
+		}
 	}
 	
 	public synchronized String getProperty(String key){
@@ -338,7 +402,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	public synchronized final void setProperty(String key, String value){
 		String old = getProperty(key);
 		propertyInputFile.setProperty(key, value);
-		firePropertyChange(PROP_CHANGED, old, value);
+		pcs.firePropertyChange(PROP_CHANGED, old, value);
 	}
 	
 	@Override
@@ -363,9 +427,7 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 	////////////////////////////////////////////////////////////////////
 	// Properties wiring 
 	//
-	@Override
-	public void addPropertyChangeListener(String propertyName,
-			PropertyChangeListener listener) {
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		propertyInputFile.addPropertyChangeListener(propertyName, listener);
 		super.addPropertyChangeListener(propertyName, listener);
 	}
@@ -380,24 +442,66 @@ public class EditorInputFolder extends PropertyChangeSupport implements IEditorI
 		propertyInputFile.removePropertyChangeListener(listener);
 		super.removePropertyChangeListener(listener);
 	}
-	@Override
-	public void removePropertyChangeListener(String propertyName,
-			PropertyChangeListener listener) {
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		propertyInputFile.removePropertyChangeListener(propertyName, listener);
 		super.removePropertyChangeListener(propertyName, listener);
 	}
 	
 	public void setDirty(boolean param){
-		firePropertyChange(DIRTY_CHANGED, this.isDirty, this.isDirty = param);
+		pcs.firePropertyChange(DIRTY_CHANGED, this.isDirty, this.isDirty = param);
 	}
 
 	@Override
 	public boolean isDirty() {
 		return isDirty || propertyInputFile.isDirty();
 	}
-
-	@Override
-	public boolean validate() {
-		return true;
+	
+	////////////////////////////////////////////////////////////////////
+	// Validation
+	//
+	private void updateStatusList(){
+		
+		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(statusSet);
+		HashSet<IValidationStatus> newList = new HashSet<IValidationStatus>();
+		
+		if(folder.exists()){
+			for(Entry<String, List<IResource>> entry : subResources.entrySet()){
+				for(IResource res : entry.getValue()){
+					IValidationStatus status = new ResourceValidationStatus(entry.getKey(), res);
+					newList.add(status);
+				}
+			}
+		}
+		
+		SetDiff diff = Diffs.computeSetDiff(oldList, newList);
+		
+		for(Object removedStatus : diff.getRemovals()){
+			removeStatus((IValidationStatus)removedStatus);
+		}
+		for(Object addedStatus : diff.getAdditions()){
+			addStatus((IValidationStatus)addedStatus);
+		}
+		
+		IValidationStatus status = getSelfStatus();
+		if(status != null){
+			status.setName(getName());
+		}
 	}
+	
+	public IValidationStatus getStatus(IResource resource){
+		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
+		for(IValidationStatus status : statusSet){
+			if(status instanceof ResourceValidationStatus){
+				ResourceValidationStatus rvs = (ResourceValidationStatus)status;
+				if(resource.equals(rvs.getResource())){
+					out.add(status);
+				}
+			}
+		}
+		
+		//only one status is permitted per resource
+		assert(out.size()<=1);
+		return out.isEmpty() ? null : out.get(0);
+	}
+
 }

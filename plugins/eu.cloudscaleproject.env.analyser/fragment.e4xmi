@@ -2,7 +2,7 @@
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_KlvP4HE9EeKZuZyaRJL9mw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_g9n6kHnSEeKfc49LSeS68A" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_yNgQ0CFJEeSfNL-QVYMrbg" elementId="eu.cloudscaleproject.env.analyser.command.openeditor" commandName="openAnalyserEditor" description="Open Analyser editor tab">
-      <parameters xmi:id="_Jct-MDN5EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.analyser.commandparameter.action" name="action" typeId="String"/>
+      <parameters xmi:id="_Jct-MDN5EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.analyser.commandparameter.action" name="action" typeId=""/>
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_Z1yUsDdmEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.command.openinputdialog" commandName="openInputDialog"/>
     <elements xsi:type="commands:Command" xmi:id="_DpYPAGN7EeSorYO_PWJo-g" elementId="eu.cloudscaleproject.env.analyser.command.openconfdialog" commandName="openConfDialog"/>

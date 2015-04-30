@@ -3,101 +3,82 @@ package eu.cloudscaleproject.env.common.notification;
 import java.util.HashSet;
 import java.util.Set;
 
-class DummyToolStatus implements IToolStatus, IResourceStatus{
+import eu.cloudscaleproject.env.common.BasicCallback;
 
+class DummyToolStatus implements IValidationStatus{
+	
 	@Override
-	public boolean hasMetRequirements() {return true;}
+	public String getID() {
+		return null;
+	}
+	
+	@Override
+	public String getName() {
+		return "Dummy status";
+	}
+	
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+	}
+	
 	@Override
 	public boolean hasWarnings() {return false;}
 	@Override
-	public boolean isInProgress() {return true;}
-	@Override
 	public boolean isDone() {return true;}
 	@Override
-	public void setMetRequirements(boolean metRequ) {}
-	@Override
-	public void setIsInProgress(boolean inProgress) {}
-	@Override
-	public void setIsDone(boolean isDone) {}
+	public void setIsValid(boolean isDone) {}
 	@Override
 	public void addWarning(String id, String message) {}
-	@Override
-	public void addWarning(String id, String message, String command) {}
-	@Override
-	public void addWarning(String id, String message, String command, String... param) {}
 	@Override
 	public void removeWarning(String id) {}
 	@Override
 	public void clearWarnings() {}
 	@Override
-	public void addListener(IToolStatusListener listener) {}
+	public void addListener(IValidationStatusListener listener) {}
 	@Override
-	public void removeListener(IToolStatusListener listener) {}
+	public void removeListener(IValidationStatusListener listener) {}
 	@Override
 	public String getWarningMessage(String id) {return "";}
 	@Override
-	public String getWarningCommand(String id) {return null;}
-	@Override
-	public String[] getWarningCommandParam(String id) {return null;}
-	@Override
 	public Set<String> getWarningIDs() {return new HashSet<String>();}
-	@Override
-	public void handleWarning(String id, boolean expression,
-			boolean throwException, String message)
-			throws IllegalStateException {
-		if(expression){
-			if(throwException){
-				throw new IllegalStateException();
-			}
-		}
-	}
-	@Override
-	public void handleWarning(String id, boolean expression,
-			boolean throwException, String message, String command)
-			throws IllegalStateException {
-		if(expression){
-			if(throwException){
-				throw new IllegalStateException();
-			}
-		}
-	}
-	@Override
-	public void handleWarning(String id, boolean expression,
-			boolean throwException, String message, String command,
-			String... param) throws IllegalStateException {
-		if(expression){
-			if(throwException){
-				throw new IllegalStateException();
-			}
-		}
-	}
 	@Override
 	public boolean isDirty() {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+	
 	@Override
 	public void setIsDirty(boolean dirty) {
 		// TODO Auto-generated method stub
 	}
 	@Override
-	public void setIsDirtyNextRecursive(boolean dirty) {
+	public void addWarning(String id, String message,
+			BasicCallback<Object> handle) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public Object getResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void setResource(Object o) {
+	public void handleWarning(String id) {
 		// TODO Auto-generated method stub
 		
 	}
+
 	@Override
-	public void setInstanceName(String name) {
+	public void check(String id, boolean expression, boolean throwException,
+			String message) throws ValidationException {
 		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public void check(String id, boolean expression, boolean throwException,
+			String message, BasicCallback<Object> handler)
+			throws ValidationException {
+		// TODO Auto-generated method stub
 	}
 }

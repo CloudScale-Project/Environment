@@ -19,10 +19,10 @@ import org.eclipse.ui.ide.IDE;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
-import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
 
 
 public class CommandFeature extends AbstractCustomFeature{
@@ -91,7 +91,7 @@ public class CommandFeature extends AbstractCustomFeature{
 		final Node node = (Node)bo;
 		
 		if(bo instanceof StatusNode){
-			StatusNode statusNode = StatusServiceImpl.getStatusNode((StatusNode)bo);
+			StatusNode statusNode = (StatusNode)bo;
 			
 			if (statusNode instanceof Requirement){
 				Requirement req = (Requirement)statusNode;
@@ -141,6 +141,23 @@ public class CommandFeature extends AbstractCustomFeature{
 					+ "Command will not be executed! Node ID: " + node.getId());
 			return;
 		}
+		
+		IValidationStatusProvider statusProvider = null;
+		
+		EObject eobject = node;
+		while(eobject != null && statusProvider == null){
+			if(eobject instanceof Node){
+				Node n = (Node)eobject;
+				Object source = n.getSource();
+				if(source instanceof IValidationStatusProvider){
+					statusProvider = (IValidationStatusProvider)source;
+				}
+			}
+			eobject = eobject.eContainer();
+		}
+		
+		//inject section source into cloudscale context
+		CloudscaleContext.getContext().set(IValidationStatusProvider.class, statusProvider);
 
 		if (node.getCommandParam().isEmpty()) {
 			executor.execute(node.getCommandId());

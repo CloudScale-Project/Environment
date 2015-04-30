@@ -1,7 +1,5 @@
 package eu.cloudscaleproject.env.spotter.dialogs;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -10,11 +8,10 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -22,11 +19,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class SelectConfAltDialog extends Dialog{
-	
-	@Inject
-	private StatusManager statusManager;
-	
-	private final ResourceProvider confResourceProvider;
 	
 	private final IProject project;
 	
@@ -36,9 +28,6 @@ public class SelectConfAltDialog extends Dialog{
 	public SelectConfAltDialog(IProject project, Shell parentShell, java.util.List<EditorInputFolder> alternatives) {
 		super(parentShell);
 		this.project = project;
-		this.confResourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
-		
 		this.alternatives = alternatives;
 	}
 
@@ -62,15 +51,18 @@ public class SelectConfAltDialog extends Dialog{
 		if (IDialogConstants.OK_ID == buttonId) {
 			int selectionIndex = list.getSelectionIndex();
 			if(selectionIndex >= 0){
-				
 				IEditorInputResource selectedResource = alternatives.get(selectionIndex);
-				confResourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
+				selectedResource.validate();
+				ValidationDiagramService.showStatus(project, selectedResource);
 				
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						statusManager.validate(project, StatusManager.Tool.DYNAMIC_SPOTTER.getID());
-					};
-				});
+				String iaResName = selectedResource.getProperty(ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+				ResourceProvider inputResourceProvider 
+					= ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+				IEditorInputResource inputResource = inputResourceProvider.getResource(iaResName);
+				if(inputResource != null){
+					inputResource.validate();
+					ValidationDiagramService.showStatus(project, inputResource);
+				}
 			}
 		}
 		super.buttonPressed(buttonId);

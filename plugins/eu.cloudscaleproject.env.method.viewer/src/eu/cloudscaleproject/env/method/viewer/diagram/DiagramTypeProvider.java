@@ -1,44 +1,21 @@
 package eu.cloudscaleproject.env.method.viewer.diagram;
 
-import javax.inject.Inject;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 
-import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
-
 public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
-
-	@Optional @Inject
-	StatusManager statusManager;
 	
 	private IToolBehaviorProvider[] toolBehaviorProviders;
 	
 	public DiagramTypeProvider() {
-		super();
-		
-		CloudscaleContext.inject(this);
+		super();		
 		setFeatureProvider(new PatternFeatureProvider(this));
 	}
 	
 	@Override
 	public void postInit() {
 		super.postInit();
-
-		// validate project resources
-		if (statusManager != null) {
-			IProject project = ExplorerProjectPaths
-					.getProjectFromEmfResource(this.getDiagram().eResource());
-			if (project != null) {
-				statusManager.validateAllAsync(project);
-
-			}
-		}
-		
+				
 		/*
 		 * TODO: FIX - Illegal state exception
 		if(getDiagramBehavior() instanceof CustomDiagramBehavior){

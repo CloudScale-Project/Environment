@@ -32,7 +32,7 @@ import org.reclipse.structure.inference.DetectPatternsJob;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;

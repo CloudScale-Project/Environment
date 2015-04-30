@@ -39,7 +39,7 @@ import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 

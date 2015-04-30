@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatusListener;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 
@@ -75,7 +75,7 @@ public class ProjectStatusService {
 					toolStatusMap.put(s.getId(), status);
 				}
 				
-				status.addListener(new IToolStatusListener() {
+				status.addListener(new IValidationStatusListener() {
 					@Override
 					public void propertyChange(PropertyChangeEvent arg0) {
 						synchronized (editorLock) {

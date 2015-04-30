@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Node#getId <em>Id</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.Node#getSource <em>Source</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Node#getName <em>Name</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Node#getDescription <em>Description</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Node#getTooltip <em>Tooltip</em>}</li>
@@ -58,6 +59,32 @@ public interface Node extends EObject {
 	 * @generated
 	 */
 	void setId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Source</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Source</em>' attribute.
+	 * @see #setSource(Object)
+	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getNode_Source()
+	 * @model transient="true"
+	 * @generated
+	 */
+	Object getSource();
+
+	/**
+	 * Sets the value of the '{@link eu.cloudscaleproject.env.method.common.method.Node#getSource <em>Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Source</em>' attribute.
+	 * @see #getSource()
+	 * @generated
+	 */
+	void setSource(Object value);
 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.

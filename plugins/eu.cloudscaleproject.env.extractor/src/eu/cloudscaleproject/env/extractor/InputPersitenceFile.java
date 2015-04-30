@@ -7,8 +7,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
 
 
 public class InputPersitenceFile extends EditorInputFile {
-
-	private static final long serialVersionUID = 1L;
 	
 	public static final String KEY_PROJECT_URL = "project_url";
 

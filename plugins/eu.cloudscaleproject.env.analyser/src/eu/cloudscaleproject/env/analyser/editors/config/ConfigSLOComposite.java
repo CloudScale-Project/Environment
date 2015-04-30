@@ -30,14 +30,14 @@ import org.palladiosimulator.servicelevelobjective.Threshold;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.Converters;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public class ConfigSLOComposite extends Composite implements IRefreshable{
 	
 	private final ConfAlternative alternative;
 	private final EditingDomain editingDomain;
 	
-	private final EObjectWrapper sloWrapper;
+	private final EObjectWrapper<ServiceLevelObjective> sloWrapper;
 	private final ServiceLevelObjective slo;
 	private final ComboViewer comboMeasurementSpecViewer;
 	
@@ -51,13 +51,13 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 	
 	private Label lblNewLabel;
 	
-	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper sloWrapper, Composite parent, int style) {
+	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper<ServiceLevelObjective> sloWrapper, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = alt;
 		this.editingDomain = alt.getEditingDomain();
 		this.sloWrapper = sloWrapper;
-		this.slo = (ServiceLevelObjective)sloWrapper.getMaster();
+		this.slo = sloWrapper.getMaster();
 		
 		setLayout(new GridLayout(2, false));
 		

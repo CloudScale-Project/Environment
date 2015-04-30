@@ -1,12 +1,5 @@
 package eu.cloudscaleproject.env.method.viewer.diagram;
 
-import java.util.HashMap;
-
-import org.eclipse.core.databinding.Binding;
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
-import org.eclipse.emf.databinding.edit.EMFEditProperties;
-import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IDirectEditingFeature;
@@ -39,17 +32,10 @@ import eu.cloudscaleproject.env.method.common.diagram.patterns.ContainerPattern;
 import eu.cloudscaleproject.env.method.common.diagram.patterns.NodePattern;
 import eu.cloudscaleproject.env.method.common.diagram.patterns.RequirementPattern;
 import eu.cloudscaleproject.env.method.common.diagram.patterns.SectionPattern;
-import eu.cloudscaleproject.env.method.common.method.MethodPackage;
-import eu.cloudscaleproject.env.method.common.method.Node;
-import eu.cloudscaleproject.env.method.common.method.StatusNode;
-import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
 import eu.cloudscaleproject.env.method.viewer.diagram.features.CommandFeature;
 
 
 public class PatternFeatureProvider extends DefaultFeatureProviderWithPatterns {
-
-	private final DataBindingContext bindingContext = new DataBindingContext();
-	private final HashMap<Node, Binding> bindings = new HashMap<Node, Binding>();
 	
 	public PatternFeatureProvider(IDiagramTypeProvider dtp) {
 		super(dtp);
@@ -57,29 +43,7 @@ public class PatternFeatureProvider extends DefaultFeatureProviderWithPatterns {
 		addPattern(new CommandPattern());
 		addPattern(new RequirementPattern());
 		addPattern(new ActionPattern());
-		addPattern(new SectionPattern(){
-			@Override
-			public String getTitle(Node node) {
-				
-				//TODO: fix this hack for updating 
-				if(node instanceof StatusNode){
-					
-					StatusNode sn = (StatusNode)node;					
-					if(!bindings.containsKey(sn)){
-						
-						IEMFEditValueProperty prop = EMFEditProperties.value(
-								this.getDiagramBehavior().getEditingDomain(), 
-								MethodPackage.Literals.STATUS_NODE__INSTANCE_NAME);
-						Binding b = bindingContext.bindValue(prop.observe(sn), prop.observe(StatusServiceImpl.getStatusNode(sn)),
-								new EMFUpdateValueStrategy(EMFUpdateValueStrategy.POLICY_NEVER),
-								new EMFUpdateValueStrategy(EMFUpdateValueStrategy.POLICY_UPDATE));
-						
-						bindings.put(sn, b);
-					}					
-				}
-				return super.getTitle(node);
-			}
-		});
+		addPattern(new SectionPattern());
 		addPattern(new ContainerPattern());
 		addPattern(new NodePattern());
 		

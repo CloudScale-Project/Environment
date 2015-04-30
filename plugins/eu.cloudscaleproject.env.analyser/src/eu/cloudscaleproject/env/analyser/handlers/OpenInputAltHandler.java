@@ -2,14 +2,7 @@ package eu.cloudscaleproject.env.analyser.handlers;
 
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
-
-import eu.cloudscaleproject.env.analyser.dialogs.SelectInputAltDialog;
-import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
 public class OpenInputAltHandler {
 	
@@ -18,6 +11,9 @@ public class OpenInputAltHandler {
 	@Execute
 	public void execute(){
 		
+		throw new UnsupportedOperationException("Reimplement this!");
+		//TODO: reimpl
+		/*
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		
@@ -29,6 +25,7 @@ public class OpenInputAltHandler {
 		else{
 			logger.warning("Can't open dialog! Current project can not be retrieved!");
 		}
+		*/
 	}
 	
 }

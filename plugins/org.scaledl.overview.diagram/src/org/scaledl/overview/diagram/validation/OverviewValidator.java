@@ -6,58 +6,52 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.scaledl.overview.Overview;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.StatusManager.Tool;
-import eu.cloudscaleproject.env.common.notification.ToolValidator;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.common.notification.IResourceValidator;
+import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
-public class OverviewValidator extends ToolValidator {
+public class OverviewValidator implements IResourceValidator {
 	
 	//private static final String ERR_OVERVIEW_NULL = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewnull";
 	private static final String ERR_OVERVIEW_EMPTY = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewempty";
 	private static final String ERR_OVERVIEW_INVALID = "org.scaledl.overview.diagram.validation.OverviewValidator.overviewinvalid";
 
 	@Override
-	public String getToolID() {
-		return Tool.OVERVIEW.getID();
+	public String getID() {
+		return ToolchainUtils.OVERVIEW_ID;
 	}
 
 	@Override
-	public IResource[] getDependantResources(IProject project) {
-		return new IResource[]{ExplorerProjectPaths
-					.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL)};
-	}
-
-	@Override
-	public boolean doValidate(IProject project, IToolStatus status) {
-		boolean isValid = true;
-				
+	public void validate(IProject project, IValidationStatusProvider statusProvider) {
+		
+		
+		IValidationStatus status = statusProvider.getSelfStatus();
+		
 		try{
 			IResource res = ExplorerProjectPaths.getProjectFile(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_MODEL);
 			//status.handleWarning(ERR_OVERVIEW_NULL, res == null, false, "Overview model file does not exist!");
 			if(res == null){
-				status.setIsInProgress(false);
-				status.setIsDone(false);
+				status.setIsValid(false);
 				status.clearWarnings();
-				return false;
+				return;
 			}
-			
+						
 			// validate model
 			Resource overviewRes = ExplorerProjectPaths.getProjectEmfResource(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_MODEL);
-			status.handleWarning(ERR_OVERVIEW_INVALID, overviewRes == null, true, "Overview model file has invalid content!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, overviewRes.getContents().isEmpty(), true, "Overview model file is empty!");
+			status.check(ERR_OVERVIEW_INVALID, overviewRes != null, true, "Overview model file has invalid content!");
+			status.check(ERR_OVERVIEW_EMPTY, !overviewRes.getContents().isEmpty(), true, "Overview model file is empty!");
 			
 			Overview ov = (Overview)overviewRes.getContents().get(0);
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getArchitecture() == null, true, "Overview model missing architecture!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getDefinition() == null, true, "Overview model missing system specification!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getDeployment() == null, true, "Overview model missing deployment!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getDataTypes() == null, true, "Overview model missing data types definition!");
+			status.check(ERR_OVERVIEW_EMPTY, ov.getArchitecture() != null, true, "Overview model missing architecture!");
+			status.check(ERR_OVERVIEW_EMPTY, ov.getDefinition() != null, true, "Overview model missing system specification!");
+			status.check(ERR_OVERVIEW_EMPTY, ov.getDeployment() != null, true, "Overview model missing deployment!");
+			status.check(ERR_OVERVIEW_EMPTY, ov.getDataTypes() != null, true, "Overview model missing data types definition!");
 			
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getArchitecture().eContents().isEmpty(), true, "Overview model has empty architecture!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getDeployment().eContents().isEmpty(), true, "Overview model has empty deployment!");
-			status.handleWarning(ERR_OVERVIEW_EMPTY, ov.getDefinition().eContents().isEmpty(), true, "Overview model has empty system specification!");
-
-			
-			status.setIsInProgress(true);
+			status.check(ERR_OVERVIEW_EMPTY, !ov.getArchitecture().eContents().isEmpty(), true, "Overview model has empty architecture!");
+			status.check(ERR_OVERVIEW_EMPTY, !ov.getDeployment().eContents().isEmpty(), true, "Overview model has empty deployment!");
+			status.check(ERR_OVERVIEW_EMPTY, !ov.getDefinition().eContents().isEmpty(), true, "Overview model has empty system specification!");			
 			
 			//
 			// Removed - problems with imported models (Extractor import) ...
@@ -66,13 +60,11 @@ public class OverviewValidator extends ToolValidator {
 			//boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 			//status.handleWarning(ERR_OVERVIEW_INVALID, !modelValid, true, diagnostic.getMessage());
 			
-			status.setIsDone(true);
+			status.setIsValid(true);
 		}
-		catch(IllegalStateException e){
-			isValid = false;
+		catch(ValidationException e){
+			status.setIsValid(false);
 		}
-		
-		return isValid;
 	}
 
 }

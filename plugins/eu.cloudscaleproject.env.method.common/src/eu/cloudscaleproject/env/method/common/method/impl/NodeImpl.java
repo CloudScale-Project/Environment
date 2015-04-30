@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * The following features are implemented:
  * <ul>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.NodeImpl#getId <em>Id</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.NodeImpl#getSource <em>Source</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.NodeImpl#getName <em>Name</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.NodeImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.NodeImpl#getTooltip <em>Tooltip</em>}</li>
@@ -57,6 +58,26 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * @ordered
 	 */
 	protected String id = ID_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Object SOURCE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSource() <em>Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected Object source = SOURCE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -293,6 +314,27 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Object getSource() {
+		return source;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSource(Object newSource) {
+		Object oldSource = source;
+		source = newSource;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.NODE__SOURCE, oldSource, source));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getName() {
 		return name;
 	}
@@ -499,6 +541,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		switch (featureID) {
 			case MethodPackage.NODE__ID:
 				return getId();
+			case MethodPackage.NODE__SOURCE:
+				return getSource();
 			case MethodPackage.NODE__NAME:
 				return getName();
 			case MethodPackage.NODE__DESCRIPTION:
@@ -534,6 +578,9 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		switch (featureID) {
 			case MethodPackage.NODE__ID:
 				setId((String)newValue);
+				return;
+			case MethodPackage.NODE__SOURCE:
+				setSource(newValue);
 				return;
 			case MethodPackage.NODE__NAME:
 				setName((String)newValue);
@@ -581,6 +628,9 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 			case MethodPackage.NODE__ID:
 				setId(ID_EDEFAULT);
 				return;
+			case MethodPackage.NODE__SOURCE:
+				setSource(SOURCE_EDEFAULT);
+				return;
 			case MethodPackage.NODE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -625,6 +675,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		switch (featureID) {
 			case MethodPackage.NODE__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case MethodPackage.NODE__SOURCE:
+				return SOURCE_EDEFAULT == null ? source != null : !SOURCE_EDEFAULT.equals(source);
 			case MethodPackage.NODE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MethodPackage.NODE__DESCRIPTION:
@@ -661,6 +713,8 @@ public class NodeImpl extends MinimalEObjectImpl.Container implements Node {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
+		result.append(", source: ");
+		result.append(source);
 		result.append(", name: ");
 		result.append(name);
 		result.append(", description: ");

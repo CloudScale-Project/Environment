@@ -13,6 +13,8 @@ import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
 import eu.cloudscaleproject.env.analyser.wizard.CreateInputAltWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -59,14 +61,17 @@ public class InputComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends TitleComposite implements IPropertySheetPageProvider{
+	private class RightPanelComposite extends TitleComposite implements ISelectable, IPropertySheetPageProvider{
 		
-		private InputTreeViewComposite treeviewComposite;
+		private final InputTreeViewComposite treeviewComposite;
+		private final InputAlternative alternative;
 
 		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style);
 			getContainer().setLayout(new FillLayout());
 			setTitle(input.getName());
+			
+			alternative = input;
 			treeviewComposite = new InputTreeViewComposite(input, getContainer(), SWT.NONE);
 		}
 
@@ -76,6 +81,13 @@ public class InputComposite extends SidebarEditorComposite{
 				return treeviewComposite.getPropertySheetPage();
 			}
 			return null;
+		}
+		
+		@Override
+		public void onSelect() {
+			ValidationDiagramService.showStatus(project, alternative);
+			ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_CONF_ID);
+			ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_RES_ID);
 		}
 	}
 

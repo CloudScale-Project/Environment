@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -22,6 +24,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
@@ -33,7 +36,9 @@ import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -83,13 +88,12 @@ public class ConfigComposite extends SidebarEditorComposite
 		});
 	}
 
-	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable{
+	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable, ISelectable{
 
 		private SelectInputAltComposite editComposite;
 		private Composite configComposite;
-
-		// private ConfigTreeviewComposite sloTreeview;
-
+		
+		private EMFEditableTreeviewComposite measuringPointsComposite;
 		private ConfigMonitorListComposite monitorsComposite;
 		private ConfigSLOListComposite sloComposite;
 
@@ -144,6 +148,21 @@ public class ConfigComposite extends SidebarEditorComposite
 				}
 				tabFolder.setSelection(tabItem);
 			}
+			
+			// measuring points editor
+			{
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Measuring points");
+				
+				List<MeasuringPointRepository> mpReps = alternative.getMeasuringPointRepositories();
+				MeasuringPointRepository mpRep = mpReps.isEmpty() ? null : mpReps.get(0);
+				
+				measuringPointsComposite = new EMFEditableTreeviewComposite(input, 
+						mpRep,
+						tabFolder, style);
+				
+				tabItem.setControl(measuringPointsComposite);
+			}
 
 			// measurements settings
 			{
@@ -164,6 +183,7 @@ public class ConfigComposite extends SidebarEditorComposite
 				sloComposite.pack();
 				tabItem.setControl(sloComposite);
 			}
+			
 			// advance settings
 			{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
@@ -188,6 +208,12 @@ public class ConfigComposite extends SidebarEditorComposite
 					ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 				}
 			});
+		}
+		
+		@Override
+		public void onSelect() {
+			ValidationDiagramService.showStatus(project, alternative.getInputAlternative());
+			ValidationDiagramService.showStatus(project, alternative);
 		}
 		
 		@Override

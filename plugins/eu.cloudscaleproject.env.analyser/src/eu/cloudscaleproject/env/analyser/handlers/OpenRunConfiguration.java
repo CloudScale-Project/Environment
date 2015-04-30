@@ -17,7 +17,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 
 public class OpenRunConfiguration {
@@ -27,13 +27,17 @@ public class OpenRunConfiguration {
 	@Execute
 	public void execute(StatusManager statusManager) {
 
+		throw new UnsupportedOperationException("Reimplement this!");
+
+		//TODO: reimpl
+		/*
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		if(project == null){
 			logger.warning("Can't open dialog! Current project can not be retrieved!");
 			return;
 		}
 		
-		IToolStatus confStatus = statusManager.getStatus(project, StatusManager.Tool.ANALYSER.getID());
+		IValidationStatus confStatus = statusManager.getStatus(project, StatusManager.Tool.ANALYSER.getID());
 		if(!confStatus.isDone()){
 			DialogUtils.openInformation("Analyser workflow diagram", "Analyser configuration in not complete. Can not run simulation.");
 			return;
@@ -67,6 +71,7 @@ public class OpenRunConfiguration {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				launchConf, DebugUITools.getLaunchGroup(launchConf, "run")
 						.getIdentifier(), null);
+		*/
 	}
 
 }

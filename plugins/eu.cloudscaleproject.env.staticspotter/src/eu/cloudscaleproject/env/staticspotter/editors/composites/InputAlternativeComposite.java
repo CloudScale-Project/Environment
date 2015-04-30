@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
 
 public class InputAlternativeComposite extends Composite implements IRefreshable {

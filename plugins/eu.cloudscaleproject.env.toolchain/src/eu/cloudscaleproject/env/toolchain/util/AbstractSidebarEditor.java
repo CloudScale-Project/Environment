@@ -32,10 +32,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.ColorResources;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.HoverButton;
 import eu.cloudscaleproject.env.common.ui.HoverToggleButton;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.util.ColorHelper;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
@@ -72,7 +73,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	public void handleSelect(IEditorInput selected){};
 	//////////////////////////////////////////////////
 	
-	private class EditorItem implements IPropertySheetPageProvider{
+	protected class EditorItem implements IPropertySheetPageProvider{
 		
 		private final IEditorInput input;
 		private final String sectionName;
@@ -182,10 +183,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 						IEditorInputResource res = (IEditorInputResource)input;
 						res.load();
 						isLoaded = true;
-						
-						if(isSelected){
-							select();
-						}
 					}
 				}
 			});
@@ -303,6 +300,10 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			composite.setFocus();
 			
 			ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
+			
+			if(composite instanceof ISelectable){
+				((ISelectable)composite).onSelect(); 
+			}
 		}
 		
 		public void dispose() {
@@ -576,6 +577,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	
 	public void showInput(IEditorInput input){
 		EditorItem epc = entries.get(input);
+		if(epc == null){
+			return;
+		}
 		epc.select();
 	}
 	

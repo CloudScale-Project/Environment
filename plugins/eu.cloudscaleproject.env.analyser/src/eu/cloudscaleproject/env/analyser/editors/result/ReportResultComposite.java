@@ -19,7 +19,7 @@ import org.palladiosimulator.edp2.models.ExperimentData.ExperimentGroup;
 import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public abstract class ReportResultComposite extends Composite implements IRefreshable{
 	

@@ -2,7 +2,10 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import org.eclipse.core.resources.IResource;
 
-public interface IEditorInputResource extends IEditorInput{
+import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+
+public interface IEditorInputResource extends IEditorInput, IProjectProvider, IValidationStatusProvider{
 
 	public final String KEY_NAME = "name";
 	public final String KEY_TIMESTAMP_CREATED = "created";
@@ -16,7 +19,7 @@ public interface IEditorInputResource extends IEditorInput{
 	public void load();
 	public void delete();
 	
-	public boolean validate();
+	public boolean isLoaded();
 	public boolean isDirty();
 		
 	public String getProperty(String key);

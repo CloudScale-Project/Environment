@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
-import java.beans.PropertyChangeSupport;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -19,26 +19,36 @@ import org.eclipse.core.runtime.CoreException;
 
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
-public class EditorInputFile extends PropertyChangeSupport implements IEditorInputResource{
+public class EditorInputFile extends EditorInputResource{
 	
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EditorInputFile.class.getName());
-	
-	
+		
 	protected Properties source = new Properties();
 	protected final IProject project;
 	protected final IFile file;
 	
+	private final String validationID;
+	
+	private boolean isLoaded = false;
 	private boolean isDirty = false;
 	
 	public EditorInputFile(IProject project, IFile file) {
-		super(file);
+		this(project, file, null);
+	}
+	
+	public EditorInputFile(IProject project, IFile file, String validationID) {
 		this.project = project;
 		this.file = file;
+		this.validationID = validationID;
 		
 		if(file.exists()){
 			load();
 		}
+	}
+	
+	@Override
+	public String getID() {
+		return validationID;
 	}
 	
 	@Override
@@ -65,11 +75,16 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		String old = getName();
 		source.setProperty(KEY_NAME, name);
 		isDirty = true;
-		firePropertyChange(KEY_NAME, old, name);
+		pcs.firePropertyChange(KEY_NAME, old, name);
 	}
 	
 	public synchronized String getProperty(String key){
 		return source.getProperty(key);
+	}
+	
+	public synchronized String[] getKeys(){
+		Set<Object> keys = source.keySet();
+		return keys.toArray(new String[keys.size()]);
 	}
 	
 	public synchronized  void setProperty(String key, String value){
@@ -84,7 +99,7 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		}
 		
 		isDirty = true;
-		firePropertyChange(key, old, value);
+		pcs.firePropertyChange(key, old, value);
 	}
 	
 	@Override
@@ -176,6 +191,13 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 		}
+		
+		isLoaded = true;
+	}
+	
+	@Override
+	public boolean isLoaded() {
+		return isLoaded;
 	}
 	
 	@Override
@@ -195,10 +217,4 @@ public class EditorInputFile extends PropertyChangeSupport implements IEditorInp
 			}
 		}
 	}
-
-	@Override
-	public boolean validate() {
-		return true;
-	}
-	
 }

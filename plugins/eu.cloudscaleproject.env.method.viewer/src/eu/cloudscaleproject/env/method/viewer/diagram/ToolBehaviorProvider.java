@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.method.viewer.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IDoubleClickContext;
@@ -18,7 +19,6 @@ import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.eclipse.graphiti.util.IColorConstant;
 
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
@@ -26,7 +26,6 @@ import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
-import eu.cloudscaleproject.env.method.viewer.StatusServiceImpl;
 import eu.cloudscaleproject.env.method.viewer.diagram.features.CommandFeature;
 
 public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
@@ -46,67 +45,69 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			return decorators.toArray(new IDecorator[decorators.size()]);
 		}
 		
-		//Retrieve chached instance in status service (workaround to obtain exactly the same object instance)
-		IToolStatus status = StatusServiceImpl.getStatus((StatusNode)bo);
-		StatusNode statusNode = StatusServiceImpl.getStatusNode((StatusNode)bo);
-		if(status == null || statusNode == null){
-			return decorators.toArray(new IDecorator[decorators.size()]);
+		StatusNode statusNode = (StatusNode)bo;
+		Section section = null;
+		if(bo instanceof Section){
+			section = (Section)bo;
 		}
 				
 		//handle requirements
 		if(statusNode instanceof Requirement){
+			
 			Requirement r = (Requirement)statusNode;
+			Section parent = null;
 			
-			boolean sectionInProgress = true;
-			boolean sectionDone = true;
-			
-			if(r.eContainer() instanceof Section){
-				Section section = (Section)r.eContainer();
-				sectionInProgress = section.isInProgress();
-				sectionDone = section.isDone();
+			{
+				EObject reqContainer = r.eContainer();
+				if(reqContainer instanceof Section){
+					parent = (Section)reqContainer;
+				}
 			}
 			
-			if(sectionInProgress || sectionDone){
-				if(r.isDone()){
-					
-					ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_TOGGLE_PAD);
-					imageRenderingDecorator.setMessage("Task is done.");
+			if(parent != null && !parent.isInProgress()){
+				//do not draw decorations
+			}
+			else if(parent != null && !calcHasMetRequirements(parent)){
+				//do not draw decorations
+			}
+			else if(r.isDone()){
+				
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_TOGGLE_PAD);
+				imageRenderingDecorator.setMessage("Task is done.");
+				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
+				imageRenderingDecorator.setY(5);
+				decorators.add(imageRenderingDecorator);
+				
+				ColorDecorator cd = new ColorDecorator();
+				cd.setBackgroundColor(IColorConstant.LIGHT_GREEN);
+				cd.setMessage("Section successfully compleated.");
+				decorators.add(cd);
+			}
+			else if(!r.getWarnings().isEmpty()){
+				for(Warning w : r.getWarnings()) {
+					ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
+					imageRenderingDecorator.setMessage(w.getMessage());
 					imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
 					imageRenderingDecorator.setY(5);
 					decorators.add(imageRenderingDecorator);
-					
-					ColorDecorator cd = new ColorDecorator();
-					cd.setBackgroundColor(IColorConstant.LIGHT_GREEN);
-					cd.setMessage("Section successfully compleated.");
-					decorators.add(cd);
 				}
-				else if(!r.getWarnings().isEmpty()){
-					for(Warning w : r.getWarnings()) {
-						ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
-						imageRenderingDecorator.setMessage(w.getMessage());
-						imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-						imageRenderingDecorator.setY(5);
-						decorators.add(imageRenderingDecorator);
-					}
-					
-					ColorDecorator cd = new ColorDecorator();
-					cd.setBackgroundColor(IColorConstant.LIGHT_ORANGE);
-					cd.setMessage("Section contains errors. Resove them before continue!");
-					decorators.add(cd);
-				}
-				else{
-					
-					ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_MISSING);
-					imageRenderingDecorator.setMessage("Requirement is missing!");
-					imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-					imageRenderingDecorator.setY(5);
-					decorators.add(imageRenderingDecorator);
-					
-					ColorDecorator cd = new ColorDecorator();
-					cd.setBackgroundColor(IColorConstant.LIGHT_ORANGE);
-					cd.setMessage("Requirement missing!");
-					decorators.add(cd);
-				}
+				
+				ColorDecorator cd = new ColorDecorator();
+				cd.setBackgroundColor(IColorConstant.LIGHT_ORANGE);
+				cd.setMessage("Section contains errors. Resove them before continue!");
+				decorators.add(cd);
+			}
+			else if(parent != null && parent.isInProgress()){
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_MISSING);
+				imageRenderingDecorator.setMessage("Requirement is missing!");
+				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
+				imageRenderingDecorator.setY(5);
+				decorators.add(imageRenderingDecorator);
+				
+				ColorDecorator cd = new ColorDecorator();
+				cd.setBackgroundColor(IColorConstant.LIGHT_ORANGE);
+				cd.setMessage("Requirement missing!");
+				decorators.add(cd);
 			}
 		}
 		else{
@@ -124,21 +125,20 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				cd.setMessage("Section contains errors. Resove them before continue!");
 				decorators.add(cd);
 			}
-			else if(!status.hasMetRequirements()){
+			else if(section != null && !calcHasMetRequirements(section)){
 				ColorDecorator cd = new ColorDecorator();
 				cd.setBackgroundColor(IColorConstant.LIGHT_GRAY);
 				cd.setMessage("Requirements has not been met.");
 				decorators.add(cd);
 			}
-			else if(status.isInProgress()){
-				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_QUICKASSIST);
-				imageRenderingDecorator.setMessage("Work still has to be done on this node!");
+			else if(statusNode.isDirty()){
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_EDIT_REFRESH);
+				imageRenderingDecorator.setMessage("Current work on this node is out of sync. Please save resources!");
 				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
 				imageRenderingDecorator.setY(5);
 				decorators.add(imageRenderingDecorator);
 			}
-			else if(status.isDone()){
-				
+			else if(statusNode.isDone()){
 				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_TOGGLE_PAD);
 				imageRenderingDecorator.setMessage("Task is done.");
 				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
@@ -150,17 +150,31 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				cd.setMessage("Section successfully compleated.");
 				decorators.add(cd);
 			}
-			
-			if(status.isDirty()){
-				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_EDIT_REFRESH);
-				imageRenderingDecorator.setMessage("Current work on this node is out of sync, based on it's required nodes!");
+			else if(section != null && section.isInProgress()){
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_QUICKASSIST);
+				imageRenderingDecorator.setMessage("Work still has to be done on this node!");
 				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
 				imageRenderingDecorator.setY(5);
 				decorators.add(imageRenderingDecorator);
-			}						
+			}					
 		}
 		
 		return decorators.toArray(new IDecorator[decorators.size()]);
+	}
+	
+	public boolean calcHasMetRequirements(Section section){
+		for(Link link : section.getPrevious()){
+			if(link.isRequired()){
+				LinkedObject lo = link.getStart();
+				if(lo instanceof StatusNode){
+					StatusNode requiredStatusNode = (StatusNode)lo;
+					if(!requiredStatusNode.isDone()){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 	
 	@Override

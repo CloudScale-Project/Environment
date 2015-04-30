@@ -12,11 +12,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
 
-public abstract class AbstractSidebarEditorComposite extends Composite implements ISidebarEditor, IRefreshable, IPropertySheetPageProvider{
+public abstract class AbstractSidebarEditorComposite extends Composite implements ISidebarEditor, ISelectable, IRefreshable, IPropertySheetPageProvider{
 	
 	private AbstractSidebarEditor sidebarBuilder;
 	
@@ -178,6 +180,14 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	@Override
 	public void refresh() {
 		sidebarBuilder.update();
+	}
+	
+	@Override
+	public void onSelect() {
+		EditorItem selection = this.sidebarBuilder.getCurrentSelectionItem();
+		if(selection != null){
+			selection.select();
+		}
 	}
 	
 	@Override

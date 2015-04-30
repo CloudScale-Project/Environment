@@ -1,18 +1,11 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateListStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.emf.databinding.EMFProperties;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -26,8 +19,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
-import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.simulizar.monitorrepository.Monitor;
 import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
@@ -35,21 +26,20 @@ import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackag
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.util.ControlTabItemListProperty;
 
-public class ConfigMonitorComposite extends Composite{
+public class ConfigMonitorComposite extends Composite implements IRefreshable{
 	
 	private final EditingDomain editingDomain;
-	private final EObjectWrapper monitorWrapper;
+	private final EObjectWrapper<Monitor> monitorWrapper;
 
-	private final ListViewer listViewer;
 	private final CTabFolder folder;
+	private final MeasuringPointsComposite measuringPointsComposite;
 	
 	private DataBindingContext bindingContext = null;
-	
-	private final ArrayList<MeasuringPoint> measuringPoints = new ArrayList<MeasuringPoint>();
-	
-	public ConfigMonitorComposite(ConfAlternative alt, final EObjectWrapper monitorWrapper, Composite parent, int style) {
+		
+	public ConfigMonitorComposite(ConfAlternative alt, final EObjectWrapper<Monitor> monitorWrapper, Composite parent, int style) {
 		super(parent, style);
 		
 		this.editingDomain = alt.getEditingDomain();
@@ -65,12 +55,10 @@ public class ConfigMonitorComposite extends Composite{
 		folder = new CTabFolder(this, SWT.BORDER);
 		folder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		listViewer = new ListViewer(this, SWT.BORDER | SWT.V_SCROLL);
-		List list = listViewer.getList();
+		measuringPointsComposite = new MeasuringPointsComposite(this, alt, monitorWrapper, SWT.NONE);
 		GridData gd_list = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_list.widthHint = 220;
-		list.setLayoutData(gd_list);
-		listViewer.setLabelProvider(new AdapterFactoryLabelProvider(alt.getAdapterFactory()));
+		measuringPointsComposite.setLayoutData(gd_list);
 		
 		Composite folderControlsComposite = new Composite(folder, SWT.NONE);
 		folderControlsComposite.setLayout(new FillLayout());
@@ -85,13 +73,6 @@ public class ConfigMonitorComposite extends Composite{
 				folder.setSelection(folder.getItemCount()-1);
 			};
 		});
-		
-		/*
-		Composite expand = new Composite(folderControlsComposite, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
-		gd.heightHint = 0;
-		expand.setLayoutData(gd);
-		*/
 		
 		Button btnRemove = new Button(folderControlsComposite, SWT.NONE);
 		btnRemove.setText("-");
@@ -116,8 +97,8 @@ public class ConfigMonitorComposite extends Composite{
 				}				
 			}
 		});
-		
-		update();
+
+		refresh();
 		initBindings();
 		
 		if(folder.getItemCount() > 0 && folder.getSelectionIndex() == -1){
@@ -193,38 +174,11 @@ public class ConfigMonitorComposite extends Composite{
 		IObservableList obsList = controlListProp.observe(folder);
 				
 		bindingContext.bindList(obsList, obsMeasurSpec, i2mStrategy, m2iStrategy);
-		
-		/*
-		IEMFEditValueProperty mpProp = EMFEditProperties.value(editingDomain, MonitorrepositoryPackage.Literals.MONITOR__MEASURING_POINT);
-		IObservableList wrappedMonitorsObs = PojoObservables.observeList(monitorWrapper, "slaves", Monitor.class);
-		IObservableList mpObs = mpProp.observeDetail(wrappedMonitorsObs);
-		*/
-		
-		IObservableList mpObs = Properties.selfList(MeasuringPoint.class).observe(measuringPoints);
-		//IObservableList mpObs = PojoObservables.observeList(this, "measuringPoints", MeasuringPoint.class);
-		
-		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-		listViewer.setContentProvider(listContentProvider);
-		listViewer.setInput(mpObs);
-		
 		bindingContext.updateTargets();
 	}
 	
-	public void update(){
-		
-		measuringPoints.clear();
-		
-		MeasuringPoint mp = ((Monitor)monitorWrapper.getMaster()).getMeasuringPoint();
-		if(mp != null && !measuringPoints.contains(mp)){
-			measuringPoints.add(mp);
-		}
-		
-		for(EObject obj : monitorWrapper.getSlaves()){
-			mp = ((Monitor)obj).getMeasuringPoint();
-			if(mp != null && !measuringPoints.contains(mp)){
-				measuringPoints.add(mp);
-			}
-		}
+	public void refresh(){
+		measuringPointsComposite.refresh();
 	}
 	
 	private MeasurementSpecComposite createMeasurementSpecComposite(MeasurementSpecification ms){

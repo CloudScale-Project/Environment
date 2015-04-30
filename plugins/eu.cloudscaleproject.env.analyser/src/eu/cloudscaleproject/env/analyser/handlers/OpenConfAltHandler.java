@@ -1,29 +1,11 @@
 package eu.cloudscaleproject.env.analyser.handlers;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.analyser.ResourceUtils;
-import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
-import eu.cloudscaleproject.env.analyser.dialogs.SelectConfAltDialog;
-import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class OpenConfAltHandler {
 
@@ -31,6 +13,10 @@ public class OpenConfAltHandler {
 	
 	@Execute
 	public void execute(CommandExecutor ex, StatusManager statusManager){
+		
+		throw new UnsupportedOperationException("Reimplement this!");
+		//TODO: reimpl 
+		/*
 				
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
@@ -40,7 +26,7 @@ public class OpenConfAltHandler {
 			return;
 		}
 		
-		IToolStatus inputStatus = statusManager.getStatus(project, StatusManager.Tool.ANALYSER_INPUT.getID());
+		IValidationStatus inputStatus = statusManager.getStatus(project, StatusManager.Tool.ANALYSER_INPUT.getID());
 		if(!inputStatus.isDone()){
 			DialogUtils.openInformation("Analyser workflow diagram", "Analyser input does not validate!");
 			return;
@@ -81,7 +67,7 @@ public class OpenConfAltHandler {
 				alternatives.toArray(new ConfAlternative[alternatives.size()]));
 		CloudscaleContext.inject(dialog);
 		dialog.open();
-		
+		*/
 	}
 	
 }

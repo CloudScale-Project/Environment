@@ -10,20 +10,21 @@ import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
 
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ResultAlternative extends EditorInputFolder{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	private final ConfAlternative.Type type;
 	
 	public ResultAlternative(IProject project, IFolder folder, ConfAlternative.Type type) {
 		super(project, folder);
-		this.type = type;
+		this.type = type;		
+	}
+	
+	@Override
+	public String getID() {
+		return ToolchainUtils.ANALYSER_RES_ID;
 	}
 	
 	public ConfAlternative.Type getTypeEnum(){

@@ -7,7 +7,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public abstract class ListComposite extends CompositeContainer implements IRefreshable{
 	

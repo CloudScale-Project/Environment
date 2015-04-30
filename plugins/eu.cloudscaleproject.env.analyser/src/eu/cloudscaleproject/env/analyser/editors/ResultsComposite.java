@@ -15,7 +15,7 @@ import eu.cloudscaleproject.env.analyser.editors.result.CapacityResultComposite;
 import eu.cloudscaleproject.env.analyser.editors.result.MonitorResultsComposite;
 import eu.cloudscaleproject.env.analyser.editors.result.ScalabilityResultComposite;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;

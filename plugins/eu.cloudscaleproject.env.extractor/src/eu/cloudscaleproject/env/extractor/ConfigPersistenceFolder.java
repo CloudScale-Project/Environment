@@ -15,9 +15,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ConfigPersistenceFolder extends EditorInputFolder
 {
-
-	private static final long serialVersionUID = 1L;
-
 	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
 
 	public static final String KEY_INPUT_PROJECT = "extracted_project";

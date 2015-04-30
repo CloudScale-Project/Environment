@@ -13,22 +13,29 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.scaledl.overview.converter.ConverterService;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class RunTransformationHandler {
 	
 	private static final Logger logger = Logger.getLogger(RunTransformationHandler.class.getName());
-	
-	//public void execute(@Named("eu.cloudscaleproject.env.csm2pcm.commandparameter.overviewmodel") String overviewModelPath) {
-	
+		
 	@Execute
-	public void execute(StatusManager statusManager) {
+	public void execute() {
 		
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		if(project == null){
 			logger.warning("Can't find active project! Exiting command..." );
+			return;
+		}
+		
+		IValidationStatusProvider statusProvider = ResourceRegistry.getInstance().getProjectUniqueResource(project, ToolchainUtils.OVERVIEW_ID);
+		statusProvider.validate();
+		if(!statusProvider.getSelfStatus().isDone()){
+			DialogUtils.openError("Overview transformation", "Unable to execute transformation. Overview model is not valid!");
 			return;
 		}
 		
@@ -38,10 +45,6 @@ public class RunTransformationHandler {
 			logger.warning("Overview model is not present in the current project! Exiting command...");
 			return;
 		}
-		//URI repositoryURI = URI.createPlatformResourceURI(overviewModelPath, true);
-		
-		//ResourceSet resSet = new ResourceSetImpl();
-		//Resource res = resSet.getResource(repositoryURI, true);
 		
 		try {
 			res.load(null);
@@ -54,11 +57,13 @@ public class RunTransformationHandler {
 			new ConverterJob(res).schedule(100);
 		}
 		
-		IToolStatus status = statusManager.getStatus(project, StatusManager.Tool.TRANSFORM_OVERVIEW.getID());
+		/*
+		IValidationStatus status = statusManager.getStatus(project, StatusManager.Tool.TRANSFORM_OVERVIEW.getID());
 		if(status != null){
 			status.setIsDirty(false);
 			status.setIsDone(true);
 		}
+		*/
 	}
 	
 	private class ConverterJob extends Job 

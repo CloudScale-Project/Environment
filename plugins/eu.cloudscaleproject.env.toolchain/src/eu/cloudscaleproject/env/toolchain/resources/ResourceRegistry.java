@@ -2,19 +2,23 @@ package eu.cloudscaleproject.env.toolchain.resources;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceRegistry {
 	
 	private static final Logger logger = Logger.getLogger(ResourceRegistry.class.getName());
 	
-	private static final String FOLDER_RESOURCE_PROVIDER_ID = "eu.cloudscaleproject.env.toolchain.util.SidebarResourceRegistry.folder";
-	private static final String FILE_RESOURCE_PROVIDER_ID = "eu.cloudscaleproject.env.toolchain.util.SidebarResourceRegistry.file";
+	private static final String FOLDER_RESOURCE_PROVIDER_ID 
+		= "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.defaultFolderResourceFactory";
+	private static final String FILE_RESOURCE_PROVIDER_ID 
+		= "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.defaultFileResourceFactory";
 	
 	private static ResourceRegistry instance = null;
 	public static ResourceRegistry getInstance(){
@@ -39,11 +43,13 @@ public class ResourceRegistry {
 											= new HashMap<String, IResourceProviderFactory>();
 	private HashMap<IFolder, ResourceProvider> resourceProviders 
 											= new HashMap<IFolder, ResourceProvider>();
+	private HashMap<IProject, Map<String, IEditorInputResource>> projectUniqueResources 
+											= new HashMap<IProject, Map<String, IEditorInputResource>>();
 	
 	public ResourceRegistry() {
 		//register basic resource provider factories
-		registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory());
-		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory());
+		registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory(FOLDER_RESOURCE_PROVIDER_ID));
+		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
 	}
 	
 	/**
@@ -131,6 +137,41 @@ public class ResourceRegistry {
 		}
 		
 		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
+	}
+	
+	public void registerProjectUniqueResource(IEditorInputResource resource, String toolchianID){
+		
+		//remove deleted projects and resources
+		Iterator<IProject> iter = projectUniqueResources.keySet().iterator();
+		while(iter.hasNext()){
+			IProject project = iter.next();
+			
+			if(project.equals(resource.getResource().getProject())){
+				continue;
+			}
+			
+			if(!project.exists()){
+				iter.remove();
+			}
+		}
+		
+		IProject project = resource.getResource().getProject();
+		
+		Map<String, IEditorInputResource> projectResourcesMap = projectUniqueResources.get(resource.getResource().getProject());
+		if(projectResourcesMap == null){
+			projectResourcesMap = new HashMap<String, IEditorInputResource>();
+			projectUniqueResources.put(project, projectResourcesMap);
+		}
+
+		projectResourcesMap.put(toolchianID, resource);
+	}
+	
+	public IEditorInputResource getProjectUniqueResource(IProject project, String toolchainID){
+		Map<String, IEditorInputResource> projectResourcesMap = projectUniqueResources.get(project);
+		if(projectResourcesMap == null){
+			return null;
+		}
+		return projectResourcesMap.get(toolchainID);
 	}
 	
 }

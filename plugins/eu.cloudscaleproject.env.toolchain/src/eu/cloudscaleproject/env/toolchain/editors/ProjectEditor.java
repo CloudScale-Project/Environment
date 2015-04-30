@@ -21,6 +21,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
@@ -140,6 +141,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		}
 		
 		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
+		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
 	}
 	
 	@Override
@@ -150,5 +152,6 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
+		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
 	}
 }

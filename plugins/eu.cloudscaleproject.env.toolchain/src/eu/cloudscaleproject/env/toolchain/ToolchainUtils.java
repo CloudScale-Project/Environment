@@ -43,22 +43,22 @@ public class ToolchainUtils {
 	// file resources
 	
 	// Analyser input & Extractor results (repository&system)
-	public static final String KEY_FILE_REPOSITORY		= "path_repository";
-	public static final String KEY_FILE_RESOURCEENV		= "path_resourceenvironment";
-	public static final String KEY_FILE_SYSTEM			= "path_system";
-	public static final String KEY_FILE_USAGE			= "path_usage";
-	public static final String KEY_FILE_ALLOCATION		= "path_allocation";
+	public static final String KEY_FILE_REPOSITORY		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository";
+	public static final String KEY_FILE_RESOURCEENV		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_resourceenvironment";
+	public static final String KEY_FILE_SYSTEM			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_system";
+	public static final String KEY_FILE_USAGE			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usage";
+	public static final String KEY_FILE_ALLOCATION		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_allocation";
 	
 	// Analyser conf
-	public static final String KEY_FILE_EXPERIMENTS 	= "path_experiments";
-	public static final String KEY_FILE_MONITOR 			= "path_pms";
-	public static final String KEY_FILE_VARIATIONS 		= "path_variations";
-	public static final String KEY_FILE_MESURPOINTS 	= "path_pcmmeasuringpoint";
-	public static final String KEY_FILE_SLO 			= "path_slo";
+	public static final String KEY_FILE_EXPERIMENTS 	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_experiments";
+	public static final String KEY_FILE_MONITOR 		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_pms";
+	public static final String KEY_FILE_VARIATIONS 		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_variations";
+	public static final String KEY_FILE_MESURPOINTS 	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_pcmmeasuringpoint";
+	public static final String KEY_FILE_SLO 			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_slo";
 	
 	// Usage evolution
-	public static final String KEY_FILE_USAGEEVOLUTION	= "path_usageevolution";
-	public static final String KEY_FILE_LIMBO 			= "path_limbo_model";
+	public static final String KEY_FILE_USAGEEVOLUTION	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usageevolution";
+	public static final String KEY_FILE_LIMBO 			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_limbo_model";
 
 	// Extractor results 
 	public static final String KEY_FILE_SOURCEDECORATOR = "path_sourcedecorator";

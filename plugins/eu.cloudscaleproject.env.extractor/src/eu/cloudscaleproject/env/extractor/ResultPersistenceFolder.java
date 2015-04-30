@@ -16,8 +16,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class ResultPersistenceFolder extends EditorInputEMF {
 	
-	private static final long serialVersionUID = 1L;
-
 	public static final String KEY_FOLDER_SOMOX = "folder_somox";
 	public static final String KEY_FOLDER_MODISCO = "folder_modisco";
 

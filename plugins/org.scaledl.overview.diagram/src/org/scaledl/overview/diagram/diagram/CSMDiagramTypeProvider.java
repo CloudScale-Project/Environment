@@ -1,17 +1,59 @@
 package org.scaledl.overview.diagram.diagram;
 
+import java.util.EventObject;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
+import org.scaledl.overview.diagram.OverviewResource;
 
-public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider {
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+
+public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 	
     private IToolBehaviorProvider[] toolBehaviorProviders;
-    
+        
 	public CSMDiagramTypeProvider() {
 		super();
 		setFeatureProvider(new DiagramFeatureProvider(this));
+	}
+	
+	@Override
+	public void postInit() {
+		super.postInit();
+		
+		final IProject project = ExplorerProjectPaths.getProjectFromEmfResource(getDiagram().eResource());
+		
+		OverviewResource resource 
+				= (OverviewResource)ResourceRegistry.getInstance().getProjectUniqueResource(project, ToolchainUtils.OVERVIEW_ID);
+		ValidationDiagramService.showStatus(project, resource);
+		
+		if(resource == null){
+			IFile file = ExplorerProjectPaths.getProjectFile(project, ExplorerProjectPaths.FILE_METHOD_NEW);
+			resource = new OverviewResource(file);
+			ResourceRegistry.getInstance().registerProjectUniqueResource(resource, ToolchainUtils.OVERVIEW_ID);
+		}
+		
+		final OverviewResource overviewResource = resource;
+		
+		ValidationDiagramService.showStatus(project, overviewResource);
+		StatusManager.getInstance().validateAsync(project, overviewResource);
+		
+		getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {
+			
+			@Override
+			public void commandStackChanged(EventObject event) {
+				StatusManager.getInstance().validateAsync(project, overviewResource);
+			}
+		});
 	}
 	
 	@Override
@@ -25,7 +67,6 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider {
 	
 	@Override
 	public void resourceReloaded(Diagram diagram) {
-		// TODO Auto-generated method stub
 		super.resourceReloaded(diagram);
 	}
 	

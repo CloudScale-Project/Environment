@@ -3,29 +3,22 @@ package eu.cloudscaleproject.env.usageevolution.validation;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.ToolValidator;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 
-public class UsageValidator extends ToolValidator{
+public class UsageValidator implements IResourceValidator{
 	
 	@Override
-	public String getToolID() {
-		return StatusManager.Tool.USAGE_EVOLUTION.getID();
-	}
-
-	@Override
-	public IResource[] getDependantResources(IProject project) {
-		return new IResource[]{ToolchainUtils.getToolFolder(project, ToolchainUtils.USAGEEVOLUTION_ID)};
+	public String getID() {
+		return ToolchainUtils.USAGEEVOLUTION_ID;
 	}
 	
 	public boolean validateModels(IProject project, UsageEvolutionAlternative ueAlt) throws CoreException{
@@ -58,31 +51,20 @@ public class UsageValidator extends ToolValidator{
 	}
 
 	@Override
-	protected boolean doValidate(IProject project, IToolStatus status) {
+	public void validate(IProject project, IValidationStatusProvider statusProvider) {
 		
-		IEditorInputResource selectedResource = ToolchainUtils.getToolSelectedResource(project, ToolchainUtils.USAGEEVOLUTION_ID);
-		if(selectedResource == null || !selectedResource.getResource().exists()){
-			status.setIsInProgress(false);
-			status.clearWarnings();
-			status.setIsDone(false);
-			return false;
-		}
-		else{
-			selectedResource.load();
-			status.setIsInProgress(true);
-		}
+		IValidationStatus status = statusProvider.getSelfStatus();
 		
-		UsageEvolutionAlternative ueAlt = (UsageEvolutionAlternative)selectedResource;
+		UsageEvolutionAlternative ueAlt = (UsageEvolutionAlternative)statusProvider;
 		
 		boolean valid = true;
 		try {
-			valid = validateModels(project, ueAlt);
+			valid = validateModels(ueAlt.getProject(), ueAlt);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
-		status.setIsDone(valid);
-		return valid;	
+		status.setIsValid(valid);
 	}
 
 }

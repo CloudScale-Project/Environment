@@ -10,12 +10,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 
 import eu.cloudscaleproject.env.common.notification.IResourceStatus;
-import eu.cloudscaleproject.env.common.notification.IStatusService;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusService;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 
-public class StatusServiceImpl implements IStatusService{
+public class StatusServiceImpl implements IValidationStatusService{
 	
 	static HashMap<IProject, ProjectStatusService> psList = new HashMap<IProject, ProjectStatusService>();
 	
@@ -49,7 +49,7 @@ public class StatusServiceImpl implements IStatusService{
 	 * @param node: <code>Node</code> to retrieve cached <code>Node</code>
 	 * @return Cached instance of the specified <code>Node</code>
 	 */
-	public static IToolStatus getStatus(StatusNode node){
+	public static IValidationStatus getStatus(StatusNode node){
 		
 		if(node == null){
 			throw new NullPointerException("StatusServiceImpl.getStatus(Node node): node is NULL!");
@@ -116,7 +116,7 @@ public class StatusServiceImpl implements IStatusService{
 	}
 	
 	@Override
-	public IToolStatus getToolStatus(IProject project, String tool) {
+	public IValidationStatus getToolStatus(IProject project, String tool) {
 		ProjectStatusService pss = getProjectStatusSrvice(project);
 		return pss.getToolStatus(tool);
 	}

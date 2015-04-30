@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.somox.common.MetricsDetails.GroupID;
 
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;

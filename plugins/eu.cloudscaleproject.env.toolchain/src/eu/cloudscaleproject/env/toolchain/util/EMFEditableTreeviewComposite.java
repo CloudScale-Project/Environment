@@ -73,14 +73,13 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	};
 
 	private ExtendedPropertySheetPage propertySheetPage;
-
-	/**
-	 * Create the composite.
-	 * 
-	 * @param parent
-	 * @param style
-	 */
+	
 	public EMFEditableTreeviewComposite(EditorInputEMF ca, Composite parent, int style)
+	{
+		this(ca, ca.getResourceSet(), parent, style);
+	}
+
+	public EMFEditableTreeviewComposite(EditorInputEMF ca, Object input, Composite parent, int style)
 	{
 		super(parent, style);
 
@@ -140,7 +139,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			}
 		});
 
-		this.treeViewer.setInput(alternative.getResourceSet());
+		this.treeViewer.setInput(input);
 		this.treeViewer.refresh();
 		
 		alternative.addPropertyChangeListener(editorInputListener);

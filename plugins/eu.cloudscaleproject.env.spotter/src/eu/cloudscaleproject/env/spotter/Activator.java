@@ -34,9 +34,12 @@ public class Activator extends AbstractUIPlugin{
 		plugin = this;
 		
 		//register resource provider factories		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID, new FolderResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, new FolderResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, new FolderResourceProviderFactory());		
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID, 
+				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID));
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, 
+				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID));
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, 
+				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_RES_ID));		
 		
 		
 		/*

@@ -7,6 +7,7 @@ import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
 import eu.cloudscaleproject.env.analyser.wizard.pages.NameSelectionPage;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -51,6 +52,8 @@ public class CreateEmptyInputAltWizard extends Wizard{
 		InputAlternative resource = (InputAlternative)provider.createNewResource(name, null);
 		resource.createEmpty(types);
 		resource.save();
+		
+		ValidationDiagramService.showStatus(project, resource);
 		
 		return true;
 	}

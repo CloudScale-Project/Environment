@@ -3,14 +3,14 @@ package eu.cloudscaleproject.env.spotter.handlers;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.spotter.eclipse.ui.util.DialogUtils;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IToolStatus;
-import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.spotter.dialogs.RunAlternativeDialog;
 
 public class DynamicSpotterRunHandler {
@@ -18,11 +18,10 @@ public class DynamicSpotterRunHandler {
 	private final static Logger logger = Logger.getLogger(DynamicSpotterRunHandler.class.getName());
 
 	@Execute
-	public void execute(StatusManager statusManager){
+	public void execute(@Active IProject project, @Optional IValidationStatusProvider statusProvider){
 		
 		//open dialog to select run alternative (confEditorInput)
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		
 		if(project == null){
 			logger.severe("Can't open dialog! Current project can not be retrieved!");
@@ -30,9 +29,8 @@ public class DynamicSpotterRunHandler {
 			return;
 		}
 		
-		if(statusManager != null){
-			IToolStatus status  = statusManager.getStatus(project, StatusManager.Tool.DYNAMIC_SPOTTER.getID());
-			if(!status.isDone()){
+		if(statusProvider != null){
+			if(!statusProvider.getSelfStatus().isDone()){
 				String msg = "Can not run dynamic spotter analyses. Check and fix configuration!";
 				logger.warning(msg);
 				DialogUtils.openWarning("DynamicSpotter Diagnosis", msg);
@@ -42,7 +40,6 @@ public class DynamicSpotterRunHandler {
 		
 		RunAlternativeDialog dialog = new RunAlternativeDialog(project, shell);
 		dialog.open();
-		
 	}
 	
 }

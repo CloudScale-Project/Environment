@@ -514,7 +514,15 @@ public class ExplorerProjectPaths {
 	}
 
 	public static IProject getProjectFromElement(Object element) {
-		return ResourceUtil.getFile(element).getProject();
+		if(element == null){
+			return null;
+		}
+		IFile file = ResourceUtil.getFile(element);
+		if(file != null){
+			return file.getProject();
+		}
+		
+		return null;
 	}
 
 	/**

@@ -1,23 +1,31 @@
 package eu.cloudscaleproject.env.common.notification;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.e4.core.di.annotations.Creatable;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
 
-@Creatable
-@Singleton
 public class StatusManager {
 	
+	public static final String PROP_STATUS_PROVIDER_ADDED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerAdded";
+	public static final String PROP_STATUS_PROVIDER_REMOVED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerRemoved";
+
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	
 	public enum Tool{
-				
+		
 		EXTRACTOR_INPUT("ext_input"),
 		EXTRACTOR("ext_tool"),
 		EXTRACTOR_RESULTS("ext_res"),
@@ -58,12 +66,77 @@ public class StatusManager {
 	}
 	
 	private static final Logger logger = Logger.getLogger(StatusManager.class.getName());
+		
+	private List<IResourceValidator> validators = null;
+	private HashMap<IValidationStatusProvider, IProject> statusProviders = new HashMap<IValidationStatusProvider, IProject>();
+		
+	private static StatusManager instance = null;
+	public static StatusManager getInstance(){
+		if(instance == null){
+			instance = new StatusManager();
+			CloudscaleContext.inject(instance);
+		}
+		return instance;
+	}
 	
-	private final Object statusLock = new Object();
-	private final Object validationLock = new Object();
+	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			pcs.firePropertyChange(evt);
+		}
+	};
 	
-	private List<ToolValidator> validators = null;
-	private List<IStatusService> services = null;
+	public synchronized void addStatusProvider(IProject project, IValidationStatusProvider statusProvider){
+		statusProviders.put(statusProvider, project);
+		statusProvider.addPropertyChangeListener(statusProviderListener);
+		pcs.firePropertyChange(PROP_STATUS_PROVIDER_ADDED, null, statusProvider);
+	}
+	
+	public synchronized void removeStatusProvider(IValidationStatusProvider statusProvider){
+		statusProviders.remove(statusProvider);
+		statusProvider.removePropertyChangeListener(statusProviderListener);			
+		pcs.firePropertyChange(PROP_STATUS_PROVIDER_REMOVED, statusProvider, null);
+	}
+	
+	public synchronized List<IValidationStatusProvider> getStatusProvider(IProject project, String id){
+		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
+		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
+			try{
+				if(project.equals(entry.getValue()) && id.equals(entry.getKey().getID())){
+					out.add(entry.getKey());
+				}
+			}
+			catch(NullPointerException e){
+				//skip
+			}
+		}
+		return out;
+	}
+	
+	/*
+	public List<IValidationStatusProvider> getStatusProviders(IProject project){
+		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
+		for(IValidationStatusProvider provider : statusProviders){
+			try{
+				if(project.equals(provider.getProject())){
+					out.add(provider);
+				}
+			}
+			catch(NullPointerException e){
+				//skip
+			}
+		}
+		return out;
+	}
+	*/
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener){
+		pcs.addPropertyChangeListener(listener);
+	}
+	
+	public void removePropertyChangeListener(PropertyChangeListener listener){
+		pcs.removePropertyChangeListener(listener);
+	}
 	
 	//validation thread
 	private static final ConcurrentLinkedQueue<Runnable> validationTasks = new ConcurrentLinkedQueue<Runnable>();
@@ -85,8 +158,14 @@ public class StatusManager {
 					}
 					
 					Runnable r = validationTasks.poll();
-					if(r != null){
-						r.run();
+					
+					try{
+						if(r != null){
+							r.run();
+						}
+					}
+					catch(Exception e){
+						e.printStackTrace();
 					}
 				
 				}
@@ -99,28 +178,19 @@ public class StatusManager {
 	@Inject
 	private ExtensionRetriever er;
 	
-	public List<ToolValidator> getValidators(){
+	public List<IResourceValidator> getValidators(){
 		if(validators == null){
 			validators = er.retrieveExtensionObjects(
 					"eu.cloudscaleproject.env.common.notification.validator",
-					"class", ToolValidator.class);
+					"class", IResourceValidator.class);
 		}
 		return validators;
 	}
 	
-	public List<IStatusService> getServices(){
-		if(this.services == null){
-			services = er.retrieveExtensionObjects(
-					"eu.cloudscaleproject.env.common.notification.status",
-					"class", IStatusService.class);
-		}
-		return services;
-	}
-	
-	public boolean hasValidator(String toolID){
+	public boolean hasValidator(String id){
 		boolean validatorFound = false;
-		for (ToolValidator v : getValidators()) {
-			if (v.getToolID().equals(toolID)) {
+		for (IResourceValidator v : getValidators()) {
+			if (v.getID().equals(id)) {
 				validatorFound = true;
 			}
 		}
@@ -128,115 +198,68 @@ public class StatusManager {
 		return validatorFound;
 	}
 	
-	public boolean validate(IProject project, String toolID) {
+	public void validate(IProject project, IValidationStatusProvider statusProvider){
+		doValidate(project, statusProvider);
+	}
+	
+	public void validateAsync(final IProject project, final IValidationStatusProvider statusProvider){
+		Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {
+				doValidate(project, statusProvider);
+			}
+		};
+		
+		synchronized (validationTasks) {
+			validationTasks.add(r);
+			validationTasks.notify();
+		}
+	}
+	
+	private void doValidate(IProject project, IValidationStatusProvider statusProvider) {
 
-		boolean isValid = true;
+		if(project == null){
+			logger.severe("Project is NULL! Can not validate: " + statusProvider.toString());
+		}
+		
+		boolean validatorFound = false;
+		for (IResourceValidator v : getValidators()) {				
+			if (v.getID().equals(statusProvider.getID())) {
+				validatorFound = true;
+				v.validate(project, statusProvider);
+			}
+		}
 
-		synchronized (validationLock) {
-			boolean validatorFound = false;
-			for (ToolValidator v : getValidators()) {				
-				if (v.getToolID().equals(toolID)) {
-					validatorFound = true;
-					isValid &= v.validate(project);
+		if (!validatorFound) {
+			logger.warning("Validator not found or it is not registered in extension point! ToolID: "
+					+ statusProvider.getID());
+		}
+	}
+	
+	public synchronized void validateAll(IProject project){
+		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
+			try{
+				if(project.equals(entry.getValue())){
+					validate(project, entry.getKey());
 				}
 			}
-
-			if (!validatorFound) {
-				logger.warning("Validator not found or it is not registered in extension point! +"
-						+ "Method \"validate()\" is returning TRUE for the ToolID: "
-						+ toolID);
+			catch(NullPointerException e){
+				//skip
 			}
-		}
-
-		return isValid;
-	}
-	
-	public boolean validateAll(IProject project) {
-
-		boolean isValid = true;
-		synchronized (validationLock) {
-			for (ToolValidator v : getValidators()) {
-				isValid &= v.validate(project);
-			}
-		}
-		return isValid;
-	}
-	
-	public void validateAsync(final IProject project, final String toolID){
-		Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				validate(project, toolID);
-			}
-		};
-		
-		synchronized (validationTasks) {
-			validationTasks.add(r);
-			validationTasks.notify();
 		}
 	}
 	
-	public void validateAllAsync(final IProject project){
-		Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				validateAll(project);
+	public synchronized void validateAllAsync(IProject project){
+		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
+			try{
+				if(project.equals(entry.getValue())){
+					validateAsync(project, entry.getKey());
+				}
 			}
-		};
-		
-		synchronized (validationTasks) {
-			validationTasks.add(r);
-			validationTasks.notify();
-		}
-	}
-
-	public IToolStatus getStatus(IProject project, String toolID) {
-
-		synchronized (statusLock) {
-			
-			if(getServices().isEmpty()){
-				logger.warning("Notification system implementation plugin or extension point NOT FOUND!");
-				logger.warning("Returning \"dummy\" IToolStatus object for toolID: "+ toolID); 
-				//dummy implementations - notification service should not produce null pointer exceptions! 
-				return new DummyToolStatus(); 
+			catch(NullPointerException e){
+				//skip
 			}
-			
-			IToolStatus status = getServices().get(0).getToolStatus(project, toolID);
-
-			if(status == null){
-				logger.warning("Notification system for specified toolID NOT FOUND!");
-				logger.warning("Returning \"dummy\" IToolStatus object for: " + toolID);
-				//dummy implementations - notification service should not produce null pointer exceptions!
-				return new DummyToolStatus();
-			}
-
-			return status;
-		}
-	}
-	
-	public IResourceStatus getResourceStatus(IProject project, String resourceID) {
-
-		synchronized (statusLock) {
-			
-			if(getServices().isEmpty()){
-				logger.warning("Notification system implementation plugin or extension point NOT FOUND!");
-				logger.warning("Returning \"dummy\" IToolStatus object for toolID: "+ resourceID); 
-				//dummy implementations - notification service should not produce null pointer exceptions! 
-				return new DummyToolStatus(); 
-			}
-			
-			IResourceStatus status = getServices().get(0).getResourceStatus(project, resourceID);
-
-			if(status == null){
-				logger.warning("Notification system for specified toolID NOT FOUND!");
-				logger.warning("Returning \"dummy\" IToolStatus object for: " + resourceID);
-				//dummy implementations - notification service should not produce null pointer exceptions!
-				return new DummyToolStatus();
-			}
-
-			return status;
 		}
 	}
 }

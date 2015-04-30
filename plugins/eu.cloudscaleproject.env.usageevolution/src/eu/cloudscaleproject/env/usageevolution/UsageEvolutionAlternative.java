@@ -30,10 +30,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class UsageEvolutionAlternative extends EditorInputFolder{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	private static final Logger logger = Logger.getLogger(UsageEvolutionAlternative.class.getName());
 		

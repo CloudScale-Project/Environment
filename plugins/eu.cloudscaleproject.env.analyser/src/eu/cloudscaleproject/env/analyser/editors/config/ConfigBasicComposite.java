@@ -42,7 +42,7 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.common.ui.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;

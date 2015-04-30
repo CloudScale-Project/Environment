@@ -3,8 +3,8 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NrKYIKO8EeOVJP61i6fIgw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_OQq48KO8EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.0" commandName="runAnalyser" description="Run simulation using analyser tool"/>
     <elements xsi:type="commands:Command" xmi:id="_L3EzAKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.openprojecteditor" commandName="openProjectEditor" description="Opens project editor">
-      <parameters xmi:id="_cyx5UKhjEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.tabid" name="tabId" typeId="String" optional="false"/>
-      <parameters xmi:id="_BJ560DN2EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.action" name="action" typeId="String"/>
+      <parameters xmi:id="_cyx5UKhjEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.tabid" name="tabId" typeId="" optional="false"/>
+      <parameters xmi:id="_BJ560DN2EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.action" name="action" typeId=""/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PBqRAKO8EeOVJP61i6fIgw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">

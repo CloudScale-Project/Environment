@@ -215,7 +215,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_Name() {
+	public EAttribute getNode_Source() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -224,7 +224,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_Description() {
+	public EAttribute getNode_Name() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -233,7 +233,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_Tooltip() {
+	public EAttribute getNode_Description() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -242,7 +242,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_ColorText() {
+	public EAttribute getNode_Tooltip() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -251,7 +251,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_ColorForeground() {
+	public EAttribute getNode_ColorText() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -260,7 +260,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_ColorBackground() {
+	public EAttribute getNode_ColorForeground() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -269,7 +269,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_Image() {
+	public EAttribute getNode_ColorBackground() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -278,7 +278,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_Layout() {
+	public EAttribute getNode_Image() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -287,7 +287,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_CommandId() {
+	public EAttribute getNode_Layout() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -296,8 +296,17 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNode_CommandParam() {
+	public EAttribute getNode_CommandId() {
 		return (EAttribute)nodeEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNode_CommandParam() {
+		return (EAttribute)nodeEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -604,6 +613,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		nodeEClass = createEClass(NODE);
 		createEAttribute(nodeEClass, NODE__ID);
+		createEAttribute(nodeEClass, NODE__SOURCE);
 		createEAttribute(nodeEClass, NODE__NAME);
 		createEAttribute(nodeEClass, NODE__DESCRIPTION);
 		createEAttribute(nodeEClass, NODE__TOOLTIP);
@@ -699,6 +709,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		initEClass(nodeEClass, Node.class, "Node", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNode_Id(), ecorePackage.getEString(), "id", "", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNode_Source(), ecorePackage.getEJavaObject(), "source", null, 0, 1, Node.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Name(), ecorePackage.getEString(), "name", "name", 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Description(), ecorePackage.getEString(), "description", null, 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNode_Tooltip(), ecorePackage.getEString(), "tooltip", "", 0, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

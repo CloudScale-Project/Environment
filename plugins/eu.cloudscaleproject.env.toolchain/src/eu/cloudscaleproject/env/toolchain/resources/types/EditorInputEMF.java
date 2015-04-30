@@ -13,16 +13,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 public class EditorInputEMF extends EditorInputFolder{
 	
-	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EditorInputEMF.class.getName());
 
 	public static final String PROP_COMMAND_STACK_CHANGED = EditorInputEMF.class.getName() + ".commandStackChanged";
@@ -32,9 +29,13 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected final AdapterFactory factory;
 	
 	protected final ResourceSet resSet;
-
+	
 	public EditorInputEMF(IProject project, IFolder folder, AdapterFactory factory) {
-		super(project, folder);
+		this(project, folder, factory, null);
+	}
+
+	public EditorInputEMF(IProject project, IFolder folder, AdapterFactory factory, String validationID) {
+		super(project, folder, validationID);
 		this.factory = factory;
 		
 		commandStack = new BasicCommandStack();
@@ -42,7 +43,7 @@ public class EditorInputEMF extends EditorInputFolder{
 			
 			@Override
 			public void commandStackChanged(EventObject event) {
-				firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
+				pcs.firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
 			}
 		});
 		
@@ -73,12 +74,6 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	@Override
-	public synchronized final void save() {
-		super.save();
-		commandStack.saveIsDone();
-	}
-	
-	@Override
 	protected void doSave() {
 
 		super.doSave();
@@ -102,21 +97,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+		
+		commandStack.saveIsDone();
 	}
 	
 	@Override
 	public boolean isDirty() {
 		return super.isDirty() || ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
-	}
-	
-	@Override
-	public boolean validate() {
-		for(Resource res : resSet.getResources()){
-			Diagnostic diagnostic = Diagnostician.INSTANCE.validate(res.getContents().get(0));
-			if(diagnostic.getSeverity() != Diagnostic.OK){
-				return false;
-			}
-		}
-		return true;
 	}
 }
