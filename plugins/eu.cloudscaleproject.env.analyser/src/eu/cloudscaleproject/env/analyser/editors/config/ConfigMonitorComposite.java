@@ -35,7 +35,7 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 	private final EObjectWrapper<Monitor> monitorWrapper;
 
 	private final CTabFolder folder;
-	private final MeasuringPointsComposite measuringPointsComposite;
+	private final MeasuringPointsSelectionComposite measuringPointsComposite;
 	
 	private DataBindingContext bindingContext = null;
 		
@@ -55,7 +55,7 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		folder = new CTabFolder(this, SWT.BORDER);
 		folder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		measuringPointsComposite = new MeasuringPointsComposite(this, alt, monitorWrapper, SWT.NONE);
+		measuringPointsComposite = new MeasuringPointsSelectionComposite(this, alt, monitorWrapper, SWT.NONE);
 		GridData gd_list = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_list.widthHint = 220;
 		measuringPointsComposite.setLayoutData(gd_list);

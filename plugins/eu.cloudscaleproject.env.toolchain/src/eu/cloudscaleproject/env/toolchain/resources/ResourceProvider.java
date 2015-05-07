@@ -200,7 +200,7 @@ public abstract class ResourceProvider{
 				if(res.exists() && validateResource(res)){
 					
 					String type = null;
-					if(res instanceof IFile){
+					if(res instanceof IFile && "prop".equals(res.getFileExtension())){
 						EditorInputFile tmp = new EditorInputFile(res.getProject(), (IFile)res);
 						tmp.load();
 						type = tmp.getProperty(PROP_TYPE);

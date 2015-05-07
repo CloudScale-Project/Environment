@@ -168,6 +168,10 @@ public class ToolchainUtils {
 			if(scaledlFolder != null)
 				folder = scaledlFolder.getFolder(usageEvFolderName);
 		}
+		else if(OVERVIEW_ID.equals(id)){
+			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
+			return scaledlFolder;
+		}
 		else{
 			throw new IllegalArgumentException("getToolchainFolder(project, id): ID is not valid: " + id);
 		}

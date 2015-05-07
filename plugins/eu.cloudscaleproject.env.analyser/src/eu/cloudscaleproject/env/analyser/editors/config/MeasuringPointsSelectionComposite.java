@@ -30,7 +30,7 @@ import eu.cloudscaleproject.env.common.dialogs.ListSelectionDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
-public class MeasuringPointsComposite extends Composite implements IRefreshable{
+public class MeasuringPointsSelectionComposite extends Composite implements IRefreshable{
 	
 	private DataBindingContext bindingContext = null;
 	private final ArrayList<MeasuringPoint> measuringPoints = new ArrayList<MeasuringPoint>();
@@ -42,7 +42,7 @@ public class MeasuringPointsComposite extends Composite implements IRefreshable{
 	private final ConfAlternative alternative;
 	private final EObjectWrapper<Monitor> monitorWrapper;
 
-	public MeasuringPointsComposite(Composite parent, ConfAlternative alt, EObjectWrapper<Monitor> monitor, int style) {
+	public MeasuringPointsSelectionComposite(Composite parent, ConfAlternative alt, EObjectWrapper<Monitor> monitor, int style) {
 		super(parent, style);
 		
 		this.alternative = alt;
@@ -110,7 +110,7 @@ public class MeasuringPointsComposite extends Composite implements IRefreshable{
 					alternative.getUsedMonitorRepository().getMonitors().add(monitor);
 					monitorWrapper.getSlaves().add(monitor);
 				}
-
+				alternative.setDirty(true);
 				refresh();
 			}
 		});
@@ -141,7 +141,7 @@ public class MeasuringPointsComposite extends Composite implements IRefreshable{
 						
 					}
 				}
-				
+				alternative.setDirty(true);
 				refresh();
 			}
 		});

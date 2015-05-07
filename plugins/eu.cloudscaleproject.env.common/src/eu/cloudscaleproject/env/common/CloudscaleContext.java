@@ -3,46 +3,81 @@ package eu.cloudscaleproject.env.common;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.translation.TranslationService;
 
 public class CloudscaleContext {
 	
-	private static IEclipseContext csContext = EclipseContextFactory.create();
+	private static IEclipseContext csContext = EclipseContextFactory.create("CloudscaleContext");
+	private static IEclipseContext apContext = null;
 	
-	static{
-		csContext.activate();
+	public static void initialize(IEclipseContext applicationContext){
+		
+		apContext = applicationContext;
+		
+		//bug fix...
+		apContext.set(TranslationService.LOCALE, "en");
+		csContext.setParent(apContext);
 	}
-
-	/*
-	public static IEclipseContext getContext(){
-		if(csContext == null){
-			IEclipseContext context = EclipseContextFactory.getServiceContext(Activator.plugin.getBundle().getBundleContext());
-			csContext = context.createChild();
-			csContext.activate();
+	
+	public static IEclipseContext getCustomContext(){
+		return csContext;
+	}
+	
+	public static IEclipseContext getActiveContext(){
+		
+		if(apContext == null){
+			throw new IllegalStateException("Main application context is not initialized jet.");
 		}
-		return csContext;
-	}
-	*/
-	
-	public static IEclipseContext getContext(){
-		return csContext;
-	}
-	
-	public static void setParentContext(IEclipseContext context){
-		csContext.setParent(context);
+		
+		return apContext.getActiveLeaf();
 	}
 	
 	public static void inject(Object object){
-		ContextInjectionFactory.inject(object, csContext);
+		ContextInjectionFactory.inject(object, getActiveContext());
+	}
+	
+	public static void inject(Object object, IEclipseContext context){
+		ContextInjectionFactory.inject(object, getActiveContext());
 	}
 	
 	public static <T> T createInstance(Class<T> clazz){
-		T instance = ContextInjectionFactory.make(clazz, csContext);
-		csContext.set(clazz, instance);
+		T instance = ContextInjectionFactory.make(clazz, getActiveContext());
 		return instance;
 	}
 	
-	public static <T> void register(Class<T> clazz){
-		csContext.set(clazz, ContextInjectionFactory.make(clazz, csContext));
+	public static <T> void registerCustom(Class<T> clazz){
+		registerCustom(clazz, ContextInjectionFactory.make(clazz, getActiveContext()));
+	}
+	
+	public static <T> void registerCustom(Class<T> clazz, T object){
+		csContext.set(clazz, object);
+	}
+	
+	public static <T> void registerCurrent(Class<T> clazz){
+		IEclipseContext current = getActiveContext();
+		registerCurrent(clazz, ContextInjectionFactory.make(clazz, current));
+	}
+	
+	public static <T> void registerCurrent(Class<T> clazz, T object){
+		IEclipseContext current = getActiveContext();
+		current.set(clazz, object);
+	}
+	
+	public static <T> void registerGlobal(Class<T> clazz){
+		registerGlobal(clazz, ContextInjectionFactory.make(clazz, getActiveContext()));
+	}
+	
+	public static <T> void registerGlobal(Class<T> clazz, T object){
+		
+		if(apContext == null){
+			throw new IllegalStateException("Main application context is not initialized jet.");
+		}
+		
+		apContext.set(clazz, object);
+	}
+	
+	public static <T> void register(Class<T> clazz, IEclipseContext context){
+		csContext.set(clazz, ContextInjectionFactory.make(clazz, context));
 	}
 	
 }

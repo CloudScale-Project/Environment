@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -16,6 +19,8 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -30,18 +35,41 @@ import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
-public class ImportModelSelectionPage extends WizardPage{
+public class ImportModelSelectionPage extends WizardPage implements IRefreshable{
 		
 	private Resource[] selectedResources = new Resource[0];
 	
-	ResourceSet resSet = new ResourceSetImpl();
-	CheckboxTableViewer tableView;
+	private ResourceSet resSet = new ResourceSetImpl();
+	private CheckboxTableViewer tableView;
+	
+	private IFolder folder = null;
+	
+	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
+		
+		@Override
+		public void resourceChanged(IResourceDelta delta) {
+			refresh();
+		}
+		
+		@Override
+		public IResource[] getResources() {
+			return new IResource[]{folder};
+		}
+	};
 
 	public ImportModelSelectionPage(String name) {
+		this(name, null);
+	}
+	
+	public ImportModelSelectionPage(String name, IFolder from) {
 		super(name, name, null);
 		setTitle(name);
+		this.folder = from;
 	}
 	
 	public Resource[] getSelectedResources(){
@@ -54,18 +82,19 @@ public class ImportModelSelectionPage extends WizardPage{
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(3, false));
 	
-		createFolderSelection(container, "Folder:", "Select folder", new BasicCallback<IContainer>() {
-
-			@Override
-			public void handle(IContainer folder) {
-				resSet.getResources().clear();
-				findAndLoadResources(folder, resSet);				
-				tableView.refresh(true);				
-				tableView.setCheckedElements(resSet.getResources().toArray());
-				selectedResources = (Resource[])resSet.getResources().toArray();
-			}
-			
-		});
+		if(folder == null){
+			createFolderSelection(container, "Folder:", "Select folder", new BasicCallback<IContainer>() {
+	
+				@Override
+				public void handle(IContainer folder) {
+					resSet.getResources().clear();
+					findAndLoadResources(folder, resSet);				
+					tableView.refresh(true);				
+					tableView.setCheckedElements(resSet.getResources().toArray());
+					selectedResources = (Resource[])resSet.getResources().toArray();
+				}
+			});
+		}
 		
 		final ComposedAdapterFactory adapterFactory = new CustomAdapterFactory();
 		
@@ -101,6 +130,28 @@ public class ImportModelSelectionPage extends WizardPage{
 		});
 		
 		setControl(container);
+		
+		if(folder != null){
+			ExplorerChangeNotifier.getInstance().addListener(ecl);
+		}
+		container.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				ExplorerChangeNotifier.getInstance().removeListener(ecl);
+			}
+		});
+
+		refresh();
+	}
+	
+	public void refresh(){
+		if(folder != null){
+			resSet.getResources().clear();
+			findAndLoadResources(folder, resSet);				
+			tableView.refresh(true);				
+			tableView.setCheckedElements(resSet.getResources().toArray());
+			selectedResources = (Resource[])resSet.getResources().toArray();
+		}
 	}
 
 	private void findAndLoadResources(IContainer folder, ResourceSet resSet){

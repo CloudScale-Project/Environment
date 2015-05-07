@@ -929,7 +929,7 @@
       </children>
     </nodes>
     <nodes xsi:type="method:Action" id="action_useMeasurements" name="Use measurements" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.12" previous="/1/@links.13"/>
-    <nodes xsi:type="method:Action" id="action_transform_overview_analyser" name="Transformation" description="Transform Overview model into PCM model." tooltip="Overview to PCM transformation" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.csm2pcm.command.runtransformation" next="/1/@links.3" previous="/1/@links.2"/>
+    <nodes xsi:type="method:Action" id="action_transform_overview_analyser" name="Transformation" description="Transform Overview model into PCM model." tooltip="Overview to PCM transformation" colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview2pcm.command.transformWizard" next="/1/@links.3" previous="/1/@links.2"/>
     <nodes xsi:type="method:Action" id="action_import_ext_analyser" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.0" previous="/1/@links.16"/>
     <nodes xsi:type="method:Action" id="action_import_ext_overview" name="Import" description="Import repository and system model, extracted from source code, into overview model." tooltip="Import extracted model into overview" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cludscale.environment.extractor.openImportWizard" next="/1/@links.1" previous="/1/@links.17"/>
     <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.14" previous="/1/@links.15"/>

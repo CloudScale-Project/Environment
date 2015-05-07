@@ -157,7 +157,7 @@ public class CommandFeature extends AbstractCustomFeature{
 		}
 		
 		//inject section source into cloudscale context
-		CloudscaleContext.getContext().set(IValidationStatusProvider.class, statusProvider);
+		CloudscaleContext.getCustomContext().set(IValidationStatusProvider.class, statusProvider);
 
 		if (node.getCommandParam().isEmpty()) {
 			executor.execute(node.getCommandId());

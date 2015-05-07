@@ -183,4 +183,6 @@ Require-Bundle: javax.xml;bundle-version="1.3.4",
 Import-Package: eu.cloudscaleproject.env.product.branding,
  javax.inject
 Export-Package: eu.cloudscaleproject.env.analyser,
- eu.cloudscaleproject.env.analyser.alternatives
+ eu.cloudscaleproject.env.analyser.alternatives,
+ eu.cloudscaleproject.env.analyser.wizard,
+ eu.cloudscaleproject.env.analyser.wizard.pages

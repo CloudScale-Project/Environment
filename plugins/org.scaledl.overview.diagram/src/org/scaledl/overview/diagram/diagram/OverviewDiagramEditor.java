@@ -1,13 +1,14 @@
 package org.scaledl.overview.diagram.diagram;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class OverviewDiagramEditor extends DiagramEditor{
 	
@@ -15,10 +16,13 @@ public class OverviewDiagramEditor extends DiagramEditor{
 	public void setFocus() {
 		super.setFocus();
 		
-		IProject project = ExplorerProjectPaths.getProject(this);
+		IFile file = ExplorerProjectPaths.getFileFromEmfResource(getDiagramTypeProvider().getDiagram().eResource());
+		IProject project = file.getProject();
+		
 		if(project != null){
-			IValidationStatusProvider resource 
-				= ResourceRegistry.getInstance().getProjectUniqueResource(project, ToolchainUtils.OVERVIEW_ID);
+			IEditorInputResource resource = ResourceRegistry.getInstance().
+					getResourceProvider(project, ToolchainUtils.OVERVIEW_ID).getResource(file);
+			
 			ValidationDiagramService.showStatus(project, resource);
 		}
 	}

@@ -20,7 +20,7 @@ public class Activator extends AbstractUIPlugin {
 	public static IEclipseContext context;
 	public static IEclipseContext getToolchainContext(){
 		if(context == null){
-			context = CloudscaleContext.getContext().createChild(Activator.class.getName());
+			context = CloudscaleContext.getCustomContext().createChild(Activator.class.getName());
 		}
 		return context;
 	}

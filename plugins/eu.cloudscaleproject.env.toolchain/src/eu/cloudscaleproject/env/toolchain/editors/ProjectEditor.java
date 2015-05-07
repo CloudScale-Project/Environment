@@ -6,9 +6,6 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
-import org.eclipse.e4.core.contexts.EclipseContextFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
@@ -20,9 +17,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
@@ -38,8 +35,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	private ProjectEditorProvider editorProvider;
 		
 	public ProjectEditor() {
-		IEclipseContext context = EclipseContextFactory.getServiceContext(Activator.plugin.getBundle().getBundleContext());
-		ContextInjectionFactory.inject(this, context);
+		CloudscaleContext.inject(this);
 	}
 	
 	@Override
@@ -151,7 +147,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
+		CloudscaleContext.registerCurrent(IProject.class, ExplorerProjectPaths.getProject(this));
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
 	}
 }
