@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h2 id="cloudstore-example---source-project">CloudStore Example - Source project</h2>
+<h4 id="installation-operation">1. Installation &amp; Operation</h4>
+<ol style="list-style-type: decimal">
+<li><p>Install Tomcat, MySQL (I used XAMPP 1.8.1; Apache Tomcat/7.0.30; MySQL 5.5.27)</p></li>
+<li><p>Configure the Tomcat as a Server in Eclipse Java EE (I used Eclipse Java EE IDE for Web Developers; Juno Service Release 2)</p></li>
+<li><p>Start your MySQL server</p></li>
+<li><p>Run the database configuration scripts (currently, only available in original sources; working on that one)</p></li>
+<li><p>Modify the following file according to your MySQL installation: /30_Project_servlets_mysql/servlets/database.properties</p></li>
+<li><p>Run the project via &quot;Run on Server&quot; in Eclipse</p></li>
+</ol>
+<h4 id="main-differences-to-original-version">2. Main Differences to original Version</h4>
+<ol style="list-style-type: decimal">
+<li>General</li>
+</ol>
+<ul>
+<li>only included folders &quot;images&quot;, &quot;servlets&quot;, and &quot;build&quot; from original sources (i.e., RBE, database population, and image generation are not included - only the TCP-W system itself)</li>
+<li>removed unnecessary dependencies to RUBIS</li>
+<li>put every servlet into &quot;tpcw&quot; package</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>New Technologies</li>
+</ol>
+<ul>
+<li>updated to newest Tomcat and mySQL versions</li>
+<li>integrated into Eclipse Java EE version</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Required Changes for Project structure</li>
+</ol>
+<ul>
+<li>specified mappings in web.xml file</li>
+<li>adapted path to images folder</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Modified TPCW_Util class</li>
+</ol>
+<ul>
+<li>reduced to random and dig_syl methods</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Generated serialVersionUIDs</p></li>
+<li><p>Specified generic Vector types</p></li>
+</ol>
+<h4 id="main-differences-to-sap-version">Main Differences to SAP version</h4>
+<ol style="list-style-type: decimal">
+<li>General</li>
+</ol>
+<ul>
+<li>different URLs for images</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Minor URL modifications</li>
+</ol>
+<ul>
+<li>SAP altered 1 URL in TPCW_admin_request_servlet.java</li>
+<li>SAP altered 1 URL in TPCW_order_inquiry_servlet.java</li>
+<li>SAP altered 1 URL in TPCW_shopping_cart_interaction.java</li>
+<li>SAP added &quot;jsessionid=&quot;+req.getRequestedSessionId()&quot; entries in TPCW_home_interaction.java</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Database</li>
+</ol>
+<ul>
+<li>SAP reimplemented (?) TPCW_Database.java</li>
+<li>SAP added TPCW_DatabaseKeys.java</li>
+<li>SAP added TPCW_DatabaseOrig.java</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Multi-tenancy</li>
+</ol>
+<ul>
+<li>SAP added tenant information in TPCW_say_hello.java</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Number of Items</li>
+</ol>
+<ul>
+<li>SAP modified upper part of TPCW_Util.java that is related to the number of items</li>
+</ul>
+</body>
+</html>

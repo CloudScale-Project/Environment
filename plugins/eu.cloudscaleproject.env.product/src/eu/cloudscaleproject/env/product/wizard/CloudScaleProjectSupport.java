@@ -2,11 +2,8 @@ package eu.cloudscaleproject.env.product.wizard;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.util.Properties;
-import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -15,28 +12,21 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.ui.dialogs.IOverwriteQuery;
-import org.eclipse.ui.wizards.datatransfer.ImportOperation;
-import org.eclipse.ui.wizards.datatransfer.ZipFileStructureProvider;
-import org.osgi.framework.Bundle;
 
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
-import eu.cloudscaleproject.env.product.Activator;
 
 public class CloudScaleProjectSupport
 {
 
-	public static void addProjectNature(IProject p)
+	public static void addNature (IProject p, String nature)
 	{
 		try
 		{
@@ -44,7 +34,7 @@ public class CloudScaleProjectSupport
 			String[] prevNatures = desc.getNatureIds();
 			String[] newNatures = new String[prevNatures.length + 1];
 			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
-			newNatures[prevNatures.length] = CloudScaleConstants.PROJECT_NATURE_ID;
+			newNatures[prevNatures.length] = nature;
 			desc.setNatureIds(newNatures);
 			p.setDescription(desc, new NullProgressMonitor());
 		} catch (CoreException e)
@@ -52,6 +42,11 @@ public class CloudScaleProjectSupport
 			e.printStackTrace();
 		}
 	}
+	public static void addProjectNature(IProject p)
+	{
+		addNature(p, CloudScaleConstants.PROJECT_NATURE_ID);
+	}
+
     /**
      * Just do the basics: create a basic project.
      * 
@@ -83,40 +78,6 @@ public class CloudScaleProjectSupport
         return newProject;
     }
 
-    public static IProject createExampleProject(IProject project, String archivePath) {
-        try {
-            addProjectNature(project);
-            ZipFile file = null;
-            try {
-                Bundle b = Activator.getDefault().getBundle();
-                URL u = b.getEntry(archivePath);
-                URL ur = FileLocator.toFileURL(u);
-                file = new ZipFile(ur.getFile());
-            } catch (IOException ioex) {
-                ioex.printStackTrace();
-            }
-            ZipFileStructureProvider provider = new ZipFileStructureProvider(file);
-            IPath containerPath = project.getFullPath();
-            Object source = provider.getRoot();
-            IOverwriteQuery query = new IOverwriteQuery() {
-                @Override
-                public String queryOverwrite(String path) {
-                    return IOverwriteQuery.ALL;
-                };
-            };
-            ImportOperation operation = new ImportOperation(containerPath, source, provider, query);
-            try {
-                operation.run(null);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            project = null;
-        }
-
-        return project;
-    }
 
 	public static void createDefaultProject(IProject p)
 	{

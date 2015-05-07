@@ -85,33 +85,12 @@
             id="eu.cloudscaleproject.env.product.wizard.category"
             name="CloudScale Projects">
       </category>
-      <category
-            id="eu.cloudscaleproject.env.example.wizard.category"
-            name="CloudScale Examples"
-            parentCategory="org.eclipse.ui.Examples">
-      </category>
       <wizard
             category="eu.cloudscaleproject.env.product.wizard.category"
             class="eu.cloudscaleproject.env.product.wizard.CloudScaleProjectWizard"
             icon="resources/icons/explorer/project_24.png"
             id="eu.cloudscaleproject.env.product.wizard.newproject"
             name="CloudScale Project"
-            project="true">
-      </wizard>
-      <wizard
-            category="eu.cloudscaleproject.env.product.wizard.category"
-            class="eu.cloudscaleproject.env.product.wizard.ExampleSelectionWizard"
-            icon="resources/icons/explorer/project_24.png"
-            id="eu.cloudscaleproject.env.product.wizard.exampleproject"
-            name="CloudScale Examples"
-            project="true">
-      </wizard>
-      <wizard
-            category="eu.cloudscaleproject.env.example.wizard.category"
-            class="eu.cloudscaleproject.env.product.wizard.examples.EmptyCloudScaleProjectWizard"
-            icon="resources/icons/explorer/project_24.png"
-            id="eu.cloudscaleproject.env.product.wizard.exampleproject"
-            name="CloudScale TPC-W Example"
             project="true">
       </wizard>
    </extension>

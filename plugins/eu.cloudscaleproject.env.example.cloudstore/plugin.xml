@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="eu.cloudscaleproject.env.example">
+      <example
+            description="This is CloudStore example."
+            name="CloudStore"
+            readme="resources/examples/cloudstore/README-CloudStore.html">
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-environment.zip"
+               dependency="Source"
+               name="Environment"
+               readme="resources/examples/cloudstore/README-CloudStore-environment.html"
+               type="environment">
+         </resource>
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-extractor.zip"
+               dependency="Source"
+               name="Extractor"
+               readme="resources/examples/cloudstore/README-CloudStore-extractor.html"
+               type="extractor">
+         </resource>
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-analyser.zip"
+               name="Analyser"
+               readme="resources/examples/cloudstore/README-CloudStore-analyser.html"
+               type="analyser">
+         </resource>
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-staticspotter.zip"
+               dependency="Source"
+               name="Static Spotter"
+               readme="resources/examples/cloudstore/README-CloudStore-staticspotter.html"
+               type="staticspotter">
+         </resource>
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-dynamicspotter.zip"
+               name="Dynamic Spotter"
+               readme="resources/examples/cloudstore/README-CloudStore-dynamicspotter.html"
+               type="dynamicspotter">
+         </resource>
+         <resource
+               bundle="resources/examples/cloudstore/CloudStore-project.zip"
+               name="Source"
+               readme="resources/examples/cloudstore/README-CloudStore-project.html"
+               type="source">
+         </resource>
+      </example>
+   </extension>
+
+</plugin>

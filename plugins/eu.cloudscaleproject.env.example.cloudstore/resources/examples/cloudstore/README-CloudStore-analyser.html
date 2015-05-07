@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h2 id="cloudstore-example---analyser-project">CloudStore Example - Analyser project</h2>
+<h4 id="about">About</h4>
+<p>Complete CloudStore model, specified using ScaleDL. Analyzable via the Analyzer.</p>
+<p>Author: Sebastian Lehrig</p>
+<h4 id="project-contents">Project contents</h4>
+<ul>
+<li>Different ScaleDL models (in root and sub folders)</li>
+<li>Run configurations (in &quot;Experiments&quot; folder)</li>
+</ul>
+<h4 id="run">Run</h4>
+<ol style="list-style-type: decimal">
+<li>Open desired *.experiments from the &quot;Experiments&quot; folder in text editor</li>
+<li>Adapt datasource location (datasource location=&quot;...&quot;) to your system; i.e., specify where measurements shall be stored</li>
+<li>Run the launch configuration corresponding to the experiment (available also in the &quot;Experiments&quot; folder)</li>
+</ol>
+<h4 id="possible-configurations">Possible configurations</h4>
+<p>Different experiments come preconfigured, simply select the experiment run you are interested in :</p>
+<ul>
+<li>No Elasticity experiment: Measures elasticity metrics of CloudStore (but database does not scale vertically); simulations may take ~10 minutes.</li>
+<li>Elasticity experiment: Measures elasticity metrics of CloudStore (database scales vertically); simulations may take ~10 minutes.</li>
+<li>Capacity experiment: Measures capacity metrics CloudStore (for a non-elastic setup); simulations may take ~30 minutes.</li>
+<li>Scalability experiment: Measures scalability metrics for CloudStore (for a setup with unlimited CPU resources); simulations may take ~30 minutes.</li>
+</ul>
+<h4 id="results">Results</h4>
+<ul>
+<li>No Elasticity experiment: Response times increase for increasing load.</li>
+<li>Elasticity experiment: Response times follow a step function for increasing load; if beyond a threshold, the next step starts again with low response times.</li>
+<li>Capacity experiment: CloudStore has a capacity limit of ~50 concurrent users, depending on random seed.</li>
+<li>Scalability experiment: CloudStore scales until the upper bound of the pre-specified interval, i.e., to 100 concurrent users. Therefore, the scalability range is at least 100 and no scalability problem was detected for that interval.</li>
+</ul>
+</body>
+</html>

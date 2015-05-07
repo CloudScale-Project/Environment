@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.common;
 public class CloudScaleConstants {
 	
 	public static final String PROJECT_NATURE_ID = "eu.cloudscaleproject.env.projectnature";
+	public static final String EXAMPLE_NATURE_ID = "eu.cloudscaleproject.env.exampleprojectnature";
 	
 	public static final String TOOL_ANALYSER_ID = "eu.cludscaleproject.env.common.cloudscaleconstants.analyser";
 	public static final String TOOL_EXTRACTOR_ID = "eu.cludscaleproject.env.common.cloudscaleconstants.extractor";

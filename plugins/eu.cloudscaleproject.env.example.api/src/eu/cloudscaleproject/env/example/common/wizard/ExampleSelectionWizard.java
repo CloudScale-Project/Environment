@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.product.wizard;
+package eu.cloudscaleproject.env.example.common.wizard;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,14 +11,15 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.cloudscaleproject.env.product.wizard.ExampleSelectionPage.ExampleWizardNode;
-import eu.cloudscaleproject.env.product.wizard.examples.EmptyCloudScaleProjectWizard;
-import eu.cloudscaleproject.env.product.wizard.examples.TPCWAnalyserProjectWizard;
+import eu.cloudscaleproject.env.example.common.Example;
+import eu.cloudscaleproject.env.example.common.ExampleService;
+import eu.cloudscaleproject.env.example.common.wizard.ExampleSelectionPage.ExampleWizardNode;
 
 public class ExampleSelectionWizard extends Wizard implements INewWizard, IExecutableExtension
 {
 	public ExampleSelectionWizard()
 	{
+		setWindowTitle("CloudScale Examples");
 	}
 
 	@Override
@@ -43,8 +44,10 @@ public class ExampleSelectionWizard extends Wizard implements INewWizard, IExecu
 	{
 		LinkedList<ExampleWizardNode> wizards = new LinkedList<>();
 		
-		wizards.add(new ExampleWizardNode(new EmptyCloudScaleProjectWizard()));
-		wizards.add(new ExampleWizardNode(new TPCWAnalyserProjectWizard()));
+		for (Example example :ExampleService.getInstance().getExamples())
+		{
+			wizards.add(new ExampleWizardNode(new ExampleProjectWizard(example)));
+		}
 		
 		return wizards;
 	}

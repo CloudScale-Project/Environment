@@ -53,7 +53,7 @@ public class ExplorerDecorator extends LabelProvider implements
 		
 		IProject p = ((IResource)element).getProject();
 		
-		if (isCSEProject(p))
+		if (checkNature(p, CloudScaleConstants.PROJECT_NATURE_ID))
 		{
 			if (element instanceof IProject)
 			{
@@ -77,20 +77,27 @@ public class ExplorerDecorator extends LabelProvider implements
 	public String decorateText(String text, Object element) {
 		if (element instanceof IProject)
 		{
-			if (isCSEProject((IProject) element))
+			if (checkNature((IProject) element, CloudScaleConstants.PROJECT_NATURE_ID))
 			{
-				return text+" [CloudScale Project]";
+				text += " [CloudScale Project]";
 			}
+
+			if (checkNature((IProject) element, CloudScaleConstants.EXAMPLE_NATURE_ID))
+			{
+				text += " [Example]";
+			}
+			
+			return text;
 		}
 		
 		return null;
 	}
 	
-	private boolean isCSEProject (IProject p)
+	private boolean checkNature (IProject p, String nature)
 	{
 		try {
 			if(p.isOpen()){
-				return p.getDescription().hasNature(CloudScaleConstants.PROJECT_NATURE_ID);
+				return p.getDescription().hasNature(nature);
 			}
 			else{
 				return false;
