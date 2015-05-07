@@ -74,6 +74,8 @@ org.modelversioning.emfprofile.feature
 org.modelversioning.emfprofile.source.feature
 org.palladiosimulator.commons.feature
 org.palladiosimulator.commons.source.feature
+org.palladiosimulator.commons.stoex.feature
+org.palladiosimulator.commons.stoex.source.feature
 org.palladiosimulator.edp2.feature
 org.palladiosimulator.edp2.source.feature
 org.palladiosimulator.edp2.ui.feature
@@ -94,6 +96,10 @@ org.palladiosimulator.measurementspec.feature
 org.palladiosimulator.measurementspec.source.feature
 org.palladiosimulator.metricspec.feature
 org.palladiosimulator.metricspec.source.feature
+org.palladiosimulator.monitorrepository.feature
+org.palladiosimulator.monitorrepository.source.feature
+org.palladiosimulator.pcm.pcmstoex.sdk
+org.palladiosimulator.pcm.pcmstoex.sdk.source
 org.palladiosimulator.probeframework.feature
 org.palladiosimulator.probeframework.source.feature
 org.palladiosimulator.probespec.feature

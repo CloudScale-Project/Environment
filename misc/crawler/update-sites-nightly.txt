@@ -15,6 +15,7 @@ https://sdqweb.ipd.kit.edu/eclipse/measurementframework/nightly
 https://sdqweb.ipd.kit.edu/eclipse/measurementspec/nightly
 https://sdqweb.ipd.kit.edu/eclipse/metricspec/nightly
 https://sdqweb.ipd.kit.edu/eclipse/misc/nightly
+https://sdqweb.ipd.kit.edu/eclipse/monitorrepository/nightly
 https://sdqweb.ipd.kit.edu/eclipse/palladio/nightly
 https://sdqweb.ipd.kit.edu/eclipse/probeframework/nightly
 https://sdqweb.ipd.kit.edu/eclipse/probespec/nightly

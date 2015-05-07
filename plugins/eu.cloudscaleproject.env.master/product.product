@@ -29,8 +29,6 @@ Visit http://www.cloudscale-project.eu
       startupProgressRect="50,280,445,10"
       startupMessageRect="50,295,445,20"
       startupForegroundColor="FFFFFF" />
-   <!--launcher name="Environment">
-      <linux icon="/resources/icons/launcher.xpm"/-->
    <launcher>
       <macosx icon="/resources/icons/launcher.icns"/>
       <solaris/>
@@ -43,35 +41,7 @@ Visit http://www.cloudscale-project.eu
    <vm>
    </vm>
 
-<plugins>
-      <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
-      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
-      <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
-      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
-      <plugin id="org.eclipse.jdt.annotation" version="1.1.0.v20140129-1625"/>
-
-      <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
-
-      <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.java7" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
-
-      <plugin id="org.eclipse.core.net"/>
-      <plugin id="org.eclipse.core.net.linux.x86_64" fragment="true"/>
-
+   <plugins>
       <plugin id="LQNModel"/>
       <plugin id="ch.ethz.iks.r_osgi.remote"/>
       <plugin id="ch.qos.logback.classic"/>
@@ -196,6 +166,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="eu.cloudscaleproject.env.analyser"/>
       <plugin id="eu.cloudscaleproject.env.common"/>
       <plugin id="eu.cloudscaleproject.env.csm2pcm"/>
+      <plugin id="eu.cloudscaleproject.env.example.cloudstore"/>
+      <plugin id="eu.cloudscaleproject.env.example.common"/>
       <plugin id="eu.cloudscaleproject.env.extractor"/>
       <plugin id="eu.cloudscaleproject.env.help"/>
       <plugin id="eu.cloudscaleproject.env.method.common"/>
@@ -214,8 +186,10 @@ Visit http://www.cloudscale-project.eu
       <plugin id="javax.xml"/>
       <plugin id="lpg.runtime.java"/>
       <plugin id="net.sourceforge.secondstring"/>
+      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.batik.bridge"/>
+      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
       <plugin id="org.apache.batik.dom"/>
       <plugin id="org.apache.batik.dom.svg"/>
       <plugin id="org.apache.batik.ext.awt"/>
@@ -223,6 +197,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.batik.pdf"/>
       <plugin id="org.apache.batik.svggen"/>
       <plugin id="org.apache.batik.transcoder"/>
+      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
       <plugin id="org.apache.batik.xml"/>
       <plugin id="org.apache.commons.cli"/>
       <plugin id="org.apache.commons.codec"/>
@@ -258,7 +234,15 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.externaltools"/>
       <plugin id="org.eclipse.core.filebuffers"/>
+      <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.java7" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.net"/>
+      <plugin id="org.eclipse.core.net.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.resources"/>
       <plugin id="org.eclipse.core.runtime"/>
       <plugin id="org.eclipse.core.runtime.compatibility"/>
@@ -582,6 +566,13 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.pde.launching"/>
       <plugin id="org.eclipse.pde.ui"/>
       <plugin id="org.eclipse.search"/>
+      <plugin id="org.eclipse.swt"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
