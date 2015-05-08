@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -52,9 +52,7 @@ public class SelectInputAltComposite extends Composite{
 	 */
 	public SelectInputAltComposite(final IProject project, final ConfAlternative ca, Composite parent, int style) {
 		super(parent, style);
-		
-		CloudscaleContext.inject(this);
-		
+				
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		
 		setLayout(new GridLayout(3, false));
@@ -102,6 +100,12 @@ public class SelectInputAltComposite extends Composite{
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				InputAlternative ia = (InputAlternative)selection.getFirstElement();				
 				ca.setInputAlternative(ia);
+				
+				ia.validate();
+				ca.validate();
+				
+				ValidationDiagramService.showStatus(project, ia);
+				ValidationDiagramService.showStatus(project, ca);
 			}
 		});
 		

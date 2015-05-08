@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.ecore.resource.Resource;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 
 public class ValidationDiagramService {
@@ -24,13 +22,7 @@ public class ValidationDiagramService {
 		IValidationDiagram diagram = diagrams.get(project);
 		if(diagram == null){
 			if(diagramFactory != null){
-				Resource diagramResource = null;
-				
-				if(project != null){
-					diagramResource = ExplorerProjectPaths.getProjectEmfResource(project, ExplorerProjectPaths.FILE_METHOD_NEW);
-				}
-				
-				diagram = diagramFactory.createDiagram(diagramResource);
+				diagram = diagramFactory.createDiagram(null);
 				diagram.setProject(project);
 				diagrams.put(project, diagram);
 			}

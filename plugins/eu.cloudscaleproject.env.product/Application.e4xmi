@@ -9,14 +9,12 @@
       <children xsi:type="advanced:Perspective" xmi:id="_U_BGcHnFEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.perspective.main" selectedElement="_-CLUcIshEeKkW7h3XzrPnQ" label="Main perspective">
         <children xsi:type="basic:PartSashContainer" xmi:id="_-CLUcIshEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" selectedElement="_CzIiAIsiEeKkW7h3XzrPnQ" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_CzIiAIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="40" selectedElement="_IaJN0IsiEeKkW7h3XzrPnQ">
-            <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.0" selectedElement="_I9w4QIsiEeKkW7h3XzrPnQ">
+            <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.upperLeft" selectedElement="_I9w4QIsiEeKkW7h3XzrPnQ">
               <tags>org.eclipse.e4.primaryNavigationStack</tags>
               <tags>newtablook</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.2" selectedElement="_pbXn4OjuEeSZ8fQe5BuMIQ">
-              <children xsi:type="basic:Part" xmi:id="_pbXn4OjuEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.part.workflow" contributionURI="bundleclass://eu.cloudscaleproject.env.method.viewer/eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart" label="Project workflow diagram"/>
-            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.lowerLeft"/>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_GM8WcIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="60">
             <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="70">
@@ -24,7 +22,6 @@
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.1" containerData="30">
               <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" ref="_mc-PMDZ_EeOUZvbZvEH41A"/>
-              <children xsi:type="advanced:Placeholder" xmi:id="_EJYPQMbvEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.placeholder.0" ref="__0KigMbuEeOONvcKIucoUw"/>
             </children>
           </children>
         </children>

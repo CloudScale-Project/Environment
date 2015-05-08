@@ -2,6 +2,7 @@ package org.scaledl.overview.converter;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.scaledl.overview.core.Entity;
@@ -18,7 +19,7 @@ public interface IOverviewConverter {
 	public boolean removeExternalModel(Entity object, List<EObject> external,
 			IOverviewConverterCallback callback);
 
-	public void transform(Resource resource);
+	public void transform(Resource resource, IFolder folder);
 
 	public boolean canTransform(Resource resource);
 

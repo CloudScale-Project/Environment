@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="eu.cloudscaleproject.env.analyser.wizard.newInputAlternative" 
+   		name="New input alternative wizard extension point" 
+   		schema="schema/eu.cloudscaleproject.env.analyser.wizard.newInputAlternative.exsd"/>
    <extension
          id="eu.cloudscaleproject.env.analyser.modelfragment"
          point="org.eclipse.e4.workbench.model">

@@ -42,10 +42,6 @@ public class ExplorerProjectPaths {
 	//
 
 	// diagram and model used for notifications and project progress status
-	public static final String FILE_METHOD = "project.method";
-	public static final String FILE_METHOD_NEW = "project.method_new";
-	public static final String FILE_METHOD_DIAGRAM = "project.method_diagram.";
-
 	public static final String KEY_FOLDER_GENERATED = "generated-folder";
 	public static final String KEY_FOLDER_SCALEDL = "scaledl-folder";
 	public static final String KEY_FOLDER_IMPORT = "imported-folder";
@@ -451,6 +447,18 @@ public class ExplorerProjectPaths {
 		}
 		return res;
 
+	}
+	
+	public static IFolder getNonexistingSubFolder(IFolder folder, String name){
+		
+		IFolder out = folder.getFolder(name);
+		
+		int counter = 1;
+		while(out.exists()){
+			out = folder.getFolder(name + " " +counter);
+			counter++;
+		}
+		return out;
 	}
 	
 	public static void copyEMFResources(IContainer folder, Resource[] resources)

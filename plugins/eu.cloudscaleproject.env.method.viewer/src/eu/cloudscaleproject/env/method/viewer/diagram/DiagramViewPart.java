@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
@@ -25,6 +26,9 @@ import eu.cloudscaleproject.env.method.viewer.MethodDiagramComposite;
 
 public class DiagramViewPart implements IValidationDiagramFactory{
 	
+	@Inject
+	private MPart part;
+	
 	private Composite composite = null;
 	private StackLayout stackLayout = new StackLayout();
 	
@@ -32,15 +36,14 @@ public class DiagramViewPart implements IValidationDiagramFactory{
 		
 	@Inject
 	public DiagramViewPart() {
-		
 	}
 	
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-				
+		
 		this.composite = new Composite(parent, SWT.NONE);
 		this.composite.setLayout(stackLayout);
-		
+				
 		Composite noDiagramComposite = new Composite(composite, SWT.NONE);
 		noDiagramComposite.setLayout(new GridLayout());
 		
@@ -67,12 +70,14 @@ public class DiagramViewPart implements IValidationDiagramFactory{
 		
 			currentDiagram = diagramComposite;
 		}
+		
+		part.setLabel("Project workflow diagram ["+diagramComposite.getProject().getName()+"]");
 	}
 	
 	@Focus
 	public void onFocus(){
 		if(currentDiagram != null){
-			CloudscaleContext.getContext().set(IProject.class, currentDiagram.getProject());
+			CloudscaleContext.getActiveContext().set(IProject.class, currentDiagram.getProject());
 		}
 	}
 

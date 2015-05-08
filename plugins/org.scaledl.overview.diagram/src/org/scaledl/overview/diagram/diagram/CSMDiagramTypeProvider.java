@@ -10,12 +10,14 @@ import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 import org.scaledl.overview.diagram.OverviewResource;
+import org.scaledl.overview.diagram.util.OverviewDiagramUtil;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 	
@@ -31,18 +33,12 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		super.postInit();
 		
 		final IProject project = ExplorerProjectPaths.getProjectFromEmfResource(getDiagram().eResource());
+		IFile file = ExplorerProjectPaths.getFileFromEmfResource(OverviewDiagramUtil.getOverviewModel(getDiagram()).eResource());
 		
-		OverviewResource resource 
-				= (OverviewResource)ResourceRegistry.getInstance().getProjectUniqueResource(project, ToolchainUtils.OVERVIEW_ID);
-		ValidationDiagramService.showStatus(project, resource);
+		IEditorInputResource resource = ResourceRegistry.getInstance().
+				getResourceProvider(project, ToolchainUtils.OVERVIEW_ID).getResource(file);
 		
-		if(resource == null){
-			IFile file = ExplorerProjectPaths.getProjectFile(project, ExplorerProjectPaths.FILE_METHOD_NEW);
-			resource = new OverviewResource(file);
-			ResourceRegistry.getInstance().registerProjectUniqueResource(resource, ToolchainUtils.OVERVIEW_ID);
-		}
-		
-		final OverviewResource overviewResource = resource;
+		final OverviewResource overviewResource = (OverviewResource)resource;
 		
 		ValidationDiagramService.showStatus(project, overviewResource);
 		StatusManager.getInstance().validateAsync(project, overviewResource);

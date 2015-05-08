@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -26,11 +27,11 @@ public class ConverterService {
 		return instance;
 	}
 
-	public void convert(Overview csm) {
-		this.convert(csm.eResource());
+	public void convert(Overview csm, IFolder folder) {
+		this.convert(csm.eResource(), folder);
 	}
 
-	public void convert(Resource inResource) {
+	public void convert(Resource inResource, IFolder folder) {
 		retrieveConverters();
 
 		if (inResource == null) {
@@ -40,7 +41,7 @@ public class ConverterService {
 
 		for (IOverviewConverter converter : converters.values()) {
 			if (converter.canTransform(inResource)) {
-				converter.transform(inResource);
+				converter.transform(inResource, folder);
 			}
 		}
 	}

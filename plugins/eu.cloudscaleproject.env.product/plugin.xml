@@ -55,6 +55,10 @@
                name="windowImages"
                value="resources/icons/cse-icon_16.png,resources/icons/cse-icon_32.png,resources/icons/cse-icon_48.png,resources/icons/cse-icon_64.png">
          </property>
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.LifeCycleManager">
+         </property>
       </product>
    </extension>
    <extension

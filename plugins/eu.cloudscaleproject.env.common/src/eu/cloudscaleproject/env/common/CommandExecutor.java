@@ -46,8 +46,9 @@ public class CommandExecutor {
 		}
 		
 		ParameterizedCommand pc = new ParameterizedCommand(command, null);
-		if(handlerService.canExecute(pc, CloudscaleContext.getContext())){
-			handlerService.executeHandler(pc, CloudscaleContext.getContext());
+		
+		if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
+			handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
 		}
 	}
 	
@@ -84,8 +85,8 @@ public class CommandExecutor {
 			return;
 		}
 		
-		if(handlerService.canExecute(pc, CloudscaleContext.getContext())){
-			handlerService.executeHandler(pc, CloudscaleContext.getContext());
+		if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
+			handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
 		}
 		
 	}
@@ -134,8 +135,8 @@ public class CommandExecutor {
 			return;
 		}
 		
-		if(handlerService.canExecute(pc, CloudscaleContext.getContext())){
-			handlerService.executeHandler(pc, CloudscaleContext.getContext());
+		if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
+			handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
 		}
 		
 	}

@@ -1,10 +1,10 @@
-package eu.cloudscaleproject.env.analyser.wizard.util;
+package eu.cloudscaleproject.env.common.wizard.util;
 
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.swt.graphics.Point;
 
-public abstract class AnalyserWizardNode implements IWizardNode{
+public abstract class WizardNode implements IWizardNode{
 	
 	protected IWizard wizard;
 	

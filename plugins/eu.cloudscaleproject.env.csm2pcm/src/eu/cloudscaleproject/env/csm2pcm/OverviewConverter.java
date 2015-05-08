@@ -1,11 +1,9 @@
 package eu.cloudscaleproject.env.csm2pcm;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -36,11 +34,7 @@ import org.scaledl.overview.core.Entity;
 
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
-import eu.cloudscaleproject.env.analyser.ResourceUtils;
-import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class OverviewConverter implements IOverviewConverter{
 	
@@ -53,7 +47,7 @@ public class OverviewConverter implements IOverviewConverter{
 																		PCMModelType.ALLOCATION,
 																		PCMModelType.USAGE};
 	
-	private HashMap<IProject, PCMResourceSet> resourceSetMap = new HashMap<IProject, PCMResourceSet>();
+	//private HashMap<IProject, PCMResourceSet> resourceSetMap = new HashMap<IProject, PCMResourceSet>();
 	
 	public OverviewConverter() {
 		// If not removed, ClassCastException...
@@ -61,7 +55,7 @@ public class OverviewConverter implements IOverviewConverter{
 	}
 	
 	@Override
-	public void transform(Resource csmResource){
+	public void transform(Resource csmResource, IFolder outputFolder){
 		
 		// Initialize QVTO transformation
 		TransformationExecutor executor = new TransformationExecutor(URI.createURI("platform:/plugin/eu.cloudscaleproject.env.csm2pcm/"+CSM2PCM_QVTO));
@@ -74,20 +68,20 @@ public class OverviewConverter implements IOverviewConverter{
 		context.setConfigProperty("PCM_SYSTEM_KEY", IOverviewConverter.KEY_PCM_SYSTEM);
 		context.setConfigProperty("PCM_INTERFACE_KEY", IOverviewConverter.KEY_PCM_INTERFACE);
 		
-		IProject project = ExplorerProjectPaths.getProjectFromEmfResource(csmResource);
+		//IProject project = ExplorerProjectPaths.getProjectFromEmfResource(csmResource);
 		
+		/*
 		PCMResourceSet resSet = resourceSetMap.get(project);
 		if(resSet == null){
-			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-			IFolder analyserInput = ExplorerProjectPaths.getProjectFolder(analyserFolder, ExplorerProjectPaths.KEY_FOLDER_INPUT);
-			IFolder analyserGen = ExplorerProjectPaths.getProjectFolder(analyserInput, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
-			
-			resSet = new PCMResourceSet(analyserGen);
+			resSet = new PCMResourceSet(outputFolder);
 			resSet.createAll(ModelTypes);
 			
 			resourceSetMap.put(project, resSet);
 			
 		}
+		*/
+		PCMResourceSet resSet = new PCMResourceSet(outputFolder);
+		resSet.createAll(ModelTypes);
 				
 		// define the transformation input
 		EList<EObject> inObjectsCsm = csmResource.getContents();
@@ -142,10 +136,14 @@ public class OverviewConverter implements IOverviewConverter{
 			resSet.saveAll(ModelTypes);
 			
 			//create or set analyser generated input alternative
+			
+			//open dialog
+			/*
 			InputAlternative ia = ResourceUtils.getGeneratedResourceInput(project);
 			ia.setAllocation(resSet.getModelFile(PCMModelType.ALLOCATION));
 			ia.setSubResource(ToolchainUtils.KEY_FILE_USAGE, resSet.getModelFile(PCMModelType.USAGE));
 			ia.save();
+			*/
 		} 
 
 		IStatus status = BasicDiagnostic.toIStatus(result);

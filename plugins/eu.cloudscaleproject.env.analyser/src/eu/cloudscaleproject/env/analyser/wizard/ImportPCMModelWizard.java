@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -13,28 +14,33 @@ public class ImportPCMModelWizard extends Wizard{
 	
 	private EditorInputEMF alternative = null;
 	
-	private ImportModelSelectionPage modelSelectionPage;
+	private ImportModelSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage importOptionsPage;
 
 	public ImportPCMModelWizard(EditorInputEMF alternative){
+		this(alternative, null);
+	}
+	
+	public ImportPCMModelWizard(EditorInputEMF alternative, IFolder from){
+		
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
 		
-		modelSelectionPage = new ImportModelSelectionPage("Select PCM model to import");
-		modelSelectionPage.setDescription("Please select project and then desired PCM models to import");
+		importModelSelectionPage = new ImportModelSelectionPage("Select PCM model to import", from);
+		importModelSelectionPage.setDescription("Please select project and then desired PCM models to import");
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	
 	@Override
 	public void addPages() {
-		addPage(modelSelectionPage);
+		addPage(importModelSelectionPage);
 		addPage(importOptionsPage);
 	}
 	
 	@Override
 	public boolean performFinish() {
 		
-		Resource[] selectedResources = modelSelectionPage.getSelectedResources();
+		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
 
 		if (importOptionsPage.getCopyIntoProjectParam())
 		{

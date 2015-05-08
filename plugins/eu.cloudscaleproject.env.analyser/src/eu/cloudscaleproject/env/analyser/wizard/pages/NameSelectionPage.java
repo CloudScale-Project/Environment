@@ -48,6 +48,8 @@ public class NameSelectionPage extends WizardPage{
 				}
 			}
 		});
+		text.setFocus();
+		
 		setPageComplete(false);
 		setControl(container);
 	}

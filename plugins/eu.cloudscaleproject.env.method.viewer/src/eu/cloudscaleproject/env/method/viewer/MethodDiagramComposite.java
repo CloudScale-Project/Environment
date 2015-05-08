@@ -129,12 +129,11 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 					if(IValidationStatus.PROP_DIRTY.equals(pce.getPropertyName())){
 						statusNode.setDirty((boolean)pce.getNewValue());
 					}
-					if(IValidationStatus.PROP_VALID.equals(pce.getPropertyName())){
-						statusNode.setDone((boolean)pce.getNewValue());
-					}
 					if(IValidationStatus.PROP_NAME.equals(pce.getPropertyName())){
 						statusNode.setInstanceName((String)pce.getNewValue());
 					}
+					
+					statusNode.setDone(status.isDone());
 					
 					refresh();
 				}

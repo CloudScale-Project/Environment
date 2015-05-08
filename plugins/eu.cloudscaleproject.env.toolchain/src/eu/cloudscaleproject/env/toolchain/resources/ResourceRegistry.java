@@ -2,14 +2,12 @@ package eu.cloudscaleproject.env.toolchain.resources;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceRegistry {
 	
@@ -43,8 +41,11 @@ public class ResourceRegistry {
 											= new HashMap<String, IResourceProviderFactory>();
 	private HashMap<IFolder, ResourceProvider> resourceProviders 
 											= new HashMap<IFolder, ResourceProvider>();
+	
+	/*
 	private HashMap<IProject, Map<String, IEditorInputResource>> projectUniqueResources 
 											= new HashMap<IProject, Map<String, IEditorInputResource>>();
+											*/
 	
 	public ResourceRegistry() {
 		//register basic resource provider factories
@@ -139,6 +140,7 @@ public class ResourceRegistry {
 		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
 	}
 	
+	/*
 	public void registerProjectUniqueResource(IEditorInputResource resource, String toolchianID){
 		
 		//remove deleted projects and resources
@@ -173,5 +175,6 @@ public class ResourceRegistry {
 		}
 		return projectResourcesMap.get(toolchainID);
 	}
+	*/
 	
 }
