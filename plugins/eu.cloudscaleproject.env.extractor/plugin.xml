@@ -16,16 +16,6 @@
       </client>
    </extension>
    <extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            category="eu.cloudscaleproject.env.product.wizard.category"
-            class="eu.cloudscaleproject.env.extractor.wizard.ImportWizard"
-            icon="resources/icons/sample.gif"
-            id="eu.cloudscaleproject.env.product.wizard.import"
-            name="Import Wizard">
-      </wizard>
-   </extension>
-   <extension
          point="eu.cloudscaleproject.env.product.newproject">
       <client
             class="eu.cloudscaleproject.env.extractor.wizard.NewProjectWizard">

@@ -102,7 +102,7 @@ public class ExtractorRunJob extends Job
 				ToolchainUtils.EXTRACTOR_RES_ID);
 
 		String name = configFolder.getName() + " [" + sdf_name.format(new Date()) + "]";
-		return (ResultPersistenceFolder) resourceProvider.createNewResource(name, name, null);
+		return (ResultPersistenceFolder) resourceProvider.createNewResource(name, null);
 	}
 
 

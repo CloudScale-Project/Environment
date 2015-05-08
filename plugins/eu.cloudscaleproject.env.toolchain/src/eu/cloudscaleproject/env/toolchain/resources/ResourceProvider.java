@@ -2,7 +2,9 @@ package eu.cloudscaleproject.env.toolchain.resources;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -314,14 +316,16 @@ public abstract class ResourceProvider{
 		return eir;
 	}
 	
+	private final SimpleDateFormat result_postix_format = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
 	public synchronized IEditorInputResource createNewResource(String name, String type){
 		
 		checkRootFolder();
 		
-		String resourceName = defaultResName;
+		String resourceName = defaultResName +"_"+ result_postix_format.format(new Date());
+
 		
 		//check and fix duplicated filenames
-		int i = 1;			
+/*		int i = 1;			
 		while(!isNewResourceNameValid(resourceName)){
 			String resourceNameNew = resourceName.replaceFirst("[0-9]*", String.valueOf(i++));
 			if(resourceName.equals(resourceNameNew)){
@@ -329,7 +333,7 @@ public abstract class ResourceProvider{
 			}
 			resourceName = resourceNameNew;
 		}
-		
+*/		
 		IResource res = createResource(resourceName);
 		IEditorInputResource eir = loadResource(res, type);
 		eir.setProperty(PROP_TYPE, type);

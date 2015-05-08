@@ -40,6 +40,8 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
 import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class Util
@@ -96,9 +98,15 @@ public class Util
 	//
 	public static void saveAnnotations(EditorInputFolder configFolder, DetectPatternsJob job)
 	{
-		IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
-		ResultPersistenceFolder rif = new ResultPersistenceFolder(configFolder.getProject(), resultFolder);
-		rif.setName(resultFolder.getName());
+		ResourceProvider resultResProvider = ResourceRegistry.getInstance().
+				getResourceProvider(configFolder.getProject(), ToolchainUtils.SPOTTER_STA_RES_ID);
+
+		ResultPersistenceFolder rif = (ResultPersistenceFolder)resultResProvider
+				.createNewResource(configFolder.getName() + " " + sdf.format(new Date()), "");
+
+		//IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
+		//ResultPersistenceFolder rif = new ResultPersistenceFolder(configFolder.getProject(), resultFolder);
+		//rif.setName(resultFolder.getName());
 
 		List<ASGAnnotation> annotations = getAnnotations(job);
 

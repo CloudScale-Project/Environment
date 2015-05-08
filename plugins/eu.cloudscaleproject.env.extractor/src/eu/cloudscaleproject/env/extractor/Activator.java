@@ -81,7 +81,7 @@ public class Activator extends AbstractUIPlugin {
 
 					@Override
 					public ResourceProvider create(final IFolder folder) {
-						return new ResourceProvider(folder, "Alternative.alt") {
+						return new ResourceProvider(folder, "Alternative") {
 
 							@Override
 							public boolean validateResource(IResource res) {

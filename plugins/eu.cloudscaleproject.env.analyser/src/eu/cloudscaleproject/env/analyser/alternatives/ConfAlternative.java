@@ -628,16 +628,16 @@ public class ConfAlternative extends EditorInputEMF{
 	///////////////////////////////////////////////////////////////////
 
 	
+	private SimpleDateFormat sdf_name = new SimpleDateFormat("hh:mm:ss");
 	public void configureResults(){
 		Experiment exp = getExperiment();
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
 		//IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
 		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
-		
+		String name = getName() + " [" + sdf_name.format(new Date()) + "]";
 		ResultAlternative resultAlternative = (ResultAlternative)resultResProvider
-				.createNewResource(dateFormat.format(date) + " [" +getName()+ "]", type.name());
+				.createNewResource(name, type.name());
+
 		resultAlternative.save();
 		
 		//create data source - a.k.a where the result will be saved

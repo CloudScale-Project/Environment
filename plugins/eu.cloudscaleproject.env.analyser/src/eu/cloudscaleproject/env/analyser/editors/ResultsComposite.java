@@ -19,6 +19,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -58,7 +59,7 @@ public class ResultsComposite extends SidebarEditorComposite{
 	}
 
 	
-	private static class RightPanelComposite extends Composite implements IRefreshable{
+	private static class RightPanelComposite extends TitleComposite implements IRefreshable{
 
 		private CTabFolder tabFolder;
 		
@@ -68,9 +69,10 @@ public class ResultsComposite extends SidebarEditorComposite{
 		public RightPanelComposite(ResultAlternative alternative, Composite parent, int style) {
 			super(parent, style);
 			
-			setLayout(new FillLayout());
+			getContainer().setLayout(new FillLayout());
+			setTitle(alternative.getName());
 			
-			this.tabFolder = new CTabFolder(this, SWT.BOTTOM);
+			this.tabFolder = new CTabFolder(getContainer(), SWT.BOTTOM);
 			
 			CTabItem tabBasicResults = new CTabItem(tabFolder, SWT.NONE);
 			if(alternative.getTypeEnum().equals(ConfAlternative.Type.NORMAL)){
