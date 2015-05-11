@@ -15,7 +15,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="121" height="101" x="160" y="120" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="ext_res"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.15 /0/@connections.16 /0/@connections.17" incomingConnections="/0/@connections.7"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -25,7 +25,7 @@
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
           <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
-          <link businessObjects="ext_res_repository"/>
+          <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes_repository"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
             <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="111" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Repository"/>
@@ -35,7 +35,7 @@
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
           <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
-          <link businessObjects="ext_res_system"/>
+          <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes_system"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
             <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="111" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="System"/>
@@ -56,7 +56,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="121" height="61" x="20" y="40" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="ext_input"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.6"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -77,7 +77,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="121" height="61" x="20" y="140" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="ext_tool"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.7" incomingConnections="/0/@connections.6"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -384,7 +384,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="40" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="static_spotter_input"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.8" incomingConnections="/0/@connections.14"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -395,7 +395,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="110" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="static_spotter_tool"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.9" incomingConnections="/0/@connections.8"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -406,7 +406,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="251" height="51" x="20" y="180" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="static_spotter_res"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"/>
         <anchors xsi:type="pi:ChopboxAnchor" incomingConnections="/0/@connections.9"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -417,7 +417,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="40" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="dynamic_spotter_input"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.10"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -438,7 +438,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="110" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="dynamic_spotter_tool"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.11" incomingConnections="/0/@connections.10"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -479,7 +479,7 @@
         <properties key="node" value="node"/>
         <properties key="section" value="section"/>
         <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="241" height="51" x="330" y="180" cornerHeight="15" cornerWidth="15"/>
-        <link businessObjects="dynamic_spotter_res"/>
+        <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"/>
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.13" incomingConnections="/0/@connections.11"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
@@ -831,35 +831,35 @@
     <links start="action_transform_overview_analyser" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"/>
     <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf" required="true"/>
     <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes" required="true"/>
-    <links start="ext_input" end="ext_tool" required="true"/>
-    <links start="ext_tool" end="ext_res" required="true"/>
-    <links start="static_spotter_input" end="static_spotter_tool" required="true"/>
-    <links start="static_spotter_tool" end="static_spotter_res" required="true"/>
-    <links start="dynamic_spotter_input" end="dynamic_spotter_tool" required="true"/>
-    <links start="dynamic_spotter_tool" end="dynamic_spotter_res" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes" required="true"/>
     <links start="action_useMeasurements" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"/>
-    <links start="dynamic_spotter_res" end="action_useMeasurements" required="true"/>
-    <links start="action_import_ext_ss" end="static_spotter_input"/>
-    <links start="ext_res" end="action_import_ext_ss" required="true"/>
-    <links start="ext_res" end="action_import_ext_analyser"/>
-    <links start="ext_res" end="action_import_ext_overview"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes" end="action_useMeasurements" required="true"/>
+    <links start="action_import_ext_ss" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes" end="action_import_ext_ss" required="true"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes" end="action_import_ext_analyser"/>
+    <links start="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes" end="action_import_ext_overview"/>
     <links start="usageEvolution" end="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"/>
     <nodes xsi:type="method:Container" id="_SqDU0C61EeSADewJHO2y3w" name="Extractor">
-      <children xsi:type="method:Section" id="ext_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.15 /1/@links.16 /1/@links.17" previous="/1/@links.7">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.15 /1/@links.16 /1/@links.17" previous="/1/@links.7">
         <commandParam>openResults</commandParam>
         <commands id="_t6RzcDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor">
           <commandParam>openResults</commandParam>
         </commands>
-        <requirements id="ext_res_repository" name="Repository" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
-        <requirements id="ext_res_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
+        <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes_repository" name="Repository" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
+        <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
       </children>
-      <children xsi:type="method:Section" id="ext_input" name="Input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.6">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput" name="Input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.6">
         <commandParam>openInput</commandParam>
         <commands id="_1QP7cDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor">
           <commandParam>openInput</commandParam>
         </commands>
       </children>
-      <children xsi:type="method:Section" id="ext_tool" name="Extractor" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.7" previous="/1/@links.6">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf" name="Extractor" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.7" previous="/1/@links.6">
         <commandParam>openRun</commandParam>
         <commands id="_6bS5cDRUEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" position="10">
           <commandParam>openRun</commandParam>
@@ -909,14 +909,14 @@
       </commands>
     </nodes>
     <nodes xsi:type="method:Container" id="_Zcc1sC61EeSADewJHO2y3w" name="Spotter">
-      <children xsi:type="method:Section" id="static_spotter_input" name="Static spotter input" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.8" previous="/1/@links.14"/>
-      <children xsi:type="method:Section" id="static_spotter_tool" name="Static spotter" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.9" previous="/1/@links.8"/>
-      <children xsi:type="method:Section" id="static_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" previous="/1/@links.9"/>
-      <children xsi:type="method:Section" id="dynamic_spotter_input" name="Dynamic spotter input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.10">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput" name="Static spotter input" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.8" previous="/1/@links.14"/>
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf" name="Static spotter" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.9" previous="/1/@links.8"/>
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes" name="Results" colorForeground="000000" colorBackground="a1c9d5" previous="/1/@links.9"/>
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput" name="Dynamic spotter input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.10">
         <commandParam>openInput</commandParam>
         <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.openinputdialog"/>
       </children>
-      <children xsi:type="method:Section" id="dynamic_spotter_tool" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.11" previous="/1/@links.10">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf" name="Dynamic spotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.11" previous="/1/@links.10">
         <commandParam>openRun</commandParam>
         <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.openconfdialog"/>
         <commands id="_0xIjQF3mEeScwqkqKbMIeg" name="Run" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.command.run" position="10"/>
@@ -924,7 +924,7 @@
           <commandParam>openServer</commandParam>
         </commands>
       </children>
-      <children xsi:type="method:Section" id="dynamic_spotter_res" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.13" previous="/1/@links.11">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes" name="Results" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" next="/1/@links.13" previous="/1/@links.11">
         <commandParam>openResults</commandParam>
       </children>
     </nodes>
