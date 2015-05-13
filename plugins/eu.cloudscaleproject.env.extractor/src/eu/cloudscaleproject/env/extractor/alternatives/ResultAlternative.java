@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor;
+package eu.cloudscaleproject.env.extractor.alternatives;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class ResultPersistenceFolder extends EditorInputEMF {
+public class ResultAlternative extends EditorInputEMF {
 	
 	public static final String KEY_FOLDER_SOMOX = "folder_somox";
 	public static final String KEY_FOLDER_MODISCO = "folder_modisco";
@@ -28,7 +28,7 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 	private static final String RESULT_FOLDER_SOMOX = "somox/";
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
-	public ResultPersistenceFolder(IProject project, IFolder folder, AdapterFactory factory){
+	public ResultAlternative(IProject project, IFolder folder, AdapterFactory factory){
 		super(project, folder, factory);
 	}
 	
@@ -74,7 +74,7 @@ public class ResultPersistenceFolder extends EditorInputEMF {
 		IResource repository = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
 		IResource system = getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
 		IResource sourceDecorator = getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
-		IResource java2kdm = getSubResource(ResultPersistenceFolder.KEY_FILE_MODISCO_JAVA2KDM);
+		IResource java2kdm = getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
 		
 		for (IResource res : new IResource[]{repository, system, sourceDecorator, java2kdm})
 		{

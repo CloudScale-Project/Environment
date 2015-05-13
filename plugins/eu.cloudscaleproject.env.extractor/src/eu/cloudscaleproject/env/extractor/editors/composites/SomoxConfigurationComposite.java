@@ -18,20 +18,20 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.somox.common.MetricsDetails;
 import org.somox.common.MetricsDetails.GroupID;
 
-import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
 
 public class SomoxConfigurationComposite extends Composite
 {
 	private HashMap<String, Scale> mapScales = new HashMap<>();
-	private ConfigPersistenceFolder alternative;
+	private ConfingAlternative alternative;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public SomoxConfigurationComposite(Composite parent, int style, ConfigPersistenceFolder alternative, GroupID ... groups)
+	public SomoxConfigurationComposite(Composite parent, int style, ConfingAlternative alternative, GroupID ... groups)
 	{
 		super(parent, style);
 		

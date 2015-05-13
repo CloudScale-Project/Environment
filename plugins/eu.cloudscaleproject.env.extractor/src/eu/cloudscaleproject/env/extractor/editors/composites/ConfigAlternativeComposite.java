@@ -1,8 +1,5 @@
 package eu.cloudscaleproject.env.extractor.editors.composites;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -11,10 +8,6 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNature;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
@@ -33,14 +26,17 @@ import org.eclipse.swt.widgets.Label;
 import org.somox.common.MetricsDetails.GroupID;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
+import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
-public class ConfigAlternativeComposite extends RunComposite implements IRefreshable
+public class ConfigAlternativeComposite extends RunComposite implements IRefreshable, ISelectable
 {
 	private DataBindingContext m_bindingContext;
-	private ConfigPersistenceFolder configPersistenceFolder;
+	private ConfingAlternative configAlternative;
 
 	/**
 	 * Create the composite.
@@ -48,17 +44,17 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigAlternativeComposite(Composite parent, int style, ConfigPersistenceFolder cif)
+	public ConfigAlternativeComposite(Composite parent, int style, ConfingAlternative cif)
 	{
 		super(parent, style);
 
-		this.configPersistenceFolder = cif;
+		this.configAlternative = cif;
 
 		// this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
 		// 1));
 		getContainer().setLayout(new GridLayout(2, false));
 
-		setTitle(configPersistenceFolder.getName());
+		setTitle(configAlternative.getName());
 
 		{
 		Label lblNewLabel = new Label(getContainer(), SWT.NONE);
@@ -85,7 +81,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 
 		{
 			SomoxConfigurationComposite composite = new SomoxConfigurationComposite(tabFolder, SWT.NONE, 
-					configPersistenceFolder, GroupID.GROUP_CLUSTERING, GroupID.GROUP_MERGING);
+					configAlternative, GroupID.GROUP_CLUSTERING, GroupID.GROUP_MERGING);
 
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setControl(composite);
@@ -94,7 +90,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 		}
 		{
 			SomoxConfigurationComposite composite = new SomoxConfigurationComposite(tabFolder, SWT.NONE, 
-					configPersistenceFolder, GroupID.GROUP_METRICS);
+					configAlternative, GroupID.GROUP_METRICS);
 
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setControl(composite);
@@ -102,7 +98,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 			tabFolder.setSelection(tabItem);
 		}
 		{
-			ModiscoConfigurationComposite composite = new ModiscoConfigurationComposite(tabFolder, SWT.NONE, configPersistenceFolder);
+			ModiscoConfigurationComposite composite = new ModiscoConfigurationComposite(tabFolder, SWT.NONE, configAlternative);
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setControl(composite);
 			tabItem.setText("Modisco configuration");
@@ -113,45 +109,20 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 
 		m_bindingContext = initDataBindings();
 	}
-
-
-	private static String JAVA_NATURE_ID = "org.eclipse.jdt.core.javanature";
+	
 	private ComboViewer comboViewer;
 
-	private List<IProject> getJavaProjects()
-	{
-		List<IProject> javaProjects = new ArrayList<>();
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		for (IProject project : root.getProjects())
-		{
-			IProjectNature nature;
-			try
-			{
-				nature = project.getNature(JAVA_NATURE_ID);
-				if (nature != null)
-					javaProjects.add(project);
-			} catch (CoreException e)
-			{
-				System.out.println("Unable to retrieve nature: " + e.getMessage());
-			}
-		}
-
-		return javaProjects;
-	}
-
-	
 	@Override
 	public void refresh()
 	{
-		this.configPersistenceFolder.load();
+		this.configAlternative.load();
 		m_bindingContext.updateTargets();
 	}
 	
 	@Override
 	protected IStatus doRun(IProgressMonitor m)
 	{
-		ExtractorRunJob job = new ExtractorRunJob(this.configPersistenceFolder);
+		ExtractorRunJob job = new ExtractorRunJob(this.configAlternative);
 		return job.run(m);
 	}
 
@@ -170,14 +141,22 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 		comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 		comboViewer.setContentProvider(listContentProvider);
 		//
-		IObservableList selfList = Properties.selfList(IProject.class).observe(getJavaProjects());
+		IObservableList selfList = Properties.selfList(IProject.class).observe(GlobalInputAlternative.getJavaProjects());
 		comboViewer.setInput(selfList);
 		//
 		IObservableValue observeSingleSelectionComboViewer_1 = ViewerProperties.singleSelection().observe(comboViewer);
 		IObservableValue projectConfigPersistenceFolderObserveValue = BeanProperties.value("extractedProject").observe(
-				configPersistenceFolder);
+				configAlternative);
 		bindingContext.bindValue(observeSingleSelectionComboViewer_1, projectConfigPersistenceFolderObserveValue, null, null);
 		//
 		return bindingContext;
 	}
+
+
+	@Override
+	public void onSelect() {
+		ValidationDiagramService.showStatus(configAlternative.getProject(), GlobalInputAlternative.getInstance());
+		ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative);
+	}
+		
 }

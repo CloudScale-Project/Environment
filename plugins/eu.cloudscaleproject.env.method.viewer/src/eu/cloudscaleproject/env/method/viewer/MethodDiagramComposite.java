@@ -263,6 +263,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		
 		status.addListener(statuslistener);
 		StatusNode node = nodes.get(status.getID());
+		
 		if(node != null){
 			bind(node, status);
 		}

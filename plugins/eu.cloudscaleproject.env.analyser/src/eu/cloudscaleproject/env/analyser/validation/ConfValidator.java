@@ -112,11 +112,14 @@ public class ConfValidator implements IResourceValidator {
 		IValidationStatus status = statusProvider.getSelfStatus();
 		
 		InputAlternative inputAlternative = alternative.getInputAlternative();
-		inputAlternative.validate();
 		
 		try {
 			status.check(ERR_INPUT_NOT_SET, inputAlternative != null, true, "Input alternative is not set!");
+
+			inputAlternative.validate();
+
 			boolean valid = validateModels(alternative.getProject(), alternative);
+
 			
 			IEditorInputResource usageAlternative = alternative.getUsageAlternative();
 			

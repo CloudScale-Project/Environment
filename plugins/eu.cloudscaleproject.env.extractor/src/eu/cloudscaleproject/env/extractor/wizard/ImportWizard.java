@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -45,20 +46,15 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	private SelectModelWizardPage selectModelPage = new SelectModelWizardPage(data);
 	private DeploymentWizardPage deploymentWizardPage = new DeploymentWizardPage(data);
 	private InterfacesWizardPage interfacesWizardPage = new InterfacesWizardPage(data);
-	//private FinishWizardPage finishWizardPage = new FinishWizardPage(data);
 	private WizardDialog dialog;
 	private IWizardPageControll currentPage;
 
+	private IProject project;
 
-	public ImportWizard() {
+	public ImportWizard(IProject project) {
 		setWindowTitle("ScaleDL Overview Import Wizard");
-		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
-		if (project == null)
-			project = ExplorerProjectPaths.getProjectFromExplorerSelection();
-		
-		if (project == null)
-			throw new IllegalStateException("Import not possible if project is not known.");
 
+		this.project = project;
 		data.setProject(project);
 	}
 
@@ -67,8 +63,6 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		this.addPage(selectModelPage);
 		this.addPage(deploymentWizardPage);
 		this.addPage(interfacesWizardPage);
-		//this.addPage(finishWizardPage);
-		
 	}
 	
 	@Override
@@ -157,9 +151,9 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 		Repository repositoryModel = data.getRepositoryModel();
 		System systemModel = data.getSystemModel();
-		
-		URI repURI_external = repositoryModel.eResource().getURI();
-		URI sysURI_external = systemModel.eResource().getURI();
+
+		URI repURI_external = ((InternalEObject)repositoryModel).eProxyURI();
+		URI sysURI_external = ((InternalEObject)systemModel).eProxyURI();
 		
 		IPath repLocation = null;
 		IPath sysLocation = null;
@@ -321,7 +315,6 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	
 	private IFile getOverviewFile()
 	{
-		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		String overviewFilePath = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_MODEL);
 		IFile overviewFile = project.getFile(overviewFilePath);
 		return overviewFile;
@@ -329,7 +322,6 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	
 	private IFile getOverviewDiagramFile()
 	{
-		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		String overviewFilePath = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_DIAGRAM);
 		IFile overviewDiagramFile = project.getFile(overviewFilePath);
 		return overviewDiagramFile;

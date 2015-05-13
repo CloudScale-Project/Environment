@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor;
+package eu.cloudscaleproject.env.extractor.alternatives;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -11,9 +11,10 @@ import org.eclipse.modisco.infra.discovery.ui.internal.util.LaunchModelUtils;
 import org.somox.configuration.SoMoXConfiguration;
 
 import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class ConfigPersistenceFolder extends EditorInputFolder
+public class ConfingAlternative extends EditorInputFolder
 {
 	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
 
@@ -24,10 +25,11 @@ public class ConfigPersistenceFolder extends EditorInputFolder
 	private SoMoXConfiguration somoxConfiguration;
 	private LaunchConfiguration modiscoConfiguration;
 
-	public ConfigPersistenceFolder(IProject project, IFolder folder)
+	public ConfingAlternative(IProject project, IFolder folder)
 	{
 		// TODO Auto-generated constructor stub
-		super(project, folder);
+		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID);
+		
 		
 		_temp_init();
 	}

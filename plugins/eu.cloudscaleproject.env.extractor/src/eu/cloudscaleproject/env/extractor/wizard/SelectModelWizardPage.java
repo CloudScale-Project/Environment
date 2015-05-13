@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -41,7 +42,7 @@ import org.scaledl.overview.util.OverviewUtil;
 import de.uka.ipd.sdq.pcm.repository.Repository;
 import de.uka.ipd.sdq.pcm.system.System;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.extractor.ResultPersistenceFolder;
+import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.extractor.wizard.util.WizardData;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -60,7 +61,7 @@ public class SelectModelWizardPage extends WizardPage implements
 	private Composite stackedComposite;
 	private Group grpExternal;
 	private Group grpResults;
-	private ResultPersistenceFolder result;
+	private ResultAlternative result;
 
 	/**
 	 * Create the wizard.
@@ -153,7 +154,7 @@ public class SelectModelWizardPage extends WizardPage implements
 		resultsList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (resultsList.getSelection().length > 0)
-					setResult((ResultPersistenceFolder)results.get(resultsList.getSelectionIndex()));
+					setResult((ResultAlternative)results.get(resultsList.getSelectionIndex()));
 					checkComplete();
 			};
 		});
@@ -242,7 +243,7 @@ public class SelectModelWizardPage extends WizardPage implements
 		stackedComposite.layout();
 	}
 
-	private void setResult(ResultPersistenceFolder res) {
+	private void setResult(ResultAlternative res) {
 		this.result = res;
 
 	}
@@ -301,6 +302,9 @@ public class SelectModelWizardPage extends WizardPage implements
 
 		EObject rep = repositoryResource.getContents().get(0);
 		EObject sys = systemResource.getContents().get(0);
+
+		EcoreUtil.resolve(rep, repositoryResource);
+		EcoreUtil.resolve(sys, systemResource);
 
 		this.data.setRepositoryModel((Repository) rep);
 		this.data.setSystemModel((System) sys);

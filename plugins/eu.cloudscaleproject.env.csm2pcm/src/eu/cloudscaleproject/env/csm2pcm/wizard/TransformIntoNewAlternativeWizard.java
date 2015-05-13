@@ -28,11 +28,13 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 	private NameSelectionPage nameSelectionPage;
 	private TransformWizardPage transformPage;
 	private ImportModelSelectionPage importSelectionPage;
+
+	private IFolder folder;
 	
 	public TransformIntoNewAlternativeWizard(IProject project) {
 		this.project = project;
 		
-		IFolder folder = createTransformOutputFolder(project);
+		folder = createTransformOutputFolder(project);
 		
 		nameSelectionPage = new NameSelectionPage("New input alternative name");
 		transformPage = new TransformWizardPage(project, folder);
@@ -41,10 +43,10 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 	
 	private IFolder createTransformOutputFolder(IProject project){
 		IFolder generatedFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
-		DateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 		String date = df.format(new Date(System.currentTimeMillis()));
 		
-		IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM [ "+ date +" ]");
+		IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM_"+ date);
 		try {
 			outputFolder.create(true, true, null);
 		} catch (CoreException e) {
@@ -82,6 +84,23 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		ValidationDiagramService.showStatus(project, newInputAlternative);
 		
 		return true;
+	}
+	
+	@Override
+	public boolean performCancel()
+	{
+		if (folder.exists())
+		{
+			try
+			{
+				folder.delete(true, null);
+			} catch (CoreException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return super.performCancel();
 	}
 	
 	/*

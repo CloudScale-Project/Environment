@@ -107,7 +107,6 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 		gd_composite.heightHint = 29;
 		composite.setLayoutData(gd_composite);
 		
-
 		rbIaaS = new Button(composite, SWT.RADIO);
 		rbIaaS.setText("IaaS");
 		
@@ -284,9 +283,6 @@ public class DeploymentWizardPage extends WizardPage implements IWizardPageContr
 
 	}
 	
-
-	
-
 	private void updateXaaSSelection()
 	{
 		if (rbIaaS.getSelection())

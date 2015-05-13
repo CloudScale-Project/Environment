@@ -16,11 +16,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.extractor.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 
 public class ModiscoConfigurationComposite extends Composite
 {
-	private ConfigPersistenceFolder alternative;
+	private ConfingAlternative alternative;
 	@SuppressWarnings("unused")
 	private ParametersTableComposite parametersTable;
 
@@ -30,7 +30,7 @@ public class ModiscoConfigurationComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public ModiscoConfigurationComposite(Composite parent, int style, ConfigPersistenceFolder alternative)
+	public ModiscoConfigurationComposite(Composite parent, int style, ConfingAlternative alternative)
 	{
 		super(parent, style);
 

@@ -13,20 +13,20 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
-import eu.cloudscaleproject.env.extractor.InputPersitenceFile;
+import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
 public class InputAlternativeComposite extends TitleComposite {
 
 	private Text txtInput;
-	private InputPersitenceFile editorInput;
+	private GlobalInputAlternative editorInput;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public InputAlternativeComposite(Composite parent, int style, final InputPersitenceFile editorInput) {
+	public InputAlternativeComposite(Composite parent, int style, final GlobalInputAlternative editorInput) {
 		super(parent, SWT.NONE);
 		this.editorInput = editorInput;
 		
@@ -60,7 +60,6 @@ public class InputAlternativeComposite extends TitleComposite {
 		        	IProject project = (IProject) selection;
 		        	String url = project.getFullPath().toPortableString();
 		        	txtInput.setText(url);
-		        	editorInput.setProperty(InputPersitenceFile.KEY_PROJECT_URL, url);
 		        	editorInput.save();
 		        	//Util.addInput(InputAlternativeComposite.this.project, InputAlternativeComposite.this.name, url);
 		        }
@@ -73,8 +72,6 @@ public class InputAlternativeComposite extends TitleComposite {
 	
 	private void load ()
 	{
-		String url = this.editorInput.getProperty(InputPersitenceFile.KEY_PROJECT_URL);
-		txtInput.setText(url == null ? "" : url);
 	}
 	
 	@Override
