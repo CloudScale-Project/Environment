@@ -39,19 +39,32 @@ public class ConfValidator implements IResourceValidator {
 			try {
 				JobDescription job = ServerService.getInstance().createJobDescription(editorInput);
 				
-				status.check(ERROR_CONF, 
+				status.check(ERROR_CONF,
 						!job.getDynamicSpotterConfig().isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration file is empty!"));					
-				status.check(ERROR_CONF, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration file is empty!"));
+				
+				status.check(ERROR_CONF,
+						job.getMeasurementEnvironment().getInstrumentationController() != null, true, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing instrumentation controller!"));
+				status.check(ERROR_CONF,
 						!job.getMeasurementEnvironment().getInstrumentationController().isEmpty(), true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing instrumentation controller!"));
-				status.check(ERROR_CONF, 
+				
+				status.check(ERROR_CONF,
+						job.getMeasurementEnvironment().getMeasurementController() != null, true, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing measurement environment!"));
+				status.check(ERROR_CONF,
 						!job.getMeasurementEnvironment().getMeasurementController().isEmpty(), true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing measurement environment!"));
-				status.check(ERROR_CONF, 
+				
+				status.check(ERROR_CONF,
+						job.getMeasurementEnvironment().getWorkloadAdapter() != null, true, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
+				status.check(ERROR_CONF,
 						!job.getMeasurementEnvironment().getWorkloadAdapter().isEmpty(), true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
-				status.check(ERROR_CONF, 
+				
+				status.check(ERROR_CONF,
 						!job.getHierarchy().getProblem().isEmpty(), true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing has incomplete hierarcy specification!"));
 

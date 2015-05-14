@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
@@ -28,13 +29,19 @@ import org.spotter.eclipse.ui.editors.InstrumentationEditorInput;
 import org.spotter.eclipse.ui.editors.MeasurementEditor;
 import org.spotter.eclipse.ui.editors.MeasurementEditorInput;
 
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class InputAlternativeComposite extends Composite{
+public class InputAlternativeComposite extends Composite implements IRefreshable, ISelectable{
 	
 	private final EditorInputFolder editorInput;
 	private Text textName;
+	
+	private IProject project;
 	
 	private Composite insComposite;
 	private Composite meaComposite;
@@ -49,8 +56,10 @@ public class InputAlternativeComposite extends Composite{
 		protected void setContentDescription(String description) {};
 	};
 		
-	public InputAlternativeComposite(Composite parent, int style, final EditorInputFolder editorInput) {
+	public InputAlternativeComposite(IProject project, Composite parent, int style, final EditorInputFolder editorInput) {
 		super(parent, style);
+		
+		this.project = project;
 		this.editorInput = editorInput;
 
 		setLayout(new GridLayout(2, false));
@@ -214,7 +223,7 @@ public class InputAlternativeComposite extends Composite{
 	}
 	
 	@Override
-	public void update() {
+	public void refresh() {
 		editorInput.load();
 		load();
 		
@@ -232,5 +241,12 @@ public class InputAlternativeComposite extends Composite{
 		insComposite.layout();
 		
 		super.update();
+	}
+
+	@Override
+	public void onSelect() {
+		ValidationDiagramService.showStatus(project, editorInput);
+		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
+		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_RES_ID);
 	}
 }

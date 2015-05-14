@@ -2,7 +2,7 @@
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_g1zG8K4CEeOG6cOE6pIkzA">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4Kp1AC3cEeSzOMcB8sHwVA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_F8kswC3dEeSzOMcB8sHwVA" elementId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor" commandName="Open Dynamic Spotter Editor">
-      <parameters xmi:id="_Ukl1EDN6EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.dynamicspotter.commandparameter.action" name="action" typeId="String"/>
+      <parameters xmi:id="_Ukl1EDN6EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.dynamicspotter.commandparameter.action" name="action" typeId=""/>
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_F-Q3YEPtEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.command.perspective" commandName="Open Dynamic Spotter perspective"/>
     <elements xsi:type="commands:Command" xmi:id="_8V6oUGAgEeSfYLflsGuUGA" elementId="eu.cloudscaleproject.env.spotter.command.run" commandName="Run Dynamic Spotter" description="Open dialog to select desired alternative and run Dynamic Spotter analyses."/>

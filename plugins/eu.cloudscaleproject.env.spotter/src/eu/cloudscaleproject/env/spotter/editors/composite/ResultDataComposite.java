@@ -73,9 +73,10 @@ import org.spotter.shared.result.ResultsLocationConstants;
 import org.spotter.shared.result.model.ResultsContainer;
 import org.spotter.shared.result.model.SpotterResult;
 
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
-public class ResultDataComposite extends Composite{
+public class ResultDataComposite extends Composite implements IRefreshable{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);
 
@@ -169,7 +170,7 @@ public class ResultDataComposite extends Composite{
 	}
 	
 	@Override
-	public void update() {
+	public void refresh() {
 		super.update();
 		if(this.resultAlternative != null && this.resultAlternative.getResource()
 				.getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME).exists()){

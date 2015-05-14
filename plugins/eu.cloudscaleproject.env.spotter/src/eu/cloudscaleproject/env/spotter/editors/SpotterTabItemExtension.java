@@ -88,7 +88,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 					return new InputComposite(project, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new RunComposite(project, parent, SWT.NONE);
+					return new ConfComposite(project, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
 					return new ResultsComposite2(project, parent, SWT.NONE);

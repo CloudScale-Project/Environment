@@ -4,7 +4,9 @@
   <imports xsi:type="commands:Command" xmi:id="_P7ECAIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.control.start"/>
   <imports xsi:type="commands:Command" xmi:id="_oVRuIIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.ui.OpenMatchingViews"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EsKJkC3kEeSFlZh2WowR_Q" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="commands:Command" xmi:id="_O0RpEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.command.openeditor" commandName="Open Static Spotter Editor"/>
+    <elements xsi:type="commands:Command" xmi:id="_O0RpEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.command.openeditor" commandName="Open Static Spotter Editor">
+      <parameters xmi:id="_9h_9IPpAEeSCruVdiXVtbg" elementId="eu.cloudscaleproject.env.staticspotter.commandparameter.0" name="action"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FUq7EC3kEeSFlZh2WowR_Q" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_PhIIAC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.StaticSpotterEditorHandler" command="_O0RpEC3kEeSFlZh2WowR_Q"/>

@@ -22,7 +22,7 @@ public class InputComposite extends SidebarEditorComposite{
 	 * @param parent
 	 * @param style
 	 */
-	public InputComposite(IProject project, Composite parent, int style) {
+	public InputComposite(final IProject project, Composite parent, int style) {
 		super(parent, style);
 		
 		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
@@ -44,7 +44,7 @@ public class InputComposite extends SidebarEditorComposite{
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
 				
-				return new InputAlternativeComposite(parent, style, (EditorInputFolder)resource);
+				return new InputAlternativeComposite(project, parent, style, (EditorInputFolder)resource);
 			}
 		});
 	}

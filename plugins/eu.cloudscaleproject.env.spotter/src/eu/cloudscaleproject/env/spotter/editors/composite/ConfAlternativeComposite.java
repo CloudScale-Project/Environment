@@ -38,6 +38,9 @@ import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
 import org.spotter.eclipse.ui.util.DialogUtils;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
@@ -47,15 +50,17 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class RunAlternativeComposite extends Composite{
+public class ConfAlternativeComposite extends Composite implements IRefreshable, ISelectable{
 		
 	private final IProject project;
-	private final EditorInputFolder editorInput;
 	private final ResourceProvider inputResourceProvider;
-	
+
+	private final EditorInputFolder confAlternative;
+	private IEditorInputResource inputAlternative = null;
+		
 	private Text textName;
 	private final ComboViewer comboViewer;
-	
+		
 	private Composite confComposite;
 	private Composite workComposite;
 	private Composite hierComposite;
@@ -73,11 +78,12 @@ public class RunAlternativeComposite extends Composite{
 		protected void setContentDescription(String description) {};
 	};
 	
-	public RunAlternativeComposite(Composite parent, int style, final EditorInputFolder editorInput) {
+	public ConfAlternativeComposite(IProject project, Composite parent, int style, final EditorInputFolder editorInput) {
 		super(parent, style);
 		
-		this.project = editorInput.getResource().getProject();
-		this.editorInput = editorInput;		
+		this.project = project;
+		
+		this.confAlternative = editorInput;		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
 		
 		setLayout(new GridLayout(2, false));
@@ -91,8 +97,8 @@ public class RunAlternativeComposite extends Composite{
 		textName.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				RunAlternativeComposite.this.editorInput.setName(textName.getText());
-				RunAlternativeComposite.this.editorInput.save();
+				ConfAlternativeComposite.this.confAlternative.setName(textName.getText());
+				ConfAlternativeComposite.this.confAlternative.save();
 			}
 		});
 		
@@ -124,9 +130,14 @@ public class RunAlternativeComposite extends Composite{
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			if(selectedEditorInput != null){
 				comboViewer.setSelection(new StructuredSelection(selectedEditorInput));
+				
+				inputAlternative = selectedEditorInput;
+				ValidationDiagramService.showStatus(ConfAlternativeComposite.this.project, selectedEditorInput);
 			}
 			else{
 				editorInput.setProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE, "");
+				inputAlternative = null;
+				ValidationDiagramService.showStatus(ConfAlternativeComposite.this.project, null);
 			}
 		}
 
@@ -139,6 +150,8 @@ public class RunAlternativeComposite extends Composite{
 				editorInput.save();
 				
 				setInput(selectedEditorInput);
+				inputAlternative = selectedEditorInput;
+				ValidationDiagramService.showStatus(ConfAlternativeComposite.this.project, selectedEditorInput);
 			}
 		});
 		
@@ -287,7 +300,7 @@ public class RunAlternativeComposite extends Composite{
 				}
 				
 				setInput(selectedEditorInput);
-				ServerService.getInstance().runSimulation(project, RunAlternativeComposite.this.editorInput);
+				ServerService.getInstance().runSimulation(project, ConfAlternativeComposite.this.confAlternative);
 			}
 		});
 		
@@ -295,11 +308,11 @@ public class RunAlternativeComposite extends Composite{
 	}
 	
 	private void setInput(IEditorInputResource ei){
-		ResourceUtils.bindEditorInputs((EditorInputFolder)ei, this.editorInput);
+		ResourceUtils.bindEditorInputs((EditorInputFolder)ei, this.confAlternative);
 	}
 	
 	private IEditorInputResource getSelectedEditorInput(){
-		String selectedInputResourceName = editorInput.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
+		String selectedInputResourceName = confAlternative.getProperty(ResourceUtils.KEY_PARENT_EDITOR_RESOURCE);
 		if(selectedInputResourceName != null){
 			IEditorInputResource selectedEditorInput = inputResourceProvider.getResource(selectedInputResourceName);
 			return selectedEditorInput;
@@ -308,13 +321,13 @@ public class RunAlternativeComposite extends Composite{
 	}
 	
 	public void load(){
-		String name = editorInput.getName();
+		String name = confAlternative.getName();
 		textName.setText(name != null ? name : "");
 	}
 	
 	@Override
-	public void update() {
-		editorInput.load();
+	public void refresh() {
+		confAlternative.load();
 		load();
 		comboViewer.refresh(true);
 		
@@ -337,5 +350,11 @@ public class RunAlternativeComposite extends Composite{
 		hierComposite.layout();
 		
 		super.update();
+	}
+
+	@Override
+	public void onSelect() {
+		ValidationDiagramService.showStatus(project, inputAlternative);
+		ValidationDiagramService.showStatus(project, confAlternative);
 	}
 }

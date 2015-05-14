@@ -202,6 +202,7 @@ public class ServerClientComposite extends Composite
 		job.schedule();
 	}
 	
+	/*
 	private ISpotterServer getSelectedSpotterServer()
 	{
 		Composite topControl = (Composite) ((StackLayout)serverStackComposite.getLayout()).topControl;
@@ -210,6 +211,7 @@ public class ServerClientComposite extends Composite
 		
 		return spotterServer;
 	}
+	*/
 
 	private void updateClient ()
 	{
