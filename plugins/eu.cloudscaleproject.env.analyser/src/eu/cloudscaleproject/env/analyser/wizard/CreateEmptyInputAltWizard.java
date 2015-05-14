@@ -32,6 +32,7 @@ public class CreateEmptyInputAltWizard extends Wizard{
 				
 		nameSelectionPage = new NameSelectionPage("New input alternative name");
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
+		
 		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
 		modelSelectionPage.setDescription("Please select PCM models to start with");
 	}

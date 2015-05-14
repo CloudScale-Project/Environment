@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.analyser.ResourceUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
 import eu.cloudscaleproject.env.analyser.wizard.CreateInputAltWizard;
@@ -26,7 +25,6 @@ import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
 public class InputComposite extends SidebarEditorComposite{
 	
-	private static final String SECTION_GEN = "Generated inputs:";
 	private static final String SECTION_ALT = "Alternative inputs:";
 	
 	private final IProject project;
@@ -41,17 +39,12 @@ public class InputComposite extends SidebarEditorComposite{
 			
 			@Override
 			public String[] getSections() {
-				return new String[]{SECTION_GEN, SECTION_ALT};
+				return new String[]{SECTION_ALT};
 			}
 			
 			@Override
 			public String getSection(IEditorInputResource resource) {
-				if(ResourceUtils.ANALYSER_INPUT_GENERATED_RES_NAME.equals(resource.getResource().getName())){
-					return SECTION_GEN;
-				}
-				else{
-					return SECTION_ALT;
-				}
+				return SECTION_ALT;
 			}
 			
 			@Override

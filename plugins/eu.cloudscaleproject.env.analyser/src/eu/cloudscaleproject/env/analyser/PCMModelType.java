@@ -8,6 +8,7 @@ public enum PCMModelType{
 	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
 	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "resourceenvironment"),
 	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "allocation"),
+	 AT(ToolchainUtils.KEY_FILE_AT, "pa.xmi"),
 	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "usagemodel"),
 	 
 	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "usageevolution"),
