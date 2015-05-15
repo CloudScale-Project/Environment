@@ -2,19 +2,17 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
-public abstract class AbstractConfigAlternative extends EditorInputFolder implements IConfigAlternative
+public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative
 {
-
-	private static final Logger logger = Logger.getLogger(AbstractConfigAlternative.class.getName());
 	private ResourceProvider resultsResourceProvider;
 	private ResourceProvider inputResourceProvider;
 
@@ -78,9 +76,9 @@ public abstract class AbstractConfigAlternative extends EditorInputFolder implem
 	}
 
 	@Override
-	public final IStatus run()
+	public final IStatus run(IProgressMonitor monitor)
 	{
-		IStatus status = doRun();
+		IStatus status = doRun(monitor);
 
 		if (status.isOK())
 		{
@@ -97,6 +95,6 @@ public abstract class AbstractConfigAlternative extends EditorInputFolder implem
 		return status;
 	}
 
-	abstract protected IStatus doRun();
+	abstract protected IStatus doRun(IProgressMonitor monitor);
 
 }

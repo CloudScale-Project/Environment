@@ -8,8 +8,6 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
@@ -30,7 +28,6 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
 public class ConfigAlternativeComposite extends RunComposite implements IRefreshable, ISelectable
@@ -117,13 +114,6 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 		m_bindingContext.updateTargets();
 	}
 	
-	@Override
-	protected IStatus doRun(IProgressMonitor m)
-	{
-		ExtractorRunJob job = new ExtractorRunJob(this.configAlternative);
-		return job.run(m);
-	}
-
 	@Override
 	protected void checkSubclass()
 	{

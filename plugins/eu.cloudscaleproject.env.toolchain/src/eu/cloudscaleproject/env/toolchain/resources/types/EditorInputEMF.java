@@ -18,25 +18,23 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
+
 public class EditorInputEMF extends EditorInputFolder{
 	
+	private static final AdapterFactory factory = new CustomAdapterFactory();
+
 	private static final Logger logger = Logger.getLogger(EditorInputEMF.class.getName());
 
 	public static final String PROP_COMMAND_STACK_CHANGED = EditorInputEMF.class.getName() + ".commandStackChanged";
 	
 	protected final BasicCommandStack commandStack;
 	protected final AdapterFactoryEditingDomain editingDomain;
-	protected final AdapterFactory factory;
 	
 	protected final ResourceSet resSet;
-	
-	public EditorInputEMF(IProject project, IFolder folder, AdapterFactory factory) {
-		this(project, folder, factory, null);
-	}
 
-	public EditorInputEMF(IProject project, IFolder folder, AdapterFactory factory, String validationID) {
+	public EditorInputEMF(IProject project, IFolder folder,String validationID) {
 		super(project, folder, validationID);
-		this.factory = factory;
 		
 		commandStack = new BasicCommandStack();
 		commandStack.addCommandStackListener(new CommandStackListener() {

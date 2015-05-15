@@ -8,16 +8,11 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -28,7 +23,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.reclipse.structure.inference.DetectPatternsJob;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -37,12 +31,10 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -59,8 +51,6 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	private ConfigAlternative configAlternative;
 
 	private ComboViewer comboViewer;
-
-	private EditorInputFolder extractorResult;
 
 	private EMFEditableTreeviewComposite treeViewComposite;
 
@@ -98,30 +88,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(configAlternative, containerEditor, SWT.NONE);
 
-		comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
-		{
-			@Override
-			public void selectionChanged(SelectionChangedEvent event)
-			{
-				extractorResult = (EditorInputFolder) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
-			}
-		});
 		m_bindingContext = initDataBindings();
-	}
-
-	@Override
-	protected IStatus doRun(IProgressMonitor m)
-	{
-		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configAlternative, extractorResult);
-		
-		IStatus status = detectPaternJob.run(m);
-		if (status.isOK())
-		{
-			// Collect results
-			Util.saveAnnotations(configAlternative, detectPaternJob);
-		}
-
-		return status;
 	}
 
 	@Override

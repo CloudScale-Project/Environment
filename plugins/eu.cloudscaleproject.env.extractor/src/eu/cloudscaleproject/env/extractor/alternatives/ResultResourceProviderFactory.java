@@ -6,14 +6,12 @@ import org.eclipse.core.resources.IResource;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class ResultResourceProviderFactory implements IResourceProviderFactory
 {
 
 	public static class ResultResourceProvider extends ResourceProvider
 	{
-		static final CustomAdapterFactory adapterFactory = new CustomAdapterFactory();
 		public ResultResourceProvider(IFolder folder, String defaultResName)
 		{
 			super(folder, defaultResName);
@@ -34,7 +32,7 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory
 		public IEditorInputResource loadResource(IResource res, String type)
 		{
 			// TODO Auto-generated method stub
-			ResultAlternative rif = new ResultAlternative(getRootFolder().getProject(), (IFolder) res, adapterFactory);
+			ResultAlternative rif = new ResultAlternative(getRootFolder().getProject(), (IFolder) res);
 			rif.load();
 			return rif;
 		}
@@ -44,7 +42,7 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory
 		{
 
 			IFolder folder = getRootFolder().getFolder(name);
-			ResultAlternative rif = new ResultAlternative(folder.getProject(), folder, adapterFactory);
+			ResultAlternative rif = new ResultAlternative(folder.getProject(), folder);
 			rif.create();
 			return folder;
 		}

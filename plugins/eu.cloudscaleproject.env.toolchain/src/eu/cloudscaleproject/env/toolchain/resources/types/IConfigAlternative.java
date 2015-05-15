@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 
@@ -14,5 +15,5 @@ public interface IConfigAlternative extends IEditorInputResource{
 	public IEditorInput getInputAlternative();
 	public IEditorInputResource getLastResult();
 	public List<IEditorInputResource> getResults();
-	public IStatus run();
+	public IStatus run(IProgressMonitor monitor);
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -17,7 +16,6 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class ResourceUtils {
 	
@@ -112,8 +110,6 @@ public class ResourceUtils {
 		//register resource provider factories		
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_INPUT_ID, new IResourceProviderFactory(){
 
-			CustomAdapterFactory adapterFactory = new CustomAdapterFactory();
-			
 			@Override
 			public ResourceProvider create(IFolder folder) {
 				
@@ -132,7 +128,7 @@ public class ResourceUtils {
 					@Override
 					public IEditorInputResource loadResource(IResource res, String type) {
 						
-						InputAlternative eif = new InputAlternative(res.getProject(), (IFolder)res, adapterFactory);
+						InputAlternative eif = new InputAlternative(res.getProject(), (IFolder)res);
 						return eif;
 					}
 					
@@ -151,9 +147,6 @@ public class ResourceUtils {
 
 			@Override
 			public ResourceProvider create(IFolder folder) {
-				
-
-				final ComposedAdapterFactory adapterFactory = new CustomAdapterFactory();
 				
 				ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
 					
@@ -175,7 +168,7 @@ public class ResourceUtils {
 						}
 						
 						ConfAlternative.Type typeEnum = ConfAlternative.Type.valueOf(type);
-						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res, typeEnum, adapterFactory);
+						ConfAlternative eif = new ConfAlternative(res.getProject(), (IFolder)res, typeEnum);
 						return eif;
 					}
 					

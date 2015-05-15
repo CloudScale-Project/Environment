@@ -7,17 +7,21 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.reclipse.structure.inference.DetectPatternsJob;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ConfigAlternative extends EditorInputEMF {
+public class ConfigAlternative extends AbstractConfigAlternative {
 
 	public static final String KEY_INPUT_ALTERNATIVE= "input_alternative";
 	
@@ -33,8 +37,17 @@ public class ConfigAlternative extends EditorInputEMF {
 	public static final String KEY_EXTRACTOR_RESULT = "extractor_result";
 
 	
-	public ConfigAlternative(IProject project, IFolder folder, AdapterFactory adapterFactory) {
-		super (project, folder, adapterFactory, ToolchainUtils.SPOTTER_STA_CONF_ID);
+	public ConfigAlternative(IProject project, IFolder folder) {
+		super (project, folder, ToolchainUtils.SPOTTER_STA_CONF_ID,
+				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID),
+				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_RES_ID)
+				);
+	}
+	
+	@Override
+	public IEditorInputResource getInputAlternative()
+	{
+		return GlobalInputAlternative.getInstance();
 	}
 
 	public IEditorInputResource getExtractorResult()
@@ -112,4 +125,21 @@ public class ConfigAlternative extends EditorInputEMF {
 			
 		}
 	}
+
+	@Override
+	protected IStatus doRun(IProgressMonitor m)
+	{
+		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(this, (EditorInputFolder) getExtractorResult());
+		
+		IStatus status = detectPaternJob.run(m);
+		if (status.isOK())
+		{
+			// Collect results
+			Util.saveAnnotations(this, detectPaternJob);
+		}
+
+		return status;
+	}
+
+	
 }

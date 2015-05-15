@@ -10,7 +10,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -25,13 +24,8 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class InputAlternative extends EditorInputEMF{
 					
-	public InputAlternative(IProject project, IFolder folder, AdapterFactory factory){
-		super(project, folder, factory);
-	}
-	
-	@Override
-	public String getID() {
-		return ToolchainUtils.ANALYSER_INPUT_ID;
+	public InputAlternative(IProject project, IFolder folder){
+		super(project, folder, ToolchainUtils.ANALYSER_INPUT_ID);
 	}
 	
 	public void importFromFolder(IContainer folder){

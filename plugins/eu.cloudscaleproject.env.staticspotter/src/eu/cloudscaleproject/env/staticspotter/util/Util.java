@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -182,24 +181,6 @@ public class Util
 	}
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
-
-	private static IFolder createResultFolder(IProject project, String name)
-	{
-		IFolder resultsFolder = getResultsFolder(project);
-		IFolder resultFolder = resultsFolder.getFolder(name + " " + sdf.format(new Date()));
-
-		try
-		{
-			resultFolder.create(true, false, null);
-		}
-		catch (CoreException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return resultFolder;
-	}
 
 	/////////////////////////////////////////
 	// Loading annotations

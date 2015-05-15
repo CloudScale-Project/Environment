@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -28,8 +27,8 @@ public class ResultAlternative extends EditorInputEMF {
 	private static final String RESULT_FOLDER_SOMOX = "somox/";
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
-	public ResultAlternative(IProject project, IFolder folder, AdapterFactory factory){
-		super(project, folder, factory);
+	public ResultAlternative(IProject project, IFolder folder){
+		super(project, folder, ToolchainUtils.EXTRACTOR_RES_ID);
 	}
 	
 	@Override

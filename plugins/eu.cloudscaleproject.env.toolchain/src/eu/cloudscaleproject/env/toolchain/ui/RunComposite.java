@@ -31,11 +31,11 @@ import org.eclipse.swt.widgets.ProgressBar;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.toolchain.Activator;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 
 public abstract class RunComposite extends Composite
 {
-	private IEditorInputResource alternative;
+	private IConfigAlternative alternative;
 
 	private Composite container;
 	private TitledGradientComposite titlebar;
@@ -55,7 +55,7 @@ public abstract class RunComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public RunComposite(Composite parent, int style, IEditorInputResource alternative)
+	public RunComposite(Composite parent, int style, IConfigAlternative alternative)
 	{
 		super(parent, style);
 
@@ -156,9 +156,6 @@ public abstract class RunComposite extends Composite
 		return container;
 	}
 
-	protected abstract IStatus doRun(IProgressMonitor m);
-
-
 	private void run()
 	{
 		if (!alternative.getSelfStatus().isDone())
@@ -175,7 +172,7 @@ public abstract class RunComposite extends Composite
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				internalMonitor = new RunProgressMonitor();
-				return doRun(internalMonitor);
+				return alternative.run(internalMonitor);
 			}
 
 			@Override

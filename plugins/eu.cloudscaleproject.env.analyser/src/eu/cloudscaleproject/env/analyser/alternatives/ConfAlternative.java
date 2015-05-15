@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +13,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -74,25 +80,28 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ConfAlternative extends EditorInputEMF{
-				
-	public static final String KEY_NAME = "name";	
+public class ConfAlternative extends AbstractConfigAlternative
+{
+
+	public static final String KEY_NAME = "name";
 	private final Type type;
-	
+
 	public static final String PROP_INPUT_ALT_SET = ConfAlternative.class.getName() + "propInputAltSet";
 	public static final String PROP_USAGE_EVOLUTION_SET = ConfAlternative.class.getName() + "propUsageEvolutionSet";
-	
+
 	private final String ERR_INVALID_INPUT_ALTERNATIVE = "eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.invalidInputAlt";
-	
+
 	public enum Type {
 		NORMAL, CAPACITY, SCALABILITY;
-		
-		public String toString() {
-			switch (ConfAlternative.Type.this) {
+
+		public String toString()
+		{
+			switch (ConfAlternative.Type.this)
+			{
 			case NORMAL:
 				return "Normal";
 			case CAPACITY:
@@ -104,283 +113,322 @@ public class ConfAlternative extends EditorInputEMF{
 			}
 		};
 	}
-		
-	public ConfAlternative(IProject project, IFolder folder, Type type, AdapterFactory factory){
-		super(project, folder, factory);
-		
+
+	public ConfAlternative(IProject project, IFolder folder, Type type)
+	{
+		super(project, folder, ToolchainUtils.ANALYSER_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
+				ToolchainUtils.ANALYSER_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
+				ToolchainUtils.ANALYSER_RES_ID));
+
 		this.type = type;
-		
-		//create and set defaults
-		Experiment exp = getExperiment();		
+
+		// create and set defaults
+		Experiment exp = getExperiment();
 		initializeCommon(exp);
-		
-		if(Type.NORMAL.equals(type)){
+
+		if (Type.NORMAL.equals(type))
+		{
 			initializeNormal(exp);
-		}
-		else if(Type.CAPACITY.equals(type)){
+		} else if (Type.CAPACITY.equals(type))
+		{
 			initializeCapacity(exp);
-		}
-		else if(Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			initializeScalability(exp);
-		}		
+		}
 	}
-	
-	@Override
-	public String getID() {
-		return ToolchainUtils.ANALYSER_CONF_ID;
-	}
-	
-	public InputAlternative getInputAlternative(){
+
+	public InputAlternative getInputAlternative()
+	{
 		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-		return (InputAlternative)rp.getResource(res);
+		return (InputAlternative) rp.getResource(res);
 	}
-	
-	public IEditorInputResource getUsageAlternative(){
+
+	public IEditorInputResource getUsageAlternative()
+	{
 		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
 		return rp.getResource(res);
 	}
-	
-	public Type getTypeEnum(){
+
+	public Type getTypeEnum()
+	{
 		String type = getType();
-		if(type == null){
+		if (type == null)
+		{
 			return null;
 		}
 		return Type.valueOf(type);
 	}
-	
-	public UsageEvolution getUsageEvolution(){
+
+	public UsageEvolution getUsageEvolution()
+	{
 		IResource ueFile = getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		if(ueFile == null){
+		if (ueFile == null)
+		{
 			return null;
 		}
-		
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)ueFile);
+
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) ueFile);
 		EObject eobject = res.getContents().isEmpty() ? null : res.getContents().get(0);
-		
-		if(eobject instanceof UsageEvolution){
-			return (UsageEvolution)eobject;
+
+		if (eobject instanceof UsageEvolution)
+		{
+			return (UsageEvolution) eobject;
 		}
 		return null;
 	}
-	
-	public void setUsageEvolution(EditorInputFolder res){
+
+	public void setUsageEvolution(EditorInputFolder res)
+	{
 		IResource fileUsageEvo = res.getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		setSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT, res.getResource());
-		if(fileUsageEvo == null){
+		if (fileUsageEvo == null)
+		{
 			return;
 		}
-		
-		Resource resUE = ExplorerProjectPaths.getEmfResource(resSet, (IFile)fileUsageEvo);
-		
+
+		Resource resUE = ExplorerProjectPaths.getEmfResource(resSet, (IFile) fileUsageEvo);
+
 		EObject eobject = resUE.getContents().isEmpty() ? null : resUE.getContents().get(0);
 		Experiment exp = getExperiment();
-		if(exp.getInitialModel() != null && eobject instanceof UsageEvolution){
-			exp.getInitialModel().setUsageEvolution((UsageEvolution)eobject);
+		if (exp.getInitialModel() != null && eobject instanceof UsageEvolution)
+		{
+			exp.getInitialModel().setUsageEvolution((UsageEvolution) eobject);
 		}
-		
+
 		setDirty(true);
 		pcs.firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
 	}
-	
-	public boolean setInputAlternative(InputAlternative inputAlt){
-		
+
+	public boolean setInputAlternative(InputAlternative inputAlt)
+	{
+
 		Experiment exp = getExperiment();
-		
+
 		InitialModel initialModel = exp.getInitialModel();
-		
-		if(inputAlt == null && initialModel != null){
+
+		if (inputAlt == null && initialModel != null)
+		{
 			exp.setInitialModel(null);
 			return true;
 		}
-		
+
 		inputAlt.validate();
-		if(inputAlt.getSelfStatus().isDone()){
+		if (inputAlt.getSelfStatus().isDone())
+		{
 			getSelfStatus().removeWarning(ERR_INVALID_INPUT_ALTERNATIVE);
-		}
-		else{
+		} else
+		{
 			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, "Invalid input alternative!");
 			setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 			setDirty(true);
 			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 			return false;
 		}
-		
-		
-		if(initialModel == null){
+
+		if (initialModel == null)
+		{
 			initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
 			exp.setInitialModel(initialModel);
 		}
-		
-		//set initial model
+
+		// set initial model
 		{
-			//allocation
+			// allocation
 			{
 				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_ALLOCATION);
-				if(file != null && file.exists()){
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-					if(!res.getContents().isEmpty()){
-						initialModel.setAllocation((Allocation)res.getContents().get(0));
+				if (file != null && file.exists())
+				{
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+					if (!res.getContents().isEmpty())
+					{
+						initialModel.setAllocation((Allocation) res.getContents().get(0));
 					}
-				}
-				else{
+				} else
+				{
 					initialModel.setAllocation(null);
 				}
 			}
-			
-			//usage			
+
+			// usage
 			{
 				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
-				if(file != null && file.exists()){
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-					if(!res.getContents().isEmpty()){
-						initialModel.setUsageModel((UsageModel)res.getContents().get(0));
+				if (file != null && file.exists())
+				{
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+					if (!res.getContents().isEmpty())
+					{
+						initialModel.setUsageModel((UsageModel) res.getContents().get(0));
 					}
-				}
-				else{
+				} else
+				{
 					initialModel.setUsageModel(null);
 				}
 			}
-			
-			//usageevolution
+
+			// usageevolution
 			UsageEvolution ue = getUsageEvolution();
-			if(ue != null){
+			if (ue != null)
+			{
 				initialModel.setUsageEvolution(ue);
 			}
-			
+
 		}
-		
-		//set usage measuring point
-		{			
+
+		// set usage measuring point
+		{
 			IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_USAGE);
-			if(file != null && file.exists()){
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-				if(!res.getContents().isEmpty()){
-					UsageModel usageModel = (UsageModel)res.getContents().get(0);
+			if (file != null && file.exists())
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+				if (!res.getContents().isEmpty())
+				{
+					UsageModel usageModel = (UsageModel) res.getContents().get(0);
 					List<UsageScenario> usageScenarios = usageModel.getUsageScenario_UsageModel();
-					if(usageScenarios != null && !usageScenarios.isEmpty()){
+					if (usageScenarios != null && !usageScenarios.isEmpty())
+					{
 						UsageScenario us = usageScenarios.get(0);
-						for(MeasuringPoint mp : getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT)){
-							((UsageScenarioMeasuringPoint)mp).setUsageScenario(us);
+						for (MeasuringPoint mp : getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT))
+						{
+							((UsageScenarioMeasuringPoint) mp).setUsageScenario(us);
 						}
 					}
 				}
 			}
 		}
-		
-		//load and set default resources from plugin
+
+		// load and set default resources from plugin
 		ResourceSet tmpResSet = new ResourceSetImpl();
 		URI uMiddleware = PathmapManager.denormalizeURI(URI.createURI("pathmap://PCM_MODELS/Glassfish.repository"));
 		URI uEventMiddleware = PathmapManager.denormalizeURI(URI.createURI("pathmap://PCM_MODELS/default_event_middleware.repository"));
 		Resource resMRep = tmpResSet.getResource(uMiddleware, true);
 		Resource resEMRep = tmpResSet.getResource(uEventMiddleware, true);
-		initialModel.setMiddlewareRepository((Repository)resMRep.getContents().get(0));
-		initialModel.setEventMiddleWareRepository((Repository)resEMRep.getContents().get(0));		
-		
+		initialModel.setMiddlewareRepository((Repository) resMRep.getContents().get(0));
+		initialModel.setEventMiddleWareRepository((Repository) resEMRep.getContents().get(0));
+
 		configureInput(exp, initialModel, inputAlt);
-		
+
 		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
-		
+
 		setDirty(true);
 		pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
-		
+
 		return true;
 	}
-	
-	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
-		if(Type.NORMAL.equals(type)){
-			//TODO:?
-		}
-		else if(Type.CAPACITY.equals(type)){
+
+	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt)
+	{
+		if (Type.NORMAL.equals(type))
+		{
+			// TODO:?
+		} else if (Type.CAPACITY.equals(type))
+		{
 			configureCapacity(exp, initialModel);
-		}
-		else if(Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			configureScalability(exp, initialModel);
 		}
 	}
-	
-	private void configureTool(SimuLizarConfiguration simulizarConf){
-		if(Type.NORMAL.equals(type)){
-			
-		}
-		else if(Type.CAPACITY.equals(type)){
+
+	private void configureTool(SimuLizarConfiguration simulizarConf)
+	{
+		if (Type.NORMAL.equals(type))
+		{
+
+		} else if (Type.CAPACITY.equals(type))
+		{
 			configureToolCapacity(simulizarConf);
-		}
-		else if(Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			configureToolScalability(simulizarConf);
 		}
 	}
-	
+
 	// Helper methods for retrieving model objects ////////////////////
-	
-	public void createEMFResource(String newFilename, String key, EObject rootObject){
-		IFile file = ((IFolder)getResource()).getFile(newFilename);
+
+	public void createEMFResource(String newFilename, String key, EObject rootObject)
+	{
+		IFile file = ((IFolder) getResource()).getFile(newFilename);
 		this.setSubResource(key, file);
 		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, file);
 		resMp.getContents().clear();
 		resMp.getContents().add(rootObject);
 	}
-	
-	public Experiment getExperiment() {
-		
+
+	public Experiment getExperiment()
+	{
+
 		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
-		if(expFile == null || !expFile.exists()){
-			List<IFile> files = PCMResourceSet.findResource(getResource(), PCMModelType.EXPERIMENTS.getFileExtension());			
-			if(files.size() > 0){
-				//TODO: for now just use fist model file found
+		if (expFile == null || !expFile.exists())
+		{
+			List<IFile> files = PCMResourceSet.findResource(getResource(), PCMModelType.EXPERIMENTS.getFileExtension());
+			if (files.size() > 0)
+			{
+				// TODO: for now just use fist model file found
 				expFile = files.get(0);
-			}
-			else{
-				//create new Experiment model file
+			} else
+			{
+				// create new Experiment model file
 				expFile = getResource().getFile(PCMModelType.EXPERIMENTS.getFullName());
 				setSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS, expFile);
-			}			
+			}
 		}
-		
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)expFile);
+
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) expFile);
 		EObject root = res.getContents().size() > 0 ? res.getContents().get(0) : null;
-		if(root == null){
+		if (root == null)
+		{
 			ExperimentRepository expRep = ExperimentsFactory.eINSTANCE.createExperimentRepository();
 			root = expRep;
 			res.getContents().add(expRep);
 		}
-		
-		if(!(root instanceof ExperimentRepository)){
+
+		if (!(root instanceof ExperimentRepository))
+		{
 			throw new IllegalArgumentException("Experiments model with root object type other then ExperimentRepository is not supported!");
 		}
-		
-		ExperimentRepository expRep = (ExperimentRepository)root;
+
+		ExperimentRepository expRep = (ExperimentRepository) root;
 		Experiment firstExperiment = expRep.getExperiments().isEmpty() ? null : expRep.getExperiments().get(0);
-		if(firstExperiment == null){
+		if (firstExperiment == null)
+		{
 			firstExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
 			firstExperiment.setRepetitions(1);
 			expRep.getExperiments().add(firstExperiment);
 		}
-						
-		return (Experiment)firstExperiment;		
+
+		return (Experiment) firstExperiment;
 	}
-	
-	public InitialModel getInitialModel(){
+
+	public InitialModel getInitialModel()
+	{
 		Experiment exp = getExperiment();
 		return exp != null ? exp.getInitialModel() : null;
 	}
-	
-	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz){
+
+	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz)
+	{
 
 		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
-		
-		for(Resource res : resSet.getResources()){
-			if(res != null && !res.getContents().isEmpty()){
+
+		for (Resource res : resSet.getResources())
+		{
+			if (res != null && !res.getContents().isEmpty())
+			{
 				EObject root = res.getContents().get(0);
-				if(clazz.equals(root.eClass())){
-					mps.add((MeasuringPoint)root);
-				}
-				else if(root instanceof MeasuringPointRepository){
-					MeasuringPointRepository mpr = (MeasuringPointRepository)root;
-					for(MeasuringPoint mp : mpr.getMeasuringPoints()){
-						if(clazz.equals(mp.eClass())){
-							mps.add((MeasuringPoint)mp);
+				if (clazz.equals(root.eClass()))
+				{
+					mps.add((MeasuringPoint) root);
+				} else if (root instanceof MeasuringPointRepository)
+				{
+					MeasuringPointRepository mpr = (MeasuringPointRepository) root;
+					for (MeasuringPoint mp : mpr.getMeasuringPoints())
+					{
+						if (clazz.equals(mp.eClass()))
+						{
+							mps.add((MeasuringPoint) mp);
 						}
 					}
 				}
@@ -388,69 +436,85 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		return mps;
 	}
-	
-	public List<MeasuringPoint> getMeasuringPointObjects(){
+
+	public List<MeasuringPoint> getMeasuringPointObjects()
+	{
 
 		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
-		
-		for(Resource res : resSet.getResources()){
-			if(res != null && !res.getContents().isEmpty()){
+
+		for (Resource res : resSet.getResources())
+		{
+			if (res != null && !res.getContents().isEmpty())
+			{
 				EObject root = res.getContents().get(0);
-				if(root instanceof MeasuringPoint){
-					mps.add((MeasuringPoint)root);
+				if (root instanceof MeasuringPoint)
+				{
+					mps.add((MeasuringPoint) root);
 				}
 			}
 		}
-		
-		for(MeasuringPointRepository mpr : getMeasuringPointRepositories()){
+
+		for (MeasuringPointRepository mpr : getMeasuringPointRepositories())
+		{
 			mps.addAll(mpr.getMeasuringPoints());
 		}
-		
+
 		return mps;
 	}
-	
-	public List<Variation> getVariationObjects(){
-		
+
+	public List<Variation> getVariationObjects()
+	{
+
 		List<Variation> out = new ArrayList<Variation>();
-		
+
 		Experiment experiment = getExperiment();
-		for(Variation v : experiment.getVariations()){
+		for (Variation v : experiment.getVariations())
+		{
 			out.add(v);
 		}
-		
+
 		return out;
 	}
-	
-	public List<VariationType> getVariationTypes(){
-		
+
+	public List<VariationType> getVariationTypes()
+	{
+
 		List<VariationType> out = new ArrayList<VariationType>();
-		
+
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		Resource resource = resSet.getResource(variations, true);
 		List<EObject> content = resource.getContents();
-		if(!content.isEmpty()){
+		if (!content.isEmpty())
+		{
 			EObject object = content.get(0);
-			if(object instanceof VariationRepository){
-				VariationRepository vRep = (VariationRepository)object;
-				for(VariationType v : vRep.getVariation()){
+			if (object instanceof VariationRepository)
+			{
+				VariationRepository vRep = (VariationRepository) object;
+				for (VariationType v : vRep.getVariation())
+				{
 					out.add(v);
 				}
 			}
 		}
 		return out;
 	}
-	
-	public VariationType getVariationType(String id){
-		
+
+	public VariationType getVariationType(String id)
+	{
+
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		Resource resource = resSet.getResource(variations, true);
 		List<EObject> content = resource.getContents();
-		if(!content.isEmpty()){
+		if (!content.isEmpty())
+		{
 			EObject object = content.get(0);
-			if(object instanceof VariationRepository){
-				VariationRepository vRep = (VariationRepository)object;
-				for(VariationType v : vRep.getVariation()){
-					if(id.equals(v.getId())){
+			if (object instanceof VariationRepository)
+			{
+				VariationRepository vRep = (VariationRepository) object;
+				for (VariationType v : vRep.getVariation())
+				{
+					if (id.equals(v.getId()))
+					{
 						return v;
 					}
 				}
@@ -458,566 +522,676 @@ public class ConfAlternative extends EditorInputEMF{
 		}
 		return null;
 	}
-	
-	public List<ValueProvider> getVariationValueProviders(EClass clazz){
-		
+
+	public List<ValueProvider> getVariationValueProviders(EClass clazz)
+	{
+
 		List<ValueProvider> out = new ArrayList<ValueProvider>();
-		
-		for(Variation v : getExperiment().getVariations()){
-			if(v.getValueProvider().eClass().equals(clazz)){
+
+		for (Variation v : getExperiment().getVariations())
+		{
+			if (v.getValueProvider().eClass().equals(clazz))
+			{
 				out.add(v.getValueProvider());
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public List<MetricDescription> getMetricDescriptions(){
-		
+
+	public List<MetricDescription> getMetricDescriptions()
+	{
+
 		List<MetricDescription> out = new ArrayList<MetricDescription>();
-		
+
 		Resource res = getResourceSet().getResource(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"), true);
 		EObject object = res.getContents().isEmpty() ? null : res.getContents().get(0);
-		
-		if(object instanceof MetricDescriptionRepository){
-			MetricDescriptionRepository mdRep = (MetricDescriptionRepository)object;
-			for(MetricDescription md : mdRep.getMetricDescriptions()){
+
+		if (object instanceof MetricDescriptionRepository)
+		{
+			MetricDescriptionRepository mdRep = (MetricDescriptionRepository) object;
+			for (MetricDescription md : mdRep.getMetricDescriptions())
+			{
 				out.add(md);
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public MetricDescription getMetricDescription(){
+
+	public MetricDescription getMetricDescription()
+	{
 		List<MetricDescription> metDescriptions = getMetricDescriptions();
 		return metDescriptions.isEmpty() ? null : metDescriptions.get(0);
 	}
-	
-	public List<StopCondition> getStopConditions(EClass clazz){
+
+	public List<StopCondition> getStopConditions(EClass clazz)
+	{
 		List<StopCondition> out = new ArrayList<StopCondition>();
-		
-		for(StopCondition stopCon : getExperiment().getStopConditions()){
-			if(stopCon.getClass().equals(clazz)){
+
+		for (StopCondition stopCon : getExperiment().getStopConditions())
+		{
+			if (stopCon.getClass().equals(clazz))
+			{
 				out.add(stopCon);
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public List<MeasuringPointRepository> getMeasuringPointRepositories(){
+
+	public List<MeasuringPointRepository> getMeasuringPointRepositories()
+	{
 		List<MeasuringPointRepository> out = new ArrayList<MeasuringPointRepository>();
-		
-		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS)){
-			if(file instanceof IFile && file.exists()){
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-				for(EObject eobj : res.getContents()){
-					if(eobj instanceof MeasuringPointRepository){
-						MeasuringPointRepository rep = (MeasuringPointRepository)eobj;
+
+		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS))
+		{
+			if (file instanceof IFile && file.exists())
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+				for (EObject eobj : res.getContents())
+				{
+					if (eobj instanceof MeasuringPointRepository)
+					{
+						MeasuringPointRepository rep = (MeasuringPointRepository) eobj;
 						out.add(rep);
 					}
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public List<MonitorRepository> getMonitorRepositories(){
+
+	public List<MonitorRepository> getMonitorRepositories()
+	{
 		List<MonitorRepository> out = new ArrayList<MonitorRepository>();
-		
-		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_MONITOR)){
-			if(file instanceof IFile && file.exists()){
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-				for(EObject eobj : res.getContents()){
-					if(eobj instanceof MonitorRepository){
-						MonitorRepository rep = (MonitorRepository)eobj;
+
+		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_MONITOR))
+		{
+			if (file instanceof IFile && file.exists())
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+				for (EObject eobj : res.getContents())
+				{
+					if (eobj instanceof MonitorRepository)
+					{
+						MonitorRepository rep = (MonitorRepository) eobj;
 						out.add(rep);
 					}
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public MonitorRepository getUsedMonitorRepository(){
+
+	public MonitorRepository getUsedMonitorRepository()
+	{
 		Experiment exp = getExperiment();
 		InitialModel initialModel = exp.getInitialModel();
-		
+
 		MonitorRepository monitorRep = null;
-		
-		if(getMonitorRepositories().isEmpty()){
+
+		if (getMonitorRepositories().isEmpty())
+		{
 			monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
 			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
-			
+
 			InitialModel initalModel = exp.getInitialModel();
 			initalModel.setMonitorRepository(monitorRep);
-		}
-		else{
+		} else
+		{
 			monitorRep = initialModel.getMonitorRepository();
-			if(monitorRep == null){
-				monitorRep = getMonitorRepositories().get(0);				
+			if (monitorRep == null)
+			{
+				monitorRep = getMonitorRepositories().get(0);
 				initialModel.setMonitorRepository(monitorRep);
 			}
 		}
-		
-		assert(monitorRep != null);
+
+		assert (monitorRep != null);
 		return monitorRep;
 	}
-	
-	public List<MeasurementSpecification> getMeasurementSpecifications(){
-		
+
+	public List<MeasurementSpecification> getMeasurementSpecifications()
+	{
+
 		List<MeasurementSpecification> out = new ArrayList<MeasurementSpecification>();
-		
+
 		MonitorRepository mr = getUsedMonitorRepository();
-		if(mr == null){
+		if (mr == null)
+		{
 			return out;
 		}
-		
-		for(Monitor monitor : mr.getMonitors()){
+
+		for (Monitor monitor : mr.getMonitors())
+		{
 			out.addAll(monitor.getMeasurementSpecifications());
 		}
-		
+
 		return out;
 	}
-	
-	public List<ServiceLevelObjectiveRepository> getSLORepositories(){
+
+	public List<ServiceLevelObjectiveRepository> getSLORepositories()
+	{
 		List<ServiceLevelObjectiveRepository> out = new ArrayList<ServiceLevelObjectiveRepository>();
-		
-		for(IResource file : getSubResources(ToolchainUtils.KEY_FILE_SLO)){
-			if(file instanceof IFile && file.exists()){
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)file);
-				for(EObject eobj : res.getContents()){
-					if(eobj instanceof ServiceLevelObjectiveRepository){
-						ServiceLevelObjectiveRepository rep = (ServiceLevelObjectiveRepository)eobj;
+
+		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_SLO))
+		{
+			if (file instanceof IFile && file.exists())
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+				for (EObject eobj : res.getContents())
+				{
+					if (eobj instanceof ServiceLevelObjectiveRepository)
+					{
+						ServiceLevelObjectiveRepository rep = (ServiceLevelObjectiveRepository) eobj;
 						out.add(rep);
 					}
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public ServiceLevelObjectiveRepository getUsedSloRepository(){
+
+	public ServiceLevelObjectiveRepository getUsedSloRepository()
+	{
 		Experiment exp = getExperiment();
 		InitialModel initialModel = exp.getInitialModel();
-		
+
 		ServiceLevelObjectiveRepository sloRep = null;
-		
-		if(getMonitorRepositories().isEmpty()){
+
+		if (getMonitorRepositories().isEmpty())
+		{
 			sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
 			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, sloRep);
-			
+
 			InitialModel initalModel = exp.getInitialModel();
 			initalModel.setServiceLevelObjectives(sloRep);
-		}
-		else{
+		} else
+		{
 			sloRep = initialModel.getServiceLevelObjectives();
-			if(sloRep == null){
-				sloRep = getSLORepositories().get(0);				
+			if (sloRep == null)
+			{
+				sloRep = getSLORepositories().get(0);
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
 		}
-		
-		assert(sloRep != null);
+
+		assert (sloRep != null);
 		return sloRep;
 	}
-	///////////////////////////////////////////////////////////////////
 
-	
+	// /////////////////////////////////////////////////////////////////
+
 	private SimpleDateFormat sdf_name = new SimpleDateFormat("hh:mm:ss");
-	public void configureResults(){
+
+	public void configureResults()
+	{
 		Experiment exp = getExperiment();
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
-		//IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
-		
+		// IEditorInputResource resultAlternative =
+		// resultResProvider.getResource(this.getResource().getName());
+
 		String name = getName() + " [" + sdf_name.format(new Date()) + "]";
-		ResultAlternative resultAlternative = (ResultAlternative)resultResProvider
-				.createNewResource(name, type.name());
+		ResultAlternative resultAlternative = (ResultAlternative) resultResProvider.createNewResource(name, type.name());
 
 		resultAlternative.save();
-		
-		//create data source - a.k.a where the result will be saved
+
+		// create data source - a.k.a where the result will be saved
 		FileDatasource ds = AbstractsimulationFactory.eINSTANCE.createFileDatasource();
 		ds.setLocation(resultAlternative.getResource().getLocation().toString());
-		
+
 		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
 		conf.setDatasource(ds);
 		configureTool(conf);
-		
+
 		exp.getToolConfiguration().clear();
 		exp.getToolConfiguration().add(conf);
 	}
 
 	@Override
-	protected void doLoad(){
-		
+	protected void doLoad()
+	{
+
 		super.doLoad();
-		
-		try {
+
+		try
+		{
 			loadModels();
-		} catch (IOException e2) {
+		} catch (IOException e2)
+		{
 			e2.printStackTrace();
 		}
 	}
-	
+
 	@Override
-	protected void doDelete() {
+	protected void doDelete()
+	{
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID);
 		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
-		
-		if(resultAlternative != null){
+
+		if (resultAlternative != null)
+		{
 			resultAlternative.delete();
 		}
-		
+
 		super.doDelete();
 	}
-	
-	private final void loadModels() throws IOException {
-		
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+
+	private final void loadModels() throws IOException
+	{
+
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 			res.unload();
 			res.load(null);
 		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MONITOR)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MONITOR))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 			res.unload();
-			res.load(null);		
+			res.load(null);
 		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 			res.unload();
-			res.load(null);		
+			res.load(null);
 		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 			res.unload();
-			res.load(null);		
+			res.load(null);
 		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_SLO)) {
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)f);
+		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_SLO))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 			res.unload();
-			res.load(null);		
+			res.load(null);
 		}
-		
-		//load plugin models into resource set
-		URI metricDescriptions = PathmapManager.denormalizeURI(URI.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
+
+		// load plugin models into resource set
+		URI metricDescriptions = PathmapManager.denormalizeURI(URI
+				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
 		resSet.getResource(metricDescriptions, true);
 	}
-	
-	private void initializeCommon(Experiment exp){
-		
+
+	private void initializeCommon(Experiment exp)
+	{
+
 		InitialModel initialModel = getInitialModel();
-		if(initialModel == null){
+		if (initialModel == null)
+		{
 			initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
 			exp.setInitialModel(initialModel);
 		}
-				
-		//create and set measurement stop condition
+
+		// create and set measurement stop condition
 		{
 			List<StopCondition> stopConditions = getStopConditions(AbstractsimulationPackage.Literals.MEASUREMENT_COUNT_STOP_CONDITION);
-			if(stopConditions.isEmpty()){
+			if (stopConditions.isEmpty())
+			{
 				MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 				msc.setMeasurementCount(100);
 				exp.getStopConditions().add(msc);
 			}
 		}
-		
-		//create and set time stop condition
+
+		// create and set time stop condition
 		{
 			List<StopCondition> stopConditions = getStopConditions(AbstractsimulationPackage.Literals.SIM_TIME_STOP_CONDITION);
-			if(stopConditions.isEmpty()){
+			if (stopConditions.isEmpty())
+			{
 				SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 				tsc.setSimulationTime(-1);
 				exp.getStopConditions().add(tsc);
 			}
 		}
-		
+
 		UsageScenarioMeasuringPoint usageMeasurePoint = null;
-		//create measuring point repository
+		// create measuring point repository
 		{
 			List<MeasuringPointRepository> measureReps = getMeasuringPointRepositories();
 			MeasuringPointRepository measureRep = null;
-			if(measureReps.isEmpty()){
+			if (measureReps.isEmpty())
+			{
 				measureRep = MeasuringpointFactory.eINSTANCE.createMeasuringPointRepository();
 				createEMFResource("analyser.measuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS, measureRep);
 				usageMeasurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
 				measureRep.getMeasuringPoints().add(usageMeasurePoint);
 			}
-			
+
 		}
-	
-		//create monitor
+
+		// create monitor
 		{
 			List<MonitorRepository> monitorReps = getMonitorRepositories();
 			MonitorRepository monitorRep = null;
-			if(monitorReps.isEmpty()){
+			if (monitorReps.isEmpty())
+			{
 				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
 				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
 				monitor.setEntityName("Usage response time monitor");
-				
-				//create default specification
+
+				// create default specification
 				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
 				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
 				interval.setIntervall(10.0);
-				
+
 				MetricDescription metric = null;
-				for(MetricDescription md : getMetricDescriptions()){
-					if("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId())){
+				for (MetricDescription md : getMetricDescriptions())
+				{
+					if ("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId()))
+					{
 						metric = md;
 					}
 				}
-				
-				if(metric == null){
+
+				if (metric == null)
+				{
 					DialogUtils.openError("Required metric description (Response time) can not be found!");
-				}
-				else{
-					specification.setMetricDescription(metric);					
+				} else
+				{
+					specification.setMetricDescription(metric);
 				}
 				specification.setTemporalRestriction(interval);
 				monitor.getMeasurementSpecifications().add(specification);
 				//
-				
+
 				monitor.setMeasuringPoint(usageMeasurePoint);
 				monitorRep.getMonitors().add(monitor);
 				initialModel.setMonitorRepository(monitorRep);
 			}
 		}
-		
-		//create slo
+
+		// create slo
 		{
 			List<ServiceLevelObjectiveRepository> sloReps = getSLORepositories();
 			ServiceLevelObjectiveRepository sloRep = null;
-			if(sloReps.isEmpty()){
+			if (sloReps.isEmpty())
+			{
 				sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
 				createEMFResource("analyser.slo", ToolchainUtils.KEY_FILE_SLO, sloRep);
-				
+
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 				slo.setName("Usage response time SLO");
-				
+
 				/*
-				for(MetricDescription md : getMetricDescriptions()){
-					if(md.getId().equals(MetricDescriptionConstants.RESPONSE_TIME_METRIC.getId())){
-						slo.setMetricDescription(md);
-					}
-				}
-				
-				slo.setMeasuringPoint(usageMeasurePoint);
-				*/
-				
+				 * for(MetricDescription md : getMetricDescriptions()){
+				 * if(md.getId
+				 * ().equals(MetricDescriptionConstants.RESPONSE_TIME_METRIC
+				 * .getId())){ slo.setMetricDescription(md); } }
+				 * 
+				 * slo.setMeasuringPoint(usageMeasurePoint);
+				 */
+
 				sloRep.getServicelevelobjectives().add(slo);
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
 		}
 	}
-	
-	private void initializeNormal(Experiment exp){
-		
+
+	private void initializeNormal(Experiment exp)
+	{
+
 	}
-	
-	private void initializeCapacity(Experiment exp) {
-		
+
+	private void initializeCapacity(Experiment exp)
+	{
+
 		exp.setName("Capacity measurement");
-		
-		//create variation
+
+		// create variation
 		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
 		exp.getVariations().clear();
 		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
 		dvp.setMinValue(1);
 		dvp.setMaxValue(100);
-		
+
 		var.setMinValue(1);
 		var.setMaxValue(100);
 		var.setMaxVariations(10);
-		
+
 		var.setValueProvider(dvp);
-		//TODO: set type var.setType();
+		// TODO: set type var.setType();
 		exp.getVariations().clear();
 		exp.getVariations().add(var);
-		
+
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		resSet.getResource(variations, true);
 	}
-	
-	private void initializeScalability(Experiment exp){
+
+	private void initializeScalability(Experiment exp)
+	{
 		exp.setName("Scalability measurement");
-		
-		//create variation
+
+		// create variation
 		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
 		exp.getVariations().clear();
 		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
 		dvp.setMinValue(1);
 		dvp.setMaxValue(100);
-		
+
 		var.setMinValue(1);
 		var.setMaxValue(100);
 		var.setMaxVariations(10);
-		
+
 		var.setValueProvider(dvp);
-		//TODO: set type var.setType();
+		// TODO: set type var.setType();
 		exp.getVariations().clear();
 		exp.getVariations().add(var);
-		
+
 		exp.getModifications().add(ExperimentsFactory.eINSTANCE.createSchedulingPolicy2DelayModification());
-		
+
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		resSet.getResource(variations, true);
 	}
-	
-	private void configureCapacity(Experiment exp, InitialModel initialModel){
+
+	private void configureCapacity(Experiment exp, InitialModel initialModel)
+	{
 
 		UsageScenarioMeasuringPoint usmp = null;
 		MeasurementSpecification usageMeasurementSpec = null;
-		
-		//retrieve usage scenario
+
+		// retrieve usage scenario
 		EList<UsageScenario> usList = initialModel.getUsageModel().getUsageScenario_UsageModel();
 		UsageScenario usageScenario = usList.size() > 0 ? usList.get(0) : null;
-		
-		if(usageScenario == null){
+
+		if (usageScenario == null)
+		{
 			DialogUtils.openWarning("Usage scenario can not be found. Please configure all properties regarding this model manually.");
 		}
-		
+
 		List<MeasuringPoint> mps = getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT);
-		if(!mps.isEmpty()){
-			usmp = (UsageScenarioMeasuringPoint)mps.get(0);
+		if (!mps.isEmpty())
+		{
+			usmp = (UsageScenarioMeasuringPoint) mps.get(0);
 			usmp.setUsageScenario(usageScenario);
-		}
-		else{
+		} else
+		{
 			DialogUtils.openWarning("Usage scenario measuring point has been removed! Please create and configure it manually.");
 		}
-		
+
 		List<MonitorRepository> monitorReps = getMonitorRepositories();
-		if(!monitorReps.isEmpty()){
+		if (!monitorReps.isEmpty())
+		{
 			MonitorRepository monitorRep = monitorReps.get(0);
-			if(!monitorRep.getMonitors().isEmpty()){		
+			if (!monitorRep.getMonitors().isEmpty())
+			{
 				Monitor monitor = monitorRep.getMonitors().get(0);
 
-				if(usmp != null){
+				if (usmp != null)
+				{
 					monitor.setMeasuringPoint(usmp);
 				}
-				
+
 				monitor.getMeasurementSpecifications().clear();
 				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
 				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
 				interval.setIntervall(10.0);
-				
+
 				MetricDescription metric = null;
-				for(MetricDescription md : getMetricDescriptions()){
-					if("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId())){
+				for (MetricDescription md : getMetricDescriptions())
+				{
+					if ("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId()))
+					{
 						metric = md;
 					}
 				}
-				
-				if(metric == null){
+
+				if (metric == null)
+				{
 					DialogUtils.openError("Required metric description (Response time) can not be found!");
+				} else
+				{
+					specification.setMetricDescription(metric);
 				}
-				else{
-					specification.setMetricDescription(metric);					
-				}
-				
+
 				specification.setTemporalRestriction(interval);
 				monitor.getMeasurementSpecifications().add(specification);
 				usageMeasurementSpec = specification;
-			}
-			else{
+			} else
+			{
 				DialogUtils.openWarning("Monitor object has been removed! Please create and configure it manually.");
 			}
-		}
-		else{
+		} else
+		{
 			DialogUtils.openWarning("Monitor repository has been removed! Please create and configure it manually.");
 		}
-				
+
 		List<Variation> variations = getVariationObjects();
-		if(!variations.isEmpty()){
+		if (!variations.isEmpty())
+		{
 			Variation v = variations.get(0);
 
-			if(usageScenario != null){
+			if (usageScenario != null)
+			{
 				Workload workload = usageScenario.getWorkload_UsageScenario();
-				if(workload == null){
+				if (workload == null)
+				{
 					DialogUtils.openWarning("Usage scenario workload can not be found! Please configure it manually.");
 				}
-				
+
 				VariationType type = null;
-				if(workload instanceof ClosedWorkload){
+				if (workload instanceof ClosedWorkload)
+				{
 					type = getVariationType("_zUZqID5zEeCEPJs72ZSOBg");
-				}
-				else if(workload instanceof OpenWorkload){
+				} else if (workload instanceof OpenWorkload)
+				{
 					type = getVariationType("_59qtgBU-EeKgFO0nt5OPnA");
 				}
-				
-				if(type != null){
+
+				if (type != null)
+				{
 					v.setType(type);
-				}
-				else{
+				} else
+				{
 					DialogUtils.openError("Required variation type can not be found! Please configure it manually.");
 				}
-			
+
 				v.setVariedObjectId(usageScenario.getId());
 			}
-		}
-		else{
+		} else
+		{
 			DialogUtils.openWarning("Variation has been removed! Please create and configure it manually.");
 		}
-		
+
 		List<ServiceLevelObjectiveRepository> sloReps = getSLORepositories();
-		if(!sloReps.isEmpty()){
+		if (!sloReps.isEmpty())
+		{
 			ServiceLevelObjectiveRepository sloRep = sloReps.get(0);
-			if(!sloRep.getServicelevelobjectives().isEmpty()){
+			if (!sloRep.getServicelevelobjectives().isEmpty())
+			{
 				ServiceLevelObjective slo = sloRep.getServicelevelobjectives().get(0);
-				if(usageMeasurementSpec != null){
+				if (usageMeasurementSpec != null)
+				{
 					slo.setMeasurementSpecification(usageMeasurementSpec);
 				}
-				
+
 				HardThreshold ut = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
 				ut.setThresholdLimit(Measure.valueOf(500.0, Unit.valueOf("s")));
-				//TODO: set limit to 'HardThreshold'
+				// TODO: set limit to 'HardThreshold'
 				slo.setUpperThreshold(ut);
-			}
-			else{
+			} else
+			{
 				DialogUtils.openWarning("Service level objective has been removed! Please create and configure it manually.");
 			}
-		}
-		else{
+		} else
+		{
 			DialogUtils.openWarning("SLO repository has been removed! Please create and configure it manually.");
 		}
 	}
-	
-	private void configureScalability(Experiment exp, InitialModel initialModel){
+
+	private void configureScalability(Experiment exp, InitialModel initialModel)
+	{
 		configureCapacity(exp, initialModel);
 	}
-	
-	private void configureToolCapacity(SimuLizarConfiguration simulizarConf) {
-		
-		//create measurement stop condition
+
+	private void configureToolCapacity(SimuLizarConfiguration simulizarConf)
+	{
+
+		// create measurement stop condition
 		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 		msc.setMeasurementCount(100);
-		
-		//create time stop condition
+
+		// create time stop condition
 		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 		tsc.setSimulationTime(-1);
-		
+
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
 	}
-	
-	private void configureToolScalability(SimuLizarConfiguration simulizarConf) {
-		
-		//create measurement stop condition
+
+	private void configureToolScalability(SimuLizarConfiguration simulizarConf)
+	{
+
+		// create measurement stop condition
 		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 		msc.setMeasurementCount(100);
-		
-		//create time stop condition
+
+		// create time stop condition
 		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 		tsc.setSimulationTime(-1);
-		
+
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
+	}
+
+	@Override
+	protected IStatus doRun(IProgressMonitor monitor)
+	{ 
+		this.getInputAlternative().save();
+
+		this.configureResults();
+		this.save();
+
+		ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
+		ILaunchConfigurationType lct = mgr
+				.getLaunchConfigurationType("org.palladiosimulator.experimentautomation.application.launchConfigurationType");
+
+		try
+		{
+			// System.out.println(ca.getExperiments().getURI().toString());
+			ILaunchConfigurationWorkingCopy lcwc = lct
+					.newInstance((IFolder) this.getResource(), this.getResource().getName());
+			lcwc.setAttribute("Experiment Automation", this.getExperiment().eResource().getURI().toString());
+			lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
+			lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
+			lcwc.doSave();
+
+			lcwc.launch(ILaunchManager.DEBUG_MODE, monitor);
+			return Status.OK_STATUS;
+		} catch (CoreException e1)
+		{
+			return new Status(Status.ERROR, "", e1.getLocalizedMessage());
+		}
 	}
 }

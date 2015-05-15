@@ -4,17 +4,21 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.modisco.infra.discovery.catalog.DiscovererDescription;
 import org.eclipse.modisco.infra.discovery.core.IDiscoveryManager;
 import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
 import org.eclipse.modisco.infra.discovery.ui.internal.util.LaunchModelUtils;
 import org.somox.configuration.SoMoXConfiguration;
 
+import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 
-public class ConfingAlternative extends EditorInputFolder
+public class ConfingAlternative extends AbstractConfigAlternative
 {
 	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
 
@@ -28,8 +32,10 @@ public class ConfingAlternative extends EditorInputFolder
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
 		// TODO Auto-generated constructor stub
-		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID);
-		
+		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID,
+				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_INPUT_ID),
+				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_RES_ID)
+				);
 		
 		_temp_init();
 	}
@@ -87,5 +93,12 @@ public class ConfingAlternative extends EditorInputFolder
 	{
 		// TODO Auto-generated method stub
 		super.load();
+	}
+
+	@Override
+	protected IStatus doRun(IProgressMonitor monitor)
+	{
+		ExtractorRunJob job = new ExtractorRunJob(this);
+		return job.run(monitor);
 	}
 }

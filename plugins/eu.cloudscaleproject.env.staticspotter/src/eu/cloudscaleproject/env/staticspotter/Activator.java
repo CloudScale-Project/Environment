@@ -1,23 +1,12 @@
 package eu.cloudscaleproject.env.staticspotter;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigResourceProviderFactory;
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 /**
  * The activator class controls the plug-in life cycle

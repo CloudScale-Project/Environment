@@ -347,28 +347,6 @@ public abstract class ResourceProvider
 		return prop == null ? false : true;
 	}
 
-	private boolean isNewResourceNameValid(String newResourceName)
-	{
-		if (hasResource(newResourceName))
-		{
-			return false;
-		}
-		try
-		{
-			for (IResource res : rootFolder.members())
-			{
-				if (newResourceName.equals(res.getName()))
-				{
-					return false;
-				}
-			}
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-		return true;
-	}
-
 	public synchronized IEditorInputResource createNewResource(String resourceName, String name, String type)
 	{
 
