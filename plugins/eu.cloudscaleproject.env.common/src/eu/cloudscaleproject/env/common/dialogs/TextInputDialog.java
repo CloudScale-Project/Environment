@@ -18,8 +18,13 @@ public class TextInputDialog extends Dialog{
 	private String out = null;
 
 	public TextInputDialog(Shell parentShell) {
+		this(parentShell, "");
+	}
+
+	public TextInputDialog(Shell parentShell, String text) {
 		super(parentShell);
 		this.setBlockOnOpen(true);		
+		out = text;
 	}
 
 	@Override
@@ -33,6 +38,8 @@ public class TextInputDialog extends Dialog{
 		
 		text = new Text(container, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		text.setText(out);
+		text.selectAll();
 		
 		return container;
 	}

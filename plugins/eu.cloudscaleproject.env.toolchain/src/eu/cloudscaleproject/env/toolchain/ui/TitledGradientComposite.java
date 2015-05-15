@@ -21,6 +21,21 @@ public class TitledGradientComposite extends GradientComposite
 
 	private Label lblTitle;
 	private IEditorInput alternative;
+	
+	private MouseAdapter mouseListener = new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				TextInputDialog dialog = new TextInputDialog(Display.getDefault().getActiveShell(), alternative.getName());
+				dialog.open();
+				
+				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
+					String name = dialog.getText();
+					alternative.setName(name);
+					updateTitle();
+				}
+			}
+		};
 
 	/**
 	 * Create the composite.
@@ -45,20 +60,8 @@ public class TitledGradientComposite extends GradientComposite
 		lblTitle.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
 		lblTitle.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
 		
-		this.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-
-				TextInputDialog dialog = new TextInputDialog(Display.getDefault().getActiveShell());
-				dialog.open();
-				
-				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					String name = dialog.getText();
-					TitledGradientComposite.this.alternative.setName(name);
-					updateTitle();
-				}
-			}
-		});
+		lblTitle.addMouseListener(mouseListener);
+		this.addMouseListener(mouseListener);
 
 		updateTitle();
 	}
