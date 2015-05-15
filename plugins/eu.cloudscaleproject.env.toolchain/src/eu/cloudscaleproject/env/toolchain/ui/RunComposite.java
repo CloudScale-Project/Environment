@@ -38,7 +38,6 @@ public abstract class RunComposite extends Composite
 	private IConfigAlternative alternative;
 
 	private Composite container;
-	private TitledGradientComposite titlebar;
 	private ProgressBar progressBarIndeterminate;
 	private Composite progressbarContainer;
 	private Button btnRun;
@@ -64,9 +63,7 @@ public abstract class RunComposite extends Composite
 
 		initValidationStatusListener();
 
-		// TODO: enable renaming
-		titlebar = new TitledGradientComposite(this, SWT.NONE);
-		updteTitle();
+		new TitledGradientComposite(this, SWT.NONE, alternative);
 
 		container = new Composite(this, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -113,16 +110,6 @@ public abstract class RunComposite extends Composite
 		btnRun.setText("Run");
 	}
 
-	private void updteTitle()
-	{
-		String title = this.alternative.getName();
-		if (this.alternative.getType() != null)
-		{
-			title = String.format("%s [%s]",this.alternative.getName(), this.alternative.getType().toLowerCase()) ;
-		}
-
-		titlebar.setTitle(title);
-	}
 
 	private void initValidationStatusListener()
 	{

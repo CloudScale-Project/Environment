@@ -67,10 +67,9 @@ public class ResultsComposite extends SidebarEditorComposite{
 		private AdvancedResultComposite advancedResultComposite;
 		
 		public RightPanelComposite(ResultAlternative alternative, Composite parent, int style) {
-			super(parent, style);
+			super(parent, style, alternative);
 			
 			getContainer().setLayout(new FillLayout());
-			setTitle(alternative.getName());
 			
 			this.tabFolder = new CTabFolder(getContainer(), SWT.BOTTOM);
 			

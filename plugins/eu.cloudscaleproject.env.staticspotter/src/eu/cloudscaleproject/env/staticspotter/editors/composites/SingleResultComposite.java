@@ -31,7 +31,7 @@ public class SingleResultComposite extends TitleComposite implements IRefreshabl
 	 * @param style
 	 */
 	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
-		super(parent, style);
+		super(parent, style, rif);
 		setLayout(new GridLayout(1, false));
 		
 		this.resultFolder = rif;
@@ -42,8 +42,6 @@ public class SingleResultComposite extends TitleComposite implements IRefreshabl
 	
 	private void init()
 	{
-		setTitle(this.resultFolder.getName());
-
 		this.annotations = Util.loadAnnotations(this.resultFolder);
 		if (annotationView != null)
                 annotationView.loadAnnotations(annotations);

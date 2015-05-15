@@ -6,6 +6,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+
 public class TitleComposite extends Composite
 {
 
@@ -17,13 +19,13 @@ public class TitleComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public TitleComposite(Composite parent, int style)
+	public TitleComposite(Composite parent, int style, IEditorInput input)
 	{
 		super(parent, style);
 		
 		setLayout(new GridLayout(1, false));
 		
-		titlebar = new TitledGradientComposite(this, SWT.NONE);
+		titlebar = new TitledGradientComposite(this, SWT.NONE, input);
 		
 		container = new Composite(this, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -33,11 +35,6 @@ public class TitleComposite extends Composite
 	public Composite getContainer()
 	{
 		return container;
-	}
-	
-	public void setTitle(String title)
-	{
-		titlebar.setTitle(title);
 	}
 	
 	public String getTitle ()

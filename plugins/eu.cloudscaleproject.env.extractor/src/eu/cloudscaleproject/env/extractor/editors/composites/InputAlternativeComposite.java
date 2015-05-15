@@ -27,10 +27,8 @@ public class InputAlternativeComposite extends TitleComposite {
 	 * @param style
 	 */
 	public InputAlternativeComposite(Composite parent, int style, final GlobalInputAlternative editorInput) {
-		super(parent, SWT.NONE);
+		super(parent, SWT.NONE, editorInput);
 		this.editorInput = editorInput;
-		
-		setTitle(editorInput.getName());
 		
 		getContainer().setLayout(new GridLayout(4, false));
 

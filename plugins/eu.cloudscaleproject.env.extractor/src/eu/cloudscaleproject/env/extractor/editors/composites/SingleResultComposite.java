@@ -26,7 +26,7 @@ public class SingleResultComposite extends TitleComposite implements IPropertySh
 	 * @param style
 	 */
 	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
-		super(parent, style);
+		super(parent, style, rif);
 		
 		this.resultPersistenceFolder = rif;
 
@@ -47,7 +47,6 @@ public class SingleResultComposite extends TitleComposite implements IPropertySh
 	
 	private void init()
 	{
-		setTitle(this.resultPersistenceFolder.getName());
 		layout();
 	}
 	
