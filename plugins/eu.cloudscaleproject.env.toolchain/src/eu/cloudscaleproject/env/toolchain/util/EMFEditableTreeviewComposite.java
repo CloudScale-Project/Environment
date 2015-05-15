@@ -19,6 +19,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -119,8 +120,14 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			{
 				menuManager.add(createOpenMenuManager());
 				menuManager.add(new Separator("default"));
+				
+				IStructuredSelection selection = (IStructuredSelection)getTreeViewer().getSelection();
+				EObject selectedElement = (EObject)selection.getFirstElement();
+				
 				super.menuAboutToShow(menuManager);
-
+				
+				menuManager.add(new Separator("default"));
+				EMFEditableTreeviewComposite.this.menuAboutToShow(menuManager, selectedElement);
 			}
 		};
 		menuSupport.setViewer(treeViewer);
@@ -154,6 +161,10 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	
 	public TreeViewer getTreeViewer(){
 		return this.treeViewer;
+	}
+	
+	protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement){
+		// Override in subclasses to add additional popup actions.
 	}
 
 	private MenuManager createOpenMenuManager()

@@ -2,6 +2,10 @@ package eu.cloudscaleproject.env.analyser.editors.input;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -15,8 +19,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
+import de.uka.ipd.sdq.pcm.system.System;
+import edu.kit.ipd.sdq.mdsd.profiles.ui.menu.ApplicableStereotypesSubmenu;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.CreatePCMModelWizard;
@@ -55,7 +63,24 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		
 		setLayout(new GridLayout(2, false));
 		
-		treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE);
+		treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE){
+			
+			@Override
+			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
+				EObject root = EcoreUtil.getRootContainer(selectedElement);
+				if(root instanceof System || root instanceof ResourceEnvironment){
+					
+					MenuManager applyStereotypeMenu = new MenuManager("Apply Architecture Template");
+					
+					ApplicableStereotypesSubmenu applyStereotypeContribution = new ApplicableStereotypesSubmenu();
+					applyStereotypeContribution.initialize(PlatformUI.getWorkbench());
+					applyStereotypeMenu.add(applyStereotypeContribution);
+					
+					menuManager.add(applyStereotypeMenu);
+				}
+			}
+		};
+		
 		treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		buttonsComposite = new Composite(this, SWT.NONE);
