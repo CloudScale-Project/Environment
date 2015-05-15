@@ -91,33 +91,6 @@ public class EditorInputFolder extends EditorInputResource{
 		return relative;
 	}
 	
-	public void setSubResource(String key, IResource res){
-		
-		String oldPath = propertyInputFile.getProperty(key);
-		String path = "";
-		
-		if(isResourceInternal(res)){
-			path = getInternalResourcePath(res);
-		}
-		else{
-			path = getExternalResourcePath(res);
-		}
-		
-		List<IResource> resources = subResources.get(key);
-		if(resources == null){
-			resources = new ArrayList<IResource>();
-			subResources.put(key, resources);
-		}
-		resources.clear();
-		resources.add(res);
-		
-		propertyInputFile.setProperty(key, path);
-		isDirty = true;
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
-		
-		updateStatusList();
-	}
-	
 	public void addSubResource(String key, IResource res){
 		String oldPath = propertyInputFile.getProperty(key);
 		String path = "";
@@ -145,7 +118,7 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		propertyInputFile.setProperty(key, path);
 		isDirty = true;
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldPath, path);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		
 		updateStatusList();
 	}
@@ -167,9 +140,34 @@ public class EditorInputFolder extends EditorInputResource{
 		setSubResources(key, resources);		
 	}
 	
+	public void setSubResource(String key, IResource res){
+		
+		String path = "";
+		
+		if(isResourceInternal(res)){
+			path = getInternalResourcePath(res);
+		}
+		else{
+			path = getExternalResourcePath(res);
+		}
+		
+		List<IResource> resources = subResources.get(key);
+		if(resources == null){
+			resources = new ArrayList<IResource>();
+			subResources.put(key, resources);
+		}
+		resources.clear();
+		resources.add(res);
+		
+		propertyInputFile.setProperty(key, path);
+		isDirty = true;
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		
+		updateStatusList();
+	}
+	
 	public void setSubResources(String key, List<? extends IResource> resList){
 		
-		String oldValue = propertyInputFile.getProperty(key);
 		String value = "";
 		
 		Iterator<? extends IResource> iter = resList.iterator();
@@ -200,7 +198,7 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		propertyInputFile.setProperty(key, value);
 		isDirty = true;
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, oldValue, value);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		
 		updateStatusList();
 	}

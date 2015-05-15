@@ -80,7 +80,7 @@ public class InputAlternative extends EditorInputEMF{
 		}
 	}
 	
-	private String getToolchainKey(IResource res){
+	public String getToolchainKey(IResource res){
 		
 		String ext = res.getFileExtension();
 		String key = null;
@@ -109,8 +109,10 @@ public class InputAlternative extends EditorInputEMF{
 		String key = getToolchainKey(res);		
 		if(key == null){
 			logger.info("addSubResourceModel(): Specified resource model file is not supported: " + res.getName());
+			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
+		
 		super.addSubResource(key, res);
 	}
 	
@@ -122,6 +124,7 @@ public class InputAlternative extends EditorInputEMF{
 		String key = getToolchainKey(res);
 		if(key == null){
 			logger.info("removeSubResourceModel(): Specified resource model file is not supported: " + res.getName());
+			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
 		
