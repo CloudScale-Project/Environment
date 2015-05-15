@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.io.IOException;
 import java.net.UnknownServiceException;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.logging.Logger;
 
@@ -75,7 +76,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected void doSave() {
 
 		super.doSave();
-		for(Resource res : editingDomain.getResourceSet().getResources()){
+		for(Resource res : new ArrayList<Resource>(editingDomain.getResourceSet().getResources())){
 			try {
 				if(!res.getContents().isEmpty()){
 					res.save(null);

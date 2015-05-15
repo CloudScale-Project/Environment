@@ -104,7 +104,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 				}
 				if(r instanceof IFile){
 					IFile f = (IFile)r;
-					if(extension.equals(f.getFileExtension())){
+					if(f.getName().endsWith(extension)){
 						files.add(f);
 					}
 				}

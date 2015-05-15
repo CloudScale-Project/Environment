@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.alternatives;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -23,6 +24,8 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class InputAlternative extends EditorInputEMF{
+	
+	private static final Logger logger = Logger.getLogger(InputAlternative.class.getName());
 					
 	public InputAlternative(IProject project, IFolder folder){
 		super(project, folder, ToolchainUtils.ANALYSER_INPUT_ID);
@@ -77,7 +80,7 @@ public class InputAlternative extends EditorInputEMF{
 		}
 	}
 	
-	public void addSubResourceModel(IResource res) {
+	private String getToolchainKey(IResource res){
 		
 		String ext = res.getFileExtension();
 		String key = null;
@@ -92,38 +95,35 @@ public class InputAlternative extends EditorInputEMF{
 			key = ToolchainUtils.KEY_FILE_ALLOCATION;
 		} else if (PCMModelType.USAGE.getFileExtension().equals(ext)) {
 			key = ToolchainUtils.KEY_FILE_USAGE;
+		} else if (PCMModelType.AT.getFileExtension().equals(ext)) {
+			key = ToolchainUtils.KEY_FILE_AT;
 		}
 		
-		if(key == null){
-			throw new UnsupportedOperationException("Specified resource model file is not supported!");
-		}
+		return key;
+	}
+	
+	public void addSubResourceModel(IResource res) {
 		
 		ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+		
+		String key = getToolchainKey(res);		
+		if(key == null){
+			logger.info("addSubResourceModel(): Specified resource model file is not supported: " + res.getName());
+			return;
+		}
 		super.addSubResource(key, res);
 	}
 	
 	public void removeSubResourceModel(IResource res){
-		String ext = res.getFileExtension();
-		String key = null;
-		
-		if (PCMModelType.REPOSITORY.getFileExtension().equals(ext)) {
-			key = ToolchainUtils.KEY_FILE_REPOSITORY;
-		} else if (PCMModelType.SYSTEM.getFileExtension().equals(ext)) {
-			key = ToolchainUtils.KEY_FILE_SYSTEM;
-		} else if (PCMModelType.RESOURCE.getFileExtension().equals(ext)) {
-			key = ToolchainUtils.KEY_FILE_RESOURCEENV;
-		} else if (PCMModelType.ALLOCATION.getFileExtension().equals(ext)) {
-			key = ToolchainUtils.KEY_FILE_ALLOCATION;
-		} else if (PCMModelType.USAGE.getFileExtension().equals(ext)) {
-			key = ToolchainUtils.KEY_FILE_USAGE;
-		}
-		
-		if(key == null){
-			throw new UnsupportedOperationException("Specified resource model file is not supported!");
-		}
 		
 		Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
 		resSet.getResources().remove(resource);
+		
+		String key = getToolchainKey(res);
+		if(key == null){
+			logger.info("removeSubResourceModel(): Specified resource model file is not supported: " + res.getName());
+			return;
+		}
 		
 		super.removeSubResource(key, res);
 	}

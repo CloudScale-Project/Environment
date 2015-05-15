@@ -185,6 +185,12 @@ public class ImportModelSelectionPage extends WizardPage implements IRefreshable
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}
 		}
+		{
+			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.AT.getFileExtension());
+			for(IFile file : files){
+				ExplorerProjectPaths.getEmfResource(resSet, file);
+			}
+		}
 	}
 	
 	private void createFolderSelection(Composite composite, final String name, final String text,
