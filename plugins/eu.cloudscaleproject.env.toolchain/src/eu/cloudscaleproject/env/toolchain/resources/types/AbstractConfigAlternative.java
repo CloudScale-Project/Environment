@@ -85,10 +85,10 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 
 			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
-			IEditorInputResource lastResult = resources.get(resources.size() - 1);
-			lastResult.setProperty("CONFIG_NAME", getName());
-			lastResult.save();
-			setLastResult(lastResult);
+			//IEditorInputResource lastResult = resources.get(resources.size() - 1);
+			//lastResult.setProperty("CONFIG_NAME", getName());
+			//lastResult.save();
+			//setLastResult(lastResult);
 			save();
 		}
 

@@ -37,6 +37,7 @@ public class TitledGradientComposite extends GradientComposite
 			}
 		};
 
+
 	/**
 	 * Create the composite.
 	 * @param parent

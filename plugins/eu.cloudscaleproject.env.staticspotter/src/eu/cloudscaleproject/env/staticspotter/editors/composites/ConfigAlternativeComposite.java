@@ -94,7 +94,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	@Override
 	public void refresh()
 	{
-		this.configAlternative.load();
+		//this.configAlternative.load();
 		updateExtractorResults();
 		m_bindingContext.updateTargets();
 	}

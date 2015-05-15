@@ -239,9 +239,7 @@ public abstract class ResourceProvider
 
 				if (res.exists() && validateResource(res))
 				{
-
 					addResource(res);
-
 					modified = true;
 				}
 			}
@@ -356,10 +354,13 @@ public abstract class ResourceProvider
 		IEditorInputResource eir = loadResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
+
+
 		eir.save();
 
-		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);
 		addResource(res);
+		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);
+
 		return eir;
 	}
 
@@ -393,7 +394,7 @@ public abstract class ResourceProvider
 
 	private void firePropertyChange(final String prop, final Object oldValue, final Object newValue)
 	{
-		Display.getDefault().syncExec(new Runnable()
+		Display.getDefault().asyncExec(new Runnable()
 		{
 			@Override
 			public void run()

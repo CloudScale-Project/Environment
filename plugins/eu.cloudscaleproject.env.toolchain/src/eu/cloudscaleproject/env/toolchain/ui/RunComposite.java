@@ -2,16 +2,12 @@ package eu.cloudscaleproject.env.toolchain.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -30,7 +26,6 @@ import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
-import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 
 public abstract class RunComposite extends Composite
@@ -39,14 +34,15 @@ public abstract class RunComposite extends Composite
 
 	private Composite container;
 	private ProgressBar progressBarIndeterminate;
-	private Composite progressbarContainer;
+	private Composite footerContainer;
 	private Button btnRun;
-	private Job currentJob;
+	private Job currentJob, lastJob;
 	private ProgressBar progressBarDeterminate;
-	private Composite progressBarNone;
-	private Label lblStatus;
-
+	private Composite resultsComposite;
+	private Label lblResult;
 	private IValidationStatusListener validationListener;
+
+	private ValidationComposite validationComposite;
 
 	/**
 	 * Create the composite.
@@ -75,18 +71,21 @@ public abstract class RunComposite extends Composite
 		gd_composite.heightHint = 48;
 		composite.setLayoutData(gd_composite);
 
-		progressbarContainer = new Composite(composite, SWT.NONE);
-		progressbarContainer.setLayout(new StackLayout());
-		progressbarContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		footerContainer = new Composite(composite, SWT.NONE);
+		footerContainer.setLayout(new StackLayout());
+		footerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		progressBarNone = new Composite(progressbarContainer, SWT.NONE);
-		progressBarIndeterminate = new ProgressBar(progressbarContainer, SWT.HORIZONTAL | SWT.INDETERMINATE);
-		progressBarDeterminate = new ProgressBar(progressbarContainer, SWT.NONE);
-		((StackLayout) progressbarContainer.getLayout()).topControl = progressBarNone;
+		resultsComposite = new Composite(footerContainer, SWT.NONE);
+		lblResult = new Label(resultsComposite, SWT.NONE);
+		lblResult.setBounds(10, 10, 379, 15);
+		lblResult.setText("");
 
-		lblStatus = new Label(progressBarNone, SWT.NONE);
-		lblStatus.setBounds(10, 10, 379, 15);
-		lblStatus.setText("");
+		validationComposite = new ValidationComposite(footerContainer, style, alternative);
+
+		progressBarIndeterminate = new ProgressBar(footerContainer, SWT.HORIZONTAL | SWT.INDETERMINATE);
+		progressBarDeterminate = new ProgressBar(footerContainer, SWT.NONE);
+
+		((StackLayout) footerContainer.getLayout()).topControl = validationComposite;
 
 		btnRun = new Button(composite, SWT.NONE);
 		btnRun.addSelectionListener(new SelectionAdapter()
@@ -108,6 +107,8 @@ public abstract class RunComposite extends Composite
 		gd_btnNewButton.widthHint = 80;
 		btnRun.setLayoutData(gd_btnNewButton);
 		btnRun.setText("Run");
+		
+		updateControls();
 	}
 
 
@@ -120,8 +121,7 @@ public abstract class RunComposite extends Composite
 			{
 				if (evt.getPropertyName().equals(IValidationStatus.PROP_VALID))
 				{
-					// TODO
-					
+					updateControls();
 				}
 			}
 		};
@@ -147,7 +147,7 @@ public abstract class RunComposite extends Composite
 	{
 		if (!alternative.getSelfStatus().isDone())
 		{
-			showValidationWarnings();
+			ValidationDialogHelper.showValidationErrorDialog(alternative);
 			return;
 		}
 
@@ -176,6 +176,8 @@ public abstract class RunComposite extends Composite
 			public void done(IJobChangeEvent event)
 			{
 				updateControls();
+				lastJob = currentJob;
+				currentJob = null;
 			}
 		});
 
@@ -198,61 +200,34 @@ public abstract class RunComposite extends Composite
 				if (currentJob != null && currentJob.getResult() == null)
 				{
 					btnRun.setText("Stop");
-					((StackLayout) progressbarContainer.getLayout()).topControl = progressBarIndeterminate;
-					progressbarContainer.layout();
+					((StackLayout) footerContainer.getLayout()).topControl = progressBarIndeterminate;
+					footerContainer.layout();
 					setEnabledRecursive(getContainer(), false);
 				} else
 				{
-					if (currentJob.getResult() != null)
+					if (currentJob != null && currentJob.getResult() != null)
 					{
 						if (currentJob.getResult().isOK())
-							lblStatus.setText("Status of last run : SUCCESSFUL");
+							lblResult.setText("Status of last run : SUCCESSFUL");
 						else
-							lblStatus.setText("Status of last run : FAILED : " + currentJob.getResult().getMessage());
+							lblResult.setText("Status of last run : FAILED : " + currentJob.getResult().getMessage());
+
+						((StackLayout) footerContainer.getLayout()).topControl = resultsComposite;
 					} else
 					{
-						lblStatus.setText("");
+						((StackLayout) footerContainer.getLayout()).topControl = validationComposite;
 					}
 
 					btnRun.setText("Run");
-					((StackLayout) progressbarContainer.getLayout()).topControl = progressBarNone;
-					progressbarContainer.layout();
+					footerContainer.layout();
+					footerContainer.redraw();
 
 					setEnabledRecursive(getContainer(), true);
 				}
-
 			}
 		});
 	}
-
-	private void showValidationWarnings()
-	{
-		int numOfwarnings = alternative.getSelfStatus().getWarningIDs().size();
-		
-		LinkedList<Status> statuses = new LinkedList<>();
-		for (String id : alternative.getSelfStatus().getWarningIDs())
-		{
-			String warning = alternative.getSelfStatus().getWarningMessage(id);
-			Status s = new Status (IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", warning));
-			statuses.add(s);
-		}
-		
-		String msg = String.format("Unable to run alternative '%s'.", alternative.getName());
-
-		String reason = String.format("Alternative validation failed. There are %s validation errors.", numOfwarnings);
-		if (numOfwarnings == 1)
-		{
-			reason = String.format("Alternative validation failed. There is %s validation error.", numOfwarnings);
-		}
-		else if (numOfwarnings == 0)
-		{
-			reason = String.format("Alternative validation failed. Validation of input alternative failed.", numOfwarnings);
-			statuses.add( new Status (IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", "Input alternative has validation errors.")));
-		}
-
-		MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, statuses.toArray(new Status[0]), reason, null);
-		ErrorDialog.openError(Display.getDefault().getActiveShell(), "Run failed", msg, ms);
-	}
+	
 
 	private HashMap<Control, Boolean> mapOriginalEnableSettings = new HashMap<>();
 
@@ -351,8 +326,8 @@ public abstract class RunComposite extends Composite
 						progressBarDeterminate.setSelection(0);
 						progressBarDeterminate.setMaximum(totalWork);
 
-						((StackLayout) progressbarContainer.getLayout()).topControl = progressBarDeterminate;
-						progressbarContainer.layout();
+						((StackLayout) footerContainer.getLayout()).topControl = progressBarDeterminate;
+						footerContainer.layout();
 					}
 				}
 			});

@@ -42,8 +42,8 @@ public class SingleResultComposite extends TitleComposite implements IRefreshabl
 	
 	private void init()
 	{
-		this.annotations = Util.loadAnnotations(this.resultFolder);
-		if (annotationView != null)
+			this.annotations = Util.loadAnnotations(this.resultFolder);
+			if (annotationView != null)
                 annotationView.loadAnnotations(annotations);
 	}
 
@@ -81,7 +81,7 @@ public class SingleResultComposite extends TitleComposite implements IRefreshabl
 	@Override
 	public void refresh() {
 		// TODO Auto-generated method stub
-		resultFolder.load();
+		//resultFolder.load();
 		init();
 	}
 }
