@@ -34,6 +34,7 @@ public class ConfigValidator implements IResourceValidator {
 
 		ConfingAlternative ca = (ConfingAlternative) statusProvider;
 		IValidationStatus status = statusProvider.getSelfStatus();
+
 		status.clearWarnings();
 		status.setIsValid(true);
 

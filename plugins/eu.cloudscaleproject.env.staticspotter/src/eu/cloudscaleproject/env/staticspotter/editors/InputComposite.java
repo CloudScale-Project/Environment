@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.staticspotter.editors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
+import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.InputAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -40,7 +40,7 @@ public class InputComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new InputAlternativeComposite(parent, style, (InputPersitenceFile)resource);
+				return new InputAlternativeComposite(parent, style, (GlobalInputAlternative)resource);
 			}
 		});
 		

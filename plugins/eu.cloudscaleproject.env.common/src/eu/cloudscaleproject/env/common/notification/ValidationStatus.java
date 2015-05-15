@@ -68,8 +68,8 @@ public class ValidationStatus implements IValidationStatus{
 	}
 
 	@Override
-	public void setIsValid(boolean isDone) {
-		pcs.firePropertyChange(PROP_VALID, this.isValid, this.isValid = isDone);
+	public void setIsValid(boolean isValid) {
+		pcs.firePropertyChange(PROP_VALID, this.isValid, this.isValid = isValid);
 	}
 
 	@Override
@@ -149,7 +149,10 @@ public class ValidationStatus implements IValidationStatus{
 
 	@Override
 	public void clearWarnings() {
-		warnings.clear();
+		for (String id : warnings.keySet())
+		{
+			removeWarning(id);
+		}
 	}
 
 	@Override

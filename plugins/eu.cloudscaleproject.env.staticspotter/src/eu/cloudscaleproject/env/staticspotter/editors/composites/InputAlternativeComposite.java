@@ -14,19 +14,19 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.staticspotter.InputPersitenceFile;
+import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
 
 public class InputAlternativeComposite extends Composite implements IRefreshable {
 
 	private Text txtInput;
-	private InputPersitenceFile editorInput;
+	private GlobalInputAlternative editorInput;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public InputAlternativeComposite(Composite parent, int style, final InputPersitenceFile editorInput) {
+	public InputAlternativeComposite(Composite parent, int style, final GlobalInputAlternative editorInput) {
 		super(parent, SWT.NONE);
 		this.setLayout(new GridLayout(4, false));
 		this.editorInput = editorInput;
@@ -68,7 +68,7 @@ public class InputAlternativeComposite extends Composite implements IRefreshable
 		        	IProject project = (IProject) selection;
 		        	String url = project.getFullPath().toPortableString();
 		        	txtInput.setText(url);
-		        	editorInput.setProperty(InputPersitenceFile.KEY_PROJECT_URL, url);
+		        	editorInput.setProperty(GlobalInputAlternative.KEY_PROJECT_URL, url);
 		        	editorInput.save();
 		        	//Util.addInput(InputAlternativeComposite.this.project, InputAlternativeComposite.this.name, url);
 		        }
@@ -81,7 +81,7 @@ public class InputAlternativeComposite extends Composite implements IRefreshable
 	
 	private void load ()
 	{
-		String url = this.editorInput.getProperty(InputPersitenceFile.KEY_PROJECT_URL);
+		String url = this.editorInput.getProperty(GlobalInputAlternative.KEY_PROJECT_URL);
 		txtInput.setText(url == null ? "" : url);
 	}
 	

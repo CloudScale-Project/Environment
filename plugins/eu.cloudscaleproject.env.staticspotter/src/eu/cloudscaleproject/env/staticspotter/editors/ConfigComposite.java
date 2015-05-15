@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.staticspotter.editors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.ConfigAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -40,7 +40,7 @@ public class ConfigComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new ConfigAlternativeComposite(parent, style, (ConfigPersistenceFolder)resource);
+				return new ConfigAlternativeComposite(parent, style, (ConfigAlternative)resource);
 			}
 		});
 		

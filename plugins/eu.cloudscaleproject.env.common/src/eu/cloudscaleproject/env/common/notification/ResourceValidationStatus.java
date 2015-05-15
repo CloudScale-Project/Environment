@@ -169,7 +169,10 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 
 	@Override
 	public void clearWarnings() {
-		warnings.clear();
+		for (String id : warnings.keySet())
+		{
+			removeWarning(id);
+		}
 	}
 
 	@Override

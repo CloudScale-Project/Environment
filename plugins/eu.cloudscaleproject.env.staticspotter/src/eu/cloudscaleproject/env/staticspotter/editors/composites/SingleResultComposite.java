@@ -13,7 +13,7 @@ import org.reclipse.structure.inference.annotations.ASGAnnotation;
 import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
@@ -21,7 +21,7 @@ import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
 
 public class SingleResultComposite extends TitleComposite implements IRefreshable{
 
-	private ResultPersistenceFolder resultFolder;
+	private ResultAlternative resultFolder;
 	private AnnotationView annotationView;
 	private Collection<ASGAnnotation> annotations;
 
@@ -30,7 +30,7 @@ public class SingleResultComposite extends TitleComposite implements IRefreshabl
 	 * @param parent
 	 * @param style
 	 */
-	public SingleResultComposite(Composite parent, int style, ResultPersistenceFolder rif) {
+	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 		

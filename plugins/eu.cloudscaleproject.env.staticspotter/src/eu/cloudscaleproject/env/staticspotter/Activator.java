@@ -7,6 +7,11 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigResourceProviderFactory;
+import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ResultResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -45,131 +50,8 @@ public class Activator extends AbstractUIPlugin
 		super.start(context);
 		plugin = this;
 
-		final AdapterFactory factory = new CustomAdapterFactory();
-
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_CONF_ID, new IResourceProviderFactory()
-		{
-			@Override
-			public ResourceProvider create(final IFolder folder)
-			{
-				return new ResourceProvider(folder, "Alternative")
-				{
-
-					@Override
-					public boolean validateResource(IResource res)
-					{
-						if (res instanceof IFolder)
-						{
-							return true;
-						}
-						return false;
-					}
-
-					@Override
-					public IEditorInputResource loadResource(IResource res, String type)
-					{
-						// TODO Auto-generated method stub
-						ConfigPersistenceFolder cif = new ConfigPersistenceFolder(folder.getProject(), (IFolder) res, factory);
-						return cif;
-					}
-
-					@Override
-					public IResource createResource(String name)
-					{
-
-						IFolder folder = getRootFolder().getFolder(name);
-						ConfigPersistenceFolder cif = new ConfigPersistenceFolder(folder.getProject(), folder, factory);
-						cif.create();
-						return folder;
-					}
-
-				};
-			}
-		});
-
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_INPUT_ID, new IResourceProviderFactory()
-		{
-
-			@Override
-			public ResourceProvider create(final IFolder folder)
-			{
-				return new ResourceProvider(folder, "Alternative.alt")
-				{
-
-					@Override
-					public boolean validateResource(IResource res)
-					{
-						if (res instanceof IFile)
-						{
-							return true;
-						}
-						return false;
-					}
-
-					@Override
-					public IEditorInputResource loadResource(IResource resource, String type)
-					{
-
-						InputPersitenceFile eif = new InputPersitenceFile(folder.getProject(), (IFile) resource);
-						if (!resource.exists())
-							eif.save();
-						return eif;
-					}
-
-					@Override
-					public IResource createResource(String resourceName)
-					{
-						IFile file = getRootFolder().getFile(resourceName);
-						InputPersitenceFile ipf = new InputPersitenceFile(folder.getProject(), file);
-						ipf.save();
-						return file;
-					}
-				};
-			}
-		});
-
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_RES_ID, new IResourceProviderFactory()
-		{
-
-			@Override
-			public ResourceProvider create(final IFolder folder)
-			{
-				return new ResourceProvider(folder, "Result")
-				{
-
-					@Override
-					public boolean validateResource(IResource res)
-					{
-						if (res instanceof IFolder)
-						{
-							return true;
-						}
-						return false;
-					}
-
-					@Override
-					public IEditorInputResource loadResource(IResource res, String type)
-					{
-						// TODO Auto-generated method stub
-						ResultPersistenceFolder rif = new ResultPersistenceFolder(getProject(), (IFolder) res);
-						rif.load();
-						return rif;
-					}
-
-					@Override
-					public IResource createResource(String name)
-					{
-
-						IFolder folder = getRootFolder().getFolder(name);
-						ResultPersistenceFolder rif = new ResultPersistenceFolder(getProject(), folder);
-						rif.create();
-						rif.save();
-						return folder;
-					}
-
-				};
-			}
-		});
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_CONF_ID, new ConfigResourceProviderFactory());
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_RES_ID, new ResultResourceProviderFactory());
 
 	}
 

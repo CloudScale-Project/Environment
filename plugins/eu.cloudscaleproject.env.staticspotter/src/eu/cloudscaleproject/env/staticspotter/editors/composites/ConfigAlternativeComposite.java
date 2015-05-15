@@ -33,7 +33,10 @@ import org.reclipse.structure.inference.DetectPatternsJob;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -44,7 +47,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable
+public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable, ISelectable
 {
 	private DataBindingContext m_bindingContext;
 
@@ -53,7 +56,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	private CommandExecutor executor;
 
 	private Combo combo;
-	private ConfigPersistenceFolder configPersistenceFolder;
+	private ConfigAlternative configAlternative;
 
 	private ComboViewer comboViewer;
 
@@ -69,12 +72,12 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigAlternativeComposite(Composite parent, int style, final ConfigPersistenceFolder cif)
+	public ConfigAlternativeComposite(Composite parent, int style, final ConfigAlternative configAlternative)
 	{
-		super(parent, style);
+		super(parent, style, configAlternative);
 		CloudscaleContext.inject(this);
 
-		this.configPersistenceFolder = cif;
+		this.configAlternative = configAlternative;
 
 		getContainer().setLayout(new GridLayout(3, false));
 
@@ -93,10 +96,8 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		this.treeViewComposite = new EMFEditableTreeviewComposite(configPersistenceFolder, containerEditor, SWT.NONE);
+		this.treeViewComposite = new EMFEditableTreeviewComposite(configAlternative, containerEditor, SWT.NONE);
 
-		setTitle(configPersistenceFolder.getName());
-		
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override
@@ -111,13 +112,13 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	@Override
 	protected IStatus doRun(IProgressMonitor m)
 	{
-		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configPersistenceFolder, extractorResult);
+		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(configAlternative, extractorResult);
 		
 		IStatus status = detectPaternJob.run(m);
 		if (status.isOK())
 		{
 			// Collect results
-			Util.saveAnnotations(configPersistenceFolder, detectPaternJob);
+			Util.saveAnnotations(configAlternative, detectPaternJob);
 		}
 
 		return status;
@@ -126,15 +127,14 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	@Override
 	public void refresh()
 	{
-		this.configPersistenceFolder.load();
-		setTitle(configPersistenceFolder.getName());
+		this.configAlternative.load();
 		updateExtractorResults();
 		m_bindingContext.updateTargets();
 	}
 	
 	private void updateExtractorResults()
 	{
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configPersistenceFolder.getProject(),
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configAlternative.getProject(),
 				ToolchainUtils.EXTRACTOR_RES_ID);
 		
 		this.extractorResults.clear();
@@ -163,9 +163,15 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 		comboViewer.setInput(extractorResults);
 		//
 		IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
-		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("extractorResult").observe(configPersistenceFolder);
+		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("extractorResult").observe(configAlternative);
 		bindingContext.bindValue(observeSingleSelectionComboViewer, extractorResultConfigPersistenceFolderObserveValue, null, null);
 		//
 		return bindingContext;
+	}
+
+	@Override
+	public void onSelect() {
+		ValidationDiagramService.showStatus(this.configAlternative.getProject(), GlobalInputAlternative.getInstance());
+		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative);
 	}
 }

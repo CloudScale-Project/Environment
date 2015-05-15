@@ -46,15 +46,13 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 	 */
 	public ConfigAlternativeComposite(Composite parent, int style, ConfingAlternative cif)
 	{
-		super(parent, style);
+		super(parent, style, cif);
 
 		this.configAlternative = cif;
 
 		// this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
 		// 1));
 		getContainer().setLayout(new GridLayout(2, false));
-
-		setTitle(configAlternative.getName());
 
 		{
 		Label lblNewLabel = new Label(getContainer(), SWT.NONE);
@@ -115,7 +113,7 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 	@Override
 	public void refresh()
 	{
-		this.configAlternative.load();
+		//this.configAlternative.load();
 		m_bindingContext.updateTargets();
 	}
 	

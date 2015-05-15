@@ -37,8 +37,8 @@ import org.reclipse.structure.inference.util.InferenceExtensionsHelper.Annotatio
 import org.reclipse.structure.specification.PSPatternSpecification;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.staticspotter.ConfigPersistenceFolder;
-import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -52,10 +52,10 @@ public class Util
 		assert (extractorResult != null);
 
 		ResourceSet resSet = new ResourceSetImpl();
-		IFile catalogFile = (IFile)configFolder.getSubResource(ConfigPersistenceFolder.KEY_CATALOG);
+		IFile catalogFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_CATALOG);
 		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
 
-		IFile enginesFile = (IFile)configFolder.getSubResource(ConfigPersistenceFolder.KEY_ENGINES);
+		IFile enginesFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_ENGINES);
 		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
 
 		IFile sdFile = (IFile)extractorResult.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
@@ -101,7 +101,7 @@ public class Util
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().
 				getResourceProvider(configFolder.getProject(), ToolchainUtils.SPOTTER_STA_RES_ID);
 
-		ResultPersistenceFolder rif = (ResultPersistenceFolder)resultResProvider
+		ResultAlternative rif = (ResultAlternative)resultResProvider
 				.createNewResource(configFolder.getName() + " " + sdf.format(new Date()), "");
 
 		//IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
@@ -110,7 +110,7 @@ public class Util
 
 		List<ASGAnnotation> annotations = getAnnotations(job);
 
-		IFile file = rif.getResource().getFile(ResultPersistenceFolder.RESULT_PSA_FILE);
+		IFile file = rif.getResource().getFile(ResultAlternative.RESULT_PSA_FILE);
 		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 
 		ResourceSet ress = new ResourceSetImpl();
@@ -143,7 +143,7 @@ public class Util
 		try
 		{
 			res.save(Collections.emptyMap());
-			rif.setSubResource(ResultPersistenceFolder.KEY_PSA, file);
+			rif.setSubResource(ResultAlternative.KEY_PSA, file);
 			rif.save();
 		}
 		catch (IOException e)
@@ -204,9 +204,9 @@ public class Util
 	/////////////////////////////////////////
 	// Loading annotations
 	//
-	public static Collection<ASGAnnotation> loadAnnotations(ResultPersistenceFolder resultFolder)
+	public static Collection<ASGAnnotation> loadAnnotations(ResultAlternative resultFolder)
 	{
-		IFile resultFile = (IFile)resultFolder.getSubResource(ResultPersistenceFolder.KEY_PSA);
+		IFile resultFile = (IFile)resultFolder.getSubResource(ResultAlternative.KEY_PSA);
 		URI resultUri = URI.createPlatformResourceURI(resultFile.getFullPath().toString(), true);
 
 		ResourceSet ress = new ResourceSetImpl();

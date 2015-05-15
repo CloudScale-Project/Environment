@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.staticspotter;
+package eu.cloudscaleproject.env.staticspotter.alternatives;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,9 +17,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ConfigPersistenceFolder extends EditorInputEMF {
-
-	private static final long serialVersionUID = 1L;
+public class ConfigAlternative extends EditorInputEMF {
 
 	public static final String KEY_INPUT_ALTERNATIVE= "input_alternative";
 	
@@ -35,8 +33,8 @@ public class ConfigPersistenceFolder extends EditorInputEMF {
 	public static final String KEY_EXTRACTOR_RESULT = "extractor_result";
 
 	
-	public ConfigPersistenceFolder(IProject project, IFolder folder, AdapterFactory adapterFactory) {
-		super (project, folder, adapterFactory);
+	public ConfigAlternative(IProject project, IFolder folder, AdapterFactory adapterFactory) {
+		super (project, folder, adapterFactory, ToolchainUtils.SPOTTER_STA_CONF_ID);
 	}
 
 	public IEditorInputResource getExtractorResult()
@@ -100,8 +98,8 @@ public class ConfigPersistenceFolder extends EditorInputEMF {
 	
 	private final void loadModels() throws IOException {
 		
-		IResource catalog = getSubResource(ConfigPersistenceFolder.KEY_CATALOG);
-		IResource engines = getSubResource(ConfigPersistenceFolder.KEY_ENGINES);
+		IResource catalog = getSubResource(ConfigAlternative.KEY_CATALOG);
+		IResource engines = getSubResource(ConfigAlternative.KEY_ENGINES);
 		
 		for (IResource res : new IResource[]{catalog, engines})
 		{

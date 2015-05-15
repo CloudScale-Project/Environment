@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.staticspotter.editors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.ResultPersistenceFolder;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.SingleResultComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -41,7 +41,7 @@ public class ResultComposite extends SidebarEditorComposite {
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
 
-				return new SingleResultComposite(parent, style, (ResultPersistenceFolder)resource);
+				return new SingleResultComposite(parent, style, (ResultAlternative)resource);
 			}
 		});
 		

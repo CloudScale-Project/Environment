@@ -104,7 +104,7 @@ public class ConfigComposite extends SidebarEditorComposite
 		private CTabFolder tabFolder;
 
 		public RightPanelComposite(IEditorPart editor, final ConfAlternative input, Composite parent, int style){
-			super(parent, style);
+			super(parent, style, input);
 
 			IProject project = ExplorerProjectPaths.getProject(editor);
 
@@ -114,9 +114,6 @@ public class ConfigComposite extends SidebarEditorComposite
 			layout.marginWidth = 0;
 			layout.marginHeight = 0;
 			getContainer().setLayout(layout);
-
-			String name = input.getTypeEnum() != null ? input.getTypeEnum().toString() : "Normal";
-			setTitle(name + " measurement type");
 
 			editComposite = new SelectInputAltComposite(project, input, getContainer(), SWT.NONE);
 			GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);

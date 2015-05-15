@@ -11,6 +11,7 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public final String KEY_TIMESTAMP_CREATED = "created";
 	public final String KEY_TIMESTAMP_MODIFIED = "modified";
 
+	public String getName();
 	public IResource getResource();
 	
 	public String getType();
