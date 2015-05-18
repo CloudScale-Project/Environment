@@ -48,13 +48,13 @@ public class EMFPopupMenuSupport implements IMenuListener{
 
 	private final void createContextMenuFor(StructuredViewer viewer) {
 		
-		MenuManager contextMenu = new MenuManager("#PopUp");
+		MenuManager contextMenu = new MenuManager("#PopUp", "eu.cloudscale.env.toolcahin.treeview.menumanager");
 		contextMenu.add(new Separator("additions"));
 		contextMenu.setRemoveAllWhenShown(true);
 		contextMenu.addMenuListener(this);
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
-
+		
 		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));

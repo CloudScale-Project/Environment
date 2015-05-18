@@ -67,6 +67,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			
 			@Override
 			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
+				
 				EObject root = EcoreUtil.getRootContainer(selectedElement);
 				if(root instanceof System || root instanceof ResourceEnvironment){
 					

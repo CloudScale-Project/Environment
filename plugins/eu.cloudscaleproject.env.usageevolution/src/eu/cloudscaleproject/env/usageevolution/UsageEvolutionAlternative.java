@@ -19,10 +19,11 @@ import org.scaledl.usageevolution.Usage;
 import org.scaledl.usageevolution.UsageEvolution;
 import org.scaledl.usageevolution.UsageevolutionFactory;
 
+import tools.descartes.dlim.ClockType;
 import tools.descartes.dlim.DlimFactory;
 import tools.descartes.dlim.ExponentialIncreaseLogarithmicDecline;
-
 import tools.descartes.dlim.Sequence;
+import tools.descartes.dlim.TimeDependentFunctionContainer;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -128,10 +129,28 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 		
 		clear();
 		
-		if(!limboFile.exists()){			
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);
-			Sequence model = DlimFactory.eINSTANCE.createSequence();
-			res.getContents().add(model);
+		if(!limboFile.exists()){
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);			
+			Sequence sequence = DlimFactory.eINSTANCE.createSequence();
+			sequence.setName("ExpIncreaseLogDecline");
+			sequence.setTerminateAfterLoops(1);
+			
+			TimeDependentFunctionContainer fc = DlimFactory.eINSTANCE.createTimeDependentFunctionContainer();
+			fc.setDuration(60*10);
+			fc.setName("Container");
+			fc.setPointOfReferenceClockType(ClockType.CONTAINER_CLOCK);
+			
+			//PETEK - TU SEM NEHAL DELATI NA UE
+			// integriraj limbo wizard in napravi tree-editor v dashboardu!
+			
+			ExponentialIncreaseLogarithmicDecline func = DlimFactory.eINSTANCE.createExponentialIncreaseLogarithmicDecline();
+			func.setPeak(200);
+			func.setBase(10);
+			func.setLogarithmicOrder(10);
+			
+			fc.setFunction(func);
+			sequence.getSequenceFunctionContainers().add(fc);
+			res.getContents().add(sequence);
 			
 			try {
 				res.save(null);
