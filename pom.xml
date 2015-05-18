@@ -47,6 +47,9 @@ Package : mvn install
     <module>plugins/org.scaledl.overview.properties</module>
     <module>plugins/eu.cloudscaleproject.env.help</module>
     <module>plugins/eu.cloudscaleproject.env.method.editor</module>
+
+    <module>plugins/eu.cloudscaleproject.env.example.api</module>
+    <module>plugins/eu.cloudscaleproject.env.example.cloudstore</module>
     
     <module>plugins/eu.cloudscaleproject.env.spotter</module>
     <module>externals/DynamicSpotter/org.spotter.eclipse.ui</module>
