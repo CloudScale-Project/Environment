@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="CloudScale" uid="eu.cloudscaleproject.env.master.product" id="eu.cloudscaleproject.env.product.product" application="org.eclipse.emf.codegen.CodeGen" version="1.0.0" useFeatures="false" includeLaunchers="true">
+<product name="CloudScale" uid="eu.cloudscaleproject.env.master.product" id="eu.cloudscaleproject.env.product.product" application="eu.cloudscaleproject.env.product.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -37,6 +37,7 @@ Visit http://www.cloudscale-project.eu
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
@@ -196,7 +197,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="eu.cloudscaleproject.env.example.common"/>
       <plugin id="eu.cloudscaleproject.env.extractor"/>
       <plugin id="eu.cloudscaleproject.env.help"/>
-      <plugin id="eu.cloudscaleproject.env.master"/>
       <plugin id="eu.cloudscaleproject.env.method.common"/>
       <plugin id="eu.cloudscaleproject.env.method.editor"/>
       <plugin id="eu.cloudscaleproject.env.method.viewer"/>
@@ -762,7 +762,12 @@ Visit http://www.cloudscale-project.eu
    </plugins>
 
    <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
    </configurations>
 
 </product>
