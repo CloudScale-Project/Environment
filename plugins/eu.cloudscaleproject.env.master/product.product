@@ -706,8 +706,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.servicelevelobjective.edit"/>
       <plugin id="org.palladiosimulator.servicelevelobjective.editor"/>
       <plugin id="org.palladiosimulator.simulizar"/>
-      <plugin id="org.palladiosimulator.simulizar.monitorrepository"/>
-      <plugin id="org.palladiosimulator.simulizar.monitorrepository.edit"/>
+      <plugin id="org.palladiosimulator.monitorrepository"/>
+      <plugin id="org.palladiosimulator.monitorrepository.edit"/>
       <plugin id="org.palladiosimulator.simulizar.prm"/>
       <plugin id="org.palladiosimulator.simulizar.prm.edit"/>
       <plugin id="org.palladiosimulator.simulizar.ui"/>
