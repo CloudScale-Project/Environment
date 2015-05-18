@@ -28,6 +28,7 @@ https://sdqweb.ipd.kit.edu/eclipse/recorderspec/nightly
 https://sdqweb.ipd.kit.edu/eclipse/sensorframework/nightly
 https://sdqweb.ipd.kit.edu/eclipse/servicelevelobjectives/nightly
 https://sdqweb.ipd.kit.edu/eclipse/simulizar/nightly
+https://sdqweb.ipd.kit.edu/eclipse/simulizarpower/nightly
 https://sdqweb.ipd.kit.edu/eclipse/sissy/nightly
 https://sdqweb.ipd.kit.edu/eclipse/somox/nightly
 https://sdqweb.ipd.kit.edu/eclipse/spa/nightly

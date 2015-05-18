@@ -9,8 +9,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_b6-YcHPTEeS3b6FdlQPPqA" elementId="eu.cloudscaleproject.env.usageevolution.handler.openEditor" contributionURI="bundleclass://eu.cloudscaleproject.env.usageevolution/eu.cloudscaleproject.env.usageevolution.handlers.OpenDashboardHandler" command="_VwsAcHPTEeS3b6FdlQPPqA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Zpp7oPpSEeSCruVdiXVtbg" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="10">
-    <elements xsi:type="basic:Part" xmi:id="_kB_BYPpSEeSCruVdiXVtbg" elementId="tools.descartes.dlim.generator.editor.views.PlotView" contributionURI="bundleclass://tools.descartes.dlim.generator.editor/tools.descartes.dlim.generator.editor.views.PlotView" label="Usage evolution" iconURI="platform:/plugin/tools.descartes.dlim.generator.editor/icons/sample.gif" closeable="true">
-      <toolbar xmi:id="_pgR2EPpSEeSCruVdiXVtbg" elementId="eu.cloudscaleproject.env.usageevolution.toolbar.0"/>
-    </elements>
+    <elements xsi:type="basic:Part" xmi:id="_465vkP1IEeSzsbl1X1VFYw" elementId="tools.descartes.dlim.generator.editor.views.PlotView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Usage Evolution (Arival plot)" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources//icons/full/eview16/resource_persp.gif"/>
   </fragments>
 </fragment:ModelFragments>
