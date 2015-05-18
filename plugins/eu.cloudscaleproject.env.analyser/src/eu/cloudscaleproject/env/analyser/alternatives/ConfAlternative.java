@@ -51,6 +51,12 @@ import org.palladiosimulator.experimentautomation.variation.VariationRepository;
 import org.palladiosimulator.experimentautomation.variation.VariationType;
 import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.metricspec.MetricDescriptionRepository;
+import org.palladiosimulator.monitorrepository.Intervall;
+import org.palladiosimulator.monitorrepository.MeasurementSpecification;
+import org.palladiosimulator.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.MonitorRepository;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
+import org.palladiosimulator.monitorrepository.StatisticalCharacterizationEnum;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointFactory;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
 import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
@@ -58,12 +64,6 @@ import org.palladiosimulator.servicelevelobjective.HardThreshold;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
-import org.palladiosimulator.simulizar.monitorrepository.Intervall;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
-import org.palladiosimulator.simulizar.monitorrepository.Monitor;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorRepository;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
-import org.palladiosimulator.simulizar.monitorrepository.StatisticalCharacterizationEnum;
 import org.scaledl.usageevolution.UsageEvolution;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
@@ -635,7 +635,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		if (getMonitorRepositories().isEmpty())
 		{
-			monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
+			monitorRep = MonitorRepositoryFactory.eINSTANCE.createMonitorRepository();
 			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 
 			InitialModel initalModel = exp.getInitialModel();
@@ -874,15 +874,15 @@ public class ConfAlternative extends AbstractConfigAlternative
 			MonitorRepository monitorRep = null;
 			if (monitorReps.isEmpty())
 			{
-				monitorRep = MonitorrepositoryFactory.eINSTANCE.createMonitorRepository();
+				monitorRep = MonitorRepositoryFactory.eINSTANCE.createMonitorRepository();
 				createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
-				Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+				Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 				monitor.setEntityName("Usage response time monitor");
 
 				// create default specification
-				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				MeasurementSpecification specification = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
-				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
+				Intervall interval = MonitorRepositoryFactory.eINSTANCE.createIntervall();
 				interval.setIntervall(10.0);
 
 				MetricDescription metric = null;
@@ -1033,9 +1033,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 				}
 
 				monitor.getMeasurementSpecifications().clear();
-				MeasurementSpecification specification = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				MeasurementSpecification specification = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				specification.setStatisticalCharacterization(StatisticalCharacterizationEnum.ARITHMETIC_MEAN);
-				Intervall interval = MonitorrepositoryFactory.eINSTANCE.createIntervall();
+				Intervall interval = MonitorRepositoryFactory.eINSTANCE.createIntervall();
 				interval.setIntervall(10.0);
 
 				MetricDescription metric = null;

@@ -535,6 +535,8 @@ org.palladiosimulator.pcm.edp2.measuringpoint
 org.palladiosimulator.pcm.edp2.measuringpoint.edit
 org.palladiosimulator.pcm.edp2.measuringpoint.edit.source
 org.palladiosimulator.pcm.edp2.measuringpoint.source
+org.palladiosimulator.pcm.profiles.util
+org.palladiosimulator.pcm.profiles.util.source
 org.palladiosimulator.probeframework
 org.palladiosimulator.probeframework.probes.example
 org.palladiosimulator.probeframework.probes.example.source

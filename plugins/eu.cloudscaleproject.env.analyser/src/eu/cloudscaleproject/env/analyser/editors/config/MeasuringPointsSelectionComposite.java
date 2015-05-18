@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
-import org.palladiosimulator.simulizar.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.Monitor;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.dialogs.ListSelectionDialog;

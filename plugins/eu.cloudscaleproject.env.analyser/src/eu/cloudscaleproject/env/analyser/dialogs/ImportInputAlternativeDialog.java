@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapterFactory;
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
-import org.palladiosimulator.simulizar.monitorrepository.provider.MonitorrepositoryItemProviderAdapterFactory;
+import org.palladiosimulator.monitorrepository.provider.MonitorRepositoryItemProviderAdapterFactory;
 
 import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
@@ -81,7 +81,7 @@ public class ImportInputAlternativeDialog extends Dialog{
 		adapterFactory.addAdapterFactory(new AllocationAdapterFactory());
 		adapterFactory.addAdapterFactory(new SeffAdapterFactory());
 		adapterFactory.addAdapterFactory(new MeasuringpointItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new MonitorrepositoryItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new MonitorRepositoryItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ExperimentDataAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new EcoreAdapterFactory());

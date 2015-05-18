@@ -24,11 +24,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
-import org.palladiosimulator.simulizar.monitorrepository.Monitor;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorRepository;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
+import org.palladiosimulator.monitorrepository.MeasurementSpecification;
+import org.palladiosimulator.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.MonitorRepository;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
 
 import de.uka.ipd.sdq.identifier.IdentifierPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -77,9 +77,9 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
 					MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
-					Monitor monitor = MonitorrepositoryFactory.eINSTANCE.createMonitor();
+					Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 					
-					MeasurementSpecification spec = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+					MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
 					monitor.getMeasurementSpecifications().add(spec);
 					monitor.setEntityName(dialog.getText());
 					
@@ -194,7 +194,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 		    		if(c == IdentifierPackage.Literals.IDENTIFIER__ID){
 		    			return true;
 		    		}
-		    		if(c == MonitorrepositoryPackage.Literals.MONITOR__MEASURING_POINT){
+		    		if(c == MonitorRepositoryPackage.Literals.MONITOR__MEASURING_POINT){
 		    			return true;
 		    		}
 		    		return super.haveEqualAttribute(eObject1, eObject2, c);
@@ -202,7 +202,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				
 				@Override
 				protected boolean haveEqualReference(EObject eObject1, EObject eObject2, EReference reference) {
-					if(reference == MonitorrepositoryPackage.Literals.MONITOR__MEASURING_POINT){
+					if(reference == MonitorRepositoryPackage.Literals.MONITOR__MEASURING_POINT){
 		    			return true;
 		    		}
 					return super.haveEqualReference(eObject1, eObject2, reference);

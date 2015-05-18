@@ -19,10 +19,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
-import org.palladiosimulator.simulizar.monitorrepository.Monitor;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
+import org.palladiosimulator.monitorrepository.MeasurementSpecification;
+import org.palladiosimulator.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
@@ -67,7 +67,7 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		btnAddNew.setText("+");
 		btnAddNew.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				MeasurementSpecification ms = MonitorrepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				MeasurementSpecification ms = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
 				Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
 				masterMonitor.getMeasurementSpecifications().add(ms);
 				folder.setSelection(folder.getItemCount()-1);
@@ -121,7 +121,7 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		bindingContext = new DataBindingContext();
 		
 		IObservableList obsMeasurSpec = EMFProperties.list(
-				MonitorrepositoryPackage.Literals.MONITOR__MEASUREMENT_SPECIFICATIONS).observe(monitorWrapper.getMaster());
+				MonitorRepositoryPackage.Literals.MONITOR__MEASUREMENT_SPECIFICATIONS).observe(monitorWrapper.getMaster());
 		
 		UpdateListStrategy i2mStrategy = new UpdateListStrategy(UpdateListStrategy.POLICY_UPDATE);
 		i2mStrategy.setConverter(new IConverter() {

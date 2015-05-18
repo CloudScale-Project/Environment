@@ -34,7 +34,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.palladiosimulator.simulizar.monitorrepository.util.MonitorrepositoryResourceImpl;
+import org.palladiosimulator.monitorrepository.util.MonitorRepositoryResourceImpl;
 
 import de.uka.ipd.sdq.pcm.allocation.util.AllocationResourceImpl;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryResourceImpl;
@@ -178,7 +178,7 @@ public class InputAlternativeTreeviewComposite extends Composite implements IPro
 				if(element instanceof UsagemodelResourceImpl){
 					return true;
 				}	
-				if(element instanceof MonitorrepositoryResourceImpl){
+				if(element instanceof MonitorRepositoryResourceImpl){
 					return true;
 				}
 			

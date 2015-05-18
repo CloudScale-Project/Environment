@@ -13,9 +13,9 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;

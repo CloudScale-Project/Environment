@@ -1,0 +1,9 @@
+<repository><id>palladio/addons/coverage</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/coverage/nightly</url></repository>
+<repository><id>palladio/addons/exactschedulers</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/exactschedulers/nightly</url></repository>
+<repository><id>palladio/addons/experimentanalysis</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/experimentanalysis/nightly</url></repository>
+<repository><id>palladio/addons/kamp</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/kamp/nightly</url></repository>
+<repository><id>palladio/addons/peropteryx</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/peropteryx/nightly</url></repository>
+<repository><id>palladio/addons/power</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/power/nightly</url></repository>
+<repository><id>palladio/addons/security</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/security/nightly</url></repository>
+<repository><id>palladio/addons/ssj</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/ssj/nightly</url></repository>
+<repository><id>palladio/addons/validation</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/validation/nightly</url></repository>

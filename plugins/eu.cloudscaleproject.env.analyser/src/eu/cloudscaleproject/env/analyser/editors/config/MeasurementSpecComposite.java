@@ -45,15 +45,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.palladiosimulator.metricspec.MetricDescription;
-import org.palladiosimulator.simulizar.monitorrepository.DelayedIntervall;
-import org.palladiosimulator.simulizar.monitorrepository.Intervall;
-import org.palladiosimulator.simulizar.monitorrepository.MeasurementSpecification;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryFactory;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage;
-import org.palladiosimulator.simulizar.monitorrepository.MonitorrepositoryPackage.Literals;
-import org.palladiosimulator.simulizar.monitorrepository.StatisticalCharacterizationEnum;
-import org.palladiosimulator.simulizar.monitorrepository.TemporalCharacterization;
-import org.palladiosimulator.simulizar.monitorrepository.TimeFrame;
+import org.palladiosimulator.monitorrepository.DelayedIntervall;
+import org.palladiosimulator.monitorrepository.Intervall;
+import org.palladiosimulator.monitorrepository.MeasurementSpecification;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage.Literals;
+import org.palladiosimulator.monitorrepository.StatisticalCharacterizationEnum;
+import org.palladiosimulator.monitorrepository.TemporalCharacterization;
+import org.palladiosimulator.monitorrepository.TimeFrame;
 
 public class MeasurementSpecComposite extends Composite{
 	
@@ -235,7 +235,7 @@ public class MeasurementSpecComposite extends Composite{
 				intervalObservable.addOption(interval, btnIntervalObserveSelection);
 			}
 			else{
-				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createIntervall(), btnIntervalObserveSelection);
+				intervalObservable.addOption(MonitorRepositoryFactory.eINSTANCE.createIntervall(), btnIntervalObserveSelection);
 			}
 			
 			IObservableValue btnDIntervalObserveSelection = SWTObservables  
@@ -245,7 +245,7 @@ public class MeasurementSpecComposite extends Composite{
 				intervalObservable.addOption(interval, btnDIntervalObserveSelection);
 			}
 			else{
-				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createDelayedIntervall(), btnDIntervalObserveSelection);
+				intervalObservable.addOption(MonitorRepositoryFactory.eINSTANCE.createDelayedIntervall(), btnDIntervalObserveSelection);
 			}
 			
 			IObservableValue btnTimeFrameObserveSelection = SWTObservables  
@@ -255,7 +255,7 @@ public class MeasurementSpecComposite extends Composite{
 				intervalObservable.addOption(interval, btnTimeFrameObserveSelection);
 			}
 			else{
-				intervalObservable.addOption(MonitorrepositoryFactory.eINSTANCE.createTimeFrame(), btnTimeFrameObserveSelection);
+				intervalObservable.addOption(MonitorRepositoryFactory.eINSTANCE.createTimeFrame(), btnTimeFrameObserveSelection);
 			}
 			
 			intervalObservable.addChangeListener(new IChangeListener() {
@@ -310,7 +310,7 @@ public class MeasurementSpecComposite extends Composite{
 			});
 			
 			bindingContext.bindValue(intervalObservable, 
-					EMFEditProperties.value(ed, MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION).observe(ms));
+					EMFEditProperties.value(ed, MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION).observe(ms));
 		}
 		
 		//bind textbox
@@ -319,20 +319,20 @@ public class MeasurementSpecComposite extends Composite{
 			ISWTObservableValue textSecondObservable = WidgetProperties.text(SWT.Modify).observe(textSecond);
 			
 			IEMFEditValueProperty intervalIntervalProp = EMFEditProperties.value(ed, FeaturePath.fromList(
-					MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
-					MonitorrepositoryPackage.Literals.INTERVALL__INTERVALL));
+					MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
+					MonitorRepositoryPackage.Literals.INTERVALL__INTERVALL));
 			
 			IEMFEditValueProperty dIntervalDelayProp = EMFEditProperties.value(ed, FeaturePath.fromList(
-					MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
-					MonitorrepositoryPackage.Literals.DELAYED_INTERVALL__DELAY));
+					MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
+					MonitorRepositoryPackage.Literals.DELAYED_INTERVALL__DELAY));
 			
 			IEMFEditValueProperty timeFrameStartProp = EMFEditProperties.value(ed, FeaturePath.fromList(
-					MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
-					MonitorrepositoryPackage.Literals.TIME_FRAME__START));
+					MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
+					MonitorRepositoryPackage.Literals.TIME_FRAME__START));
 			
 			IEMFEditValueProperty timeFrameStopProp = EMFEditProperties.value(ed, FeaturePath.fromList(
-					MonitorrepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
-					MonitorrepositoryPackage.Literals.TIME_FRAME__STOP));
+					MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION, 
+					MonitorRepositoryPackage.Literals.TIME_FRAME__STOP));
 			
 			UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
 			t2mStrategy.setConverter(StringToNumberConverter.toDouble(true));

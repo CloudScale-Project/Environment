@@ -1,0 +1,9 @@
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/coverage/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/exactschedulers/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/experimentanalysis/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/kamp/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/peropteryx/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/power/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/security/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/ssj/nightly
+https://sdqweb.ipd.kit.edu/eclipse/palladio/addons/validation/nightly

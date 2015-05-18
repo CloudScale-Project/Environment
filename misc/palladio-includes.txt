@@ -1,4 +1,6 @@
-Palladio simulator \n
+PalladioSimulator
+--------------------
+
 <includes id="org.palladiosimulator.commons.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.edp2.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.edp2.ui.feature" version="0.0.0"/>
@@ -23,7 +25,11 @@ Palladio simulator \n
 <includes id="org.palladiosimulator.simulizar.reconfiguration.qvto.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.thirdpartywrapper.feature" version="0.0.0"/>
-\n\nPalladio simulator - sources \n
+
+
+PalladioSimulator (sources)
+------------------
+
 <includes id="org.palladiosimulator.commons.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.edp2.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.edp2.ui.source.feature" version="0.0.0"/>
@@ -48,7 +54,11 @@ Palladio simulator \n
 <includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.simulizar.source.feature" version="0.0.0"/>
 <includes id="org.palladiosimulator.thirdpartywrapper.source.feature" version="0.0.0"/>
-\n\nde.uka.ipd.sdq \n
+
+
+DE.UKA 
+------------------
+
 <includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>
@@ -66,171 +76,11 @@ Palladio simulator \n
 <includes id="de.uka.ipd.sdq.statistics.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.stoex.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.units.source.feature" version="0.0.0"/>
-\n\nde.uka.ipd.sdq (sources) \n
-<includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.identifier.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.diagram.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.resultdecorator.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcmsolver.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.probfunction.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.reliability.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.visualisation.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simucom.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.statistics.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.stoex.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.units.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.commons.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.ui.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.examples.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.metricspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.monitorrepository.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probeframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probespec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.javaee.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.servicelevelobjective.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.power.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.qvto.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.thirdpartywrapper.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.commons.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.ui.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.examples.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.metricspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.monitorrepository.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probeframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probespec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.javaee.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.servicelevelobjective.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.power.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.qvto.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.thirdpartywrapper.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.identifier.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.diagram.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.resultdecorator.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcmsolver.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.probfunction.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.reliability.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.visualisation.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simucom.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.statistics.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.stoex.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.units.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.identifier.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.diagram.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.resultdecorator.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcmsolver.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.probfunction.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.reliability.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.visualisation.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simucom.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.statistics.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.stoex.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.units.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.commons.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.ui.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.examples.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.metricspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.monitorrepository.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probeframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probespec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.javaee.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderframework.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderspec.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.servicelevelobjective.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.power.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.qvto.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.thirdpartywrapper.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.commons.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.edp2.ui.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.examples.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.experimentautomation.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.measurementspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.metricspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.monitorrepository.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probeframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.probespec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.javaee.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.protocom.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderframework.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.recorderspec.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.servicelevelobjective.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.power.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.qvto.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.reconfiguration.storydiagram.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.simulizar.source.feature" version="0.0.0"/>
-<includes id="org.palladiosimulator.thirdpartywrapper.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.identifier.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.diagram.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.resultdecorator.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcmsolver.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.pcm.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.probfunction.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.reliability.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.sensorframework.visualisation.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simucom.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.statistics.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.stoex.source.feature" version="0.0.0"/>
-<includes id="de.uka.ipd.sdq.units.source.feature" version="0.0.0"/>
+
+
+DE.UKA (sources)
+------------------
+
 <includes id="de.uka.ipd.sdq.ByCounter.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.dialogs.source.feature" version="0.0.0"/>
 <includes id="de.uka.ipd.sdq.errorhandling.source.feature" version="0.0.0"/>

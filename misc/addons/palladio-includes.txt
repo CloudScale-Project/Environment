@@ -1,0 +1,34 @@
+PalladioSimulator
+--------------------
+
+<includes id="org.palladiosimulator.experimentanalysis.feature" version="0.0.0"/>
+
+
+PalladioSimulator (sources)
+------------------
+
+<includes id="org.palladiosimulator.experimentanalysis.source.feature" version="0.0.0"/>
+
+
+DE 
+------------------
+
+<includes id="de.fzi.power.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.pcmcoverage.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.validation.effort.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.validation.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.dsexplore.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.pcm.link.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.ssj.source.feature" version="0.0.0"/>
+
+
+DE (sources)
+------------------
+
+<includes id="de.fzi.power.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.pcmcoverage.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.validation.effort.source.feature" version="0.0.0"/>
+<includes id="de.fzi.se.validation.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.dsexplore.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.pcm.link.source.feature" version="0.0.0"/>
+<includes id="de.uka.ipd.sdq.simulation.abstractsimengine.ssj.source.feature" version="0.0.0"/>
