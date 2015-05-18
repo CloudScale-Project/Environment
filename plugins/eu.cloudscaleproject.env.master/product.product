@@ -720,8 +720,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint"/>
       <plugin id="org.palladiosimulator.simulizar.monitorrepository"/>
       <plugin id="org.palladiosimulator.simulizar.monitorrepository.edit"/>
-      <plugin id="org.palladiosimulator.simulizar.prm"/>
-      <plugin id="org.palladiosimulator.simulizar.prm.edit"/>
       <plugin id="org.palladiosimulator.simulizar.reconfiguration.storydiagram"/>
       <plugin id="org.palladiosimulator.simulizar.runtimemeasurement"/>
       <plugin id="org.palladiosimulator.simulizar.ui"/>
