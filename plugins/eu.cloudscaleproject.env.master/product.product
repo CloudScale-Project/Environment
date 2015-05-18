@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="CloudScale" uid="eu.cloudscaleproject.env.master.product" id="eu.cloudscaleproject.env.product.product" application="eu.cloudscaleproject.env.product.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
+<product name="CloudScale" uid="eu.cloudscaleproject.env.master.product" id="org.eclipse.emf.cdo.server.product.tcp_h2" application="org.eclipse.emf.codegen.CodeGen" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
@@ -40,6 +40,7 @@ Visit http://www.cloudscale-project.eu
 
    <vm>
    </vm>
+
 
    <plugins>
       <plugin id="LQNModel"/>
@@ -162,7 +163,9 @@ Visit http://www.cloudscale-project.eu
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles.builder"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles.nature"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles.ui"/>
       <plugin id="edu.kit.ipd.sdq.mdsd.profiles.util"/>
+      <plugin id="edu.kit.ipd.sdq.mdsd.profiles.view"/>
       <plugin id="eu.cloudscaleproject.env.analyser"/>
       <plugin id="eu.cloudscaleproject.env.common"/>
       <plugin id="eu.cloudscaleproject.env.csm2pcm"/>
@@ -181,6 +184,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="javax.el"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.inject.source"/>
+      <plugin id="javax.servlet"/>
       <plugin id="javax.servlet-api"/>
       <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
@@ -203,6 +207,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.commons.cli"/>
       <plugin id="org.apache.commons.codec"/>
       <plugin id="org.apache.commons.collections15"/>
+      <plugin id="org.apache.commons.io"/>
       <plugin id="org.apache.commons.jxpath"/>
       <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
@@ -273,6 +278,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.ant"/>
       <plugin id="org.eclipse.emf.cdo"/>
       <plugin id="org.eclipse.emf.cdo.common"/>
+      <plugin id="org.eclipse.emf.cdo.ecore.retrofit" fragment="true"/>
       <plugin id="org.eclipse.emf.cdo.net4j"/>
       <plugin id="org.eclipse.emf.cdo.server"/>
       <plugin id="org.eclipse.emf.cdo.server.db"/>
@@ -288,6 +294,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.databinding.edit"/>
       <plugin id="org.eclipse.emf.ecore"/>
       <plugin id="org.eclipse.emf.ecore.change"/>
+      <plugin id="org.eclipse.emf.ecore.change.edit"/>
       <plugin id="org.eclipse.emf.ecore.edit"/>
       <plugin id="org.eclipse.emf.ecore.editor"/>
       <plugin id="org.eclipse.emf.ecore.xmi"/>
@@ -400,6 +407,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.gmf.runtime.emf.ui.properties"/>
       <plugin id="org.eclipse.gmf.runtime.gef.ui"/>
       <plugin id="org.eclipse.gmf.runtime.notation"/>
+      <plugin id="org.eclipse.gmf.runtime.notation.edit"/>
       <plugin id="org.eclipse.gmf.runtime.notation.providers"/>
       <plugin id="org.eclipse.gmf.tooling.runtime"/>
       <plugin id="org.eclipse.gmt.modisco.examples"/>
@@ -566,6 +574,11 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.pde.launching"/>
       <plugin id="org.eclipse.pde.ui"/>
       <plugin id="org.eclipse.search"/>
+      <plugin id="org.eclipse.sirius"/>
+      <plugin id="org.eclipse.sirius.common"/>
+      <plugin id="org.eclipse.sirius.ecore.extender"/>
+      <plugin id="org.eclipse.sirius.ext.base"/>
+      <plugin id="org.eclipse.sirius.ext.emf"/>
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
       <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
@@ -657,6 +670,10 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.junit"/>
       <plugin id="org.modelversioning.emfprofile"/>
       <plugin id="org.modelversioning.emfprofile.application.registry"/>
+      <plugin id="org.modelversioning.emfprofile.application.registry.ui"/>
+      <plugin id="org.modelversioning.emfprofile.diagram"/>
+      <plugin id="org.modelversioning.emfprofile.edit"/>
+      <plugin id="org.modelversioning.emfprofile.editor"/>
       <plugin id="org.modelversioning.emfprofile.project"/>
       <plugin id="org.modelversioning.emfprofile.registry"/>
       <plugin id="org.objectweb.asm"/>
@@ -672,6 +689,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.edp2.util"/>
       <plugin id="org.palladiosimulator.edp2.visualization"/>
       <plugin id="org.palladiosimulator.edp2.visualization.jfreechart"/>
+      <plugin id="org.palladiosimulator.experimentanalysis"/>
       <plugin id="org.palladiosimulator.experimentautomation"/>
       <plugin id="org.palladiosimulator.experimentautomation.application"/>
       <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom"/>
@@ -686,6 +704,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.metricspec.edit"/>
       <plugin id="org.palladiosimulator.metricspec.editor"/>
       <plugin id="org.palladiosimulator.metricspec.resources"/>
+      <plugin id="org.palladiosimulator.monitorrepository"/>
+      <plugin id="org.palladiosimulator.monitorrepository.edit"/>
       <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint"/>
       <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint.edit"/>
       <plugin id="org.palladiosimulator.probeframework"/>
@@ -695,11 +715,15 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.palladiosimulator.servicelevelobjective"/>
       <plugin id="org.palladiosimulator.servicelevelobjective.edit"/>
       <plugin id="org.palladiosimulator.servicelevelobjective.editor"/>
+      <plugin id="org.palladiosimulator.servicelevelobjective.edp2"/>
       <plugin id="org.palladiosimulator.simulizar"/>
+      <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint"/>
       <plugin id="org.palladiosimulator.simulizar.monitorrepository"/>
       <plugin id="org.palladiosimulator.simulizar.monitorrepository.edit"/>
       <plugin id="org.palladiosimulator.simulizar.prm"/>
       <plugin id="org.palladiosimulator.simulizar.prm.edit"/>
+      <plugin id="org.palladiosimulator.simulizar.reconfiguration.storydiagram"/>
+      <plugin id="org.palladiosimulator.simulizar.runtimemeasurement"/>
       <plugin id="org.palladiosimulator.simulizar.ui"/>
       <plugin id="org.palladiosimulator.simulizar.ui.perspective"/>
       <plugin id="org.palladiosimulator.simulizar.ui.wizards"/>
