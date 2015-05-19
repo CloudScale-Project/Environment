@@ -88,6 +88,11 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		});
 	}
 	
+	public SidebarEditor getSidebarEditor()
+	{
+		return sidebarBuilder;
+	}
+	
 	public void setContentProvider(SidebarContentProvider compositeProvider) {
 		sidebarBuilder.setContentProvider(compositeProvider);
 	}

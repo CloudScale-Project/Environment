@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -36,13 +35,13 @@ public abstract class RunComposite extends Composite
 	private ProgressBar progressBarIndeterminate;
 	private Composite footerContainer;
 	private Button btnRun;
-	private Job currentJob, lastJob;
+	private Job currentJob;
 	private ProgressBar progressBarDeterminate;
-	private Composite resultsComposite;
-	private Label lblResult;
 	private IValidationStatusListener validationListener;
 
-	private ValidationComposite validationComposite;
+	private FooterValidationComposite validationComposite;
+
+	private FooterResultComposite resultsComposite;
 
 	/**
 	 * Create the composite.
@@ -75,12 +74,9 @@ public abstract class RunComposite extends Composite
 		footerContainer.setLayout(new StackLayout());
 		footerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		resultsComposite = new Composite(footerContainer, SWT.NONE);
-		lblResult = new Label(resultsComposite, SWT.NONE);
-		lblResult.setBounds(10, 10, 379, 15);
-		lblResult.setText("");
+		resultsComposite = new FooterResultComposite(footerContainer, style, alternative);
 
-		validationComposite = new ValidationComposite(footerContainer, style, alternative);
+		validationComposite = new FooterValidationComposite(footerContainer, style, alternative);
 
 		progressBarIndeterminate = new ProgressBar(footerContainer, SWT.HORIZONTAL | SWT.INDETERMINATE);
 		progressBarDeterminate = new ProgressBar(footerContainer, SWT.NONE);
@@ -176,7 +172,6 @@ public abstract class RunComposite extends Composite
 			public void done(IJobChangeEvent event)
 			{
 				updateControls();
-				lastJob = currentJob;
 				currentJob = null;
 			}
 		});
@@ -207,12 +202,9 @@ public abstract class RunComposite extends Composite
 				{
 					if (currentJob != null && currentJob.getResult() != null)
 					{
-						if (currentJob.getResult().isOK())
-							lblResult.setText("Status of last run : SUCCESSFUL");
-						else
-							lblResult.setText("Status of last run : FAILED : " + currentJob.getResult().getMessage());
-
+						resultsComposite.setStatus(currentJob.getResult());
 						((StackLayout) footerContainer.getLayout()).topControl = resultsComposite;
+
 					} else
 					{
 						((StackLayout) footerContainer.getLayout()).topControl = validationComposite;

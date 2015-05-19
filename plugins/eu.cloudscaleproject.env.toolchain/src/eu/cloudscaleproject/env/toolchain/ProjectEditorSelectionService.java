@@ -155,6 +155,8 @@ public class ProjectEditorSelectionService implements IPostSelectionProvider
 	public void reloadPropertySheetPage()
 	{
 		IWorkbenchPart activePart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		if (activePart == null) return;
+
 		@SuppressWarnings("deprecation")
 		IViewPart[] views = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews();
 		for (IViewPart v : views)

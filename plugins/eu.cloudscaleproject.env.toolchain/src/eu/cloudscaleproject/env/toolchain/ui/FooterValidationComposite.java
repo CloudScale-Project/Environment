@@ -3,6 +3,8 @@ package eu.cloudscaleproject.env.toolchain.ui;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -16,7 +18,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class ValidationComposite extends Composite
+public class FooterValidationComposite extends Composite
 {
 
 	private IEditorInputResource alternative;
@@ -62,7 +64,7 @@ public class ValidationComposite extends Composite
 	private Label lblIcon;
 	private Label lblText;
 
-	public ValidationComposite(Composite parent, int style, IEditorInputResource alternative)
+	public FooterValidationComposite(Composite parent, int style, IEditorInputResource alternative)
 	{
 		super(parent, style);
 
@@ -79,6 +81,16 @@ public class ValidationComposite extends Composite
 		lblIcon.addMouseListener(mouseListener);
 
 		alternative.getSelfStatus().addListener(listener);
+		this.addDisposeListener(new DisposeListener()
+		{
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+				FooterValidationComposite.this.alternative.
+					getSelfStatus().removeListener(listener);
+			}
+		});
 		updateStatus();
 	}
 
@@ -92,7 +104,8 @@ public class ValidationComposite extends Composite
 			lblIcon.setImage(CommonResources.OK);
 		} else
 		{
-			lblText.setText("Alternative is not valid : #warnings=" + selfStatus.getWarningIDs().size());
+			lblText.setText(String.format("Alternative is not valid : %s warning(s)", 
+					selfStatus.getWarningIDs().size()));
 			lblIcon.setImage(CommonResources.WARNING);
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
@@ -73,7 +74,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	public void handleSelect(IEditorInput selected){};
 	//////////////////////////////////////////////////
 	
-	protected class EditorItem implements IPropertySheetPageProvider{
+	public class EditorItem implements IPropertySheetPageProvider{
 		
 		private final IEditorInput input;
 		private final String sectionName;
@@ -116,6 +117,18 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			this.sectionName = sectionName;
 			this.initButton();
 			this.input.addPropertyChangeListener(resourceChangeListener);
+
+			EditorRegistry.getInstance().registerEditorItem(AbstractSidebarEditor.this, EditorItem.this);
+		}
+
+		public IEditorInput getInput()
+		{
+			return input;
+		}
+
+		public Composite getComposite()
+		{
+			return composite;
 		}
 		
 		private List<ISaveable> getSaveables(){
@@ -335,7 +348,15 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	public AbstractSidebarEditor(Composite sidebar, Composite area) {
 		this.compositeSidebar = sidebar;
 		this.compositeArea = area;
+		
+		EditorRegistry.getInstance().registerEditor(this);
 	}
+
+	public Map<IEditorInput, EditorItem> getEntries()
+	{
+		return entries;
+	}
+	
 	
 	public void init(){
 		
@@ -584,6 +605,10 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	}
 	
 	public void addSidebarEditor(IEditorInput ei, String section){
+
+		// Workaround - entry can already exist - thread fuck
+		if (entries.get(ei) != null) return;
+
 		EditorItem newEditorItem = new EditorItem(ei, section, SWT.NONE);
 		entries.put(ei, newEditorItem);
 		
@@ -725,7 +750,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			}
 		}
 	}
-	
+
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
 		EditorItem ei = getCurrentSelectionItem();
@@ -750,5 +775,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 	}
+	
 }
 

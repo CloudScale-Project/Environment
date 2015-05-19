@@ -56,7 +56,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 
 	private void setLastResult(IEditorInputResource res)
 	{
-		addSubResource(IConfigAlternative.KEY_LAST_RESULT, res.getResource());
+		setSubResource(IConfigAlternative.KEY_LAST_RESULT, res.getResource());
 	}
 
 	@Override
@@ -85,10 +85,13 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 
 			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
-			//IEditorInputResource lastResult = resources.get(resources.size() - 1);
+
+			IEditorInputResource lastResult = resources.get(resources.size() - 1);
+			// BUG : Retrieves different object!?
 			//lastResult.setProperty("CONFIG_NAME", getName());
 			//lastResult.save();
-			//setLastResult(lastResult);
+			setLastResult(lastResult);
+
 			save();
 		}
 
