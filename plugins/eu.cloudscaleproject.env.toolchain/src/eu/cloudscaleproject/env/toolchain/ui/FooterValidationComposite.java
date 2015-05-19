@@ -56,7 +56,7 @@ public class FooterValidationComposite extends Composite
 		{
 			if (!alternative.getSelfStatus().isValid())
 			{
-				ValidationDialogHelper.showWarningsDialog(alternative);
+				ValidationStatusHelper.showValidationWarnings(alternative);
 			}
 		}
 	};
@@ -105,7 +105,7 @@ public class FooterValidationComposite extends Composite
 		} else
 		{
 			lblText.setText(String.format("Alternative is not valid : %s warning(s)", 
-					selfStatus.getWarningIDs().size()));
+					ValidationStatusHelper.countValidationWarnings(alternative)));
 			lblIcon.setImage(CommonResources.WARNING);
 		}
 	}

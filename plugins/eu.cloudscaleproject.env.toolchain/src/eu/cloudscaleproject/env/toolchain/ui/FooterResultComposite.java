@@ -2,8 +2,6 @@ package eu.cloudscaleproject.env.toolchain.ui;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -58,15 +56,6 @@ public class FooterResultComposite extends Composite
 
 		lblText.addMouseListener(mouseListener);
 		lblIcon.addMouseListener(mouseListener);
-
-		this.addDisposeListener(new DisposeListener()
-		{
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e)
-			{
-			}
-		});
 	}
 	
 	public void setStatus (IStatus status)
@@ -80,11 +69,11 @@ public class FooterResultComposite extends Composite
 	{
 		if (status != null && status.isOK())
 		{
-			lblText.setText("Success... Go to result.");
+			lblText.setText("Success... See result.");
 			lblIcon.setImage(CommonResources.THUMB_UP);
 		} else
 		{
-			lblText.setText("Unsuccsfull... See error.");
+			lblText.setText("Problem occured... See error.");
 			lblIcon.setImage(CommonResources.ERROR);
 		}
 		

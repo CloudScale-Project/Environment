@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 
@@ -37,11 +36,17 @@ public abstract class RunComposite extends Composite
 	private Button btnRun;
 	private Job currentJob;
 	private ProgressBar progressBarDeterminate;
-	private IValidationStatusListener validationListener;
-
 	private FooterValidationComposite validationComposite;
-
 	private FooterResultComposite resultsComposite;
+	
+	private final IValidationStatusListener propertyChangeListener = new IValidationStatusListener()
+	{
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+			updateControls();
+		}
+	};
 
 	/**
 	 * Create the composite.
@@ -56,7 +61,7 @@ public abstract class RunComposite extends Composite
 		setLayout(new GridLayout(1, false));
 		this.alternative = alternative;
 
-		initValidationStatusListener();
+		initListeners();
 
 		new TitledGradientComposite(this, SWT.NONE, alternative);
 
@@ -107,31 +112,20 @@ public abstract class RunComposite extends Composite
 		updateControls();
 	}
 
-
-	private void initValidationStatusListener()
+	private void initListeners()
 	{
-		this.validationListener = new IValidationStatusListener()
-		{
-			@Override
-			public void propertyChange(PropertyChangeEvent evt)
-			{
-				if (evt.getPropertyName().equals(IValidationStatus.PROP_VALID))
-				{
-					updateControls();
-				}
-			}
-		};
-		
 		this.addDisposeListener(new DisposeListener()
 		{
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				alternative.getSelfStatus().removeListener(validationListener);
+				alternative.getSelfStatus().removeListener(propertyChangeListener);
+				alternative.removePropertyChangeListener(propertyChangeListener);
 			}
 		});
 
-		alternative.getSelfStatus().addListener(validationListener);
+		alternative.addPropertyChangeListener(propertyChangeListener);
+		alternative.getSelfStatus().addListener(propertyChangeListener);
 	}
 
 	public Composite getContainer()
@@ -141,12 +135,6 @@ public abstract class RunComposite extends Composite
 
 	private void run()
 	{
-		if (!alternative.getSelfStatus().isDone())
-		{
-			ValidationDialogHelper.showValidationErrorDialog(alternative);
-			return;
-		}
-
 		this.currentJob = new Job("CloudScale Run [" + alternative.getName() + "]")
 		{
 			private RunProgressMonitor internalMonitor;
