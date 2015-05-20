@@ -117,6 +117,11 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			this.sectionName = sectionName;
 			this.initButton();
 			this.input.addPropertyChangeListener(resourceChangeListener);
+			
+			if (!(input instanceof IEditorInputResource))
+			{
+				initComposite();
+			}
 
 			EditorRegistry.getInstance().registerEditorItem(AbstractSidebarEditor.this, EditorItem.this);
 		}

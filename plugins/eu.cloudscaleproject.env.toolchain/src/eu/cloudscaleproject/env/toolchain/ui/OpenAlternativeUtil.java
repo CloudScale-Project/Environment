@@ -89,10 +89,10 @@ public class OpenAlternativeUtil
 		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
 		if (editorItem != null)
 		{
-			editorItem.select();
-			
 			EditorItem parent = EditorRegistry.getInstance().getParent(editorItem);
 			parent.select();
+
+			editorItem.select();
 		}
 	}
 }
