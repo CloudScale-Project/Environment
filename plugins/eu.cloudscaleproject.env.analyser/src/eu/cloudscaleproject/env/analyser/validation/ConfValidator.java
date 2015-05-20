@@ -18,15 +18,12 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfValidator implements IResourceValidator {
 	
 	private static final String ERR_MODEL_ERROR = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.modelerror";
 	private static final String ERR_MODEL_EMPTY = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.modelempty";
 	private static final String ERR_INPUT_NOT_SET = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.inputnotset";
-	private static final String ERR_USAGE_NOT_DOME = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.usageNotDone";
-
 
 	@Override
 	public String getID() {
@@ -121,17 +118,7 @@ public class ConfValidator implements IResourceValidator {
 			boolean valid = validateModels(alternative.getProject(), alternative);
 
 			
-			IEditorInputResource usageAlternative = alternative.getUsageAlternative();
-			
-			if(usageAlternative != null){
-				usageAlternative.validate();
-				IValidationStatus usageStatus = usageAlternative.getSelfStatus();
-				
-				status.check(ERR_USAGE_NOT_DOME, usageStatus.isDone(), true, "Usage evolution is incomplete!");
-			}
-			else{
-				status.removeWarning(ERR_USAGE_NOT_DOME);
-			}
+			//TODO: check usage evolution
 			
 			status.setIsValid(valid);
 		} 

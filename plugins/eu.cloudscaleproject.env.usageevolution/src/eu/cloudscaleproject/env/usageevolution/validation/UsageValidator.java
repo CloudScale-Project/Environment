@@ -27,7 +27,6 @@ public class UsageValidator implements IResourceValidator{
 		boolean usage = false;
 		
 		limbo = validateModel(project, ueAlt != null ? ueAlt.getModels("dlim") : null);
-		usage = validateModel(project, ueAlt != null ? ueAlt.getModels("usageevolution") : null);
 
 		return limbo && usage;
 		

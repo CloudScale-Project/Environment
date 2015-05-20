@@ -36,6 +36,7 @@ public abstract class RunComposite extends Composite
 	private Button btnRun;
 	private Job currentJob;
 	private ProgressBar progressBarDeterminate;
+<<<<<<< HEAD
 	private FooterValidationComposite validationComposite;
 	private FooterResultComposite resultsComposite;
 	
@@ -47,6 +48,13 @@ public abstract class RunComposite extends Composite
 			updateControls();
 		}
 	};
+=======
+	private Composite resultsComposite;
+	private Label lblResult;
+	private IValidationStatusListener validationListener;
+	
+	private ValidationComposite validationComposite;
+>>>>>>> Usage evolution editor improved
 
 	/**
 	 * Create the composite.

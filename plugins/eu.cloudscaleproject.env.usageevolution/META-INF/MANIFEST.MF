@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  tools.descartes.dlim.generator;bundle-version="0.14.10",
  tools.descartes.dlim.generator.edit;bundle-version="0.14.10",
  org.scaledl.usageevolution.wizard;bundle-version="1.0.0",
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ org.eclipse.e4.ui.workbench;bundle-version="1.2.2"
 Import-Package: javax.inject
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

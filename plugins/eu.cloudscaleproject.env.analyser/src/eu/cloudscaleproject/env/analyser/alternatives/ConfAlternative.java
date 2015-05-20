@@ -64,7 +64,9 @@ import org.palladiosimulator.servicelevelobjective.HardThreshold;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
+import org.scaledl.usageevolution.Usage;
 import org.scaledl.usageevolution.UsageEvolution;
+import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import de.uka.ipd.sdq.pcm.allocation.Allocation;
 import de.uka.ipd.sdq.pcm.repository.Repository;
@@ -81,7 +83,6 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfAlternative extends AbstractConfigAlternative
@@ -137,21 +138,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			initializeScalability(exp);
 		}
 	}
-
-	public InputAlternative getInputAlternative()
-	{
-		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-		return (InputAlternative) rp.getResource(res);
-	}
-
-	public IEditorInputResource getUsageAlternative()
-	{
-		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
-		return rp.getResource(res);
-	}
-
+	
 	public Type getTypeEnum()
 	{
 		String type = getType();
@@ -162,44 +149,11 @@ public class ConfAlternative extends AbstractConfigAlternative
 		return Type.valueOf(type);
 	}
 
-	public UsageEvolution getUsageEvolution()
+	public InputAlternative getInputAlternative()
 	{
-		IResource ueFile = getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		if (ueFile == null)
-		{
-			return null;
-		}
-
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) ueFile);
-		EObject eobject = res.getContents().isEmpty() ? null : res.getContents().get(0);
-
-		if (eobject instanceof UsageEvolution)
-		{
-			return (UsageEvolution) eobject;
-		}
-		return null;
-	}
-
-	public void setUsageEvolution(EditorInputFolder res)
-	{
-		IResource fileUsageEvo = res.getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		setSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT, res.getResource());
-		if (fileUsageEvo == null)
-		{
-			return;
-		}
-
-		Resource resUE = ExplorerProjectPaths.getEmfResource(resSet, (IFile) fileUsageEvo);
-
-		EObject eobject = resUE.getContents().isEmpty() ? null : resUE.getContents().get(0);
-		Experiment exp = getExperiment();
-		if (exp.getInitialModel() != null && eobject instanceof UsageEvolution)
-		{
-			exp.getInitialModel().setUsageEvolution((UsageEvolution) eobject);
-		}
-
-		setDirty(true);
-		pcs.firePropertyChange(PROP_USAGE_EVOLUTION_SET, null, eobject);
+		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		return (InputAlternative) rp.getResource(res);
 	}
 
 	public boolean setInputAlternative(InputAlternative inputAlt)
@@ -359,7 +313,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public Experiment getExperiment()
 	{
-
 		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
 		if (expFile == null || !expFile.exists())
 		{
@@ -406,6 +359,34 @@ public class ConfAlternative extends AbstractConfigAlternative
 	{
 		Experiment exp = getExperiment();
 		return exp != null ? exp.getInitialModel() : null;
+	}
+	
+	public UsageEvolution getUsageEvolution()
+	{
+		IFile usageEvolutionFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		if(usageEvolutionFile == null){
+			return null;
+		}
+		
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, usageEvolutionFile);
+		if(res == null){
+			return null;
+		}
+		
+		return res.getContents().isEmpty() ? null : (UsageEvolution)res.getContents().get(0);
+	}
+	
+	public List<UsageScenario> getUsageScenarios(){
+		List<UsageScenario> scenarios = new ArrayList<UsageScenario>();
+		
+		Experiment exp = getExperiment();
+		if(exp.getInitialModel() != null){
+			UsageModel usageModel = exp.getInitialModel().getUsageModel();
+			if(usageModel != null){
+				scenarios.addAll(usageModel.getUsageScenario_UsageModel());
+			}
+		}
+		return scenarios;
 	}
 
 	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz)
@@ -624,6 +605,17 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 
 		return out;
+	}
+	
+	public UsageModel getUsedUsageModel(){
+		Experiment exp = getExperiment();
+		InitialModel initialModel = exp.getInitialModel();
+		
+		if(initialModel == null){
+			return null;
+		}
+		
+		return initialModel.getUsageModel();
 	}
 
 	public MonitorRepository getUsedMonitorRepository()
@@ -936,11 +928,27 @@ public class ConfAlternative extends AbstractConfigAlternative
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
 		}
+		
+		//create usage evolution
+		{
+			UsageEvolution ue = getUsageEvolution();
+			if (ue == null)
+			{
+				ue = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
+				ue.setEntityName("Initial usage evolution");
+				createEMFResource("analyser.usageevolution", ToolchainUtils.KEY_FILE_USAGEEVOLUTION, ue);
+			}
+			if(ue.getUsages().isEmpty()){
+				Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
+				usage.setEntityName("Initial usage evolution");
+				ue.getUsages().add(usage);
+			}
+		}
 	}
 
 	private void initializeNormal(Experiment exp)
 	{
-
+		
 	}
 
 	private void initializeCapacity(Experiment exp)

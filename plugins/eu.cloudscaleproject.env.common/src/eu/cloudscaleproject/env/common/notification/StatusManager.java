@@ -218,22 +218,27 @@ public class StatusManager {
 	}
 	
 	private void doValidate(IProject project, IValidationStatusProvider statusProvider) {
-
-		if(project == null){
-			logger.severe("Project is NULL! Can not validate: " + statusProvider.toString());
-		}
-		
-		boolean validatorFound = false;
-		for (IResourceValidator v : getValidators()) {				
-			if (v.getID().equals(statusProvider.getID())) {
-				validatorFound = true;
-				v.validate(project, statusProvider);
+		try{
+			if(project == null){
+				logger.severe("Project is NULL! Can not validate: " + statusProvider.toString());
+			}
+			
+			boolean validatorFound = false;
+			for (IResourceValidator v : getValidators()) {				
+				if (v.getID().equals(statusProvider.getID())) {
+					validatorFound = true;
+					v.validate(project, statusProvider);
+				}
+			}
+	
+			if (!validatorFound) {
+				logger.warning("Validator not found or it is not registered in extension point! ToolID: "
+						+ statusProvider.getID());
 			}
 		}
-
-		if (!validatorFound) {
-			logger.warning("Validator not found or it is not registered in extension point! ToolID: "
-					+ statusProvider.getID());
+		catch(Exception e){
+			//validation should not break any other functionality
+			e.printStackTrace();
 		}
 	}
 	

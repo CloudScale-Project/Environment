@@ -29,7 +29,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class SelectInputAltComposite extends Composite{
-	
+		
 	private final ResourceProvider inputResourceProvider;
 	private final ComboViewer comboViewerInput;
 			
@@ -100,9 +100,6 @@ public class SelectInputAltComposite extends Composite{
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				InputAlternative ia = (InputAlternative)selection.getFirstElement();				
 				ca.setInputAlternative(ia);
-				
-				ia.validate();
-				ca.validate();
 				
 				ValidationDiagramService.showStatus(project, ia);
 				ValidationDiagramService.showStatus(project, ca);

@@ -24,6 +24,7 @@ import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.SelectInputAltComposite;
+import eu.cloudscaleproject.env.analyser.editors.config.UsageEvolutionComposite;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
@@ -86,6 +87,7 @@ public class ConfigComposite extends SidebarEditorComposite
 		private EMFEditableTreeviewComposite measuringPointsComposite;
 		private ConfigMonitorListComposite monitorsComposite;
 		private ConfigSLOListComposite sloComposite;
+		private UsageEvolutionComposite ueComposite;
 
 		private EMFEditableTreeviewComposite advancedTreeview;
 
@@ -164,11 +166,21 @@ public class ConfigComposite extends SidebarEditorComposite
 			// slo settings
 			{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-				tabItem.setText("Service level objectives");
+				tabItem.setText("SLO");
 
 				sloComposite = new ConfigSLOListComposite(input, tabFolder, style);
 				sloComposite.pack();
 				tabItem.setControl(sloComposite);
+			}
+			
+			//usage evolution
+			{
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Usage evolution");
+
+				ueComposite = new UsageEvolutionComposite(input, tabFolder, style);
+				ueComposite.pack();
+				tabItem.setControl(ueComposite);
 			}
 			
 			// advance settings

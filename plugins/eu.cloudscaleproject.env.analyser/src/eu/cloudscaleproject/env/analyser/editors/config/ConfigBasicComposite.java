@@ -11,17 +11,9 @@ import org.eclipse.core.databinding.conversion.StringToNumberConverter;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -30,7 +22,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -43,24 +34,15 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.StopConditi
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
 public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
 	protected final ConfAlternative alternative;
-	
-	private final ResourceProvider usageResourceProvider;
-	
+		
 	private final Composite extensionComposite;
 	private final Button btnCheckSimTime;
 	private final Button btnCheckMeasureCount;
-	
-	private final ComboViewer comboViewerUsage;
-	
+		
 	private Text textSimTime;
 	private Text textMeasureCount;
 	
@@ -78,30 +60,15 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			}
 		}
 	};
-	
-	private final PropertyChangeListener usageResourceListener = new PropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
-				comboViewerUsage.add(evt.getNewValue());
-			}
-			else if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
-				comboViewerUsage.remove(evt.getOldValue());
-			}
-		}
-		
-	};
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = input;
-		
-		//TODO: Handle situation when usage evolution resource provider does not exist (==null)! 
-		this.usageResourceProvider = ResourceRegistry.getInstance().getResourceProvider(input.getProject(), ToolchainUtils.USAGEEVOLUTION_ID);
-		
+				
 		setLayout(new GridLayout(1, false));
 		
+		/*
 		Label lblUsage = new Label(this, SWT.NONE);
 		lblUsage.setText("Usage:");
 		
@@ -110,57 +77,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		GridLayout gl_compositeMetDesc = new GridLayout(2, false);
 		gl_compositeMetDesc.marginLeft = 10;
 		compositeUsageEvolution.setLayout(gl_compositeMetDesc);
-		
-		//usage evolution selection combo
-		Label lblSelectUsage = new Label(compositeUsageEvolution, SWT.NONE);
-		lblSelectUsage.setText("Select usage evolution:");
-		new Label(this, SWT.NONE);
-		{
-			comboViewerUsage = new ComboViewer(compositeUsageEvolution, SWT.READ_ONLY);
-			Combo combo = comboViewerUsage.getCombo();
-			GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
-			gd_combo.minimumWidth = 300;
-			combo.setLayoutData(gd_combo);
-		}
-		comboViewerUsage.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewerUsage.setLabelProvider(new LabelProvider() {
-			
-			@Override
-			public String getText(Object element) {
-				if (element instanceof IEditorInput) {
-					return ((IEditorInput) element).getName();
-				}
-				return super.getText(element);
-			}
-			
-		});
-		
-		//configure usage evolution combo-box
-		if(this.usageResourceProvider != null){
-			usageResourceProvider.addListener(usageResourceListener);
-			
-			comboViewerUsage.setInput(usageResourceProvider.getResources());
-			
-			IFolder ueAl = (IFolder)alternative.getSubResource(ToolchainUtils.KEY_FOLDER_USAGEEVOLUTION_ALT);
-			if(ueAl != null){
-				comboViewerUsage.setSelection(
-						new StructuredSelection(usageResourceProvider.getResource(ueAl)), true);
-			}
-			
-			comboViewerUsage.addSelectionChangedListener(new ISelectionChangedListener() {
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-					IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-					alternative.setUsageEvolution((EditorInputFolder)selection.getFirstElement());
-					alternative.save();
-				}
-			});
-			
-			comboViewerUsage.getCombo().setEnabled(true);
-		}
-		else {
-			comboViewerUsage.getCombo().setEnabled(false);
-		}
+		*/
 		
 		Label lblConfiguration = new Label(this, SWT.NONE);
 		lblConfiguration.setText("Configuration:");
@@ -251,10 +168,6 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				if(bindingContext != null){
 					bindingContext.dispose();
 					bindingContext = null;
-				}
-				
-				if(usageResourceProvider != null){
-					usageResourceProvider.removeListener(usageResourceListener);
 				}
 			}
 		});

@@ -8,191 +8,166 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.scaledl.usageevolution.Usage;
-import org.scaledl.usageevolution.UsageEvolution;
-import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import tools.descartes.dlim.ClockType;
 import tools.descartes.dlim.DlimFactory;
 import tools.descartes.dlim.ExponentialIncreaseLogarithmicDecline;
+import tools.descartes.dlim.ExponentialTrend;
+import tools.descartes.dlim.Function;
+import tools.descartes.dlim.LinearIncreaseAndDecline;
+import tools.descartes.dlim.LinearTrend;
 import tools.descartes.dlim.Sequence;
+import tools.descartes.dlim.Sin;
+import tools.descartes.dlim.SinTrend;
 import tools.descartes.dlim.TimeDependentFunctionContainer;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class UsageEvolutionAlternative extends EditorInputFolder{
+public class UsageEvolutionAlternative extends EditorInputEMF{
 
-	
 	private static final Logger logger = Logger.getLogger(UsageEvolutionAlternative.class.getName());
+	
+	public enum Presets{
+		LINEAR_TREND, 
+		LINEAR_INCREASE_DECLINE, 
+		SINUSOIDAL,
+		SINUSOIDAL_TREND, 
+		EXPONENTIAL, 
+		EXPONENTIAL_LOG
+	}
 		
-	private final ResourceSet resSet = new ResourceSetImpl();
-
 	public UsageEvolutionAlternative(IProject project, IFolder folder) {
-		super(project, folder);
+		super(project, folder, ToolchainUtils.USAGEEVOLUTION_ID);
 		
-		IFile usageFile = folder.getFile("pcm.usageevolution");
 		IFile limboFile = folder.getFile("pcm.dlim");
-		
 		if(!limboFile.exists()){
-			//create dummy limbo model
-			
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);
-			ExponentialIncreaseLogarithmicDecline model = DlimFactory.eINSTANCE.createExponentialIncreaseLogarithmicDecline();
-			model.setBase(0);
-			model.setPeak(500);
-			model.setPeakTime(100);
-			res.getContents().add(model);
-			
-			try {
-				res.save(null);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//create dummy limbo model		
+			createPreset(Presets.LINEAR_TREND);
 		}
-		if(!usageFile.exists()){
-			//create dummy usageevolution model
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, usageFile);
-						
-			UsageEvolution ue = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
-			Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
-			ue.getUsages().add(usage);
-			
-			res.getContents().add(ue);
-			
-			try {
-				res.save(null);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		setSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageFile);
 		setSubResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
 	}
 	
-	public void clear(){
+	public void createPreset(Presets type){
 		
 		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
-		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		
 		if(limboFile == null){
-			logger.warning("clear(): Limbo model file not set!");
-			return;
+			limboFile = getResource().getFile("pcm.dlim");
 		}
-		if(usageFile == null){
-			logger.warning("clear(): Usage evolution model file not set!");
-			return;
-		}
-
-		if(limboFile.exists() || usageFile.exists()){
+		
+		if(limboFile.exists()){
 			if(!DialogUtils.openConfirm("Current usage evolution data will be removed! Do you confirm?")){
 				return;
 			}
 		}
+				
+		Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);
+		Sequence sequence = res.getContents().isEmpty() ? null : (Sequence)res.getContents().get(0);
+		
+		if(sequence != null){
+			EcoreUtil.delete(sequence, true);
+		}
+		
+		sequence = DlimFactory.eINSTANCE.createSequence();
+		sequence.setName("No name");
+		sequence.setTerminateAfterLoops(1);
+		
+		TimeDependentFunctionContainer fc = DlimFactory.eINSTANCE.createTimeDependentFunctionContainer();
+		fc.setDuration(60*10);
+		fc.setName("Container");
+		fc.setPointOfReferenceClockType(ClockType.CONTAINER_CLOCK);
+		
+		Function f = null;
+		
+		switch(type){
+			case LINEAR_TREND:
+				sequence.setName("Linear trend");
+				f = createLinearTrendFunction();
+				break;
+			case LINEAR_INCREASE_DECLINE:
+				sequence.setName("Linear increase and decline");
+				f = createLinearIncreaseAndDecline();
+				break;
+			case SINUSOIDAL:
+				sequence.setName("Sinusoidal");
+				f = createSinusoidal();
+				break;
+			case SINUSOIDAL_TREND:
+				sequence.setName("Sinusoidal trend");
+				f = createSinusoidalTrend();
+				break;
+			case EXPONENTIAL:
+				sequence.setName("Exponential");
+				f = createExponentialTrend();
+				break;
+			case EXPONENTIAL_LOG:
+				sequence.setName("Explonential increase and log decline");
+				f = createExponentialLogFunction();
+				break;
+		}
+		
+		fc.setFunction(f);
+		sequence.getSequenceFunctionContainers().add(fc);
+		res.getContents().add(sequence);
 		
 		try {
-			
-			limboFile.delete(true, null);
-			limboFile.getParent().refreshLocal(IFile.DEPTH_ZERO, null);
-			usageFile.delete(true, null);
-			usageFile.getParent().refreshLocal(IFile.DEPTH_ZERO, null);
-			
-		} catch (CoreException e1) {
-			e1.printStackTrace();
-		}		
-	}
-	
-	public void createEILDPreset(){
-		
-		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
-		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		
-		if(limboFile == null){
-			logger.warning("clear(): Limbo model file not set!");
-			return;
-		}
-		if(usageFile == null){
-			logger.warning("clear(): Usage evolution model file not set!");
-			return;
-		}
-		
-		clear();
-		
-		if(!limboFile.exists()){
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);			
-			Sequence sequence = DlimFactory.eINSTANCE.createSequence();
-			sequence.setName("ExpIncreaseLogDecline");
-			sequence.setTerminateAfterLoops(1);
-			
-			TimeDependentFunctionContainer fc = DlimFactory.eINSTANCE.createTimeDependentFunctionContainer();
-			fc.setDuration(60*10);
-			fc.setName("Container");
-			fc.setPointOfReferenceClockType(ClockType.CONTAINER_CLOCK);
-			
-			//PETEK - TU SEM NEHAL DELATI NA UE
-			// integriraj limbo wizard in napravi tree-editor v dashboardu!
-			
-			ExponentialIncreaseLogarithmicDecline func = DlimFactory.eINSTANCE.createExponentialIncreaseLogarithmicDecline();
-			func.setPeak(200);
-			func.setBase(10);
-			func.setLogarithmicOrder(10);
-			
-			fc.setFunction(func);
-			sequence.getSequenceFunctionContainers().add(fc);
-			res.getContents().add(sequence);
-			
-			try {
-				res.save(null);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else{
-			logger.warning("createEILDPreset(): Can't create '.limbo' file! File already exist!");
-		}
-		if(!usageFile.exists()){
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, usageFile);
-						
-			UsageEvolution ue = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
-			Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
-			usage.setLoadEvolution(getSequence());
-			ue.getUsages().add(usage);
-			
-			res.getContents().add(ue);
-			
-			try {
-				res.save(null);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else{
-			logger.warning("createEILDPreset(): Can't create '.usageevolution' file! File already exist!");
+			res.save(null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	public Usage getUsage(){
-		for(Resource res : resSet.getResources()){
-			if(!res.getContents().isEmpty()){
-				if(res.getContents().get(0) instanceof Usage){
-					return (Usage)res.getContents().get(0);
-				}
-			}
-		}
-		return null;
+	private Function createLinearTrendFunction(){
+		LinearTrend func = DlimFactory.eINSTANCE.createLinearTrend();
+		func.setFunctionOutputAtStart(0);
+		func.setFunctionOutputAtEnd(50);
+		return func;
+	}
+	
+	private Function createLinearIncreaseAndDecline(){
+		LinearIncreaseAndDecline func = DlimFactory.eINSTANCE.createLinearIncreaseAndDecline();
+		func.setBase(0);
+		func.setPeak(50);
+		func.setPeakTime(0);
+		return func;
+	}
+	
+	private Function createSinusoidal(){
+		Sin func = DlimFactory.eINSTANCE.createSin();
+		func.setMax(50);
+		func.setMin(0);
+		func.setPeriod(100);
+		func.setPhase(0);
+		return func;
+	}
+	
+	private Function createSinusoidalTrend(){
+		SinTrend func = DlimFactory.eINSTANCE.createSinTrend();
+		func.setFunctionOutputAtStart(0);
+		func.setFunctionOutputAtEnd(50);
+		return func;
+	}
+	
+	private Function createExponentialTrend(){
+		ExponentialTrend func = DlimFactory.eINSTANCE.createExponentialTrend();
+		func.setFunctionOutputAtStart(0);
+		func.setFunctionOutputAtEnd(50);
+		return func;
+	}
+	
+	private Function createExponentialLogFunction(){
+		ExponentialIncreaseLogarithmicDecline func = DlimFactory.eINSTANCE.createExponentialIncreaseLogarithmicDecline();
+		func.setPeak(200);
+		func.setBase(10);
+		func.setLogarithmicOrder(10);
+		return func;
 	}
 	
 	public Sequence getSequence(){
@@ -204,22 +179,6 @@ public class UsageEvolutionAlternative extends EditorInputFolder{
 			}
 		}
 		return null;
-	}
-	
-	public void openUsageEvolutionEditor(){
-		
-		IFile usageFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		
-		if(usageFile == null){
-			logger.warning("clear(): Usage evolution model file not set!");
-			return;
-		}
-		
-		try {
-			IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), usageFile);
-		} catch (PartInitException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void openLimboEditor(){

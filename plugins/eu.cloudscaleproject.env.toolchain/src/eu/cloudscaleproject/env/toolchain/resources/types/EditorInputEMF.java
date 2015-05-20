@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -14,11 +15,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class EditorInputEMF extends EditorInputFolder{
@@ -70,6 +73,42 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	public AdapterFactory getAdapterFactory(){
 		return factory;
+	}
+	
+	public List<EObject> getModelRoot(String key) {
+		
+		List<EObject> out = new ArrayList<>();
+		List<IResource> resources = getSubResources(key);
+		
+		for(IResource res : resources){
+			if(res instanceof IFile){
+				IFile file = (IFile)res;
+				Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, file);
+				if(emfResource.isLoaded() && !emfResource.getContents().isEmpty()){
+					out.add(emfResource.getContents().get(0));
+				}
+			}
+		}
+		return out;
+	}
+	
+	public EObject getModelRoot(Resource resource) {
+		if(resource.getContents().isEmpty()){
+			return null;
+		}
+		
+		return resource.getContents().get(0);
+	}
+	
+	public List<Resource> loadExternal(EditorInputEMF resource, String key){
+		
+		List<Resource> resources = new ArrayList<Resource>();
+		for(IResource res : resource.getSubResources(key)){
+			if(res instanceof IFile){
+				resources.add(ExplorerProjectPaths.getEmfResource(resSet, (IFile)res));
+			}
+		}
+		return resources;
 	}
 	
 	@Override
