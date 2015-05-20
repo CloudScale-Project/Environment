@@ -50,11 +50,14 @@ public class OpenProjectEditorHandler {
 			ResourceProvider resourceProvider = 
 					ResourceRegistry.getInstance().getResourceProvider(project, validationStatus.getID());
 			
-			IEditorInputResource resource = resourceProvider.getResource(((ResourceValidationStatus)validationStatus).getResource());
+			if (resourceProvider != null)
+			{
+				IEditorInputResource resource = resourceProvider.getResource(((ResourceValidationStatus)validationStatus).getResource());
 
-			OpenAlternativeUtil.openAlternative(resource);
+				OpenAlternativeUtil.openAlternative(resource);
 			
-			return;
+				return;
+			}
 		}
 
 			

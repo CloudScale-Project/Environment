@@ -140,5 +140,10 @@ public class ConfigAlternativeComposite extends RunComposite implements IPropert
 	public void onSelect() {
 		ValidationDiagramService.showStatus(this.configAlternative.getProject(), GlobalInputAlternative.getInstance());
 		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative);
+
+		if (configAlternative.getLastResult() != null)
+			ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative.getLastResult());
+		else
+			ValidationDiagramService.clearStatus(configAlternative.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
 	}
 }
