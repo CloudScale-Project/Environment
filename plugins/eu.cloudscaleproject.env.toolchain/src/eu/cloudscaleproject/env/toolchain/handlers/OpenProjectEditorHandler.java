@@ -18,8 +18,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.OpenAlternativeUtil;
 
 public class OpenProjectEditorHandler {
 	
@@ -31,10 +38,25 @@ public class OpenProjectEditorHandler {
 						@Named("eu.cloudscaleproject.env.toolchain.commandparameter.tabid") String tabid,
 						@Optional @Named("eu.cloudscaleproject.env.toolchain.commandparameter.action") String action) {
 				
+
 		if (project == null){
 			logger.warning("Can't execute command: Project is null!");
 			return;
 		}
+
+		IValidationStatus validationStatus = CloudscaleContext.getActiveContext().get(IValidationStatus.class);
+		if (validationStatus instanceof ResourceValidationStatus)
+		{
+			ResourceProvider resourceProvider = 
+					ResourceRegistry.getInstance().getResourceProvider(project, validationStatus.getID());
+			
+			IEditorInputResource resource = resourceProvider.getResource(((ResourceValidationStatus)validationStatus).getResource());
+
+			OpenAlternativeUtil.openAlternative(resource);
+			
+			return;
+		}
+
 			
 		IFile file = ExplorerProjectPaths.getPropertyFile(project);
 

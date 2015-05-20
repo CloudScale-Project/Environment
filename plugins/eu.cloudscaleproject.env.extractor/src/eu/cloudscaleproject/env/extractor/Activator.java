@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.extractor;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.somox.sourcecodedecorator.impl.SourceCodeDecoratorPackageImpl;
 
 import eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory;
@@ -39,6 +40,9 @@ public class Activator extends AbstractUIPlugin {
 				ToolchainUtils.EXTRACTOR_RES_ID,
 				new ResultResourceProviderFactory()
 		);
+		
+		SourceCodeDecoratorPackageImpl.init();
+		
 	}
 
 	/*

@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 
 public abstract class RunComposite extends Composite
@@ -31,20 +32,19 @@ public abstract class RunComposite extends Composite
 	private IConfigAlternative alternative;
 
 	private Composite container;
-	private ProgressBar progressBarIndeterminate;
 	private Composite footerContainer;
 	private Button btnRun;
 	private Job currentJob;
-	private ProgressBar progressBarDeterminate;
 	private FooterValidationComposite validationComposite;
 	private FooterResultComposite resultsComposite;
+	private Composite progressComposite;
 	
 	private final IValidationStatusListener propertyChangeListener = new IValidationStatusListener()
 	{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			updateControls();
+			if (!isRunning()) updateControls();
 		}
 	};
 
@@ -81,13 +81,14 @@ public abstract class RunComposite extends Composite
 		footerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		resultsComposite = new FooterResultComposite(footerContainer, style, alternative);
-
 		validationComposite = new FooterValidationComposite(footerContainer, style, alternative);
+		progressComposite = new Composite(footerContainer, SWT.NONE);
 
-		progressBarIndeterminate = new ProgressBar(footerContainer, SWT.HORIZONTAL | SWT.INDETERMINATE);
-		progressBarDeterminate = new ProgressBar(footerContainer, SWT.NONE);
-
+		progressComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		new ProgressBar(progressComposite, SWT.HORIZONTAL | SWT.INDETERMINATE);
+				
 		((StackLayout) footerContainer.getLayout()).topControl = validationComposite;
+		footerContainer.layout();
 
 		btnRun = new Button(composite, SWT.NONE);
 		btnRun.addSelectionListener(new SelectionAdapter()
@@ -174,6 +175,11 @@ public abstract class RunComposite extends Composite
 		this.currentJob.cancel();
 	}
 
+	private boolean isRunning ()
+	{
+		return currentJob != null && currentJob.getResult() == null;
+	}
+
 	private void updateControls()
 	{
 		Display.getDefault().syncExec(new Runnable()
@@ -181,10 +187,10 @@ public abstract class RunComposite extends Composite
 			@Override
 			public void run()
 			{
-				if (currentJob != null && currentJob.getResult() == null)
+				if (isRunning())
 				{
 					btnRun.setText("Stop");
-					((StackLayout) footerContainer.getLayout()).topControl = progressBarIndeterminate;
+					((StackLayout) footerContainer.getLayout()).topControl = progressComposite;
 					footerContainer.layout();
 					setEnabledRecursive(getContainer(), false);
 				} else
@@ -193,6 +199,8 @@ public abstract class RunComposite extends Composite
 					{
 						resultsComposite.setStatus(currentJob.getResult());
 						((StackLayout) footerContainer.getLayout()).topControl = resultsComposite;
+
+						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());
 
 					} else
 					{
@@ -233,15 +241,8 @@ public abstract class RunComposite extends Composite
 				{
 					ctrl.setEnabled(enabled);
 				}
-
 			}
 		}
-	}
-
-	@Override
-	protected void checkSubclass()
-	{
-		// Disable the check that prevents subclassing of SWT components
 	}
 
 	private class RunProgressMonitor implements IProgressMonitor
@@ -256,7 +257,8 @@ public abstract class RunComposite extends Composite
 				@Override
 				public void run()
 				{
-					progressBarDeterminate.setSelection(work);
+					// not acctually used
+					//progressBarDeterminate.setSelection(work);
 				}
 			});
 		}
@@ -296,22 +298,6 @@ public abstract class RunComposite extends Composite
 		@Override
 		public void beginTask(final String name, final int totalWork)
 		{
-			Display.getDefault().syncExec(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (totalWork > 0)
-					{
-						progressBarDeterminate.setMinimum(0);
-						progressBarDeterminate.setSelection(0);
-						progressBarDeterminate.setMaximum(totalWork);
-
-						((StackLayout) footerContainer.getLayout()).topControl = progressBarDeterminate;
-						footerContainer.layout();
-					}
-				}
-			});
 		}
 	}
 }

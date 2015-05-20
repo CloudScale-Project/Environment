@@ -25,7 +25,7 @@
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
           <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="20" x="5" y="53" cornerHeight="5" cornerWidth="5"/>
-          <link businessObjects="ext_res_repository"/>
+          <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
             <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="111" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="Repository"/>
@@ -35,7 +35,7 @@
           <properties key="node" value="node"/>
           <properties key="requirement" value="requirement"/>
           <graphicsAlgorithm xsi:type="al:RoundedRectangle" background="/0/@colors.3" foreground="/0/@colors.2" lineWidth="1" transparency="0.0" width="111" height="20" x="5" y="75" cornerHeight="5" cornerWidth="5"/>
-          <link businessObjects="ext_res_system"/>
+          <link businessObjects="eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_system"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
             <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="111" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="System"/>
@@ -869,8 +869,8 @@
         <commands id="_t6RzcDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor">
           <commandParam>openResults</commandParam>
         </commands>
-        <requirements id="ext_res_repository" name="Repository" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
-        <requirements id="ext_res_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
+        <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository" name="Repository" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
+        <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5"/>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput" name="Input" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" next="/1/@links.6">
         <commandParam>openInput</commandParam>

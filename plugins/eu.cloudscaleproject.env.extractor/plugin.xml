@@ -29,5 +29,8 @@
       <client
             class="eu.cloudscaleproject.env.extractor.validators.ConfigValidator">
       </client>
+      <client
+            class="eu.cloudscaleproject.env.extractor.validators.ResultValidator">
+      </client>
    </extension>
 </plugin>

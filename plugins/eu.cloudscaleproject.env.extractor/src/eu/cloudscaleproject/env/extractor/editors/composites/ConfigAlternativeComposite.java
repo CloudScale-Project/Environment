@@ -28,6 +28,7 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
 
 public class ConfigAlternativeComposite extends RunComposite implements IRefreshable, ISelectable
@@ -145,6 +146,10 @@ public class ConfigAlternativeComposite extends RunComposite implements IRefresh
 	public void onSelect() {
 		ValidationDiagramService.showStatus(configAlternative.getProject(), GlobalInputAlternative.getInstance());
 		ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative);
+		if (configAlternative.getLastResult() != null)
+			ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative.getLastResult());
+		else
+			ValidationDiagramService.clearStatus(configAlternative.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
 	}
 		
 }

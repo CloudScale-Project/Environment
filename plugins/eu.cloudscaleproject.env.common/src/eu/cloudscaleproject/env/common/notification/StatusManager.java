@@ -139,7 +139,7 @@ public class StatusManager {
 	}
 	
 	//validation thread
-	private static final ConcurrentLinkedQueue<Runnable> validationTasks = new ConcurrentLinkedQueue<Runnable>();
+	private static final ConcurrentLinkedQueue<ValidationRunnable> validationTasks = new ConcurrentLinkedQueue<ValidationRunnable>();
 	static {
 		Thread validationThread = new Thread(new Runnable() {
 
@@ -203,17 +203,33 @@ public class StatusManager {
 	}
 	
 	public void validateAsync(final IProject project, final IValidationStatusProvider statusProvider){
-		Runnable r = new Runnable() {
-			
-			@Override
-			public void run() {
-				doValidate(project, statusProvider);
-			}
-		};
-		
+
 		synchronized (validationTasks) {
+			for (ValidationRunnable r : validationTasks)
+			{
+				if (r.statusProvider == statusProvider) return;
+			}
+
+			ValidationRunnable r = new ValidationRunnable(project, statusProvider);		
 			validationTasks.add(r);
 			validationTasks.notify();
+		}
+	}
+
+	private class ValidationRunnable implements Runnable
+	{
+		private IProject project;
+		private IValidationStatusProvider statusProvider;
+
+		public ValidationRunnable(IProject project, IValidationStatusProvider statusProvider)
+		{
+			this.project = project;
+			this.statusProvider = statusProvider;
+		}
+
+		public void run()
+		{
+			doValidate(project, statusProvider);
 		}
 	}
 	

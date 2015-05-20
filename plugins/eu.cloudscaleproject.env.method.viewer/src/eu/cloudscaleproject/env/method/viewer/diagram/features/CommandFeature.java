@@ -19,7 +19,7 @@ import org.eclipse.ui.ide.IDE;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
@@ -142,22 +142,23 @@ public class CommandFeature extends AbstractCustomFeature{
 			return;
 		}
 		
-		IValidationStatusProvider statusProvider = null;
+		IValidationStatus validationStatus = null;
 		
 		EObject eobject = node;
-		while(eobject != null && statusProvider == null){
+		while(eobject != null && validationStatus == null){
 			if(eobject instanceof Node){
 				Node n = (Node)eobject;
 				Object source = n.getSource();
-				if(source instanceof IValidationStatusProvider){
-					statusProvider = (IValidationStatusProvider)source;
+				if(source instanceof IValidationStatus){
+					validationStatus = (IValidationStatus) source;
 				}
 			}
 			eobject = eobject.eContainer();
 		}
 		
 		//inject section source into cloudscale context
-		CloudscaleContext.getCustomContext().set(IValidationStatusProvider.class, statusProvider);
+
+		CloudscaleContext.getActiveContext().set(IValidationStatus.class, validationStatus);
 
 		if (node.getCommandParam().isEmpty()) {
 			executor.execute(node.getCommandId());

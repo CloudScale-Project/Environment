@@ -6,7 +6,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -16,18 +15,19 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource;
-import eu.cloudscaleproject.env.toolchain.util.EditorRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
+import eu.cloudscaleproject.env.toolchain.util.EditorRegistry;
 
 public class OpenAlternativeUtil
 {
-	public static void openAlternative (EditorInputResource alternative)
+	public static void openAlternative (IEditorInputResource alternative)
 	{
 		IProject project = alternative.getProject();
 
 		IFile file = ExplorerProjectPaths.getPropertyFile(project);
-		IEditorInput editorInput = new FileEditorInput(file);
+		FileEditorInput editorInput = new FileEditorInput(file);
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try
 		{
@@ -44,7 +44,7 @@ public class OpenAlternativeUtil
 		
 	}
 	
-	public static void openAlternative (ProjectEditor pe, EditorInputResource alternative)
+	public static void openAlternative (ProjectEditor pe, IEditorInput alternative)
 	{
 		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
 		if (editorItem == null) return;
@@ -71,7 +71,7 @@ public class OpenAlternativeUtil
 		}
 	}
 	
-	private static  Control findTabItemControl (EditorInputResource alternative)
+	private static  Control findTabItemControl (IEditorInput alternative)
 	{
 		Composite composite = EditorRegistry.getInstance().getEditorItem(alternative).getComposite();
 		
@@ -84,7 +84,7 @@ public class OpenAlternativeUtil
 	}
 
 	
-	private static void selectAlternative (EditorInputResource alternative)
+	private static void selectAlternative (IEditorInput alternative)
 	{
 		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
 		if (editorItem != null)

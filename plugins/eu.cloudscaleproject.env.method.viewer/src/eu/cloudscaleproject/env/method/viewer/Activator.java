@@ -1,8 +1,12 @@
 package eu.cloudscaleproject.env.method.viewer;
 
+import org.eclipse.graphiti.mm.impl.MmPackageImpl;
+import org.eclipse.graphiti.mm.pictograms.impl.PictogramsPackageImpl;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import eu.cloudscaleproject.env.method.common.method.impl.MethodPackageImpl;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -30,6 +34,10 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		bundleContext = context;
+		
+		MethodPackageImpl.init();
+		PictogramsPackageImpl.init();
+		MmPackageImpl.init();
 	}
 
 	/*
