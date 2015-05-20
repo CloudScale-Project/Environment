@@ -174,7 +174,7 @@ public class ConfigComposite extends SidebarEditorComposite
 			}
 			
 			//usage evolution
-			{
+			if(ConfAlternative.Type.NORMAL == alternative.getTypeEnum()){
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Usage evolution");
 

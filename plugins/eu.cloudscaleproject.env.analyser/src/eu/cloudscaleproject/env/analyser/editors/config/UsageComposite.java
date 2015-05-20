@@ -149,6 +149,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 				StructuredSelection ss = (StructuredSelection)event.getSelection();
 				UsageScenario us = (UsageScenario)ss.getFirstElement();
 				UsageComposite.this.usage.setScenario(us);
+				alternative.fireDirtyState();
 			}
 		});
 		
@@ -159,6 +160,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 				StructuredSelection ss = (StructuredSelection)event.getSelection();
 				Sequence sequence = (Sequence)ss.getFirstElement();
 				UsageComposite.this.usage.setLoadEvolution(sequence);
+				alternative.fireDirtyState();
 			}
 		});
 		
@@ -203,7 +205,11 @@ public class UsageComposite extends Composite implements IRefreshable{
 	public void refresh() {
 		limboComboViewer.setInput(getSequences());
 		
-		scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
-		limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+		if(usage.getScenario() != null){
+			scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
+		}
+		if(usage.getLoadEvolution() != null){
+			limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+		}
 	}
 }

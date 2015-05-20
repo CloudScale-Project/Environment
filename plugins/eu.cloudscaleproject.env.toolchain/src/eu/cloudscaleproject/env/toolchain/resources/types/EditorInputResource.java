@@ -15,6 +15,8 @@ import eu.cloudscaleproject.env.common.notification.StatusManager;
 
 public abstract class EditorInputResource implements IEditorInputResource{
 	
+	public static final String PROP_FIRE_DIRTY_STATE = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.fireDirtyState";
+	
 	public static final String PROP_SAVED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propSaved";
 	public static final String PROP_LOADED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propLoaded";
 	public static final String PROP_DELETED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propDeleted";
@@ -86,6 +88,10 @@ public abstract class EditorInputResource implements IEditorInputResource{
 			load();
 		}
 		StatusManager.getInstance().validate(getProject(), this);
+	}
+	
+	public void fireDirtyState(){
+		pcs.firePropertyChange(PROP_FIRE_DIRTY_STATE, null, isDirty());
 	}
 	
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {

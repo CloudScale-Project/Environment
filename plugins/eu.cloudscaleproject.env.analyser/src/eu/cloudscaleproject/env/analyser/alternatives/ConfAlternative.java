@@ -274,14 +274,11 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt)
 	{
-		if (Type.NORMAL.equals(type))
-		{
-			// TODO:?
-		} else if (Type.CAPACITY.equals(type))
-		{
+		if (Type.NORMAL.equals(type)){
+			configureNormal(exp, initialModel);
+		} else if (Type.CAPACITY.equals(type)){
 			configureCapacity(exp, initialModel);
-		} else if (Type.SCALABILITY.equals(type))
-		{
+		} else if (Type.SCALABILITY.equals(type)){
 			configureScalability(exp, initialModel);
 		}
 	}
@@ -928,7 +925,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 				initialModel.setServiceLevelObjectives(sloRep);
 			}
 		}
-		
+	}
+
+	private void initializeNormal(Experiment exp)
+	{
 		//create usage evolution
 		{
 			UsageEvolution ue = getUsageEvolution();
@@ -943,12 +943,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 				usage.setEntityName("Initial usage evolution");
 				ue.getUsages().add(usage);
 			}
+			
+			
 		}
-	}
-
-	private void initializeNormal(Experiment exp)
-	{
-		
 	}
 
 	private void initializeCapacity(Experiment exp)
@@ -1000,6 +997,16 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		resSet.getResource(variations, true);
+	}
+	
+	private void configureNormal(Experiment exp, InitialModel initialModel){
+		UsageEvolution ue = getUsageEvolution();
+		if(ue != null){
+			initialModel.setUsageEvolution(ue);
+		}
+		else{
+			DialogUtils.openWarning("Usage evolution has been removed! Please create and configure it manually.");
+		}
 	}
 
 	private void configureCapacity(Experiment exp, InitialModel initialModel)

@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.usageevolution.editors.composite;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
@@ -9,13 +10,21 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative.Presets;
 
-public class EditorComposite extends Composite{
+public class EditorComposite extends Composite implements ISelectable{
 
+	private final IProject project;
+	private final UsageEvolutionAlternative alternative;
+	
 	public EditorComposite(final UsageEvolutionAlternative alt, Composite parent, int style) {
 		super(parent, style);
+		
+		this.project = alt.getProject();
+		this.alternative = alt;
 		
 		setLayout(new GridLayout(1, false));
 		
@@ -116,7 +125,10 @@ public class EditorComposite extends Composite{
 		});
 		btnLimboEditor.setLayoutData(new GridData());
 		btnLimboEditor.setText("Edit Limbo model");
-		
-		
+	}
+
+	@Override
+	public void onSelect() {
+		ValidationDiagramService.showStatus(project, alternative);
 	}
 }
