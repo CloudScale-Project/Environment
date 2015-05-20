@@ -142,7 +142,8 @@ public class NodePattern extends AbstractPattern implements IPattern {
 
 		RoundedRectangle roundedRectangle = gaService.createRoundedRectangle(containerShape, 15, 15);
 		gaService.setLocationAndSize(roundedRectangle, x, y, w, h);
-		roundedRectangle.setBackground(getColorBackground(node));
+		//roundedRectangle.setBackground(getColorBackground(node));
+		roundedRectangle.setBackground(manageColor(ColorConstant.GREEN));
 		roundedRectangle.setForeground(getColorForeground(node));
 			
 		addName(node, containerShape, 5, 5, w-5, 20);

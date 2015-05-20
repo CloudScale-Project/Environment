@@ -3,7 +3,6 @@
 package eu.cloudscaleproject.env.method.common.method;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

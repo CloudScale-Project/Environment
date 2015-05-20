@@ -50,7 +50,7 @@ public class MethodUtil {
 		Action action = MethodFactory.eINSTANCE.createAction();
 		action.setName("Action");
 		
-		action.setColorBackground("a1c9d5");
+		action.setColorBackground(MethodColorConstants.ACTION);
 		action.setColorForeground("000000");
 		
 		action.setDone(false);
@@ -64,7 +64,7 @@ public class MethodUtil {
 		s.setId(EcoreUtil.generateUUID());
 		s.setName("Section");
 		
-		s.setColorBackground("a1c9d5");
+		s.setColorBackground(MethodColorConstants.STATUS_NODE);
 		s.setColorForeground("000000");
 		
 		s.setInProgress(false);
@@ -76,7 +76,7 @@ public class MethodUtil {
 	
 	public static Command createCommand(){
 		Command command = MethodFactory.eINSTANCE.createCommand();
-		command.setColorBackground("a1c9d5");
+		command.setColorBackground(MethodColorConstants.COMMAND);
 		command.setColorForeground("000000");
 		command.setColorText("0000ff");
 		command.setLayout(true);
@@ -85,7 +85,7 @@ public class MethodUtil {
 	
 	public static Requirement createRequirement(){
 		Requirement requirement = MethodFactory.eINSTANCE.createRequirement();
-		requirement.setColorBackground("a1c9d5");
+		requirement.setColorBackground(MethodColorConstants.REQUIREMENT);
 		requirement.setColorForeground("000000");
 		requirement.setColorText("0000ff");
 		requirement.setLayout(true);

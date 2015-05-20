@@ -20,6 +20,9 @@
       <diagramType
         id ="eu.cloudscaleproject.env.method.diagram.MethodDiagramType">
       </diagramType>
+      <imageProvider
+            id="eu.cloudscaleproject.env.method.viewer.diagram.DiagramImageProvider">
+      </imageProvider>
     </diagramTypeProvider>
   </extension>
   
@@ -73,5 +76,12 @@
             source="pathmap://METHOD_WORKFLOW/"
             target="platform:/plugin/eu.cloudscaleproject.env.method.viewer/resources/">
       </mapping>
+   </extension>
+   <extension
+         point="org.eclipse.graphiti.ui.imageProviders">
+      <imageProvider
+            class="eu.cloudscaleproject.env.method.viewer.diagram.DiagramImageProvider"
+            id="eu.cloudscaleproject.env.method.viewer.diagram.DiagramImageProvider">
+      </imageProvider>
    </extension>
 </plugin>
