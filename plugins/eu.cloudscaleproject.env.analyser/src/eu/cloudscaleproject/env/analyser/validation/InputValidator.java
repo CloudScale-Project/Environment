@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -99,10 +100,15 @@ public class InputValidator implements IResourceValidator {
 		
 		EcoreUtil.resolveAll(resource);
 		
-		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(resource.getContents().get(0));
+		EObject eObject = resource.getContents().get(0);
+		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 		
-		status.check(ERR_MODEL_ERROR, modelValid, false, diagnostic.getMessage());
+		String message = String.format("Model validation failed : %s [%s]", 
+				eObject.eClass().getName(),
+				resource.getURI().lastSegment());
+
+		status.check(ERR_MODEL_ERROR, modelValid, false, message);
 		status.setIsValid(modelValid);
 		
 		return modelValid;

@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.ui;
+package eu.cloudscaleproject.env.toolchain.ui.widgets;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
@@ -13,8 +13,9 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 
-public class FooterResultComposite extends Composite
+public class ResultWiget extends Composite
 {
 
 
@@ -41,7 +42,7 @@ public class FooterResultComposite extends Composite
 
 	private IConfigAlternative alternative;
 
-	public FooterResultComposite(Composite parent, int style, IConfigAlternative alternative)
+	public ResultWiget(Composite parent, int style, IConfigAlternative alternative)
 	{
 		super(parent, style);
 

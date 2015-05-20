@@ -17,6 +17,10 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ValidationStatusHelper
 {
+	//
+	// HACKISH : TEMPORARY SOLUTION
+	//
+
 	public static void showValidationWarnings(IEditorInputResource alternative)
 	{
 		StringBuilder sb = new StringBuilder();

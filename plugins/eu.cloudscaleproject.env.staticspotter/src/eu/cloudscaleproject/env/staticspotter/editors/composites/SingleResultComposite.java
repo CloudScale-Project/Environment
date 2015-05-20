@@ -15,11 +15,11 @@ import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
-import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
+import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 
 
 
-public class SingleResultComposite extends TitleComposite implements IRefreshable{
+public class SingleResultComposite extends TitleEditorView implements IRefreshable{
 
 	private ResultAlternative resultFolder;
 	private AnnotationView annotationView;

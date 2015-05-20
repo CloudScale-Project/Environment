@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.ui;
+package eu.cloudscaleproject.env.toolchain.ui.widgets;
 
 import java.beans.PropertyChangeEvent;
 
@@ -17,8 +17,9 @@ import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.ValidationStatusHelper;
 
-public class FooterValidationComposite extends Composite
+public class ValidationWidget extends Composite
 {
 
 	private IEditorInputResource alternative;
@@ -35,9 +36,7 @@ public class FooterValidationComposite extends Composite
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			if (evt.getPropertyName().equals(IValidationStatus.PROP_VALID))
-			{
-				Display.getDefault().syncExec(new Runnable()
+				Display.getDefault().asyncExec(new Runnable()
 				{
 					@Override
 					public void run()
@@ -45,7 +44,6 @@ public class FooterValidationComposite extends Composite
 						updateStatus();
 					}
 				});
-			}
 		}
 	};
 
@@ -64,7 +62,7 @@ public class FooterValidationComposite extends Composite
 	private Label lblIcon;
 	private Label lblText;
 
-	public FooterValidationComposite(Composite parent, int style, IEditorInputResource alternative)
+	public ValidationWidget(Composite parent, int style, IEditorInputResource alternative)
 	{
 		super(parent, style);
 
@@ -81,14 +79,17 @@ public class FooterValidationComposite extends Composite
 		lblIcon.addMouseListener(mouseListener);
 
 		alternative.getSelfStatus().addListener(listener);
+		alternative.addPropertyChangeListener(listener);
 		this.addDisposeListener(new DisposeListener()
 		{
 			
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				FooterValidationComposite.this.alternative.
+				ValidationWidget.this.alternative.
 					getSelfStatus().removeListener(listener);
+				ValidationWidget.this.alternative.
+					removePropertyChangeListener(listener);
 			}
 		});
 		updateStatus();
@@ -104,8 +105,18 @@ public class FooterValidationComposite extends Composite
 			lblIcon.setImage(CommonResources.OK);
 		} else
 		{
-			lblText.setText(String.format("Alternative is not valid : %s warning(s)", 
+			int warningCount = ValidationStatusHelper.countValidationWarnings(alternative); 
+			// BUG WORKAROUND
+			if (warningCount == 0)
+			{
+				lblText.setText(String.format("Alternative is not valid.")); 
+			}
+			else
+			{
+				lblText.setText(String.format("Alternative is not valid : %s warning(s)", 
 					ValidationStatusHelper.countValidationWarnings(alternative)));
+			}
+
 			lblIcon.setImage(CommonResources.WARNING);
 		}
 	}

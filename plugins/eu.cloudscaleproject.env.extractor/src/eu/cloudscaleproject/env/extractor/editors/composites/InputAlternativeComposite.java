@@ -14,9 +14,9 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
+import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 
-public class InputAlternativeComposite extends TitleComposite {
+public class InputAlternativeComposite extends TitleEditorView {
 
 	private Text txtInput;
 	private GlobalInputAlternative editorInput;

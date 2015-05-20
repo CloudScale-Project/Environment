@@ -19,7 +19,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
+import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -59,7 +59,7 @@ public class ResultsComposite extends SidebarEditorComposite{
 	}
 
 	
-	private static class RightPanelComposite extends TitleComposite implements IRefreshable{
+	private static class RightPanelComposite extends TitleEditorView implements IRefreshable{
 
 		private CTabFolder tabFolder;
 		

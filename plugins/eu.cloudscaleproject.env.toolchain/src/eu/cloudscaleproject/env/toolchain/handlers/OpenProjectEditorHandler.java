@@ -26,7 +26,7 @@ import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.ui.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 
 public class OpenProjectEditorHandler {
 	

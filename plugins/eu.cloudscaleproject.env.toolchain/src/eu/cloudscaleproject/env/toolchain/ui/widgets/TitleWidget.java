@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.ui;
+package eu.cloudscaleproject.env.toolchain.ui.widgets;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -16,7 +16,7 @@ import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public class TitledGradientComposite extends GradientComposite
+public class TitleWidget extends GradientComposite
 {
 
 	private Label lblTitle;
@@ -43,13 +43,12 @@ public class TitledGradientComposite extends GradientComposite
 	 * @param parent
 	 * @param style
 	 */
-	public TitledGradientComposite(Composite parent, int style, IEditorInput alternative)
+	public TitleWidget(Composite parent, int style, IEditorInput alternative)
 	{
 		super(parent, style);
 		this.alternative = alternative;
 
 		this.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
-		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		this.setLayout(new GridLayout(1, false));
 		
 		this.setGradientDirection(false);
@@ -57,7 +56,7 @@ public class TitledGradientComposite extends GradientComposite
 		this.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
 
 		lblTitle = new Label(this, SWT.NONE);
-		lblTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		lblTitle.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		lblTitle.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
 		lblTitle.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
 		

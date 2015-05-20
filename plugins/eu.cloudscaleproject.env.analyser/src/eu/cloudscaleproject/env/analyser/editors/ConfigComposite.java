@@ -37,7 +37,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
+import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -79,7 +79,7 @@ public class ConfigComposite extends SidebarEditorComposite
 		});
 	}
 
-	private class RightPanelComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable, ISelectable{
+	private class RightPanelComposite extends ConfigEditorView implements IPropertySheetPageProvider, IRefreshable, ISelectable{
 
 		private SelectInputAltComposite editComposite;
 		private Composite configComposite;

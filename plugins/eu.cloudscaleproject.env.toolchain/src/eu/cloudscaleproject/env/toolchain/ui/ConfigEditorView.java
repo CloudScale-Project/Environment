@@ -26,17 +26,19 @@ import org.eclipse.swt.widgets.ProgressBar;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 
-public abstract class RunComposite extends Composite
+public abstract class ConfigEditorView extends AbstractEditorView
 {
 	private IConfigAlternative alternative;
 
-	private Composite container;
-	private Composite footerContainer;
+	private Composite stackedContainer;
 	private Button btnRun;
 	private Job currentJob;
-	private FooterValidationComposite validationComposite;
-	private FooterResultComposite resultsComposite;
+	private ValidationWidget validationComposite;
+	private ResultWiget resultsComposite;
 	private Composite progressComposite;
 	
 	private final IValidationStatusListener propertyChangeListener = new IValidationStatusListener()
@@ -55,40 +57,37 @@ public abstract class RunComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public RunComposite(Composite parent, int style, IConfigAlternative alternative)
+	public ConfigEditorView(Composite parent, int style, IConfigAlternative alternative)
 	{
-		super(parent, style);
+		super(parent, style, alternative);
 
-		setLayout(new GridLayout(1, false));
 		this.alternative = alternative;
 
+		new TitleWidget(getHeader(), SWT.NONE, alternative);
+
+		initFooterContent();
+		
 		initListeners();
-
-		new TitledGradientComposite(this, SWT.NONE, alternative);
-
-		container = new Composite(this, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.HORIZONTAL));
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		Composite composite = new Composite(this, SWT.BORDER);
+	}
+	
+	private void initFooterContent()
+	{
+		Composite composite = new Composite(getFooter(), SWT.None);
 		composite.setLayout(new GridLayout(2, false));
-		GridData gd_composite = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_composite.heightHint = 48;
-		composite.setLayoutData(gd_composite);
 
-		footerContainer = new Composite(composite, SWT.NONE);
-		footerContainer.setLayout(new StackLayout());
-		footerContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		stackedContainer = new Composite(composite, SWT.NONE);
+		stackedContainer.setLayout(new StackLayout());
+		stackedContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		resultsComposite = new FooterResultComposite(footerContainer, style, alternative);
-		validationComposite = new FooterValidationComposite(footerContainer, style, alternative);
-		progressComposite = new Composite(footerContainer, SWT.NONE);
+		resultsComposite = new ResultWiget(stackedContainer, SWT.NONE, alternative);
+		validationComposite = new ValidationWidget(stackedContainer, SWT.NONE, alternative);
+		progressComposite = new Composite(stackedContainer, SWT.NONE);
 
 		progressComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new ProgressBar(progressComposite, SWT.HORIZONTAL | SWT.INDETERMINATE);
 				
-		((StackLayout) footerContainer.getLayout()).topControl = validationComposite;
-		footerContainer.layout();
+		((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
+		stackedContainer.layout();
 
 		btnRun = new Button(composite, SWT.NONE);
 		btnRun.addSelectionListener(new SelectionAdapter()
@@ -110,8 +109,7 @@ public abstract class RunComposite extends Composite
 		gd_btnNewButton.widthHint = 80;
 		btnRun.setLayoutData(gd_btnNewButton);
 		btnRun.setText("Run");
-		
-		updateControls();
+
 	}
 
 	private void initListeners()
@@ -128,11 +126,6 @@ public abstract class RunComposite extends Composite
 
 		alternative.addPropertyChangeListener(propertyChangeListener);
 		alternative.getSelfStatus().addListener(propertyChangeListener);
-	}
-
-	public Composite getContainer()
-	{
-		return container;
 	}
 
 	private void run()
@@ -190,26 +183,26 @@ public abstract class RunComposite extends Composite
 				if (isRunning())
 				{
 					btnRun.setText("Stop");
-					((StackLayout) footerContainer.getLayout()).topControl = progressComposite;
-					footerContainer.layout();
+					((StackLayout) stackedContainer.getLayout()).topControl = progressComposite;
+					stackedContainer.layout();
 					setEnabledRecursive(getContainer(), false);
 				} else
 				{
 					if (currentJob != null && currentJob.getResult() != null)
 					{
 						resultsComposite.setStatus(currentJob.getResult());
-						((StackLayout) footerContainer.getLayout()).topControl = resultsComposite;
+						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
 
 						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());
 
 					} else
 					{
-						((StackLayout) footerContainer.getLayout()).topControl = validationComposite;
+						((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
 					}
 
 					btnRun.setText("Run");
-					footerContainer.layout();
-					footerContainer.redraw();
+					stackedContainer.layout();
+					stackedContainer.redraw();
 
 					setEnabledRecursive(getContainer(), true);
 				}

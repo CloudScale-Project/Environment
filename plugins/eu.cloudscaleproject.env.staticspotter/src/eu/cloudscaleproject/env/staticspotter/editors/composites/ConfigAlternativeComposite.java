@@ -36,10 +36,10 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.ui.RunComposite;
+import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class ConfigAlternativeComposite extends RunComposite implements IPropertySheetPageProvider, IRefreshable, ISelectable
+public class ConfigAlternativeComposite extends ConfigEditorView implements IPropertySheetPageProvider, IRefreshable, ISelectable
 {
 	private DataBindingContext m_bindingContext;
 

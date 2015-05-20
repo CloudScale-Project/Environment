@@ -19,7 +19,7 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
+import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -54,7 +54,7 @@ public class InputComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends TitleComposite implements ISelectable, IPropertySheetPageProvider{
+	private class RightPanelComposite extends InputEditorView implements ISelectable, IPropertySheetPageProvider{
 		
 		private final InputTreeViewComposite treeviewComposite;
 		private final InputAlternative alternative;

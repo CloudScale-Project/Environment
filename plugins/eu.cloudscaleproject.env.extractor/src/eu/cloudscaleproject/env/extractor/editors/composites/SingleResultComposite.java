@@ -11,10 +11,10 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ui.TitleComposite;
+import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class SingleResultComposite extends TitleComposite implements IPropertySheetPageProvider, IRefreshable{
+public class SingleResultComposite extends TitleEditorView implements IPropertySheetPageProvider, IRefreshable{
 
 
 	private ResultAlternative resultPersistenceFolder;

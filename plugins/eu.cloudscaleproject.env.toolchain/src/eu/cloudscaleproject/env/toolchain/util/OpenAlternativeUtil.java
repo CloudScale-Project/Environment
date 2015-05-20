@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.ui;
+package eu.cloudscaleproject.env.toolchain.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -18,7 +18,6 @@ import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
-import eu.cloudscaleproject.env.toolchain.util.EditorRegistry;
 
 public class OpenAlternativeUtil
 {
