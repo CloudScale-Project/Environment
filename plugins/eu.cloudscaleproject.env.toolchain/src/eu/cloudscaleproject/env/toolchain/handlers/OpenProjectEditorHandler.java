@@ -42,7 +42,7 @@ public class OpenProjectEditorHandler {
 		}
 
 		IValidationStatus validationStatus = CloudscaleContext.getActiveContext().get(IValidationStatus.class);
-		if (validationStatus.getProvider() instanceof IEditorInputResource)
+		if (validationStatus!=null && validationStatus.getProvider() instanceof IEditorInputResource)
 		{
 			IEditorInputResource alternative = (IEditorInputResource)validationStatus.getProvider();
 			OpenAlternativeUtil.openAlternative(alternative);

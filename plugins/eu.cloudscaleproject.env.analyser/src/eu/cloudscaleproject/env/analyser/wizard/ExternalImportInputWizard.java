@@ -13,6 +13,7 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
@@ -27,6 +28,8 @@ public class ExternalImportInputWizard extends Wizard{
 	public ExternalImportInputWizard(IProject project) {
 		
 		this.project = project;
+		
+		setWindowTitle("Analyser - External project import");
 		
 		nameSelectionPage = new NameSelectionPage();
 
@@ -65,6 +68,7 @@ public class ExternalImportInputWizard extends Wizard{
 		alternative.save();
 		
 		ValidationDiagramService.showStatus(project, alternative);
+		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;
 	}

@@ -8,11 +8,13 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
@@ -27,6 +29,8 @@ public class ExtractorImportInputWizard extends Wizard
 	public ExtractorImportInputWizard(IProject project)
 	{
 		this.project = project;
+		
+		setWindowTitle("Analyser - Extractor result import");
 
 		nameSelectionPage = new NameSelectionPage();
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
@@ -76,6 +80,9 @@ public class ExtractorImportInputWizard extends Wizard
 		}
 
 		alternative.save();
+
+		ValidationDiagramService.showStatus(project, alternative);
+		OpenAlternativeUtil.openAlternative(alternative);
 
 		return true;
 	}

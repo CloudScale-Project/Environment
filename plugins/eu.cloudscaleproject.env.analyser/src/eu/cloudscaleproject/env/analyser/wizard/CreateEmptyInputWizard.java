@@ -11,6 +11,7 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class CreateEmptyInputWizard extends Wizard{
@@ -54,6 +55,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		resource.save();
 		
 		ValidationDiagramService.showStatus(project, resource);
+		OpenAlternativeUtil.openAlternative(resource);
 		
 		return true;
 	}

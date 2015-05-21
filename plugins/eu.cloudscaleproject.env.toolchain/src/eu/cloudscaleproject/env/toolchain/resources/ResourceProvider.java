@@ -354,12 +354,17 @@ public abstract class ResourceProvider
 		IEditorInputResource eir = loadResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
-
-
 		eir.save();
 
-		addResource(res);
+		resources.put(res, eir);
+
+		if (res instanceof IValidationStatusProvider)
+		{
+			StatusManager.getInstance().addStatusProvider(res.getProject(), (IValidationStatusProvider) eir);
+		}
+
 		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);
+		firePropertyChange(PROP_RESOURCE_ADDED, null, eir);
 
 		return eir;
 	}
@@ -394,7 +399,7 @@ public abstract class ResourceProvider
 
 	private void firePropertyChange(final String prop, final Object oldValue, final Object newValue)
 	{
-		Display.getDefault().asyncExec(new Runnable()
+		Display.getDefault().syncExec(new Runnable()
 		{
 			@Override
 			public void run()

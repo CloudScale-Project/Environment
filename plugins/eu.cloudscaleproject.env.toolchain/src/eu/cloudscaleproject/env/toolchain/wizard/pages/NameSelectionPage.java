@@ -15,8 +15,7 @@ public class NameSelectionPage extends WizardPage{
 	private static final String DEFAULT_TITLE = "Alternative name";
 	private static final String DEFAULT_DESCRIPTION = "Please insert alternative name.";
 	
-	private static final String PLACEHOLDER = "<Alternative name>";
-	private String name = PLACEHOLDER;
+	private String name = "alternative";
 	private Text text;
 
 	public NameSelectionPage() {
@@ -42,7 +41,7 @@ public class NameSelectionPage extends WizardPage{
 			@Override
 			public void modifyText(ModifyEvent e) {
 				name = text.getText();
-				if(!name.isEmpty() && !name.equals(PLACEHOLDER)){
+				if(!name.isEmpty()){
 					setPageComplete(true);
 				}
 				else{
@@ -53,7 +52,7 @@ public class NameSelectionPage extends WizardPage{
 		text.setFocus();
 		text.selectAll();
 		
-		setPageComplete(false);
+		setPageComplete(!name.isEmpty());
 		setControl(container);
 	}
 	

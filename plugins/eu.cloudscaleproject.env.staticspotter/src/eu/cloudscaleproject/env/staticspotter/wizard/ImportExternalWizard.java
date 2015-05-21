@@ -6,11 +6,13 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
@@ -54,6 +56,9 @@ public class ImportExternalWizard extends Wizard{
 		}
 
 		alternative.save();
+
+		ValidationDiagramService.showStatus(project, alternative);
+		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;
 	}

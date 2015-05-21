@@ -54,13 +54,6 @@ public class ConfigComposite extends SidebarEditorComposite {
 	}
 
 	@Override
-	public void handleNewInput(IEditorInput selected) {
-		InputSelectionWizard inputSelectionWizard = new InputSelectionWizard(project);
-		WizardDialog wizardDialog = new WizardDialog(this.getShell(), inputSelectionWizard);
-		wizardDialog.open();
-	}
-	
-	@Override
 	public void update() {
 		// TODO Auto-generated method stub
 		super.update();
