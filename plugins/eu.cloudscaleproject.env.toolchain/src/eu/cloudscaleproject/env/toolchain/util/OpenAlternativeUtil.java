@@ -45,8 +45,6 @@ public class OpenAlternativeUtil
 	
 	public static void openAlternative (ProjectEditor pe, IEditorInput alternative)
 	{
-		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
-
 		//
 		// Select alternative
 		//

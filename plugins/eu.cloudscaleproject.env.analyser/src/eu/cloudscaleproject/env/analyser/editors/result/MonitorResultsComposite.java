@@ -41,6 +41,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
+@SuppressWarnings("deprecation")
 public class MonitorResultsComposite extends Composite implements IRefreshable{
 	
 	private final ResultAlternative alternative;
@@ -184,7 +185,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 	    // it shows possible visualizations, which are instances of
 	    // DefaultSequence
 	    private void openWizard(final IDataSource edp2Source) {
-	        final DefaultViewsWizard wizard = new DefaultViewsWizard(edp2Source);
+			final DefaultViewsWizard wizard = new DefaultViewsWizard(edp2Source);
 	        final WizardDialog wdialog = new WizardDialog(PlatformUI.getWorkbench()
 	                .getActiveWorkbenchWindow().getShell(), wizard);
 	        wdialog.open();

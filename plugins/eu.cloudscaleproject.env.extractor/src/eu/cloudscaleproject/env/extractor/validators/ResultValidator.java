@@ -32,17 +32,5 @@ public class ResultValidator implements IResourceValidator {
 			s.clearWarnings();
 			s.setIsValid(true);
 		}
-		
-		IValidationStatus[] statusRepository = statusProvider.getStatus(ToolchainUtils.KEY_FILE_REPOSITORY);
-		for (IValidationStatus s : statusRepository)
-		{
-			//s.setIsValid(true);
-		}
-
-		IValidationStatus[] statusSystem = statusProvider.getStatus(ToolchainUtils.KEY_FILE_SYSTEM);
-		for (IValidationStatus s : statusRepository)
-		{
-			//s.setIsValid(true);
-		}
 	}
 }
