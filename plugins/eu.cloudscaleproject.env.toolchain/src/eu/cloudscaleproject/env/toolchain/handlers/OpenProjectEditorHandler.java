@@ -21,10 +21,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
-import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 
@@ -45,19 +42,11 @@ public class OpenProjectEditorHandler {
 		}
 
 		IValidationStatus validationStatus = CloudscaleContext.getActiveContext().get(IValidationStatus.class);
-		if (validationStatus instanceof ResourceValidationStatus)
+		if (validationStatus.getProvider() instanceof IEditorInputResource)
 		{
-			ResourceProvider resourceProvider = 
-					ResourceRegistry.getInstance().getResourceProvider(project, validationStatus.getID());
-			
-			if (resourceProvider != null)
-			{
-				IEditorInputResource resource = resourceProvider.getResource(((ResourceValidationStatus)validationStatus).getResource());
-
-				OpenAlternativeUtil.openAlternative(resource);
-			
-				return;
-			}
+			IEditorInputResource alternative = (IEditorInputResource)validationStatus.getProvider();
+			OpenAlternativeUtil.openAlternative(alternative);
+			return;
 		}
 
 			
