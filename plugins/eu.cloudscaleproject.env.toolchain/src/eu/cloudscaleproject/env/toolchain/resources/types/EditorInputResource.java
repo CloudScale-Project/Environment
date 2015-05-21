@@ -21,8 +21,10 @@ public abstract class EditorInputResource implements IEditorInputResource{
 	public static final String PROP_LOADED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propLoaded";
 	public static final String PROP_DELETED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propDeleted";
 	
+	private final Object statusLock = new Object();
+	
 	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	protected final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
+	private final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
 	
 	private IValidationStatus selfStatus;
 		
@@ -37,12 +39,16 @@ public abstract class EditorInputResource implements IEditorInputResource{
 	}
 	
 	public void addStatus(IValidationStatus status){
-		statusSet.add(status);
+		synchronized (statusLock) {
+			statusSet.add(status);
+		}
 		pcs.firePropertyChange(PROP_STATUS_ADDED, null, status);
 	}
 	
 	public void removeStatus(IValidationStatus status){
-		statusSet.remove(status);
+		synchronized (statusLock) {
+			statusSet.remove(status);
+		}
 		pcs.firePropertyChange(PROP_STATUS_REMOVED, status, null);
 	}
 	
@@ -66,16 +72,22 @@ public abstract class EditorInputResource implements IEditorInputResource{
 	
 	@Override
 	public IValidationStatus[] getStatus() {
-		return statusSet.toArray(new IValidationStatus[statusSet.size()]);
+		IValidationStatus[] out = null;
+		synchronized (statusLock) {
+			out = statusSet.toArray(new IValidationStatus[statusSet.size()]);
+		}
+		return out;
 	}
 	
 	@Override
 	public IValidationStatus[] getStatus(String id) {
 		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
 		
-		for(IValidationStatus status : statusSet){
-			if(id.equals(status.getID())){
-				out.add(status);
+		synchronized (statusLock) {
+			for(IValidationStatus status : statusSet){
+				if(id.equals(status.getID())){
+					out.add(status);
+				}
 			}
 		}
 		

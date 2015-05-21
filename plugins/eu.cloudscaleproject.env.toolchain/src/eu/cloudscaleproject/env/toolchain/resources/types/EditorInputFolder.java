@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -458,8 +459,7 @@ public class EditorInputFolder extends EditorInputResource{
 	// Validation
 	//
 	private void updateStatusList(){
-		
-		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(statusSet);
+		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(Arrays.asList(getStatus()));
 		HashSet<IValidationStatus> newList = new HashSet<IValidationStatus>();
 		
 		if(folder.exists()){
@@ -488,7 +488,9 @@ public class EditorInputFolder extends EditorInputResource{
 	
 	public IValidationStatus getStatus(IResource resource){
 		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
-		for(IValidationStatus status : statusSet){
+		IValidationStatus[] statuses = getStatus();
+		
+		for(IValidationStatus status : statuses){
 			if(status instanceof ResourceValidationStatus){
 				ResourceValidationStatus rvs = (ResourceValidationStatus)status;
 				if(resource.equals(rvs.getResource())){
