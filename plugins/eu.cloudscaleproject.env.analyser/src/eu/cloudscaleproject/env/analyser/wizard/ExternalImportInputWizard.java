@@ -16,7 +16,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
-public class CreateImportInputAltWizard extends Wizard{
+public class ExternalImportInputWizard extends Wizard{
 
 	private IProject project;
 
@@ -24,7 +24,7 @@ public class CreateImportInputAltWizard extends Wizard{
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage optionsPage;
 	
-	public CreateImportInputAltWizard(IProject project) {
+	public ExternalImportInputWizard(IProject project) {
 		
 		this.project = project;
 		

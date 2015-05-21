@@ -31,7 +31,7 @@ public class TransformIntoExistingWizardNode extends WizardNode implements IExec
 
 	@Override
 	public String getName() {
-		return "Merge to existing";
+		return "Merge Overivew model";
 	}
 
 	@Override

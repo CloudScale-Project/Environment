@@ -31,7 +31,7 @@ public class TransformIntoNewWizardNode extends WizardNode implements IExecutabl
 	
 	@Override
 	public String getName() {
-		return "Create from the Overview model";
+		return "Transfrom Overview model";
 	}
 
 	@Override

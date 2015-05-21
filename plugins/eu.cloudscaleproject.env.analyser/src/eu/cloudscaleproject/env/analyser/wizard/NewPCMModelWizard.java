@@ -9,13 +9,13 @@ import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class CreatePCMModelWizard extends Wizard{
+public class NewPCMModelWizard extends Wizard{
 
 	private final EditorInputEMF alternative;
 	
 	private ModelSelectionPage modelSelectionPage;
 	
-	public CreatePCMModelWizard(EditorInputEMF alternative, ModelType[] types) {
+	public NewPCMModelWizard(EditorInputEMF alternative, ModelType[] types) {
 		this.alternative = alternative;
 		
 		modelSelectionPage = new ModelSelectionPage("Empty model creation", alternative.getAdapterFactory(), types);

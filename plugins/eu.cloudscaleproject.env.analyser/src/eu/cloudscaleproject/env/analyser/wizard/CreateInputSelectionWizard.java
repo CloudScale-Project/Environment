@@ -14,21 +14,22 @@ import eu.cloudscaleproject.env.common.ExtensionRetriever;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class CreateInputAltWizard extends Wizard{
+public class CreateInputSelectionWizard extends Wizard{
 	
 	@Inject 
 	private ExtensionRetriever extensionRetriever;
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public CreateInputAltWizard(IProject project) {
+	public CreateInputSelectionWizard(IProject project) {
 		
 		CloudscaleContext.inject(this);
 		
 		List<WizardNode> nodes = new ArrayList<>();
 		
 		nodes.add(new CreateEmptyInputAltNode(project));
-		nodes.add(new CreateImportInputAltNode(project));
+		nodes.add(new ExternalImportNode(project));
+		nodes.add(new ExtractorImportNode(project));
 		
 		//retrieve nodes from extension point
 		List<WizardNode> nodesFromExtensions = extensionRetriever.retrieveExtensionObjects(
@@ -73,12 +74,12 @@ public class CreateInputAltWizard extends Wizard{
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateEmptyInputAltWizard(project);
+			return new CreateEmptyInputWizard(project);
 		}
 
 		@Override
 		public String getName() {
-			return "Empty input alternative";
+			return "New Analyser input";
 		}
 
 		@Override
@@ -88,29 +89,56 @@ public class CreateInputAltWizard extends Wizard{
 
 	}
 	
-	private static class CreateImportInputAltNode extends WizardNode
+	private static class ExternalImportNode extends WizardNode
 	{
 		private final IProject project;
 		
 
-		public CreateImportInputAltNode(IProject project)
+		public ExternalImportNode(IProject project)
 		{
 			this.project = project;
 		}
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateImportInputAltWizard(project);
+			return new ExternalImportInputWizard(project);
 		}
 
 		@Override
 		public String getName() {
-			return "Create from existing PCM";
+			return "Import existing project";
 		}
 
 		@Override
 		public String getDescription() {
 			return "Creates new input alternative from existing PCM model";
+		}
+
+	}
+
+	private static class ExtractorImportNode extends WizardNode
+	{
+		private final IProject project;
+		
+
+		public ExtractorImportNode (IProject project)
+		{
+			this.project = project;
+		}
+
+		@Override
+		public IWizard createWizard() {
+			return new ExtractorImportInputWizard(project);
+		}
+
+		@Override
+		public String getName() {
+			return "Import Extractor result";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Creates new input alternative from existing Extractor result";
 		}
 
 	}

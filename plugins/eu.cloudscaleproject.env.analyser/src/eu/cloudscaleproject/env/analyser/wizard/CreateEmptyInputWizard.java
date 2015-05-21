@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
-public class CreateEmptyInputAltWizard extends Wizard{
+public class CreateEmptyInputWizard extends Wizard{
 	
 	private final IProject project;
 	
@@ -27,7 +27,7 @@ public class CreateEmptyInputAltWizard extends Wizard{
 	private final NameSelectionPage nameSelectionPage;
 	private final ModelSelectionPage modelSelectionPage;
 	
-	public CreateEmptyInputAltWizard(IProject project) {
+	public CreateEmptyInputWizard(IProject project) {
 		this.project = project;
 				
 		nameSelectionPage = new NameSelectionPage();

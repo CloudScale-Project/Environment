@@ -975,7 +975,7 @@
     <nodes xsi:type="method:Action" id="action_transform_overview_analyser" name="Transformation" description="Transform Overview model into PCM model." tooltip="Overview to PCM transformation" colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview2pcm.command.transformWizard" next="/1/@links.3" previous="/1/@links.2"/>
     <nodes xsi:type="method:Action" id="action_import_ext_analyser" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.0" previous="/1/@links.16"/>
     <nodes xsi:type="method:Action" id="action_import_ext_overview" name="Import" description="Import repository and system model, extracted from source code, into overview model." tooltip="Import extracted model into overview" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cludscale.environment.extractor.openImportWizard" next="/1/@links.1" previous="/1/@links.17"/>
-    <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.14" previous="/1/@links.15"/>
+    <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" description="Import input for StaticSpotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.staticspotter.command.openinputwizard" next="/1/@links.14" previous="/1/@links.15"/>
     <nodes xsi:type="method:Action" id="_kQmOgPo5EeSga-ySs5-xDw" name="Import existing" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openpcmimportdialog" next="/1/@links.19"/>
   </method:Method>
 </xmi:XMI>

@@ -10,7 +10,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
-import eu.cloudscaleproject.env.analyser.wizard.CreateInputAltWizard;
+import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -87,7 +87,7 @@ public class InputComposite extends SidebarEditorComposite{
 		//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, getShell());
 		//dialog.open();
 		
-		CreateInputAltWizard createInputAltWizard = new CreateInputAltWizard(project);
+		CreateInputSelectionWizard createInputAltWizard = new CreateInputSelectionWizard(project);
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createInputAltWizard);
 		wizardDialog.open();
 	}

@@ -26,7 +26,7 @@ import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
 import de.uka.ipd.sdq.pcm.system.System;
 import edu.kit.ipd.sdq.mdsd.profiles.ui.menu.ApplicableStereotypesSubmenu;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.wizard.CreatePCMModelWizard;
+import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -104,7 +104,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 						ModelType.USAGE
 				};
 				
-				CreatePCMModelWizard createEmptyModelWizard = new CreatePCMModelWizard(input, types);
+				NewPCMModelWizard createEmptyModelWizard = new NewPCMModelWizard(input, types);
 				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
 				wizardDialog.open();
 				

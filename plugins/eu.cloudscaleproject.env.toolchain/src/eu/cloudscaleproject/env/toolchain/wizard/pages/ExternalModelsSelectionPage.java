@@ -97,7 +97,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 					resSet.getResources().clear();
 					findAndLoadResources(folder, resSet);				
 					tableView.refresh(true);				
-					tableView.setCheckedElements(resSet.getResources().toArray());
+					tableView.setAllChecked(true);
 					selectedResources = (Resource[])resSet.getResources().toArray();
 				}
 			});

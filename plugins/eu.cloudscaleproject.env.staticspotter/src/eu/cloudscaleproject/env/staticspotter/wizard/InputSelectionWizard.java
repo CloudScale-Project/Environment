@@ -19,13 +19,15 @@ public class InputSelectionWizard extends Wizard{
 		
 		CloudscaleContext.inject(this);
 		
+		setWindowTitle("StaticSpotter Import");
+		
 		List<WizardNode> nodes = new ArrayList<>();
 		
 		nodes.add(new CreateExternalNode(project));
 		nodes.add(new CreateImportExtractorNode(project));
 		
-		newInputSelectionPage = new WizardSelectionPage("New input alternative selection page",
-														"Create new input alternative", nodes);
+		newInputSelectionPage = new WizardSelectionPage("Import options",
+														"Select one of the possible options.", nodes);
 	}
 	
 	@Override
@@ -88,7 +90,7 @@ public class InputSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Create from external";
+			return "Import external project";
 		}
 
 		@Override
