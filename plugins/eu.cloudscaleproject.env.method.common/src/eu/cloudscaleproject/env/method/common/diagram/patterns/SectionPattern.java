@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.ILayoutFeature;
 import org.eclipse.graphiti.features.IReason;
+import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.context.ILayoutContext;
@@ -332,12 +333,13 @@ public class SectionPattern extends NodePattern {
             }
             
             //check removed commands & requirements
-            for(Shape shape : root.getChildren()){
+            for(Shape shape : new ArrayList<Shape>(root.getChildren())){
             	if(PatternUtil.hasShapeID(shape, "node")){
             		Object bo = getBusinessObjectForPictogramElement(shape);
             		if(bo == null){
             			IRemoveContext rc = new RemoveContext(shape);
-                		getFeatureProvider().getRemoveFeature(rc);
+                		IRemoveFeature rf = getFeatureProvider().getRemoveFeature(rc);
+                		rf.remove(rc);
             		}
             	}
             }

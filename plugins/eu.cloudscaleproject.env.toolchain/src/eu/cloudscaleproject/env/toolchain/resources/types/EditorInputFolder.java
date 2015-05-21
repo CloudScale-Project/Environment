@@ -465,7 +465,7 @@ public class EditorInputFolder extends EditorInputResource{
 		if(folder.exists()){
 			for(Entry<String, List<IResource>> entry : subResources.entrySet()){
 				for(IResource res : entry.getValue()){
-					IValidationStatus status = new ResourceValidationStatus(this, entry.getKey(), res);
+					IValidationStatus status = new ResourceValidationStatus(this, this.getID() + "." + entry.getKey(), res);
 					newList.add(status);
 				}
 			}
@@ -484,6 +484,12 @@ public class EditorInputFolder extends EditorInputResource{
 		if(status != null){
 			status.setName(getName());
 		}
+	}
+	
+	@Override
+	public IValidationStatus[] getStatus(String resourceKey) {
+		// TODO Auto-generated method stub
+		return super.getStatus(this.getID() + "." + resourceKey);
 	}
 	
 	public IValidationStatus getStatus(IResource resource){
