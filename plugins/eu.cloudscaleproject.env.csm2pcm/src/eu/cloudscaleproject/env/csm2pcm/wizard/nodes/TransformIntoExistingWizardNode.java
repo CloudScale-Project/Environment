@@ -8,8 +8,8 @@ import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.jface.wizard.IWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.wizard.util.WizardNode;
 import eu.cloudscaleproject.env.csm2pcm.wizard.TransformIntoExistingAlternativeWizard;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 
 public class TransformIntoExistingWizardNode extends WizardNode implements IExecutableExtensionFactory{
 	

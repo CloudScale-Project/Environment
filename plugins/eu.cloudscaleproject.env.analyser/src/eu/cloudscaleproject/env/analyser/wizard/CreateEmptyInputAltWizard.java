@@ -6,12 +6,12 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
-import eu.cloudscaleproject.env.analyser.wizard.pages.NameSelectionPage;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class CreateEmptyInputAltWizard extends Wizard{
 	
@@ -30,8 +30,7 @@ public class CreateEmptyInputAltWizard extends Wizard{
 	public CreateEmptyInputAltWizard(IProject project) {
 		this.project = project;
 				
-		nameSelectionPage = new NameSelectionPage("New input alternative name");
-		nameSelectionPage.setDescription("Please type in name for the new alternative");
+		nameSelectionPage = new NameSelectionPage();
 		
 		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
 		modelSelectionPage.setDescription("Please select PCM models to start with");

@@ -6,15 +6,15 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
-import eu.cloudscaleproject.env.analyser.wizard.pages.ImportModelSelectionPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 
 public class ImportPCMModelWizard extends Wizard{
 	
 	private EditorInputEMF alternative = null;
 	
-	private ImportModelSelectionPage importModelSelectionPage;
+	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage importOptionsPage;
 
 	public ImportPCMModelWizard(EditorInputEMF alternative){
@@ -26,8 +26,7 @@ public class ImportPCMModelWizard extends Wizard{
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
 		
-		importModelSelectionPage = new ImportModelSelectionPage("Select PCM model to import", from);
-		importModelSelectionPage.setDescription("Please select project and then desired PCM models to import");
+		importModelSelectionPage = new ExternalModelsSelectionPage(from, ExternalModelsSelectionPage.PCM_EXTENSIONS);
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	

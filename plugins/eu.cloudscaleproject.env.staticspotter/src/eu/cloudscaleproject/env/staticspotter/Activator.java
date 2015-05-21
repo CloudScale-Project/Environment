@@ -3,8 +3,9 @@ package eu.cloudscaleproject.env.staticspotter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigResourceProviderFactory;
-import eu.cloudscaleproject.env.staticspotter.alternatives.ResultResourceProviderFactory;
+import eu.cloudscaleproject.env.staticspotter.alternatives.providers.ConfigResourceProviderFactory;
+import eu.cloudscaleproject.env.staticspotter.alternatives.providers.InputResourceProviderFactory;
+import eu.cloudscaleproject.env.staticspotter.alternatives.providers.ResultResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
@@ -39,6 +40,7 @@ public class Activator extends AbstractUIPlugin
 		super.start(context);
 		plugin = this;
 
+		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_INPUT_ID, new InputResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_CONF_ID, new ConfigResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_STA_RES_ID, new ResultResourceProviderFactory());
 

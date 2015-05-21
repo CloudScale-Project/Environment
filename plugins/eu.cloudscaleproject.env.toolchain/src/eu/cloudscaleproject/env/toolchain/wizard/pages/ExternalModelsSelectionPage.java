@@ -1,5 +1,6 @@
-package eu.cloudscaleproject.env.analyser.wizard.pages;
+package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -7,6 +8,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -30,18 +32,43 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.cloudscaleproject.env.analyser.PCMModelType;
-import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
+import eu.cloudscaleproject.env.common.emf.CustomAdapterFactory;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
-public class ImportModelSelectionPage extends WizardPage implements IRefreshable{
+public class ExternalModelsSelectionPage extends WizardPage implements IRefreshable{
 		
+	private static final String DEFAULT_TITLE = "External models selection";
+	private static final String DEFAULT_DESCRIPTION = "Please select folder and models.";
+
+	///////////////////
+	//
+	// TODO: currently hard-coded - make it configurable
+	//
+	public static final String[] ALL_EXTENSIONS = {
+			"repository", "system", "resourceenvironment", "allocation", "usagemodel",  // PCM
+			"experiments","slo", "monitorrepository", "measuringpoint", "variation", "usageevolution", 
+			"xmi", "sourcecodedecorator", "ecore" // Other
+	};
+
+	public static final String[] PCM_EXTENSIONS = {
+			"repository", "system", "resourceenvironment", "allocation", "usagemodel", "xmi" // PCM
+	};
+
+	public static final String[] EXPERIMENTS_EXTENSIONS = {
+			"experiments","slo", "monitorrepository", "measuringpoint", "variation", "usageevolution", 
+	};
+
+	public static final String[] RECLIPSE_EXTENSIONS = {
+        	"repository", "system", "xmi", "sourcecodedecorator", "ecore" // Other
+	};
+	//
+	////////////////////
+
 	private Resource[] selectedResources = new Resource[0];
 	
 	private ResourceSet resSet = new ResourceSetImpl();
@@ -61,15 +88,18 @@ public class ImportModelSelectionPage extends WizardPage implements IRefreshable
 			return new IResource[]{folder};
 		}
 	};
+	private String[] extensions;
 
-	public ImportModelSelectionPage(String name) {
-		this(name, null);
+	public ExternalModelsSelectionPage() {
+		this (null, ALL_EXTENSIONS);
 	}
-	
-	public ImportModelSelectionPage(String name, IFolder from) {
-		super(name, name, null);
-		setTitle(name);
+
+	public ExternalModelsSelectionPage(IFolder from, String[] extensions) {
+		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
+		setDescription(DEFAULT_DESCRIPTION);
 		this.folder = from;
+		
+		this.extensions = extensions;
 	}
 	
 	public Resource[] getSelectedResources(){
@@ -153,44 +183,44 @@ public class ImportModelSelectionPage extends WizardPage implements IRefreshable
 			selectedResources = (Resource[])resSet.getResources().toArray();
 		}
 	}
+	
 
 	private void findAndLoadResources(IContainer folder, ResourceSet resSet){
+		
+		for (IFile file : ExplorerProjectPaths.findResources(folder, extensions))
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
+			ExplorerProjectPaths.getEmfResource(resSet, file);
+		}
+	}
+
+	public static List<IFile> findResource(IContainer folder, String extension){
+		
+		List<IFile> files = new ArrayList<IFile>();
+		
+		if(!folder.exists()){
+			return files;
+		}
+		
+		try {
+			for(IResource r : folder.members()){
+				if(r instanceof IContainer){
+					IContainer f = (IContainer)r;
+					files.addAll(findResource(f, extension));
+				}
+				if(r instanceof IFile){
+					IFile f = (IFile)r;
+					if(f.getName().endsWith(extension)){
+						files.add(f);
+					}
+				}
 			}
 		}
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
-			}
+		catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
-			}
-		}
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.ALLOCATION.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
-			}
-		}
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
-			}
-		}
-		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.AT.getFileExtension());
-			for(IFile file : files){
-				ExplorerProjectPaths.getEmfResource(resSet, file);
-			}
-		}
+		
+		return files;
 	}
 	
 	private void createFolderSelection(Composite composite, final String name, final String text,

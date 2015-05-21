@@ -78,6 +78,14 @@ public class ValidationWidget extends Composite
 		lblText.addMouseListener(mouseListener);
 		lblIcon.addMouseListener(mouseListener);
 
+		if (alternative == null) return; // 
+
+		initListeners();
+		updateStatus();
+	}
+	
+	private void initListeners ()
+	{
 		alternative.getSelfStatus().addListener(listener);
 		alternative.addPropertyChangeListener(listener);
 		this.addDisposeListener(new DisposeListener()
@@ -92,7 +100,7 @@ public class ValidationWidget extends Composite
 					removePropertyChangeListener(listener);
 			}
 		});
-		updateStatus();
+		
 	}
 
 	private void updateStatus()
@@ -119,6 +127,8 @@ public class ValidationWidget extends Composite
 
 			lblIcon.setImage(CommonResources.WARNING);
 		}
+		
+		redraw();
 	}
 
 }

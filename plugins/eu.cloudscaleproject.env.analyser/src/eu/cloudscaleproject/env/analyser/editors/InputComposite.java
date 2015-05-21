@@ -61,7 +61,6 @@ public class InputComposite extends SidebarEditorComposite{
 
 		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style, input);
-			getContainer().setLayout(new FillLayout());
 			
 			alternative = input;
 			treeviewComposite = new InputTreeViewComposite(input, getContainer(), SWT.NONE);

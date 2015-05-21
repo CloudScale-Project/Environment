@@ -65,8 +65,9 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		new TitleWidget(getHeader(), SWT.NONE, alternative);
 
+		if (alternative == null) return; // For WindowBuilder
+
 		initFooterContent();
-		
 		initListeners();
 	}
 	

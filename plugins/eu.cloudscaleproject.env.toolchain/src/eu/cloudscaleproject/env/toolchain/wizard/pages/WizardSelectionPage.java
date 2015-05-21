@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.common.wizard.util;
+package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
 import java.util.ArrayList;
 import java.util.List;

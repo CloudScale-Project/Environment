@@ -1,11 +1,12 @@
 package eu.cloudscaleproject.env.staticspotter.validators;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
@@ -21,16 +22,30 @@ public class InputValidator implements IResourceValidator {
 		
 		IValidationStatus status = statusProvider.getSelfStatus();
 		
-		GlobalInputAlternative ia = (GlobalInputAlternative) statusProvider;
+		InputAlternative ia = (InputAlternative) statusProvider;
 		ia.getProject();
 				
 		status.clearWarnings();
 		status.setIsValid(true);
-
-		if (GlobalInputAlternative.getInstance().getExtractorResults().isEmpty())
+		
+		if (!validateSourcecodeDecorator(ia))
 		{
-			status.addWarning("", "Extractor results are missing in workspace.");
 			status.setIsValid(false);
 		}
+	}
+
+	private boolean validateSourcecodeDecorator (InputAlternative ia)
+	{
+		IValidationStatus selfStatus = ia.getSelfStatus();
+
+		IResource catalog = ia.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		
+		if (catalog == null)
+		{
+			selfStatus.addWarning("", "Sourcecode Decorator is missing.");
+			return false;
+		}
+		
+		return true;
 	}
 }

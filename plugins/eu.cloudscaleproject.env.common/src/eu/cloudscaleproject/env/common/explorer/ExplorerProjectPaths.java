@@ -461,6 +461,47 @@ public class ExplorerProjectPaths {
 		return out;
 	}
 	
+	public static List<IFile> findResources (IContainer folder, String[] extensions)
+	{
+		List<IFile> files = new ArrayList<IFile>();
+		for (String ext : extensions)
+		{
+			files.addAll(findResources(folder, ext));
+		}
+		
+		return files;
+	}
+
+	public static List<IFile> findResources(IContainer folder, String extension){
+		
+		List<IFile> files = new ArrayList<IFile>();
+		
+		if(!folder.exists()){
+			return files;
+		}
+		
+		try {
+			for(IResource r : folder.members()){
+				if(r instanceof IContainer){
+					IContainer f = (IContainer)r;
+					files.addAll(findResources(f, extension));
+				}
+				if(r instanceof IFile){
+					IFile f = (IFile)r;
+					if(f.getName().endsWith(extension)){
+						files.add(f);
+					}
+				}
+			}
+		}
+		catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return files;
+	}
+	
 	public static void copyEMFResources(IContainer folder, Resource[] resources)
 	{
 		for (Resource res : resources)

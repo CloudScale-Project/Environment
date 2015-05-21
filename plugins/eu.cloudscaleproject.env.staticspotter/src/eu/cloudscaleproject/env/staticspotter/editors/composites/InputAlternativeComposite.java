@@ -1,93 +1,64 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
+import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
-public class InputAlternativeComposite extends Composite implements IRefreshable {
+public class InputAlternativeComposite extends InputEditorView implements IRefreshable, IPropertySheetPageProvider, ISelectable {
 
-	private Text txtInput;
-	private GlobalInputAlternative editorInput;
+	private InputAlternative inputAlternative;
+	private EMFEditableTreeviewComposite treeViewComposite;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public InputAlternativeComposite(Composite parent, int style, final GlobalInputAlternative editorInput) {
-		super(parent, SWT.NONE);
-		this.setLayout(new GridLayout(4, false));
-		this.editorInput = editorInput;
-		
-		Label lblConfigurationalternative = new Label(this, SWT.NONE);
-		lblConfigurationalternative.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblConfigurationalternative.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
-		lblConfigurationalternative.setText("Input (Alternative "+editorInput.getName()+")");
-		
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GRAY));
-		GridData gd_label = new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1);
-		gd_label.widthHint = 167;
-		label.setLayoutData(gd_label);
-		
-		Label lblInput = new Label(this, SWT.NONE);
-		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblInput.setText("Project: ");
-		
-		txtInput = new Text(this, SWT.BORDER);
-		txtInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Button btnChoose = new Button(this, SWT.NONE);
-		btnChoose.setText("...");
-		new Label(this, SWT.NONE);
-		
-		btnChoose.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-		        CustomResourceSelectionDialog dialog = new CustomResourceSelectionDialog("Project selection", "Select Java project ...", IProject.class, null);
-		        dialog.open();
-		        Object selection = dialog.getFirstResult();
-		        
-		        if (selection instanceof IProject)
-		        {
-		        	IProject project = (IProject) selection;
-		        	String url = project.getFullPath().toPortableString();
-		        	txtInput.setText(url);
-		        	editorInput.setProperty(GlobalInputAlternative.KEY_PROJECT_URL, url);
-		        	editorInput.save();
-		        	//Util.addInput(InputAlternativeComposite.this.project, InputAlternativeComposite.this.name, url);
-		        }
-			}
-			
-		});
-		
-		load();
+	public InputAlternativeComposite(Composite parent, int style, final InputAlternative inputAlternative) {
+		super(parent, SWT.NONE, inputAlternative);
+
+		this.inputAlternative = inputAlternative;
+
+		Group containerEditor = new Group(getContainer(), SWT.NONE);
+		containerEditor.setText("Catalog and Engine models");
+		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
+
+		this.treeViewComposite = new EMFEditableTreeviewComposite(inputAlternative, containerEditor, SWT.NONE);
 	}
 	
 	private void load ()
 	{
-		String url = this.editorInput.getProperty(GlobalInputAlternative.KEY_PROJECT_URL);
-		txtInput.setText(url == null ? "" : url);
+		//String url = this.editorInput.getProperty(GlobalInputAlternative.KEY_PROJECT_URL);
+		//txtInput.setText(url == null ? "" : url);
 	}
 	
 	@Override
 	public void refresh() {
-		editorInput.load();
 		load();
+	}
+
+	@Override
+	public IPropertySheetPage getPropertySheetPage()
+	{
+		return treeViewComposite.getPropertySheetPage();
+	}
+
+	@Override
+	public void onSelect()
+	{
+		ValidationDiagramService.showStatus(this.inputAlternative.getProject(), this.inputAlternative);
+		ValidationDiagramService.clearStatus(this.inputAlternative.getProject(), ToolchainUtils.SPOTTER_STA_CONF_ID);
+		ValidationDiagramService.clearStatus(this.inputAlternative.getProject(), ToolchainUtils.SPOTTER_STA_RES_ID);
 	}
 }

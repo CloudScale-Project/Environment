@@ -1,8 +1,9 @@
-package eu.cloudscaleproject.env.staticspotter.alternatives;
+package eu.cloudscaleproject.env.staticspotter.alternatives.providers;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;

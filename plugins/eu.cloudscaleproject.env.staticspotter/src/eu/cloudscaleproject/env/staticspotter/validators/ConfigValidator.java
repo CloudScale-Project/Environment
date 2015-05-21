@@ -7,7 +7,6 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ConfigValidator implements IResourceValidator {
@@ -25,8 +24,8 @@ public class ConfigValidator implements IResourceValidator {
 	@Override
 	public void validate(final IProject project, IValidationStatusProvider statusProvider) {
 		
-		GlobalInputAlternative.getInstance().setProject(project);
-		GlobalInputAlternative.getInstance().validate();
+		//GlobalInputAlternative.getInstance().setProject(project);
+		//GlobalInputAlternative.getInstance().validate();
 
 		ConfigAlternative ca = (ConfigAlternative) statusProvider;
 
@@ -34,9 +33,9 @@ public class ConfigValidator implements IResourceValidator {
 		status.clearWarnings();
 		status.setIsValid(true);
 
-		if (ca.getExtractorResult() == null)
+		if (ca.getInputAlternative() == null)
 		{
-			status.addWarning("", "Input project not selected.");
+			status.addWarning("", "Input alternative not selected.");
 			status.setIsValid(false);
 		}
 		

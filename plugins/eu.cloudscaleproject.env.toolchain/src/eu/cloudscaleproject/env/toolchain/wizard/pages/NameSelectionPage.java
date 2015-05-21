@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.analyser.wizard.pages;
+package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -12,15 +12,16 @@ import org.eclipse.swt.widgets.Text;
 
 public class NameSelectionPage extends WizardPage{
 	
-	private String name = "";
-
-	public NameSelectionPage(String title) {
-		super(title, title, null);
-		setTitle(title);
-	}
+	private static final String DEFAULT_TITLE = "Alternative name";
+	private static final String DEFAULT_DESCRIPTION = "Please insert alternative name.";
 	
-	public String getName(){
-		return this.name;
+	private static final String PLACEHOLDER = "<Alternative name>";
+	private String name = PLACEHOLDER;
+	private Text text;
+
+	public NameSelectionPage() {
+		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
+		setDescription(DEFAULT_DESCRIPTION);
 	}
 
 	@Override
@@ -32,15 +33,16 @@ public class NameSelectionPage extends WizardPage{
 		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Alternative name:");
 		
-		final Text text = new Text(container, SWT.BORDER);
+		text = new Text(container, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		text.setText(name);
 		
 		text.addModifyListener(new ModifyListener() {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				name = text.getText();
-				if(!name.isEmpty()){
+				if(!name.isEmpty() && !name.equals(PLACEHOLDER)){
 					setPageComplete(true);
 				}
 				else{
@@ -49,9 +51,16 @@ public class NameSelectionPage extends WizardPage{
 			}
 		});
 		text.setFocus();
+		text.selectAll();
 		
 		setPageComplete(false);
 		setControl(container);
+	}
+	
+	@Override
+	public String getName()
+	{
+		return name;
 	}
 
 }

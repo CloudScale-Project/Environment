@@ -6,8 +6,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.wizard.util.WizardNode;
-import eu.cloudscaleproject.env.common.wizard.util.WizardSelectionPage;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.*;
 import eu.cloudscaleproject.env.csm2pcm.wizard.nodes.TransformIntoNewWizardNode;
 
 public class TransformWizard extends Wizard{

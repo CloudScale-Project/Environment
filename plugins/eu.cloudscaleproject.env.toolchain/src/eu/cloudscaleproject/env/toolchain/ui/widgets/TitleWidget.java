@@ -75,7 +75,7 @@ public class TitleWidget extends GradientComposite
 		if (this.alternative instanceof IEditorInputResource)  
 		{
 			String type = ((IEditorInputResource)this.alternative).getType();
-			if ( type != null)
+			if ( type != null && !type.isEmpty())
 			{
 				title = String.format("%s [%s]", title, type) ;
 			}

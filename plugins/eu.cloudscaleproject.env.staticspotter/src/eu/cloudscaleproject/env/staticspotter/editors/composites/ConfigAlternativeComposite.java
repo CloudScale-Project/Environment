@@ -30,7 +30,6 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -54,7 +53,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 
 	private EMFEditableTreeviewComposite treeViewComposite;
 
-	private WritableList extractorResults = new WritableList();
+	private WritableList inputAlternatives = new WritableList();
 
 	/**
 	 * Create the composite.
@@ -73,7 +72,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 
 		Label lblInput = new Label(getContainer(), SWT.NONE);
 		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblInput.setText("Extractor result:");
+		lblInput.setText("Input alternative:");
 
 		comboViewer = new ComboViewer(getContainer(), SWT.NONE);
 		combo = comboViewer.getCombo();
@@ -102,10 +101,10 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 	private void updateExtractorResults()
 	{
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configAlternative.getProject(),
-				ToolchainUtils.EXTRACTOR_RES_ID);
+				ToolchainUtils.SPOTTER_STA_INPUT_ID);
 		
-		this.extractorResults.clear();
-		this.extractorResults.addAll(resourceProvider.getResources());
+		this.inputAlternatives.clear();
+		this.inputAlternatives.addAll(resourceProvider.getResources());
 	}
 
 	@Override
@@ -127,10 +126,10 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 		comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 		comboViewer.setContentProvider(listContentProvider);
 		//
-		comboViewer.setInput(extractorResults);
+		comboViewer.setInput(inputAlternatives);
 		//
 		IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
-		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("extractorResult").observe(configAlternative);
+		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("inputAlternative").observe(configAlternative);
 		bindingContext.bindValue(observeSingleSelectionComboViewer, extractorResultConfigPersistenceFolderObserveValue, null, null);
 		//
 		return bindingContext;
@@ -138,7 +137,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(this.configAlternative.getProject(), GlobalInputAlternative.getInstance());
+		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative.getInputAlternative());
 		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative);
 
 		if (configAlternative.getLastResult() != null)

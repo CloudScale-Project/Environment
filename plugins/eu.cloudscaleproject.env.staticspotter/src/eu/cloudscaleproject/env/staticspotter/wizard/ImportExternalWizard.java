@@ -1,69 +1,62 @@
-package eu.cloudscaleproject.env.analyser.wizard;
+package eu.cloudscaleproject.env.staticspotter.wizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
-public class CreateImportInputAltWizard extends Wizard{
+public class ImportExternalWizard extends Wizard{
+
+	public static final String[] MODEL_EXTENSIONS = {
+			"repository", "system", "xmi", "sourcecodedecorator", "ecore"
+	};
 
 	private IProject project;
-
+	
 	private NameSelectionPage nameSelectionPage;
 	private ExternalModelsSelectionPage importModelSelectionPage;
-	private ImportAlternativeOptionsPage optionsPage;
 	
-	public CreateImportInputAltWizard(IProject project) {
+	public ImportExternalWizard(IProject project) {
 		
 		this.project = project;
 		
 		nameSelectionPage = new NameSelectionPage();
-
-		importModelSelectionPage = new ExternalModelsSelectionPage(null,ExternalModelsSelectionPage.PCM_EXTENSIONS);
-		
-		optionsPage = new ImportAlternativeOptionsPage();
+		importModelSelectionPage = new ExternalModelsSelectionPage(null,ExternalModelsSelectionPage.RECLIPSE_EXTENSIONS);
 	}
 	
 	@Override
 	public void addPages() {
 		addPage(nameSelectionPage);
 		addPage(importModelSelectionPage);
-		addPage(optionsPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 		
 		String altName = nameSelectionPage.getName();
-		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
-		boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
-		
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID);
+
 		InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
-		if (copyIntoProject)
-		{
-			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
-		}
+		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
+		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
 
 		for (Resource resource : selectedResources)
 		{
 			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
 			alternative.addSubResourceModel(f);
 		}
+
 		alternative.save();
-		
-		ValidationDiagramService.showStatus(project, alternative);
 		
 		return true;
 	}

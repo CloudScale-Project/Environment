@@ -1,12 +1,15 @@
 package eu.cloudscaleproject.env.staticspotter.editors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.InputAlternativeComposite;
+import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -14,6 +17,7 @@ import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 public class InputComposite extends SidebarEditorComposite {
 	
 	private final String[] sections = new String[]{"Inputs:"};
+	private IProject project;
 	
 	/**
 	 * Create the composite.
@@ -22,6 +26,8 @@ public class InputComposite extends SidebarEditorComposite {
 	 */
 	public InputComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
+		
+		this.project = project;
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID));
 		
@@ -40,12 +46,18 @@ public class InputComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new InputAlternativeComposite(parent, style, (GlobalInputAlternative)resource);
+				return new InputAlternativeComposite(parent, style, (InputAlternative)resource);
 			}
 		});
-		
-		//init();
 	}
+
+	@Override
+	public void handleNewInput(IEditorInput selected) {
+		InputSelectionWizard inputSelectionWizard = new InputSelectionWizard(project);
+		WizardDialog wizardDialog = new WizardDialog(this.getShell(), inputSelectionWizard);
+		wizardDialog.open();
+	}
+	
 	
 	@Override
 	public void update() {

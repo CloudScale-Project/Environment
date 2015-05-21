@@ -37,6 +37,7 @@ import org.reclipse.structure.specification.PSPatternSpecification;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -46,9 +47,9 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 public class Util
 {
 
-	public static DetectPatternsJob createDetectPaternJob(EditorInputFolder configFolder, EditorInputFolder extractorResult)
+	public static DetectPatternsJob createDetectPaternJob(EditorInputFolder configFolder, InputAlternative inputAlternative)
 	{
-		assert (extractorResult != null);
+		assert (inputAlternative != null);
 
 		ResourceSet resSet = new ResourceSetImpl();
 		IFile catalogFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_CATALOG);
@@ -57,7 +58,7 @@ public class Util
 		IFile enginesFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_ENGINES);
 		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
 
-		IFile sdFile = (IFile)extractorResult.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		IFile sdFile = (IFile)inputAlternative.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
 		URI sdURI = URI.createPlatformResourceURI(sdFile.getFullPath().toString(), true);
 
 		//

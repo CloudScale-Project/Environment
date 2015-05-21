@@ -15,16 +15,11 @@ import org.reclipse.structure.inference.DetectPatternsJob;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfigAlternative extends AbstractConfigAlternative {
 
-	public static final String KEY_INPUT_ALTERNATIVE= "input_alternative";
-	
 	public static final String PLUGIN_FILE_DEFAULT_CATALOG = "resources/catalog/default.psc";
 	public static final String PLUGIN_FILE_DEFAULT_ENGINES = "resources/catalog/default.psc.ecore";
 
@@ -43,28 +38,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_RES_ID)
 				);
 	}
-	
-	@Override
-	public IEditorInputResource getInputAlternative()
-	{
-		return GlobalInputAlternative.getInstance();
-	}
 
-	public IEditorInputResource getExtractorResult()
-	{
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(getProject(),
-				ToolchainUtils.EXTRACTOR_RES_ID);
-		
-		String resourceName = getProperty(KEY_EXTRACTOR_RESULT);
-		return resourceProvider.getResource(resourceName);
-	}
-
-	public void setExtractorResult(IEditorInputResource project)
-	{
-		setProperty(KEY_EXTRACTOR_RESULT, project.getResource().getName());
-	}
-	
 	@Override
 	public void create() {
 		super.create();
@@ -129,7 +103,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	@Override
 	protected IStatus doRun(IProgressMonitor m)
 	{
-		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(this, (EditorInputFolder) getExtractorResult());
+		final DetectPatternsJob detectPaternJob = Util.createDetectPaternJob(this, (InputAlternative) getInputAlternative());
 		
 		IStatus status = detectPaternJob.run(m);
 		if (status.isOK())
