@@ -31,7 +31,7 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class UsageEvolutionAlternative extends EditorInputEMF{
-
+	
 	private static final Logger logger = Logger.getLogger(UsageEvolutionAlternative.class.getName());
 	
 	public enum Presets{
@@ -122,6 +122,8 @@ public class UsageEvolutionAlternative extends EditorInputEMF{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		setSubResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
 	}
 	
 	private Function createLinearTrendFunction(){

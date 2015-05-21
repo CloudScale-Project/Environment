@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.ecore.EObject;
@@ -53,6 +54,78 @@ public class UsageComposite extends Composite implements IRefreshable{
 
 	private final ConfAlternative alternative;
 	private final Usage usage;
+	
+	private final ISelectionChangedListener scenarioComboListener = new ISelectionChangedListener() {
+		
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			final StructuredSelection ss = (StructuredSelection)event.getSelection();
+			
+			alternative.getEditingDomain().getCommandStack().execute(new AbstractCommand() {
+				
+				UsageScenario last = null;
+				
+				@Override
+				public void undo() {
+					UsageComposite.this.usage.setScenario(last);
+				}
+				
+				@Override
+				public void redo() {
+					UsageScenario us = (UsageScenario)ss.getFirstElement();
+					UsageComposite.this.usage.setScenario(us);
+				}
+				
+				@Override
+				public boolean canExecute() {
+					return true;
+				}
+				
+				@Override
+				public void execute() {
+					last = UsageComposite.this.usage.getScenario();
+					UsageScenario us = (UsageScenario)ss.getFirstElement();
+					UsageComposite.this.usage.setScenario(us);
+				}
+			});
+		}
+	};
+	
+	private final ISelectionChangedListener limboComboListener = new ISelectionChangedListener() {
+		
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			final StructuredSelection ss = (StructuredSelection)event.getSelection();
+			
+			alternative.getEditingDomain().getCommandStack().execute(new AbstractCommand() {
+				
+				Sequence last = null;
+				
+				@Override
+				public void undo() {
+					UsageComposite.this.usage.setLoadEvolution(last);
+				}
+				
+				@Override
+				public void redo() {
+					Sequence sequence = (Sequence)ss.getFirstElement();
+					UsageComposite.this.usage.setLoadEvolution(sequence);
+				}
+				
+				@Override
+				public boolean canExecute() {
+					return true;
+				}
+				
+				@Override
+				public void execute() {
+					last = UsageComposite.this.usage.getLoadEvolution();
+					Sequence sequence = (Sequence)ss.getFirstElement();
+					UsageComposite.this.usage.setLoadEvolution(sequence);
+				}
+			});
+		}
+	};
 	
 	private final PropertyChangeListener inputSetListener = new PropertyChangeListener() {
 		
@@ -141,29 +214,6 @@ public class UsageComposite extends Composite implements IRefreshable{
 				super.widgetSelected(e);
 			}
 		});
-		
-		scenarioComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection ss = (StructuredSelection)event.getSelection();
-				UsageScenario us = (UsageScenario)ss.getFirstElement();
-				UsageComposite.this.usage.setScenario(us);
-				alternative.fireDirtyState();
-			}
-		});
-		
-		limboComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				StructuredSelection ss = (StructuredSelection)event.getSelection();
-				Sequence sequence = (Sequence)ss.getFirstElement();
-				UsageComposite.this.usage.setLoadEvolution(sequence);
-				alternative.fireDirtyState();
-			}
-		});
-		
 	}
 	
 	private List<Sequence> getSequences(){
@@ -203,13 +253,20 @@ public class UsageComposite extends Composite implements IRefreshable{
 
 	@Override
 	public void refresh() {
-		limboComboViewer.setInput(getSequences());
 		
+		limboComboViewer.removeSelectionChangedListener(limboComboListener);
+		scenarioComboViewer.removeSelectionChangedListener(scenarioComboListener);
+		
+		limboComboViewer.setInput(getSequences());
 		if(usage.getScenario() != null){
 			scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
 		}
 		if(usage.getLoadEvolution() != null){
 			limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
 		}
+		
+		limboComboViewer.addSelectionChangedListener(limboComboListener);
+		scenarioComboViewer.addSelectionChangedListener(scenarioComboListener);
+		
 	}
 }

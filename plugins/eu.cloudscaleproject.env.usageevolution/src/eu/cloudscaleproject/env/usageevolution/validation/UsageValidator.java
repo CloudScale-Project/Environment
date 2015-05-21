@@ -22,14 +22,7 @@ public class UsageValidator implements IResourceValidator{
 	}
 	
 	public boolean validateModels(IProject project, UsageEvolutionAlternative ueAlt) throws CoreException{
-		
-		boolean limbo = false;
-		boolean usage = false;
-		
-		limbo = validateModel(project, ueAlt != null ? ueAlt.getModels("dlim") : null);
-
-		return limbo && usage;
-		
+		return validateModel(project, ueAlt != null ? ueAlt.getModels("dlim") : null);		
 	}
 	
 	public boolean validateModel(IProject project, List<Resource> resources) throws CoreException{
