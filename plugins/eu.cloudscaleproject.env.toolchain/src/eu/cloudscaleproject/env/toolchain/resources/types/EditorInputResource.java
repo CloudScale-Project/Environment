@@ -59,7 +59,7 @@ public abstract class EditorInputResource implements IEditorInputResource{
 	@Override
 	public IValidationStatus getSelfStatus() {
 		if(this.selfStatus == null){
-			this.selfStatus = new ResourceValidationStatus(getID(), getResource());
+			this.selfStatus = new ResourceValidationStatus(this, getID(), getResource());
 		}
 		return selfStatus;
 	}

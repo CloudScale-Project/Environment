@@ -465,7 +465,7 @@ public class EditorInputFolder extends EditorInputResource{
 		if(folder.exists()){
 			for(Entry<String, List<IResource>> entry : subResources.entrySet()){
 				for(IResource res : entry.getValue()){
-					IValidationStatus status = new ResourceValidationStatus(entry.getKey(), res);
+					IValidationStatus status = new ResourceValidationStatus(this, entry.getKey(), res);
 					newList.add(status);
 				}
 			}

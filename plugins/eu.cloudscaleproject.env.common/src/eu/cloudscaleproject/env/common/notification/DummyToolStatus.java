@@ -81,4 +81,9 @@ class DummyToolStatus implements IValidationStatus{
 			throws ValidationException {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public IValidationStatusProvider getProvider() {
+		return null;
+	}
 }

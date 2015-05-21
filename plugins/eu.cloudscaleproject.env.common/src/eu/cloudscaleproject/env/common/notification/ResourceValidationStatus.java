@@ -22,16 +22,19 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	private boolean isValid = false;	
 	private HashMap<String, Warning> warnings = new HashMap<String, Warning>();
 	
+	private final IValidationStatusProvider provider;
+	
 	private class Warning{
 		public String message;
 		BasicCallback<Object> handler;
 	}
 	
-	public ResourceValidationStatus(String id) {
-		this(id, null);
+	public ResourceValidationStatus(IValidationStatusProvider provider, String id) {
+		this(provider, id, null);
 	}
 	
-	public ResourceValidationStatus(String id, IResource resource) {
+	public ResourceValidationStatus(IValidationStatusProvider provider, String id, IResource resource) {
+		this.provider = provider;
 		this.id = id;
 		this.resource = resource;
 	}
@@ -46,6 +49,11 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 		return name;
 	}
 	
+	@Override
+	public IValidationStatusProvider getProvider() {
+		return provider;
+	}
+	
 	public IResource getResource(){
 		return this.resource;
 	}
@@ -53,6 +61,9 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	public IProject getProject(){
 		if(resource != null){
 			return resource.getProject();
+		}
+		if(provider instanceof IProjectProvider){
+			return ((IProjectProvider)provider).getProject();
 		}
 		return null;
 	}

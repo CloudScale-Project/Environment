@@ -188,13 +188,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			}
 		}
 		
-		/*
-		List<IValidationStatusProvider> statusProviders = StatusManager.getInstance().getStatusProviders(this.project);
-		for(IValidationStatusProvider statusProvider : statusProviders){
-			bindStatusProvider(statusProvider);
-		}
-		*/
-		
 		addDisposeListener(new DisposeListener() {
 			
 			@Override
@@ -246,6 +239,11 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		providerBindings.put(statusProvider.getID(), statusProvider);
 	}
 	
+	private String getStatusDiagramUniqueID(IValidationStatus status){
+		String providerID = status.getProvider() != null ? status.getProvider().getID() : "";
+		return providerID + status.getID();
+	}
+	
 	public void bindStatus(IValidationStatus status){
 		
 		if(!isInitilized){
@@ -256,7 +254,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			return;
 		}
 		
-		IValidationStatus old = statusBindings.get(status.getID());
+		IValidationStatus old = statusBindings.get(getStatusDiagramUniqueID(status));
 		if(old != null){
 			unbindStatus(old);
 		}
@@ -267,7 +265,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		if(node != null){
 			bind(node, status);
 		}
-		statusBindings.put(status.getID(), status);
+		statusBindings.put(getStatusDiagramUniqueID(status), status);
 	}
 	
 	public void unbindStatus(IValidationStatus status){
@@ -286,7 +284,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		if(node != null){
 			bind(node, null);
 		}
-		statusBindings.remove(status.getID());
+		statusBindings.remove(getStatusDiagramUniqueID(status));
 	}
 	
 	public void unbindStatusProvider(IValidationStatusProvider statusProvider){

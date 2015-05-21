@@ -19,6 +19,7 @@ public interface IValidationStatus{
 	
 	public String getName();
 	public String getID();
+	public IValidationStatusProvider getProvider();
 	
 	public boolean hasWarnings();
 	public boolean isDirty();
