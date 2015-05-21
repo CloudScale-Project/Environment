@@ -7,6 +7,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 
@@ -26,7 +27,7 @@ public class ImportPCMModelWizard extends Wizard{
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
 		
-		importModelSelectionPage = new ExternalModelsSelectionPage(from, ExternalModelsSelectionPage.PCM_EXTENSIONS);
+		importModelSelectionPage = new ExternalModelsSelectionPage(from, ModelType.GROUP_PCM_EXTENDED);
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	

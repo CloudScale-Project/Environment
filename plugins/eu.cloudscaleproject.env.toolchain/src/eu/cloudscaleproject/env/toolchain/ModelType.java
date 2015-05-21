@@ -1,8 +1,8 @@
-package eu.cloudscaleproject.env.analyser;
+package eu.cloudscaleproject.env.toolchain;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
-public enum PCMModelType{
+
+public enum ModelType{
 	
 	 REPOSITORY(ToolchainUtils.KEY_FILE_REPOSITORY, "repository"), 
 	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
@@ -16,13 +16,23 @@ public enum PCMModelType{
 	 VARIATIONS(ToolchainUtils.KEY_FILE_VARIATIONS, "variations"),
 	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "pcmmeasuringpoint"),
 	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
-	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments");
+	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments"),
+
+	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "sourcecodedecorator"),
+	 XMI(null, "xmi"),
+	 ECORE(null, "ecore");
+	 
+	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
+	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
+	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, AT} ;
+	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, PMS, SLO, VARIATIONS, USAGE_EVOLUTION, MEASURING_POINT} ;
+	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, XMI, ECORE} ;
 	 
 	 private final String extension;
 	 private final String name;
 	 private final String toolcahinId;
 	 
-	 PCMModelType(String toolchainId, String modelExtension){
+	 ModelType(String toolchainId, String modelExtension){
 		 this.extension = modelExtension;
 		 this.name = "pcm";
 		 this.toolcahinId = toolchainId;
@@ -38,5 +48,10 @@ public enum PCMModelType{
 	 
 	 public String getToolchainFileID(){
 		 return toolcahinId;
+	 }
+	 
+	 public void check (Object o)
+	 {
+		 
 	 }
 }

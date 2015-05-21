@@ -32,20 +32,20 @@ import org.scaledl.overview.converter.IOverviewConverter;
 import org.scaledl.overview.converter.IOverviewConverterCallback;
 import org.scaledl.overview.core.Entity;
 
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class OverviewConverter implements IOverviewConverter{
 	
 	private static final String ENTITY_ID_PREFIX = PalladioModel.DEFAULT_MODEL_ID;
 	private static final String CSM2PCM_QVTO = "transforms/csm2pcm.qvto";
 	
-	private static final PCMModelType[] ModelTypes = new PCMModelType[]{PCMModelType.REPOSITORY,
-																		PCMModelType.SYSTEM,
-																		PCMModelType.RESOURCE,
-																		PCMModelType.ALLOCATION,
-																		PCMModelType.USAGE};
+	private static final ModelType[] ModelTypes = new ModelType[]{ModelType.REPOSITORY,
+																		ModelType.SYSTEM,
+																		ModelType.RESOURCE,
+																		ModelType.ALLOCATION,
+																		ModelType.USAGE};
 	
 	//private HashMap<IProject, PCMResourceSet> resourceSetMap = new HashMap<IProject, PCMResourceSet>();
 	
@@ -122,15 +122,15 @@ public class OverviewConverter implements IOverviewConverter{
 			
 			resSet.clearAll(ModelTypes);
 						
-			resSet.setRootObject(PCMModelType.RESOURCE, 
+			resSet.setRootObject(ModelType.RESOURCE, 
 					outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0));
-			resSet.setRootObject(PCMModelType.REPOSITORY, 
+			resSet.setRootObject(ModelType.REPOSITORY, 
 					outputRepository.getContents().isEmpty() ? null : outputRepository.getContents().get(0));
-			resSet.setRootObject(PCMModelType.SYSTEM, 
+			resSet.setRootObject(ModelType.SYSTEM, 
 					outputSystem.getContents().isEmpty() ? null : outputSystem.getContents().get(0));
-			resSet.setRootObject(PCMModelType.ALLOCATION, 
+			resSet.setRootObject(ModelType.ALLOCATION, 
 					outputAllocation.getContents().isEmpty() ? null : outputAllocation.getContents().get(0));
-			resSet.setRootObject(PCMModelType.USAGE, 
+			resSet.setRootObject(ModelType.USAGE, 
 					outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0));
 			
 			resSet.saveAll(ModelTypes);

@@ -32,6 +32,7 @@ import de.uka.ipd.sdq.pcm.repository.RepositoryFactory;
 import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceenvironmentFactory;
 import de.uka.ipd.sdq.pcm.usagemodel.UsagemodelFactory;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class PCMResourceSet extends ResourceSetImpl{
 	
@@ -45,8 +46,8 @@ public class PCMResourceSet extends ResourceSetImpl{
 	
 	public PCMResourceSet(IFolder rootFolder) {
 		
-		modelFiles = new IFile[PCMModelType.values().length];
-		diagramFiles = new IFile[PCMModelType.values().length];
+		modelFiles = new IFile[ModelType.values().length];
+		diagramFiles = new IFile[ModelType.values().length];
 		
 		this.rootFolder = rootFolder;
 		this.rootFolderModels = rootFolder.getFolder("models");
@@ -66,20 +67,20 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 		*/
 		
-		for(PCMModelType mt : PCMModelType.values()){
+		for(ModelType mt : ModelType.values()){
 			this.modelFiles[mt.ordinal()] = this.rootFolderModels.getFile("pcm." + mt.getFileExtension());
 		}
 		
-		for(PCMModelType mt : PCMModelType.values()){
+		for(ModelType mt : ModelType.values()){
 			this.diagramFiles[mt.ordinal()] = this.rootFolder.getFile("pcm." + mt.getFileExtension() + "_diagram");
 		}
 	}
 		
-	public static PCMModelType getTypeFromResource(Resource res){
-		PCMModelType type = null;
+	public static ModelType getTypeFromResource(Resource res){
+		ModelType type = null;
 		
 		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
-		for(PCMModelType t : PCMModelType.values()){
+		for(ModelType t : ModelType.values()){
 			if(t.getFileExtension().equals(file.getFileExtension())){
 				return t;
 			}
@@ -118,7 +119,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		return files;
 	}
 	
-	public void setModelFile(PCMModelType model, IFile file){
+	public void setModelFile(ModelType model, IFile file){
 		IFile old = this.modelFiles[model.ordinal()];
 		if(ExplorerProjectPaths.hasEmfResource(this, old)){
 			Resource res = ExplorerProjectPaths.getEmfResource(this, old);
@@ -128,7 +129,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		this.modelFiles[model.ordinal()] = file;
 	}
 	
-	public void setDiagramFile(PCMModelType model, IFile file){
+	public void setDiagramFile(ModelType model, IFile file){
 		
 		//TODO: if diagram exist so must model file too - set model file automatically
 		IFile old = this.diagramFiles[model.ordinal()];
@@ -140,15 +141,15 @@ public class PCMResourceSet extends ResourceSetImpl{
 		this.diagramFiles[model.ordinal()] = file;
 	}
 	
-	public IFile getModelFile(PCMModelType model){
+	public IFile getModelFile(ModelType model){
 		return modelFiles[model.ordinal()];
 	}
 	
-	public IFile getDiagramFile(PCMModelType model){
+	public IFile getDiagramFile(ModelType model){
 		return diagramFiles[model.ordinal()];
 	}
 	
-	public EObject getModelRootObject(PCMModelType model){
+	public EObject getModelRootObject(ModelType model){
 		
 		if(getModelFile(model) == null){
 			return null;
@@ -158,7 +159,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		return res.getContents().isEmpty() ? null : res.getContents().get(0);
 	}
 	
-	public Diagram getDiagramRootObject(PCMModelType model){
+	public Diagram getDiagramRootObject(ModelType model){
 		
 		if(getDiagramFile(model) == null){
 			return null;
@@ -168,7 +169,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		return res.getContents().isEmpty() ? null : (Diagram)res.getContents().get(0);
 	}
 	
-	public void create(PCMModelType model){
+	public void create(ModelType model){
 		
 		if(getModelFile(model) != null){
 			Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
@@ -186,15 +187,15 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 	
-	public void createAll(PCMModelType[] models){
-		for(PCMModelType mt : models){
+	public void createAll(ModelType[] models){
+		for(ModelType mt : models){
 			if(getModelFile(mt) != null){
 				create(mt);
 			}
 		}
 	}
 	
-	public void clear(PCMModelType model){
+	public void clear(ModelType model){
 		if(getModelFile(model) != null){
 			Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
 			if(res != null){res.getContents().clear();};
@@ -209,15 +210,15 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 	
-	public void clearAll(PCMModelType[] models){
-		for(PCMModelType mt : models){
+	public void clearAll(ModelType[] models){
+		for(ModelType mt : models){
 			if(getModelFile(mt) != null){
 				clear(mt);
 			}
 		}
 	}
 	
-	public void setRootObject(PCMModelType model, EObject object){
+	public void setRootObject(ModelType model, EObject object){
 		
 		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
 		Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
@@ -238,7 +239,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 		resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
 	}
 	
-	public void save(PCMModelType model){
+	public void save(ModelType model){
 		
 		try{
 			if(!rootFolder.exists()){
@@ -271,15 +272,15 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 	
-	public void saveAll(PCMModelType[] models){
-		for(PCMModelType mt : models){
+	public void saveAll(ModelType[] models){
+		for(ModelType mt : models){
 			if(getModelFile(mt) != null){
 				save(mt);
 			}
 		}
 	}
 	
-	public void delete(PCMModelType model){
+	public void delete(ModelType model){
 		
 		try{
 			if(getModelFile(model) != null){
@@ -304,15 +305,15 @@ public class PCMResourceSet extends ResourceSetImpl{
 		}
 	}
 		
-	public void deleteAll(PCMModelType[] models){
-		for(PCMModelType mt : models){
+	public void deleteAll(ModelType[] models){
+		for(ModelType mt : models){
 			if(getModelFile(mt) != null){
 				delete(mt);
 			}
 		}
 	}
 	
-	public static EObject createModelRootObject(PCMModelType id){
+	public static EObject createModelRootObject(ModelType id){
 		EObject model = null;
 		
 		switch(id){
@@ -343,7 +344,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 	public static Diagram createDiagramRootObject(EObject model){
 		Diagram diagram = null;
 		
-		PCMModelType id = getTypeFromResource(model.eResource());
+		ModelType id = getTypeFromResource(model.eResource());
 		if(id == null){
 			String msg = "createDiagramRootObject(): Model type can not be determined!";
 			logger.severe(msg);

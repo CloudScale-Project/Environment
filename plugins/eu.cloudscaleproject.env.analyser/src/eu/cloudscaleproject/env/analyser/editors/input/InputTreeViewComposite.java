@@ -25,11 +25,11 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
 import de.uka.ipd.sdq.pcm.system.System;
 import edu.kit.ipd.sdq.mdsd.profiles.ui.menu.ApplicableStereotypesSubmenu;
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.CreatePCMModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
 public class InputTreeViewComposite extends Composite implements IPropertySheetPageProvider{
@@ -96,12 +96,12 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, Display.getDefault().getActiveShell());
 				//dialog.open();
 				
-				PCMModelType[] types = new PCMModelType[]{
-						PCMModelType.REPOSITORY,
-						PCMModelType.SYSTEM,
-						PCMModelType.RESOURCE,
-						PCMModelType.ALLOCATION,
-						PCMModelType.USAGE
+				ModelType[] types = new ModelType[]{
+						ModelType.REPOSITORY,
+						ModelType.SYSTEM,
+						ModelType.RESOURCE,
+						ModelType.ALLOCATION,
+						ModelType.USAGE
 				};
 				
 				CreatePCMModelWizard createEmptyModelWizard = new CreatePCMModelWizard(input, types);

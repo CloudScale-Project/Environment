@@ -39,35 +39,12 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class ExternalModelsSelectionPage extends WizardPage implements IRefreshable{
 		
 	private static final String DEFAULT_TITLE = "External models selection";
 	private static final String DEFAULT_DESCRIPTION = "Please select folder and models.";
-
-	///////////////////
-	//
-	// TODO: currently hard-coded - make it configurable
-	//
-	public static final String[] ALL_EXTENSIONS = {
-			"repository", "system", "resourceenvironment", "allocation", "usagemodel",  // PCM
-			"experiments","slo", "monitorrepository", "measuringpoint", "variation", "usageevolution", 
-			"xmi", "sourcecodedecorator", "ecore" // Other
-	};
-
-	public static final String[] PCM_EXTENSIONS = {
-			"repository", "system", "resourceenvironment", "allocation", "usagemodel", "xmi" // PCM
-	};
-
-	public static final String[] EXPERIMENTS_EXTENSIONS = {
-			"experiments","slo", "monitorrepository", "measuringpoint", "variation", "usageevolution", 
-	};
-
-	public static final String[] RECLIPSE_EXTENSIONS = {
-        	"repository", "system", "xmi", "sourcecodedecorator", "ecore" // Other
-	};
-	//
-	////////////////////
 
 	private Resource[] selectedResources = new Resource[0];
 	
@@ -88,18 +65,18 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			return new IResource[]{folder};
 		}
 	};
-	private String[] extensions;
+	private ModelType[] types;
 
 	public ExternalModelsSelectionPage() {
-		this (null, ALL_EXTENSIONS);
+		this (null, ModelType.GROUP_ALL);
 	}
 
-	public ExternalModelsSelectionPage(IFolder from, String[] extensions) {
+	public ExternalModelsSelectionPage(IFolder from, ModelType[] types) {
 		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
 		setDescription(DEFAULT_DESCRIPTION);
 		this.folder = from;
 		
-		this.extensions = extensions;
+		this.types = types;
 	}
 	
 	public Resource[] getSelectedResources(){
@@ -187,9 +164,13 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 
 	private void findAndLoadResources(IContainer folder, ResourceSet resSet){
 		
-		for (IFile file : ExplorerProjectPaths.findResources(folder, extensions))
+		for (ModelType type : types)
 		{
-			ExplorerProjectPaths.getEmfResource(resSet, file);
+             for (IFile file : ExplorerProjectPaths.findResources(folder, type.getFileExtension()))
+             {
+            	 // TODO:addtional checks
+                 ExplorerProjectPaths.getEmfResource(resSet, file);
+             }
 		}
 	}
 

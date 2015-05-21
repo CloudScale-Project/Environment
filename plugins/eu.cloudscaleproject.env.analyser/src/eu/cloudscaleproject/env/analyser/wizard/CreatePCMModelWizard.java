@@ -4,9 +4,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class CreatePCMModelWizard extends Wizard{
@@ -15,7 +15,7 @@ public class CreatePCMModelWizard extends Wizard{
 	
 	private ModelSelectionPage modelSelectionPage;
 	
-	public CreatePCMModelWizard(EditorInputEMF alternative, PCMModelType[] types) {
+	public CreatePCMModelWizard(EditorInputEMF alternative, ModelType[] types) {
 		this.alternative = alternative;
 		
 		modelSelectionPage = new ModelSelectionPage("Empty model creation", alternative.getAdapterFactory(), types);
@@ -30,12 +30,12 @@ public class CreatePCMModelWizard extends Wizard{
 	@Override
 	public boolean performFinish() {
 		
-		PCMModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
+		ModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
 		
 		PCMResourceSet resSet = new PCMResourceSet(alternative.getResource());
 		resSet.createAll(selectedModels);
 		
-		for(PCMModelType type : selectedModels){
+		for(ModelType type : selectedModels){
 			IFile file = resSet.getModelFile(type);
 			EObject root = resSet.getModelRootObject(type);
 			

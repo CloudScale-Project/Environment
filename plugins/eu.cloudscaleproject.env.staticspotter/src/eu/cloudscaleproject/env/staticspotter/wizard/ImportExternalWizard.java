@@ -7,6 +7,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -14,10 +15,6 @@ import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPa
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class ImportExternalWizard extends Wizard{
-
-	public static final String[] MODEL_EXTENSIONS = {
-			"repository", "system", "xmi", "sourcecodedecorator", "ecore"
-	};
 
 	private IProject project;
 	
@@ -29,7 +26,7 @@ public class ImportExternalWizard extends Wizard{
 		this.project = project;
 		
 		nameSelectionPage = new NameSelectionPage();
-		importModelSelectionPage = new ExternalModelsSelectionPage(null,ExternalModelsSelectionPage.RECLIPSE_EXTENSIONS);
+		importModelSelectionPage = new ExternalModelsSelectionPage(null, ModelType.GROUP_SOURCEDECORATOR);
 	}
 	
 	@Override

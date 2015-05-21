@@ -17,19 +17,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class ModelSelectionPage extends WizardPage{
 	
-	private List<PCMModelType> selectedModels = new ArrayList<PCMModelType>();
+	private List<ModelType> selectedModels = new ArrayList<ModelType>();
 	
 	private AdapterFactory adapterFactory = null;
 	
-	private PCMModelType[] types;
+	private ModelType[] types;
 	private Resource resource = new ResourceImpl();
 	
-	public ModelSelectionPage(String name, AdapterFactory adapterFacoty, PCMModelType[] types) {
+	public ModelSelectionPage(String name, AdapterFactory adapterFacoty, ModelType[] types) {
 		super(name, name, null);
 		
 		setTitle(name);
@@ -38,8 +38,8 @@ public class ModelSelectionPage extends WizardPage{
 		this.adapterFactory = adapterFacoty;
 	}
 	
-	public PCMModelType[] getSelectedModelTypes(){
-		return selectedModels.toArray(new PCMModelType[selectedModels.size()]);
+	public ModelType[] getSelectedModelTypes(){
+		return selectedModels.toArray(new ModelType[selectedModels.size()]);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class ModelSelectionPage extends WizardPage{
 				for(int i=0; i<selection.length; i++){
 					Object o = selection[i];
 					
-					PCMModelType type = types[resource.getContents().indexOf(o)];
+					ModelType type = types[resource.getContents().indexOf(o)];
 					selectedModels.add(type);
 				}				
 			}

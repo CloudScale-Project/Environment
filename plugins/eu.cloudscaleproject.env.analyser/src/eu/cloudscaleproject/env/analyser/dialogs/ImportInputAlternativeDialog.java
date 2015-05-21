@@ -36,11 +36,11 @@ import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
 import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
 import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
 import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class ImportInputAlternativeDialog extends Dialog{
 		
@@ -137,31 +137,31 @@ public class ImportInputAlternativeDialog extends Dialog{
 	
 	private void findAndLoadResources(IContainer folder, ResourceSet resSet){
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.REPOSITORY.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(folder, ModelType.REPOSITORY.getFileExtension());
 			for(IFile file : files){
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}
 		}
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.SYSTEM.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(folder, ModelType.SYSTEM.getFileExtension());
 			for(IFile file : files){
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}
 		}
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.RESOURCE.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(folder, ModelType.RESOURCE.getFileExtension());
 			for(IFile file : files){
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}
 		}
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.ALLOCATION.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(folder, ModelType.ALLOCATION.getFileExtension());
 			for(IFile file : files){
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}
 		}
 		{
-			List<IFile> files = PCMResourceSet.findResource(folder, PCMModelType.USAGE.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(folder, ModelType.USAGE.getFileExtension());
 			for(IFile file : files){
 				ExplorerProjectPaths.getEmfResource(resSet, file);
 			}

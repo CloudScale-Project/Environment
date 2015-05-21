@@ -75,10 +75,10 @@ import de.uka.ipd.sdq.pcm.usagemodel.OpenWorkload;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import de.uka.ipd.sdq.pcm.usagemodel.UsageScenario;
 import de.uka.ipd.sdq.pcm.usagemodel.Workload;
-import eu.cloudscaleproject.env.analyser.PCMModelType;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -313,7 +313,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
 		if (expFile == null || !expFile.exists())
 		{
-			List<IFile> files = PCMResourceSet.findResource(getResource(), PCMModelType.EXPERIMENTS.getFileExtension());
+			List<IFile> files = PCMResourceSet.findResource(getResource(), ModelType.EXPERIMENTS.getFileExtension());
 			if (files.size() > 0)
 			{
 				// TODO: for now just use fist model file found
@@ -321,7 +321,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			} else
 			{
 				// create new Experiment model file
-				expFile = getResource().getFile(PCMModelType.EXPERIMENTS.getFullName());
+				expFile = getResource().getFile(ModelType.EXPERIMENTS.getFullName());
 				setSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS, expFile);
 			}
 		}
@@ -772,36 +772,14 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	private final void loadModels() throws IOException
 	{
-
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS))
+		for (ModelType type : ModelType.GROUP_EXPERIMENTS)
 		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MONITOR))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_VARIATIONS))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
-		for (IResource f : getSubResources(ToolchainUtils.KEY_FILE_SLO))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
+			for (IResource f : getSubResources(type.getToolchainFileID()))
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
+				res.unload();
+				res.load(null);
+			}
 		}
 
 		// load plugin models into resource set

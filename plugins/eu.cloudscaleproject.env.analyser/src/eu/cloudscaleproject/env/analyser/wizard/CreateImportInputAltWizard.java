@@ -9,6 +9,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -29,7 +30,7 @@ public class CreateImportInputAltWizard extends Wizard{
 		
 		nameSelectionPage = new NameSelectionPage();
 
-		importModelSelectionPage = new ExternalModelsSelectionPage(null,ExternalModelsSelectionPage.PCM_EXTENSIONS);
+		importModelSelectionPage = new ExternalModelsSelectionPage(null,ModelType.GROUP_PCM_EXTENDED);
 		
 		optionsPage = new ImportAlternativeOptionsPage();
 	}
