@@ -15,6 +15,7 @@ import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class TitleWidget extends GradientComposite
 {
@@ -68,11 +69,17 @@ public class TitleWidget extends GradientComposite
 
 	private void updateTitle()
 	{
+		if (this.alternative == null) return;
 		String title = this.alternative.getName();
-/*		if (this.alternative.getType() != null)
+
+		if (this.alternative instanceof IEditorInputResource)  
 		{
-			title = String.format("%s [%s]",this.alternative.getName(), this.alternative.getType().toLowerCase()) ;
-		}*/
+			String type = ((IEditorInputResource)this.alternative).getType();
+			if ( type != null)
+			{
+				title = String.format("%s [%s]", title, type) ;
+			}
+		}
 
 		lblTitle.setText(title);
 	}
