@@ -18,8 +18,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class AlternativeSelectionPage extends WizardPage{
-	private static final String DEFAULT_TITLE = "Select resource";
-	private static final String DEFAULT_DESCRIPTION = "Please select reource from a list.";
+	private static final String DEFAULT_TITLE = "Select alternative";
+	private static final String DEFAULT_DESCRIPTION = "Please select alternative from a list.";
 
 
 	@SuppressWarnings("unused")

@@ -5,95 +5,115 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.wizard.CloneAlternativeWizard;
 
-public class SidebarEditor extends AbstractSidebarEditor{
+public class SidebarEditor extends AbstractSidebarEditor
+{
 
 	private SidebarContentProvider contentProvider = null;
 	private ResourceProvider resourceProvider = null;
-	
-	private final PropertyChangeListener rcl = new PropertyChangeListener() {
-		
+
+	private final PropertyChangeListener rcl = new PropertyChangeListener()
+	{
+
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			
-			if(contentProvider == null){
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+
+			if (contentProvider == null)
+			{
 				return;
 			}
-			
-			if(ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName())){
-				IEditorInputResource res = (IEditorInputResource)evt.getNewValue();
+
+			if (ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName()))
+			{
+				IEditorInputResource res = (IEditorInputResource) evt.getNewValue();
 				String section = contentProvider.getSection(res);
 				SidebarEditor.this.addSidebarEditor(res, section);
 			}
-			if(ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName())){
-				IEditorInputResource res = (IEditorInputResource)evt.getOldValue();
+			if (ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName()))
+			{
+				IEditorInputResource res = (IEditorInputResource) evt.getOldValue();
 				SidebarEditor.this.removeSidebarEditor(res);
 			}
-			if(ResourceProvider.PROP_RESOURCE_MODIFIED.equals(evt.getPropertyName())){
-				IEditorInputResource res = (IEditorInputResource)evt.getNewValue();
+			if (ResourceProvider.PROP_RESOURCE_MODIFIED.equals(evt.getPropertyName()))
+			{
+				IEditorInputResource res = (IEditorInputResource) evt.getNewValue();
 				Composite current = getCurrentSelection();
-				if(current != null && !current.isDisposed() && current.isVisible()){
+				if (current != null && !current.isDisposed() && current.isVisible())
+				{
 					return;
 				}
 				load(res);
 			}
 		}
 	};
-	
-	public SidebarEditor(Composite sidebar, Composite area) {
+
+	public SidebarEditor(Composite sidebar, Composite area)
+	{
 		super(sidebar, area);
 	}
-	
-	public void setContentProvider(SidebarContentProvider compositeProvider){
+
+	public void setContentProvider(SidebarContentProvider compositeProvider)
+	{
 		this.contentProvider = compositeProvider;
 		init();
 	}
-	
-	public void setResourceProvider(ResourceProvider resourceProvider){
+
+	public void setResourceProvider(ResourceProvider resourceProvider)
+	{
 		this.resourceProvider = resourceProvider;
 		init();
 	}
-	
+
 	@Override
-	public void init() {
-		if(resourceProvider != null && contentProvider != null){
+	public void init()
+	{
+		if (resourceProvider != null && contentProvider != null)
+		{
 			super.init();
 			resourceProvider.addListener(rcl);
 		}
 	}
 
 	@Override
-	public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
-		if(contentProvider == null){
+	public Composite createInputComposite(IEditorInput input, Composite parent, int style)
+	{
+		if (contentProvider == null)
+		{
 			return null;
 		}
-		
-		return contentProvider.createComposite(parent, style, (IEditorInputResource)input);
+
+		return contentProvider.createComposite(parent, style, (IEditorInputResource) input);
 	}
 
 	@Override
-	public List<IEditorInput> getInputs(String section) {
+	public List<IEditorInput> getInputs(String section)
+	{
 		List<IEditorInput> resources = new ArrayList<IEditorInput>();
-		
-		if(resourceProvider == null){
+
+		if (resourceProvider == null)
+		{
 			return resources;
 		}
-		
-		for(IEditorInputResource res : resourceProvider.getResources()){
-			if(section == null){
-				if(contentProvider.getSection(res) == null){
+
+		for (IEditorInputResource res : resourceProvider.getResources())
+		{
+			if (section == null)
+			{
+				if (contentProvider.getSection(res) == null)
+				{
 					resources.add(res);
 				}
-			}
-			else if(section.equals(contentProvider.getSection(res))){
+			} else if (section.equals(contentProvider.getSection(res)))
+			{
 				resources.add(res);
 			}
 		}
@@ -101,67 +121,59 @@ public class SidebarEditor extends AbstractSidebarEditor{
 	}
 
 	@Override
-	public String[] getSidebarSections() {
-		if(contentProvider == null){
-			return new String[]{};
+	public String[] getSidebarSections()
+	{
+		if (contentProvider == null)
+		{
+			return new String[] {};
 		}
 		return contentProvider.getSections();
 	}
 
 	@Override
-	public void handleNewInput(IEditorInput selected) {
+	public void handleNewInput(IEditorInput selected)
+	{
 		doHandleNewInput(selected);
 	}
-	
-	public void doHandleNewInput(IEditorInput selected) {
-		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
-		dialog.open();
-		
-		if(IDialogConstants.OK_ID == dialog.getReturnCode()){
-			if(resourceProvider == null){
-				throw new IllegalStateException("Sidebar resource provider not set!");
-			}
-			resourceProvider.createNewResource(dialog.getText(), null);
-		}
+
+	public void doHandleNewInput(IEditorInput selected)
+	{
+		CloneAlternativeWizard cloneAlternativeWizard = new CloneAlternativeWizard(resourceProvider);
+		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), cloneAlternativeWizard);
+		wizardDialog.open();
 	}
 
 	@Override
-	public void handleNewInputFrom(final IEditorInput selected) {
+	public void handleNewInputFrom(final IEditorInput selected)
+	{
 		doHandleNewInputFrom(selected);
 	}
-	
-	public void doHandleNewInputFrom(final IEditorInput selected) {
-		
-		if(!(selected instanceof IEditorInputResource)){
-			return;
-		}
-		
-		TextInputDialog dialog = new TextInputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
-		dialog.open();
-		
-		if(IDialogConstants.OK_ID == dialog.getReturnCode()){
-			if(resourceProvider == null){
-				throw new IllegalStateException("Sidebar resource provider not set!");
-			}
-			IEditorInputResource res = resourceProvider.createNewResource(dialog.getText(), null);
-			res.copyFrom(((IEditorInputResource)selected).getResource());
-			res.setName(dialog.getText());
-			res.save();
-		}
+
+	public void doHandleNewInputFrom(final IEditorInput selected)
+	{
+		if (resourceProvider.getResources().isEmpty()) return;
+
+		CloneAlternativeWizard cloneAlternativeWizard = new CloneAlternativeWizard(resourceProvider);
+		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), cloneAlternativeWizard);
+		wizardDialog.open();
 	}
 
 	@Override
-	public void handleInputDelete(IEditorInput toDelete) {
-		if(!(toDelete instanceof IEditorInputResource)){
+	public void handleInputDelete(IEditorInput toDelete)
+	{
+		if (!(toDelete instanceof IEditorInputResource))
+		{
 			return;
 		}
-		
-		resourceProvider.deleteResource(((IEditorInputResource)toDelete).getResource().getName());
+
+		resourceProvider.deleteResource(((IEditorInputResource) toDelete).getResource().getName());
 	}
-	
+
 	@Override
-	public void dispose() {
-		if(resourceProvider != null){
+	public void dispose()
+	{
+		if (resourceProvider != null)
+		{
 			resourceProvider.removeListener(rcl);
 		}
 		super.dispose();

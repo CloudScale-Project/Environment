@@ -103,10 +103,9 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		txtServerLog.setLeftMargin(8);
 		txtServerLog.append("");
 
+		if (project == null) return;
 		updateState();
 		initLog();
-		
-		txtPort.setText(""+BuiltinServerController.getInstance(project).getServerPort());
 	}
 	
 	public String getHostname()

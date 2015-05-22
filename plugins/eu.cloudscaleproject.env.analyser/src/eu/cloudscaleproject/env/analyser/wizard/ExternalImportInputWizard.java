@@ -14,6 +14,8 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
@@ -21,7 +23,8 @@ public class ExternalImportInputWizard extends Wizard{
 
 	private IProject project;
 
-	private NameSelectionPage nameSelectionPage;
+	
+	private AlternativeNamePage nameSelectionPage;
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage optionsPage;
 	
@@ -31,7 +34,7 @@ public class ExternalImportInputWizard extends Wizard{
 		
 		setWindowTitle("Analyser - External project import");
 		
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 
 		importModelSelectionPage = new ExternalModelsSelectionPage(null,ModelType.GROUP_PCM_EXTENDED);
 		

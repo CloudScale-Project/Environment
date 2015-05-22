@@ -12,6 +12,7 @@ Export-Package: eu.cloudscaleproject.env.toolchain,
  eu.cloudscaleproject.env.toolchain.resources.types,
  eu.cloudscaleproject.env.toolchain.ui,
  eu.cloudscaleproject.env.toolchain.util,
+ eu.cloudscaleproject.env.toolchain.wizard,
  eu.cloudscaleproject.env.toolchain.wizard.pages
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

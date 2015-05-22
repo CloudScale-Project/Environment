@@ -12,8 +12,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -25,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -43,14 +40,16 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.ServerService;
+import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 
-public class ConfAlternativeComposite extends Composite implements IRefreshable, ISelectable{
+public class ConfAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable{
 		
 	private final IProject project;
 	private final ResourceProvider inputResourceProvider;
@@ -58,7 +57,6 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 	private final EditorInputFolder confAlternative;
 	private IEditorInputResource inputAlternative = null;
 		
-	private Text textName;
 	private final ComboViewer comboViewer;
 		
 	private Composite confComposite;
@@ -78,36 +76,22 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 		protected void setContentDescription(String description) {};
 	};
 	
-	public ConfAlternativeComposite(IProject project, Composite parent, int style, final EditorInputFolder editorInput) {
-		super(parent, style);
+	public ConfAlternativeComposite(IProject project, Composite parent, int style, final ConfigAlternative editorInput) {
+		super(parent, style, editorInput);
 		
 		this.project = project;
 		
 		this.confAlternative = editorInput;		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
 		
-		setLayout(new GridLayout(2, false));
+		getContainer().setLayout(new GridLayout(2, false));
 		
-		Label lblName = new Label(this, SWT.NONE);
-		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblName.setText("Name:");
-		
-		textName = new Text(this, SWT.BORDER);
-		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textName.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				ConfAlternativeComposite.this.confAlternative.setName(textName.getText());
-				ConfAlternativeComposite.this.confAlternative.save();
-			}
-		});
-		
-		Label lblSelectInput = new Label(this, SWT.NONE);
+		Label lblSelectInput = new Label(getContainer(), SWT.NONE);
 		lblSelectInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSelectInput.setText("Select input:");
+		lblSelectInput.setText("Input:");
 		
 		//combo viewer
-		comboViewer = new ComboViewer(this, SWT.READ_ONLY);
+		comboViewer = new ComboViewer(getContainer(), SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -156,7 +140,7 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 		});
 		
 		//composite with tab folder
-		Composite composite = new Composite(this, SWT.NONE);
+		Composite composite = new Composite(getContainer(), SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		
@@ -285,7 +269,7 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 			e1.printStackTrace();
 		}
 		
-		Button btnRunDynamicSpotter = new Button(this, SWT.CENTER);
+		Button btnRunDynamicSpotter = new Button(getContainer(), SWT.CENTER);
 		btnRunDynamicSpotter.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false, 2, 1));
 		btnRunDynamicSpotter.setText("Run DynamicSpotter...");
 		btnRunDynamicSpotter.addSelectionListener(new SelectionAdapter() {
@@ -303,8 +287,6 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 				ServerService.getInstance().runSimulation(project, ConfAlternativeComposite.this.confAlternative);
 			}
 		});
-		
-		load();
 	}
 	
 	private void setInput(IEditorInputResource ei){
@@ -320,15 +302,9 @@ public class ConfAlternativeComposite extends Composite implements IRefreshable,
 		return null;
 	}
 	
-	public void load(){
-		String name = confAlternative.getName();
-		textName.setText(name != null ? name : "");
-	}
-	
 	@Override
 	public void refresh() {
 		confAlternative.load();
-		load();
 		comboViewer.refresh(true);
 		
 		for(Control c : confComposite.getChildren()){

@@ -15,15 +15,15 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class ImportExtractorResultWizard extends Wizard
 {
 
 	private IProject project;
 
-	private NameSelectionPage nameSelectionPage;
+	private AlternativeNamePage nameSelectionPage;
 	private AlternativeSelectionPage alternativeSelectionPage;
 
 	public ImportExtractorResultWizard(IProject project)
@@ -31,7 +31,7 @@ public class ImportExtractorResultWizard extends Wizard
 
 		this.project = project;
 
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
 		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,

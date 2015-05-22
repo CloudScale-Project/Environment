@@ -11,16 +11,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -35,11 +31,11 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 
-public class InputAlternativeComposite extends Composite implements IRefreshable, ISelectable{
+public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable{
 	
 	private final EditorInputFolder editorInput;
-	private Text textName;
 	
 	private IProject project;
 	
@@ -57,31 +53,17 @@ public class InputAlternativeComposite extends Composite implements IRefreshable
 	};
 		
 	public InputAlternativeComposite(IProject project, Composite parent, int style, final EditorInputFolder editorInput) {
-		super(parent, style);
+		super(parent, style, editorInput);
 		
 		this.project = project;
 		this.editorInput = editorInput;
 
-		setLayout(new GridLayout(2, false));
-		
-		Label lblName = new Label(this, SWT.NONE);
-		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblName.setText("Name:");
-		
-		textName = new Text(this, SWT.BORDER);
-		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textName.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				InputAlternativeComposite.this.editorInput.setName(textName.getText().trim());
-				InputAlternativeComposite.this.editorInput.save();
-			}
-		});
+		getContainer().setLayout(new GridLayout(2, false));
 		
 		//Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		//label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
-		Composite composite = new Composite(this, SWT.NONE);
+		Composite composite = new Composite(getContainer(), SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
 		gd_composite.widthHint = 57;
@@ -193,8 +175,6 @@ public class InputAlternativeComposite extends Composite implements IRefreshable
 			}
 		});
 		*/
-		
-		load();
 	}
 	
 	private void createDefaultFile(IFile file, String string){
@@ -217,15 +197,9 @@ public class InputAlternativeComposite extends Composite implements IRefreshable
 		}
 	}
 	
-	public void load(){
-		String name = editorInput.getName();
-		textName.setText(name != null ? name : "");
-	}
-	
 	@Override
 	public void refresh() {
 		editorInput.load();
-		load();
 		
 		for(Control c : meaComposite.getChildren()){
 			c.dispose();

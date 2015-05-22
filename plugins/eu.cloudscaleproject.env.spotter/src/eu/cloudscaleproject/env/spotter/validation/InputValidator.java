@@ -12,9 +12,9 @@ import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.shared.environment.model.XMeasurementEnvironment;
 
+import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -74,6 +74,7 @@ public class InputValidator implements IResourceValidator {
 				
 		} catch (ValidationException e) {
 			status.setIsValid(false);
+			return;
 		} catch (UICoreException e) {
 			e.printStackTrace();
 		}

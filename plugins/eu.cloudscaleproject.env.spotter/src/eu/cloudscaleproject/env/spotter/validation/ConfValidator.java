@@ -6,9 +6,9 @@ import org.eclipse.core.resources.IProject;
 import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.shared.configuration.JobDescription;
 
+import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;

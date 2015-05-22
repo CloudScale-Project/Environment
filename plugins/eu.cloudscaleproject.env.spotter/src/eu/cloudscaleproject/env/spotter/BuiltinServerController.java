@@ -28,6 +28,7 @@ public class BuiltinServerController
 	private static HashMap<String, BuiltinServerController> mapControllers = new HashMap<>();
 	public static BuiltinServerController getInstance(IProject project)
 	{
+		if (project == null) return null;
 		if (!mapControllers.containsKey(project.getName()))
 		{
 			BuiltinServerController controller = new BuiltinServerController(project);

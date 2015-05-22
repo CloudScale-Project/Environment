@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

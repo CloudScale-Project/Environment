@@ -3,18 +3,20 @@ package eu.cloudscaleproject.env.csm2pcm.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 
 
 //TODO: implement this class - transformation merge has to be re-enabled first
 public class TransformIntoExistingAlternativeWizard extends Wizard{
 
 	//private IProject project;
-	private NameSelectionPage nameSelectionPage;
+	private AlternativeNamePage nameSelectionPage;
 
 	public TransformIntoExistingAlternativeWizard(IProject project) {
 		//this.project = project;
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 	}
 	
 	@Override

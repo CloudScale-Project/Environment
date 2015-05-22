@@ -465,7 +465,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		if(btnNewEnabled){
 			HoverButton btnNew = new HoverButton(compositeSidebarControls, SWT.NONE);
 			btnNew.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-			btnNew.setText("New");
+			btnNew.setText("Create");
 			btnNew.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -483,7 +483,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		if(btnNewFromEnabled){
 			HoverButton btnNewFromSelection = new HoverButton(compositeSidebarControls, SWT.NONE);
 			btnNewFromSelection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-			btnNewFromSelection.setText("New from selection");
+			btnNewFromSelection.setText("Clone");
 			btnNewFromSelection.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -498,7 +498,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		if(btnRemoveEnabled){
 			HoverButton btnRemove = new HoverButton(compositeSidebarControls, SWT.NONE);
 			btnRemove.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-			btnRemove.setText("Remove");
+			btnRemove.setText("Delete");
 			btnRemove.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

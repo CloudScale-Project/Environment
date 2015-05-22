@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import java.io.File;
 import java.io.IOException;

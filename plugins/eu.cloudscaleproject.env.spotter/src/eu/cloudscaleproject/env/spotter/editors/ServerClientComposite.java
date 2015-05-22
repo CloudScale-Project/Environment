@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.ColorResources;
+import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
@@ -41,9 +42,10 @@ public class ServerClientComposite extends Composite
 	private ExternalServerComposite externalServerComposite;
 	private Label lblStatus;
 	private Button btnConnectClient;
-	private GradientComposite composite_2;
-	private GradientComposite composite_3;
+	private GradientComposite headerComposite;
 	private Composite serverComposite;
+	private Composite statusComposite;
+	private Label lblStatusIcon;
 
 	/**
 	 * Create the composite.
@@ -58,50 +60,16 @@ public class ServerClientComposite extends Composite
 
 		setLayout(new GridLayout(1, false));
 		
-		composite_2 = new GradientComposite(this, SWT.NONE);
-		composite_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		composite_2.setLayout(new GridLayout(1, false));
-		
-		composite_2.setGradientDirection(false);
-		composite_2.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
-		composite_2.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
-		
-		Label lblSpotterClient = new Label(composite_2, SWT.NONE);
-		lblSpotterClient.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		lblSpotterClient.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
-		lblSpotterClient.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
-		lblSpotterClient.setText("Client");
-		
-		Composite composite_1 = new Composite(this, SWT.NONE);
-		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_composite_1.heightHint = 80;
-		composite_1.setLayoutData(gd_composite_1);
-		
-		btnConnectClient = new Button(composite_1, SWT.NONE);
-		btnConnectClient.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				toggleClientConnection();
-			}
-		});
-		btnConnectClient.setBounds(10, 10, 120, 27);
-		btnConnectClient.setText("Connect client");
-		
-		lblStatus = new Label(composite_1, SWT.NONE);
-		lblStatus.setText("Status");
-		lblStatus.setBounds(20, 43, 470, 27);
-		
-		composite_3 = new GradientComposite(this, SWT.NONE);
-		composite_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
-		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		composite_3.setLayout(new GridLayout(1, false));
+		headerComposite = new GradientComposite(this, SWT.NONE);
+		headerComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
+		headerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		headerComposite.setLayout(new GridLayout(1, false));
 
-		composite_3.setGradientDirection(false);
-		composite_3.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
-		composite_3.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
+		headerComposite.setGradientDirection(false);
+		headerComposite.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
+		headerComposite.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
 		
-		Label lblSpotterServer = new Label(composite_3, SWT.NONE);
+		Label lblSpotterServer = new Label(headerComposite, SWT.NONE);
 		lblSpotterServer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		lblSpotterServer.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
 		lblSpotterServer.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
@@ -146,6 +114,35 @@ public class ServerClientComposite extends Composite
 		externalServerComposite = new ExternalServerComposite(this.grpExternalServer, SWT.NONE);
 		
 		rbBuiltinServer.setSelection(true);
+		
+		Composite footerComposite = new Composite(this, SWT.BORDER);
+		footerComposite.setLayout(new GridLayout(2, false));
+		GridData gd_footerComposite = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_footerComposite.heightHint = 48;
+		footerComposite.setLayoutData(gd_footerComposite);
+		
+		statusComposite = new Composite(footerComposite, SWT.NONE);
+		statusComposite.setLayout(new GridLayout(2, false));
+		statusComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		lblStatusIcon = new Label(statusComposite, SWT.NONE);
+		lblStatusIcon.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
+
+		lblStatus = new Label(statusComposite, SWT.NONE);
+		lblStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
+
+		
+		btnConnectClient = new Button(footerComposite, SWT.NONE);
+		GridData gd_btnConnectClient = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnConnectClient.widthHint = 80;
+		btnConnectClient.setLayoutData(gd_btnConnectClient);
+		btnConnectClient.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				toggleClientConnection();
+			}
+		});
+		btnConnectClient.setText("Connect");
 		
 		updateClient();
 		updateServerComposite();
@@ -224,8 +221,10 @@ public class ServerClientComposite extends Composite
 			lblStatus.setText(String.format("Client is connected to %s:%s.",
 							clientController.getClient().getHost(), 
 							clientController.getClient().getPort()));
+			
+			lblStatusIcon.setImage(CommonResources.OK);
 
-			btnConnectClient.setText("Disconnect client");
+			btnConnectClient.setText("Disconnect");
 
 			setEnabledRecursive(serverComposite, false);
 		}
@@ -233,7 +232,8 @@ public class ServerClientComposite extends Composite
 		{
 			setEnabledRecursive(serverComposite, true);
 			lblStatus.setText("Client is not connected. Please configure server properties.");
-			btnConnectClient.setText("Connect client");
+			btnConnectClient.setText("Connect");
+			lblStatusIcon.setImage(CommonResources.WARNING);
 		}
 	}
 

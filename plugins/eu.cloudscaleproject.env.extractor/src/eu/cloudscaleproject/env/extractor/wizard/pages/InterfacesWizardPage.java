@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -41,7 +41,6 @@ import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
 import org.scaledl.overview.util.OverviewSpecificationUtil;
 
-import eu.cloudscaleproject.env.extractor.wizard.components.ProvidedServiceComposite;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.extractor.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;

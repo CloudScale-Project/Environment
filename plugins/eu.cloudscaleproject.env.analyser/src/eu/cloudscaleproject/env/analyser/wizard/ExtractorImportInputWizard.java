@@ -15,6 +15,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
@@ -23,7 +24,7 @@ public class ExtractorImportInputWizard extends Wizard
 
 	private IProject project;
 
-	private NameSelectionPage nameSelectionPage;
+	private AlternativeNamePage nameSelectionPage;
 	private AlternativeSelectionPage alternativeSelectionPage;
 
 	public ExtractorImportInputWizard(IProject project)
@@ -32,7 +33,7 @@ public class ExtractorImportInputWizard extends Wizard
 		
 		setWindowTitle("Analyser - Extractor result import");
 
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
 		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,

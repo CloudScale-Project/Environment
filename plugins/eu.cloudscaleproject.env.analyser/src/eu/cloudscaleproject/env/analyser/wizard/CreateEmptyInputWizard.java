@@ -12,7 +12,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 
 public class CreateEmptyInputWizard extends Wizard{
 	
@@ -25,13 +25,13 @@ public class CreateEmptyInputWizard extends Wizard{
 			ModelType.RESOURCE,
 			ModelType.USAGE};
 	
-	private final NameSelectionPage nameSelectionPage;
+	private final AlternativeNamePage nameSelectionPage;
 	private final ModelSelectionPage modelSelectionPage;
 	
 	public CreateEmptyInputWizard(IProject project) {
 		this.project = project;
 				
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 		
 		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
 		modelSelectionPage.setDescription("Please select PCM models to start with");

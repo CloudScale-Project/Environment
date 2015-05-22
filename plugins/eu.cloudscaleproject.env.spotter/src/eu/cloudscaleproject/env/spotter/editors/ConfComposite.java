@@ -3,10 +3,10 @@ package eu.cloudscaleproject.env.spotter.editors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.composite.ConfAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -40,7 +40,7 @@ public class ConfComposite extends SidebarEditorComposite {
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
 				
-				return new ConfAlternativeComposite(project, parent, style, (EditorInputFolder)resource);
+				return new ConfAlternativeComposite(project, parent, style, (ConfigAlternative)resource);
 			}
 		});
 	}

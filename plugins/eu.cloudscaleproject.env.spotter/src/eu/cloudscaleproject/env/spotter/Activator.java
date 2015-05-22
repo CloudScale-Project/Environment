@@ -4,8 +4,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory;
+import eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory;
+import eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.FolderResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 /**
@@ -35,11 +37,11 @@ public class Activator extends AbstractUIPlugin{
 		
 		//register resource provider factories		
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID, 
-				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID));
+				new InputResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, 
-				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID));
+				new ConfigResourceProviderFactory());
 		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, 
-				new FolderResourceProviderFactory(ToolchainUtils.SPOTTER_DYN_RES_ID));		
+				new ResultResourceProviderFactory());		
 		
 		
 		/*

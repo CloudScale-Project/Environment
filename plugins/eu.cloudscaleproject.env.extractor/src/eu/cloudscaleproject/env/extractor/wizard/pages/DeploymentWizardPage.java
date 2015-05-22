@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import java.util.List;
 
@@ -45,7 +45,6 @@ import org.scaledl.overview.specification.ServiceSpecification;
 import org.scaledl.overview.specification.Specification;
 import org.scaledl.overview.util.OverviewSpecificationUtil;
 
-import eu.cloudscaleproject.env.extractor.wizard.components.ServiceDeploymentComponent;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.extractor.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.extractor.wizard.util.SwtUtil;

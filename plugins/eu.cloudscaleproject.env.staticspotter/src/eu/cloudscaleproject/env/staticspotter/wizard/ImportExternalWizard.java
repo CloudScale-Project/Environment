@@ -13,21 +13,21 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class ImportExternalWizard extends Wizard{
 
 	private IProject project;
 	
-	private NameSelectionPage nameSelectionPage;
+	private AlternativeNamePage nameSelectionPage;
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	
 	public ImportExternalWizard(IProject project) {
 		
 		this.project = project;
 		
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID));
 		importModelSelectionPage = new ExternalModelsSelectionPage(null, ModelType.GROUP_SOURCEDECORATOR);
 	}
 	

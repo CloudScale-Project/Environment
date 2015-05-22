@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard.components;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import java.util.LinkedList;
 import java.util.List;

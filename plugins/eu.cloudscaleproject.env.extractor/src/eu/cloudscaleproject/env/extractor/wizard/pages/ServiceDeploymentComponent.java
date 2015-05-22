@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard.components;
+package eu.cloudscaleproject.env.extractor.wizard.pages;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;

@@ -21,7 +21,7 @@ import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
 
 public class OpenAlternativeUtil
 {
-	public static void openAlternative (IEditorInputResource alternative)
+	public static void openAlternative(IEditorInputResource alternative)
 	{
 		IProject project = alternative.getProject();
 
@@ -32,7 +32,8 @@ public class OpenAlternativeUtil
 		{
 			IEditorPart part = IDE.openEditor(page, editorInput, "eu.cloudscaleproject.env.toolchain.tooleditor");
 
-			if (part instanceof ProjectEditor) {
+			if (part instanceof ProjectEditor)
+			{
 				ProjectEditor pe = (ProjectEditor) part;
 				openAlternative(pe, alternative);
 			}
@@ -40,47 +41,54 @@ public class OpenAlternativeUtil
 		{
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public static void openAlternative (ProjectEditor pe, IEditorInput alternative)
+
+	public static void openAlternative(ProjectEditor pe, IEditorInput alternative)
 	{
 		//
 		// Select alternative
 		//
 		selectAlternative(alternative);
-		
+
 		//
 		// Select tab
 		//
 		Control control = findTabItemControl(alternative);
-		if (control == null) return;
-
-		CTabItem[] tabList = pe.getTabFolder().getItems();
-		for (CTabItem tab : tabList)
+		if (control != null)
 		{
-			if (tab.getControl() == control)
+
+			CTabItem[] tabList = pe.getTabFolder().getItems();
+			for (CTabItem tab : tabList)
 			{
-				pe.getTabFolder().setSelection(tab);
-				break;
+				if (tab.getControl() == control)
+				{
+					pe.getTabFolder().setSelection(tab);
+					break;
+				}
 			}
 		}
 	}
-	
-	private static  Control findTabItemControl (IEditorInput alternative)
+
+	private static Control findTabItemControl(IEditorInput alternative)
 	{
-		Composite composite = EditorRegistry.getInstance().getEditorItem(alternative).getComposite();
-		
-		while (!(composite.getParent() instanceof CTabFolder))
+		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
+		Composite composite = null;
+
+		if (editorItem != null)
 		{
-			composite = composite.getParent();
+			composite = editorItem.getComposite();
+
+			while (!(composite.getParent() instanceof CTabFolder))
+			{
+				composite = composite.getParent();
+			}
 		}
-		
+
 		return composite;
 	}
 
-	
-	private static void selectAlternative (IEditorInput alternative)
+	private static void selectAlternative(IEditorInput alternative)
 	{
 		EditorItem editorItem = EditorRegistry.getInstance().getEditorItem(alternative);
 		if (editorItem != null)

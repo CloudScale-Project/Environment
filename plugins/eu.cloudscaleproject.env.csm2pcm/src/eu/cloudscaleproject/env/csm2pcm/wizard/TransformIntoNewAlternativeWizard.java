@@ -19,14 +19,14 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class TransformIntoNewAlternativeWizard extends Wizard{
 	
 	private IProject project;
 	
-	private NameSelectionPage nameSelectionPage;
+	private AlternativeNamePage nameSelectionPage;
 	private TransformWizardPage transformPage;
 	private ExternalModelsSelectionPage importSelectionPage;
 
@@ -37,7 +37,7 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		
 		folder = createTransformOutputFolder(project);
 		
-		nameSelectionPage = new NameSelectionPage();
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 		transformPage = new TransformWizardPage(project, folder);
 		importSelectionPage = new ExternalModelsSelectionPage(folder, ModelType.GROUP_PCM_EXTENDED);
 	}
