@@ -38,6 +38,7 @@ public class CustomDiagramEditor extends DiagramEditor{
 		//set zoom
 		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);
 		zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_NEVER);
+		zoomManager.setZoomAsText(ZoomManager.FIT_ALL);
 		
 		getGraphicalViewer().getControl().addControlListener(new ControlListener() {
 			

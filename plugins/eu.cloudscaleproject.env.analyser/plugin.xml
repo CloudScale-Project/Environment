@@ -27,6 +27,9 @@
       <client
             class="eu.cloudscaleproject.env.analyser.validation.ConfValidator">
       </client>
+      <client
+            class="eu.cloudscaleproject.env.analyser.validation.ResultValidator">
+      </client>
    </extension>
    <extension
          point="org.eclipse.emf.ecore.uri_mapping">

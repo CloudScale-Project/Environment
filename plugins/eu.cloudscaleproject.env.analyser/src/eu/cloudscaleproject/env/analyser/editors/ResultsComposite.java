@@ -16,6 +16,8 @@ import eu.cloudscaleproject.env.analyser.editors.result.MonitorResultsComposite;
 import eu.cloudscaleproject.env.analyser.editors.result.ScalabilityResultComposite;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -59,15 +61,21 @@ public class ResultsComposite extends SidebarEditorComposite{
 	}
 
 	
-	private static class RightPanelComposite extends TitleEditorView implements IRefreshable{
+	private static class RightPanelComposite extends TitleEditorView implements IRefreshable, ISelectable{
 
+		private final IProject project;
+		private final ResultAlternative alternative;
+		
 		private CTabFolder tabFolder;
 		
 		private Composite basicResultComposite;
 		private AdvancedResultComposite advancedResultComposite;
 		
-		public RightPanelComposite(ResultAlternative alternative, Composite parent, int style) {
-			super(parent, style, alternative);
+		public RightPanelComposite(ResultAlternative alt, Composite parent, int style) {
+			super(parent, style, alt);
+			
+			this.project = alt.getProject();
+			this.alternative = alt;
 			
 			getContainer().setLayout(new FillLayout());
 			
@@ -95,6 +103,11 @@ public class ResultsComposite extends SidebarEditorComposite{
 			
 			refresh();
 			layout();
+		}
+		
+		@Override
+		public void onSelect() {
+			ValidationDiagramService.showStatus(project, alternative);
 		}
 		
 		@Override
