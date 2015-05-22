@@ -1,134 +1,129 @@
-package eu.cloudscaleproject.env.usageevolution.editors.composite;
+package eu.cloudscaleproject.env.usageevolution.wizard.pages;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
-import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative.Presets;
 
-public class EditorComposite extends Composite implements ISelectable{
-
-	private final IProject project;
-	private final UsageEvolutionAlternative alternative;
+public class PresetSelectionPage extends WizardPage{
 	
-	public EditorComposite(final UsageEvolutionAlternative alt, Composite parent, int style) {
-		super(parent, style);
+	private Presets selectedPreset = null;
+
+	public PresetSelectionPage() {
+		super("Select arrival rate preset");
+		setTitle("Select arrival rate preset");
+		setDescription("Please select initial arrival rate preset.");
 		
-		this.project = alt.getProject();
-		this.alternative = alt;
+		setPageComplete(false);
+	}
+	
+	public Presets getSelectedPreset(){
+		return selectedPreset;
+	}
+
+	@Override
+	public void createControl(Composite parent) {
 		
-		setLayout(new GridLayout(1, false));
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
 		
-		Label lblPresets = new Label(this, SWT.NONE);
+		Label lblPresets = new Label(composite, SWT.NONE);
 		lblPresets.setLayoutData(new GridData());
 		lblPresets.setBounds(10, 10, 162, 15);
 		lblPresets.setText("Usage evolution presets:");
 		
 		//presets
-		Composite presets = new Composite(this, SWT.NONE);
+		Composite presets = new Composite(composite, SWT.NONE);
 		presets.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		presets.setLayout(new GridLayout(1, false));
 		
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.LINEAR_TREND);
+					selectedPreset = Presets.LINEAR_TREND;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create linear trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.LINEAR_INCREASE_DECLINE);
+					selectedPreset = Presets.LINEAR_INCREASE_DECLINE;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create linear increase and decline");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.SINUSOIDAL);
+					selectedPreset = Presets.SINUSOIDAL;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create sinusoidal");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.SINUSOIDAL_TREND);
+					selectedPreset = Presets.SINUSOIDAL_TREND;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create sinusoidal trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.EXPONENTIAL);
+					selectedPreset = Presets.EXPONENTIAL;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create explonential trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT);
+			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					alt.createPreset(Presets.EXPONENTIAL_LOG);
+					selectedPreset = Presets.EXPONENTIAL_LOG;
+					setPageComplete(true);
 				}
 			});
 			button.setBounds(10, 31, 258, 27);
 			button.setText("Create explonential increase and log decline");
 		}
 		
-		//actions
-		Label lblActions = new Label(this, SWT.NONE);
-		lblActions.setLayoutData(new GridData());
-		lblActions.setText("Actions:");
-		
-		Button btnLimboEditor = new Button(this, SWT.NONE);
-		btnLimboEditor.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				alt.openLimboEditor();
-			}
-		});
-		btnLimboEditor.setLayoutData(new GridData());
-		btnLimboEditor.setText("Edit Limbo model");
+		setControl(composite);
 	}
 
-	@Override
-	public void onSelect() {
-		ValidationDiagramService.showStatus(project, alternative);
-	}
 }

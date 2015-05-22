@@ -17,6 +17,8 @@ public enum ModelType{
 	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "pcmmeasuringpoint"),
 	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
 	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments"),
+	 
+	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "dlim"),
 
 	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "sourcecodedecorator"),
 	 XMI(null, "xmi"),

@@ -224,7 +224,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 			if(eir instanceof EditorInputEMF){
 				EditorInputEMF alt = (EditorInputEMF)eir;
 				
-				for(EObject eo : alt.getModelRoot(ToolchainUtils.KEY_FILE_LIMBO)){
+				for(EObject eo : alt.getModelRoot(alternative.getResourceSet(), ToolchainUtils.KEY_FILE_LIMBO)){
 					if(eo instanceof Sequence){
 						out.add((Sequence)eo);
 					}
@@ -257,10 +257,11 @@ public class UsageComposite extends Composite implements IRefreshable{
 		limboComboViewer.removeSelectionChangedListener(limboComboListener);
 		scenarioComboViewer.removeSelectionChangedListener(scenarioComboListener);
 		
-		limboComboViewer.setInput(getSequences());
 		if(usage.getScenario() != null){
 			scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
 		}
+		
+		limboComboViewer.setInput(getSequences());
 		if(usage.getLoadEvolution() != null){
 			limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
 		}

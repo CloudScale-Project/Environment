@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ui.PartInitException;
@@ -25,8 +26,8 @@ import tools.descartes.dlim.Sequence;
 import tools.descartes.dlim.Sin;
 import tools.descartes.dlim.SinTrend;
 import tools.descartes.dlim.TimeDependentFunctionContainer;
-import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
@@ -59,12 +60,6 @@ public class UsageEvolutionAlternative extends EditorInputEMF{
 		IFile limboFile = (IFile)getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
 		if(limboFile == null){
 			limboFile = getResource().getFile("pcm.dlim");
-		}
-		
-		if(limboFile.exists()){
-			if(!DialogUtils.openConfirm("Current usage evolution data will be removed! Do you confirm?")){
-				return;
-			}
 		}
 				
 		Resource res = ExplorerProjectPaths.getEmfResource(resSet, limboFile);
@@ -211,5 +206,30 @@ public class UsageEvolutionAlternative extends EditorInputEMF{
 			}
 		}
 		return out;
+	}
+	
+	@Override
+	protected void doLoad()
+	{
+
+		super.doLoad();
+
+		try
+		{
+			loadModels();
+		} catch (IOException e2)
+		{
+			e2.printStackTrace();
+		}
+	}
+	
+	private final void loadModels() throws IOException
+	{
+		for (IResource f : getSubResources(ModelType.LIMBO.getToolchainFileID()))
+		{
+			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
+			res.unload();
+			res.load(null);
+		}
 	}
 }

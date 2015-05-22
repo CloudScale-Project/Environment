@@ -43,7 +43,10 @@ public abstract class ResourceProvider
 
 	private final IFolder rootFolder;
 	private final String defaultResName;
-
+	
+	private final Object propLock = new Object();
+	private final Object resourcesLock = new Object();
+	
 	private final LinkedHashMap<IResource, IEditorInputResource> resources = new LinkedHashMap<IResource, IEditorInputResource>();
 
 	// private transient HashMap<String, IEditorInputResource> taggedResources =
@@ -63,18 +66,17 @@ public abstract class ResourceProvider
 		@Override
 		public void resourceChanged(IResourceDelta delta)
 		{
-			boolean modified = ResourceProvider.this.reloadResources();
-			if (!modified)
-			{
-				synchronized (ResourceProvider.this)
+			synchronized (resourcesLock){
+				boolean modified = ResourceProvider.this.reloadResources();
+				if (!modified)
 				{
-					for (IResource res : resources.keySet())
-					{
-						if (delta.findMember(res.getFullPath()) != null)
+						for (IResource res : resources.keySet())
 						{
-							firePropertyChange(PROP_RESOURCE_MODIFIED, null, resources.get(res));
+							if (delta.findMember(res.getFullPath()) != null)
+							{
+								firePropertyChange(PROP_RESOURCE_MODIFIED, null, resources.get(res));
+							}
 						}
-					}
 				}
 			}
 		}
@@ -95,12 +97,12 @@ public abstract class ResourceProvider
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 	}
 
-	public synchronized void dispose()
+	public void dispose()
 	{
 		ExplorerChangeNotifier.getInstance().removeListener(ecl);
 	}
 
-	public synchronized void tagResource(String tag, IEditorInputResource resource)
+	public void tagResource(String tag, IEditorInputResource resource)
 	{
 		IProject project = rootFolder.getProject();
 
@@ -108,21 +110,27 @@ public abstract class ResourceProvider
 		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
 		try
 		{
-			project.setPersistentProperty(key, resource != null ? resource.getResource().getName() : "");
+			synchronized (propLock) {
+				project.setPersistentProperty(key, resource != null ? resource.getResource().getName() : "");				
+			}
 		} catch (CoreException e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	public synchronized boolean hasTag(String tag, IEditorInputResource resource)
+	public boolean hasTag(String tag, IEditorInputResource resource)
 	{
 		IProject project = rootFolder.getProject();
 
 		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
 		try
 		{
-			String tagedResourceName = project.getPersistentProperties().get(key);
+			String tagedResourceName;
+			synchronized (propLock) {
+				tagedResourceName = project.getPersistentProperties().get(key);
+			}
+			
 			if (tagedResourceName == null || tagedResourceName.isEmpty())
 			{
 				return false;
@@ -147,14 +155,18 @@ public abstract class ResourceProvider
 		return false;
 	}
 
-	public synchronized IEditorInputResource getTaggedResource(String tag)
+	public IEditorInputResource getTaggedResource(String tag)
 	{
 		IProject project = rootFolder.getProject();
 
 		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
 		try
 		{
-			String tagedResourceName = project.getPersistentProperties().get(key);
+			String tagedResourceName;
+			synchronized (propLock) {
+				tagedResourceName = project.getPersistentProperties().get(key);
+			}
+			
 			if (tagedResourceName == null || tagedResourceName.isEmpty())
 			{
 				return null;
@@ -197,55 +209,57 @@ public abstract class ResourceProvider
 		return modified;
 	}
 
-	public synchronized final boolean reloadResources()
+	public final boolean reloadResources()
 	{
-
 		boolean modified = checkRootFolder();
 
-		// remove missing
-		Iterator<IResource> iter = resources.keySet().iterator();
-		while (iter.hasNext())
-		{
-			IResource res = iter.next();
-			if (!res.exists())
+		synchronized (resourcesLock) {
+			
+			// remove missing
+			Iterator<IResource> iter = resources.keySet().iterator();
+			while (iter.hasNext())
 			{
-
-				IEditorInputResource eir = resources.get(res);
-				if (eir instanceof IValidationStatusProvider)
+				IResource res = iter.next();
+				if (!res.exists())
 				{
-					StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
-				}
-				iter.remove();
-
-				firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
-				modified = true;
-			}
-		}
-
-		if (!rootFolder.exists())
-		{
-			return modified;
-		}
-
-		// add new
-		try
-		{
-			for (IResource res : rootFolder.members())
-			{
-				if (resources.containsKey(res))
-				{
-					continue;
-				}
-
-				if (res.exists() && validateResource(res))
-				{
-					addResource(res);
+	
+					IEditorInputResource eir = resources.get(res);
+					if (eir instanceof IValidationStatusProvider)
+					{
+						StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
+					}
+					iter.remove();
+	
+					firePropertyChange(PROP_RESOURCE_REMOVED, eir, null);
 					modified = true;
 				}
 			}
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
+	
+			if (!rootFolder.exists())
+			{
+				return modified;
+			}
+	
+			// add new
+			try
+			{
+				for (IResource res : rootFolder.members())
+				{
+					if (resources.containsKey(res))
+					{
+						continue;
+					}
+	
+					if (res.exists() && validateResource(res))
+					{
+						addResource(res);
+						modified = true;
+					}
+				}
+			} catch (CoreException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return modified;
@@ -268,7 +282,10 @@ public abstract class ResourceProvider
 
 		IEditorInputResource prop = loadResource(res, type);
 
-		resources.put(prop.getResource(), prop);
+		synchronized (resourcesLock) {
+			resources.put(prop.getResource(), prop);			
+		}
+		
 		if (prop instanceof IValidationStatusProvider)
 		{
 			StatusManager.getInstance().addStatusProvider(prop.getResource().getProject(), (IValidationStatusProvider) prop);
@@ -287,12 +304,14 @@ public abstract class ResourceProvider
 		return this.rootFolder.getProject();
 	}
 
-	public synchronized List<IEditorInputResource> getResources()
+	public List<IEditorInputResource> getResources()
 	{
-		return new ArrayList<IEditorInputResource>(resources.values());
+		synchronized (resourcesLock) {
+			return new ArrayList<IEditorInputResource>(resources.values());			
+		}
 	}
 
-	public synchronized IEditorInputResource getResource(String resourceName)
+	public IEditorInputResource getResource(String resourceName)
 	{
 
 		if (resourceName == null)
@@ -300,52 +319,61 @@ public abstract class ResourceProvider
 			return null;
 		}
 
-		for (IEditorInputResource prop : resources.values())
-		{
-			if (resourceName.equals(prop.getResource().getName()))
+		synchronized (resourcesLock) {
+			for (IEditorInputResource prop : resources.values())
 			{
-				return prop;
+				if (resourceName.equals(prop.getResource().getName()))
+				{
+					return prop;
+				}
 			}
 		}
+		
 		return null;
 	}
 
-	public synchronized IEditorInputResource getResourceByName(String name)
+	public IEditorInputResource getResourceByName(String name)
 	{
-		for (IEditorInputResource prop : resources.values())
-		{
-			if (name.equals(prop.getName()))
+		synchronized (resourcesLock) {
+			for (IEditorInputResource prop : resources.values())
 			{
-				return prop;
+				if (name.equals(prop.getName()))
+				{
+					return prop;
+				}
 			}
 		}
+		
 		return null;
 	}
 
-	public synchronized IEditorInputResource getResource(IResource resource)
+	public IEditorInputResource getResource(IResource resource)
 	{
 		if (resource == null)
 		{
 			return null;
 		}
 
-		for (IEditorInputResource prop : resources.values())
-		{
-			if (resource.getName().equals(prop.getResource().getName()))
+		synchronized (resourcesLock) {
+			for (IEditorInputResource prop : resources.values())
 			{
-				return prop;
+				if (resource.getName().equals(prop.getResource().getName()))
+				{
+					return prop;
+				}
 			}
 		}
+		
 		return null;
 	}
 
-	public synchronized boolean hasResource(String resourceName)
+	public boolean hasResource(String resourceName)
 	{
 		IEditorInputResource prop = getResource(resourceName);
 		return prop == null ? false : true;
 	}
 
-	public synchronized IEditorInputResource createNewResource(String resourceName, String name, String type)
+	public IEditorInputResource createNewResource(String resourceName, String name, String type)
 	{
 
 		checkRootFolder();
@@ -356,7 +384,9 @@ public abstract class ResourceProvider
 		eir.setName(name);
 		eir.save();
 
-		resources.put(res, eir);
+		synchronized (resourcesLock) {
+			resources.put(res, eir);			
+		}
 
 		if (res instanceof IValidationStatusProvider)
 		{
@@ -371,7 +401,7 @@ public abstract class ResourceProvider
 
 	private final SimpleDateFormat result_postix_format = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
 
-	public synchronized IEditorInputResource createNewResource(String name, String type)
+	public IEditorInputResource createNewResource(String name, String type)
 	{
 		checkRootFolder();
 
@@ -379,7 +409,7 @@ public abstract class ResourceProvider
 		return createNewResource(resourceName, name, type);
 	}
 
-	public synchronized void deleteResource(String resourceName)
+	public void deleteResource(String resourceName)
 	{
 		IEditorInputResource resource = getResource(resourceName);
 		resource.delete();

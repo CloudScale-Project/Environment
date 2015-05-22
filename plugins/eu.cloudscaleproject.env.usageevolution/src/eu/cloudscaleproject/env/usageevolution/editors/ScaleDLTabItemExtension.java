@@ -106,9 +106,9 @@ public class ScaleDLTabItemExtension extends DIExtension implements ProjectEdito
 	public void handleAction(String action) {
 		
 	}
-
+	
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		return null;
+		return scaledlEditor.getPropertySheetPage();
 	}
 }

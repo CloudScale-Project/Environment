@@ -76,6 +76,17 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public List<EObject> getModelRoot(String key) {
+		return getModelRoot(resSet, key);
+	}
+	
+	public EObject getModelRoot(Resource resource) {
+		if(resource.getContents().isEmpty()){
+			return null;
+		}
+		return resource.getContents().get(0);
+	}
+	
+	public List<EObject> getModelRoot(ResourceSet resSet, String key) {
 		
 		List<EObject> out = new ArrayList<>();
 		List<IResource> resources = getSubResources(key);
@@ -90,14 +101,6 @@ public class EditorInputEMF extends EditorInputFolder{
 			}
 		}
 		return out;
-	}
-	
-	public EObject getModelRoot(Resource resource) {
-		if(resource.getContents().isEmpty()){
-			return null;
-		}
-		
-		return resource.getContents().get(0);
 	}
 	
 	public List<Resource> loadExternal(EditorInputEMF resource, String key){
