@@ -31,8 +31,10 @@ public class CloneAlternativeWizard extends CreateAlternativeWizard{
 
 	protected void initAlternative (IEditorInputResource alternative)
 	{
+		String name = alternative.getName();
 		IEditorInputResource selection = alternativeSelectionPage.getSelection();
 		alternative.copyFrom(selection.getResource());
+		alternative.setName(name);
 	}
 	
 

@@ -7,7 +7,9 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -50,6 +52,15 @@ public class AlternativeSelectionPage extends WizardPage{
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		listViewer = new ListViewer(container, SWT.BORDER | SWT.V_SCROLL);
+		
+		listViewer.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				checkComplete();
+			}
+		});
 		m_bindingContext = initDataBindings();
 	}
 
@@ -70,5 +81,10 @@ public class AlternativeSelectionPage extends WizardPage{
 	public IEditorInputResource getSelection ()
 	{
 		return (IEditorInputResource) ((StructuredSelection)listViewer.getSelection()).getFirstElement();
+	}
+	
+	private void checkComplete()
+	{
+		this.setPageComplete(getSelection()!=null);
 	}
 }

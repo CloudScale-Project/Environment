@@ -4,9 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
@@ -38,8 +36,6 @@ public class CreateAlternativeWizard extends Wizard{
 	public boolean performFinish() {
 		
 		String altName = nameSelectionPage.getName();
-
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_CONF_ID);
 
 		IEditorInputResource alternative = (IEditorInputResource)provider.createNewResource(altName, null);
 

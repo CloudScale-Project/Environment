@@ -1,65 +1,38 @@
 package eu.cloudscaleproject.env.usageevolution.wizard;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative.Presets;
 import eu.cloudscaleproject.env.usageevolution.wizard.pages.PresetSelectionPage;
 
-public class CreatePredefinedUsageWizard extends Wizard{
-
-	private final IProject project;
-	
-	private NameSelectionPage nameSelectionPage = null;
+public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
 	private PresetSelectionPage presetSelectionPage = null;
 
 	public CreatePredefinedUsageWizard(IProject project) {
+		super(project, ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
 		
 		this.project = project;
 		
-		nameSelectionPage = new NameSelectionPage();
 		presetSelectionPage = new PresetSelectionPage();
 	}
 	
 	@Override
 	public void addPages() {
 		
-		addPage(nameSelectionPage);
+		super.addPages();
 		addPage(presetSelectionPage);
 	}
-
 	@Override
-	public boolean performFinish() {
-		
-		String name = nameSelectionPage.getName();
-		Presets selectedPreset = presetSelectionPage.getSelectedPreset();
-		
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID);
-		UsageEvolutionAlternative resource = (UsageEvolutionAlternative)provider.createNewResource(name, null);
-		resource.createPreset(selectedPreset);
-		resource.save();
-		
-		ValidationDiagramService.showStatus(project, resource);
-		OpenAlternativeUtil.openAlternative(resource);
-		
-		return true;
-	}
-	
-	@Override
-	public boolean canFinish()
+	protected void initAlternative(IEditorInputResource alternative)
 	{
-		if (getContainer().getCurrentPage() == getPages()[getPageCount()-1] 
-				&& getContainer().getCurrentPage().isPageComplete())
-			return true;
-
-		return false;
+		Presets selectedPreset = presetSelectionPage.getSelectedPreset();
+		((UsageEvolutionAlternative)alternative).createPreset(selectedPreset);
+		// TODO Auto-generated method stub
+		super.initAlternative(alternative);
 	}
-
 }

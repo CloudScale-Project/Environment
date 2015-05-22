@@ -15,10 +15,11 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
+import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 
-public class UsageEvolutionEditorComposite extends Composite implements IPropertySheetPageProvider, ISelectable, IRefreshable{
+public class UsageEvolutionEditorComposite extends InputEditorView implements IPropertySheetPageProvider, ISelectable, IRefreshable{
 
 	private static final String PLOTVIEWID = "tools.descartes.dlim.generator.editor.views.PlotView";
 	
@@ -46,18 +47,18 @@ public class UsageEvolutionEditorComposite extends Composite implements IPropert
 	};
 	
 	public UsageEvolutionEditorComposite(final UsageEvolutionAlternative alt, Composite parent, int style) {
-		super(parent, style);
+		super(parent, style, alt);
 				
 		this.project = alt.getProject();
 		this.alternative = alt;
 		
-		setLayout(new GridLayout(1, false));
+		getContainer().setLayout(new GridLayout(1, false));
 		
-		Label lblTitle = new Label(this, SWT.NONE);
+		Label lblTitle = new Label(getContainer(), SWT.NONE);
 		lblTitle.setText("Usage evolution arrival rate editor:");
 		lblTitle.setLayoutData(new GridData());
 		
-		treeviewEditor = new EMFEditableTreeviewComposite(alt, this, SWT.NONE);
+		treeviewEditor = new EMFEditableTreeviewComposite(alt, getContainer(), SWT.NONE);
 		treeviewEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
