@@ -13,6 +13,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.CloneAlternativeWizard;
+import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 
 public class SidebarEditor extends AbstractSidebarEditor
 {
@@ -138,8 +139,8 @@ public class SidebarEditor extends AbstractSidebarEditor
 
 	public void doHandleNewInput(IEditorInput selected)
 	{
-		CloneAlternativeWizard cloneAlternativeWizard = new CloneAlternativeWizard(resourceProvider);
-		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), cloneAlternativeWizard);
+		CreateAlternativeWizard createlternativeWizard = new CreateAlternativeWizard(resourceProvider.getProject(), resourceProvider);
+		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
 		wizardDialog.open();
 	}
 

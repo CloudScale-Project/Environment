@@ -69,7 +69,7 @@ public class CreateConfigSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Import project";
+			return "Import configuration";
 		}
 
 		@Override
