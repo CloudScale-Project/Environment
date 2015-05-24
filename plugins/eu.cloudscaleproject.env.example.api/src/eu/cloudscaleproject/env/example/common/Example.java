@@ -155,8 +155,10 @@ public class Example
 		try
 		{
 			return FileLocator.toFileURL(u);
-		} catch (IOException e)
+		} catch (Exception e)
 		{
+			Logger.getGlobal().warning(String.format("Unable to find resource <%s> for example <%s>.", 
+					el.getAttribute("name"),attr));
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
