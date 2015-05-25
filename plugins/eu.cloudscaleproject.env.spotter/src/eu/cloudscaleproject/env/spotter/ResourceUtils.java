@@ -95,10 +95,6 @@ public class ResourceUtils {
 		} catch (UICoreException e) {
 			e.printStackTrace();
 		}
-		
-		//save to properties
-		runAlternative.setProperty(KEY_PARENT_EDITOR_RESOURCE, inputAlternative.getResource().getName());
-		runAlternative.save();
 	}
 	
 	public static void registerResourceFactories(){

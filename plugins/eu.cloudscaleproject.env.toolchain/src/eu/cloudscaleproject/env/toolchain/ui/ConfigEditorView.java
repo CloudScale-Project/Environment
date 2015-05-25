@@ -1,7 +1,9 @@
 package eu.cloudscaleproject.env.toolchain.ui;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -23,7 +25,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
@@ -32,16 +33,18 @@ import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 
 public abstract class ConfigEditorView extends AbstractEditorView
 {
+	
+	private static Map<IConfigAlternative, Job> JOBS_REGISTRY = new HashMap<>();
+
 	private IConfigAlternative alternative;
 
 	private Composite stackedContainer;
 	private Button btnRun;
-	private Job currentJob;
 	private ValidationWidget validationComposite;
 	private ResultWiget resultsComposite;
 	private Composite progressComposite;
 	
-	private final IValidationStatusListener propertyChangeListener = new IValidationStatusListener()
+	private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener()
 	{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
@@ -96,7 +99,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if (currentJob != null && currentJob.getResult() == null)
+				if (JOBS_REGISTRY.get(alternative) != null && JOBS_REGISTRY.get(alternative).getResult() == null)
 				{
 					stop();
 				} else
@@ -111,6 +114,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		btnRun.setLayoutData(gd_btnNewButton);
 		btnRun.setText("Run");
 
+		updateControls();
 	}
 
 	private void initListeners()
@@ -120,18 +124,16 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				alternative.getSelfStatus().removeListener(propertyChangeListener);
 				alternative.removePropertyChangeListener(propertyChangeListener);
 			}
 		});
 
 		alternative.addPropertyChangeListener(propertyChangeListener);
-		alternative.getSelfStatus().addListener(propertyChangeListener);
 	}
 
 	private void run()
 	{
-		this.currentJob = new Job("CloudScale Run [" + alternative.getName() + "]")
+		Job job = new Job("CloudScale Run [" + alternative.getName() + "]")
 		{
 			private RunProgressMonitor internalMonitor;
 
@@ -150,28 +152,32 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			}
 		};
 
-		currentJob.addJobChangeListener(new JobChangeAdapter()
+		job.addJobChangeListener(new JobChangeAdapter()
 		{
 			@Override
 			public void done(IJobChangeEvent event)
 			{
 				updateControls();
-				currentJob = null;
+				JOBS_REGISTRY.put(alternative, null);
 			}
 		});
 
-		currentJob.schedule();
+		job.schedule();
+		JOBS_REGISTRY.put(alternative, job);
+
+
 		updateControls();
 	}
 
 	private void stop()
 	{
-		this.currentJob.cancel();
+		JOBS_REGISTRY.get(alternative).cancel();
 	}
 
 	private boolean isRunning ()
 	{
-		return currentJob != null && currentJob.getResult() == null;
+		Job job = JOBS_REGISTRY.get(alternative);
+		return job != null && job.getResult() == null;
 	}
 
 	private void updateControls()
@@ -189,9 +195,10 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					setEnabledRecursive(getContainer(), false);
 				} else
 				{
-					if (currentJob != null && currentJob.getResult() != null)
+					Job job = JOBS_REGISTRY.get(alternative);
+					if (job != null && job.getResult() != null)
 					{
-						resultsComposite.setStatus(currentJob.getResult());
+						resultsComposite.setStatus(job.getResult());
 						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
 
 						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());

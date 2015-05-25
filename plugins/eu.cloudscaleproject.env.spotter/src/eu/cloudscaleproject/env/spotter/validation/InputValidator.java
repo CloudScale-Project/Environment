@@ -16,6 +16,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -38,19 +39,10 @@ public class InputValidator implements IResourceValidator {
 		//validate selected input alternatives
 		try {								
 			// check connection
-			ServiceClientWrapper client = Activator.getDefault().getClient(selectedRes.getResource().getName());
-			String hostname = selectedRes.getProperty("hostname");
-			String port = selectedRes.getProperty("port");
+			SpotterClientController controller = SpotterClientController.getController(project);
 			
-			status.check(ERROR, hostname != null && hostname.isEmpty(), true, 
-					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection hostname is not specified!"));
-			status.check(ERROR, port != null && !port.isEmpty(), true, 
-					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection port is not specified!"));
-			
-			client.saveServiceClientSettings(hostname, port);
-			
-			status.check(ERROR, client.testConnection(false), true, 
-					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Connection to server can not be established!"));
+			status.check(ERROR, controller.isConnected(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Spotter client not initialized - check Server page.!"));
 			
 			// check input files
 			IFolder folder = (IFolder)selectedRes.getResource();

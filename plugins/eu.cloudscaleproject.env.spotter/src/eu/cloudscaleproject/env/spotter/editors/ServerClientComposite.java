@@ -134,7 +134,8 @@ public class ServerClientComposite extends Composite
 		
 		btnConnectClient = new Button(footerComposite, SWT.NONE);
 		GridData gd_btnConnectClient = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnConnectClient.widthHint = 80;
+		gd_btnConnectClient.widthHint = 90;
+		gd_btnConnectClient.heightHint = 36;
 		btnConnectClient.setLayoutData(gd_btnConnectClient);
 		btnConnectClient.addSelectionListener(new SelectionAdapter() {
 			@Override

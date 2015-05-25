@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
-import eu.cloudscaleproject.env.spotter.editors.composite.ConfAlternativeComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.ConfigAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -40,7 +40,7 @@ public class ConfComposite extends SidebarEditorComposite {
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
 				
-				return new ConfAlternativeComposite(project, parent, style, (ConfigAlternative)resource);
+				return new ConfigAlternativeComposite(project, parent, style, (ConfigAlternative)resource);
 			}
 		});
 	}

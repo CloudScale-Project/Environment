@@ -13,8 +13,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative
 {
-	private ResourceProvider resultsResourceProvider;
-	private ResourceProvider inputResourceProvider;
+	protected ResourceProvider resultsResourceProvider;
+	protected ResourceProvider inputResourceProvider;
 
 	public AbstractConfigAlternative(IProject project, IFolder folder, String validationID, 
 			ResourceProvider inputResourceProvider,
@@ -80,7 +80,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	{
 		IStatus status = doRun(monitor);
 
-		if (status.isOK())
+		if (status == null || status.isOK())
 		{
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 

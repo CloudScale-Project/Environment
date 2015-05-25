@@ -11,7 +11,6 @@ import org.eclipse.ui.PlatformUI;
 import org.spotter.eclipse.ui.util.DialogUtils;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.spotter.dialogs.RunAlternativeDialog;
 
 public class DynamicSpotterRunHandler {
 	
@@ -38,8 +37,8 @@ public class DynamicSpotterRunHandler {
 			}
 		}
 		
-		RunAlternativeDialog dialog = new RunAlternativeDialog(project, shell);
-		dialog.open();
+		//RunAlternativeDialog dialog = new RunAlternativeDialog(project, shell);
+		//dialog.open();
 	}
 	
 }
