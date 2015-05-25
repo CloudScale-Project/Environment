@@ -152,8 +152,8 @@ public class ConfValidator implements IResourceValidator {
 					status.check(errorID, slo.getMeasurementSpecification() != null, true, 
 							"SLO: '"+ slo.getName() +"' needs measurement specification!");
 				}
-				
 			}
+			status.clearWarnings();
 		}
 
 		return true;
@@ -175,7 +175,7 @@ public class ConfValidator implements IResourceValidator {
 				status.check(errorID, monitor.getMeasuringPoint() != null, true,
 						"Monitor: '"+ monitor.getEntityName() +"' does not have measuring point specified!");
 			}
-				
+			status.clearWarnings();
 		}
 
 		return true;
@@ -201,7 +201,7 @@ public class ConfValidator implements IResourceValidator {
 				status.check("", usage.getScenario() != null, true, 
 						"Usage evolution: '"+ usage.getEntityName() + "' does not have usage scenarion!");
 			}
-				
+			status.clearWarnings();
 		}
 		return true;
 	}
