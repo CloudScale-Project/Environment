@@ -15,9 +15,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_PhIIAC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.handler.openinputwizard" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.OpenInputWizardHandler" command="_O0RpEC3kEeSFlZh2WowR_Q"/>
     <elements xsi:type="commands:Handler" xmi:id="_1tETsP-PEeSqy_Mw_uqHTA" elementId="eu.cloudscaleproject.env.staticspotter.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.StaticSpotterEditorHandler" command="_mOK8wP-PEeSqy_Mw_uqHTA"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FmhgEC3kEeSFlZh2WowR_Q" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_QH5NEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/ic-spotter-small.png" tooltip="Open Static Spotter Editor" command="_O0RpEC3kEeSFlZh2WowR_Q"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WXy1kHubEeSCzZgOtBwvkA" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_WXy1kXubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.staticspotter.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
       <children xsi:type="menu:Menu" xmi:id="_WXy1knubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.staticspotter.menu.staticspotter" label="Static Spotter">

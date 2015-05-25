@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.toolchain;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -112,8 +115,16 @@ public class ProjectEditorSelectionService implements IPostSelectionProvider
 		Object[] listeners = list.getListeners();
 		for (int i = 0; i < listeners.length; i++)
 		{
-			ISelectionChangedListener listener = (ISelectionChangedListener) listeners[i];
-			listener.selectionChanged(event);
+			try
+			{
+				ISelectionChangedListener listener = (ISelectionChangedListener) listeners[i];
+				listener.selectionChanged(event);
+			}
+			catch (Exception e)
+			{
+				Logger.getLogger(ProjectEditorSelectionService.class.getName()).log(Level.WARNING, "Exception fireing selection changed: "+e.getMessage());
+			}
+
 		}
 	}
 

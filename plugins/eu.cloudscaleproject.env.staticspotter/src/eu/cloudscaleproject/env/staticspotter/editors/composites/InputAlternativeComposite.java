@@ -31,7 +31,7 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		this.inputAlternative = inputAlternative;
 
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
-		containerEditor.setText("Catalog and Engine models");
+		containerEditor.setText("Source Code Decorator");
 		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(inputAlternative, containerEditor, SWT.NONE);

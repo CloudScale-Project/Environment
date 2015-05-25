@@ -58,7 +58,7 @@ public class SelectInputAltComposite extends Composite{
 		setLayout(new GridLayout(3, false));
 		
 		Label lblSelectInput = new Label(this, SWT.NONE);
-		lblSelectInput.setText("Select input:");
+		lblSelectInput.setText("Input:");
 		new Label(this, SWT.NONE);
 		{
 			comboViewerInput = new ComboViewer(this, SWT.READ_ONLY);

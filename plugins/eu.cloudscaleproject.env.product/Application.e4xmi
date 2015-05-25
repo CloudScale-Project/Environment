@@ -65,7 +65,7 @@
     </sharedElements>
     <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
       <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newproject" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="New cloudscale project" command="_czYasKLbEeOVJP61i6fIgw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
       </children>
       <children xsi:type="menu:ToolControl" xmi:id="_3WnY4HteEeKIYfuE0pelcA" elementId="SearchField" toBeRendered="false" visible="false"/>
       <children xsi:type="menu:ToolControl" xmi:id="_Ic3vMHtfEeKIYfuE0pelcA" elementId="Search-PS Glue" toBeRendered="false" visible="false"/>

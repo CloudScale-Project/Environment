@@ -24,12 +24,12 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "New arival rate";
+				return "New usage evolution";
 			}
 			
 			@Override
 			public String getDescription() {
-				return "Create default arrival rate.";
+				return "Create default usage evolution.";
 			}
 			
 			@Override
@@ -43,12 +43,12 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "Predefined arrival rate";
+				return "Predefined usage evolution";
 			}
 			
 			@Override
 			public String getDescription() {
-				return "Create initial arrival rate from the predefined presets.";
+				return "Create initial usage evolution from the predefined presets.";
 			}
 			
 			@Override
@@ -61,7 +61,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "Custom arrival rate";
+				return "Custom usage evolution";
 			}
 			
 			@Override

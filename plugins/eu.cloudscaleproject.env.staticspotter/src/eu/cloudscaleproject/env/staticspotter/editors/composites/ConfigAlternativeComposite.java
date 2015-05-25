@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -71,8 +70,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 		getContainer().setLayout(new GridLayout(3, false));
 
 		Label lblInput = new Label(getContainer(), SWT.NONE);
-		lblInput.setFont(SWTResourceManager.getFont("Sans", 11, SWT.NORMAL));
-		lblInput.setText("Input alternative:");
+		lblInput.setText("Input:");
 
 		comboViewer = new ComboViewer(getContainer(), SWT.NONE);
 		combo = comboViewer.getCombo();
