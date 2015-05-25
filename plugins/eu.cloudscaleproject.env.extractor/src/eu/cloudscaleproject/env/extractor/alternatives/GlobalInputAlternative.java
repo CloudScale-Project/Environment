@@ -16,6 +16,10 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -46,7 +50,39 @@ public class GlobalInputAlternative extends EditorInputResource
 			@Override
 			public void projectsUpdated(Set<IProject> projects)
 			{
+				//////////////////////////
+				// HACK - delayed validation, if project is not yet accessible (when opening projects)
+				// TODO: Probably there is better solution
+				//
+				boolean delayed = false;
+				for (IProject iProject : projects)
+				{
+					if (!iProject.isAccessible())
+					{
+						delayed = true; break;
+					}
+
+				}
+
+				if (delayed)
+				{
+					Job job = new Job ("Delayed validation. [Workaround]"){
+						@Override
+						protected IStatus run(IProgressMonitor monitor)
+						{
+							getInstance().validate();
+							return Status.OK_STATUS;
+						}
+					};
+					job.schedule(1000);
+				}
+				
+				//
+				////////////////////////
+				
+
 				getInstance().validate();
+
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					@Override
@@ -189,10 +225,10 @@ public class GlobalInputAlternative extends EditorInputResource
 						if (delta.getResource().getType() == IResource.PROJECT)
 						{
 							IProject project = (IProject) delta.getResource();
-							if (delta.getKind() == IResourceDelta.ADDED && project.isAccessible())
+							if (delta.getKind() == IResourceDelta.ADDED)
 							{
 								projects.add(project);
-							} 
+							}
 
 							if (delta.getKind() == IResourceDelta.REMOVED)
 							{
