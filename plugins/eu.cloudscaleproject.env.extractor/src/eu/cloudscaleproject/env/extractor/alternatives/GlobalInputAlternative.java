@@ -192,7 +192,8 @@ public class GlobalInputAlternative extends EditorInputResource
 							if (delta.getKind() == IResourceDelta.ADDED && project.isAccessible())
 							{
 								projects.add(project);
-							} else
+							} 
+							else if (!project.isAccessible())
 							{
 								projects.add(project);
 							}
