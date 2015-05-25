@@ -103,11 +103,7 @@ public class MeasuringPointsSelectionComposite extends Composite implements IRef
 					Monitor monitor = EcoreUtil.copy(monitorWrapper.getMaster());
 					monitor.setMeasuringPoint((MeasuringPoint)selection);
 					
-					if(alternative.getUsedMonitorRepository() == null){
-						return;
-					}
-					
-					alternative.getUsedMonitorRepository().getMonitors().add(monitor);
+					alternative.retrieveMonitorRepository().getMonitors().add(monitor);
 					monitorWrapper.getSlaves().add(monitor);
 				}
 				alternative.setDirty(true);

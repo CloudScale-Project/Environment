@@ -133,7 +133,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ConfAlternative.PROP_INPUT_ALT_SET.equals(evt.getPropertyName())){
 				IEMFListProperty usageScenListProp = EMFProperties.list(UsagemodelPackage.Literals.USAGE_MODEL__USAGE_SCENARIO_USAGE_MODEL);
-				scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getUsedUsageModel()));
+				scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getActiveUsageModel()));
 				scenarioComboViewer.refresh();
 			}
 		}
@@ -171,7 +171,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		});
 		scenarioComboViewer.setContentProvider(new ObservableListContentProvider());
 		IEMFListProperty usageScenListProp = EMFProperties.list(UsagemodelPackage.Literals.USAGE_MODEL__USAGE_SCENARIO_USAGE_MODEL);
-		scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getUsedUsageModel()));
+		scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getActiveUsageModel()));
 		
 		alternative.addPropertyChangeListener(inputSetListener);
 		addDisposeListener(new DisposeListener() {

@@ -66,7 +66,7 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 		
 		comboMeasurementSpecViewer = new ComboViewer(this, SWT.NONE);
 		comboMeasurementSpecViewer.setContentProvider(new ArrayContentProvider());
-		comboMeasurementSpecViewer.setInput(alternative.getMeasurementSpecifications());
+		comboMeasurementSpecViewer.setInput(alternative.getActiveMeasurementSpecifications());
 
 		Combo comboMeasuremntSpec = comboMeasurementSpecViewer.getCombo();
 		GridData gd_comboMeasuremntSpec = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
@@ -195,7 +195,7 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 	
 	public void refresh(){
 		if(comboMeasurementSpecViewer != null){
-			comboMeasurementSpecViewer.setInput(alternative.getMeasurementSpecifications());
+			comboMeasurementSpecViewer.setInput(alternative.getActiveMeasurementSpecifications());
 		}
 		if(bindingContext != null){
 			bindingContext.updateTargets();

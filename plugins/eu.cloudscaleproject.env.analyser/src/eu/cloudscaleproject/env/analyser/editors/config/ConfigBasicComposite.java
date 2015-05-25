@@ -181,7 +181,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 
 	public void refresh() {
 		
-		for(StopCondition sc : alternative.getExperiment().getStopConditions()){
+		for(StopCondition sc : alternative.retrieveExperimentModel().getStopConditions()){
 			if(sc instanceof SimTimeStopCondition){
 				simTime = (SimTimeStopCondition)sc;
 			}
@@ -193,14 +193,14 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		if(simTime == null){
 			simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 			simTime.setSimulationTime(-1);
-			alternative.getExperiment().getStopConditions().add(simTime);
+			alternative.retrieveExperimentModel().getStopConditions().add(simTime);
 			alternative.save();
 		}
 		
 		if(measureCount == null){
 			measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 			measureCount.setMeasurementCount(-1);
-			alternative.getExperiment().getStopConditions().add(measureCount);
+			alternative.retrieveExperimentModel().getStopConditions().add(measureCount);
 			alternative.save();
 		}
 		

@@ -11,6 +11,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.palladiosimulator.experimentautomation.experiments.Experiment;
+import org.palladiosimulator.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.MonitorRepository;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
+import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
+import org.scaledl.usageevolution.Usage;
+import org.scaledl.usageevolution.UsageEvolution;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -107,6 +114,98 @@ public class ConfValidator implements IResourceValidator {
 		return modelValid;
 	}
 	
+	private boolean validateExperiment(ConfAlternative alt) throws ValidationException{
+		
+		Experiment experiment = alt.retrieveExperimentModel();
+	
+		IValidationStatus status = alt.getSelfStatus();
+		
+		status.check("ExperimentError", experiment != null, true, "Experiment: Experiment does not exist!");
+		status.check("InitialModelError", experiment.getInitialModel() != null, true, "Experiment: Initial model does not exist!");
+		status.check("StopConditionError", !experiment.getStopConditions().isEmpty(), true, "Experiment: Stop condition is empty!");
+
+		return true;
+	}
+	
+	private boolean validateSloRepository(ConfAlternative alt) throws ValidationException{
+		
+		ServiceLevelObjectiveRepository sloRep = alt.getActiveSLORepository();
+		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_SLO);
+		
+		for(IValidationStatus status : statusArray){
+			
+			if(ConfAlternative.Type.CAPACITY.equals(alt.getTypeEnum())
+					|| ConfAlternative.Type.SCALABILITY.equals(alt.getTypeEnum())){
+				
+				status.check("SLOError", sloRep != null , true, "This experiment type needs SLO specifications");
+				status.check("SLOEmptyError", !sloRep.getServicelevelobjectives().isEmpty() , true, "This experiment type needs SLO specifications");
+
+			}
+			
+			if(sloRep != null && !sloRep.getServicelevelobjectives().isEmpty()){
+				
+				String errorID = "SLOError";
+				
+				for(ServiceLevelObjective slo : sloRep.getServicelevelobjectives()){
+					status.check(errorID, slo.getLowerThreshold() != null || slo.getUpperThreshold() != null, true,
+							"SLO: '"+ slo.getName() +"' needs uper or lower threshold!");
+					status.check(errorID, slo.getMeasurementSpecification() != null, true, 
+							"SLO: '"+ slo.getName() +"' needs measurement specification!");
+				}
+				
+			}
+		}
+
+		return true;
+	}
+	
+	private boolean validateMonitorRepository(ConfAlternative alt) throws ValidationException{
+		
+		MonitorRepository monitorRep = alt.getActiveMonitorRepository();
+		
+		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_MONITOR);
+		
+		for(IValidationStatus status : statusArray){
+				
+			String errorID = "MonitorError";
+			for(Monitor monitor : monitorRep.getMonitors()){
+				
+				status.check(errorID, monitor.getMeasurementSpecifications() != null, true,
+						"Monitor: '"+ monitor.getEntityName() +"' needs measurement specification!");
+				status.check(errorID, monitor.getMeasuringPoint() != null, true,
+						"Monitor: '"+ monitor.getEntityName() +"' does not have measuring point specified!");
+			}
+				
+		}
+
+		return true;
+	}
+	
+	private boolean validateUsageEvolution(ConfAlternative alt) throws ValidationException{
+		
+		UsageEvolution usageEvolution = alt.getActiveUsageEvolutionModel();
+		if(usageEvolution == null){
+			return true;
+		}
+		
+		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		
+		for(IValidationStatus status : statusArray){
+				
+			status.check("UEEmpty", !usageEvolution.getUsages().isEmpty(), true, 
+					"Usage evolution with empty configuration is set in Experiment!");
+			
+			for(Usage usage : usageEvolution.getUsages()){
+				status.check("", usage.getLoadEvolution() != null, true, 
+						"Usage evolution: '"+ usage.getEntityName() + "' does not have load evolution!");
+				status.check("", usage.getScenario() != null, true, 
+						"Usage evolution: '"+ usage.getEntityName() + "' does not have usage scenarion!");
+			}
+				
+		}
+		return true;
+	}
+	
 	@Override
 	public void validate(IProject project, IValidationStatusProvider statusProvider) {
 		
@@ -117,11 +216,14 @@ public class ConfValidator implements IResourceValidator {
 		
 		try {
 			status.check(ERR_INPUT_NOT_SET, inputAlternative != null, true, "Input alternative is not set!");
-
 			inputAlternative.validate();
 
 			boolean valid = validateModels(alternative.getProject(), alternative);
 
+			valid &= validateExperiment(alternative);
+			valid &= validateMonitorRepository(alternative);
+			valid &= validateSloRepository(alternative);
+			valid &= validateUsageEvolution(alternative);
 			
 			//TODO: check usage evolution
 			

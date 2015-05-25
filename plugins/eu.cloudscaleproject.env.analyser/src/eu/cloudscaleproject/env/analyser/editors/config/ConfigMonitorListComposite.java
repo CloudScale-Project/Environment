@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
@@ -76,7 +79,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					MonitorRepository monitorRep = alternative.getUsedMonitorRepository();
+					MonitorRepository monitorRep = alternative.retrieveMonitorRepository();
 					Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 					
 					MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
@@ -120,6 +123,30 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 					
 					EObjectWrapper<Monitor> wrapper = new EObjectWrapper<Monitor>(group.getMonitors());
 					ConfigMonitorComposite monitorComposite = new ConfigMonitorComposite(alternative, wrapper, parent, SWT.NONE);
+					
+					//If this is the first child, set Monitor repository model reference to the initial model
+					if(groupsComposite.getChilds().isEmpty()){
+						InitialModel im = alternative.getActiveInitialModel();
+						//Monitor repository found to the initial model
+						if(im != null){
+							im.setMonitorRepository(alternative.retrieveMonitorRepository());
+						}
+					}
+					//If this is the last child, remove Monitor repository reference from the initial model
+					monitorComposite.addDisposeListener(new DisposeListener() {
+						
+						@Override
+						public void widgetDisposed(DisposeEvent e) {
+							if(groupsComposite.getChilds().isEmpty()){
+								//remove SLO model reference from experiment
+								InitialModel im = alternative.getActiveInitialModel();
+								if(im != null){
+									im.setMonitorRepository(null);
+								}
+							}
+						}
+					});
+					
 					return monitorComposite;
 				}
 				
@@ -147,7 +174,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 		
 		List<MonitorGroup> monitorGroupsNew = new ArrayList<MonitorGroup>();
 				
-		for(Monitor m : alternative.getUsedMonitorRepository().getMonitors()){
+		for(Monitor m : alternative.retrieveMonitorRepository().getMonitors()){
 			boolean hasBeenAdded = false;
 			for(MonitorGroup mc : monitorGroupsNew){
 				if(mc.add(m)){

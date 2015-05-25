@@ -69,16 +69,19 @@ public class CompositeContainer extends ScrolledComposite{
 		Composite c;
 		
 		if(index >= 0 && index < childs.size()){
+			child = childs.get(index);
 			c = childs.get(index).getComposite();
 		}
 		else{
 			c = child.getComposite();
 		}
 		
-		if(c != null){
+		childs.remove(child);
+		child.disposeComposite();
+		
+		if(c != null && !c.isDisposed()){
 			c.dispose();
 		}
-		childs.remove(child);
 		
 		notifyListeners(SWT.CHANGED, null);
 		
