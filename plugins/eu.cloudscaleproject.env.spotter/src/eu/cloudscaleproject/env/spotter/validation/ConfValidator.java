@@ -10,7 +10,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
-import eu.cloudscaleproject.env.spotter.ServerService;
+import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -37,7 +37,7 @@ public class ConfValidator implements IResourceValidator {
 			
 			boolean jobCreationFailed = false;
 			try {
-				JobDescription job = ServerService.getInstance().createJobDescription(editorInput);
+				JobDescription job = Util.createJobDescription(editorInput);
 				
 				status.check(ERROR_CONF,
 						!job.getDynamicSpotterConfig().isEmpty(), true, 

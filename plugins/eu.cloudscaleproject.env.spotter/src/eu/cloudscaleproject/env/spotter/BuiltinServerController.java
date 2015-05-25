@@ -207,6 +207,13 @@ public class BuiltinServerController
 
 		streamRedirectThread = new StreamRedirectThread(serverProcess.getInputStream(), logger);
 		streamRedirectThread.start();
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+				public void run()
+				{
+					serverProcess.destroy();
+				}
+		}); 
 	}
 	
 	public Process getServerProcess()

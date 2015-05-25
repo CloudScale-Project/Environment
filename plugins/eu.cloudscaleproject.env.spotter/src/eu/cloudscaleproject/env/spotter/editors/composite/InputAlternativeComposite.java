@@ -197,8 +197,16 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		}
 	}
 	
+	long lastRefresh = 0;
 	@Override
 	public void refresh() {
+		// WORKAROUND - prevent  blinkering 
+		// called 2 times in a row is Main group selected
+		long time = System.currentTimeMillis();
+		if (lastRefresh > time - 500) return;
+		lastRefresh = time;
+		//////
+		
 		editorInput.load();
 		
 		for(Control c : meaComposite.getChildren()){

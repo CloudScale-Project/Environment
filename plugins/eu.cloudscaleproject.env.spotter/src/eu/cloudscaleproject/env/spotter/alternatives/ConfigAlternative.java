@@ -11,9 +11,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.spotter.eclipse.ui.Activator;
+import org.spotter.eclipse.ui.UICoreException;
 
+import eu.cloudscaleproject.env.spotter.CustomDynamicSpotterRunJob;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
-import eu.cloudscaleproject.env.spotter.ServerService;
+import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
@@ -108,8 +110,6 @@ public class ConfigAlternative extends AbstractConfigAlternative
 				
 				save();
 		}
-
-		
 	}
 
 	@Override
@@ -120,7 +120,15 @@ public class ConfigAlternative extends AbstractConfigAlternative
 		if (selectedEditorInput != null)
 		{
 			ResourceUtils.bindEditorInputs(selectedEditorInput, this);
-			return ServerService.getInstance().runSimulation(this);
+			try
+			{
+				CustomDynamicSpotterRunJob job = Util.createJob(this);
+				return job.run(m);
+			} catch (UICoreException e)
+			{
+				e.printStackTrace();
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error when preparign DS job.", e);
+			}
 		} else
 		{
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Input not defined.");

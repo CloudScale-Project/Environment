@@ -15,16 +15,12 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
@@ -35,27 +31,21 @@ import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditorInput;
 import org.spotter.eclipse.ui.editors.WorkloadEditor;
 import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
-import org.spotter.eclipse.ui.util.DialogUtils;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.spotter.ResourceUtils;
-import eu.cloudscaleproject.env.spotter.ServerService;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 
 public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable{
 		
 	private final IProject project;
-	private final ResourceProvider inputResourceProvider;
 
 	private final ConfigAlternative confAlternative;
 		
@@ -86,7 +76,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		this.project = project;
 		
 		this.confAlternative = editorInput;		
-		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
 		
 		getContainer().setLayout(new GridLayout(2, false));
 		
@@ -190,7 +179,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			});
 			
 			IFile file = confAlternative.getResource().getFile("hierarchy.xml");
-			
 			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
 			hierEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
 			
@@ -202,8 +190,16 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		
 	}
 	
+	long lastRefresh = 0;
 	@Override
 	public void refresh() {
+		// WORKAROUND - prevent  blinkering 
+		// called 2 times in a row
+		long time = System.currentTimeMillis();
+		if (lastRefresh > time - 500) return;
+		lastRefresh = time;
+		//////
+
 		confAlternative.load();
 		comboViewer.refresh(true);
 		
@@ -243,7 +239,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		if (confAlternative.getLastResult() != null)
 			ValidationDiagramService.showStatus(confAlternative.getProject(), confAlternative.getLastResult());
 		else
-			ValidationDiagramService.clearStatus(confAlternative.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
+			ValidationDiagramService.clearStatus(confAlternative.getProject(), ToolchainUtils.SPOTTER_DYN_RES_ID);
 	}
 
 

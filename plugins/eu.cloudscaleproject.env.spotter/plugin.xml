@@ -25,6 +25,9 @@
       <client
             class="eu.cloudscaleproject.env.spotter.validation.ConfValidator">
       </client>
+      <client
+            class="eu.cloudscaleproject.env.spotter.validation.ResultValidator">
+      </client>
    </extension>
 
 </plugin>

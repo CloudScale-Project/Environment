@@ -15,6 +15,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -136,8 +138,7 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		doc.addDocumentListener(new DocumentListener()
+		final DocumentListener documentListener = new DocumentListener()
 		{
 
 			@Override
@@ -181,7 +182,19 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 					}
 				});
 			}
+		};
+		
+		doc.addDocumentListener(documentListener);
+		
+		addDisposeListener(new DisposeListener()
+		{
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+				doc.removeDocumentListener(documentListener);
+			}
 		});
+		
 		
 		txtPort.addListener(SWT.Verify, new Listener() {
 			   public void handleEvent(Event e) {
