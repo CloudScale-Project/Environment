@@ -313,7 +313,7 @@ public class CustomDynamicSpotterRunJob extends Job
 				ToolchainUtils.SPOTTER_DYN_RES_ID);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
-		ResultAlternative resultAlternative = (ResultAlternative) resultResourceProvider.createNewResource(alternative.getName() + " asdf "
+		ResultAlternative resultAlternative = (ResultAlternative) resultResourceProvider.createNewResource(alternative.getName() 
 				+ sdf.format(new Date(timestamp)), "");
 
 		System.out.println(resultAlternative.getName());
