@@ -50,7 +50,7 @@ public class FinishWizardPage extends WizardPage implements IWizardPageControll 
 		connection.setTarget(this.data.getSoftwareService());
 		connection.setSource(usageProxy);
 		usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
-		overview.getArchitecture().getExternalConnections().add(connection);
+		overview.getArchitecture().getUsageConnections().add(connection);
 	}
 	
 	@Override
