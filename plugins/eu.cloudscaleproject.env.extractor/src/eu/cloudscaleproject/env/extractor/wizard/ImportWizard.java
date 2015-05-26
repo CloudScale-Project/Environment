@@ -252,7 +252,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		connection.setTarget(this.data.getSoftwareService());
 		connection.setSource(usageProxy);
 		usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
-		overview.getArchitecture().getExternalConnections().add(connection);
+		overview.getArchitecture().getUsageConnections().add(connection);
 	}
 	
 	private void mergeOverviewModel () throws Exception
@@ -269,7 +269,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		if (overview.getArchitecture().getProxies().isEmpty())
 		{
 			overview.getArchitecture().getProxies().add(overviewToMerge.getArchitecture().getProxies().get(0));
-			overview.getArchitecture().getExternalConnections().addAll (overviewToMerge.getArchitecture().getExternalConnections());
+			overview.getArchitecture().getUsageConnections().addAll (overviewToMerge.getArchitecture().getUsageConnections());
 		}
 		else
 		{
@@ -283,9 +283,9 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
 
 
-			ExternalConnection externalConnection = overviewToMerge.getArchitecture().getExternalConnections().get(0);
+			ExternalConnection externalConnection = overviewToMerge.getArchitecture().getUsageConnections().get(0);
 			externalConnection.setSource(usageProxy);
-			overview.getArchitecture().getExternalConnections().add(externalConnection);
+			overview.getArchitecture().getUsageConnections().add(externalConnection);
 		}
 		
 		// // // // // // // // //
