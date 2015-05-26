@@ -2,6 +2,9 @@ package eu.cloudscaleproject.env.product;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
@@ -30,6 +33,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		//return INITIAL_PERSPECTIVE_ID;
 	}
 	
+	public IAdaptable getDefaultPageInput() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		return workspace.getRoot();
+	}
+	
 	@Override
 	public void postStartup() {
 
@@ -47,6 +55,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	     PlatformUI.getPreferenceStore().setValue(
 	            IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
 	     
+
 		// inserted: register workbench adapters
 		IDE.registerAdapters();
 
