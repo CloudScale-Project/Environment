@@ -211,7 +211,7 @@ public class BuiltinServerController
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 				public void run()
 				{
-					serverProcess.destroy();
+					if (serverProcess != null) serverProcess.destroy();
 				}
 		}); 
 	}
