@@ -5,15 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -34,8 +27,6 @@ import org.scaledl.overview.architecture.ExternalConnection;
 import org.scaledl.overview.architecture.UsageProxy;
 import org.scaledl.overview.converter.IOverviewConverter;
 
-import de.uka.ipd.sdq.pcm.repository.Repository;
-import de.uka.ipd.sdq.pcm.system.System;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.extractor.wizard.pages.DeploymentWizardPage;
 import eu.cloudscaleproject.env.extractor.wizard.pages.InterfacesWizardPage;
@@ -150,6 +141,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	
 	private void saveImportedModels() throws Exception
 	{
+		/*
 		IProject project = data.getProject();
 
 		Repository repositoryModel = data.getRepositoryModel();
@@ -157,6 +149,13 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 		URI repURI_external = ((InternalEObject)repositoryModel).eProxyURI();
 		URI sysURI_external = ((InternalEObject)systemModel).eProxyURI();
+		
+		if(repURI_external == null){
+			repURI_external = repositoryModel.eResource().getURI();
+		}
+		if(sysURI_external == null){
+			sysURI_external = systemModel.eResource().getURI();
+		}
 		
 		IPath repLocation = null;
 		IPath sysLocation = null;
@@ -224,9 +223,10 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 		EObject sys = systemRes.getContents().get(0);
 		EObject rep = repositoryRes.getContents().get(0);
-		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_SYSTEM, sys );
-		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_REPOSITORY, rep );
-		
+		*/
+
+		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_SYSTEM, data.getSystemModel() );
+		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_REPOSITORY, data.getRepositoryModel() );
 	}
 	
 	private void saveOverviewModel () throws Exception
