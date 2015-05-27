@@ -198,7 +198,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="eu.cloudscaleproject.env.extractor"/>
       <plugin id="eu.cloudscaleproject.env.help"/>
       <plugin id="eu.cloudscaleproject.env.method.common"/>
-      <plugin id="eu.cloudscaleproject.env.method.editor"/>
       <plugin id="eu.cloudscaleproject.env.method.viewer"/>
       <plugin id="eu.cloudscaleproject.env.product"/>
       <plugin id="eu.cloudscaleproject.env.spotter"/>
