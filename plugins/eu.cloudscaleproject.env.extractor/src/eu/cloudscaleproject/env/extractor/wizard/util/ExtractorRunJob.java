@@ -31,6 +31,7 @@ import org.somox.analyzer.simplemodelanalyzer.jobs.SaveSoMoXModelsJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SimpleModelAnalyzerJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SoMoXBlackboard;
 import org.somox.configuration.SoMoXConfiguration;
+import org.somox.gast2seff.jobs.GAST2SEFFJob;
 import org.somox.metrics.IMetric;
 import org.somox.metrics.naming.NameResemblance;
 import org.somox.metrics.registry.MetricsRegistry;
@@ -162,15 +163,18 @@ public class ExtractorRunJob extends Job
 		{
 			ModelAnalyzerConfiguration conf = new ModelAnalyzerConfiguration();
 			conf.setSomoxConfiguration(somoxConfiguration);
-			SimpleModelAnalyzerJob job = new SimpleModelAnalyzerJob(conf);
 			SoMoXBlackboard blackboard = new SoMoXBlackboard();
-			job.setBlackboard(blackboard);
 
+			SimpleModelAnalyzerJob job = new SimpleModelAnalyzerJob(conf);
+			job.setBlackboard(blackboard);
 			job.execute(monitor);
+			
+			GAST2SEFFJob gast2SeffJob = new GAST2SEFFJob(somoxConfiguration);
+			gast2SeffJob.setBlackboard(blackboard);
+			gast2SeffJob.execute(monitor);
 
 			SaveSoMoXModelsJob saveJob = new SaveSoMoXModelsJob(somoxConfiguration);
 			saveJob.setBlackboard(blackboard);
-
 			saveJob.execute(monitor);
 
 			IFolder somoxFolder = (IFolder) resultsFolder.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
