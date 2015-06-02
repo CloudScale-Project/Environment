@@ -1,8 +1,18 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -15,18 +25,38 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class ExternalImportInputWizard extends Wizard{
 
 	private IProject project;
-
 	
 	private AlternativeNamePage nameSelectionPage;
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage optionsPage;
+	
+	//auto-selection
+	private final ICheckStateListener modelCheckStateListener = new ICheckStateListener() {
+		
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			Object el = event.getElement();			
+			EObject root = null;
+			
+			//get root object
+			if (el instanceof EObject)
+			{
+				root = (EObject)el;
+			}
+			if(el instanceof Resource){
+				Resource r = (Resource)el;
+				root = r.getContents().isEmpty() ? null : r.getContents().get(0);
+			}
+			
+			//handle selection
+			selectLinked(root, event.getChecked());
+		}
+	};
 	
 	public ExternalImportInputWizard(IProject project) {
 		
@@ -36,9 +66,53 @@ public class ExternalImportInputWizard extends Wizard{
 		
 		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 
-		importModelSelectionPage = new ExternalModelsSelectionPage(null,ModelType.GROUP_PCM_EXTENDED);
+		importModelSelectionPage = new ExternalModelsSelectionPage(null,ModelType.GROUP_PCM_EXTENDED, modelCheckStateListener);
 		
 		optionsPage = new ImportAlternativeOptionsPage();
+	}
+	
+	private void selectLinked(EObject object, boolean selectionState){
+		
+		//skip auto-selection when unselecting
+		if(!selectionState){
+			return;
+		}
+		
+		List<EObject> selected = new ArrayList<EObject>();
+		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
+		while(iter.hasNext()){
+			EObject o = iter.next();
+			
+			{
+				EObject root = EcoreUtil.getRootContainer(o, false);
+				if(root != null && !selected.contains(root)){
+					importModelSelectionPage.selectModel(root, selectionState);
+					selected.add(root);
+				}	
+			}
+			
+			for(EStructuralFeature feature : o.eClass().getEAllStructuralFeatures()){
+				Object child = o.eGet(feature, false);
+				if(child instanceof InternalEObject){
+					InternalEObject ieo = (InternalEObject)child;
+					
+					if(ieo.eProxyURI() == null){
+						continue;
+					}
+					
+					if(!ieo.eProxyURI().scheme().equals("pathmap")){
+						EObject eo = ((InternalEObject)o).eResolveProxy(ieo);
+						EObject root = EcoreUtil.getRootContainer(eo, false);
+						if(root != null && !selected.contains(root)){
+							importModelSelectionPage.selectModel(root, selectionState);
+							selected.add(root);
+							selectLinked(root, selectionState);
+						}
+					}
+				}
+			}
+			
+		}
 	}
 	
 	@Override

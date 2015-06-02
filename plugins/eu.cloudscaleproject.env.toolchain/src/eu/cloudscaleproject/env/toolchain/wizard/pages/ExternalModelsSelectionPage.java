@@ -1,14 +1,10 @@
 package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -52,6 +48,9 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	private CheckboxTableViewer tableView;
 	
 	private IFolder folder = null;
+	private ICheckStateListener checkStateListener = null;
+	
+	private boolean disableSelectionListeners = false;
 	
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
 		
@@ -72,15 +71,53 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	}
 
 	public ExternalModelsSelectionPage(IFolder from, ModelType[] types) {
+		this(from, types, null);
+	}
+	
+	public ExternalModelsSelectionPage(IFolder from, ModelType[] types, ICheckStateListener csl) {
 		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
 		setDescription(DEFAULT_DESCRIPTION);
 		this.folder = from;
-		
+		this.checkStateListener = csl;
 		this.types = types;
 	}
 	
 	public Resource[] getSelectedResources(){
 		return selectedResources;
+	}
+	
+	public void selectModel(ModelType modelType, boolean state, boolean selectOnlyOne){
+		try{
+			disableSelectionListeners = true;
+
+			for(Resource r : resSet.getResources()){
+				if(modelType.getFileExtension().equals(r.getURI().fileExtension())){
+					for(EObject eo : r.getContents()){
+						tableView.setChecked(eo, state);
+					}
+					if(selectOnlyOne){
+						state = false;
+					}
+				}
+			}
+		}
+		finally{
+			disableSelectionListeners = false;
+		}
+	}
+	
+	public void selectModel(EObject modelRoot, boolean state){
+		try{
+			disableSelectionListeners = true;
+			
+			if(modelRoot == null){
+				return;
+			}
+			tableView.setChecked(modelRoot, state);
+		}
+		finally{
+			disableSelectionListeners = false;
+		}
 	}
 	
 	@Override
@@ -97,7 +134,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 					resSet.getResources().clear();
 					findAndLoadResources(folder, resSet);				
 					tableView.refresh(true);				
-					tableView.setAllChecked(true);
+					//tableView.setAllChecked(true);
 					selectedResources = (Resource[])resSet.getResources().toArray();
 				}
 			});
@@ -107,6 +144,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		
 		tableView = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
 		tableView.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3 , 1));
+		
 		tableView.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 		tableView.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
 				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, this.tableView)));
@@ -116,6 +154,11 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
+				
+				if(disableSelectionListeners){
+					return;
+				}
+				
 				Object[] selection = tableView.getCheckedElements();
 				selectedResources = new Resource[selection.length];
 				
@@ -132,6 +175,10 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 						Resource res = (Resource)o;
 						selectedResources[i] = res;
 					}
+				}
+				
+				if(checkStateListener != null){
+					checkStateListener.checkStateChanged(event);
 				}
 			}
 		});
@@ -156,7 +203,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			resSet.getResources().clear();
 			findAndLoadResources(folder, resSet);				
 			tableView.refresh(true);				
-			tableView.setCheckedElements(resSet.getResources().toArray());
+			//tableView.setCheckedElements(resSet.getResources().toArray());
 			selectedResources = (Resource[])resSet.getResources().toArray();
 		}
 	}
@@ -172,36 +219,6 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
                  ExplorerProjectPaths.getEmfResource(resSet, file);
              }
 		}
-	}
-
-	public static List<IFile> findResource(IContainer folder, String extension){
-		
-		List<IFile> files = new ArrayList<IFile>();
-		
-		if(!folder.exists()){
-			return files;
-		}
-		
-		try {
-			for(IResource r : folder.members()){
-				if(r instanceof IContainer){
-					IContainer f = (IContainer)r;
-					files.addAll(findResource(f, extension));
-				}
-				if(r instanceof IFile){
-					IFile f = (IFile)r;
-					if(f.getName().endsWith(extension)){
-						files.add(f);
-					}
-				}
-			}
-		}
-		catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return files;
 	}
 	
 	private void createFolderSelection(Composite composite, final String name, final String text,

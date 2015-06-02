@@ -488,7 +488,7 @@ public class ExplorerProjectPaths {
 				}
 				if(r instanceof IFile){
 					IFile f = (IFile)r;
-					if(f.getName().endsWith(extension)){
+					if(f.getFileExtension().equals(extension)){
 						files.add(f);
 					}
 				}
