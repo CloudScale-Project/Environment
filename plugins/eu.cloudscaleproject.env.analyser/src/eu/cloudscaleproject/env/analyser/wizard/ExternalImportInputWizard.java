@@ -57,7 +57,6 @@ public class ExternalImportInputWizard extends Wizard{
 			if(root instanceof UsageModel){
 				importModelSelectionPage.selectModel(ModelType.USAGE, false, false);
 				importModelSelectionPage.selectModel(root, event.getChecked());
-				return;
 			}
 			
 			//handle selection
@@ -78,12 +77,7 @@ public class ExternalImportInputWizard extends Wizard{
 		optionsPage = new ImportAlternativeOptionsPage();
 	}
 	
-	private void selectLinked(EObject object, boolean selectionState){
-		
-		//skip auto-selection when unselecting
-		if(!selectionState){
-			return;
-		}
+private void selectLinked(EObject object, boolean selectionState){
 		
 		List<EObject> selected = new ArrayList<EObject>();
 		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
@@ -103,12 +97,14 @@ public class ExternalImportInputWizard extends Wizard{
 				if(child instanceof InternalEObject){
 					InternalEObject ieo = (InternalEObject)child;
 					
-					if(ieo.eProxyURI() == null){
+					if(ieo.eProxyURI() == null
+							|| ieo.eProxyURI().scheme().equals("pathmap")){
 						continue;
 					}
 					
-					if(!ieo.eProxyURI().scheme().equals("pathmap")){
-						EObject eo = ((InternalEObject)o).eResolveProxy(ieo);
+					EObject eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), false);
+					
+					if(eo != null){
 						EObject root = EcoreUtil.getRootContainer(eo, false);
 						if(root != null && !selected.contains(root)){
 							importModelSelectionPage.selectModel(root, selectionState);

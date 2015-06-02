@@ -125,11 +125,6 @@ public class ImportPCMModelWizard extends Wizard{
 	
 	private void selectLinked(EObject object, boolean selectionState){
 		
-		//skip auto-selection when unselecting
-		if(!selectionState){
-			return;
-		}
-		
 		List<EObject> selected = new ArrayList<EObject>();
 		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
 		while(iter.hasNext()){
@@ -148,12 +143,14 @@ public class ImportPCMModelWizard extends Wizard{
 				if(child instanceof InternalEObject){
 					InternalEObject ieo = (InternalEObject)child;
 					
-					if(ieo.eProxyURI() == null){
+					if(ieo.eProxyURI() == null
+							|| ieo.eProxyURI().scheme().equals("pathmap")){
 						continue;
 					}
 					
-					if(!ieo.eProxyURI().scheme().equals("pathmap")){
-						EObject eo = ((InternalEObject)o).eResolveProxy(ieo);
+					EObject eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), false);
+					
+					if(eo != null){
 						EObject root = EcoreUtil.getRootContainer(eo, false);
 						if(root != null && !selected.contains(root)){
 							importModelSelectionPage.selectModel(root, selectionState);
