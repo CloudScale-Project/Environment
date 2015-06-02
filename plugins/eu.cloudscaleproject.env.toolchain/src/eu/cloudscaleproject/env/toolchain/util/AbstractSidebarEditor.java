@@ -201,6 +201,10 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 						IEditorInputResource res = (IEditorInputResource)input;
 						res.load();
 						isLoaded = true;
+						
+						if(isSelected){
+							select();
+						}
 					}
 				}
 			});
