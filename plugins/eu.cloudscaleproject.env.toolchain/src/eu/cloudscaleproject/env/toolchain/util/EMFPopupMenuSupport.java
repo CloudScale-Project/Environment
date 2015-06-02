@@ -3,6 +3,8 @@ package eu.cloudscaleproject.env.toolchain.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.CopyAction;
 import org.eclipse.emf.edit.ui.action.CreateChildAction;
@@ -124,6 +126,7 @@ public class EMFPopupMenuSupport implements IMenuListener{
 		Collection<IAction> actions = new ArrayList<IAction>();
 	    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 	    IStructuredSelection strucSelection = (StructuredSelection)selection;
+	    
 	    {
 			UndoAction action = new UndoAction(editingDomain);
 			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_UNDO));
@@ -134,6 +137,14 @@ public class EMFPopupMenuSupport implements IMenuListener{
 			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 			actions.add(action);
 		}
+
+		Object selected = strucSelection.getFirstElement();
+		if (selected instanceof EObject) {
+			if (EcoreUtil.getRootContainer((EObject)selected) == selected) {
+				return actions;
+			}
+		}
+		
 	    {
 	    	CopyAction action = new CopyAction(editingDomain);
 			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
