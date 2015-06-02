@@ -1,13 +1,16 @@
 package eu.cloudscaleproject.env.analyser.editors.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -26,8 +29,8 @@ import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
 import de.uka.ipd.sdq.pcm.system.System;
 import edu.kit.ipd.sdq.mdsd.profiles.ui.menu.ApplicableStereotypesSubmenu;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
+import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -36,13 +39,19 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 
 	private Composite buttonsComposite;
 	private EMFEditableTreeviewComposite treeviewComposite;
+	
+	private final Button btnCreate;
+	private final Button btnImport;
 	private final Button btnDelete;
+	
+	private final InputAlternative alternative;
 	
 	ISelectionChangedListener treeViewSelectionListener = new ISelectionChangedListener() {
 		
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
-			ISelection selection = event.getSelection();
+			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+			Object selected = selection.getFirstElement();
 			
 			if(btnDelete == null || btnDelete.isDisposed()){
 				return;
@@ -50,17 +59,24 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			
 			if(selection.isEmpty()){
 				btnDelete.setEnabled(false);
+				return;
+			}
+			
+			if(selected instanceof EObject 
+					&& EcoreUtil.getRootContainer((EObject)selected) == selected){
+				btnDelete.setEnabled(true);
 			}
 			else{
-				btnDelete.setEnabled(true);
+				btnDelete.setEnabled(false);
 			}
 			
 		}
 	};
 	
 	public InputTreeViewComposite(final InputAlternative input, Composite parent, int style) {
-		super(parent, style);		
+		super(parent, style);
 		
+		alternative = input;
 		setLayout(new GridLayout(2, false));
 		
 		treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE){
@@ -88,30 +104,26 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		buttonsComposite.setLayout(new GridLayout(1, true));
 		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 		
-		Button btnCreate = new Button(buttonsComposite, SWT.NONE);
+		btnCreate = new Button(buttonsComposite, SWT.NONE);
 		btnCreate.setText("Create...");
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, Display.getDefault().getActiveShell());
-				//dialog.open();
 				
-				ModelType[] types = new ModelType[]{
-						ModelType.REPOSITORY,
-						ModelType.SYSTEM,
-						ModelType.RESOURCE,
-						ModelType.ALLOCATION,
-						ModelType.USAGE
-				};
+				List<ModelType> avaiableModelTypes = getAvaiableModelTypes();
 				
-				NewPCMModelWizard createEmptyModelWizard = new NewPCMModelWizard(input, types);
+				NewPCMModelWizard createEmptyModelWizard = new NewPCMModelWizard(
+						alternative, 
+						avaiableModelTypes.toArray(new ModelType[avaiableModelTypes.size()]));
+						
 				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
 				wizardDialog.open();
 				
+				refreshButtonStates();
 				super.widgetSelected(e);
 			}
 		});
-		Button btnImport = new Button(buttonsComposite, SWT.NONE);
+		btnImport = new Button(buttonsComposite, SWT.NONE);
 		btnImport.setText("Import...");
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -124,6 +136,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				wizardDialog.setTitle("asdf");
 				wizardDialog.open();
 				
+				refreshButtonStates();
 				super.widgetSelected(e);
 			}
 		});
@@ -146,6 +159,8 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 						}
 					}
 				}
+				
+				refreshButtonStates();
 			}
 		});
 		
@@ -159,7 +174,43 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		});
 	}
 	
+	private void refreshButtonStates(){
+		List<ModelType> avaiableModelTypes = getAvaiableModelTypes();
+		if(avaiableModelTypes.isEmpty()){
+			btnCreate.setEnabled(false);
+			btnImport.setEnabled(false);
+		}
+		else{
+			btnCreate.setEnabled(true);
+			btnImport.setEnabled(true);
+		}
+	}
 	
+	private List<ModelType> getAvaiableModelTypes(){
+		ModelType[] types = new ModelType[]{
+				ModelType.REPOSITORY,
+				ModelType.SYSTEM,
+				ModelType.RESOURCE,
+				ModelType.ALLOCATION,
+				ModelType.USAGE
+		};
+		
+		List<ModelType> modelTypes = new ArrayList<ModelType>();
+		for(ModelType mt : types){
+			
+			//allow multiple repository models
+			if(mt == ModelType.REPOSITORY){
+				modelTypes.add(mt);
+				continue;
+			}
+			
+			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
+				modelTypes.add(mt);
+			}
+		}
+		
+		return modelTypes;
+	}
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {

@@ -17,7 +17,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
-import eu.cloudscaleproject.env.toolchain.wizard.pages.NameSelectionPage;
 
 public class ExtractorImportInputWizard extends Wizard
 {
