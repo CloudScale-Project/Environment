@@ -1,10 +1,21 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
 
+import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -17,6 +28,35 @@ public class ImportPCMModelWizard extends Wizard{
 	
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage importOptionsPage;
+	
+	//auto-selection
+	private final ICheckStateListener modelCheckStateListener = new ICheckStateListener() {
+		
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			Object el = event.getElement();			
+			EObject root = null;
+			
+			//get root object
+			if (el instanceof EObject)
+			{
+				root = (EObject)el;
+			}
+			if(el instanceof Resource){
+				Resource r = (Resource)el;
+				root = r.getContents().isEmpty() ? null : r.getContents().get(0);
+			}
+			
+			if(root instanceof UsageModel){
+				importModelSelectionPage.selectModel(ModelType.USAGE, false, false);
+				importModelSelectionPage.selectModel(root, event.getChecked());
+				return;
+			}
+			
+			//handle selection
+			selectLinked(root, event.getChecked());
+		}
+	};
 
 	public ImportPCMModelWizard(EditorInputEMF alternative){
 		this(alternative, null);
@@ -27,7 +67,25 @@ public class ImportPCMModelWizard extends Wizard{
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
 		
-		importModelSelectionPage = new ExternalModelsSelectionPage(from, ModelType.GROUP_PCM_EXTENDED);
+		List<ModelType> modelTypes = new ArrayList<ModelType>();
+		for(ModelType mt : ModelType.GROUP_PCM_EXTENDED){
+			
+			//allow multiple repository models
+			if(mt == ModelType.REPOSITORY){
+				modelTypes.add(mt);
+				continue;
+			}
+			
+			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
+				modelTypes.add(mt);
+			}
+		}
+		
+		importModelSelectionPage = new ExternalModelsSelectionPage(
+				from, 
+				modelTypes.toArray(new ModelType[modelTypes.size()]), 
+				modelCheckStateListener);
+		
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}
 	
@@ -63,6 +121,50 @@ public class ImportPCMModelWizard extends Wizard{
 			return true;
 
 		return false;
+	}
+	
+	private void selectLinked(EObject object, boolean selectionState){
+		
+		//skip auto-selection when unselecting
+		if(!selectionState){
+			return;
+		}
+		
+		List<EObject> selected = new ArrayList<EObject>();
+		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
+		while(iter.hasNext()){
+			EObject o = iter.next();
+			
+			{
+				EObject root = EcoreUtil.getRootContainer(o, false);
+				if(root != null && !selected.contains(root)){
+					importModelSelectionPage.selectModel(root, selectionState);
+					selected.add(root);
+				}	
+			}
+			
+			for(EStructuralFeature feature : o.eClass().getEAllStructuralFeatures()){
+				Object child = o.eGet(feature, false);
+				if(child instanceof InternalEObject){
+					InternalEObject ieo = (InternalEObject)child;
+					
+					if(ieo.eProxyURI() == null){
+						continue;
+					}
+					
+					if(!ieo.eProxyURI().scheme().equals("pathmap")){
+						EObject eo = ((InternalEObject)o).eResolveProxy(ieo);
+						EObject root = EcoreUtil.getRootContainer(eo, false);
+						if(root != null && !selected.contains(root)){
+							importModelSelectionPage.selectModel(root, selectionState);
+							selected.add(root);
+							selectLinked(root, selectionState);
+						}
+					}
+				}
+			}
+			
+		}
 	}
 
 }

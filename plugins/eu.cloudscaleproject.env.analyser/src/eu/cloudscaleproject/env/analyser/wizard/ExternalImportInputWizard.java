@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
 
+import de.uka.ipd.sdq.pcm.usagemodel.UsageModel;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -51,6 +52,12 @@ public class ExternalImportInputWizard extends Wizard{
 			if(el instanceof Resource){
 				Resource r = (Resource)el;
 				root = r.getContents().isEmpty() ? null : r.getContents().get(0);
+			}
+			
+			if(root instanceof UsageModel){
+				importModelSelectionPage.selectModel(ModelType.USAGE, false, false);
+				importModelSelectionPage.selectModel(root, event.getChecked());
+				return;
 			}
 			
 			//handle selection
