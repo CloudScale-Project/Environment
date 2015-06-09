@@ -16,6 +16,7 @@
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Node">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/source"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Node/tooltip"/>
@@ -54,6 +55,7 @@
     </genClasses>
     <genClasses ecoreClass="method.ecore#//Warning">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Warning/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Warning/severity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute method.ecore#//Warning/message"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference method.ecore#//Warning/commands"/>
     </genClasses>

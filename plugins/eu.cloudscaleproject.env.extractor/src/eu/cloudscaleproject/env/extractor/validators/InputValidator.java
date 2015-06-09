@@ -27,7 +27,7 @@ public class InputValidator implements IResourceValidator {
 		status.clearWarnings();
 		if (GlobalInputAlternative.getJavaProjects().isEmpty())
 		{
-			status.addWarning("", "No Java projects present in workspace.");
+			status.addWarning("", IValidationStatus.SEVERITY_ERROR, "No Java projects present in workspace.");
 			status.setIsValid(false);
 		}
 		else

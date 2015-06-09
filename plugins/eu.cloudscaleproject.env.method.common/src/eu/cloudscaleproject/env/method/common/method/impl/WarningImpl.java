@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.WarningImpl#getId <em>Id</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.WarningImpl#getSeverity <em>Severity</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.WarningImpl#getMessage <em>Message</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.impl.WarningImpl#getCommands <em>Commands</em>}</li>
  * </ul>
@@ -57,6 +58,26 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 	 * @ordered
 	 */
 	protected String id = ID_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSeverity() <em>Severity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSeverity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SEVERITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSeverity() <em>Severity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSeverity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int severity = SEVERITY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
@@ -133,6 +154,27 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getSeverity() {
+		return severity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSeverity(int newSeverity) {
+		int oldSeverity = severity;
+		severity = newSeverity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MethodPackage.WARNING__SEVERITY, oldSeverity, severity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getMessage() {
 		return message;
 	}
@@ -185,6 +227,8 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 		switch (featureID) {
 			case MethodPackage.WARNING__ID:
 				return getId();
+			case MethodPackage.WARNING__SEVERITY:
+				return getSeverity();
 			case MethodPackage.WARNING__MESSAGE:
 				return getMessage();
 			case MethodPackage.WARNING__COMMANDS:
@@ -204,6 +248,9 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 		switch (featureID) {
 			case MethodPackage.WARNING__ID:
 				setId((String)newValue);
+				return;
+			case MethodPackage.WARNING__SEVERITY:
+				setSeverity((Integer)newValue);
 				return;
 			case MethodPackage.WARNING__MESSAGE:
 				setMessage((String)newValue);
@@ -227,6 +274,9 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 			case MethodPackage.WARNING__ID:
 				setId(ID_EDEFAULT);
 				return;
+			case MethodPackage.WARNING__SEVERITY:
+				setSeverity(SEVERITY_EDEFAULT);
+				return;
 			case MethodPackage.WARNING__MESSAGE:
 				setMessage(MESSAGE_EDEFAULT);
 				return;
@@ -247,6 +297,8 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 		switch (featureID) {
 			case MethodPackage.WARNING__ID:
 				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
+			case MethodPackage.WARNING__SEVERITY:
+				return severity != SEVERITY_EDEFAULT;
 			case MethodPackage.WARNING__MESSAGE:
 				return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
 			case MethodPackage.WARNING__COMMANDS:
@@ -267,6 +319,8 @@ public class WarningImpl extends MinimalEObjectImpl.Container implements Warning
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (id: ");
 		result.append(id);
+		result.append(", severity: ");
+		result.append(severity);
 		result.append(", message: ");
 		result.append(message);
 		result.append(')');

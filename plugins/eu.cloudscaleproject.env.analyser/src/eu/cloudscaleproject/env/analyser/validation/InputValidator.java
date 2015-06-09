@@ -18,6 +18,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.EMFUtils;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
@@ -91,7 +92,8 @@ public class InputValidator implements IResourceValidator {
 	
 	public boolean validateModel(IValidationStatus status, Resource resource) throws ValidationException{		
 		
-		status.check(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
+		status.clearWarnings();
+		status.checkError(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
 		
 		if(resource.getContents().isEmpty()){
 			status.setIsValid(false);
@@ -108,7 +110,9 @@ public class InputValidator implements IResourceValidator {
 				eObject.eClass().getName(),
 				resource.getURI().lastSegment());
 
-		status.check(ERR_MODEL_ERROR, modelValid, false, message);
+		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
+		EMFUtils.fillWarnings(status, diagnostic);
+		
 		status.setIsValid(modelValid);
 		
 		return modelValid;

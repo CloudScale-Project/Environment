@@ -18,6 +18,7 @@ import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.eclipse.graphiti.util.ColorConstant;
 
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.method.common.method.Link;
 import eu.cloudscaleproject.env.method.common.method.LinkedObject;
 import eu.cloudscaleproject.env.method.common.method.Node;
@@ -34,6 +35,21 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 		super(diagramTypeProvider);
 	}
 	
+	private void advancePosition(int[] pos){
+		pos[0] = pos[0]-18;
+		pos[1] = pos[1];
+	}
+	
+	private void advancePositionMin(int[] pos){
+		pos[0] = pos[0]-4;
+		pos[1] = pos[1];
+	}
+	
+	private void advancePositionRequ(int[] pos){
+		pos[0] = pos[0]-10;
+		pos[1] = pos[1];
+	}
+		
 	@Override
 	public IDecorator[] getDecorators(PictogramElement pe) {
 		IFeatureProvider featureProvider = getFeatureProvider();		
@@ -46,14 +62,46 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 		}
 		
 		StatusNode statusNode = (StatusNode)bo;
-		Section section = null;
-		if(bo instanceof Section){
-			section = (Section)bo;
+		synchronized (statusNode) {
+			collectDecorators(pe, statusNode, decorators);
 		}
+		
+		return decorators.toArray(new IDecorator[decorators.size()]);
+	}
+	
+	private void collectDecorators(PictogramElement pe, StatusNode statusNode, List<IDecorator> decorators){
+		
+		Section section = null;
+		if(statusNode instanceof Section){
+			section = (Section)statusNode;
+		}
+		
+		//sort warnings by severity
+		List<Warning> errors = new ArrayList<Warning>();
+		List<Warning> warnings = new ArrayList<Warning>();
+		List<Warning> infos = new ArrayList<Warning>();
+		
+		for(Warning w : statusNode.getWarnings()){
+			if(IValidationStatus.SEVERITY_INFO == w.getSeverity()){
+				infos.add(w);
+			}
+			else if(IValidationStatus.SEVERITY_WARNING == w.getSeverity()){
+				warnings.add(w);
+			}
+			else{
+				errors.add(w);
+			}
+		}
+		
+		//image decorations position (x,y)
+		int[] position = new int[]{
+				pe.getGraphicsAlgorithm().getWidth() - 5,
+				5
+		};
 				
 		//handle requirements
 		if(statusNode instanceof Requirement){
-			
+						
 			Requirement r = (Requirement)statusNode;
 			Section parent = null;
 			
@@ -72,10 +120,12 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			}
 			else if(r.isDone()){
 				
+				advancePositionRequ(position);
+				
 				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_DONE_SMALL);
 				imageRenderingDecorator.setMessage("Task is done.");
-				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-				imageRenderingDecorator.setY(5);
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -83,13 +133,18 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				cd.setMessage("Section successfully compleated.");
 				decorators.add(cd);
 			}
-			else if(!r.getWarnings().isEmpty()){
-				for(Warning w : r.getWarnings()) {
+			else if(!errors.isEmpty()){
+				
+				advancePositionRequ(position);
+				
+				for(Warning w : errors) {
 					ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_WARNING_SMALL);
 					imageRenderingDecorator.setMessage(w.getMessage());
-					imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-					imageRenderingDecorator.setY(5);
+					imageRenderingDecorator.setX(position[0]);
+					imageRenderingDecorator.setY(position[1]);
 					decorators.add(imageRenderingDecorator);
+					
+					advancePositionRequ(position);
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -98,10 +153,13 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				decorators.add(cd);
 			}
 			else if(parent != null && parent.isInProgress()){
+				
+				advancePositionRequ(position);
+				
 				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_MISSING_SMALL);
 				imageRenderingDecorator.setMessage("Requirement is missing!");
-				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-				imageRenderingDecorator.setY(5);
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -111,13 +169,19 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 			}
 		}
 		else{
-			if(!statusNode.getWarnings().isEmpty()){
-				for(Warning w : statusNode.getWarnings()) {
+			
+			if(!errors.isEmpty()){
+				
+				advancePosition(position);
+				
+				for(Warning w : errors) {
 					ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_WARNING);
 					imageRenderingDecorator.setMessage(w.getMessage());
-					imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-					imageRenderingDecorator.setY(5);
+					imageRenderingDecorator.setX(position[0]);
+					imageRenderingDecorator.setY(position[1]);
 					decorators.add(imageRenderingDecorator);
+					
+					advancePositionMin(position);
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -131,18 +195,14 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				cd.setMessage("Requirements has not been met.");
 				decorators.add(cd);
 			}
-			else if(statusNode.isDirty()){
-				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_REFRESH);
-				imageRenderingDecorator.setMessage("Current work on this node is out of sync. Please save resources!");
-				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-				imageRenderingDecorator.setY(5);
-				decorators.add(imageRenderingDecorator);
-			}
 			else if(statusNode.isDone()){
+				
+				advancePosition(position);
+				
 				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_DONE);
 				imageRenderingDecorator.setMessage("Task is done.");
-				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-				imageRenderingDecorator.setY(5);
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -151,15 +211,58 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				decorators.add(cd);
 			}
 			else if(section != null && section.isInProgress()){
+				
+				advancePosition(position);
+				
 				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_NOT_DONE);
 				imageRenderingDecorator.setMessage("Work still has to be done on this node!");
-				imageRenderingDecorator.setX(pe.getGraphicsAlgorithm().getWidth() - 20);
-				imageRenderingDecorator.setY(5);
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
-			}					
+			}
+			
+			if(statusNode.isDirty()){
+				
+				advancePosition(position);
+				
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_REFRESH);
+				imageRenderingDecorator.setMessage("Current work on this node is out of sync. Please save resources!");
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
+				decorators.add(imageRenderingDecorator);
+			}
 		}
 		
-		return decorators.toArray(new IDecorator[decorators.size()]);
+		//add warning and info decorators		
+		if(!warnings.isEmpty()){
+			
+			advancePosition(position);
+			
+			for(Warning w : warnings) {
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_WARNING);
+				imageRenderingDecorator.setMessage(w.getMessage());
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
+				decorators.add(imageRenderingDecorator);
+				
+				advancePositionMin(position);
+			}
+		}
+		
+		if(!infos.isEmpty()){
+			
+			advancePosition(position);
+			
+			for(Warning w : infos) {
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_WARNING);
+				imageRenderingDecorator.setMessage(w.getMessage());
+				imageRenderingDecorator.setX(position[0]);
+				imageRenderingDecorator.setY(position[1]);
+				decorators.add(imageRenderingDecorator);
+				
+				advancePositionMin(position);
+			}
+		}
 	}
 	
 	public boolean calcHasMetRequirements(Section section){

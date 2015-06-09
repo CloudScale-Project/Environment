@@ -42,7 +42,7 @@ public class InputValidator implements IResourceValidator {
 		
 		if (catalog == null)
 		{
-			selfStatus.addWarning("", "Sourcecode Decorator is missing.");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Sourcecode Decorator is missing.");
 			return false;
 		}
 		

@@ -40,7 +40,7 @@ public class ConfigValidator implements IResourceValidator {
 
 		if (ca.getExtractedProject() == null)
 		{
-			status.addWarning("", "Input project not selected.");
+			status.addWarning("", IValidationStatus.SEVERITY_ERROR, "Input project not selected.");
 			status.setIsValid(false);
 		}
 		
@@ -58,7 +58,7 @@ public class ConfigValidator implements IResourceValidator {
 		
 		if (modiscoConfiguration == null)
 		{
-			selfStatus.addWarning("", "Modisco configuration is missing");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Modisco configuration is missing");
 			return false;
 		}
 
@@ -73,7 +73,7 @@ public class ConfigValidator implements IResourceValidator {
 
 		if (paramDeepAnlysis != Boolean.TRUE || paramSerializeTarget != Boolean.TRUE)
 		{
-			selfStatus.addWarning("", "Modisco is misconfigered : DEEP_ANALYSIS and SERIALIZE_TARGET must be set to TRUE");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Modisco is misconfigered : DEEP_ANALYSIS and SERIALIZE_TARGET must be set to TRUE");
 			return false;
 		}
 		
@@ -89,7 +89,7 @@ public class ConfigValidator implements IResourceValidator {
 		
 		if (somoxConfiguration == null)
 		{
-			selfStatus.addWarning("", "Somox configuration is missing");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Somox configuration is missing");
 			return false;
 		}
 		

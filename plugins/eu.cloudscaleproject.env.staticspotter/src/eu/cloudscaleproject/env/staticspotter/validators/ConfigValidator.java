@@ -35,7 +35,7 @@ public class ConfigValidator implements IResourceValidator {
 
 		if (ca.getInputAlternative() == null)
 		{
-			status.addWarning("", "Input alternative not selected.");
+			status.addWarning("", IValidationStatus.SEVERITY_ERROR, "Input alternative not selected.");
 			status.setIsValid(false);
 		}
 		
@@ -53,7 +53,7 @@ public class ConfigValidator implements IResourceValidator {
 		
 		if (catalog == null)
 		{
-			selfStatus.addWarning("", "Static Spotter catalog is missing.");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Static Spotter catalog is missing.");
 			return false;
 		}
 		
@@ -68,7 +68,7 @@ public class ConfigValidator implements IResourceValidator {
 
 		if (engines == null || !engines.exists())
 		{
-			selfStatus.addWarning("", "Static Spotter engines definition are missing.");
+			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Static Spotter engines definition are missing.");
 			return false;
 		}
 		

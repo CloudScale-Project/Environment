@@ -39,27 +39,27 @@ public class InputValidator implements IResourceValidator {
 			// check connection
 			SpotterClientController controller = SpotterClientController.getController(project);
 			
-			status.check(ERROR, controller.isConnected(), true, 
+			status.checkError(ERROR, controller.isConnected(), true, 
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Spotter client not initialized - check Server page.!"));
 			
 			// check input files
 			IFolder folder = (IFolder)selectedRes.getResource();
 			IFile confFile = folder.getFile("mEnv.xml");
-			status.check(ERROR, confFile.exists(), true, 
+			status.checkError(ERROR, confFile.exists(), true, 
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Instrumentation controller and Measurement controller not specified!"));
 			
 			MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
 				
 			XMeasurementEnvironment confEnv = factory.parseXMLFile(confFile.getLocation().toString());
-			status.check(ERROR, confEnv != null, true, 
+			status.checkError(ERROR, confEnv != null, true, 
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Invalid input configuration!"));
 			
 			List<?> ic = confEnv.getInstrumentationController();
 			List<?> mc = confEnv.getMeasurementController();
 			
-			status.check(ERROR, ic != null && !ic.isEmpty(), true, 
+			status.checkError(ERROR, ic != null && !ic.isEmpty(), true, 
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Instrumentation controller not specified!"));					
-			status.check(ERROR, mc != null && !mc.isEmpty(), true,
+			status.checkError(ERROR, mc != null && !mc.isEmpty(), true,
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Measurement controller not specified!"));
 				
 		} catch (ValidationException e) {

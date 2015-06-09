@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Warning#getId <em>Id</em>}</li>
+ *   <li>{@link eu.cloudscaleproject.env.method.common.method.Warning#getSeverity <em>Severity</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Warning#getMessage <em>Message</em>}</li>
  *   <li>{@link eu.cloudscaleproject.env.method.common.method.Warning#getCommands <em>Commands</em>}</li>
  * </ul>
@@ -50,6 +51,32 @@ public interface Warning extends EObject {
 	 * @generated
 	 */
 	void setId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Severity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Severity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Severity</em>' attribute.
+	 * @see #setSeverity(int)
+	 * @see eu.cloudscaleproject.env.method.common.method.MethodPackage#getWarning_Severity()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getSeverity();
+
+	/**
+	 * Sets the value of the '{@link eu.cloudscaleproject.env.method.common.method.Warning#getSeverity <em>Severity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Severity</em>' attribute.
+	 * @see #getSeverity()
+	 * @generated
+	 */
+	void setSeverity(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Message</b></em>' attribute.

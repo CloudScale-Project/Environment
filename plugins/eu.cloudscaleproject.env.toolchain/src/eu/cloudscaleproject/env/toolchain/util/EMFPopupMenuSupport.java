@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.ui.action.DeleteAction;
 import org.eclipse.emf.edit.ui.action.PasteAction;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
@@ -32,6 +33,7 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 public class EMFPopupMenuSupport implements IMenuListener{
@@ -138,37 +140,57 @@ public class EMFPopupMenuSupport implements IMenuListener{
 			actions.add(action);
 		}
 
+		boolean isRootObject = false;
 		Object selected = strucSelection.getFirstElement();
 		if (selected instanceof EObject) {
 			if (EcoreUtil.getRootContainer((EObject)selected) == selected) {
-				return actions;
+				isRootObject = true;
 			}
 		}
 		
-	    {
-	    	CopyAction action = new CopyAction(editingDomain);
-			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+		if(!isRootObject){
+		    {
+		    	CopyAction action = new CopyAction(editingDomain);
+				action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+				action.updateSelection(strucSelection);
+				actions.add(action);
+			}
+		    {
+		    	CutAction action = new CutAction(editingDomain);
+				action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
+				action.updateSelection(strucSelection);
+				actions.add(action);
+			}
+		    {
+		    	PasteAction action = new PasteAction(editingDomain);
+				action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
+				action.updateSelection(strucSelection);
+				actions.add(action);
+			}
+			{
+				DeleteAction action = new DeleteAction(editingDomain, true);
+				action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+				action.updateSelection(strucSelection);
+				actions.add(action);
+			}
+		}
+		else{
+			//TODO: find better solution
+			//Hack - injecting editing domain into action
+			ValidateAction action = new ValidateAction(){
+				public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart){
+					this.domain = editingDomain;
+				}
+			};
+			action.setActiveWorkbenchPart(null);
+			
+			action.notifyResult(true);
+			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_OBJS_WARN_TSK));
 			action.updateSelection(strucSelection);
+			
 			actions.add(action);
 		}
-	    {
-	    	CutAction action = new CutAction(editingDomain);
-			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
-			action.updateSelection(strucSelection);
-			actions.add(action);
-		}
-	    {
-	    	PasteAction action = new PasteAction(editingDomain);
-			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
-			action.updateSelection(strucSelection);
-			actions.add(action);
-		}
-		{
-			DeleteAction action = new DeleteAction(editingDomain, true);
-			action.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-			action.updateSelection(strucSelection);
-			actions.add(action);
-		}
+		
 		return actions;
 	}
 	

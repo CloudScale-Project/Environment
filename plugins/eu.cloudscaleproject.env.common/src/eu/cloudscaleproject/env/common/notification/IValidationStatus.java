@@ -2,6 +2,8 @@ package eu.cloudscaleproject.env.common.notification;
 
 import java.util.Set;
 
+import org.eclipse.emf.validation.internal.modeled.model.validation.SeverityEnum;
+
 import eu.cloudscaleproject.env.common.BasicCallback;
 
 public interface IValidationStatus{
@@ -17,6 +19,10 @@ public interface IValidationStatus{
 	
 	public static final String PROP_UPDATE_ALL = "eu.cloudscaleproject.env.common.notification.toolstatus.updateall";
 	
+	public static final int SEVERITY_INFO = SeverityEnum.INFO_VALUE;
+	public static final int SEVERITY_WARNING = SeverityEnum.WARNING_VALUE;
+	public static final int SEVERITY_ERROR = SeverityEnum.ERROR_VALUE;
+	
 	public String getName();
 	public String getID();
 	public IValidationStatusProvider getProvider();
@@ -31,14 +37,17 @@ public interface IValidationStatus{
 	public void setIsValid(boolean isDone);
 	
 	public String getWarningMessage(String id);
+	public int getWarningType(String id);
+
 	public Set<String> getWarningIDs();
 		
-	public void addWarning(String id, String message);
-	public void addWarning(String id, String message, BasicCallback<Object> handle);
+	public void addWarning(String id, int severity, String message);
+	public void addWarning(String id, int severity, String message, BasicCallback<Object> handle);
 	public void handleWarning(String id);
 	
-	public void check(String id, boolean expression, boolean throwException, String message) throws ValidationException;
-	public void check(String id, boolean expression, boolean throwException, String message, BasicCallback<Object> handler) throws ValidationException;
+	public void checkError(String id, boolean expression, boolean throwException, String message) throws ValidationException;
+	public void check(String id, boolean expression, boolean throwException, int severity, String message) throws ValidationException;
+	public void check(String id, boolean expression, boolean throwException, int severity, String message, BasicCallback<Object> handler) throws ValidationException;
 	
 	public void removeWarning(String id);
 	public void clearWarnings();

@@ -107,33 +107,36 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 						return;
 					}
 					
-					if(IValidationStatus.PROP_WARNING_ADD.equals(pce.getPropertyName())){
-						String id = (String)pce.getNewValue();
-						Warning w = MethodFactory.eINSTANCE.createWarning();
-						w.setId(id);
-						w.setMessage(status.getWarningMessage(id));
-						statusNode.getWarnings().add(w);
-					}
-					if(IValidationStatus.PROP_WARNING_REMOVE.equals(pce.getPropertyName())){
-						Warning warning = null;
-						for(Warning w : statusNode.getWarnings()){
-							if(pce.getOldValue().equals(w.getId())){
-								warning = w;
-								break;
+					synchronized (statusNode) {
+						if(IValidationStatus.PROP_WARNING_ADD.equals(pce.getPropertyName())){
+							String id = (String)pce.getNewValue();
+							Warning w = MethodFactory.eINSTANCE.createWarning();
+							w.setId(id);
+							w.setSeverity(status.getWarningType(id));
+							w.setMessage(status.getWarningMessage(id));
+							statusNode.getWarnings().add(w);
+						}
+						if(IValidationStatus.PROP_WARNING_REMOVE.equals(pce.getPropertyName())){
+							Warning warning = null;
+							for(Warning w : statusNode.getWarnings()){
+								if(pce.getOldValue().equals(w.getId())){
+									warning = w;
+									break;
+								}
+							}
+							if(warning != null){
+								statusNode.getWarnings().remove(warning);
 							}
 						}
-						if(warning != null){
-							statusNode.getWarnings().remove(warning);
+						if(IValidationStatus.PROP_DIRTY.equals(pce.getPropertyName())){
+							statusNode.setDirty((boolean)pce.getNewValue());
 						}
+						if(IValidationStatus.PROP_NAME.equals(pce.getPropertyName())){
+							statusNode.setInstanceName((String)pce.getNewValue());
+						}
+						
+						statusNode.setDone(status.isDone());
 					}
-					if(IValidationStatus.PROP_DIRTY.equals(pce.getPropertyName())){
-						statusNode.setDirty((boolean)pce.getNewValue());
-					}
-					if(IValidationStatus.PROP_NAME.equals(pce.getPropertyName())){
-						statusNode.setInstanceName((String)pce.getNewValue());
-					}
-					
-					statusNode.setDone(status.isDone());
 					
 					refresh();
 				}
@@ -318,20 +321,23 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			commandStack.execute(new RecordingCommand((TransactionalEditingDomain) editingDomain) {
 				
 				protected void doExecute() {
-					statusNode.setInstanceName("");
-					statusNode.setSource(null);
-					statusNode.setDirty(false);
-					statusNode.setDone(false);
-					statusNode.getWarnings().clear();
 					
-					if(statusNode instanceof Section){
-						Section section = (Section)statusNode;
-						section.setInProgress(false);
-					}
-					
-					if(statusNode instanceof Requirement){
-						Requirement req = (Requirement)statusNode;
-						req.setResource(null);
+					synchronized (statusNode) {
+						statusNode.setInstanceName("");
+						statusNode.setSource(null);
+						statusNode.setDirty(false);
+						statusNode.setDone(false);
+						statusNode.getWarnings().clear();
+						
+						if(statusNode instanceof Section){
+							Section section = (Section)statusNode;
+							section.setInProgress(false);
+						}
+						
+						if(statusNode instanceof Requirement){
+							Requirement req = (Requirement)statusNode;
+							req.setResource(null);
+						}
 					}
 					
 					refresh();
@@ -346,20 +352,23 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		commandStack.execute(new RecordingCommand((TransactionalEditingDomain) editingDomain) {
 			
 			protected void doExecute() {
-				statusNode.setInstanceName(status.getName());
-				statusNode.setSource(status);
-				statusNode.setDirty(status.isDirty());
-				statusNode.setDone(status.isDone());
-				if(statusNode instanceof Section){
-					Section section = (Section)statusNode;
-					section.setInProgress(true);
-				}
-				setWarnings(statusNode, status);
 				
-				if(statusNode instanceof Requirement){
-					if(status instanceof ResourceValidationStatus){
-						Requirement req = (Requirement)statusNode;
-						req.setResource(((ResourceValidationStatus) status).getResource());
+				synchronized (statusNode) {
+					statusNode.setInstanceName(status.getName());
+					statusNode.setSource(status);
+					statusNode.setDirty(status.isDirty());
+					statusNode.setDone(status.isDone());
+					if(statusNode instanceof Section){
+						Section section = (Section)statusNode;
+						section.setInProgress(true);
+					}
+					setWarnings(statusNode, status);
+					
+					if(statusNode instanceof Requirement){
+						if(status instanceof ResourceValidationStatus){
+							Requirement req = (Requirement)statusNode;
+							req.setResource(((ResourceValidationStatus) status).getResource());
+						}
 					}
 				}
 				
@@ -369,12 +378,15 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	}
 	
 	private void setWarnings(StatusNode node, IValidationStatus status){
-		node.getWarnings().clear();
-		for(String id : status.getWarningIDs()){
-			Warning w = MethodFactory.eINSTANCE.createWarning();
-			w.setId(id);
-			w.setMessage(status.getWarningMessage(id));
-			node.getWarnings().add(w);
+		synchronized (node) {
+			node.getWarnings().clear();
+			for(String id : status.getWarningIDs()){
+				Warning w = MethodFactory.eINSTANCE.createWarning();
+				w.setId(id);
+				w.setSeverity(status.getWarningType(id));
+				w.setMessage(status.getWarningMessage(id));
+				node.getWarnings().add(w);
+			}
 		}
 	}
 

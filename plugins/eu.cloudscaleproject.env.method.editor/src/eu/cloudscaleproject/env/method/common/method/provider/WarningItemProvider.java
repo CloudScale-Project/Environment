@@ -66,6 +66,7 @@ public class WarningItemProvider
 			super.getPropertyDescriptors(object);
 
 			addIdPropertyDescriptor(object);
+			addSeverityPropertyDescriptor(object);
 			addMessagePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -89,6 +90,28 @@ public class WarningItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Severity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSeverityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Warning_severity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Warning_severity_feature", "_UI_Warning_type"),
+				 MethodPackage.Literals.WARNING__SEVERITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -184,6 +207,7 @@ public class WarningItemProvider
 
 		switch (notification.getFeatureID(Warning.class)) {
 			case MethodPackage.WARNING__ID:
+			case MethodPackage.WARNING__SEVERITY:
 			case MethodPackage.WARNING__MESSAGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

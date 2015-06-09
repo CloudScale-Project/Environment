@@ -1236,13 +1236,22 @@ public interface MethodPackage extends EPackage {
 	int WARNING__ID = 0;
 
 	/**
+	 * The feature id for the '<em><b>Severity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WARNING__SEVERITY = 1;
+
+	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WARNING__MESSAGE = 1;
+	int WARNING__MESSAGE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Commands</b></em>' containment reference list.
@@ -1251,7 +1260,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WARNING__COMMANDS = 2;
+	int WARNING__COMMANDS = 3;
 
 	/**
 	 * The number of structural features of the '<em>Warning</em>' class.
@@ -1260,7 +1269,7 @@ public interface MethodPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WARNING_FEATURE_COUNT = 3;
+	int WARNING_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Warning</em>' class.
@@ -1881,6 +1890,17 @@ public interface MethodPackage extends EPackage {
 	EAttribute getWarning_Id();
 
 	/**
+	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Warning#getSeverity <em>Severity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Severity</em>'.
+	 * @see eu.cloudscaleproject.env.method.common.method.Warning#getSeverity()
+	 * @see #getWarning()
+	 * @generated
+	 */
+	EAttribute getWarning_Severity();
+
+	/**
 	 * Returns the meta object for the attribute '{@link eu.cloudscaleproject.env.method.common.method.Warning#getMessage <em>Message</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2310,6 +2330,14 @@ public interface MethodPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute WARNING__ID = eINSTANCE.getWarning_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Severity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WARNING__SEVERITY = eINSTANCE.getWarning_Severity();
 
 		/**
 		 * The meta object literal for the '<em><b>Message</b></em>' attribute feature.

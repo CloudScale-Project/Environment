@@ -25,6 +25,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.EMFUtils;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ConfValidator implements IResourceValidator {
@@ -91,7 +92,7 @@ public class ConfValidator implements IResourceValidator {
 			return true;
 		}
 		
-		status.check(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
+		status.checkError(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
 		
 		if(resource.getContents().isEmpty()){
 			status.setIsValid(false);
@@ -105,7 +106,8 @@ public class ConfValidator implements IResourceValidator {
 		String message = String.format("Model validation failed : %s", 
 				eObject.eClass().getName());
 
-		status.check(ERR_MODEL_ERROR, modelValid, false, message);
+		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
+		EMFUtils.fillWarnings(status, diagnostic);
 		
 		if(modelValid){
 			status.setIsValid(true);
@@ -120,9 +122,9 @@ public class ConfValidator implements IResourceValidator {
 	
 		IValidationStatus status = alt.getSelfStatus();
 		
-		status.check("ExperimentError", experiment != null, true, "Experiment: Experiment does not exist!");
-		status.check("InitialModelError", experiment.getInitialModel() != null, true, "Experiment: Initial model does not exist!");
-		status.check("StopConditionError", !experiment.getStopConditions().isEmpty(), true, "Experiment: Stop condition is empty!");
+		status.checkError("ExperimentError", experiment != null, true, "Experiment: Experiment does not exist!");
+		status.checkError("InitialModelError", experiment.getInitialModel() != null, true, "Experiment: Initial model does not exist!");
+		status.checkError("StopConditionError", !experiment.getStopConditions().isEmpty(), true, "Experiment: Stop condition is empty!");
 
 		return true;
 	}
@@ -137,8 +139,8 @@ public class ConfValidator implements IResourceValidator {
 			if(ConfAlternative.Type.CAPACITY.equals(alt.getTypeEnum())
 					|| ConfAlternative.Type.SCALABILITY.equals(alt.getTypeEnum())){
 				
-				status.check("SLOError", sloRep != null , true, "This experiment type needs SLO specifications");
-				status.check("SLOEmptyError", !sloRep.getServicelevelobjectives().isEmpty() , true, "This experiment type needs SLO specifications");
+				status.checkError("SLOError", sloRep != null , true, "This experiment type needs SLO specifications");
+				status.checkError("SLOEmptyError", !sloRep.getServicelevelobjectives().isEmpty() , true, "This experiment type needs SLO specifications");
 
 			}
 			
@@ -147,9 +149,9 @@ public class ConfValidator implements IResourceValidator {
 				String errorID = "SLOError";
 				
 				for(ServiceLevelObjective slo : sloRep.getServicelevelobjectives()){
-					status.check(errorID, slo.getLowerThreshold() != null || slo.getUpperThreshold() != null, true,
+					status.checkError(errorID, slo.getLowerThreshold() != null || slo.getUpperThreshold() != null, true,
 							"SLO: '"+ slo.getName() +"' needs uper or lower threshold!");
-					status.check(errorID, slo.getMeasurementSpecification() != null, true, 
+					status.checkError(errorID, slo.getMeasurementSpecification() != null, true, 
 							"SLO: '"+ slo.getName() +"' needs measurement specification!");
 				}
 			}
@@ -170,9 +172,9 @@ public class ConfValidator implements IResourceValidator {
 			String errorID = "MonitorError";
 			for(Monitor monitor : monitorRep.getMonitors()){
 				
-				status.check(errorID, monitor.getMeasurementSpecifications() != null, true,
+				status.checkError(errorID, monitor.getMeasurementSpecifications() != null, true,
 						"Monitor: '"+ monitor.getEntityName() +"' needs measurement specification!");
-				status.check(errorID, monitor.getMeasuringPoint() != null, true,
+				status.checkError(errorID, monitor.getMeasuringPoint() != null, true,
 						"Monitor: '"+ monitor.getEntityName() +"' does not have measuring point specified!");
 			}
 			status.clearWarnings();
@@ -192,13 +194,13 @@ public class ConfValidator implements IResourceValidator {
 		
 		for(IValidationStatus status : statusArray){
 				
-			status.check("UEEmpty", !usageEvolution.getUsages().isEmpty(), true, 
+			status.checkError("UEEmpty", !usageEvolution.getUsages().isEmpty(), true, 
 					"Usage evolution with empty configuration is set in Experiment!");
 			
 			for(Usage usage : usageEvolution.getUsages()){
-				status.check("", usage.getLoadEvolution() != null, true, 
+				status.checkError("", usage.getLoadEvolution() != null, true, 
 						"Usage evolution: '"+ usage.getEntityName() + "' does not have load evolution!");
-				status.check("", usage.getScenario() != null, true, 
+				status.checkError("", usage.getScenario() != null, true, 
 						"Usage evolution: '"+ usage.getEntityName() + "' does not have usage scenarion!");
 			}
 			status.clearWarnings();
@@ -215,7 +217,7 @@ public class ConfValidator implements IResourceValidator {
 		InputAlternative inputAlternative = alternative.getInputAlternative();
 		
 		try {
-			status.check(ERR_INPUT_NOT_SET, inputAlternative != null, true, "Input alternative is not set!");
+			status.checkError(ERR_INPUT_NOT_SET, inputAlternative != null, true, "Input alternative is not set!");
 			inputAlternative.validate();
 
 			boolean valid = validateModels(alternative.getProject(), alternative);

@@ -512,7 +512,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getWarning_Message() {
+	public EAttribute getWarning_Severity() {
 		return (EAttribute)warningEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -521,8 +521,17 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getWarning_Message() {
+		return (EAttribute)warningEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getWarning_Commands() {
-		return (EReference)warningEClass.getEStructuralFeatures().get(2);
+		return (EReference)warningEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -653,6 +662,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		warningEClass = createEClass(WARNING);
 		createEAttribute(warningEClass, WARNING__ID);
+		createEAttribute(warningEClass, WARNING__SEVERITY);
 		createEAttribute(warningEClass, WARNING__MESSAGE);
 		createEReference(warningEClass, WARNING__COMMANDS);
 
@@ -749,6 +759,7 @@ public class MethodPackageImpl extends EPackageImpl implements MethodPackage {
 
 		initEClass(warningEClass, Warning.class, "Warning", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWarning_Id(), ecorePackage.getEString(), "id", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getWarning_Severity(), ecorePackage.getEInt(), "severity", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getWarning_Message(), ecorePackage.getEString(), "message", null, 1, 1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getWarning_Commands(), this.getCommand(), null, "commands", null, 0, -1, Warning.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

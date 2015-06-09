@@ -26,6 +26,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	
 	private class Warning{
 		public String message;
+		public int severity;
 		BasicCallback<Object> handler;
 	}
 	
@@ -111,6 +112,15 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 		}
 		return null;
 	}
+	
+	@Override
+	public int getWarningType(String id) {
+		Warning w = warnings.get(id);
+		if(w != null){
+			return w.severity;
+		}
+		return SEVERITY_ERROR;
+	};
 
 	@Override
 	public Set<String> getWarningIDs() {
@@ -118,8 +128,9 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void addWarning(String id, String message) {
+	public void addWarning(String id, int severity, String message) {
 		Warning w = new Warning();
+		w.severity = severity;
 		w.message = message;
 		warnings.put(id, w);
 		setIsValid(false);
@@ -128,8 +139,9 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void addWarning(String id, String message, BasicCallback<Object> handler) {
+	public void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
 		Warning w = new Warning();
+		w.severity = severity;
 		w.message = message;
 		w.handler = handler;
 		warnings.put(id, w);
@@ -139,12 +151,27 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 	
 	@Override
-	public void check(String id, boolean expression, boolean throwException, String message) throws ValidationException{
+	public void checkError(String id, boolean expression, boolean throwException, 
+						   String message) throws ValidationException{
 		if(expression){
 			removeWarning(id);
 		}
 		else{
-			addWarning(id, message);
+			addWarning(id, SEVERITY_ERROR, message);
+			if(throwException){
+				throw new ValidationException(id);
+			}
+		}
+	}
+	
+	@Override
+	public void check(String id, boolean expression, boolean throwException, 
+					  int severity, String message) throws ValidationException{
+		if(expression){
+			removeWarning(id);
+		}
+		else{
+			addWarning(id, severity, message);
 			if(throwException){
 				throw new ValidationException(id);
 			}
@@ -152,12 +179,13 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void check(String id, boolean expression, boolean throwException, String message, BasicCallback<Object> handler) throws ValidationException{
+	public void check(String id, boolean expression, boolean throwException, 
+					  int severity, String message, BasicCallback<Object> handler) throws ValidationException{
 		if(expression){
 			removeWarning(id);
 		}
 		else{
-			addWarning(id, message, handler);
+			addWarning(id, severity, message, handler);
 			if(throwException){
 				throw new ValidationException(id);
 			}
@@ -180,9 +208,8 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 
 	@Override
 	public void clearWarnings() {
-		for (String id : warnings.keySet())
-		{
-			removeWarning(id);
+		for (Object id : warnings.keySet().toArray()){
+			removeWarning((String)id);
 		}
 	}
 

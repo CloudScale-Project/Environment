@@ -77,6 +77,7 @@ import de.uka.ipd.sdq.pcm.usagemodel.Workload;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -190,7 +191,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 			getSelfStatus().removeWarning(ERR_INVALID_INPUT_ALTERNATIVE);
 		} 
 		else{
-			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, "Invalid input alternative!");
+			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, 
+					IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
 			setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
 			setDirty(true);
 			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
