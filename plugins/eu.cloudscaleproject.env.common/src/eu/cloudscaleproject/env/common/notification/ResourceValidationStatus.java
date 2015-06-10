@@ -1,7 +1,7 @@
 package eu.cloudscaleproject.env.common.notification;
 
 import java.beans.PropertyChangeSupport;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -20,15 +20,9 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	
 	private boolean isDirty = false;
 	private boolean isValid = false;	
-	private HashMap<String, Warning> warnings = new HashMap<String, Warning>();
+	private LinkedHashMap<String, Warning> warnings = new LinkedHashMap<String, Warning>();
 	
 	private final IValidationStatusProvider provider;
-	
-	private class Warning{
-		public String message;
-		public int severity;
-		BasicCallback<Object> handler;
-	}
 	
 	public ResourceValidationStatus(IValidationStatusProvider provider, String id) {
 		this(provider, id, null);
@@ -102,6 +96,10 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	@Override
 	public void setIsValid(boolean isDone) {
 		pcs.firePropertyChange(PROP_VALID, this.isValid, this.isValid = isDone);
+	}
+	
+	public Warning[] getWarnings(){
+		return warnings.values().toArray(new Warning[warnings.values().size()]);
 	}
 
 	@Override

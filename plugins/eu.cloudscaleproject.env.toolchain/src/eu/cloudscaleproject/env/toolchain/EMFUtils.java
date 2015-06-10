@@ -11,8 +11,19 @@ public class EMFUtils {
 		for(int i=0; i<diagnostic.getChildren().size(); i++){
 			
 			Diagnostic d = diagnostic.getChildren().get(i);
-			status.addWarning(d.toString(), d.getSeverity(), d.getMessage());
 			
+			int severity = 2;
+			if(d.getSeverity() == Diagnostic.INFO){
+				severity = IValidationStatus.SEVERITY_INFO;
+			}
+			else if(d.getSeverity() == Diagnostic.WARNING){
+				severity = IValidationStatus.SEVERITY_WARNING;
+			}
+			else if(d.getSeverity() == Diagnostic.ERROR){
+				severity = IValidationStatus.SEVERITY_ERROR;
+			}
+			
+			status.addWarning(d.toString(), severity, d.getMessage());
 			for(Diagnostic ds : d.getChildren()){
 				fillWarnings(status, ds);
 			}

@@ -35,12 +35,12 @@ import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
-import eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart;
+import eu.cloudscaleproject.env.method.viewer.diagram.IDiagramView;
 
 public class MethodDiagramComposite extends DiagramComposite implements IValidationDiagram{
 		
 	private boolean isInitilized = false;
-	private DiagramViewPart part;
+	private IDiagramView part;
 	private IProject project;
 		
 	private HashMap<String, StatusNode> nodes = new HashMap<String, StatusNode>();
@@ -145,7 +145,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 	};
 	
-	public MethodDiagramComposite(DiagramViewPart part, Composite parent){
+	public MethodDiagramComposite(IDiagramView part, Composite parent){
 		
 		super(parent, SWT.NONE);
 		this.part = part;		

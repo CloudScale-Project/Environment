@@ -20,7 +20,7 @@
             <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="70">
               <children xsi:type="advanced:Placeholder" xmi:id="_imeVUKLIEeOVJP61i6fIgw" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.1" containerData="30">
+            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.bottom" containerData="30">
               <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" ref="_mc-PMDZ_EeOUZvbZvEH41A"/>
             </children>
           </children>

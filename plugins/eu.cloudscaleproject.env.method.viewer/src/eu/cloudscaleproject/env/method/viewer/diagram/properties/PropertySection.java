@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.method.viewer.diagram.properties;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.graphiti.services.Graphiti;
@@ -19,7 +21,12 @@ import eu.cloudscaleproject.env.common.ui.resources.ResourceManager;
 import eu.cloudscaleproject.env.method.common.method.*;
 
 
-public class PropertySection extends GFPropertySection implements ITabbedPropertyConstants {
+public class PropertySection extends GFPropertySection implements ITabbedPropertyConstants, IExecutableExtensionFactory{
+
+	@Override
+	public Object create() throws CoreException {
+		return new PropertySection();
+	}
 	
 	@Optional
 	private CommandExecutor commandExecutor;

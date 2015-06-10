@@ -148,6 +148,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	@Override
 	public void setFocus() {
 		CloudscaleContext.registerCurrent(IProject.class, ExplorerProjectPaths.getProject(this));
+		CloudscaleContext.registerGlobal(IProject.class, ExplorerProjectPaths.getProject(this));
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
 	}
 }

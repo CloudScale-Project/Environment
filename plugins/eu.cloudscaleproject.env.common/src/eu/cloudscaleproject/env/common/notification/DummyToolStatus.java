@@ -94,4 +94,9 @@ class DummyToolStatus implements IValidationStatus{
 	public IValidationStatusProvider getProvider() {
 		return null;
 	}
+
+	@Override
+	public Warning[] getWarnings() {
+		return new Warning[]{};
+	}
 }

@@ -24,6 +24,14 @@ public class StatusManager {
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
+	//forward status provider changes to this prop. change support.
+	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			pcs.firePropertyChange(evt);
+		}
+	};
+	
 	public enum Tool{
 		
 		EXTRACTOR_INPUT("ext_input"),
@@ -79,13 +87,6 @@ public class StatusManager {
 		return instance;
 	}
 	
-	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			pcs.firePropertyChange(evt);
-		}
-	};
-	
 	public synchronized void addStatusProvider(IProject project, IValidationStatusProvider statusProvider){
 		statusProviders.put(statusProvider, project);
 		statusProvider.addPropertyChangeListener(statusProviderListener);
@@ -98,12 +99,15 @@ public class StatusManager {
 		pcs.firePropertyChange(PROP_STATUS_PROVIDER_REMOVED, statusProvider, null);
 	}
 	
-	public synchronized List<IValidationStatusProvider> getStatusProvider(IProject project, String id){
+	public synchronized List<IValidationStatusProvider> getStatusProviders(IProject project){
 		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(entry.getValue()) && id.equals(entry.getKey().getID())){
-					out.add(entry.getKey());
+				if(project.equals(entry.getValue())){
+					IValidationStatusProvider sp = entry.getKey();
+					if(sp != null){
+						out.add(entry.getKey());
+					}
 				}
 			}
 			catch(NullPointerException e){
@@ -113,13 +117,15 @@ public class StatusManager {
 		return out;
 	}
 	
-	/*
-	public List<IValidationStatusProvider> getStatusProviders(IProject project){
+	public synchronized List<IValidationStatusProvider> getStatusProvider(IProject project, String id){
 		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
-		for(IValidationStatusProvider provider : statusProviders){
+		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(provider.getProject())){
-					out.add(provider);
+				if(project.equals(entry.getValue()) && id.equals(entry.getKey().getID())){
+					IValidationStatusProvider sp = entry.getKey();
+					if(sp != null){
+						out.add(entry.getKey());
+					}
 				}
 			}
 			catch(NullPointerException e){
@@ -128,7 +134,6 @@ public class StatusManager {
 		}
 		return out;
 	}
-	*/
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener){
 		pcs.addPropertyChangeListener(listener);

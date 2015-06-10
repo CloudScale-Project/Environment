@@ -36,9 +36,15 @@ public interface IValidationStatus{
 	public void setIsDirty(boolean dirty);	
 	public void setIsValid(boolean isDone);
 	
+	public class Warning{
+		public String message;
+		public int severity;
+		BasicCallback<Object> handler;
+	}
+	
+	public Warning[] getWarnings();
 	public String getWarningMessage(String id);
 	public int getWarningType(String id);
-
 	public Set<String> getWarningIDs();
 		
 	public void addWarning(String id, int severity, String message);
