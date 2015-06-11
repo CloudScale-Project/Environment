@@ -22,9 +22,6 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 
 public class StatusViewPart {
 	
-	//@Inject
-	//private MPart part;
-	
 	private Composite composite;
 	private TableViewer tableViewer;
 	

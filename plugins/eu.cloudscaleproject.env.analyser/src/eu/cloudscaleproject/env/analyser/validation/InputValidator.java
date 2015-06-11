@@ -111,7 +111,7 @@ public class InputValidator implements IResourceValidator {
 				resource.getURI().lastSegment());
 
 		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
-		EMFUtils.fillWarnings(status, diagnostic);
+		EMFUtils.fillValidationStatus(status, diagnostic);
 		
 		status.setIsValid(modelValid);
 		

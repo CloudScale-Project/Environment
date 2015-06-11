@@ -6,7 +6,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 
 public class EMFUtils {
 
-	public static void fillWarnings(IValidationStatus status, Diagnostic diagnostic){
+	public static void fillValidationStatus(IValidationStatus status, Diagnostic diagnostic){
 		
 		for(int i=0; i<diagnostic.getChildren().size(); i++){
 			
@@ -25,7 +25,7 @@ public class EMFUtils {
 			
 			status.addWarning(d.toString(), severity, d.getMessage());
 			for(Diagnostic ds : d.getChildren()){
-				fillWarnings(status, ds);
+				fillValidationStatus(status, ds);
 			}
 		}
 	}

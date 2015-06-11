@@ -107,7 +107,7 @@ public class ConfValidator implements IResourceValidator {
 				eObject.eClass().getName());
 
 		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
-		EMFUtils.fillWarnings(status, diagnostic);
+		EMFUtils.fillValidationStatus(status, diagnostic);
 		
 		if(modelValid){
 			status.setIsValid(true);
