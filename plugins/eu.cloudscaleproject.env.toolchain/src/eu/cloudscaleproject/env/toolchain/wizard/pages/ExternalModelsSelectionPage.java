@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -9,9 +11,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -45,8 +50,8 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	private static final String DEFAULT_TITLE = "External models selection";
 	private static final String DEFAULT_DESCRIPTION = "Please select folder and models.";
 
-	private List<Resource> selectedResources = new ArrayList<Resource>();
-	private List<Resource> selectedDiagramResources = new ArrayList<Resource>();
+	private HashSet<Resource> selectedResources = new HashSet<Resource>();
+	private HashSet<Resource> selectedDiagramResources = new HashSet<Resource>();
 	
 	private ResourceSet resSet = new ResourceSetImpl();
 	private ResourceSet resSetDiagram = new ResourceSetImpl();
@@ -55,9 +60,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	
 	private IFolder folder = null;
 	private ICheckStateListener checkStateListener = null;
-	
-	private boolean disableSelectionListeners = false;
-	
+		
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
 		
 		@Override
@@ -104,39 +107,41 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		return selectedDiagramResources.toArray(new Resource[selectedDiagramResources.size()]);
 	}
 	
-	public void selectModel(ModelType modelType, boolean state, boolean selectOnlyOne){
-		try{
-			disableSelectionListeners = true;
-
-			for(Resource r : resSet.getResources()){
-				if(modelType.getFileExtension().equals(r.getURI().fileExtension())){
-					for(EObject eo : r.getContents()){
-						tableView.setChecked(eo, state);
-					}
-					if(selectOnlyOne){
-						state = false;
-					}
+	public void selectResource(ModelType modelType, boolean state, boolean selectOnlyOne){
+		for(Resource r : resSet.getResources()){
+			if(modelType.getFileExtension().equals(r.getURI().fileExtension())){
+				selectResource(r, state);
+				if(selectOnlyOne){
+					state = false;
 				}
 			}
-			collectSelectedResources(tableView.getCheckedElements());
-		}
-		finally{
-			disableSelectionListeners = false;
 		}
 	}
 	
-	public void selectModel(EObject modelRoot, boolean state){
-		try{
-			disableSelectionListeners = true;
-			
-			if(modelRoot == null){
-				return;
+	public void selectResource(Resource res, boolean state){
+		
+		for(EObject eo : res.getContents()){
+			tableView.setChecked(eo, state);
+			if(state){
+				selectedResources.add(eo.eResource());
 			}
-			tableView.setChecked(modelRoot, state);
-			collectSelectedResources(tableView.getCheckedElements());
+			else{
+				selectedResources.remove(eo.eResource());
+			}
 		}
-		finally{
-			disableSelectionListeners = false;
+		
+		Resource dRes = findDiagramResource(res);
+		if(dRes != null){
+			if(state){
+				selectedDiagramResources.add(dRes);
+			}
+			else{
+				selectedDiagramResources.remove(dRes);
+			}
+		}
+		
+		for(Resource lRes : findLinked(res)){
+			selectResource(lRes, state);
 		}
 	}
 	
@@ -175,14 +180,22 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
+								
+				Object element = event.getElement();
+				boolean state = event.getChecked();
 				
-				if(disableSelectionListeners){
-					return;
+				Resource res = null;
+				if(element instanceof Resource){
+					res = (Resource)element;
+				}
+				else if(element instanceof EObject){
+					res = ((EObject)element).eResource();
 				}
 				
-				Object[] selection = tableView.getCheckedElements();
-				collectSelectedResources(selection);
-				
+				if(res != null){
+					selectResource(res, state);
+				}
+												
 				if(checkStateListener != null){
 					checkStateListener.checkStateChanged(event);
 				}
@@ -204,36 +217,10 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		refresh();
 	}
 	
-	private void collectSelectedResources(Object... selection){
-		
-		selectedResources.clear();
-		selectedDiagramResources.clear();
-		
-		for(int i=0; i<selection.length; i++){
-			Object o = selection[i];
-
-			if (o instanceof EObject)
-			{
-				EObject eobj = (EObject) o;
-				o = eobj.eResource();
-			}
-
-			if(o instanceof Resource){
-				Resource res = (Resource)o;				
-				selectedResources.add(res);
-				
-				Resource resDiag = findDiagramResource(res, resSetDiagram);
-				if(resDiag != null){
-					selectedDiagramResources.add(resDiag);
-				}
-			}
-		}
-	}
-	
-	private Resource findDiagramResource(Resource modelResource, ResourceSet diagramsResSet){
+	private Resource findDiagramResource(Resource modelResource){
 		String diagramName = modelResource.getURI().lastSegment().toString() + "_diagram";
 		
-		for(Resource r : diagramsResSet.getResources()){
+		for(Resource r : resSetDiagram.getResources()){
 			if(r.getURI().lastSegment().toString().equals(diagramName)){
 				return r;
 			}
@@ -241,12 +228,60 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		return null;
 	}
 	
+	private List<Resource> findLinked(Resource resource){
+			
+		List<Resource> selected = new ArrayList<Resource>();
+		Iterator<EObject> iter = EcoreUtil.getAllContents(resource, false);
+		while(iter.hasNext()){
+			EObject o = iter.next();
+			
+			{	
+				Resource res = o.eResource();
+				if(res != null && !selected.contains(res)){
+					selected.add(res);
+				}
+			}
+			
+			for(EStructuralFeature feature : o.eClass().getEAllStructuralFeatures()){
+				Object child = o.eGet(feature, false);
+				if(child instanceof InternalEObject){
+					InternalEObject ieo = (InternalEObject)child;
+					
+					if(ieo.eProxyURI() == null
+							|| ieo.eProxyURI().scheme().equals("pathmap")){
+						continue;
+					}
+					
+					EObject eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), false);
+					
+					if(eo != null){
+						Resource res = eo.eResource();
+						if(res != null && !selected.contains(res)){
+							selected.add(res);
+							selected.addAll(findLinked(res));
+						}
+					}
+				}
+			}
+			
+		}
+		
+		//remove self from this list!
+		selected.remove(resource);
+		return selected;
+	}
+	
 	public void refresh(){
 		if(folder != null){
 			resSet.getResources().clear();
-			findAndLoadResources(folder);				
+			resSetDiagram.getResources().clear();
+			
+			findAndLoadResources(folder);
+			tableView.setAllChecked(false);
 			tableView.refresh(true);				
-			collectSelectedResources(tableView.getSelection());
+			
+			selectedResources.clear();
+			selectedDiagramResources.clear();
 		}
 	}
 	
