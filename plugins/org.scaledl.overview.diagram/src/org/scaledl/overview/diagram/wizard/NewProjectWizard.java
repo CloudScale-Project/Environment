@@ -12,6 +12,7 @@ public class NewProjectWizard implements NewProjectExtension{
 		
 	public void finalize(IProject project){
 		
+		/*
 		//create or retrieve ScaleDL folder
 		String folder = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
 		
@@ -34,6 +35,7 @@ public class NewProjectWizard implements NewProjectExtension{
 		URI modelURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI(modelFile.getFullPath().toString(), true);
 		URI diagramURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI(diagramFile.getFullPath().toString(), true);
 		Util.createDiagram(diagramURI, modelURI);
+		*/
 	}
 	
 }

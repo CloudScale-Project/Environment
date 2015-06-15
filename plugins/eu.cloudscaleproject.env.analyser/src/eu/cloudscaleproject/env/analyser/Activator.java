@@ -15,7 +15,11 @@ import de.uka.ipd.sdq.pcm.system.impl.SystemPackageImpl;
 import de.uka.ipd.sdq.pcm.usagemodel.impl.UsagemodelPackageImpl;
 
 /**
+ * 
+ * @author Vito Čuček <vito.cucek@xlab.si>
+ * 
  * The activator class controls the plug-in life cycle
+ * 
  */
 public class Activator extends AbstractUIPlugin {
 

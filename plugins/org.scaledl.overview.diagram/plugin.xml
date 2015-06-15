@@ -148,12 +148,6 @@
          </description>
       </decorator>
    </extension>
-   <extension
-         point="eu.cloudscaleproject.env.common.notification.validator">
-      <client
-            class="org.scaledl.overview.diagram.validation.OverviewValidator">
-      </client>
-   </extension>
    
    <!--
    <extension

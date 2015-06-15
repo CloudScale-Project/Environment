@@ -9,13 +9,13 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
-import org.scaledl.overview.diagram.OverviewResource;
 import org.scaledl.overview.diagram.util.OverviewDiagramUtil;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -35,21 +35,22 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		final IProject project = ExplorerProjectPaths.getProjectFromEmfResource(getDiagram().eResource());
 		IFile file = ExplorerProjectPaths.getFileFromEmfResource(OverviewDiagramUtil.getOverviewModel(getDiagram()).eResource());
 		
-		IEditorInputResource resource = ResourceRegistry.getInstance().
-				getResourceProvider(project, ToolchainUtils.OVERVIEW_ID).getResource(file);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
 		
-		final OverviewResource overviewResource = (OverviewResource)resource;
-		
-		ValidationDiagramService.showStatus(project, overviewResource);
-		StatusManager.getInstance().validateAsync(project, overviewResource);
-		
-		getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {
+		if(rp != null){
+			final IEditorInputResource resource = rp.getResource(file);
+					
+			ValidationDiagramService.showStatus(project, resource);
+			StatusManager.getInstance().validateAsync(project, resource);
 			
-			@Override
-			public void commandStackChanged(EventObject event) {
-				StatusManager.getInstance().validateAsync(project, overviewResource);
-			}
-		});
+			getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {
+				
+				@Override
+				public void commandStackChanged(EventObject event) {
+					StatusManager.getInstance().validateAsync(project, resource);
+				}
+			});
+		}
 	}
 	
 	@Override

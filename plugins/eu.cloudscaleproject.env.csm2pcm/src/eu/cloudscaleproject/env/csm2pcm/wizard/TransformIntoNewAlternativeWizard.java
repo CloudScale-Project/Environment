@@ -36,10 +36,11 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		this.project = project;
 		
 		folder = createTransformOutputFolder(project);
-		
 		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
 		transformPage = new TransformWizardPage(project, folder);
-		importSelectionPage = new ExternalModelsSelectionPage(folder, ModelType.GROUP_PCM_EXTENDED);
+		importSelectionPage = new ExternalModelsSelectionPage(
+									"Transformed models selection", 
+									"Please select desired models to import into the new alternative.", folder, ModelType.GROUP_PCM_EXTENDED, null);
 	}
 	
 	private IFolder createTransformOutputFolder(IProject project){

@@ -16,6 +16,8 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	
 	public String getType();
 	
+	public void create();
+	
 	public void save();
 	public void load();
 	public void delete();

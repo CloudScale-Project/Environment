@@ -75,8 +75,16 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	}
 	
 	public ExternalModelsSelectionPage(IFolder from, ModelType[] types, ICheckStateListener csl) {
-		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
+		this(DEFAULT_TITLE, DEFAULT_DESCRIPTION, from, types, csl);
 		setDescription(DEFAULT_DESCRIPTION);
+		this.folder = from;
+		this.checkStateListener = csl;
+		this.types = types;
+	}
+	
+	public ExternalModelsSelectionPage(String name, String description, IFolder from, ModelType[] types, ICheckStateListener csl) {
+		super(name, name, null);
+		setDescription(description);
 		this.folder = from;
 		this.checkStateListener = csl;
 		this.types = types;

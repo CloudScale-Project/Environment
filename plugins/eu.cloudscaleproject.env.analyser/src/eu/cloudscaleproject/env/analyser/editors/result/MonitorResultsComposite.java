@@ -41,7 +41,6 @@ import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
-@SuppressWarnings("deprecation")
 public class MonitorResultsComposite extends Composite implements IRefreshable{
 	
 	private final ResultAlternative alternative;

@@ -41,6 +41,8 @@ public class ToolchainUtils {
 	public static final String KEY_FOLDER_USAGEEVOLUTION_ALT = "path_usageevolution_alt";
 	
 	// file resources
+	public static final String KEY_FILE_OVERVIEW		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_overview";
+	public static final String KEY_FILE_OVERVIEW_DIAGRAM		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_overview_diagram";
 	
 	// Analyser input & Extractor results (repository&system)
 	public static final String KEY_FILE_REPOSITORY		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository";
@@ -92,6 +94,7 @@ public class ToolchainUtils {
 		String configFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION, "Configuration");
 		String resultFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS, "Result");
 		String usageEvFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, "Usage evolution");
+		String overviewFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_OVERVIEW, "Overview");
 
 		IFolder folder = null;
 				
@@ -171,7 +174,8 @@ public class ToolchainUtils {
 		}
 		else if(OVERVIEW_ID.equals(id)){
 			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-			return scaledlFolder;
+			if(scaledlFolder != null)
+				folder = scaledlFolder.getFolder(overviewFolderName);
 		}
 		else{
 			throw new IllegalArgumentException("getToolchainFolder(project, id): ID is not valid: " + id);

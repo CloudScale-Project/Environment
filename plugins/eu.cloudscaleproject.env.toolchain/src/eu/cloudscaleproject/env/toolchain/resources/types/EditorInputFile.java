@@ -103,6 +103,11 @@ public class EditorInputFile extends EditorInputResource{
 	}
 	
 	@Override
+	public void create() {
+		//override
+	}
+	
+	@Override
 	public synchronized final void save() {
 		
 		if(!isDirty){

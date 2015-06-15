@@ -32,6 +32,11 @@ import eu.cloudscaleproject.env.extractor.wizard.pages.FinishWizardPage;
 import eu.cloudscaleproject.env.extractor.wizard.pages.SelectModelWizardPage;
 import eu.cloudscaleproject.env.extractor.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.extractor.wizard.util.WizardData;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class PcmImportWizard extends Wizard implements IWorkbenchWizard {
 
@@ -199,22 +204,57 @@ public class PcmImportWizard extends Wizard implements IWorkbenchWizard {
 	
 	private URI getOverviewModelURI()
 	{
+		//TODO: implement overview model selection
+		//For now just try to retrieve first '.sdlo' model file.
+		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+		if(rp != null){
+			for(IEditorInputResource res : rp.getResources()){
+				if(res instanceof EditorInputEMF){
+					EditorInputEMF emfAlternative = (EditorInputEMF)res;
+					IFile file = (IFile)emfAlternative.getSubResource(ToolchainUtils.KEY_FILE_OVERVIEW);
+					return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+				}
+			}
+		}
+		throw new UnsupportedOperationException("Implement overview model selection. "
+				+ "To awoid this exception, please create Overview alternative!");
+		
+		/*
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		String overviewFilePath = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_MODEL);
 		IFile overviewFile = project.getFile(overviewFilePath);
 		URI overviewURI = URI.createPlatformResourceURI(overviewFile.getFullPath().toString(), true);
 
 		return overviewURI;
-		
+		*/
 	}
 	
 	private URI getOverviewDiagramURI()
 	{
+		//TODO: implement overview model selection
+		//For now just try to retrieve first '.sdlo' model file.
+		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+		if(rp != null){
+			for(IEditorInputResource res : rp.getResources()){
+				if(res instanceof EditorInputEMF){
+					EditorInputEMF emfAlternative = (EditorInputEMF)res;
+					IFile file = (IFile)emfAlternative.getSubResource(ToolchainUtils.KEY_FILE_OVERVIEW_DIAGRAM);
+					return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+				}
+			}
+		}
+		throw new UnsupportedOperationException("Implement overview model selection. "
+				+ "To awoid this exception, please create Overview alternative!");
+		
+		/*
 		IProject project = ExplorerProjectPaths.getProjectFromActiveEditor();
 		String overviewFilePath = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FILE_OVERVIEW_DIAGRAM);
 		IFile overviewFile = project.getFile(overviewFilePath);
 		URI overviewDiagramURI = URI.createPlatformResourceURI(overviewFile.getFullPath().toString(), true);
 		return overviewDiagramURI;
+		*/
 	}
 	
 	private void createOverviewDiagram ()

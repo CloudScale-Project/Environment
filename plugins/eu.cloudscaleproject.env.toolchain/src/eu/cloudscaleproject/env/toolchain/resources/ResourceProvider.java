@@ -382,6 +382,7 @@ public abstract class ResourceProvider
 		IEditorInputResource eir = loadResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
+		eir.create();
 		eir.save();
 
 		synchronized (resourcesLock) {

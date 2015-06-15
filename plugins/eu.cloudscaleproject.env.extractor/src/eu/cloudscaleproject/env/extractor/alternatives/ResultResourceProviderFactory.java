@@ -33,18 +33,13 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory
 		{
 			// TODO Auto-generated method stub
 			ResultAlternative rif = new ResultAlternative(getRootFolder().getProject(), (IFolder) res);
-			rif.load();
 			return rif;
 		}
 
 		@Override
 		public IResource createResource(String name)
 		{
-
-			IFolder folder = getRootFolder().getFolder(name);
-			ResultAlternative rif = new ResultAlternative(folder.getProject(), folder);
-			rif.create();
-			return folder;
+			return getRootFolder().getFolder(name);
 		}
 
 	}

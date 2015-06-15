@@ -16,15 +16,20 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagram;
 import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramFactory;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.method.viewer.MethodDiagramComposite;
-import eu.cloudscaleproject.env.method.viewer.diagram.properties.DiagramPropertyPage;
 
+/**
+ * 
+ * @author Vito Čuček <vito.cucek@xlab.si>
+ * 
+ * This ViewPart is not used!
+ * 
+ */
 public class DiagramViewPartE3 extends ViewPart implements IDiagramView, IValidationDiagramFactory{
 	
 	private Composite composite = null;
@@ -101,13 +106,4 @@ public class DiagramViewPartE3 extends ViewPart implements IDiagramView, IValida
 
 		CloudscaleContext.getActiveContext().set(IProject.class, currentDiagram.getProject());
 	}
-	
-	@Override
-	public Object getAdapter(Class adapter) {
-		if(adapter.equals(PropertySheetPage.class)){
-			return new DiagramPropertyPage();
-		}
-		return super.getAdapter(adapter);
-	}
-
 }

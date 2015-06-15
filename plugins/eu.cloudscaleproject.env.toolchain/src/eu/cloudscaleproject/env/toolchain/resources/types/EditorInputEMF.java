@@ -37,7 +37,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	protected final ResourceSet resSet;
 
-	public EditorInputEMF(IProject project, IFolder folder,String validationID) {
+	public EditorInputEMF(IProject project, IFolder folder, String validationID) {
 		super(project, folder, validationID);
 		
 		commandStack = new BasicCommandStack();
@@ -75,17 +75,59 @@ public class EditorInputEMF extends EditorInputFolder{
 		return factory;
 	}
 	
-	public List<EObject> getModelRoot(String key) {
-		return getModelRoot(resSet, key);
+	public Resource getModelResource(String key){
+		return getModelResource(resSet, key);
 	}
 	
+	public Resource getModelResource(ResourceSet resSet, String key){
+		List<Resource> resources = getModelResources(resSet, key);
+		assert(resources.size() <= 1);
+		return resources.size() == 0 ? null : resources.get(0);
+	}
+	
+	public List<Resource> getModelResources(String key) {
+		return getModelResources(resSet, key);
+	}
+	
+	public List<Resource> getModelResources(ResourceSet resSet, String key) {
+		List<Resource> out = new ArrayList<>();
+		List<IResource> resources = getSubResources(key);
+		
+		for(IResource res : resources){
+			if(res instanceof IFile){
+				IFile file = (IFile)res;
+				Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, file);
+				out.add(emfResource);
+			}
+		}
+		return out;
+	}
+	
+	/*
 	public EObject getModelRoot(Resource resource) {
 		if(resource.getContents().isEmpty()){
 			return null;
 		}
 		return resource.getContents().get(0);
 	}
+	*/
 	
+	public EObject getModelRootSingle(String key){
+		return getModelRootSingle(resSet, key);
+	}
+	
+	public EObject getModelRootSingle(ResourceSet resSet, String key){
+		List<EObject> roots = getModelRoot(resSet, key);
+		assert(roots.size() <= 1);
+		return roots.size() == 0 ? null : roots.get(0);
+	}
+	
+	//TODO: refactor to getModelRoots and implement getModelRoot for retrieving single EObject.
+	public List<EObject> getModelRoot(String key) {
+		return getModelRoot(resSet, key);
+	}
+	
+	//TODO: refactor to getModelRoots and implement getModelRoot for retrieving single EObject.
 	public List<EObject> getModelRoot(ResourceSet resSet, String key) {
 		
 		List<EObject> out = new ArrayList<>();

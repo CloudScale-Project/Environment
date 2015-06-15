@@ -41,6 +41,11 @@ public class GlobalInputAlternative extends EditorInputResource
 
 		return globalInputAlternative;
 	}
+	
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
+	}
 
 	private static void initProjectListener()
 	{

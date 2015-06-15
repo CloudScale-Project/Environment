@@ -4,6 +4,8 @@ package eu.cloudscaleproject.env.toolchain;
 
 public enum ModelType{
 	
+	 OVERVIEW(ToolchainUtils.KEY_FILE_OVERVIEW, "sdlo"),
+	
 	 REPOSITORY(ToolchainUtils.KEY_FILE_REPOSITORY, "repository"), 
 	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
 	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "resourceenvironment"),

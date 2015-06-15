@@ -39,12 +39,7 @@ public class ConfigResourceProviderFactory implements IResourceProviderFactory
 		@Override
 		public IResource createResource(String name)
 		{
-
-			IFolder folder = getRootFolder().getFolder(name);
-			ConfingAlternative cif = new ConfingAlternative(folder.getProject(), folder);
-			cif.create();
-
-			return folder;
+			return getRootFolder().getFolder(name);
 		}
 	}
 

@@ -55,9 +55,11 @@ public class ExplorerProjectPaths {
 	public static final String KEY_FOLDER_INPUT = "input-folder";
 	public static final String KEY_FOLDER_CONFIGURATION = "configuration-folder";
 	public static final String KEY_FOLDER_RESULTS = "results-folder";
+	
+	public static final String KEY_FOLDER_OVERVIEW = "overview-folder";
 
-	public static final String KEY_FILE_OVERVIEW_MODEL = "scaledl-overview-model";
-	public static final String KEY_FILE_OVERVIEW_DIAGRAM = "scaledl-overview-diagram";
+	//public static final String KEY_FILE_OVERVIEW_MODEL = "scaledl-overview-model";
+	//public static final String KEY_FILE_OVERVIEW_DIAGRAM = "scaledl-overview-diagram";
 
 	/**
 	 * Retrieve all CloudScale projects from the Workspace

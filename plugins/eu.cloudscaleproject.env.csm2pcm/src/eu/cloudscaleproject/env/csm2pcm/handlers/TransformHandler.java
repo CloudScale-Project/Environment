@@ -20,11 +20,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.scaledl.overview.converter.ConverterService;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class TransformHandler {
 	
@@ -51,15 +47,6 @@ public class TransformHandler {
 	}
 	
 	public void execute(IFile file, IFolder outputFolder, BasicCallback<IFolder> callback) {
-		
-		IValidationStatusProvider statusProvider 
-			= ResourceRegistry.getInstance().getResourceProvider(file.getProject(), ToolchainUtils.OVERVIEW_ID).getResource(file);
-		
-		statusProvider.validate();
-		if(!statusProvider.getSelfStatus().isDone()){
-			DialogUtils.openError("Overview transformation", "Unable to execute transformation. Overview model is not valid!");
-			return;
-		}
 		
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource res = ExplorerProjectPaths.getEmfResource(resSet, file);

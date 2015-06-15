@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.util;
 
+import java.util.logging.Logger;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.custom.CTabFolder;
@@ -21,6 +23,8 @@ import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
 
 public class OpenAlternativeUtil
 {
+	private static final Logger logger = Logger.getLogger(OpenAlternativeUtil.class.getName());
+	
 	public static void openAlternative(IEditorInputResource alternative)
 	{
 		IProject project = alternative.getProject();
@@ -49,8 +53,15 @@ public class OpenAlternativeUtil
 		//
 		// Select alternative
 		//
-		selectAlternative(alternative);
-
+		
+		//TODO: fix null pointer exception problem!
+		try{
+			selectAlternative(alternative);
+		}
+		catch(Exception e){
+			logger.severe("Exception occured druring alternative selection: Excpetion: " + e.getMessage());
+		}
+		
 		//
 		// Select tab
 		//
