@@ -29,7 +29,7 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory
 		}
 
 		@Override
-		public IEditorInputResource loadResource(IResource res, String type)
+		public IEditorInputResource createEditorInputResource(IResource res, String type)
 		{
 			// TODO Auto-generated method stub
 			ResultAlternative rif = new ResultAlternative(getRootFolder().getProject(), (IFolder) res);

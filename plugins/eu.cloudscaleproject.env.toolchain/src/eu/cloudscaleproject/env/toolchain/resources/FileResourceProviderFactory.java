@@ -38,7 +38,7 @@ public class FileResourceProviderFactory implements IResourceProviderFactory{
 			}
 
 			@Override
-			public IEditorInputResource loadResource(IResource res, String type) {
+			public IEditorInputResource createEditorInputResource(IResource res, String type) {
 				return new EditorInputFile(folder.getProject(), (IFile)res, validationID);
 			}
 		};

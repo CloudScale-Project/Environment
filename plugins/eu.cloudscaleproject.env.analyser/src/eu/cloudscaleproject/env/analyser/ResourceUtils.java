@@ -126,7 +126,7 @@ public class ResourceUtils {
 					}
 					
 					@Override
-					public IEditorInputResource loadResource(IResource res, String type) {
+					public IEditorInputResource createEditorInputResource(IResource res, String type) {
 						
 						InputAlternative eif = new InputAlternative(res.getProject(), (IFolder)res);
 						return eif;
@@ -161,7 +161,7 @@ public class ResourceUtils {
 					}
 					
 					@Override
-					public IEditorInputResource loadResource(IResource res, String type) {
+					public IEditorInputResource createEditorInputResource(IResource res, String type) {
 						
 						if(type == null){
 							type = ConfAlternative.Type.NORMAL.name();
@@ -201,7 +201,7 @@ public class ResourceUtils {
 					}
 					
 					@Override
-					public IEditorInputResource loadResource(IResource res, String type) {
+					public IEditorInputResource createEditorInputResource(IResource res, String type) {
 						
 						if(type == null){
 							type = ConfAlternative.Type.NORMAL.name();
