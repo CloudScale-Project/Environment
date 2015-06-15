@@ -36,6 +36,15 @@ public enum ModelType{
 	 private final String name;
 	 private final String toolcahinId;
 	 
+	 public static ModelType getModelType(String extension){
+		 for(ModelType mt : ModelType.values()){
+			 if(mt.extension.equals(extension)){
+				 return mt;
+			 }
+		 }
+		 return null;
+	 }
+	 
 	 ModelType(String toolchainId, String modelExtension){
 		 this.extension = modelExtension;
 		 this.name = "pcm";
@@ -48,6 +57,10 @@ public enum ModelType{
 	 
 	 public String getFileExtension(){
 		 return extension;
+	 }
+	 
+	 public String getDiagramFileExtension(){
+		 return extension + "_diagram";
 	 }
 	 
 	 public String getToolchainFileID(){

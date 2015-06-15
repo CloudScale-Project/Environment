@@ -77,7 +77,7 @@ public class ExternalImportInputWizard extends Wizard{
 		optionsPage = new ImportAlternativeOptionsPage();
 	}
 	
-private void selectLinked(EObject object, boolean selectionState){
+	private void selectLinked(EObject object, boolean selectionState){
 		
 		List<EObject> selected = new ArrayList<EObject>();
 		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
@@ -130,14 +130,16 @@ private void selectLinked(EObject object, boolean selectionState){
 		
 		String altName = nameSelectionPage.getName();
 		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
+		Resource[] selectedDiagramResources = importModelSelectionPage.getSelectedDiagramResources();
 		boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
 		
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
 		if (copyIntoProject)
-		{
+		{			
 			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
+			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
 		}
 
 		for (Resource resource : selectedResources)

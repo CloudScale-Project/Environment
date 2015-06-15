@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="eu.cloudscaleproject.env.overview.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.editors">
+      <client
+            class="eu.cloudscaleproject.env.overview.editors.OverviewTabItemExtension"
+            position="1000">
+      </client>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.common.notification.validator">
+      <client
+            class="eu.cloudscaleproject.env.overview.validation.OverviewValidator">
+      </client>
+   </extension>
+
+</plugin>
