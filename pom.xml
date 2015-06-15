@@ -38,6 +38,7 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
 
     <module>plugins/eu.cloudscaleproject.env.usageevolution</module>
+	<module>plugins/eu.cloudscaleproject.env.overview</module>
 
     <module>plugins/org.scaledl.overview</module>
     <module>plugins/org.scaledl.overview.diagram</module>

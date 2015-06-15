@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Extract all update-sites, features and plugins available on Palladio website
-#URL='https://sdqweb.ipd.kit.edu/eclipse'
-URL='https://sdqweb.ipd.kit.edu/eclipse/palladio/addons'
+URL='https://sdqweb.ipd.kit.edu/eclipse'
+#URL='https://sdqweb.ipd.kit.edu/eclipse/palladio/addons'
 
 URL_REGEX=${URL//\//\\\/}
 
