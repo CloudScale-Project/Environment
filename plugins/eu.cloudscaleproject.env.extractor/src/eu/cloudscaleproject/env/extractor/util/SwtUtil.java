@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard.util;
+package eu.cloudscaleproject.env.extractor.util;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;

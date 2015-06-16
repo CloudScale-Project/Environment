@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard.util;
+package eu.cloudscaleproject.env.extractor.util;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;

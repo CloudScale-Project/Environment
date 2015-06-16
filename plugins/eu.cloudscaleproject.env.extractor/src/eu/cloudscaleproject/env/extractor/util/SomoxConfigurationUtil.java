@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.wizard.util;
+package eu.cloudscaleproject.env.extractor.util;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

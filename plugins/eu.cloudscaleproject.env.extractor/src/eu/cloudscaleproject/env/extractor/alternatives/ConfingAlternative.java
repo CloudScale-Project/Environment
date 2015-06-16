@@ -12,8 +12,8 @@ import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
 import org.eclipse.modisco.infra.discovery.ui.internal.util.LaunchModelUtils;
 import org.somox.configuration.SoMoXConfiguration;
 
-import eu.cloudscaleproject.env.extractor.wizard.util.ExtractorRunJob;
-import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
+import eu.cloudscaleproject.env.extractor.util.ExtractorRunJob;
+import eu.cloudscaleproject.env.extractor.util.SomoxConfigurationUtil;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;

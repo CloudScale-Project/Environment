@@ -19,7 +19,7 @@ import org.somox.common.MetricsDetails;
 import org.somox.common.MetricsDetails.GroupID;
 
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
-import eu.cloudscaleproject.env.extractor.wizard.util.SomoxConfigurationUtil;
+import eu.cloudscaleproject.env.extractor.util.SomoxConfigurationUtil;
 
 public class SomoxConfigurationComposite extends Composite
 {
