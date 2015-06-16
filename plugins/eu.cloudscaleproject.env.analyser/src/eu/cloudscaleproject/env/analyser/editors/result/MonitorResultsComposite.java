@@ -1,15 +1,23 @@
 package eu.cloudscaleproject.env.analyser.editors.result;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,180 +47,89 @@ import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
+import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
+/**
+ *
+ * @author Vito Čuček <vito.cucek@xlab.si>
+ *
+ */
 public class MonitorResultsComposite extends Composite implements IRefreshable{
 	
 	private final ResultAlternative alternative;
-	private final Composite resultItemComposite;
-
+	
+	private final ListViewer menuList;
+	private final Composite content;
+	
 	public MonitorResultsComposite(ResultAlternative alternative, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = alternative;
-		setLayout(new FillLayout());
 		
-		final ScrolledComposite scrolledComposite = new ScrolledComposite(this, SWT.V_SCROLL);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setAlwaysShowScrollBars(true);
+		setLayout(new GridLayout(2, false));
 		
-		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
-	    layout.wrap = true;
+		Composite sidepanel = new Composite(this, SWT.NONE);
+		sidepanel.setLayout(new FillLayout());
+		sidepanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 		
-		this.resultItemComposite = new Composite(scrolledComposite, SWT.NONE);
-		this.resultItemComposite.setLayout(layout);
-		
-		scrolledComposite.setContent(this.resultItemComposite);
-		
-		/**
-		 * Scrolled composite fix!
-		 */
-		scrolledComposite.addControlListener(new ControlAdapter() {
-		      public void controlResized(ControlEvent e) {
-		        Rectangle r = scrolledComposite.getClientArea();
-		        scrolledComposite.setMinSize(resultItemComposite.computeSize(r.width,
-		            SWT.DEFAULT));
-		      }
-		    });
-		Rectangle r = scrolledComposite.getClientArea();
-        scrolledComposite.setMinSize(resultItemComposite.computeSize(r.width,
-            SWT.DEFAULT));
-        
-		refresh();
-	}
-	
-	public void clearResults(){
-		for(Control control : this.resultItemComposite.getChildren()){
-			((Composite)control).dispose();
-		}
-	}
-	
-	private static class ResultItem extends Composite{
-		
-		private final Measurement measurement;
-		private final MeasuringPoint measuringPoint;
-		//private final MetricDescription metricDescription;
-
-		@SuppressWarnings("unchecked")
-		public ResultItem(final ExperimentSetting setting, final Measurement measurement, Composite parent, int style) {
-			super(parent, style);
+		//sidepanel menu
+		menuList = new ListViewer(sidepanel);
+		menuList.setContentProvider(new ArrayContentProvider());
+		menuList.setLabelProvider(new LabelProvider(){
 			
-			this.measurement = measurement;
-			this.measuringPoint = measurement.getMeasuringType().getMeasuringPoint();
-			//this.metricDescription = measurement.getMeasuringType().getMetric();
+			@Override
+			public Image getImage(Object element) {
+				return super.getImage(element);
+			}
 			
-			GridLayout gridLayout = new GridLayout(1, true);
-			setLayout(gridLayout);
-			
-			Label chartName = new Label(this, SWT.WRAP);
-			chartName.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
-			chartName.setText(measuringPoint.getStringRepresentation()+ " [ "+ setting.getDescription() +" ]");
-			chartName.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false));
-			
-			ChartComposite chartImage = new ChartComposite(this, SWT.NONE);
-			chartImage.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			this.addMouseListener(new MouseListener() {
-				
-				@Override
-				public void mouseUp(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
+			@Override
+			public String getText(Object element) {
+				if(element instanceof MonitorItem){
+					MonitorItem mi = (MonitorItem)element;
+					return mi.getName();
 				}
-				
-				@Override
-				public void mouseDown(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void mouseDoubleClick(MouseEvent e) {
-					openChainSelectionDialog(ResultItem.this.measurement);	
-				}
-			});
+				return super.getText(element);
+			}
 			
-			final RawMeasurements rawMeasurements = measurement.getMeasurementRanges().get(0).getRawMeasurements();
-			if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
-				IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
-				int dataStreamSize = edp2Source.getDataStream().size();
-				edp2Source.getDataStream().close();
-				if (dataStreamSize > 0) {
-					
-					ChainDescription chainDescription = ResultUtils.getApplicableChainDescriptionsFromExtensions(edp2Source).get(1);
-					
-					@SuppressWarnings("rawtypes")
-					IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
-			        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
-			        
-			        final JFreeChart chart = ((JFreeChartVisualizationInput) input).createChart();
-			        chart.setTitle("");
-			        chartImage.setChart(chart);
-			        chartImage.forceRedraw();
+		});
+		
+		menuList.addSelectionChangedListener(new ISelectionChangedListener() {
+			
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection ss = (IStructuredSelection)event.getSelection();
+				Object element = ss.getFirstElement();
+				
+				if(element instanceof MonitorItem){
+					MonitorItem mi = (MonitorItem)element;
+					showMeasurement(mi);
 				}
 			}
-			else{
-				throw new RuntimeException("Empty Measurements!");
-			}
-		}
-		
-		//edp2 viewer copy/paste
-		/*
-		 * This is copy/paste from EDP2 NavigatorDoubleClickListener in a attempt to open graphs for the measurements.
-		 * Unfortunately the following code do not work (edp2Source.getDataStream() throws an exception).    
-		 * 
-		 * 
-		 */
-	    private void openChainSelectionDialog(final Object selectedObject) {
-	        final Measurement measurements = (Measurement) selectedObject;
-	        final RawMeasurements rawMeasurements = measurements.getMeasurementRanges().get(0).getRawMeasurements();
+		});
+				
+		content = new Composite(this, SWT.NONE);
+		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		content.setLayout(new FillLayout());
 
-	        if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
-	            final IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
-	            final int dataStreamSize = edp2Source.getDataStream().size();
-	            edp2Source.getDataStream().close();
-
-	            if (dataStreamSize > 0) {
-	                openWizard(edp2Source);
-	            }
-	        } else {
-	            throw new RuntimeException("Empty Measurements!");
-	        }
-	    }
-
-	    // open the wizard with reference to the selected source
-	    // it shows possible visualizations, which are instances of
-	    // DefaultSequence
-	    private void openWizard(final IDataSource edp2Source) {
-			final DefaultViewsWizard wizard = new DefaultViewsWizard(edp2Source);
-	        final WizardDialog wdialog = new WizardDialog(PlatformUI.getWorkbench()
-	                .getActiveWorkbenchWindow().getShell(), wizard);
-	        wdialog.open();
-
-	        if (wdialog.getReturnCode() == Window.OK) {
-	            openEditor(edp2Source, wizard);
-	        }
-	    }
-
-	    @SuppressWarnings({ "rawtypes", "unchecked" })
-		private void openEditor(final IDataSource edp2Source, final DefaultViewsWizard wizard) {
-	        final ChainDescription chainDescription = wizard.getSelectedDefault();
-	        final IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
-	        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
-	        try {
-	            final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-	                    .getActivePage();
-	            page.openEditor(input, "org.palladiosimulator.edp2.visualization.editors.JFreeChartEditor");
-	        } catch (final PartInitException e) {
-	            throw new RuntimeException(e);
-	        }
-	    }
+		//content
 	}
 	
-	@Override
-	public void refresh() {
+	private void showMeasurement(MonitorItem monitorItem){
 		
-		clearResults();
+		//clear content
+		for(Control c : content.getChildren()){
+			c.dispose();
+		}
+		
+		monitorItem.initComposite(content, SWT.NONE);
+		
+		this.layout(true, true);
+	}
+	
+	public void refresh(){
+		
+		List<MonitorItem> monitors = new ArrayList<>();
 		
 		LocalDirectoryRepository ldr = alternative.getEDP2Model();
 		EList<ExperimentGroup> egList = ldr.getExperimentGroups();
@@ -226,17 +143,218 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 		for(ExperimentSetting setting : eg.getExperimentSettings()){
 			for(ExperimentRun run : setting.getExperimentRuns()){
 				for(Measurement measurement : run.getMeasurement()){
-					ResultItem ri = new ResultItem(setting, measurement, resultItemComposite, SWT.NONE);
-					ri.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
-					ri.setLayoutData(new RowData(400, 250));
-					ri.layout(true);
-					ri.pack();
+					
+					monitors.add(new MonitorItem(setting, measurement));
 				}
 			}
 		}
+		
+		menuList.setInput(monitors);
+		
+		if(!monitors.isEmpty()){
+			menuList.setSelection(new StructuredSelection(monitors.get(0)));
+		}
+	}
 
-		resultItemComposite.pack(true);
-		resultItemComposite.layout(true);
-		resultItemComposite.redraw();
+	private class MonitorItem{
+		
+		private final Measurement measurement;
+		private final MeasuringPoint measuringPoint;	
+		private final ExperimentSetting expSettings;
+	
+		private ChartComposite chartComposite;
+
+		public MonitorItem(final ExperimentSetting setting, final Measurement measurement) {			
+			
+			this.expSettings = setting;
+			
+			this.measurement = measurement;
+			this.measuringPoint = measurement.getMeasuringType().getMeasuringPoint();			
+		}
+		
+		public String getName(){
+			return measuringPoint.getStringRepresentation() + ": " + measurement.getMeasuringType().getMetric().getName();
+		}
+		
+		public void initComposite(Composite parent, int style){
+			
+			Composite composite = new Composite(parent, SWT.NONE);		
+			GridLayout gridLayout = new GridLayout(2, false);
+			composite.setLayout(gridLayout);
+			
+			Label chartName = new Label(composite, SWT.WRAP);
+			chartName.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
+			chartName.setText(measuringPoint.getStringRepresentation()+ " [ "+ expSettings.getDescription() +" ]");
+			chartName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			
+			Composite viewPanel = new Composite(composite, SWT.NONE);
+			viewPanel.setLayout(new RowLayout());
+			viewPanel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false));
+			
+			//diagram view controls
+			
+			//Pie chart icon
+			{
+				Label icon = new Label(viewPanel, SWT.NONE);
+				icon.setLayoutData(new RowData(16, 16));
+				icon.setBackgroundImage(CommonResources.CHART_PIE_16);
+				icon.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseUp(MouseEvent e) {
+						super.mouseUp(e);
+						displayChart(0);
+					}
+				});
+			}
+			
+			//Histogram chart icon
+			{
+				Label icon = new Label(viewPanel, SWT.NONE);
+				icon.setLayoutData(new RowData(16, 16));
+				icon.setBackgroundImage(CommonResources.CHART_HISTOGRAM_16);
+				icon.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseUp(MouseEvent e) {
+						super.mouseUp(e);
+						displayChart(2);
+					}
+				});
+			}
+			
+			//Histogram chart icon
+			{
+				Label icon = new Label(viewPanel, SWT.NONE);
+				icon.setLayoutData(new RowData(16, 16));
+				icon.setBackgroundImage(CommonResources.CHART_LINE_16);
+				icon.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseUp(MouseEvent e) {
+						super.mouseUp(e);
+						displayChart(1);
+					}
+				});
+			}
+			
+			chartComposite = new ChartComposite(composite, SWT.NONE);
+			chartComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+			
+			MouseListener diagramMouseListener = new MouseListener() {
+				
+				@Override
+				public void mouseUp(MouseEvent e) {}
+				@Override
+				public void mouseDown(MouseEvent e) {}
+				
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					openChainSelectionDialog(MonitorItem.this.measurement);	
+				}
+			};
+			
+			composite.addMouseListener(diagramMouseListener);
+			chartName.addMouseListener(diagramMouseListener);
+			chartComposite.addMouseListener(diagramMouseListener);
+			
+			displayChart(null);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public void displayChart(Integer type){
+			
+			final RawMeasurements rawMeasurements = measurement.getMeasurementRanges().get(0).getRawMeasurements();
+			if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
+				IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
+				int dataStreamSize = edp2Source.getDataStream().size();
+				edp2Source.getDataStream().close();
+				if (dataStreamSize > 0) {
+					
+					Integer persistedType = null;
+					String chartType = alternative.getProperty(measurement.getId());
+					if(chartType != null){
+						persistedType = Integer.parseInt(chartType);
+					}
+					
+					if(type != null && persistedType != type){
+						alternative.setProperty(measurement.getId(), String.valueOf(type));
+						alternative.setDirty(true);
+					}
+					
+					if(type == null){
+						type = persistedType;
+					}
+					
+					//set default diagram chart type
+					if(type == null){
+						type = 1;
+					}
+					
+					ChainDescription chainDescription = ResultUtils.getApplicableChainDescriptionsFromExtensions(edp2Source).get(type);
+					
+					@SuppressWarnings("rawtypes")
+					IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
+			        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
+			        
+			        final JFreeChart chart = ((JFreeChartVisualizationInput) input).createChart();
+			        chart.setTitle("");
+			        chartComposite.setChart(chart);
+			        chartComposite.forceRedraw();
+				}
+			}
+			else{
+				throw new RuntimeException("Empty Measurements!");
+			}
+		}
+	
+		//edp2 viewer copy/paste
+		/*
+		 * This is copy/paste from EDP2 NavigatorDoubleClickListener in a attempt to open graphs for the measurements.
+		 * Unfortunately the following code do not work (edp2Source.getDataStream() throws an exception).    
+		 * 
+		 * 
+		 */
+	    private void openChainSelectionDialog(final Object selectedObject) {
+	        final Measurement measurements = (Measurement) selectedObject;
+	        final RawMeasurements rawMeasurements = measurements.getMeasurementRanges().get(0).getRawMeasurements();
+	
+	        if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
+	            final IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
+	            final int dataStreamSize = edp2Source.getDataStream().size();
+	            edp2Source.getDataStream().close();
+	
+	            if (dataStreamSize > 0) {
+	                openWizard(edp2Source);
+	            }
+	        } else {
+	            throw new RuntimeException("Empty Measurements!");
+	        }
+	    }
+	
+	    // open the wizard with reference to the selected source
+	    // it shows possible visualizations, which are instances of
+	    // DefaultSequence
+	    private void openWizard(final IDataSource edp2Source) {
+			final DefaultViewsWizard wizard = new DefaultViewsWizard(edp2Source);
+	        final WizardDialog wdialog = new WizardDialog(PlatformUI.getWorkbench()
+	                .getActiveWorkbenchWindow().getShell(), wizard);
+	        wdialog.open();
+	
+	        if (wdialog.getReturnCode() == Window.OK) {
+	            openEditor(edp2Source, wizard);
+	        }
+	    }
+	
+	    @SuppressWarnings({ "rawtypes", "unchecked" })
+		private void openEditor(final IDataSource edp2Source, final DefaultViewsWizard wizard) {
+	        final ChainDescription chainDescription = wizard.getSelectedDefault();
+	        final IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
+	        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
+	        try {
+	            final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+	                    .getActivePage();
+	            page.openEditor(input, "org.palladiosimulator.edp2.visualization.editors.JFreeChartEditor");
+	        } catch (final PartInitException e) {
+	            throw new RuntimeException(e);
+	        }
+	    }
 	}
 }

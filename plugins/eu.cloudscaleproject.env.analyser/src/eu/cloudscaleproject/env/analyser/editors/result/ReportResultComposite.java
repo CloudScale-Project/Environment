@@ -24,7 +24,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 public abstract class ReportResultComposite extends Composite implements IRefreshable{
 	
 	private TableViewer tableViewer;
-	private MonitorResultsCompositeNew monitorResults;
+	private MonitorResultsComposite monitorResults;
 	
 	private final ResultAlternative alternative;
 	private Table table;
@@ -86,7 +86,7 @@ public abstract class ReportResultComposite extends Composite implements IRefres
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		tableViewer.setInput(tableRows);
 		
-		this.monitorResults = new MonitorResultsCompositeNew(alternative, this, SWT.NONE);
+		this.monitorResults = new MonitorResultsComposite(alternative, this, SWT.NONE);
 		this.monitorResults.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 	
