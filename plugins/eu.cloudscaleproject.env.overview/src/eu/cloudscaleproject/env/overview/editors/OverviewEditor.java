@@ -8,7 +8,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.overview.OverviewResource;
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
@@ -20,12 +20,12 @@ import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 public class OverviewEditor extends Composite implements ISelectable, IPropertySheetPageProvider{
 
 	private final IProject project;
-	private final OverviewResource alternative;
+	private final OverviewAlternative alternative;
 
 	private final EMFEditableTreeviewComposite treeviewComposite;
 
 	
-	public OverviewEditor(OverviewResource input, Composite parent, int style) {
+	public OverviewEditor(OverviewAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		setLayout(new FillLayout());

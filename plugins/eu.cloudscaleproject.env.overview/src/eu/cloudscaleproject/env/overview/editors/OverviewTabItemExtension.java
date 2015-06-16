@@ -8,7 +8,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.overview.OverviewResource;
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
@@ -64,8 +64,8 @@ public class OverviewTabItemExtension extends DIExtension implements ProjectEdit
 			@Override
 			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
 				
-				if(resource instanceof OverviewResource){				
-					return new OverviewEditor((OverviewResource)resource, parent, style);
+				if(resource instanceof OverviewAlternative){				
+					return new OverviewEditor((OverviewAlternative)resource, parent, style);
 				}
 				return null;
 			}

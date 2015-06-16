@@ -9,7 +9,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
-import eu.cloudscaleproject.env.overview.OverviewResource;
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 /**
@@ -31,7 +31,7 @@ public class OverviewValidator implements IResourceValidator {
 	@Override
 	public void validate(IProject project, IValidationStatusProvider statusProvider) {
 		
-		OverviewResource alternative = (OverviewResource)statusProvider;
+		OverviewAlternative alternative = (OverviewAlternative)statusProvider;
 		IValidationStatus status = statusProvider.getSelfStatus();
 		
 		try{	

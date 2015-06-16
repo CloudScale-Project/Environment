@@ -20,12 +20,12 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class OverviewResource extends EditorInputEMF{
+public class OverviewAlternative extends EditorInputEMF{
 	
 	private static final String OVERVIEW_MODEL_FILENAME = "overview.sdlo";
 	private static final String OVERVIEW_MODEL_DIAGRAM_FILENAME = "overview.sdlo_diagram";
 		
-	public OverviewResource(IProject project, IFolder folder) {
+	public OverviewAlternative(IProject project, IFolder folder) {
 		super(project, folder, ToolchainUtils.OVERVIEW_ID);
 	}
 	
