@@ -29,7 +29,7 @@ public class ConfigResourceProviderFactory implements IResourceProviderFactory
 		}
 
 		@Override
-		public IEditorInputResource loadResource(IResource res, String type)
+		public IEditorInputResource createEditorInputResource(IResource res, String type)
 		{
 			// TODO Auto-generated method stub
 			ConfingAlternative cif = new ConfingAlternative(getRootFolder().getProject(), (IFolder) res);

@@ -25,7 +25,7 @@ public class InputResourceProviderFactory implements IResourceProviderFactory {
 		}
 
 		@Override
-		public IEditorInputResource loadResource(IResource res, String type) {
+		public IEditorInputResource createEditorInputResource(IResource res, String type) {
 			InputAlternative ia = new InputAlternative(getRootFolder()
 					.getProject(), (IFolder) res);
 			return ia;

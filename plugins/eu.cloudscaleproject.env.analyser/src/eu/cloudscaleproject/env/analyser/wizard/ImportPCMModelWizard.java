@@ -1,16 +1,12 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
@@ -48,13 +44,9 @@ public class ImportPCMModelWizard extends Wizard{
 			}
 			
 			if(root instanceof UsageModel){
-				importModelSelectionPage.selectModel(ModelType.USAGE, false, false);
-				importModelSelectionPage.selectModel(root, event.getChecked());
-				return;
+				importModelSelectionPage.selectResource(ModelType.USAGE, false, false);
+				importModelSelectionPage.selectResource(root.eResource(), event.getChecked());
 			}
-			
-			//handle selection
-			selectLinked(root, event.getChecked());
 		}
 	};
 
@@ -121,47 +113,6 @@ public class ImportPCMModelWizard extends Wizard{
 			return true;
 
 		return false;
-	}
-	
-	private void selectLinked(EObject object, boolean selectionState){
-		
-		List<EObject> selected = new ArrayList<EObject>();
-		Iterator<EObject> iter = EcoreUtil.getAllContents(object, false);
-		while(iter.hasNext()){
-			EObject o = iter.next();
-			
-			{
-				EObject root = EcoreUtil.getRootContainer(o, false);
-				if(root != null && !selected.contains(root)){
-					importModelSelectionPage.selectModel(root, selectionState);
-					selected.add(root);
-				}	
-			}
-			
-			for(EStructuralFeature feature : o.eClass().getEAllStructuralFeatures()){
-				Object child = o.eGet(feature, false);
-				if(child instanceof InternalEObject){
-					InternalEObject ieo = (InternalEObject)child;
-					
-					if(ieo.eProxyURI() == null
-							|| ieo.eProxyURI().scheme().equals("pathmap")){
-						continue;
-					}
-					
-					EObject eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), false);
-					
-					if(eo != null){
-						EObject root = EcoreUtil.getRootContainer(eo, false);
-						if(root != null && !selected.contains(root)){
-							importModelSelectionPage.selectModel(root, selectionState);
-							selected.add(root);
-							selectLinked(root, selectionState);
-						}
-					}
-				}
-			}
-			
-		}
 	}
 
 }

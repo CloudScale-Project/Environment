@@ -43,7 +43,7 @@ public class ResourceUtils {
 				}
 
 				@Override
-				public IEditorInputResource loadResource(IResource res, String type) {
+				public IEditorInputResource createEditorInputResource(IResource res, String type) {
 					return new UsageEvolutionAlternative(folder.getProject(), (IFolder)res);
 				}
 			};

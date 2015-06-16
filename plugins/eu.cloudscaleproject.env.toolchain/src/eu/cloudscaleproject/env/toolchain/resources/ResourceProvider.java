@@ -49,17 +49,11 @@ public abstract class ResourceProvider
 	
 	private final LinkedHashMap<IResource, IEditorInputResource> resources = new LinkedHashMap<IResource, IEditorInputResource>();
 
-	// private transient HashMap<String, IEditorInputResource> taggedResources =
-	// new HashMap<String, IEditorInputResource>();
-
 	protected abstract boolean validateResource(IResource res);
-
 	protected abstract IResource createResource(String resourceName);
-
-	protected abstract IEditorInputResource loadResource(IResource res, String type);
+	protected abstract IEditorInputResource createEditorInputResource(IResource res, String type);
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener()
 	{
 
@@ -280,7 +274,7 @@ public abstract class ResourceProvider
 			type = tmp.getProperty(PROP_TYPE);
 		}
 
-		IEditorInputResource prop = loadResource(res, type);
+		IEditorInputResource prop = createEditorInputResource(res, type);
 
 		synchronized (resourcesLock) {
 			resources.put(prop.getResource(), prop);			
@@ -379,7 +373,7 @@ public abstract class ResourceProvider
 		checkRootFolder();
 
 		IResource res = createResource(resourceName);
-		IEditorInputResource eir = loadResource(res, type);
+		IEditorInputResource eir = createEditorInputResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
 		eir.create();

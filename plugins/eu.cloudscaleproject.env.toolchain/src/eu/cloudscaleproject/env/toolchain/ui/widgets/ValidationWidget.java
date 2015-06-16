@@ -41,7 +41,9 @@ public class ValidationWidget extends Composite
 					@Override
 					public void run()
 					{
-						updateStatus();
+						if(!ValidationWidget.this.isDisposed()){
+							updateStatus();
+						}
 					}
 				});
 		}

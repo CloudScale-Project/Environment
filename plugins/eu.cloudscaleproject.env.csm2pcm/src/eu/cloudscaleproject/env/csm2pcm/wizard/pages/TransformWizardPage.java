@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.csm2pcm.handlers.TransformHandler;
-import eu.cloudscaleproject.env.overview.OverviewResource;
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -45,7 +45,7 @@ public class TransformWizardPage extends WizardPage{
 	private final IProject project;
 	private final IFolder outputFolder;
 
-	private OverviewResource overviewAlternative;
+	private OverviewAlternative overviewAlternative;
 	private IFolder transformedPCMModelFolder = null;
 	
 	@SuppressWarnings("unused")
@@ -95,8 +95,8 @@ public class TransformWizardPage extends WizardPage{
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				IEditorInputResource alternative = getSelectedAlternative();
-				if(alternative instanceof OverviewResource){
-					overviewAlternative = (OverviewResource)alternative;					
+				if(alternative instanceof OverviewAlternative){
+					overviewAlternative = (OverviewAlternative)alternative;					
 					overviewAlternative.validate();
 					ValidationDiagramService.showDiagram(project);
 					ValidationDiagramService.showStatus(project, overviewAlternative);

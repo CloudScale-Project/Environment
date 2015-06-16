@@ -25,7 +25,7 @@ public class ConfigResourceProviderFactory implements IResourceProviderFactory {
 		}
 
 		@Override
-		public IEditorInputResource loadResource(IResource res, String type) {
+		public IEditorInputResource createEditorInputResource(IResource res, String type) {
 			ConfigAlternative cif = new ConfigAlternative(getRootFolder()
 					.getProject(), (IFolder) res);
 			return cif;
