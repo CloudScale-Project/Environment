@@ -59,7 +59,7 @@ public class Activator extends AbstractUIPlugin {
 					}
 					
 					@Override
-					protected IEditorInputResource loadResource(IResource res, String type) {
+					protected IEditorInputResource createEditorInputResource(IResource res, String type) {
 						return new OverviewResource(res.getProject(), (IFolder)res);
 					}
 					
