@@ -24,7 +24,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "New usage evolution";
+				return "New Usage Evolution";
 			}
 			
 			@Override
@@ -43,7 +43,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "Predefined usage evolution";
+				return "Usage Evolution templates";
 			}
 			
 			@Override
@@ -61,7 +61,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public String getName() {
-				return "Custom usage evolution";
+				return "New Usage Evolution (advance)";
 			}
 			
 			@Override
@@ -71,14 +71,15 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public IWizard createWizard() {
-				return new CreateCustomUsageWizard();
+				return new CreateCustomUsageWizard(project,
+						ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
 			}
 		};
 		
 		List<WizardNode> nodes = new ArrayList<WizardNode>();
 		nodes.add(emptyNode);
-		nodes.add(presetNode);
 		nodes.add(customNode);
+		nodes.add(presetNode);
 		
 		selectionPage = new WizardSelectionPage("Select usage evolution preset", 
 												"Please select desired arrival rate preset.", nodes);
