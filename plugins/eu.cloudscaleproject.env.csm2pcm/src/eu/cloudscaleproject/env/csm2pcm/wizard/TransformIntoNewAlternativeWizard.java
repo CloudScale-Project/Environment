@@ -13,12 +13,12 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.csm2pcm.wizard.pages.TransformWizardPage;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 
@@ -82,8 +82,9 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		}
 		newInputAlternative.save();
 		
-		ValidationDiagramService.showDiagram(project);
-		ValidationDiagramService.showStatus(project, newInputAlternative);
+		OpenAlternativeUtil.openAlternative(newInputAlternative);
+		//ValidationDiagramService.showDiagram(project);
+		//ValidationDiagramService.showStatus(project, newInputAlternative);
 		
 		return true;
 	}

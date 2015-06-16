@@ -24,6 +24,14 @@ public class CommonResources
 		WARNING = loadImage("warning_32.png");
 		ERROR = loadImage("error_32.png");
 		THUMB_UP = loadImage("thumbup_32.png");
+		
+		CHART_PIE = loadImage("chart_pie.png");
+		CHART_HISTOGRAM = loadImage("chart_histogram.png");
+		CHART_LINE = loadImage("chart_line.png");
+		
+		CHART_PIE_16 = loadImage("chart_pie_16.png");
+		CHART_HISTOGRAM_16 = loadImage("chart_histogram_16.png");
+		CHART_LINE_16 = loadImage("chart_line_16.png");
 	}
 
 	private static Image loadImage(String name)
@@ -51,5 +59,15 @@ public class CommonResources
 	public static Image WARNING;
 	public static Image ERROR;
 	public static Image THUMB_UP;
+	
+	// Diagrams
+	public static Image CHART_PIE;
+	public static Image CHART_HISTOGRAM;
+	public static Image CHART_LINE;
+	
+	public static Image CHART_PIE_16;
+	public static Image CHART_HISTOGRAM_16;
+	public static Image CHART_LINE_16;
+
 
 }
