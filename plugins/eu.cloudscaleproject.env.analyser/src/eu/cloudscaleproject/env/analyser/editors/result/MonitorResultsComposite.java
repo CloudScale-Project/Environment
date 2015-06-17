@@ -49,6 +49,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import org.eclipse.swt.custom.ScrolledComposite;
 
 /**
  *
@@ -71,10 +72,19 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 		
 		Composite sidepanel = new Composite(this, SWT.NONE);
 		sidepanel.setLayout(new FillLayout());
-		sidepanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+		GridData gd_sidepanel = new GridData(SWT.FILL, SWT.FILL, false, true);
+		gd_sidepanel.widthHint = 250;
+		sidepanel.setLayoutData(gd_sidepanel);
+		
+		ScrolledComposite scrolledComposite = new ScrolledComposite(sidepanel, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
 		
 		//sidepanel menu
-		menuList = new ListViewer(sidepanel);
+		menuList = new ListViewer(scrolledComposite);
+		org.eclipse.swt.widgets.List list = menuList.getList();
+		scrolledComposite.setContent(list);
+		scrolledComposite.setMinSize(list.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		menuList.setContentProvider(new ArrayContentProvider());
 		menuList.setLabelProvider(new LabelProvider(){
 			
@@ -181,9 +191,9 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 			Composite composite = new Composite(parent, SWT.NONE);		
 			GridLayout gridLayout = new GridLayout(2, false);
 			composite.setLayout(gridLayout);
+			composite.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
 			
 			Label chartName = new Label(composite, SWT.WRAP);
-			chartName.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
 			chartName.setText(measuringPoint.getStringRepresentation()+ " [ "+ expSettings.getDescription() +" ]");
 			chartName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			
