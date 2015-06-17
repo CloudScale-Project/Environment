@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -49,7 +50,6 @@ import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import org.eclipse.swt.custom.ScrolledComposite;
 
 /**
  *
