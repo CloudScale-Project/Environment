@@ -1,24 +1,26 @@
 package eu.cloudscaleproject.env.usageevolution.wizard;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.resource.Resource;
 
+import tools.descartes.dlim.Sequence;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
+import eu.cloudscaleproject.env.usageevolution.DlimGenerator;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
-import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative.Presets;
-import eu.cloudscaleproject.env.usageevolution.wizard.pages.PresetSelectionPage;
+import eu.cloudscaleproject.env.usageevolution.wizard.pages.TemplateSelectionPage;
 
 public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
-	private PresetSelectionPage presetSelectionPage = null;
+	private TemplateSelectionPage presetSelectionPage = null;
 
 	public CreatePredefinedUsageWizard(IProject project) {
 		super(project, ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
 		
 		this.project = project;
 		
-		presetSelectionPage = new PresetSelectionPage();
+		presetSelectionPage = new TemplateSelectionPage();
 	}
 	
 	@Override
@@ -30,9 +32,14 @@ public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
 	@Override
 	protected void initAlternative(IEditorInputResource alternative)
 	{
-		Presets selectedPreset = presetSelectionPage.getSelectedPreset();
-		((UsageEvolutionAlternative)alternative).createPreset(selectedPreset);
-		// TODO Auto-generated method stub
+		DlimGenerator.Template selectedPreset = presetSelectionPage.getSelectedTemplate();
+		Sequence sequence = DlimGenerator.createTemplateSequance(selectedPreset);
+
+		Resource modelResource = ((UsageEvolutionAlternative)alternative).getModelResource(ToolchainUtils.KEY_FILE_LIMBO);
+
+		modelResource.getContents().clear();
+		modelResource.getContents().add(sequence);
+
 		super.initAlternative(alternative);
 	}
 }

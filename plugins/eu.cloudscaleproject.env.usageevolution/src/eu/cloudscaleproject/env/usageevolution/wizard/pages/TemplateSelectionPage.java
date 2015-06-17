@@ -10,22 +10,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative.Presets;
+import eu.cloudscaleproject.env.usageevolution.DlimGenerator;
 
-public class PresetSelectionPage extends WizardPage{
+public class TemplateSelectionPage extends WizardPage{
 	
-	private Presets selectedPreset = null;
+	private DlimGenerator.Template selectedTemplate = null;
 
-	public PresetSelectionPage() {
-		super("Select arrival rate preset");
-		setTitle("Select arrival rate preset");
-		setDescription("Please select initial arrival rate preset.");
+	public TemplateSelectionPage() {
+		super("Select arrival rate template");
+		setTitle("Select arrival rate template");
+		setDescription("Please select initial arrival rate template.");
 		
 		setPageComplete(false);
 	}
 	
-	public Presets getSelectedPreset(){
-		return selectedPreset;
+	public DlimGenerator.Template getSelectedTemplate(){
+		return selectedTemplate;
 	}
 
 	@Override
@@ -34,23 +34,23 @@ public class PresetSelectionPage extends WizardPage{
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		
-		Label lblPresets = new Label(composite, SWT.NONE);
-		lblPresets.setLayoutData(new GridData());
-		lblPresets.setBounds(10, 10, 162, 15);
-		lblPresets.setText("Usage evolution presets:");
+		Label lblTemplate = new Label(composite, SWT.NONE);
+		lblTemplate.setLayoutData(new GridData());
+		lblTemplate.setBounds(10, 10, 162, 15);
+		lblTemplate.setText("Usage evolution template:");
 		
-		//presets
-		Composite presets = new Composite(composite, SWT.NONE);
-		presets.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		presets.setLayout(new GridLayout(1, false));
+		//templates
+		Composite templates = new Composite(composite, SWT.NONE);
+		templates.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		templates.setLayout(new GridLayout(1, false));
 		
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.LINEAR_TREND;
+					selectedTemplate = DlimGenerator.Template.LINEAR_TREND;
 					setPageComplete(true);
 				}
 			});
@@ -58,12 +58,12 @@ public class PresetSelectionPage extends WizardPage{
 			button.setText("Create linear trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.LINEAR_INCREASE_DECLINE;
+					selectedTemplate = DlimGenerator.Template.LINEAR_INCREASE_DECLINE;
 					setPageComplete(true);
 				}
 			});
@@ -71,12 +71,12 @@ public class PresetSelectionPage extends WizardPage{
 			button.setText("Create linear increase and decline");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.SINUSOIDAL;
+					selectedTemplate = DlimGenerator.Template.SINUSOIDAL;
 					setPageComplete(true);
 				}
 			});
@@ -84,12 +84,12 @@ public class PresetSelectionPage extends WizardPage{
 			button.setText("Create sinusoidal");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.SINUSOIDAL_TREND;
+					selectedTemplate = DlimGenerator.Template.SINUSOIDAL_TREND;
 					setPageComplete(true);
 				}
 			});
@@ -97,12 +97,12 @@ public class PresetSelectionPage extends WizardPage{
 			button.setText("Create sinusoidal trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.EXPONENTIAL;
+					selectedTemplate = DlimGenerator.Template.EXPONENTIAL;
 					setPageComplete(true);
 				}
 			});
@@ -110,12 +110,12 @@ public class PresetSelectionPage extends WizardPage{
 			button.setText("Create explonential trend");
 		}
 		{
-			Button button = new Button(presets, SWT.LEFT | SWT.RADIO);
+			Button button = new Button(templates, SWT.LEFT | SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					selectedPreset = Presets.EXPONENTIAL_LOG;
+					selectedTemplate = DlimGenerator.Template.EXPONENTIAL_LOG;
 					setPageComplete(true);
 				}
 			});

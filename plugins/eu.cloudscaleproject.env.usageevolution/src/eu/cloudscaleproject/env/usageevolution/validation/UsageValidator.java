@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.usageevolution.validation;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
@@ -21,25 +20,24 @@ public class UsageValidator implements IResourceValidator{
 		return ToolchainUtils.USAGEEVOLUTION_ID;
 	}
 	
-	public boolean validateModels(IProject project, UsageEvolutionAlternative ueAlt) throws CoreException{
-		return validateModel(project, ueAlt != null ? ueAlt.getModels("dlim") : null);		
-	}
-	
-	public boolean validateModel(IProject project, List<Resource> resources) throws CoreException{
+	private boolean validateDlimModel (UsageEvolutionAlternative alternative)
+	{
+		List<Resource> resources = alternative.getModelResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
-		boolean out = true;
-		for(Resource res : resources){
-			out &= validateModel(res);
+		if (resources.isEmpty())
+		{
+			alternative.getSelfStatus().addWarning("", IValidationStatus.SEVERITY_ERROR, "DLIM file is not registered in alternative.");
+			return false;
 		}
-		return out;
-	}
-	
-	public boolean validateModel(Resource resource){		
 		
+		Resource resource = resources.get(0);
+
 		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(resource.getContents().get(0));
+		
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 		
 		return modelValid;
+		
 	}
 
 	@Override
@@ -49,12 +47,7 @@ public class UsageValidator implements IResourceValidator{
 		
 		UsageEvolutionAlternative ueAlt = (UsageEvolutionAlternative)statusProvider;
 		
-		boolean valid = true;
-		try {
-			valid = validateModels(ueAlt.getProject(), ueAlt);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		boolean valid = validateDlimModel(ueAlt);
 		
 		status.setIsValid(valid);
 	}
