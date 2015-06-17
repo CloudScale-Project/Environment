@@ -16,7 +16,6 @@ public class CreateAlternativeWizard extends Wizard{
 	
 	private AlternativeNamePage nameSelectionPage;
 
-	
 	public CreateAlternativeWizard(IProject project, ResourceProvider provider) {
 		
 		this.project = project;
@@ -42,6 +41,7 @@ public class CreateAlternativeWizard extends Wizard{
 		initAlternative(alternative);
 		
 		alternative.save();
+		alternative.load();
 
 		ValidationDiagramService.showStatus(project, alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
