@@ -41,20 +41,11 @@ public class SingleResultComposite extends TitleEditorView implements IPropertyS
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(resultPersistenceFolder, containerEditor, SWT.NONE);
-		
-		init();
 	}
 	
-	private void init()
-	{
-		layout();
-	}
 	
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		resultPersistenceFolder.load();
-		init();
 	}
 
 	@Override

@@ -72,10 +72,10 @@ public class ResultAlternative extends EditorInputEMF {
 		
 		IResource repository = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
 		IResource system = getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
-		IResource sourceDecorator = getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
-		IResource java2kdm = getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
+		//IResource sourceDecorator = getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+		//IResource java2kdm = getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
 		
-		for (IResource res : new IResource[]{repository, system, sourceDecorator, java2kdm})
+		for (IResource res : new IResource[]{repository, system})
 		{
 			if (res != null)
 			{

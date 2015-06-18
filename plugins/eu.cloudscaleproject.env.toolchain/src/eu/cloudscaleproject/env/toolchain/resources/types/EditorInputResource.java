@@ -33,7 +33,8 @@ public abstract class EditorInputResource implements IEditorInputResource{
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+				if (EditorInputResource.this.getID() != null)
+					StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
 			}
 		});
 	}

@@ -46,6 +46,8 @@ public class ResultComposite extends SidebarEditorComposite {
 			}
 		});
 		
+		setNewButtonEnabled(false);
+		setNewFromButtonEnabled(false);
 	}
 	
 	@Override

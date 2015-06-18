@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -97,17 +98,16 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 					btnSelect.redraw();
 				}
 
-				try{
-					IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-					if(editor != null){
-						IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
-						if(dirtyAdapter != null){
-							dirtyAdapter.fireDirtyState();
-						}
+				// When non GUI thread => WorkbenchWidow == null
+                if (Display.getDefault().getThread() != Thread.currentThread()) return;
+
+				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+
+				if(editor != null){
+					IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
+					if(dirtyAdapter != null){
+						dirtyAdapter.fireDirtyState();
 					}
-				}
-				catch(NullPointerException e){
-					logger.severe("Resource change listener: Can not trigger editor dirty state check. Can not find editor!");
 				}
 			}
 		};

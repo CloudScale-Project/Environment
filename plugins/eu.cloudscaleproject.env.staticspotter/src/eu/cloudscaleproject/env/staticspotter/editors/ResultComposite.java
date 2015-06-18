@@ -44,7 +44,9 @@ public class ResultComposite extends SidebarEditorComposite {
 				return new SingleResultComposite(parent, style, (ResultAlternative)resource);
 			}
 		});
-		
+
+		setNewButtonEnabled(false);
+		setNewFromButtonEnabled(false);
 	}
 	
 	@Override
