@@ -9,6 +9,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative
@@ -29,13 +30,13 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 
 	public void setInputAlternative(IEditorInputResource input)
 	{
-		setSubResource(IConfigAlternative.KEY_INPUT_ALTERNATIVE, input.getResource());
+		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, input.getResource());
 	}
 
 	@Override
 	public IEditorInputResource getInputAlternative()
 	{
-		IResource res = getSubResource(IConfigAlternative.KEY_INPUT_ALTERNATIVE);
+		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
 		if (res != null)
 			return inputResourceProvider.getResource(res);

@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.IStatus;
 
 public interface IConfigAlternative extends IEditorInputResource{
 
-	public final String KEY_INPUT_ALTERNATIVE = "input";
 	public final String KEY_LAST_RESULT = "last_result";
 	public final String KEY_TIMESTAMP_LAST_SUCC_RUN = "last_run";
 	

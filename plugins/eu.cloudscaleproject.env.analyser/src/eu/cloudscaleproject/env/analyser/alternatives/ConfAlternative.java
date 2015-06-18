@@ -171,7 +171,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	}
 
 	public InputAlternative getInputAlternative(){
-		IResource res = getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		return (InputAlternative) rp.getResource(res);
 	}
@@ -193,7 +193,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		else{
 			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, 
 					IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
-			setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
+			setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 			setDirty(true);
 			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 			return false;
@@ -272,7 +272,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		configureInput(exp, initialModel, inputAlt);
 
-		setSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT, inputAlt.getResource());
+		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 
 		setDirty(true);
 		pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
@@ -1151,7 +1151,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		String name = getName() + " [" + sdf_name.format(new Date()) + "]";
 		ResultAlternative resultAlternative = (ResultAlternative) resultResProvider.createNewResource(name, type.name());
-
+		resultAlternative.setSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE, getResource());
 		resultAlternative.save();
 
 		// create data source - a.k.a where the result will be saved

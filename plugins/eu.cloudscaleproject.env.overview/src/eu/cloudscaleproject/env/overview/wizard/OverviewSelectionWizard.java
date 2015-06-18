@@ -27,7 +27,7 @@ public class OverviewSelectionWizard extends Wizard{
 		List<WizardNode> nodes = new ArrayList<>();
 		
 		nodes.add(new CreateNewNode(project));
-		nodes.add(new CreateTemplateNode(project));
+		nodes.add(new CreateTemplateNode());
 		nodes.add(new CreateImportNewNode(project));
 		nodes.add(new CreateImportExistingNode(project));
 		
@@ -133,15 +133,7 @@ public class OverviewSelectionWizard extends Wizard{
 	}
 
 	public static class CreateTemplateNode extends WizardNode
-	{
-		private final IProject project;
-		
-
-		public CreateTemplateNode(IProject project)
-		{
-			this.project = project;
-		}
-
+	{		
 		@Override
 		public IWizard createWizard() {
 			throw new IllegalStateException("Not yet implemented");
@@ -157,6 +149,5 @@ public class OverviewSelectionWizard extends Wizard{
 			return "Creates new alternative with built-in templates.";
 		}
 	}
-
 
 }

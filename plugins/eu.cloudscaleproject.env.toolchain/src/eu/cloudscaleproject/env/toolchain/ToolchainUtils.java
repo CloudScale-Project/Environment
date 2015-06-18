@@ -37,7 +37,10 @@ public class ToolchainUtils {
 	public static final String ARCHITECTURAL_TEMPLATES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.architecturaltemplates";
 	
 	// folder serources
-	public static final String KEY_FOLDER_ANALYSER_INPUT_ALT = "path_analyser_alt";
+	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
+	public static final String KEY_CONFIG_ALTERNATIVE = "config_alternative";
+	public static final String KEY_RESULT_ALTERNATIVE = "result_alternative";
+
 	public static final String KEY_FOLDER_USAGEEVOLUTION_ALT = "path_usageevolution_alt";
 	
 	// file resources

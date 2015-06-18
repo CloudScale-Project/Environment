@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.analyser.editors.result.AdvancedResultComposite;
 import eu.cloudscaleproject.env.analyser.editors.result.CapacityResultComposite;
@@ -107,6 +108,16 @@ public class ResultsComposite extends SidebarEditorComposite{
 		
 		@Override
 		public void onSelect() {
+			
+			InputAlternative inputAlternative = null;
+			ConfAlternative confAlternative = alternative.getConfAlternative();
+			
+			if(confAlternative != null){
+				inputAlternative = confAlternative.getInputAlternative();
+			}
+			
+			ValidationDiagramService.showStatus(project, inputAlternative);
+			ValidationDiagramService.showStatus(project, confAlternative);
 			ValidationDiagramService.showStatus(project, alternative);
 		}
 		

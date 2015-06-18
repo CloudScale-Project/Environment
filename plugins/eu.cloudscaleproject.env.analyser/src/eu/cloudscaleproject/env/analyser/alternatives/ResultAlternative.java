@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
@@ -11,6 +12,8 @@ import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 
 public class ResultAlternative extends EditorInputFolder{
@@ -29,6 +32,12 @@ public class ResultAlternative extends EditorInputFolder{
 	
 	public ConfAlternative.Type getTypeEnum(){
 		return type;
+	}
+	
+	public ConfAlternative getConfAlternative(){
+		IResource res = getSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		return (ConfAlternative) rp.getResource(res);
 	}
 	
 	public LocalDirectoryRepository getEDP2Model(){

@@ -87,7 +87,7 @@ public class SelectInputAltComposite extends Composite{
 		
 		comboViewerInput.setInput(inputResourceProvider.getResources());
 		
-		IFolder inputAlt = (IFolder)ca.getSubResource(ToolchainUtils.KEY_FOLDER_ANALYSER_INPUT_ALT);
+		IFolder inputAlt = (IFolder)ca.getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 		if(inputAlt != null){
 			comboViewerInput.setSelection(
 					new StructuredSelection(inputResourceProvider.getResource(inputAlt)), 
