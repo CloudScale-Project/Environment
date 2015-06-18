@@ -218,6 +218,8 @@ public class ConfigComposite extends SidebarEditorComposite
 		@Override
 		public void refresh() {
 			
+			alternative.unloadProxyResources();
+			
 			if(tabFolder.isDisposed()){
 				return;
 			}

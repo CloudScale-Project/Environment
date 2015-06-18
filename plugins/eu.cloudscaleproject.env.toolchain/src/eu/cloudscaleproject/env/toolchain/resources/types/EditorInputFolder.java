@@ -285,6 +285,15 @@ public class EditorInputFolder extends EditorInputResource{
 		return resources;
 	}
 	
+	public List<IResource> getLoadedSubResources(){
+		
+		List<IResource> out = new ArrayList<IResource>();
+		for(List<IResource> list : subResources.values()){
+			out.addAll(list);
+		}
+		return out;
+	}
+	
 	@Override
 	public synchronized void save() {
 
@@ -320,7 +329,7 @@ public class EditorInputFolder extends EditorInputResource{
 		for(String key : propertyInputFile.getKeys()){
 			List<IResource> resources = getSubResources(key);
 			if(!resources.isEmpty()){
-				subResources.put(key, getSubResources(key));
+				subResources.put(key, resources);
 			}
 		}
 		

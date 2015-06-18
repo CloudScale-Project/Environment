@@ -67,6 +67,30 @@ public class EditorInputEMF extends EditorInputFolder{
 		return editingDomain.getResourceSet();
 	}
 	
+	public void unloadProxyResources(){
+		List<IResource> loadedSubResources = getLoadedSubResources();
+		List<Resource> loadedEMFResources = new ArrayList<Resource>();
+		
+		for(IResource res : loadedSubResources){
+			if(res instanceof IFile){
+				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				loadedEMFResources.add(emfRes);
+			}
+		}
+		
+		List<Resource> proxyResources = new ArrayList<Resource>(resSet.getResources());
+		proxyResources.removeAll(loadedEMFResources);
+		
+		boolean reloaded = false;
+		
+		for(Resource r : proxyResources){
+			r.unload();
+			reloaded = true;
+		}
+		
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
+	}
+	
 	public EditingDomain getEditingDomain(){
 		return editingDomain;
 	}
