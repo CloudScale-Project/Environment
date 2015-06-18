@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.overview.wizard.pages;
+package eu.cloudscaleproject.env.overview.wizard.composites;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -55,7 +55,7 @@ import org.scaledl.overview.deployment.DeploymentPackage.Literals;
 
 import eu.cloudscaleproject.env.overview.wizard.util.SwtUtil;
 
-public class ServiceDeploymentComponent extends Composite {
+public class ServiceDeploymentComposite extends Composite {
 	
 	private Text txtInitialSize;
 	private Text txtMinSize;
@@ -76,7 +76,7 @@ public class ServiceDeploymentComponent extends Composite {
 	private ComboViewer cvLoadBalancer;
 	private Label lblGb;
 
-	public ServiceDeploymentComponent(Composite parent, int style) {
+	public ServiceDeploymentComposite(Composite parent, int style) {
 		super(parent, style);
 
 		setLayout(new GridLayout(2, false));

@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.overview.wizard.pages;
+package eu.cloudscaleproject.env.overview.wizard.composites;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class ProvidedServiceComposite extends Composite {
 	private Button rbPaaS;
 	private Button rbIaaS;
 
-	private ServiceDeploymentComponent serviceDeploymentComposite;
+	private ServiceDeploymentComposite serviceDeploymentComposite;
 	private Composite stackedComposite;
 	private Composite cIaaS;
 	private Composite cPaaS;
@@ -188,7 +188,7 @@ public class ProvidedServiceComposite extends Composite {
 		grpDeploymentConfiguraiton.setLayout(new FillLayout(SWT.HORIZONTAL));
 		grpDeploymentConfiguraiton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		serviceDeploymentComposite = new ServiceDeploymentComponent(grpDeploymentConfiguraiton, SWT.NONE);
+		serviceDeploymentComposite = new ServiceDeploymentComposite(grpDeploymentConfiguraiton, SWT.NONE);
 		
 		initComponents();
 		initBindings();

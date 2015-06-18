@@ -7,17 +7,15 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.overview.wizard.ImportWizard;
+import eu.cloudscaleproject.env.overview.wizard.ImportSelectionWizard;
 
 public class OpenImportWizardHandler {
 	
 	@Execute
 	public void execute(IProject project, CommandExecutor commandExecutor) {
-
-		ImportWizard importWizard = new ImportWizard(project);
-		importWizard.init(PlatformUI.getWorkbench(), null);
-		WizardDialog wd = new  WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), importWizard);
-		wd.setTitle(importWizard.getWindowTitle());
+		ImportSelectionWizard selectionWizard = new ImportSelectionWizard(project);
+		WizardDialog wd = new  WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), selectionWizard);
+		wd.setTitle(selectionWizard.getWindowTitle());
 		wd.open();
 	}
 }

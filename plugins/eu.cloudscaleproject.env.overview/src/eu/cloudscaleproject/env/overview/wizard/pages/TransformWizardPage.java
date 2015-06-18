@@ -32,8 +32,11 @@ import org.scaledl.overview.application.Operation;
 import org.scaledl.overview.application.OperationInterface;
 import org.scaledl.overview.architecture.ArchitectureFactory;
 import org.scaledl.overview.architecture.CloudEnvironment;
+import org.scaledl.overview.architecture.ExternalConnection;
 import org.scaledl.overview.architecture.SoftwareService;
+import org.scaledl.overview.architecture.UsageProxy;
 import org.scaledl.overview.converter.ConverterService;
+import org.scaledl.overview.converter.IOverviewConverter;
 import org.scaledl.overview.parametertype.ParametertypeFactory;
 import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
@@ -50,7 +53,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class SelectModelWizardPage extends WizardPage implements
+public class TransformWizardPage extends WizardPage implements
 		IWizardPageControll {
 	private WizardData data;
 	private Text txtRepositoryModelLoc;
@@ -62,11 +65,13 @@ public class SelectModelWizardPage extends WizardPage implements
 	private Group grpExternal;
 	private Group grpResults;
 	private EditorInputEMF result;
+	private Label lblSelectInput;
+	private Button cbFakeInterface;
 
 	/**
 	 * Create the wizard.
 	 */
-	public SelectModelWizardPage(WizardData data) {
+	public TransformWizardPage(WizardData data) {
 		super("selectModelPage");
 		setTitle("Select PCM model");
 		setDescription("System and repository PCM model selection.");
@@ -86,28 +91,33 @@ public class SelectModelWizardPage extends WizardPage implements
 		setControl(container);
 		container.setLayout(new GridLayout(1, false));
 
-		Group grpSelectInput = new Group(container, SWT.NONE);
-		grpSelectInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		grpSelectInput.setText("Select Input");
+		Composite grpSelectInput = new Composite(container, SWT.BORDER);
+		grpSelectInput.setLayout(new GridLayout(3, false));
+		GridData gd_grpSelectInput = new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1);
+		gd_grpSelectInput.heightHint = 48;
+		grpSelectInput.setLayoutData(gd_grpSelectInput);
+		
+		lblSelectInput = new Label(grpSelectInput, SWT.NONE);
+		lblSelectInput.setText("Select input: ");
 
 		rbResults = new Button(grpSelectInput, SWT.RADIO);
-		rbResults.setBounds(10, 21, 135, 35);
+		rbResults.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
 		rbResults.setText("Extractor results");
 
 		rbExternal = new Button(grpSelectInput, SWT.RADIO);
-		rbExternal.setBounds(151, 21, 135, 35);
 		rbExternal.setText("External models");
 
 		stackedComposite = new Composite(container, SWT.NONE);
 		stackedComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 		StackLayout sl_stackedComposite = new StackLayout();
+		sl_stackedComposite.marginWidth = 6;
 		sl_stackedComposite.marginHeight = 10;
 		stackedComposite.setLayout(sl_stackedComposite);
 
 		grpExternal = new Group(stackedComposite, SWT.NONE);
-		grpExternal.setText("Applicaiton PCM model");
+		grpExternal.setText("External models");
 		grpExternal.setLayout(new GridLayout(3, false));
 
 		Label label = new Label(grpExternal, SWT.NONE);
@@ -116,8 +126,10 @@ public class SelectModelWizardPage extends WizardPage implements
 		label.setText("Repository model:");
 
 		txtRepositoryModelLoc = new Text(grpExternal, SWT.BORDER);
-		txtRepositoryModelLoc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		GridData gd_txtRepositoryModelLoc = new GridData(SWT.FILL, SWT.CENTER,
+				false, false, 1, 1);
+		gd_txtRepositoryModelLoc.widthHint = 250;
+		txtRepositoryModelLoc.setLayoutData(gd_txtRepositoryModelLoc);
 
 		Button btnSelectRepositoryModel = new Button(grpExternal, SWT.NONE);
 		btnSelectRepositoryModel.setText("Browse...");
@@ -128,8 +140,10 @@ public class SelectModelWizardPage extends WizardPage implements
 		label_1.setText("System model:");
 
 		txtSystemModelLoc = new Text(grpExternal, SWT.BORDER);
-		txtSystemModelLoc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		GridData gd_txtSystemModelLoc = new GridData(SWT.FILL, SWT.CENTER,
+				false, false, 1, 1);
+		gd_txtSystemModelLoc.widthHint = 250;
+		txtSystemModelLoc.setLayoutData(gd_txtSystemModelLoc);
 
 		Button btnSelectSystemModel = new Button(grpExternal, SWT.NONE);
 		btnSelectSystemModel.setText("Browse...");
@@ -240,6 +254,9 @@ public class SelectModelWizardPage extends WizardPage implements
 		rbResults.setSelection(true);
 		StackLayout sl = (StackLayout) stackedComposite.getLayout();
 		sl.topControl = grpResults;
+		
+		cbFakeInterface = new Button(container, SWT.CHECK);
+		cbFakeInterface.setText("Add fake interface (dev)");
 		stackedComposite.layout();
 	}
 
@@ -335,32 +352,55 @@ public class SelectModelWizardPage extends WizardPage implements
 	private void prepareOverviewModel() {
 		Overview overview = OverviewUtil.createOverviewModel();
 
-		CloudEnvironment cloudEnvironment = ArchitectureFactory.eINSTANCE
-				.createCloudEnvironment();
-		cloudEnvironment.setSoftwareLayer(ArchitectureFactory.eINSTANCE
-				.createSoftwareLayer());
-		cloudEnvironment.setPlatformLayer(ArchitectureFactory.eINSTANCE
-				.createPlatformLayer());
-		cloudEnvironment.setInfrastructureLayer(ArchitectureFactory.eINSTANCE
-				.createInfrastructureLayer());
+		//
+		// CloudEnvironment
+		//
+		CloudEnvironment cloudEnvironment = ArchitectureFactory.eINSTANCE.createCloudEnvironment();
+		cloudEnvironment.setSoftwareLayer(ArchitectureFactory.eINSTANCE.createSoftwareLayer());
+		cloudEnvironment.setPlatformLayer(ArchitectureFactory.eINSTANCE.createPlatformLayer());
+		cloudEnvironment.setInfrastructureLayer(ArchitectureFactory.eINSTANCE.createInfrastructureLayer());
 		overview.getArchitecture().getCloudEnvironments().add(cloudEnvironment);
 
 		this.data.setOverviewModel(overview);
 
-		SoftwareService ss = ArchitectureFactory.eINSTANCE
-				.createSoftwareService();
-		CloudEnvironment ce = overview.getArchitecture().getCloudEnvironments()
-				.get(0);
+		//
+		// Software service
+		//
+		SoftwareService ss = ArchitectureFactory.eINSTANCE.createSoftwareService();
+		ss.getAeMap().put(IOverviewConverter.KEY_PCM_SYSTEM, data.getSystemModel() );
+		ss.getAeMap().put(IOverviewConverter.KEY_PCM_REPOSITORY, data.getRepositoryModel() );
+		CloudEnvironment ce = overview.getArchitecture().getCloudEnvironments().get(0);
 		ce.getSoftwareLayer().getServices().add(ss);
-		this.data.setSoftwareService(ss);
 
+		this.data.setSoftwareService(ss);
+		
+		// 
+		// Usage Proxy
+		//
+		UsageProxy usageProxy = ArchitectureFactory.eINSTANCE.createUsageProxy();
+		overview.getArchitecture().getProxies().add(usageProxy);
+		ExternalConnection connection = ArchitectureFactory.eINSTANCE.createExternalConnection();
+		connection.setTarget(ss);
+		connection.setSource(usageProxy);
+		overview.getArchitecture().getUsageConnections().add(connection);
+
+		
+		//
+		// Import - Transformation
+		//
 		List<EObject> toImport = new ArrayList<EObject>();
 		toImport.add(this.data.getRepositoryModel());
 		toImport.add(this.data.getSystemModel());
 
 		ConverterService.getInstance().addExternalModel(ss, toImport, null);
-		addFakeIneterfaces(ss);
+
+		//
+		// After transformation 
+		//
+		// all provided interfaces are exposed (todo - selection)
+		usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
 		
+		if (cbFakeInterface.getSelection()) addFakeIneterfaces(ss);
 	}
 
 	private void checkComplete() {
@@ -393,7 +433,6 @@ public class SelectModelWizardPage extends WizardPage implements
 			
 			ss.getRequiredInterfaces().add(oi);
 		}
-		
 	}
 	
 	private Operation createFakeOperation(String name, TypeEnum ret, TypeEnum ... par)

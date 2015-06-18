@@ -17,6 +17,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabFolderListener;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.scaledl.overview.Overview;
@@ -41,12 +43,13 @@ import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.specification.NetworkInfrastructureServiceDescriptor;
 import org.scaledl.overview.util.OverviewSpecificationUtil;
 
+import eu.cloudscaleproject.env.overview.wizard.composites.ProvidedServiceComposite;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.overview.wizard.util.SwtUtil;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
 
-public class InterfacesWizardPage extends WizardPage implements IWizardPageControll, Listener{
+public class RequiredInterfacesWizardPage extends WizardPage implements IWizardPageControll, Listener{
 
 	private WizardData data;
 	private SoftwareService softwareService;
@@ -56,11 +59,14 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 	private Button btnAdd;
 	private Button btnRemove;
 	private Button btnNew;
+	private Composite emptyComposite;
+	private Composite mainComposite;
+	private Composite container;
 
 	/**
 	 * Create the wizard.
 	 */
-	public InterfacesWizardPage(WizardData data) {
+	public RequiredInterfacesWizardPage(WizardData data) {
 		super("wizardPage");
 		setTitle("Support services");
 		setDescription("Configure support services.");
@@ -74,19 +80,27 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 	 */
 	@SuppressWarnings("deprecation")
 	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NULL);
+		container = new Composite(parent, SWT.NULL);
+		container.setLayout(new StackLayout());
+		mainComposite = new Composite(container, SWT.NULL);
+
+		emptyComposite = new Composite(container, SWT.BORDER);
+		emptyComposite.setLayout(new GridLayout(1, false));
+		Label lblEmpty = new Label(emptyComposite, SWT.CENTER);
+		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		lblEmpty.setText("Nothing to do here... \nTransformed software service does not \nrequire any external support services.");
 
 		setControl(container);
-		container.setLayout(new GridLayout(3, false));
+		mainComposite.setLayout(new GridLayout(3, false));
 
-		listViewer = new ListViewer(container, SWT.BORDER | SWT.V_SCROLL);
+		listViewer = new ListViewer(mainComposite, SWT.BORDER | SWT.V_SCROLL);
 		List list = listViewer.getList();
 		GridData gd_list = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 		gd_list.widthHint = 200;
 		gd_list.minimumWidth = 200;
 		list.setLayoutData(gd_list);
 		
-		Composite composite = new Composite(container, SWT.NONE);
+		Composite composite = new Composite(mainComposite, SWT.NONE);
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
 		
 		btnNew = new Button(composite, SWT.NONE);
@@ -111,7 +125,7 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 		
 		
 		
-		tabFolder = new CTabFolder(container, SWT.BORDER | SWT.CLOSE);
+		tabFolder = new CTabFolder(mainComposite, SWT.BORDER | SWT.CLOSE);
 		tabFolder.setTabHeight(30);
 		GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_tabFolder.minimumWidth = 600;
@@ -154,7 +168,7 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 		
 		// Create initial component
 
-		SwtUtil.addListenerReursive(getControl(), this);
+		SwtUtil.addListenerRecursive(getControl(), this);
 	}
 	
 	private int counter = 1;
@@ -170,7 +184,7 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 		tabItem.setControl(psc);
 		tabFolder.setSelection(tabItem);
 		
-		SwtUtil.addListenerReursive(psc, this);
+		SwtUtil.addListenerRecursive(psc, this);
 		checkComplete();
 	}
 	
@@ -327,18 +341,28 @@ public class InterfacesWizardPage extends WizardPage implements IWizardPageContr
 	@Override
 	public void performUpdate() {
 		// TODO Auto-generated method stub
-		if (this.softwareService == data.getSoftwareService())
-			return;
+		//if (this.softwareService == data.getSoftwareService()) return;
 
 		Overview overviewModel = data.getOverviewModel();
 		this.softwareService = data.getSoftwareService();
 		System.out.println("Model: "+overviewModel.getArchitecture().getCloudEnvironments().get(0).getSoftwareLayer().getServices().get(0).getName());
 		System.out.println("Software Service: "+this.softwareService.getName());
 		
-		initBindings();
-		createServiceComponent();
-		checkComplete();
-		
+		if (softwareService.getRequiredInterfaces().isEmpty())
+		{
+			((StackLayout)container.getLayout()).topControl = emptyComposite;
+			checkComplete();
+		}
+		else
+		{
+			((StackLayout)container.getLayout()).topControl = mainComposite;
+			initBindings();
+			createServiceComponent();
+			checkComplete();
+		}
+
+		container.layout();
+		container.redraw();
 	}
 
 	@Override

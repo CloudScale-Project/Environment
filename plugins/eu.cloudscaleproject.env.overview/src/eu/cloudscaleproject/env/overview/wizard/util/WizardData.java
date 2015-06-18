@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.overview.wizard.util;
 
 import org.eclipse.core.resources.IProject;
 import org.scaledl.overview.Overview;
+import org.scaledl.overview.architecture.PlatformRuntimeService;
 import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.specification.CloudSpecification;
 
@@ -17,6 +18,10 @@ public class WizardData{
 	private Overview overview;
 	private SoftwareService softwareService;
 	private CloudSpecification cloudSpecification;
+
+	private Overview targetOverview;
+
+	private PlatformRuntimeService platformRuntimeService;
 	
 	public void setProject(IProject project) {
 		this.project = project;
@@ -58,6 +63,22 @@ public class WizardData{
 		return softwareService;
 	}
 	
+	public void setTargetOverviewModel (Overview targetOverview)
+	{
+		this.targetOverview = targetOverview;		
+	}
+	public Overview getTargetOverview()
+	{
+		return targetOverview;
+	}
+	public void setPlatformRuntimeService(PlatformRuntimeService prs)
+	{
+		this.platformRuntimeService = prs;
+	}
+	public PlatformRuntimeService getPlatformRuntimeService()
+	{
+		return platformRuntimeService;
+	}
 	
 
 }

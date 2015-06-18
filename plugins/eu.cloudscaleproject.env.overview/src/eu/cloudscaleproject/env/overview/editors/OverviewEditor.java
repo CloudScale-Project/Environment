@@ -1,8 +1,10 @@
 package eu.cloudscaleproject.env.overview.editors;
 
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -10,6 +12,7 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
 /**
@@ -17,22 +20,25 @@ import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class OverviewEditor extends Composite implements ISelectable, IPropertySheetPageProvider{
+public class OverviewEditor extends InputEditorView implements ISelectable, IPropertySheetPageProvider{
 
 	private final IProject project;
 	private final OverviewAlternative alternative;
 
-	private final EMFEditableTreeviewComposite treeviewComposite;
+	private EMFEditableTreeviewComposite treeviewComposite;
 
 	
 	public OverviewEditor(OverviewAlternative input, Composite parent, int style) {
-		super(parent, style);
-		
-		setLayout(new FillLayout());
+		super(parent, style, input);
 		
 		this.project = input.getProject();
 		this.alternative = input;
-		this.treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE);
+		
+		Composite mainContainer = new Composite(getContainer(), SWT.NONE);
+		mainContainer.setLayout(new GridLayout());
+		
+		this.treeviewComposite = new EMFEditableTreeviewComposite(input, mainContainer, SWT.NONE);
+		this.treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
 	@Override

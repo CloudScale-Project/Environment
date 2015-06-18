@@ -1,15 +1,10 @@
 package eu.cloudscaleproject.env.overview.wizard;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -20,47 +15,68 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.scaledl.overview.Overview;
-import org.scaledl.overview.application.OperationInterface;
-import org.scaledl.overview.architecture.ArchitectureFactory;
-import org.scaledl.overview.architecture.CloudEnvironment;
-import org.scaledl.overview.architecture.ExternalConnection;
-import org.scaledl.overview.architecture.UsageProxy;
-import org.scaledl.overview.converter.IOverviewConverter;
 
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.overview.wizard.pages.DeploymentWizardPage;
-import eu.cloudscaleproject.env.overview.wizard.pages.InterfacesWizardPage;
-import eu.cloudscaleproject.env.overview.wizard.pages.SelectModelWizardPage;
+import eu.cloudscaleproject.env.overview.wizard.pages.ExposedInterfacesWizardPage;
+import eu.cloudscaleproject.env.overview.wizard.pages.RequiredInterfacesWizardPage;
+import eu.cloudscaleproject.env.overview.wizard.pages.TransformWizardPage;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
+import eu.cloudscaleproject.env.overview.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 
 public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 	private WizardData data = new WizardData();
-	private SelectModelWizardPage selectModelPage = new SelectModelWizardPage(data);
+
+	private AlternativeNamePage namePage;
+	private AlternativeSelectionPage selectionPage;
+	private TransformWizardPage transformPage = new TransformWizardPage(data);
 	private DeploymentWizardPage deploymentWizardPage = new DeploymentWizardPage(data);
-	private InterfacesWizardPage interfacesWizardPage = new InterfacesWizardPage(data);
+	private ExposedInterfacesWizardPage exposedInterfacesWizardPage = new ExposedInterfacesWizardPage(data);
+	private RequiredInterfacesWizardPage requiredInterfacesWizardPage = new RequiredInterfacesWizardPage(data);
+
 	private WizardDialog dialog;
 	private IWizardPageControll currentPage;
 
 	private IProject project;
 
-	public ImportWizard(IProject project) {
+	private boolean merge;
+
+	public ImportWizard(IProject project, boolean merge) {
 		setWindowTitle("ScaleDL Overview Import Wizard");
 
 		this.project = project;
 		data.setProject(project);
+		
+		this.merge = merge;
+
 	}
 
 	@Override
 	public void addPages() {
-		this.addPage(selectModelPage);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+		if (merge)
+		{
+			selectionPage = new CustomAlternativeSelectionPage(data, provider);
+			this.addPage(selectionPage);
+		}
+		else
+		{
+			namePage = new AlternativeNamePage(provider);
+			this.addPage(namePage);
+		}
+		
+		this.addPage(transformPage);
+		this.addPage(exposedInterfacesWizardPage);
 		this.addPage(deploymentWizardPage);
-		this.addPage(interfacesWizardPage);
+		this.addPage(requiredInterfacesWizardPage);
 	}
 	
 	@Override
@@ -72,7 +88,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		
-		if (page == selectModelPage && page.isPageComplete())
+		if (page == transformPage && page.isPageComplete())
 		{
             java.lang.System.out.println("getNextPage() : "+page.getClass().getName());
 			//selectModelPage.performPageComplete();
@@ -80,9 +96,6 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 		return super.getNextPage(page);
 	}
-	
-	
-	
 	
 	@Override
 	public void setContainer(IWizardContainer wizardContainer) {
@@ -143,241 +156,6 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		});
 	}
 	
-	private void saveImportedModels() throws Exception
-	{
-		/*
-		IProject project = data.getProject();
-
-		Repository repositoryModel = data.getRepositoryModel();
-		System systemModel = data.getSystemModel();
-
-		URI repURI_external = ((InternalEObject)repositoryModel).eProxyURI();
-		URI sysURI_external = ((InternalEObject)systemModel).eProxyURI();
-		
-		if(repURI_external == null){
-			repURI_external = repositoryModel.eResource().getURI();
-		}
-		if(sysURI_external == null){
-			sysURI_external = systemModel.eResource().getURI();
-		}
-		
-		IPath repLocation = null;
-		IPath sysLocation = null;
-		IFile repImportFile = null;
-		IFile sysImportFile = null;
-
-		if (repURI_external.isPlatform() && sysURI_external.isPlatform())
-		{
-			repLocation = new Path(repURI_external.toPlatformString(true));
-			sysLocation = new Path(sysURI_external.toPlatformString(true));
-			repImportFile = ResourcesPlugin.getWorkspace().getRoot().getFile(repLocation);
-			sysImportFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sysLocation);
-		}
-		else
-		{
-			IWorkspace workspace= ResourcesPlugin.getWorkspace();    
-
-			repLocation = Path.fromOSString(repURI_external.toFileString()); 
-			sysLocation = Path.fromOSString(sysURI_external.toFileString()); 
-			repImportFile= workspace.getRoot().getFileForLocation(repLocation);
-			sysImportFile= workspace.getRoot().getFileForLocation(sysLocation);
-		}
-
-
-		IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-		IFolder importFolder = scaledlFolder.getFolder("Import");
-		if (!importFolder.exists()) importFolder.create(true, true, null);
-
-		importFolder = importFolder.getFolder(data.getSoftwareService().getName());
-		if (!importFolder.exists()) importFolder.create(true, true, null);
-		
-		//
-		// Create model fiels and copy external model files into it
-		//
-		IFile repositoryFile = importFolder.getFile(repImportFile.getName());
-		IFile systemFile = importFolder.getFile(sysImportFile.getName());
-		
-		// Delete files if already exists
-		if (repositoryFile.exists()) repositoryFile.delete(true, null);
-		if (systemFile.exists()) systemFile.delete(true, null);
-		
-		// Copy 
-		IPath projectPath = new Path("/"+project.getName());
-		repImportFile.copy(projectPath.append(repositoryFile.getProjectRelativePath()), true, null);
-		sysImportFile.copy(projectPath.append(systemFile.getProjectRelativePath()), true, null);
-
-		//repositoryFile.create(new FileInputStream(repositoryFile_external), true, null);
-		//systemFile.create(new FileInputStream(systemFile_external), true, null);
-
-		final URI repURI = URI.createPlatformResourceURI(repositoryFile.getFullPath().toString(), true);
-		final URI sysURI = URI.createPlatformResourceURI(systemFile.getFullPath().toString(), true);
-
-
-		//
-		// Get models (system and repository) and link it to newly created software service
-		//
-		ResourceSet resSet = new ResourceSetImpl();
-		final Resource systemRes = resSet.createResource(sysURI);
-		final Resource repositoryRes = resSet.createResource(repURI);
-		// !? !? !? 
-		repositoryRes.unload();
-		systemRes.unload();
-		repositoryRes.load(null);
-		systemRes.load(null);
-
-		EObject sys = systemRes.getContents().get(0);
-		EObject rep = repositoryRes.getContents().get(0);
-		*/
-
-		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_SYSTEM, data.getSystemModel() );
-		this.data.getSoftwareService().getAeMap().put(IOverviewConverter.KEY_PCM_REPOSITORY, data.getRepositoryModel() );
-	}
-	
-	private void saveOverviewModel () throws Exception
-	{
-		Overview overview = data.getOverviewModel();
-		URI overviewURI = getOverviewModelURI();
-		ResourceSet resSet = new ResourceSetImpl();
-		Resource overviewRes = resSet.createResource(overviewURI);
-		overviewRes.getContents().add(overview);
-		overviewRes.save(null);
-
-
-	}
-	
-	private void createUsageProxy ()
-	{
-		// Lastly create UsageProxy and connect imported app service
-		UsageProxy usageProxy = ArchitectureFactory.eINSTANCE.createUsageProxy();
-		Overview overview = this.data.getOverviewModel();
-
-		overview.getArchitecture().getProxies().add(usageProxy);
-		ExternalConnection connection = ArchitectureFactory.eINSTANCE.createExternalConnection();
-		connection.setTarget(this.data.getSoftwareService());
-		connection.setSource(usageProxy);
-		usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
-		overview.getArchitecture().getUsageConnections().add(connection);
-	}
-	
-	private void mergeOverviewModel () throws Exception
-	{
-		Overview overviewToMerge = data.getOverviewModel();
-		URI overviewURI = getOverviewModelURI();
-		ResourceSet resSet = new ResourceSetImpl();
-		final Resource overviewRes = resSet.createResource(overviewURI);
-		overviewRes.load(null);
-		Overview overview = (Overview) overviewRes.getContents().get(0);
-
-		// UsageProxy 
-		// If empty just copy it, otherwise copy contents and external connection
-		if (overview.getArchitecture().getProxies().isEmpty())
-		{
-			overview.getArchitecture().getProxies().add(overviewToMerge.getArchitecture().getProxies().get(0));
-			overview.getArchitecture().getUsageConnections().addAll (overviewToMerge.getArchitecture().getUsageConnections());
-		}
-		else
-		{
-			UsageProxy usageProxy = (UsageProxy) overview.getArchitecture().getProxies().get(0);
-			UsageProxy usageProxyToMerge = (UsageProxy) overviewToMerge.getArchitecture().getProxies().get(0);
-			for (OperationInterface oi : new LinkedList<OperationInterface>(usageProxyToMerge.getRequiredInterfaces()))
-			{
-				oi.getRequiringContainer().clear();
-			}
-
-			usageProxy.getRequiredInterfaces().addAll(this.data.getSoftwareService().getProvidedInterfaces());
-
-
-			ExternalConnection externalConnection = overviewToMerge.getArchitecture().getUsageConnections().get(0);
-			externalConnection.setSource(usageProxy);
-			overview.getArchitecture().getUsageConnections().add(externalConnection);
-		}
-		
-		// // // // // // // // //
-		// Other stuff
-		overview.getDataTypes().getTypes().addAll(overviewToMerge.getDataTypes().getTypes());
-		overview.getDefinition().getDescriptors().addAll(overviewToMerge.getDefinition().getDescriptors());
-		overview.getDeployment().getServiceDeployments().addAll(overviewToMerge.getDeployment().getServiceDeployments());
-
-		// // // // // // // // //
-		// CloudEnvironment
-		CloudEnvironment ceToMerge = overviewToMerge.getArchitecture().getCloudEnvironments().get(0);
-		
-		if (overview.getArchitecture().getCloudEnvironments().isEmpty())
-		{ 
-			overview.getArchitecture().getCloudEnvironments().add(ceToMerge);
-		}
-
-		CloudEnvironment ce = overview.getArchitecture().getCloudEnvironments().get(0);
-			
-		ce.getSoftwareLayer().getServices().addAll(ceToMerge.getSoftwareLayer().getServices());
-		ce.getPlatformLayer().getServices().addAll(ceToMerge.getPlatformLayer().getServices());
-		ce.getInfrastructureLayer().getServices().addAll(ceToMerge.getInfrastructureLayer().getServices());
-			
-		ce.getInternalConnections().addAll(ceToMerge.getInternalConnections());
-
-		
-		overviewRes.save(null);
-		
-	}
-	
-	private IFile getOverviewFile()
-	{
-		//TODO: implement overview model selection
-		//For now just try to retrieve first '.sdlo' model file.
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
-		if(rp != null){
-			for(IEditorInputResource res : rp.getResources()){
-				if(res instanceof EditorInputEMF){
-					EditorInputEMF emfAlternative = (EditorInputEMF)res;
-					return (IFile)emfAlternative.getSubResource(ToolchainUtils.KEY_FILE_OVERVIEW);
-				}
-			}
-		}
-		throw new UnsupportedOperationException("Implement overview model selection. "
-				+ "To awoid this exception, please create Overview alternative!");
-	}
-	
-	private IFile getOverviewDiagramFile()
-	{
-		//TODO: implement overview model selection
-		//For now just try to retrieve first '.sdlo_diagram' diagram file.
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
-		if(rp != null){
-			for(IEditorInputResource res : rp.getResources()){
-				if(res instanceof EditorInputEMF){
-					EditorInputEMF emfAlternative = (EditorInputEMF)res;
-					return (IFile)emfAlternative.getSubResource(ToolchainUtils.KEY_FILE_OVERVIEW_DIAGRAM);
-				}
-			}
-		}
-		throw new UnsupportedOperationException("Implement overview model selection. "
-				+ "To awoid this exception, please create Overview alternative!");
-	}
-
-	private URI getOverviewModelURI()
-	{
-		IFile overviewFile = getOverviewFile();
-		URI overviewURI = URI.createPlatformResourceURI(overviewFile.getFullPath().toString(), true);
-
-		return overviewURI;
-	}
-	
-	private URI getOverviewDiagramURI()
-	{
-		IFile overviewFile = getOverviewDiagramFile();
-		URI overviewDiagramURI = URI.createPlatformResourceURI(overviewFile.getFullPath().toString(), true);
-		return overviewDiagramURI;
-	}
-	
-	private void createOverviewDiagram ()
-	{
-		URI overviewModelURI = getOverviewModelURI();
-		URI overviewDiagramURI = getOverviewDiagramURI();
-		
-		org.scaledl.overview.diagram.Util.createDiagram(overviewDiagramURI, overviewModelURI);
-		
-	}
-	
 	@Override
 	public boolean performFinish() {
 
@@ -386,32 +164,36 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			currentPage.performNext();
 		}
 		try {
-			saveImportedModels();
 
-			createUsageProxy();
-			
-			if (getOverviewFile().exists())
+			OverviewAlternative alternative;
+			if (merge)
 			{
-				mergeOverviewModel();
+				alternative = (OverviewAlternative) selectionPage.getSelection();
 			}
 			else
 			{
-				saveOverviewModel();
+				ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+				alternative = (OverviewAlternative) provider.createNewResource(namePage.getName(), null);
 			}
+
+			Overview overviewToMerge = data.getOverviewModel();
+			Resource overviewRes = alternative.getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
+			Overview overview = (Overview) overviewRes.getContents().get(0);
 			
-			if (!getOverviewDiagramFile().exists())
-			{
-				createOverviewDiagram();
-			}
+			// Merge/move all temporary overview
+			OverviewHelper.mergeOverviewModel(overviewToMerge, overview);
+			// Deploy service
+			data.getPlatformRuntimeService().getSoftwareServices().add(data.getSoftwareService());
+
+			overviewRes.save(null);
 			
+			OpenAlternativeUtil.openAlternative(alternative);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
-		
-		
 		
 		return true;
 	}
@@ -428,5 +210,28 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// TODO Auto-generated method stub
+	}
+	
+	private static class CustomAlternativeSelectionPage extends AlternativeSelectionPage implements IWizardPageControll
+	{
+		private WizardData data;
+
+		public CustomAlternativeSelectionPage(WizardData data, ResourceProvider provider)
+		{
+			super(provider);
+			this.data = data;
+		}
+
+		@Override
+		public void performNext()
+		{
+			Resource modelResource = ((OverviewAlternative)getSelection()).getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
+			Overview overview = (Overview) modelResource.getContents().get(0);
+			this.data.setTargetOverviewModel(overview);
+		}
+
+		@Override public void performBack() { }
+		@Override public void performUpdate() { }
+		
 	}
 }
