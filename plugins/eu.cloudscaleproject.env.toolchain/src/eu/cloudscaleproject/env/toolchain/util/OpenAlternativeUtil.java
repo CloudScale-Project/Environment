@@ -23,6 +23,7 @@ import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
 
 public class OpenAlternativeUtil
 {
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenAlternativeUtil.class.getName());
 	
 	public static void openAlternative(IEditorInputResource alternative)
@@ -53,14 +54,7 @@ public class OpenAlternativeUtil
 		//
 		// Select alternative
 		//
-		
-		//TODO: fix null pointer exception problem!
-		try{
-			selectAlternative(alternative);
-		}
-		catch(Exception e){
-			logger.severe("Exception occured druring alternative selection: Excpetion: " + e.getMessage());
-		}
+		selectAlternative(alternative);
 		
 		//
 		// Select tab
@@ -90,7 +84,7 @@ public class OpenAlternativeUtil
 		{
 			composite = editorItem.getComposite();
 
-			while (!(composite.getParent() instanceof CTabFolder))
+			while (composite != null && !(composite.getParent() instanceof CTabFolder))
 			{
 				composite = composite.getParent();
 			}
@@ -105,7 +99,7 @@ public class OpenAlternativeUtil
 		if (editorItem != null)
 		{
 			EditorItem parent = EditorRegistry.getInstance().getParent(editorItem);
-			parent.select();
+			if (parent != null) parent.select();
 
 			editorItem.select();
 		}
