@@ -22,7 +22,7 @@ public class UsageValidator implements IResourceValidator{
 	
 	private boolean validateDlimModel (UsageEvolutionAlternative alternative)
 	{
-		List<Resource> resources = alternative.getModelResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		List<Resource> resources = alternative.getModelResources(ToolchainUtils.KEY_FILE_LIMBO);
 		
 		if (resources.isEmpty())
 		{

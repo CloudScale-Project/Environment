@@ -48,6 +48,8 @@ public class CreateCustomUsageWizard extends CustomDlimModelWizard{
 		
 		if (res)
 		{
+			this.alternative.load();
+
 			// Close just opened editor
 			IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 			IWorkbenchPage page = workbenchWindow.getActivePage();
@@ -56,6 +58,10 @@ public class CreateCustomUsageWizard extends CustomDlimModelWizard{
 			// DlimEditor Throws Assertion error because 
 			// setActivePage is called async in DlimEditor
 			// Not really a problem
+		}
+		else
+		{
+			this.alternative.delete();
 		}
 		
 		return res;
