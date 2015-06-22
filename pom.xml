@@ -70,6 +70,8 @@ Package : mvn install
 	<!-- CloudScale update-sites --> 
 	<repository><id>CloudScale Toolchain</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/</url></repository>
 
+	<repository><id>Thirdparty wrapper</id><layout>p2</layout><url>https://sdqweb.ipd.kit.edu/eclipse/thirdpartywrapper/nightly/</url></repository>
+
 	<!-- Eclipse update-sites -->
 	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
 	<repository><id>Eclipse 4.4 Recomenders</id><layout>p2</layout><url>http://download.eclipse.org/recommenders/updates/stable</url></repository>
