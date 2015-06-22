@@ -27,7 +27,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;
 import de.uka.ipd.sdq.pcm.system.System;
-import edu.kit.ipd.sdq.mdsd.profiles.ui.menu.ApplicableStereotypesSubmenu;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;
@@ -89,9 +88,19 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 					
 					MenuManager applyStereotypeMenu = new MenuManager("Apply Architecture Template");
 					
-					ApplicableStereotypesSubmenu applyStereotypeContribution = new ApplicableStereotypesSubmenu();
-					applyStereotypeContribution.initialize(PlatformUI.getWorkbench());
-					applyStereotypeMenu.add(applyStereotypeContribution);
+					//
+					// IProfileRegistry.INSTANCE.getRegisteredProfiles();
+					// Filter for AT profiles
+					// 
+					// org.scaledl.arc....repositories.cloudscale/CloudScaleATRepository
+					// CloudScaleATRepository
+					//
+					
+					// ApplicableStereotypesSubmenu - not present anymore
+					//ApplicableStereotypesSubmenu applyStereotypeContribution = new ApplicableStereotypesSubmenu();
+
+					//applyStereotypeContribution.initialize(PlatformUI.getWorkbench());
+					//applyStereotypeMenu.add(applyStereotypeContribution);
 					
 					menuManager.add(applyStereotypeMenu);
 				}
