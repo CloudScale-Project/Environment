@@ -324,7 +324,7 @@ public class EditorInputFolder extends EditorInputResource{
 		return out;
 	}
 	
-	protected void handleCreate() {
+	protected final void handleCreate() {
 		if(!folder.exists()){
 			try {
 				folder.create(true, true, null);
@@ -340,7 +340,7 @@ public class EditorInputFolder extends EditorInputResource{
 		//override
 	}
 	
-	protected void handleSave() {
+	protected final void handleSave() {
 
 		if(!folder.exists()){
 			try {
@@ -359,7 +359,7 @@ public class EditorInputFolder extends EditorInputResource{
 		//override
 	}
 
-	protected void handleLoad() {
+	protected final void handleLoad() {
 		
 		propertyInputFile.handleLoad();
 		
@@ -385,7 +385,7 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 
 	@Override
-	public void handleDelete() {
+	public final void handleDelete() {
 		
 		doDelete();
 		

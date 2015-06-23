@@ -22,7 +22,7 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 		super(project, folder, ToolchainUtils.USAGEEVOLUTION_ID);
 	}
 
-	public void handleCreate()
+	public void doCreate()
 	{
 		IFile limboFile = getResource().getFile("limbo.dlim");
 

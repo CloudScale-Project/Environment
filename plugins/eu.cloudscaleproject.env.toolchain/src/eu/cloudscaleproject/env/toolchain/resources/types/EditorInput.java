@@ -38,7 +38,7 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	
 	@Override
 	public String getID() {
-		return null;
+		return validatorID;
 	}
 	
 	@Override

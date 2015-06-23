@@ -1048,7 +1048,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// Standard alternative load/save/delete methods
 	
 	@Override
-	public void handleCreate() {		
+	public void doCreate() {		
 		Experiment exp = retrieveExperimentModel();
 		
 		//Sets initial settings. 

@@ -37,11 +37,7 @@ public class CreateAlternativeWizard extends Wizard{
 		String altName = nameSelectionPage.getName();
 
 		IEditorInputResource alternative = (IEditorInputResource)provider.createNewResource(altName, null);
-
-		initAlternative(alternative);
-		
-		alternative.save();
-		alternative.load();
+		initAlternative(alternative);		
 
 		ValidationDiagramService.showStatus(project, alternative);
 		OpenAlternativeUtil.openAlternative(alternative);

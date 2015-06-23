@@ -32,7 +32,7 @@ public class ResultAlternative extends EditorInputEMF {
 	}
 	
 	@Override
-	public void handleCreate() {		
+	public void doCreate() {		
 		//
 		// Prepare folder structure
 		//
