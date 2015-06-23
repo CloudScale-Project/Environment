@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -29,7 +28,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -48,7 +46,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class AbstractSidebarEditor implements ISidebarEditor{
 	
-	private static final Logger logger = Logger.getLogger(AbstractSidebarEditor.class.getName());
+	//private static final Logger logger = Logger.getLogger(AbstractSidebarEditor.class.getName());
 	
 	private StackLayout stackLayout;
 	
@@ -86,21 +84,21 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		private Color color_select;
 		private Color color_hover;
 		
-		public boolean isLoaded = false;
 		public boolean isSelected = false;
-		
-		//TODO: name change should be handled differently! Fix this. 
-		final PropertyChangeListener resourceChangeListener = new PropertyChangeListener() {
+				
+		final PropertyChangeListener eirChangeListener = new PropertyChangeListener() {
+					
 			@Override
-			public void propertyChange(PropertyChangeEvent arg) {
-				if("name".equals(arg.getPropertyName()) && btnSelect != null && !btnSelect.isDisposed()){
-					btnSelect.setText((String)arg.getNewValue());
-					btnSelect.redraw();
-				}
+			public void propertyChange(final PropertyChangeEvent evt) {
+				
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						resourceChanged(evt);
+					};
+				});
 
 				// When non GUI thread => WorkbenchWidow == null
                 if (Display.getDefault().getThread() != Thread.currentThread()) return;
-
 				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 				if(editor != null){
@@ -115,17 +113,38 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		public EditorItem(IEditorInput input, String sectionName, int style) {
 			this.input = input;
 			this.sectionName = sectionName;
-			this.initButton();
-			this.input.addPropertyChangeListener(resourceChangeListener);
 			
-			if (!(input instanceof IEditorInputResource))
-			{
-				initComposite();
-			}
-
+			initialize();
+			
+			this.input.addPropertyChangeListener(eirChangeListener);
 			EditorRegistry.getInstance().registerEditorItem(AbstractSidebarEditor.this, EditorItem.this);
 		}
-
+		
+		public void resourceChanged(PropertyChangeEvent evt){
+			
+			if(composite == null || composite.isDisposed()){
+				return;
+			}
+			if(btnSelect == null || btnSelect.isDisposed()){
+				return;
+			}
+			
+			if (IEditorInputResource.PROP_LOADED.equals(evt.getPropertyName()))
+			{
+				btnSelect.setText(input.getName());
+				btnSelect.redraw();
+				
+				if(composite instanceof IRefreshable){
+					((IRefreshable)composite).refresh();
+				}
+			}
+			
+			if(IEditorInputResource.PROP_NAME.equals(evt.getPropertyName())){
+				btnSelect.setText((String)evt.getNewValue());
+				btnSelect.redraw();
+			}
+		}
+		
 		public IEditorInput getInput()
 		{
 			return input;
@@ -140,6 +159,19 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			List<ISaveable> out = new ArrayList<>();
 			collectSaveableComposites(out, composite);
 			return out;
+		}
+		
+		public boolean isDirty(){
+			if(this.input instanceof IEditorInputResource){
+				IEditorInputResource res = (IEditorInputResource)input;
+				return res.isDirty();
+			}
+			for(ISaveable s : getSaveables()){
+				if(s.isDirty()){
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		private void collectSaveableComposites(List<ISaveable> composites, Composite c){
@@ -182,11 +214,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			});
 		}
 		
-		public void load(boolean force){
-			
-			if(isLoaded && !force){
-				return;
-			}
+		public void load(final boolean force){
 			
 			BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
 
@@ -199,50 +227,39 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 						}
 						
 						IEditorInputResource res = (IEditorInputResource)input;
-						res.load();
-						isLoaded = true;
+						synchronized (res) {
+							if(!res.isLoaded() || force){
+								res.load();
+							}
+						}
 						
+						/*
 						if(isSelected){
 							select();
 						}
+						*/
 					}
 				}
 			});
 			
-			for(ISaveable s : getSaveables()){
-				s.load(force);
-			}
 		}
 		
-		public boolean isDirty(){
-			if(this.input instanceof IEditorInputResource){
-				IEditorInputResource res = (IEditorInputResource)input;
-				return res.isDirty();
-			}
-			for(ISaveable s : getSaveables()){
-				if(s.isDirty()){
-					return true;
+		private void initialize(){
+			BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+				
+				@Override
+				public void run() {
+					load(false);
 				}
-			}
-			return false;
+			});
+			
+			initButton();
+			initComposite();
 		}
 		
 		private void checkWidgets(){
 			initButton();
 			initComposite();
-		}
-		
-		private void initComposite(){
-			if(composite == null || composite.isDisposed()){
-				BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
-					
-					@Override
-					public void run() {
-						load(false);
-						composite = createInputComposite(input, compositeArea, SWT.NONE);
-					}
-				}); 
-			}
 		}
 		
 		private void initButton(){
@@ -291,6 +308,12 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			}
 		}
 		
+		private void initComposite(){
+			if(composite == null || composite.isDisposed()){
+				composite = createInputComposite(input, compositeArea, SWT.NONE);
+			}
+		}
+		
 		public void update() {
 			checkWidgets();
 			
@@ -329,7 +352,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 		public void dispose() {
-			input.removePropertyChangeListener(resourceChangeListener);
+			input.removePropertyChangeListener(eirChangeListener);
 			if(btnSelect != null){
 				btnSelect.dispose();
 			}
@@ -639,6 +662,11 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		if(editorItem != null){
 			editorItem.dispose();
 		}
+		else{
+			//editor item already removed
+			return;
+		}
+		
 		entries.remove(editorInput);
 
 		compositeArea.layout(true);
@@ -663,13 +691,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		EditorItem ei = getCurrentSelectionItem();
 		if(ei != null){
 			ei.load(force);
-		}
-	}
-	
-	protected void load(IEditorInput editorInput){
-		EditorItem ei = entries.get(editorInput);
-		if(ei != null){
-			ei.load(true);
 		}
 	}
 	

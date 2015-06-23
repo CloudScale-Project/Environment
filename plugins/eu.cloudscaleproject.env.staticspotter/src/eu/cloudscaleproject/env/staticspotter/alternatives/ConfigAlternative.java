@@ -40,8 +40,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	}
 
 	@Override
-	public void create() {
-		super.create();
+	public void handleCreate() {
 
 		try {
 			IFile catalog = getResource().getFile(FILE_CATALOG);

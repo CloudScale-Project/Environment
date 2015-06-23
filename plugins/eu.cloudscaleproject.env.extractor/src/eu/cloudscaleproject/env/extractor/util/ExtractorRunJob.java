@@ -53,7 +53,7 @@ public class ExtractorRunJob extends Job
 	private IProject project;
 	private ConfingAlternative configFolder;
 	private IProject projectToExtract;
-	private ResultAlternative resultsFolder;
+	private ResultAlternative resultAlternative;
 
 	public ExtractorRunJob(ConfingAlternative configInputFolder)
 	{
@@ -75,11 +75,12 @@ public class ExtractorRunJob extends Job
 
 		try
 		{
-			this.resultsFolder = createResultPersistenceFolder();
+			this.resultAlternative = createResultPersistenceFolder();
 			runModisco(monitor);
 			runSomox(monitor);
 			initializeDiagrams();
-			resultsFolder.save();
+			resultAlternative.save();
+			resultAlternative.load();
 
 		} catch (CoreException e)
 		{
@@ -112,7 +113,7 @@ public class ExtractorRunJob extends Job
 		LaunchConfiguration modiscoConfiguration = configFolder.getModiscoConfiguration();
 		AbstractModelDiscoverer<?> discoverer = (AbstractModelDiscoverer<?>) IDiscoveryManager.INSTANCE.createDiscovererImpl(modiscoConfiguration.getDiscoverer().getId()); 
 		
-        IFolder modiscoFolder = (IFolder) resultsFolder.getSubResource(ResultAlternative.KEY_FOLDER_MODISCO);
+        IFolder modiscoFolder = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_MODISCO);
         IFile java2kdmFile = modiscoFolder.getFile(projectToExtract.getName()+"_java2kdm.xmi");
         IFile javaFile = modiscoFolder.getFile(projectToExtract.getName()+"_java.xmi");
         IFile kdmFile = modiscoFolder.getFile(projectToExtract.getName()+"_kdm.xmi");
@@ -135,9 +136,9 @@ public class ExtractorRunJob extends Job
 		{
 			IDiscoveryManager.INSTANCE.discoverElement(discoverer, projectToExtract, parameters, monitor);
 
-			resultsFolder.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM, java2kdmFile);
-			resultsFolder.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA, javaFile);
-			resultsFolder.setSubResource(ResultAlternative.KEY_FILE_MODISCO_KDM, kdmFile);
+			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM, java2kdmFile);
+			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA, javaFile);
+			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_KDM, kdmFile);
 
 		} catch (DiscoveryException e)
 		{
@@ -150,11 +151,11 @@ public class ExtractorRunJob extends Job
 	{
 		SoMoXConfiguration somoxConfiguration = configFolder.getSomoxConfiguration();
 
-		IFile file = (IFile)resultsFolder.getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
+		IFile file = (IFile)resultAlternative.getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
 		somoxConfiguration.getFileLocations().setAnalyserInputFile(file.getFullPath().toString());
 
 		somoxConfiguration.getFileLocations().setProjectName(this.project.getName());
-		IFolder res = (IFolder) resultsFolder.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
+		IFolder res = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
 		somoxConfiguration.getFileLocations().setOutputFolder("/"+res.getProjectRelativePath().toString());
 
 		_somoxNameResemblanceBugWorkaround();
@@ -177,13 +178,13 @@ public class ExtractorRunJob extends Job
 			saveJob.setBlackboard(blackboard);
 			saveJob.execute(monitor);
 
-			IFolder somoxFolder = (IFolder) resultsFolder.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
+			IFolder somoxFolder = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
 			IFile repositoryModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".repository");
 			IFile systemModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".system");
 			IFile sourceDecoratorFile = somoxFolder.getFile(SOMOX_BASE_NAME+".sourcecodedecorator");
-			resultsFolder.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryModelFile);
-			resultsFolder.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, systemModelFile);
-			resultsFolder.setSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, sourceDecoratorFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryModelFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, systemModelFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, sourceDecoratorFile);
 
 		} catch (Exception e)
 		{
@@ -195,8 +196,8 @@ public class ExtractorRunJob extends Job
 
 	private void initializeDiagrams()
 	{
-		IFile repositoryFile = (IFile)resultsFolder.getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
-		IFile systemFile = (IFile)resultsFolder.getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
+		IFile repositoryFile = (IFile)resultAlternative.getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
+		IFile systemFile = (IFile)resultAlternative.getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
 		IFolder container = (IFolder)repositoryFile.getParent();
 
 		final URI resourceURI = URI.createPlatformResourceURI(repositoryFile.getFullPath().toString(), true);
@@ -232,8 +233,8 @@ public class ExtractorRunJob extends Job
 			systemDiagramResource.getContents().add(systemDiagram);
 			systemDiagramResource.save(null);
 
-			resultsFolder.setSubResource(ResultAlternative.KEY_FILE_REPOSITORY_DIAGRAM, repositoryDiagramFile);
-			resultsFolder.setSubResource(ResultAlternative.KEY_FILE_SYSTEM_DIAGRAM, systemDiagramFile);
+			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_REPOSITORY_DIAGRAM, repositoryDiagramFile);
+			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_SYSTEM_DIAGRAM, systemDiagramFile);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

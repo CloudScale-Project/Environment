@@ -187,6 +187,10 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void run()
 			{
+				if(stackedContainer == null || stackedContainer.isDisposed()){
+					return;
+				}
+				
 				if (isRunning())
 				{
 					btnRun.setText("Stop");

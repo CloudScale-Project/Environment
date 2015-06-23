@@ -55,7 +55,7 @@ public class ResourceRegistry {
 	 * @param toolchainID ID under which the specified 'IResourceProviderFactory' should be registered.
 	 * @param factory 'IResourceProviderFactory'
 	 */
-	public void registerFactory(String toolchainID, IResourceProviderFactory factory){
+	public synchronized void registerFactory(String toolchainID, IResourceProviderFactory factory){
 		resourceProviderFactories.put(toolchainID, factory);
 		logger.info("IResourceProviderFactory registered uder toolchainID: " + toolchainID);
 	}
@@ -70,7 +70,7 @@ public class ResourceRegistry {
 	 * @param folder The root folder of the returned 'ResourceProvider'. 
 	 * @return ResourceProvider
 	 */
-	public ResourceProvider getResourceProvider(String toolchainID, IFolder folder){
+	public synchronized ResourceProvider getResourceProvider(String toolchainID, IFolder folder){
 		
 		ResourceProvider resourceProvider = resourceProviders.get(folder);
 		
@@ -99,7 +99,7 @@ public class ResourceRegistry {
 	 * @param folder The root folder of the returned 'ResourceProvider'.
 	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
 	 */
-	public ResourceProvider getFolderResourceProvider(IFolder folder){
+	public synchronized ResourceProvider getFolderResourceProvider(IFolder folder){
 		return getResourceProvider(FOLDER_RESOURCE_PROVIDER_ID, folder);
 	}
 	
@@ -110,7 +110,7 @@ public class ResourceRegistry {
 	 * @param folder The root folder of the returned 'ResourceProvider'.
 	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
 	 */
-	public ResourceProvider getFileResourceProvider(IFolder folder){
+	public synchronized ResourceProvider getFileResourceProvider(IFolder folder){
 		return getResourceProvider(FILE_RESOURCE_PROVIDER_ID, folder);
 	}
 	
@@ -122,7 +122,7 @@ public class ResourceRegistry {
 	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
 	 * @return ResourceProvider
 	 */
-	public ResourceProvider getResourceProvider(IProject project, String toolchainID){
+	public synchronized ResourceProvider getResourceProvider(IProject project, String toolchainID){
 		
 		//Check if the resource factory is registered for the specified toolchainID
 		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',

@@ -59,17 +59,19 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		@Override
 		public void propertyChange(final PropertyChangeEvent evt) {
 			
-			Display.getDefault().asyncExec(new Runnable() {
-				
-				@Override
-				public void run() {
-					if(EditorInputEMF.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())
-							|| EditorInputEMF.PROP_LOADED.equals(evt.getPropertyName()))
-					if(!treeViewer.getTree().isDisposed()){
-						treeViewer.refresh();
+			if (EditorInputEMF.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())
+					|| EditorInputEMF.PROP_LOADED.equals(evt.getPropertyName())){
+								
+				Display.getDefault().syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						if (!treeViewer.getTree().isDisposed()) {
+							treeViewer.refresh();
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	};
 

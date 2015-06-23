@@ -21,12 +21,6 @@ public class InputAlternative extends EditorInputEMF
 	}
 
 	@Override
-	public void create()
-	{
-		super.create();
-	}
-
-	@Override
 	protected void doLoad()
 	{
 

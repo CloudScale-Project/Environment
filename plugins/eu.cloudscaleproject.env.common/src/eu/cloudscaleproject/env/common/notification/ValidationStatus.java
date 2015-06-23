@@ -5,18 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
 
-public class ResourceValidationStatus implements IValidationStatus, IProjectProvider{
+public class ValidationStatus implements IValidationStatus, IProjectProvider{
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	private String name;
 	private final String id;
-	private IResource resource;
 	
 	private boolean isDirty = false;
 	private boolean isValid = false;	
@@ -24,14 +22,9 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	
 	private final IValidationStatusProvider provider;
 	
-	public ResourceValidationStatus(IValidationStatusProvider provider, String id) {
-		this(provider, id, null);
-	}
-	
-	public ResourceValidationStatus(IValidationStatusProvider provider, String id, IResource resource) {
+	public ValidationStatus(IValidationStatusProvider provider, String id) {
 		this.provider = provider;
 		this.id = id;
-		this.resource = resource;
 	}
 	
 	@Override
@@ -49,23 +42,18 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 		return provider;
 	}
 	
-	public IResource getResource(){
-		return this.resource;
-	}
-	
-	public IProject getProject(){
-		if(resource != null){
-			return resource.getProject();
-		}
-		if(provider instanceof IProjectProvider){
-			return ((IProjectProvider)provider).getProject();
-		}
-		return null;
-	}
-	
 	@Override
 	public String getID() {
 		return id;
+	}
+	
+	@Override
+	public IProject getProject() {
+		if(provider instanceof IProjectProvider){
+			IProjectProvider pp = (IProjectProvider)provider;
+			return pp.getProject();
+		}
+		return null;
 	}
 
 	@Override
@@ -127,11 +115,6 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 
 	@Override
 	public void addWarning(String id, int severity, String message) {
-		
-		if(warnings.containsKey(id)){
-			return;
-		}
-		
 		Warning w = new Warning();
 		w.severity = severity;
 		w.message = message;
@@ -143,11 +126,6 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 
 	@Override
 	public void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
-		
-		if(warnings.containsKey(id)){
-			return;
-		}
-		
 		Warning w = new Warning();
 		w.severity = severity;
 		w.message = message;
@@ -237,7 +215,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((resource == null) ? 0 : resource.hashCode());
+				+ ((provider == null) ? 0 : provider.hashCode());
 		return result;
 	}
 
@@ -249,17 +227,18 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ResourceValidationStatus other = (ResourceValidationStatus) obj;
+		ValidationStatus other = (ValidationStatus) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (resource == null) {
-			if (other.resource != null)
+		if (provider == null) {
+			if (other.provider != null)
 				return false;
-		} else if (!resource.equals(other.resource))
+		} else if (!provider.equals(other.provider))
 			return false;
 		return true;
 	}
+	
 }

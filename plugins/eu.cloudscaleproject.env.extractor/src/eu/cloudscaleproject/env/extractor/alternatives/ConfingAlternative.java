@@ -70,9 +70,9 @@ public class ConfingAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	public synchronized void load()
+	public void doLoad()
 	{
-		super.load();
+		super.doLoad();
 		loadSomoxModel();
 	}
 	

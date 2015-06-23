@@ -44,16 +44,6 @@ public class SidebarEditor extends AbstractSidebarEditor
 				IEditorInputResource res = (IEditorInputResource) evt.getOldValue();
 				SidebarEditor.this.removeSidebarEditor(res);
 			}
-			if (ResourceProvider.PROP_RESOURCE_MODIFIED.equals(evt.getPropertyName()))
-			{
-				IEditorInputResource res = (IEditorInputResource) evt.getNewValue();
-				Composite current = getCurrentSelection();
-				if (current != null && !current.isDisposed() && current.isVisible())
-				{
-					return;
-				}
-				load(res);
-			}
 		}
 	};
 
@@ -167,7 +157,7 @@ public class SidebarEditor extends AbstractSidebarEditor
 			return;
 		}
 
-		resourceProvider.deleteResource(((IEditorInputResource) toDelete).getResource().getName());
+		((IEditorInputResource)toDelete).delete();
 	}
 
 	@Override

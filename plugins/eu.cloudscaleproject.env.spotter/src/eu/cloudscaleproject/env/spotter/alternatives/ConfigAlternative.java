@@ -35,14 +35,6 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	public void create()
-	{
-		super.create();
-
-		// initModels() cannot be called here - BUG -- property is overwriten
-	}
-
-	@Override
 	protected void doLoad()
 	{
 		super.doLoad();

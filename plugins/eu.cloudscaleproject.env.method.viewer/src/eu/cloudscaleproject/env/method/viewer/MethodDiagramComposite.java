@@ -54,10 +54,14 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		public void propertyChange(PropertyChangeEvent pce) {
 			if(StatusManager.PROP_STATUS_PROVIDER_REMOVED.equals(pce.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)pce.getOldValue();
-				IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
-				if(statusProvider.equals(bindedProvider)){
-					unbindStatusProvider(statusProvider);
+				
+				synchronized (MethodDiagramComposite.this) {
+					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
+					if(statusProvider.equals(bindedProvider)){
+						unbindStatusProvider(statusProvider);
+					}
 				}
+				
 			}
 		}
 	};
@@ -70,19 +74,24 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			if(IValidationStatusProvider.PROP_STATUS_ADDED.equals(evt.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)evt.getSource();
 				
-				IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
-				IValidationStatus status = (IValidationStatus)evt.getNewValue();
-				if(statusProvider.equals(bindedProvider)){
-					bindStatus(status);
+				synchronized (MethodDiagramComposite.this) {
+					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
+					IValidationStatus status = (IValidationStatus)evt.getNewValue();
+					if(statusProvider.equals(bindedProvider)){
+						bindStatus(status);
+					}
 				}
+				
 			}
 			if(IValidationStatusProvider.PROP_STATUS_REMOVED.equals(evt.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)evt.getSource();
 				
-				IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
-				IValidationStatus status = (IValidationStatus)evt.getOldValue();
-				if(statusProvider.equals(bindedProvider)){
-					unbindStatus(status);
+				synchronized (MethodDiagramComposite.this) {
+					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
+					IValidationStatus status = (IValidationStatus)evt.getOldValue();
+					if(statusProvider.equals(bindedProvider)){
+						unbindStatus(status);
+					}
 				}
 			}
 			refresh();
@@ -222,7 +231,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 	}
 	
-	public void bindStatusProvider(IValidationStatusProvider statusProvider){
+	public synchronized void bindStatusProvider(IValidationStatusProvider statusProvider){
 		
 		if(!isInitilized){
 			return;
@@ -247,7 +256,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		return providerID + status.getID();
 	}
 	
-	public void bindStatus(IValidationStatus status){
+	public synchronized void bindStatus(IValidationStatus status){
 		
 		if(!isInitilized){
 			return;
@@ -271,7 +280,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		statusBindings.put(getStatusDiagramUniqueID(status), status);
 	}
 	
-	public void unbindStatus(IValidationStatus status){
+	public synchronized void unbindStatus(IValidationStatus status){
 		
 		if(!isInitilized){
 			return;
@@ -290,7 +299,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		statusBindings.remove(getStatusDiagramUniqueID(status));
 	}
 	
-	public void unbindStatusProvider(IValidationStatusProvider statusProvider){
+	public synchronized void unbindStatusProvider(IValidationStatusProvider statusProvider){
 
 		if(!isInitilized){
 			return;
@@ -305,7 +314,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		providerBindings.remove(statusProvider.getID());
 	}
 	
-	public IValidationStatusProvider getActiveStatusProvider(String id){
+	public synchronized IValidationStatusProvider getActiveStatusProvider(String id){
 		return providerBindings.get(id);
 	}
 	

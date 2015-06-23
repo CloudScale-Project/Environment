@@ -21,13 +21,8 @@ public class ResultAlternative extends EditorInputFolder{
 	private final ConfAlternative.Type type;
 	
 	public ResultAlternative(IProject project, IFolder folder, ConfAlternative.Type type) {
-		super(project, folder);
+		super(project, folder, ToolchainUtils.ANALYSER_RES_ID);
 		this.type = type;		
-	}
-	
-	@Override
-	public String getID() {
-		return ToolchainUtils.ANALYSER_RES_ID;
 	}
 	
 	public ConfAlternative.Type getTypeEnum(){

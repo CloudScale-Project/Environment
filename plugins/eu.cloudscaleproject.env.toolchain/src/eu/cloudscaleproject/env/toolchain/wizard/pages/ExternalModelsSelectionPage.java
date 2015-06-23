@@ -33,6 +33,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -65,7 +66,13 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		
 		@Override
 		public void resourceChanged(IResourceDelta delta) {
-			refresh();
+			Display.getDefault().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					refresh();
+				}
+			});
 		}
 		
 		@Override

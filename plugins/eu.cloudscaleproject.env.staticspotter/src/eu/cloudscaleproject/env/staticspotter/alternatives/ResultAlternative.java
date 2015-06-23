@@ -16,11 +16,4 @@ public class ResultAlternative extends EditorInputFolder {
 		super (project, folder, ToolchainUtils.SPOTTER_STA_RES_ID);
 	}
 	
-	
-	@Override
-	public void create() {
-		super.create();
-	}
-	
-	
 }

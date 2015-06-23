@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
 
-public class GlobalInputAlternative extends EditorInputResource
+public class GlobalInputAlternative extends EditorInput
 {
 
 	private static GlobalInputAlternative globalInputAlternative;
@@ -43,11 +43,6 @@ public class GlobalInputAlternative extends EditorInputResource
 	}
 
 	private List<IProject> javaProjects;
-	
-	@Override
-	public void create() {
-		// TODO Auto-generated method stub
-	}
 
 	private static void initProjectListener()
 	{
@@ -109,7 +104,7 @@ public class GlobalInputAlternative extends EditorInputResource
 
 	private GlobalInputAlternative()
 	{
-		super();
+		super("Input alternative", ToolchainUtils.EXTRACTOR_INPUT_ID);
 		setJavaProjects(findJavaProjects());
 	}
 
@@ -151,11 +146,6 @@ public class GlobalInputAlternative extends EditorInputResource
 
 	private IProject project;
 
-	public String getID()
-	{
-		return ToolchainUtils.EXTRACTOR_INPUT_ID;
-	}
-
 	public void setProject(IProject project)
 	{
 		this.project = project;
@@ -164,60 +154,6 @@ public class GlobalInputAlternative extends EditorInputResource
 	public IProject getProject()
 	{
 		return this.project;
-	}
-
-	public IResource getResource()
-	{
-		return null;
-	}
-
-	public String getType()
-	{
-		return null;
-	}
-
-	public void save()
-	{
-	}
-
-	public void load()
-	{
-	}
-
-	public void delete()
-	{
-	}
-
-	public boolean isLoaded()
-	{
-		return true;
-	}
-
-	public boolean isDirty()
-	{
-		return false;
-	}
-
-	public String getProperty(String key)
-	{
-		return null;
-	}
-
-	public void setProperty(String key, String value)
-	{
-	}
-
-	public void copyFrom(IResource file)
-	{
-	}
-
-	public String getName()
-	{
-		return "Input alternative";
-	}
-
-	public void setName(String name)
-	{
 	}
 
 	public static abstract class ProjectListener implements IResourceChangeListener

@@ -68,6 +68,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public void unloadProxyResources(){
+		/*
 		List<IResource> loadedSubResources = getLoadedSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
@@ -89,6 +90,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
+		*/
 	}
 	
 	public EditingDomain getEditingDomain(){
@@ -184,19 +186,26 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected void doSave() {
 
 		super.doSave();
-		for(Resource res : new ArrayList<Resource>(editingDomain.getResourceSet().getResources())){
-			try {
-				if(!res.getContents().isEmpty()){
-					res.save(null);
+		for(IResource r : getLoadedSubResources()){
+			
+			if(r instanceof IFile){
+				try {
+					//do not save auto-loaded resources
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)r); 
+					
+					if(!res.getContents().isEmpty()){
+						res.save(null);
+					}
+				} catch (UnknownServiceException e){
+					//ignore - file can not be saved
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.severe("Conf alternative: "+ getResource().getLocation().toString() 
+									+" Can not save resource: "+ r.getFullPath().toString());
+					e.printStackTrace();
 				}
-			} catch (UnknownServiceException e){
-				//ignore - file can not be saved
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				logger.severe("Conf alternative: "+ getResource().getLocation().toString() 
-								+" Can not save resource: "+ res.getURI().toString());
-				e.printStackTrace();
 			}
+			
 		}
 
 		try {

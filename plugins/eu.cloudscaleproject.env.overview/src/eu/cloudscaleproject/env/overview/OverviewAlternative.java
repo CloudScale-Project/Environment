@@ -30,10 +30,7 @@ public class OverviewAlternative extends EditorInputEMF{
 	}
 	
 	@Override
-	public void create() {
-		
-		super.create();
-		
+	public void handleCreate() {		
 		IFile modelFile = getResource().getFile(OVERVIEW_MODEL_FILENAME);
 		IFile diagramFile = getResource().getFile(OVERVIEW_MODEL_DIAGRAM_FILENAME);
 				

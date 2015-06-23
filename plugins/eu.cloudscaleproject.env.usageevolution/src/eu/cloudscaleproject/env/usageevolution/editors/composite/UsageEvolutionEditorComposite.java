@@ -13,6 +13,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -45,7 +46,12 @@ public class UsageEvolutionEditorComposite extends InputEditorView implements IP
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			updatePlotCanvas();
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					updatePlotCanvas();
+				}
+			});
 		}
 	};
 

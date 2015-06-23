@@ -28,18 +28,11 @@ public class EditorInputFolder extends EditorInputResource{
 	
 	private EditorInputFile propertyInputFile;
 	private final IFolder folder;
-	
-	private final String validationID;
-	
+		
 	public static final String PROP_FILENAME = "prop.alt";
-	public static final String PROP_CHANGED = EditorInputFolder.class.getName() + ".propChanged";
 	public static final String PROP_SUB_RESOURCE_CHANGED = EditorInputFolder.class.getName() + ".propSubResChanged";
-	
-	public static final String DIRTY_CHANGED = EditorInputFolder.class.getName() + ".dirtyChanged";
-
-	private boolean isLoaded = false;
-	private boolean isDirty = false;
-	
+		
+	private final Object subResourcesLock = new Object();
 	private HashMap<String, List<IResource>> subResources = new HashMap<String, List<IResource>>();
 		
 	public EditorInputFolder(IProject project, IFolder folder) {
@@ -47,17 +40,16 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	public EditorInputFolder(IProject project, IFolder folder, String validationID) {
+		
+		super(folder, validationID);
+		
 		this.project = project;
 		this.folder = folder;
-		this.validationID = validationID;
 
 		IFile file = folder.getFile(PROP_FILENAME);
 		this.propertyInputFile = new EditorInputFile(project, file);
-	}
-	
-	@Override
-	public String getID() {
-		return validationID;
+		
+		initialize();
 	}
 	
 	public IProject getProject()
@@ -68,6 +60,16 @@ public class EditorInputFolder extends EditorInputResource{
 	@Override
 	public IFolder getResource(){
 		return folder;
+	}
+	
+	public void createSubResources(Runnable runnable) {
+		try{
+			saveInProgress = true;
+			runnable.run();
+		}
+		finally{
+			saveInProgress = false;
+		}
 	}
 	
 	@Override
@@ -93,56 +95,76 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	public void addSubResource(String key, IResource res){
-		String oldPath = propertyInputFile.getProperty(key);
+		
 		String path = "";
-		
-		if(isResourceInternal(res)){
-			path = getInternalResourcePath(res);
-		}
-		else{
-			path = getExternalResourcePath(res);
-		}
-		
-		if(oldPath != null){
-			String oldPathTrimed = oldPath.trim();
-			if(!oldPathTrimed.isEmpty()){
-				path = oldPathTrimed + "," + path;
+
+		synchronized (subResourcesLock) {
+			String oldPath = propertyInputFile.getProperty(key);
+			
+			if(isResourceInternal(res)){
+				path = getInternalResourcePath(res);
 			}
+			else{
+				path = getExternalResourcePath(res);
+			}
+			
+			if(oldPath != null){
+				String oldPathTrimed = oldPath.trim();
+				if(!oldPathTrimed.isEmpty()){
+					path = oldPathTrimed + "," + path;
+				}
+			}
+			
+			List<IResource> resources = subResources.get(key);
+			if(resources == null){
+				resources = new ArrayList<IResource>();
+				subResources.put(key, resources);
+			}
+			resources.add(res);
+			propertyInputFile.setProperty(key, path);
 		}
 		
-		List<IResource> resources = subResources.get(key);
-		if(resources == null){
-			resources = new ArrayList<IResource>();
-			subResources.put(key, resources);
-		}
-		resources.add(res);
-		
-		propertyInputFile.setProperty(key, path);
-		isDirty = true;
+		setDirty(true);
 		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
-		
 		updateStatusList();
 	}
 	
 	public void removeSubResource(String key, IResource res){
-		
-		List<IResource> resources = getSubResources(key);
-		IResource toRemove = null;
-		
-		for(IResource r : resources){
-			if(r.equals(res)){
-				toRemove = r;
+				
+		synchronized (subResourcesLock) {
+			List<IResource> resources = getSubResources(key);
+			IResource toRemove = null;
+			
+			for(IResource r : resources){
+				if(r.equals(res)){
+					toRemove = r;
+				}
 			}
+			
+			if(toRemove != null){
+				resources.remove(toRemove);
+			}
+			
+			doSetSubResources(key, resources);		
 		}
 		
-		if(toRemove != null){
-			resources.remove(toRemove);
-		}
-		setSubResources(key, resources);		
+		setDirty(true);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		
+		updateStatusList();
 	}
 	
 	public void setSubResource(String key, IResource res){
 		
+		doSetSubResource(key, res);
+		
+		setDirty(true);
+		
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		updateStatusList();
+	}
+	
+	private void doSetSubResource(String key, IResource res){
 		String path = "";
 		
 		if(isResourceInternal(res)){
@@ -152,23 +174,30 @@ public class EditorInputFolder extends EditorInputResource{
 			path = getExternalResourcePath(res);
 		}
 		
-		List<IResource> resources = subResources.get(key);
-		if(resources == null){
-			resources = new ArrayList<IResource>();
-			subResources.put(key, resources);
+		synchronized (subResourcesLock) {
+			List<IResource> resources = subResources.get(key);
+			if(resources == null){
+				resources = new ArrayList<IResource>();
+				subResources.put(key, resources);
+			}
+			resources.clear();
+			resources.add(res);
+			
+			propertyInputFile.setProperty(key, path);
 		}
-		resources.clear();
-		resources.add(res);
-		
-		propertyInputFile.setProperty(key, path);
-		isDirty = true;
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
-		
-		updateStatusList();
 	}
 	
 	public void setSubResources(String key, List<? extends IResource> resList){
 		
+		doSetSubResources(key, resList);
+		
+		setDirty(true);
+		
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		updateStatusList();
+	}
+	
+	private void doSetSubResources(String key, List<? extends IResource> resList){
 		String value = "";
 		
 		Iterator<? extends IResource> iter = resList.iterator();
@@ -189,19 +218,20 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		List<IResource> resources = subResources.get(key);
-		if(resources == null){
-			resources = new ArrayList<IResource>();
-			subResources.put(key, resources);
+		List<IResource> resources = null;
+		
+		synchronized (subResourcesLock) {
+			resources = subResources.get(key);
+			if(resources == null){
+				resources = new ArrayList<IResource>();
+				subResources.put(key, resources);
+			}
+		
+			resources.clear();
+			resources.addAll(resList);
+		
+			propertyInputFile.setProperty(key, value);
 		}
-		resources.clear();
-		resources.addAll(resList);
-		
-		propertyInputFile.setProperty(key, value);
-		isDirty = true;
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
-		
-		updateStatusList();
 	}
 	
 	private String getInternalResourcePath(IResource file)
@@ -294,8 +324,23 @@ public class EditorInputFolder extends EditorInputResource{
 		return out;
 	}
 	
-	@Override
-	public synchronized void save() {
+	protected void handleCreate() {
+		if(!folder.exists()){
+			try {
+				folder.create(true, true, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		propertyInputFile.handleCreate();
+		doCreate();
+	}
+	
+	protected void doCreate() {
+		//override
+	}
+	
+	protected void handleSave() {
 
 		if(!folder.exists()){
 			try {
@@ -305,67 +350,51 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		propertyInputFile.save();
+		propertyInputFile.handleSave();
 		doSave();
-		isDirty = false;
-		
-		pcs.firePropertyChange(PROP_SAVED, false, true);
+		setDirty(false);
 	}
 	
 	protected void doSave(){
 		//override
 	}
 
-	@Override
-	public synchronized void load() {
-
-		if(!folder.exists()){
-			throw new IllegalStateException("Can't load resource. Root folder does not exist: " + folder.getLocation().toString());
-		}
+	protected void handleLoad() {
 		
-		propertyInputFile.load();
+		propertyInputFile.handleLoad();
 		
-		subResources.clear();
-		for(String key : propertyInputFile.getKeys()){
-			List<IResource> resources = getSubResources(key);
-			if(!resources.isEmpty()){
-				subResources.put(key, resources);
+		synchronized (propertyInputFile) {
+			synchronized (subResourcesLock) {
+				subResources.clear();
+				for(String key : propertyInputFile.getKeys()){
+					List<IResource> resources = getSubResources(key);
+					if(!resources.isEmpty()){
+						subResources.put(key, resources);
+					}
+				}
 			}
 		}
 		
 		doLoad();
-		
-		isDirty = false;
-		isLoaded = true;
-		updateStatusList();
-		
-		pcs.firePropertyChange(PROP_LOADED, false, true);
+		setDirty(false);
+		updateStatusList();		
 	}
 	
 	protected void doLoad(){
 		//override
 	}
-	
-	@Override
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-
-	public void create() {
-		if(!folder.exists()){
-			try {
-				folder.create(true, true, null);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		propertyInputFile.save();
-	}
 
 	@Override
-	public synchronized final void delete() {
+	public void handleDelete() {
 		
 		doDelete();
+		
+		synchronized (propertyInputFile) {
+			synchronized (subResourcesLock) {
+				propertyInputFile.handleDelete();
+				subResources.clear();
+			}
+		}
 		
 		if (folder.exists()) {
 			try {
@@ -375,61 +404,76 @@ public class EditorInputFolder extends EditorInputResource{
 				e.printStackTrace();
 			}
 		}
-		pcs.firePropertyChange(PROP_DELETED, false, true);
 		updateStatusList();
 	}
 	
 	protected void doDelete(){
 		//override
 	}
-
-	@Override
-	public synchronized String getName(){
-		String name = getProperty(EditorInputFile.KEY_NAME);
-		if (name == null)
-		{
-			return getResource().getName();
-		}
-
-		return name;
-	}
-	
-	@Override
-	public synchronized final void setName(String name){
-		propertyInputFile.setName(name);
-		IValidationStatus status = getSelfStatus();
-		if(status != null){
-			status.setName(name);
-		}
-	}
-	
-	public synchronized String getProperty(String key){
-		return propertyInputFile.getProperty(key);
-	}
-	
-	public synchronized final void setProperty(String key, String value){
-		String old = getProperty(key);
-		propertyInputFile.setProperty(key, value);
-		pcs.firePropertyChange(PROP_CHANGED, old, value);
-	}
 	
 	@Override
 	public synchronized void copyFrom(IResource src) {
-
+		
 		if (!src.exists() || !(src instanceof IFolder))
 			throw new IllegalStateException();
 		
 		try {
+			saveInProgress = true;
 			if (this.folder.exists())
 				this.folder.delete(true, null);
 
 			src.copy(folder.getFullPath(), true, null);
 			
-		} catch (CoreException e) {
+		} 
+		catch (CoreException e) {
 			e.printStackTrace();
+		}
+		finally{
+			saveInProgress = false;
 		}
 		
 		load();
+	}
+
+	@Override
+	public String getName(){
+		synchronized (propertyInputFile) {
+			String name = getProperty(EditorInputFile.KEY_NAME);
+			if (name == null)
+			{
+				return getResource().getName();
+			}
+
+			return name;
+		}
+	}
+	
+	@Override
+	public final void setName(String name){
+		synchronized (propertyInputFile) {
+			propertyInputFile.setName(name);
+			IValidationStatus status = getSelfStatus();
+			if(status != null){
+				status.setName(name);
+			}
+		}
+	}
+	
+	public String getProperty(String key){
+		synchronized (propertyInputFile) {
+			return propertyInputFile.getProperty(key);
+		}
+	}
+	
+	public final void setProperty(String key, String value){
+		synchronized (propertyInputFile) {
+			propertyInputFile.setProperty(key, value);
+		}
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return super.isDirty() || propertyInputFile.isDirty();	
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -453,15 +497,6 @@ public class EditorInputFolder extends EditorInputResource{
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		propertyInputFile.removePropertyChangeListener(propertyName, listener);
 		super.removePropertyChangeListener(propertyName, listener);
-	}
-	
-	public void setDirty(boolean param){
-		pcs.firePropertyChange(DIRTY_CHANGED, this.isDirty, this.isDirty = param);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return isDirty || propertyInputFile.isDirty();
 	}
 	
 	////////////////////////////////////////////////////////////////////

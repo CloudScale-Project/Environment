@@ -19,7 +19,6 @@ import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 public class InputAlternativeComposite extends TitleEditorView {
 
 	private Text txtInput;
-	private GlobalInputAlternative editorInput;
 
 	/**
 	 * Create the composite.
@@ -28,7 +27,6 @@ public class InputAlternativeComposite extends TitleEditorView {
 	 */
 	public InputAlternativeComposite(Composite parent, int style, final GlobalInputAlternative editorInput) {
 		super(parent, SWT.NONE, editorInput);
-		this.editorInput = editorInput;
 		
 		getContainer().setLayout(new GridLayout(4, false));
 
@@ -58,7 +56,6 @@ public class InputAlternativeComposite extends TitleEditorView {
 		        	IProject project = (IProject) selection;
 		        	String url = project.getFullPath().toPortableString();
 		        	txtInput.setText(url);
-		        	editorInput.save();
 		        	//Util.addInput(InputAlternativeComposite.this.project, InputAlternativeComposite.this.name, url);
 		        }
 			}
@@ -74,7 +71,6 @@ public class InputAlternativeComposite extends TitleEditorView {
 	
 	@Override
 	public void update() {
-		editorInput.load();
 		load();
 		super.update();
 	}

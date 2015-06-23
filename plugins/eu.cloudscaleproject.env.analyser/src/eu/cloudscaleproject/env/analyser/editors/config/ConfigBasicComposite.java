@@ -1,8 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -51,6 +48,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
 	private DataBindingContext bindingContext = null;
 	
+	/*
 	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
 		@Override
@@ -60,6 +58,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			}
 		}
 	};
+	*/
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -156,14 +155,14 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			}
 		});
 		
-		this.alternative.addPropertyChangeListener(alternativeListener);
+		//this.alternative.addPropertyChangeListener(alternativeListener);
 		
 		this.addDisposeListener(new DisposeListener() {
 			
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				
-				alternative.removePropertyChangeListener(alternativeListener);
+				//alternative.removePropertyChangeListener(alternativeListener);
 				
 				if(bindingContext != null){
 					bindingContext.dispose();

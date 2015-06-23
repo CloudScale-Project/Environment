@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.swt.widgets.Display;
 
 public class ExplorerChangeNotifier implements IResourceChangeListener{
 	
@@ -28,37 +27,45 @@ public class ExplorerChangeNotifier implements IResourceChangeListener{
 		listeners.remove(r);
 	}
 	
+	private IResourceDelta findContainerDelta (IResource resource, IResourceDelta delta)
+	{
+		if (delta.getResource().equals(resource)) return delta;
+		if (delta.getAffectedChildren().length == 0) return null;
+		
+		for (IResourceDelta d : delta.getAffectedChildren())
+		{
+			IResourceDelta res = findContainerDelta(resource, d);
+			if (res != null) return res;
+		}
+		return null;
+	}
+	
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		if (event.getDelta() == null) {
 			return;
 		}
-		
+				
 		final IResourceDelta delta = event.getDelta();
 			
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (ExplorerChangeNotifier.this) {
-					for(ExplorerChangeListener listener : new HashSet<>(listeners)){
-						boolean update = false;
-						
-						IResource[] resources = listener.getResources();
-						if(resources != null){
-							for(IResource r : resources){
-								if(r != null && delta.findMember(r.getFullPath()) != null){									
-									update = true;
+			synchronized (ExplorerChangeNotifier.this) {
+				for(ExplorerChangeListener listener : new HashSet<>(listeners)){
+					
+					IResource[] resources = listener.getResources();
+					if(resources != null){
+						for(IResource r : resources){
+							if(r != null && delta.findMember(r.getFullPath()) != null){									
+								IResourceDelta rootDelta = findContainerDelta(r, delta);
+								if(rootDelta != null){
+									listener.resourceChanged(rootDelta);
 								}
 							}
 						}
-						
-						if(update){
-							listener.resourceChanged(delta);
-						}
 					}
+					
 				}
 			}
-		});
+			
 	}
 	
 }

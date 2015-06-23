@@ -21,8 +21,11 @@ public class StatusManager {
 	
 	public static final String PROP_STATUS_PROVIDER_ADDED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerAdded";
 	public static final String PROP_STATUS_PROVIDER_REMOVED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerRemoved";
+	public static final String PROP_VALIDATION_COMPLETED = "eu.cloudscaleproject.env.common.notification.StatusManager.validationCompleted";
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	
+	private final Object validationLock = new Object();
 	
 	//forward status provider changes to this prop. change support.
 	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
@@ -135,8 +138,16 @@ public class StatusManager {
 		return out;
 	}
 	
+	public void addPropertyChangeListener(String prop, PropertyChangeListener listener){
+		pcs.addPropertyChangeListener(prop, listener);
+	}
+	
 	public void addPropertyChangeListener(PropertyChangeListener listener){
 		pcs.addPropertyChangeListener(listener);
+	}
+	
+	public void removePropertyChangeListener(String prop, PropertyChangeListener listener){
+		pcs.removePropertyChangeListener(prop, listener);
 	}
 	
 	public void removePropertyChangeListener(PropertyChangeListener listener){
@@ -219,6 +230,7 @@ public class StatusManager {
 			validationTasks.add(r);
 			validationTasks.notify();
 		}
+		
 	}
 
 	private class ValidationRunnable implements Runnable
@@ -240,21 +252,25 @@ public class StatusManager {
 	
 	private void doValidate(IProject project, IValidationStatusProvider statusProvider) {
 		try{
-			if(project == null){
-				logger.severe("Project is NULL! Can not validate: " + statusProvider.toString());
-			}
-			
 			boolean validatorFound = false;
 			for (IResourceValidator v : getValidators()) {				
 				if (v.getID().equals(statusProvider.getID())) {
 					validatorFound = true;
-					v.validate(project, statusProvider);
+					
+					//limit only one validation at a time
+					synchronized (validationLock) {
+						v.validate(project, statusProvider);
+					}
+					
 				}
 			}
 	
 			if (!validatorFound) {
 				logger.warning("Validator not found or it is not registered in extension point! ToolID: "
 						+ statusProvider.getID());
+			}
+			else{
+				pcs.firePropertyChange(PROP_VALIDATION_COMPLETED, null, statusProvider);
 			}
 		}
 		catch(Exception e){

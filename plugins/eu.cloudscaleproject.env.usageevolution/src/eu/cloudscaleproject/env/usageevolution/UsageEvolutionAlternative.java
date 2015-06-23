@@ -22,8 +22,7 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 		super(project, folder, ToolchainUtils.USAGEEVOLUTION_ID);
 	}
 
-	@Override
-	public void create()
+	public void handleCreate()
 	{
 		IFile limboFile = getResource().getFile("limbo.dlim");
 
@@ -32,8 +31,6 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 		res.getContents().add(sequence);
 
 		setSubResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
-
-		super.create();
 	}
 
 	@Override

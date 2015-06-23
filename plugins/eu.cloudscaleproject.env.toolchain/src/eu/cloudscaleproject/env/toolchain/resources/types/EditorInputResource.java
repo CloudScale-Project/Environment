@@ -2,61 +2,200 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 
-public abstract class EditorInputResource implements IEditorInputResource{
+public abstract class EditorInputResource extends EditorInput implements IEditorInputResource{
 	
-	public static final String PROP_FIRE_DIRTY_STATE = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.fireDirtyState";
+	private static final Logger logger = Logger.getLogger(EditorInputResource.class.getName());
+	private PropertyChangeListener listener;
 	
-	public static final String PROP_SAVED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propSaved";
-	public static final String PROP_LOADED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propLoaded";
-	public static final String PROP_DELETED = "eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource.propDeleted";
+	protected final IResource resource;
 	
-	private final Object statusLock = new Object();
+	private boolean isLoaded = false;
+	private boolean isDirty = false;
 	
-	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	private final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
+	protected boolean createInProgress = false;
+	protected boolean saveInProgress = false;
+	protected boolean loadInProgress = false;
+	protected boolean deleteInProgress = false;
 	
-	private IValidationStatus selfStatus;
+	protected abstract void handleCreate();
+	protected abstract void handleSave();
+	protected abstract void handleLoad();
+	protected abstract void handleDelete();
+	
+	public EditorInputResource(IResource resource){
+		this(resource, null);
+	}
+	
+	public EditorInputResource(IResource resource, String validatorID) {
+		super("No name", validatorID);
 		
-	public EditorInputResource() {
-		this.pcs.addPropertyChangeListener(new PropertyChangeListener() {
+		if(resource == null){
+			throw new NullPointerException("Resource can not be NULL!");
+		}
+		
+		this.resource = resource;
+	}
+	
+	protected void initialize()
+	{
+		if (listener == null)
+		{
+			listener = new PropertyChangeListener() {
+				
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (EditorInputResource.this.getID() != null)
+						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+				}
+			};
 			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (EditorInputResource.this.getID() != null)
-					StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
-			}
-		});
+			this.addPropertyChangeListener(listener);
+		}
 	}
 	
-	public void addStatus(IValidationStatus status){
-		synchronized (statusLock) {
-			statusSet.add(status);
-		}
-		pcs.firePropertyChange(PROP_STATUS_ADDED, null, status);
+	public IResource getResource(){
+		return resource;
 	}
 	
-	public void removeStatus(IValidationStatus status){
-		synchronized (statusLock) {
-			statusSet.remove(status);
-		}
-		pcs.firePropertyChange(PROP_STATUS_REMOVED, status, null);
+	public boolean isCreateInProgress() {
+		return createInProgress;
+	}
+	public boolean isSaveInProgress() {
+		return saveInProgress;
+	}
+	public boolean isLoadInProgress() {
+		return loadInProgress;
+	}
+	public boolean isDeleteInProgress() {
+		return deleteInProgress;
 	}
 	
 	@Override
-	public String getID() {
-		//Override in derived classes
-		return null;
+	public void setDirty(boolean value) {
+		pcs.firePropertyChange(PROP_DIRTY, this.isDirty, this.isDirty = value);
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return isDirty;
+	}
+	
+	@Override
+	public boolean isLoaded() {
+		return isLoaded;
+	}
+	
+	@Override
+	public final synchronized void create() {
+		try{
+			createInProgress = true;
+			logger.info("Creating resource: " + resource.getFullPath());
+			handleCreate();
+		}
+		finally{
+			createInProgress = false;
+		}
+		
+		save();
+		isLoaded = true;		
+	}
+	
+	@Override
+	public final synchronized void save() {
+		
+		if(createInProgress){
+			return;
+		}
+		
+		try{
+			saveInProgress = true;
+			logger.info("Saving resource: " + resource.getFullPath());
+			handleSave();
+			setDirty(false);
+		}
+		finally{
+			saveInProgress = false;
+		}
+		
+		pcs.firePropertyChange(PROP_SAVED, false, true);
+	}
+	
+	@Override
+	public final synchronized void load() {
+		
+		//skip load operation if it is triggered from save or create
+		if(createInProgress || saveInProgress || deleteInProgress){
+			return;
+		}
+		
+		if(!resource.exists()){
+			return;
+		}
+		
+		IResource res = getResource();
+		if(res == null){
+			throw new IllegalStateException("Can't load resource. Root folder is NULL!");
+		}
+		
+		if(!res.exists()){
+			throw new IllegalStateException("Can't load resource. Root folder does not exist: " + res.getLocation().toString());
+		}
+		
+
+		if(isDirty){
+			boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
+					"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
+			if(!load){
+				return;
+			}
+			
+		}
+				
+		try {
+			loadInProgress = true;
+			logger.info("Loading resource: " + resource.getFullPath());
+			handleLoad();
+			setDirty(false);
+			isLoaded = true;
+		}
+		finally{
+			loadInProgress = false;
+		}
+		
+		pcs.firePropertyChange(PROP_LOADED, false, true);
+	}
+	
+	@Override
+	public final synchronized void delete() {
+		
+		if(!resource.exists()){
+			return;
+		}
+		
+		try{
+			deleteInProgress = true;
+			logger.info("Deleting resource: " + resource.getFullPath());
+			handleDelete();
+		}
+		finally{
+			deleteInProgress = false;
+		}
+		pcs.firePropertyChange(PROP_DELETED, false, true);
+	}
+	
+	@Override
+	public final String getID() {
+		return validatorID;
 	}
 	
 	public IProject getProject() {
@@ -72,39 +211,11 @@ public abstract class EditorInputResource implements IEditorInputResource{
 	}
 	
 	@Override
-	public IValidationStatus[] getStatus() {
-		IValidationStatus[] out = null;
-		synchronized (statusLock) {
-			out = statusSet.toArray(new IValidationStatus[statusSet.size()]);
-		}
-		return out;
-	}
-	
-	@Override
-	public IValidationStatus[] getStatus(String id) {
-		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
-		
-		synchronized (statusLock) {
-			for(IValidationStatus status : statusSet){
-				if(id.equals(status.getID())){
-					out.add(status);
-				}
-			}
-		}
-		
-		return out.toArray(new IValidationStatus[out.size()]);
-	}
-	
-	@Override
 	public void validate() {
 		if(!isLoaded()){
 			load();
 		}
 		StatusManager.getInstance().validate(getProject(), this);
-	}
-	
-	public void fireDirtyState(){
-		pcs.firePropertyChange(PROP_FIRE_DIRTY_STATE, null, isDirty());
 	}
 	
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {

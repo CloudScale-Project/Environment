@@ -120,23 +120,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 				ToolchainUtils.ANALYSER_RES_ID));
 
 		this.type = type;
-		
-		Experiment exp = retrieveExperimentModel();
-		
-		//Sets initial settings. 
-		//For already existing alternatives, those configurations are overridden by the load() method. 
-		
-		initializeCommon(exp);
-
-		if (Type.NORMAL.equals(type)){
-			initializeNormal(exp);
-		} 
-		else if (Type.CAPACITY.equals(type)){
-			initializeCapacity(exp);
-		} 
-		else if (Type.SCALABILITY.equals(type)){
-			initializeScalability(exp);
-		}
 	}
 	
 	public Type getTypeEnum(){
@@ -1063,6 +1046,26 @@ public class ConfAlternative extends AbstractConfigAlternative
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Standard alternative load/save/delete methods
+	
+	@Override
+	public void handleCreate() {		
+		Experiment exp = retrieveExperimentModel();
+		
+		//Sets initial settings. 
+		//For already existing alternatives, those configurations are overridden by the load() method. 
+		
+		initializeCommon(exp);
+
+		if (Type.NORMAL.equals(type)){
+			initializeNormal(exp);
+		} 
+		else if (Type.CAPACITY.equals(type)){
+			initializeCapacity(exp);
+		} 
+		else if (Type.SCALABILITY.equals(type)){
+			initializeScalability(exp);
+		}
+	}
 
 	@Override
 	protected void doLoad()

@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public class EditorInputFile extends EditorInputResource{
@@ -26,29 +27,19 @@ public class EditorInputFile extends EditorInputResource{
 	protected Properties source = new Properties();
 	protected final IProject project;
 	protected final IFile file;
-	
-	private final String validationID;
-	
-	private boolean isLoaded = false;
-	private boolean isDirty = false;
-	
+			
 	public EditorInputFile(IProject project, IFile file) {
 		this(project, file, null);
 	}
 	
 	public EditorInputFile(IProject project, IFile file, String validationID) {
+		
+		super(file, validationID);
+		
 		this.project = project;
 		this.file = file;
-		this.validationID = validationID;
 		
-		if(file.exists()){
-			load();
-		}
-	}
-	
-	@Override
-	public String getID() {
-		return validationID;
+		initialize();
 	}
 	
 	@Override
@@ -61,9 +52,40 @@ public class EditorInputFile extends EditorInputResource{
 		return file;
 	}
 	
+	public String getProperty(String key){
+		synchronized (source) {
+			return source.getProperty(key);
+		}
+	}
+	
+	public String[] getKeys(){
+		synchronized (source) {
+			Set<Object> keys = source.keySet();
+			return keys.toArray(new String[keys.size()]);
+		}
+	}
+	
+	public void setProperty(String key, String value){
+		String old = null;
+		synchronized (source) {
+			old = getProperty(key);
+			if (value == null) 
+			{
+				source.remove(key);
+			}
+			else
+			{
+				source.setProperty(key, value);
+			}
+		}
+		
+		setDirty(true);
+		pcs.firePropertyChange(key, old, value);
+	}
+	
 	@Override
-	public synchronized  String getName(){
-		String prop = source.getProperty(KEY_NAME);
+	public String getName(){
+		String prop = getProperty(KEY_NAME);
 		if(prop == null){
 			return file.getName();
 		}
@@ -71,51 +93,18 @@ public class EditorInputFile extends EditorInputResource{
 	}
 	
 	@Override
-	public synchronized  void setName(String name){
+	public void setName(String name){
 		String old = getName();
-		source.setProperty(KEY_NAME, name);
-		isDirty = true;
-		pcs.firePropertyChange(KEY_NAME, old, name);
-	}
-	
-	public synchronized String getProperty(String key){
-		return source.getProperty(key);
-	}
-	
-	public synchronized String[] getKeys(){
-		Set<Object> keys = source.keySet();
-		return keys.toArray(new String[keys.size()]);
-	}
-	
-	public synchronized  void setProperty(String key, String value){
-		String old = getProperty(key);
-		if (value == null) 
-		{
-			source.remove(key);
-		}
-		else
-		{
-			source.setProperty(key, value);
-		}
+		setProperty(KEY_NAME, name);
 		
-		isDirty = true;
-		pcs.firePropertyChange(key, old, value);
+		setDirty(true);
+		pcs.firePropertyChange(PROP_NAME, old, name);
 	}
 	
-	@Override
-	public void create() {
-		//override
-	}
-	
-	@Override
-	public synchronized final void save() {
+	protected void handleCreate() {
 		
-		if(!isDirty){
-			return;
-		}
-
 		if (!file.exists()) {
-			source.setProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
+			setProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
 			try (InputStream is = new ByteArrayInputStream(new byte[0])) {
 				file.create(is, true, null);
 			} catch (CoreException e) {
@@ -124,12 +113,17 @@ public class EditorInputFile extends EditorInputResource{
 				e1.printStackTrace();
 			}
 		}
+	}
+	
+	protected void handleSave() {
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {
-			source.setProperty(KEY_TIMESTAMP_MODIFIED, ""+System.currentTimeMillis());
-			source.storeToXML(os, "");
-			isDirty = false;
+			setProperty(KEY_TIMESTAMP_MODIFIED, ""+System.currentTimeMillis());
+			synchronized (source) {
+				source.storeToXML(os, "");
+			}
+			setDirty(false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -144,11 +138,42 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
-	@Override
-	public synchronized  final void copyFrom(IResource file) {
+	protected void handleLoad() {
 
-		if(isDirty){
-			logger.info("copyFrom(): EditorInputFile has unsaved changes! Resource: " + getResource().getFullPath());
+		try (InputStream is = file.getContents(true)) {
+			synchronized (source) {
+				source.loadFromXML(is);
+			}
+			setDirty(false);
+		} catch (InvalidPropertiesFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e1) {
+			e1.printStackTrace();
+		}		
+	}
+	
+	protected void handleDelete() {
+		if (file.exists()) {
+			try {
+				file.delete(true, null);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public synchronized final void copyFrom(IResource file) {
+		
+		if(isDirty()){
+			boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
+					"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
+			if(!load){
+				return;
+			}
 		}
 		
 		if(!(file instanceof IFile)){
@@ -161,65 +186,18 @@ public class EditorInputFile extends EditorInputResource{
 		}
 
 		try (InputStream is = ((IFile)file).getContents(true)) {
-			source.loadFromXML(is);
-			isDirty = false;
-
-		} catch (InvalidPropertiesFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (CoreException e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	@Override
-	public synchronized  final void load() {
-		
-		if(isDirty){
-			logger.info("load(): EditorInputFile has unsaved changes! Resource: " + getResource().getFullPath());
-		}
-
-		if (!file.exists()) {
-			logger.warning("File resource does not exist, Can not load properties!");
-			return;
-		}
-
-		try (InputStream is = file.getContents(true)) {
-			source.loadFromXML(is);
-			isDirty = false;
-
-		} catch (InvalidPropertiesFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (CoreException e1) {
-			e1.printStackTrace();
-		}
-		
-		isLoaded = true;
-	}
-	
-	@Override
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-	
-	@Override
-	public boolean isDirty() {
-		return isDirty;
-	}
-
-	@Override
-	public synchronized  void delete() {
-		if (file.exists()) {
-			try {
-				file.delete(true, null);
-				isDirty = true;
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			synchronized (source) {
+				source.loadFromXML(is);
 			}
+			setDirty(false);
+
+		} catch (InvalidPropertiesFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e1) {
+			e1.printStackTrace();
 		}
 	}
+
 }
