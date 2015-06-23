@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_EtjxQHPAEeS3b6FdlQPPqA">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_J94BEHPQEeS3b6FdlQPPqA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="commands:Command" xmi:id="_Tsc_MHPQEeS3b6FdlQPPqA" elementId="eu.cloudscaleproject.env.usageevolution.command.openSelectionDialog" commandName="ShowUsageAltValidation" description="Open alternative selection dialog"/>
+    <elements xsi:type="commands:Command" xmi:id="_Tsc_MHPQEeS3b6FdlQPPqA" elementId="eu.cloudscaleproject.env.overview.command.openStatusSelectionDialog" commandName="Open alternative status selection dialog" description="Open alternative status selection dialog"/>
     <elements xsi:type="commands:Command" xmi:id="_VwsAcHPTEeS3b6FdlQPPqA" elementId="eu.cloudscaleproject.env.usageevolution.command.openeditor" commandName="openDashboardEditor" description="Opens Dashboard editor for the Usage evolution"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_L85SgHPQEeS3b6FdlQPPqA" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
