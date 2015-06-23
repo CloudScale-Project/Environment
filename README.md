@@ -1,4 +1,5 @@
 <img src="http://www.cloudscale-project.eu/static/img/logo-CloudScale.png" alt="http://wwww.cloudscale-project.eu" width=200> 
+
 =========
 
 The CloudScale Environment is a desktop application that integrates the different tools of the CloudScale project, 
@@ -6,6 +7,14 @@ namely the Dynamic and Static Spotters, the Analyzer and the Extractor, while dr
 This desktop application can be installed and used in any personal computer running Java 6+, including Windows, MacOS and Linux.
 
 Bundled versions are available here: http://cloudscale-project.github.io/Environment/
+
+Services
+-----------------------------------------
+Service | Status | Description
+------- | ------ | -----------
+Travis | [![Build Status](https://travis-ci.org/CloudScale-Project/Environment.svg?branch=master)](https://travis-ci.org/CloudScale-Project/Environment) | Mvn compile
+Codacy |  [![Codacy Badge](https://www.codacy.com/project/badge/f08dd5ce953b4a35a7d01e93505365f1)](https://www.codacy.com/app/jure-polutnik/Environment) | Code Quality
+Jenkins | Official CI | http://cloudscale.xlab.si/jenkins/job/eu.cloudscaleproject.env/
 
 Build and Run CloudScale Environment
 -----------------------------------------
