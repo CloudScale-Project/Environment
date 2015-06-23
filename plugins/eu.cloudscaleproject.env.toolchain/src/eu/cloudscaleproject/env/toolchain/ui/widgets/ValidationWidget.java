@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.toolchain.ui.widgets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -17,7 +16,6 @@ import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ValidationStatusHelper;

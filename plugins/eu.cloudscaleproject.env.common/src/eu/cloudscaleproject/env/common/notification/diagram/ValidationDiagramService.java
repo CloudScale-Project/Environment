@@ -19,20 +19,25 @@ public class ValidationDiagramService {
 		
 		assert(project != null);
 		
-		IValidationDiagram diagram = diagrams.get(project);
-		if(diagram == null){
-			if(diagramFactory != null){
-				diagram = diagramFactory.createDiagram(null);
-				diagram.setProject(project);
-				diagrams.put(project, diagram);
+		try{
+			IValidationDiagram diagram = diagrams.get(project);
+			if(diagram == null){
+				if(diagramFactory != null){
+					diagram = diagramFactory.createDiagram(null);
+					diagram.setProject(project);
+					diagrams.put(project, diagram);
+				}
+				else{
+					deferredRequests.add(project);
+				}
 			}
-			else{
-				deferredRequests.add(project);
+			
+			if(diagram != null){
+				diagram.show();
 			}
 		}
-		
-		if(diagram != null){
-			diagram.show();
+		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 	

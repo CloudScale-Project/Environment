@@ -22,7 +22,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment;

@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding,
  org.eclipse.emf.databinding,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
- org.eclipse.e4.core.di
+ org.eclipse.e4.core.di,
+ org.eclipse.e4.core.contexts
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: eu.cloudscaleproject.env.overview

@@ -1,11 +1,7 @@
 package org.scaledl.overview.diagram.wizard;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
-import org.scaledl.overview.diagram.Util;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
 
 public class NewProjectWizard implements NewProjectExtension{

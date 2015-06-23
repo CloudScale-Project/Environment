@@ -911,7 +911,7 @@
       </commands>
     </nodes>
     <nodes xsi:type="method:Container" id="_YVJPYC61EeSADewJHO2y3w" name="ScaleDL">
-      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview" name="Overview model" description="Overview model digram is used to model cloud environment architecture and its deployment." tooltip="Overview model of a cloud environemnt." colorForeground="000000" colorBackground="a1c9d5" commandId="org.scaledl.overview.diagram.open" next="/1/@links.2" previous="/1/@links.1">
+      <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview" name="Overview model" description="Overview model digram is used to model cloud environment architecture and its deployment." tooltip="Overview model of a cloud environemnt." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.overview.command.openValiadtionStatus" next="/1/@links.2" previous="/1/@links.1">
         <commands id="_KUsqwBMzEeWrnYazqRxW7w" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.overview.command.openinputdialog"/>
       </children>
       <children xsi:type="method:Section" id="architectureTemplates" name="Architecture templates" colorForeground="000000" colorBackground="a1c9d5"/>
