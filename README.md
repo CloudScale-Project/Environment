@@ -1,6 +1,5 @@
-<img src="http://www.cloudscale-project.eu/static/img/logo-CloudScale.png" alt="http://wwww.cloudscale-project.eu" width=200> 
+[<img src="http://www.cloudscale-project.eu/static/img/logo-CloudScale.png">](http://wwww.cloudscale-project.eu)
 
-=========
 
 The CloudScale Environment is a desktop application that integrates the different tools of the CloudScale project, 
 namely the Dynamic and Static Spotters, the Analyzer and the Extractor, while driving the user through the flow of the CloudScale Model.
