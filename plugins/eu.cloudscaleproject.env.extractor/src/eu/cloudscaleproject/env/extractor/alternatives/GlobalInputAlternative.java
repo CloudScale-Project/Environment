@@ -41,6 +41,8 @@ public class GlobalInputAlternative extends EditorInputResource
 
 		return globalInputAlternative;
 	}
+
+	private List<IProject> javaProjects;
 	
 	@Override
 	public void create() {
@@ -76,6 +78,8 @@ public class GlobalInputAlternative extends EditorInputResource
 						protected IStatus run(IProgressMonitor monitor)
 						{
 							getInstance().validate();
+
+							GlobalInputAlternative.getInstance().setJavaProjects(findJavaProjects());
 							return Status.OK_STATUS;
 						}
 					};
@@ -85,7 +89,7 @@ public class GlobalInputAlternative extends EditorInputResource
 				//
 				////////////////////////
 				
-
+				GlobalInputAlternative.getInstance().setJavaProjects(findJavaProjects());
 				getInstance().validate();
 
 				Display.getDefault().asyncExec(new Runnable()
@@ -106,11 +110,24 @@ public class GlobalInputAlternative extends EditorInputResource
 	private GlobalInputAlternative()
 	{
 		super();
+		setJavaProjects(findJavaProjects());
 	}
 
 	private static String JAVA_NATURE_ID = "org.eclipse.jdt.core.javanature";
-
-	public static List<IProject> getJavaProjects()
+	
+	private void setJavaProjects(List<IProject> javaProjects)
+	{
+		List<IProject> old = this.javaProjects;
+		this.javaProjects = javaProjects;
+		this.pcs.firePropertyChange("javaProjects", old, this.javaProjects);
+	}
+	
+	public List<IProject> getJavaProjects ()
+	{
+		return this.javaProjects;
+	}
+	
+	private static List<IProject> findJavaProjects()
 	{
 		List<IProject> javaProjects = new ArrayList<>();
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

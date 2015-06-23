@@ -1,12 +1,15 @@
 package eu.cloudscaleproject.env.extractor.editors.composites;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -15,6 +18,8 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -35,6 +40,22 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 {
 	private DataBindingContext m_bindingContext;
 	private ConfingAlternative configAlternative;
+	
+	private final PropertyChangeListener projectListener = new PropertyChangeListener()
+	{
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+			Display.getDefault().asyncExec(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					refresh();
+				}
+			});
+		}
+	};
 
 	/**
 	 * Create the composite.
@@ -104,6 +125,16 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		tabFolder.setSelection(0);
 
 		m_bindingContext = initDataBindings();
+		
+		GlobalInputAlternative.getInstance().addPropertyChangeListener("javaProjects",projectListener);
+		this.addDisposeListener(new DisposeListener()
+		{
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+                GlobalInputAlternative.getInstance().removePropertyChangeListener(projectListener);
+			}
+		});
 	}
 	
 	private ComboViewer comboViewer;
@@ -112,7 +143,9 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	public void refresh()
 	{
 		//this.configAlternative.load();
-		m_bindingContext.updateTargets();
+		if (m_bindingContext != null)
+			m_bindingContext.dispose();
+		m_bindingContext = initDataBindings();
 	}
 	
 	@Override
@@ -130,7 +163,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 		comboViewer.setContentProvider(listContentProvider);
 		//
-		IObservableList selfList = Properties.selfList(IProject.class).observe(GlobalInputAlternative.getJavaProjects());
+		IObservableList selfList = PojoProperties.list("javaProjects").observe(GlobalInputAlternative.getInstance());
 		comboViewer.setInput(selfList);
 		//
 		IObservableValue observeSingleSelectionComboViewer_1 = ViewerProperties.singleSelection().observe(comboViewer);

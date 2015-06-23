@@ -5,10 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.somox.common.MetricsDetails;
 import org.somox.common.MetricsDetails.GroupID;
 import org.somox.common.SoMoXProjectPreferences;
 import org.somox.configuration.SoMoXConfiguration;
+
+import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 
 public class SomoxConfigurationUtil
 {
@@ -108,6 +111,33 @@ public class SomoxConfigurationUtil
 		return new LinkedList<>(mapMetrics.keySet());
 	}
 	
+	
+	
+	public static SoMoXConfiguration loadSomoxConfiguration (ConfingAlternative r)
+	{
+		SoMoXConfiguration somoxConfiguration = createDefaultSomoxConfiguration();
+		for(String metric : mapMetrics.keySet())
+		{
+			try
+			{
+				double value = Double.parseDouble(r.getProperty(metric));
+				setValueByKey(metric, value, somoxConfiguration);
+			}
+			catch(NullPointerException e){} // Expected
+			catch(NumberFormatException e){
+				Logger.getLogger(SomoxConfigurationUtil.class).warn(
+						"Unable to parse SomoxConfiguration metric value: "+metric);
+			} 
+		}
+		
+		return somoxConfiguration;
+	}
+	
+
+	public static void persistValue (String key, double value, ConfingAlternative alternative)
+	{
+		alternative.setProperty(key, ""+value);
+	}
 	
 	public static void setValueByKey (String key, double value, SoMoXConfiguration conf)
 	{

@@ -31,34 +31,15 @@ public class ConfingAlternative extends AbstractConfigAlternative
 
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
-		// TODO Auto-generated constructor stub
 		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID,
 				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_INPUT_ID),
 				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_RES_ID)
 				);
 		
-		_temp_init();
+		initSomoxModel();
+		initModiscoModel();
 	}
 
-	private void _temp_init()
-	{
-		// Should be persisted
-		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
-
-		this.modiscoConfiguration = LaunchModelUtils.createLaunchConfigurationModel();
-		this.modiscoConfiguration.setOpenModelAfterDiscovery(false);
-
-		String ID_DISCOVERER = "org.eclipse.modisco.java.composition.discoverer.fromProject";
-		DiscovererDescription discoverer = IDiscoveryManager.INSTANCE.getDiscovererDescription(ID_DISCOVERER);
-		this.modiscoConfiguration.setDiscoverer(discoverer);
-
-		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
-				discoverer.getParameterDefinition("SERIALIZE_TARGET"),
-				Boolean.TRUE);
-		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
-				discoverer.getParameterDefinition("DEEP_ANALYSIS"),
-				Boolean.TRUE);
-	}
 
 	public SoMoXConfiguration getSomoxConfiguration()
 	{
@@ -91,8 +72,50 @@ public class ConfingAlternative extends AbstractConfigAlternative
 	@Override
 	public synchronized void load()
 	{
-		// TODO Auto-generated method stub
 		super.load();
+		loadSomoxModel();
+	}
+	
+	private void loadSomoxModel ()
+	{
+		this.somoxConfiguration = SomoxConfigurationUtil.loadSomoxConfiguration(this);
+	}
+	
+	private void initSomoxModel ()
+	{
+		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
+	}
+
+	private void initModiscoModel ()
+	{
+		String ID_DISCOVERER = "org.eclipse.modisco.java.composition.discoverer.fromProject";
+		this.modiscoConfiguration = LaunchModelUtils.createLaunchConfigurationModel();
+		this.modiscoConfiguration.setOpenModelAfterDiscovery(false);
+
+		DiscovererDescription discoverer = IDiscoveryManager.INSTANCE.getDiscovererDescription(ID_DISCOVERER);
+		this.modiscoConfiguration.setDiscoverer(discoverer);
+
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
+				discoverer.getParameterDefinition("SERIALIZE_TARGET"),
+				Boolean.TRUE);
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
+				discoverer.getParameterDefinition("DEEP_ANALYSIS"),
+				Boolean.TRUE);
+		
+/*		IFile modisco = getResource().getFile("modisco.conf");
+		Resource emfResource = ExplorerProjectPaths.getEmfResource(getResourceSet(), modisco);
+		emfResource.getContents().add(modiscoConfiguration);
+		emfResource.getContents().add(discoverer);
+		
+		try
+		{
+			emfResource.save(Collections.EMPTY_MAP);
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setSubResource(KEY_MODISCO_CONFIG, modisco);*/
 	}
 
 	@Override

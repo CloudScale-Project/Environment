@@ -112,10 +112,15 @@ public class SomoxConfigurationComposite extends Composite
 				WidgetProperties.text().observe(lblValue), 
 				WidgetProperties.selection().observe(scale), 
 				null, null);
+		
+		
+		
 
 	    scale.addListener(SWT.Selection, new Listener() {
 	        public void handleEvent(Event event) {
+	        	// TODO: Use batch executor
 	        	SomoxConfigurationUtil.setValueByKey(metricKey, scale.getSelection()/100d, alternative.getSomoxConfiguration());
+	        	SomoxConfigurationUtil.persistValue(metricKey, scale.getSelection()/100d, alternative);
 	        }
 	      });
 	    
