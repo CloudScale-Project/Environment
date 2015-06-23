@@ -3,101 +3,44 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
     <title>CloudScale Environment by CloudScale-Project</title>
   </head>
 
   <body>
+
     <header>
-      <div class="inner">
+      <div class="container">
         <h1>CloudScale Environment</h1>
         <h2></h2>
-        <a href="https://github.com/CloudScale-Project/Environment" class="button"><small>View project on</small>GitHub</a>
+
+        <section id="downloads">
+          <a href="https://github.com/CloudScale-Project/Environment/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/CloudScale-Project/Environment/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/CloudScale-Project/Environment" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
       </div>
     </header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h3>
-<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h3>
+    <div class="container">
+      <section id="main_content">
+        <h3>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h3>
 
 <p>The CloudScale Environment is a desktop application that integrates the different tools of the CloudScale project, namely the Dynamic and Static Spotters, the Analyzer and the Extractor, while driving the user through the flow of the CloudScale Model. This desktop application can be installed and used in any personal computer running Java 6+, including Windows, MacOS and Linux.</p>
 
-          <h3>
-<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Architecture</h3>
-<p align="center">
-    <img src="images/cloudscale-environment.png" />
-</p>
-<p>
-The picture above shows the high-level CloudScale Environment architecture. Its main purpose is to modularize the whole application and split it into three loosely coupled clusters: the Platform, Tools and GUI. Each cluster is further split into main components that are modularized and can be extended to provide additional functionalities. The Platform is the base of the CloudScale Environment responsible of providing extension points (Tool chain) for integrating the Tools, and presenting the information and actions required to the GUI (Graphical User Interface). 
-</p>
-          <h3>
-<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Rich Client Platform</h3>
-<p>
-From the development point of view, the aim of the CloudScale Environment is to be as extensible and customizable as possible. To achieve this, the CloudScale Environment is built on top of the Eclipse Rich Client Platform, which fully supports the OSGi standard
-</p>
-<p align="center">
-    <img src="images/cloudscale-rcp.png" />
-</p>
-<p>
-Picture above represents the main components of the CloudScale Environment in relation to Eclipse RCP and additional plugins that are built on top of the platform, which are supported by the Eclipse foundation project (Eclipse open-source community). The bottom three layers represent the core of the Eclipse RCP followed by the Compatibility Layer that supports integration of older plug-ins into Eclipse 4 applications (Palladio and Archimetrix are based on Eclipse 3 RCP). 
-</p>
 <h3>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>CloudScale Environment is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<ul>
-<li><a href="https://github.com/jurepolutnik" class="user-mention">Jure Polutnik</a></li>
-<li><a href="https://github.com/vcucek" class="user-mention">Vito Cucek</a></li></ul>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/CloudScale-Project/Environment/zipball/master" class="button">
-            Source code
-          </a>
-          <a href="http://www.cloudscale-project.eu/media/filer_public/2015/05/26/cloudscaleenvironment-userguide.pdf" class="button">
-            User guide
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-linux.gtk.x86.zip" class="button">
-            Linux 32-bit
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-linux.gtk.x86_64.zip" class="button">
-            Linux 64-bit
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-win32.win32.x86.zip" class="button">
-            Windows 32-bit
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-win32.win32.x86_64.zip" class="button">
-            Windows 64-bit
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-macosx.cocoa.x86.zip" class="button">
-            Mac OSX 32-bit
-          </a>
-          <a href="http://cloudscale.xlab.si/cse/products/release/eu.cloudscaleproject.env.master.product-macosx.cocoa.x86_64.zip" class="button">
-            Mac OSX 64-bit
-          </a>
-          
-          
-          <p class="repo-owner"><a href="https://github.com/CloudScale-Project/Environment"></a> is maintained by <a href="https://github.com/CloudScale-Project">CloudScale-Project</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+<p><a href="https://github.com/jurepolutnik" class="user-mention">@jurepolutnik</a>
+<a href="https://github.com/vcucek" class="user-mention">@vcucek</a></p>
+      </section>
     </div>
 
-  
+    
   </body>
 </html>
