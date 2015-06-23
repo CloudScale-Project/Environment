@@ -215,10 +215,21 @@ public class StatusManager {
 	}
 	
 	public void validate(IProject project, IValidationStatusProvider statusProvider){
+		
+		if(statusProvider == null){
+			logger.severe("Status provider is NULL! Can not validate!");
+			return;
+		}
+		
 		doValidate(project, statusProvider);
 	}
 	
 	public void validateAsync(final IProject project, final IValidationStatusProvider statusProvider){
+		
+		if(statusProvider == null){
+			logger.severe("Status provider is NULL! Can not validate!");
+			return;
+		}
 
 		synchronized (validationTasks) {
 			for (ValidationRunnable r : validationTasks)

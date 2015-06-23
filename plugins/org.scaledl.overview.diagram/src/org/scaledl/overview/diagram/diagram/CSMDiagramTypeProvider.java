@@ -2,14 +2,13 @@ package org.scaledl.overview.diagram.diagram;
 
 import java.util.EventObject;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
-import org.scaledl.overview.diagram.util.OverviewDiagramUtil;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
@@ -33,12 +32,12 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		super.postInit();
 		
 		final IProject project = ExplorerProjectPaths.getProjectFromEmfResource(getDiagram().eResource());
-		IFile file = ExplorerProjectPaths.getFileFromEmfResource(OverviewDiagramUtil.getOverviewModel(getDiagram()).eResource());
+		IContainer altFolder = ExplorerProjectPaths.getFileFromEmfResource(getDiagram().eResource()).getParent();
 		
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
 		
 		if(rp != null){
-			final IEditorInputResource resource = rp.getResource(file);
+			final IEditorInputResource resource = rp.getResource(altFolder);
 					
 			ValidationDiagramService.showStatus(project, resource);
 			StatusManager.getInstance().validateAsync(project, resource);

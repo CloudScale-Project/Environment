@@ -70,12 +70,12 @@ public class OverviewSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Transform PCM (new)";
+			return "Transform PCM (New Overview)";
 		}
 
 		@Override
 		public String getDescription() {
-			return "Creates new alternative from existing extractor configuration.";
+			return "Creates new Overview alternative from existing extractor configuration.";
 		}
 	}
 
@@ -96,7 +96,7 @@ public class OverviewSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Tranfrorm PCM (import)";
+			return "Tranfrorm PCM (Existing Overview)";
 		}
 
 		@Override
