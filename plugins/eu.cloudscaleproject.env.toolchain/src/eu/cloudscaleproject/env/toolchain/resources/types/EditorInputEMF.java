@@ -68,7 +68,6 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public void unloadProxyResources(){
-		/*
 		List<IResource> loadedSubResources = getLoadedSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
@@ -90,7 +89,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
-		*/
 	}
 	
 	public EditingDomain getEditingDomain(){

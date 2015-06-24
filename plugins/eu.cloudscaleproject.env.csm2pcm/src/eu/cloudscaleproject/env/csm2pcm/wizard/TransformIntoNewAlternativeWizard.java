@@ -70,16 +70,24 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		String name = nameSelectionPage.getName();
 
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-		InputAlternative newInputAlternative = (InputAlternative)rp.createNewResource(name, null);
+		final InputAlternative newInputAlternative = (InputAlternative)rp.createNewResource(name, null);
 		
-		Resource[] selectedResources = importSelectionPage.getSelectedResources();
-		ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources);
+		newInputAlternative.createSubResources(new Runnable() {
+			
+			@Override
+			public void run() {
+				Resource[] selectedResources = importSelectionPage.getSelectedResources();
+				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources);
 
-		for (Resource resource : selectedResources)
-		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			newInputAlternative.addSubResourceModel(f);
-		}
+				for (Resource resource : selectedResources)
+				{
+					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
+					newInputAlternative.addSubResourceModel(f);
+				}
+				
+			}
+		});
+		
 		newInputAlternative.save();
 		
 		OpenAlternativeUtil.openAlternative(newInputAlternative);

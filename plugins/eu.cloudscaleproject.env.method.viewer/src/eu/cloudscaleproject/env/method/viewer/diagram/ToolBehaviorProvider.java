@@ -40,6 +40,7 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 		pos[1] = pos[1];
 	}
 	
+	@SuppressWarnings("unused")
 	private void advancePositionMin(int[] pos){
 		pos[0] = pos[0]-4;
 		pos[1] = pos[1];
@@ -144,7 +145,9 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 					imageRenderingDecorator.setY(position[1]);
 					decorators.add(imageRenderingDecorator);
 					
-					advancePositionRequ(position);
+					//show only first
+					//advancePositionRequ(position);
+					break;
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -181,7 +184,9 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 					imageRenderingDecorator.setY(position[1]);
 					decorators.add(imageRenderingDecorator);
 					
-					advancePositionMin(position);
+					//show only first
+					//advancePositionRequ(position);
+					break;
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
@@ -245,7 +250,9 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
-				advancePositionMin(position);
+				//show only first
+				//advancePositionRequ(position);
+				break;
 			}
 		}
 		
@@ -260,7 +267,9 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
-				advancePositionMin(position);
+				//show only first
+				//advancePositionRequ(position);
+				break;
 			}
 		}
 	}
