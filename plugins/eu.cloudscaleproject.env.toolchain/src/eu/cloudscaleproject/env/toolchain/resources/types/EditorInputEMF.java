@@ -189,9 +189,9 @@ public class EditorInputEMF extends EditorInputFolder{
 			if(r instanceof IFile){
 				try {
 					//do not save auto-loaded resources
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)r); 
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)r, false); 
 					
-					if(!res.getContents().isEmpty()){
+					if(res!= null && !res.getContents().isEmpty()){
 						res.save(null);
 					}
 				} catch (UnknownServiceException e){
