@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -105,7 +106,7 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	protected IStatus doRun(IProgressMonitor m)
+	protected IStatus doRun(IProgressMonitor m) throws CoreException
 	{
 		InputAlternative selectedEditorInput = (InputAlternative) getInputAlternative();
 
@@ -119,7 +120,7 @@ public class ConfigAlternative extends AbstractConfigAlternative
 			} catch (UICoreException e)
 			{
 				e.printStackTrace();
-				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error when preparign DS job.", e);
+				throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error when preparign DS job.", e));
 			}
 		} else
 		{

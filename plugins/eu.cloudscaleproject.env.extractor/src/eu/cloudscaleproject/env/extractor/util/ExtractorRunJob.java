@@ -13,7 +13,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -47,7 +46,7 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
-public class ExtractorRunJob extends Job
+public class ExtractorRunJob 
 {
 	public static final String SOMOX_BASE_NAME = "internal_architecture_model";
 	private IProject project;
@@ -57,22 +56,13 @@ public class ExtractorRunJob extends Job
 
 	public ExtractorRunJob(ConfingAlternative configInputFolder)
 	{
-		super("Extractor run");
-
 		this.configFolder = configInputFolder;
 		this.project = configInputFolder.getProject();
 		this.projectToExtract = configInputFolder.getExtractedProject();
-
-		setUser(true);
 	}
 	
-
-	@Override
-	public IStatus run(IProgressMonitor monitor)
+	public IStatus run(IProgressMonitor monitor) throws CoreException
 	{
-		// Infinite progress: -1
-		monitor.beginTask("Extracting PCM from source code.", -1);
-
 		try
 		{
 			this.resultAlternative = createResultPersistenceFolder();
@@ -80,19 +70,16 @@ public class ExtractorRunJob extends Job
 			runSomox(monitor);
 			initializeDiagrams();
 			resultAlternative.save();
-			resultAlternative.load();
 
 		} catch (CoreException e)
 		{
-			e.printStackTrace();
-			return e.getStatus();
+			throw e;
 		}
 		catch (Exception e)
 		{
-			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Message : "+e.getMessage());
+			Status s = new Status(Status.ERROR, Activator.PLUGIN_ID, "Message : "+e.getMessage());
+			throw new CoreException(s);
 		}
-
-		monitor.done();
 
 		return Status.OK_STATUS;
 	}
@@ -182,6 +169,7 @@ public class ExtractorRunJob extends Job
 			IFile repositoryModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".repository");
 			IFile systemModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".system");
 			IFile sourceDecoratorFile = somoxFolder.getFile(SOMOX_BASE_NAME+".sourcecodedecorator");
+
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryModelFile);
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, systemModelFile);
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, sourceDecoratorFile);

@@ -189,6 +189,7 @@ public class Util
 	public static Collection<ASGAnnotation> loadAnnotations(ResultAlternative resultFolder)
 	{
 		IFile resultFile = (IFile)resultFolder.getSubResource(ResultAlternative.KEY_PSA);
+		if (resultFile == null) return null;
 		
 		URI resultUri = URI.createPlatformResourceURI(resultFile.getFullPath().toString(), true);
 

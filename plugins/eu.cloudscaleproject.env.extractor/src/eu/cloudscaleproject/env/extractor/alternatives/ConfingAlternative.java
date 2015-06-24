@@ -4,8 +4,10 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.modisco.infra.discovery.catalog.DiscovererDescription;
 import org.eclipse.modisco.infra.discovery.core.IDiscoveryManager;
 import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
@@ -31,15 +33,13 @@ public class ConfingAlternative extends AbstractConfigAlternative
 
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID,
-				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_INPUT_ID),
-				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_RES_ID)
-				);
-		
+		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
+				ToolchainUtils.EXTRACTOR_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
+				ToolchainUtils.EXTRACTOR_RES_ID));
+
 		initSomoxModel();
 		initModiscoModel();
 	}
-
 
 	public SoMoXConfiguration getSomoxConfiguration()
 	{
@@ -75,18 +75,18 @@ public class ConfingAlternative extends AbstractConfigAlternative
 		super.doLoad();
 		loadSomoxModel();
 	}
-	
-	private void loadSomoxModel ()
+
+	private void loadSomoxModel()
 	{
 		this.somoxConfiguration = SomoxConfigurationUtil.loadSomoxConfiguration(this);
 	}
-	
-	private void initSomoxModel ()
+
+	private void initSomoxModel()
 	{
 		this.somoxConfiguration = SomoxConfigurationUtil.createDefaultSomoxConfiguration();
 	}
 
-	private void initModiscoModel ()
+	private void initModiscoModel()
 	{
 		String ID_DISCOVERER = "org.eclipse.modisco.java.composition.discoverer.fromProject";
 		this.modiscoConfiguration = LaunchModelUtils.createLaunchConfigurationModel();
@@ -95,33 +95,29 @@ public class ConfingAlternative extends AbstractConfigAlternative
 		DiscovererDescription discoverer = IDiscoveryManager.INSTANCE.getDiscovererDescription(ID_DISCOVERER);
 		this.modiscoConfiguration.setDiscoverer(discoverer);
 
-		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
-				discoverer.getParameterDefinition("SERIALIZE_TARGET"),
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, discoverer.getParameterDefinition("SERIALIZE_TARGET"),
 				Boolean.TRUE);
-		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, 
-				discoverer.getParameterDefinition("DEEP_ANALYSIS"),
+		LaunchModelUtils.setDiscoveryParameterValue(this.modiscoConfiguration, discoverer.getParameterDefinition("DEEP_ANALYSIS"),
 				Boolean.TRUE);
-		
-/*		IFile modisco = getResource().getFile("modisco.conf");
-		Resource emfResource = ExplorerProjectPaths.getEmfResource(getResourceSet(), modisco);
-		emfResource.getContents().add(modiscoConfiguration);
-		emfResource.getContents().add(discoverer);
-		
-		try
-		{
-			emfResource.save(Collections.EMPTY_MAP);
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		setSubResource(KEY_MODISCO_CONFIG, modisco);*/
+
+		/*
+		 * IFile modisco = getResource().getFile("modisco.conf"); Resource
+		 * emfResource = ExplorerProjectPaths.getEmfResource(getResourceSet(),
+		 * modisco); emfResource.getContents().add(modiscoConfiguration);
+		 * emfResource.getContents().add(discoverer);
+		 * 
+		 * try { emfResource.save(Collections.EMPTY_MAP); } catch (IOException
+		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
+		 * setSubResource(KEY_MODISCO_CONFIG, modisco);
+		 */
 	}
 
 	@Override
-	protected IStatus doRun(IProgressMonitor monitor)
+	protected IStatus doRun(IProgressMonitor monitor) throws CoreException
 	{
-		ExtractorRunJob job = new ExtractorRunJob(this);
-		return job.run(monitor);
+		ExtractorRunJob job = new ExtractorRunJob(ConfingAlternative.this);
+		job.run(monitor);
+
+		return Status.OK_STATUS;
 	}
 }

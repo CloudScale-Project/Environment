@@ -95,7 +95,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	private final String ERR_INVALID_INPUT_ALTERNATIVE = "eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.invalidInputAlt";
 
-	public enum Type {
+	public enum Type
+	{
 		NORMAL, CAPACITY, SCALABILITY;
 
 		public String toString()
@@ -114,52 +115,61 @@ public class ConfAlternative extends AbstractConfigAlternative
 		};
 	}
 
-	public ConfAlternative(IProject project, IFolder folder, Type type){
+	public ConfAlternative(IProject project, IFolder folder, Type type)
+	{
 		super(project, folder, ToolchainUtils.ANALYSER_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.ANALYSER_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.ANALYSER_RES_ID));
 
 		this.type = type;
 	}
-	
-	public Type getTypeEnum(){
+
+	public Type getTypeEnum()
+	{
 		String type = getType();
-		if (type == null){
+		if (type == null)
+		{
 			return null;
 		}
 		return Type.valueOf(type);
 	}
-	
-	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt){
-		if (Type.NORMAL.equals(type)){
+
+	private void configureInput(Experiment exp, InitialModel initialModel, InputAlternative inputAlt)
+	{
+		if (Type.NORMAL.equals(type))
+		{
 			configureNormal(exp, initialModel);
-		} 
-		else if (Type.CAPACITY.equals(type)){
+		} else if (Type.CAPACITY.equals(type))
+		{
 			configureCapacity(exp, initialModel);
-		} 
-		else if (Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			configureScalability(exp, initialModel);
 		}
 	}
 
-	private void configureTool(SimuLizarConfiguration simulizarConf){
-		if (Type.NORMAL.equals(type)){
-		}
-		else if (Type.CAPACITY.equals(type)){
+	private void configureTool(SimuLizarConfiguration simulizarConf)
+	{
+		if (Type.NORMAL.equals(type))
+		{
+		} else if (Type.CAPACITY.equals(type))
+		{
 			configureToolCapacity(simulizarConf);
-		} 
-		else if (Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			configureToolScalability(simulizarConf);
 		}
 	}
 
-	public InputAlternative getInputAlternative(){
+	public InputAlternative getInputAlternative()
+	{
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
 		return (InputAlternative) rp.getResource(res);
 	}
 
-	public boolean setInputAlternative(InputAlternative inputAlt){
+	public boolean setInputAlternative(InputAlternative inputAlt)
+	{
 		Experiment exp = retrieveExperimentModel();
 		InitialModel initialModel = exp.getInitialModel();
 
@@ -170,19 +180,20 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 
 		inputAlt.validate();
-		if (inputAlt.getSelfStatus().isDone()){
+		if (inputAlt.getSelfStatus().isDone())
+		{
 			getSelfStatus().removeWarning(ERR_INVALID_INPUT_ALTERNATIVE);
-		} 
-		else{
-			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, 
-					IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
+		} else
+		{
+			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
 			setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 			setDirty(true);
 			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 			return false;
 		}
 
-		if (initialModel == null){
+		if (initialModel == null)
+		{
 			initialModel = ExperimentsFactory.eINSTANCE.createInitialModel();
 			exp.setInitialModel(initialModel);
 		}
@@ -445,8 +456,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		return out;
 	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods for retrieving sub-resources
 
 	public List<MeasuringPointRepository> getMeasuringPointRepositories()
@@ -517,7 +528,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		return out;
 	}
-	
+
 	public List<UsageEvolution> getUsageEvolutions()
 	{
 		List<UsageEvolution> out = new ArrayList<UsageEvolution>();
@@ -540,10 +551,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		return out;
 	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Helper methods for creating and returning base models 
-	
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Helper methods for creating and returning base models
+
 	public Experiment retrieveExperimentModel()
 	{
 		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
@@ -587,128 +598,147 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		return (Experiment) firstExperiment;
 	}
-	
-	public MeasuringPointRepository retrieveMeasuringPointRepository(){
+
+	public MeasuringPointRepository retrieveMeasuringPointRepository()
+	{
 		if (getMeasuringPointRepositories().isEmpty())
 		{
 			MeasuringPointRepository measureRep = MeasuringpointFactory.eINSTANCE.createMeasuringPointRepository();
 			createEMFResource("analyser.measuringpoint", ToolchainUtils.KEY_FILE_MESURPOINTS, measureRep);
 			return measureRep;
-		}
-		else{
+		} else
+		{
 			return getMeasuringPointRepositories().get(0);
 		}
 	}
-	
-	public ServiceLevelObjectiveRepository retrieveSLORepository(){
-		if (getSLORepositories().isEmpty()){
+
+	public ServiceLevelObjectiveRepository retrieveSLORepository()
+	{
+		if (getSLORepositories().isEmpty())
+		{
 			ServiceLevelObjectiveRepository sloRep = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjectiveRepository();
 			createEMFResource("analyser.slo", ToolchainUtils.KEY_FILE_SLO, sloRep);
 			return sloRep;
-		}
-		else{
+		} else
+		{
 			return getSLORepositories().get(0);
 		}
 	}
-	
-	public MonitorRepository retrieveMonitorRepository(){
-		if (getMonitorRepositories().isEmpty()){
+
+	public MonitorRepository retrieveMonitorRepository()
+	{
+		if (getMonitorRepositories().isEmpty())
+		{
 			MonitorRepository monitorRep = MonitorRepositoryFactory.eINSTANCE.createMonitorRepository();
 			createEMFResource("analyser.monitorrepository", ToolchainUtils.KEY_FILE_MONITOR, monitorRep);
 			return monitorRep;
-		}
-		else{
+		} else
+		{
 			return getMonitorRepositories().get(0);
 		}
 	}
-	
-	public UsageEvolution retrieveUsageEvolution(){
-		if (getUsageEvolutions().isEmpty()){
+
+	public UsageEvolution retrieveUsageEvolution()
+	{
+		if (getUsageEvolutions().isEmpty())
+		{
 			UsageEvolution usageEvolution = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
 			createEMFResource("analyser.usageevolution", ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageEvolution);
 			return usageEvolution;
-		}
-		else{
+		} else
+		{
 			return getUsageEvolutions().get(0);
 		}
 	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Helper methods for retrieving referenced models from the Experiments model
-	
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Helper methods for retrieving referenced models from the Experiments
+	// model
+
 	public InitialModel getActiveInitialModel()
 	{
 		Experiment exp = retrieveExperimentModel();
 		return exp != null ? exp.getInitialModel() : null;
 	}
-	
+
 	public MonitorRepository getActiveMonitorRepository()
 	{
 		InitialModel im = getActiveInitialModel();
-		if(im == null){
+		if (im == null)
+		{
 			return null;
 		}
-		
+
 		return im.getMonitorRepository();
 	}
-	
+
 	public ServiceLevelObjectiveRepository getActiveSLORepository()
 	{
 		InitialModel im = getActiveInitialModel();
-		if(im == null){
+		if (im == null)
+		{
 			return null;
 		}
-		
+
 		return im.getServiceLevelObjectives();
 	}
-	
+
 	public UsageEvolution getActiveUsageEvolutionModel()
 	{
 		InitialModel im = getActiveInitialModel();
-		if(im == null){
+		if (im == null)
+		{
 			return null;
 		}
-		
+
 		return im.getUsageEvolution();
 	}
-	
-	public List<UsageScenario> getActiveScenarios(){
+
+	public List<UsageScenario> getActiveScenarios()
+	{
 		List<UsageScenario> scenarios = new ArrayList<UsageScenario>();
-		
+
 		Experiment exp = retrieveExperimentModel();
-		if(exp.getInitialModel() != null){
+		if (exp.getInitialModel() != null)
+		{
 			UsageModel usageModel = exp.getInitialModel().getUsageModel();
-			if(usageModel != null){
+			if (usageModel != null)
+			{
 				scenarios.addAll(usageModel.getUsageScenario_UsageModel());
 			}
 		}
 		return scenarios;
 	}
-	
-	public List<MeasurementSpecification> getActiveMeasurementSpecifications(){
+
+	public List<MeasurementSpecification> getActiveMeasurementSpecifications()
+	{
 		List<MeasurementSpecification> out = new ArrayList<MeasurementSpecification>();
 
 		MonitorRepository mr = getActiveInitialModel() != null ? getActiveInitialModel().getMonitorRepository() : null;
-		if (mr == null){
+		if (mr == null)
+		{
 			return out;
 		}
-		for (Monitor monitor : mr.getMonitors()){
+		for (Monitor monitor : mr.getMonitors())
+		{
 			out.addAll(monitor.getMeasurementSpecifications());
 		}
 		return out;
 	}
-	
-	public UsageModel getActiveUsageModel(){
-		InitialModel initialModel = getActiveInitialModel();		
-		if(initialModel == null){
+
+	public UsageModel getActiveUsageModel()
+	{
+		InitialModel initialModel = getActiveInitialModel();
+		if (initialModel == null)
+		{
 			return null;
 		}
 		return initialModel.getUsageModel();
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Alternative initialization and configuration methods
-	
+
 	private void initializeCommon(Experiment exp)
 	{
 
@@ -745,7 +775,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// create measuring point repository
 		{
 			MeasuringPointRepository measureRep = retrieveMeasuringPointRepository();
-			if(measureRep.getMeasuringPoints().isEmpty()){
+			if (measureRep.getMeasuringPoints().isEmpty())
+			{
 				usageMeasurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();
 				measureRep.getMeasuringPoints().add(usageMeasurePoint);
 			}
@@ -754,7 +785,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// create monitor
 		{
 			MonitorRepository monitorRep = retrieveMonitorRepository();
-		
+
 			Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 			monitor.setEntityName("Usage response time monitor");
 
@@ -765,16 +796,19 @@ public class ConfAlternative extends AbstractConfigAlternative
 			interval.setIntervall(10.0);
 
 			MetricDescription metric = null;
-			for (MetricDescription md : getMetricDescriptions()){
-				if ("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId())){
+			for (MetricDescription md : getMetricDescriptions())
+			{
+				if ("_6rYmYs7nEeOX_4BzImuHbA".equals(md.getId()))
+				{
 					metric = md;
 				}
 			}
 
-			if (metric == null){
+			if (metric == null)
+			{
 				DialogUtils.openError("Required metric description (Response time) can not be found!");
-			} 
-			else{
+			} else
+			{
 				specification.setMetricDescription(metric);
 			}
 			specification.setTemporalRestriction(interval);
@@ -789,21 +823,23 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// create slo
 		{
 			ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
-			if(!sloRep.getServicelevelobjectives().isEmpty()){
+			if (!sloRep.getServicelevelobjectives().isEmpty())
+			{
 				getActiveInitialModel().setServiceLevelObjectives(sloRep);
-			}
-			else{
+			} else
+			{
 				getActiveInitialModel().setServiceLevelObjectives(null);
 			}
 		}
-		
-		//create usage evolution
+
+		// create usage evolution
 		{
 			UsageEvolution ue = retrieveUsageEvolution();
-			if(!ue.getUsages().isEmpty()){
+			if (!ue.getUsages().isEmpty())
+			{
 				getActiveInitialModel().setUsageEvolution(ue);
-			}
-			else{
+			} else
+			{
 				getActiveInitialModel().setUsageEvolution(null);
 			}
 		}
@@ -811,7 +847,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	private void initializeNormal(Experiment exp)
 	{
-		
+
 	}
 
 	private void initializeCapacity(Experiment exp)
@@ -837,7 +873,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		resSet.getResource(variations, true);
-		
+
 		// create SLO
 		{
 			ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
@@ -871,7 +907,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
 		resSet.getResource(variations, true);
-		
+
 		// create SLO
 		{
 			ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
@@ -880,10 +916,12 @@ public class ConfAlternative extends AbstractConfigAlternative
 			sloRep.getServicelevelobjectives().add(slo);
 		}
 	}
-	
-	private void configureNormal(Experiment exp, InitialModel initialModel){
+
+	private void configureNormal(Experiment exp, InitialModel initialModel)
+	{
 		UsageEvolution ue = retrieveUsageEvolution();
-		if(!ue.getUsages().isEmpty()){
+		if (!ue.getUsages().isEmpty())
+		{
 			getActiveInitialModel().setUsageEvolution(ue);
 		}
 	}
@@ -917,7 +955,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 		if (!monitorRep.getMonitors().isEmpty())
 		{
 			Monitor monitor = monitorRep.getMonitors().get(0);
-			if (usmp != null){
+			if (usmp != null)
+			{
 				monitor.setMeasuringPoint(usmp);
 			}
 
@@ -989,7 +1028,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 			DialogUtils.openWarning("Variation has been removed! Please create and configure it manually.");
 		}
 
-	
 		ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
 		if (!sloRep.getServicelevelobjectives().isEmpty())
 		{
@@ -1003,8 +1041,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 			ut.setThresholdLimit(Measure.valueOf(500.0, Unit.valueOf("s")));
 			// TODO: set limit to 'HardThreshold'
 			slo.setUpperThreshold(ut);
-		}
-		else{
+		} else
+		{
 			DialogUtils.openWarning("Service level objective has been removed! Please create and configure it manually.");
 		}
 	}
@@ -1043,26 +1081,29 @@ public class ConfAlternative extends AbstractConfigAlternative
 		simulizarConf.getStopConditions().add(msc);
 		simulizarConf.getStopConditions().add(tsc);
 	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Standard alternative load/save/delete methods
-	
+
 	@Override
-	public void doCreate() {		
+	public void doCreate()
+	{
 		Experiment exp = retrieveExperimentModel();
-		
-		//Sets initial settings. 
-		//For already existing alternatives, those configurations are overridden by the load() method. 
-		
+
+		// Sets initial settings.
+		// For already existing alternatives, those configurations are
+		// overridden by the load() method.
+
 		initializeCommon(exp);
 
-		if (Type.NORMAL.equals(type)){
+		if (Type.NORMAL.equals(type))
+		{
 			initializeNormal(exp);
-		} 
-		else if (Type.CAPACITY.equals(type)){
+		} else if (Type.CAPACITY.equals(type))
+		{
 			initializeCapacity(exp);
-		} 
-		else if (Type.SCALABILITY.equals(type)){
+		} else if (Type.SCALABILITY.equals(type))
+		{
 			initializeScalability(exp);
 		}
 	}
@@ -1115,8 +1156,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	protected IStatus doRun(IProgressMonitor monitor)
-	{ 
+	protected IStatus doRun(IProgressMonitor monitor) throws CoreException
+	{
 		this.getInputAlternative().save();
 
 		this.configureResults();
@@ -1126,25 +1167,18 @@ public class ConfAlternative extends AbstractConfigAlternative
 		ILaunchConfigurationType lct = mgr
 				.getLaunchConfigurationType("org.palladiosimulator.experimentautomation.application.launchConfigurationType");
 
-		try
-		{
-			// System.out.println(ca.getExperiments().getURI().toString());
-			ILaunchConfigurationWorkingCopy lcwc = lct
-					.newInstance((IFolder) this.getResource(), this.getResource().getName());
-			lcwc.setAttribute("Experiment Automation", this.retrieveExperimentModel().eResource().getURI().toString());
-			lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
-			lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
-			lcwc.doSave();
+		ILaunchConfigurationWorkingCopy lcwc = lct.newInstance((IFolder) this.getResource(), this.getResource().getName());
+		lcwc.setAttribute("Experiment Automation", this.retrieveExperimentModel().eResource().getURI().toString());
+		lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
+		lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
+		lcwc.doSave();
 
-			lcwc.launch(ILaunchManager.DEBUG_MODE, monitor);
-			return Status.OK_STATUS;
-		} catch (CoreException e1)
-		{
-			return new Status(Status.ERROR, "", e1.getLocalizedMessage());
-		}
+		lcwc.launch(ILaunchManager.DEBUG_MODE, monitor);
+		return Status.OK_STATUS;
 	}
-	
+
 	private SimpleDateFormat sdf_name = new SimpleDateFormat("hh:mm:ss");
+
 	public void configureResults()
 	{
 		Experiment exp = retrieveExperimentModel();

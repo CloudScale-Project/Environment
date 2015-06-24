@@ -6,6 +6,9 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -16,6 +19,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 {
 	protected ResourceProvider resultsResourceProvider;
 	protected ResourceProvider inputResourceProvider;
+	private IStatus lastRunStatus;
 
 	public AbstractConfigAlternative(IProject project, IFolder folder, String validationID, 
 			ResourceProvider inputResourceProvider,
@@ -79,26 +83,37 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	@Override
 	public final IStatus run(IProgressMonitor monitor)
 	{
-		IStatus status = doRun(monitor);
+		save();
+		
+		try
+		{
+			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
+			{
+				@Override
+				public void run(IProgressMonitor monitor) throws CoreException
+				{
+					lastRunStatus = doRun(monitor);
+				}
+			}, monitor);
+		} catch (CoreException e)
+		{
+			e.printStackTrace();
+			lastRunStatus = e.getStatus();
+		}
 
-		if (status == null || status.isOK())
+		if (lastRunStatus == null || lastRunStatus.isOK())
 		{
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 
 			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
-
 			IEditorInputResource lastResult = resources.get(resources.size() - 1);
-			// BUG : Retrieves different object!?
-			//lastResult.setProperty("CONFIG_NAME", getName());
-			//lastResult.save();
 			setLastResult(lastResult);
-
 			save();
 		}
 
-		return status;
+		return lastRunStatus;
 	}
 
-	abstract protected IStatus doRun(IProgressMonitor monitor);
+	abstract protected IStatus doRun(IProgressMonitor monitor) throws CoreException;
 
 }

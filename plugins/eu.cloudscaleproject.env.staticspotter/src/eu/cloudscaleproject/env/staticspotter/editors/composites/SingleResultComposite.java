@@ -43,7 +43,7 @@ public class SingleResultComposite extends TitleEditorView implements IRefreshab
 	private void init()
 	{
 			this.annotations = Util.loadAnnotations(this.resultFolder);
-			if (annotationView != null)
+			if (annotations != null && annotationView != null)
                 annotationView.loadAnnotations(annotations);
 	}
 
