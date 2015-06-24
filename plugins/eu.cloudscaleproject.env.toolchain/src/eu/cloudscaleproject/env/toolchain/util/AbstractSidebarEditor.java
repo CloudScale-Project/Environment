@@ -642,8 +642,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		
 		compositeSidebarList.redraw();
 		compositeSidebarList.layout(true);
-		
-		newEditorItem.select();
 	}
 	
 	public void removeSidebarEditor(IEditorInput editorInput){
