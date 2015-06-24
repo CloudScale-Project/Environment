@@ -224,7 +224,7 @@ public interface CorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>AV Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyId="true" keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueDataType="org.eclipse.emf.ecore.EJavaObject" valueRequired="true"
 	 * @generated
 	 */
@@ -258,7 +258,7 @@ public interface CorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>AE Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyId="true" keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueType="org.eclipse.emf.ecore.EObject" valueRequired="true"
 	 * @generated
 	 */

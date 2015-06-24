@@ -93,7 +93,7 @@ public class OperationItemProvider extends EntityItemProvider {
 				 getString("_UI_PropertyDescriptor_description", "_UI_Operation_parameters_feature", "_UI_Operation_type"),
 				 ApplicationPackage.Literals.OPERATION__PARAMETERS,
 				 true,
-				 true,
+				 false,
 				 false,
 				 null,
 				 null,

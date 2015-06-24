@@ -2,6 +2,7 @@ package org.scaledl.overview.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
@@ -189,7 +190,8 @@ public class OverviewSpecificationUtil {
 
 		if (systemDescriptor == null) {
 			
-			systemDescriptor = EcoreUtil.copy(descriptor);	
+			systemDescriptor = EcoreUtil.copy(descriptor);
+			systemDescriptor.setId(UUID.randomUUID().toString());
 			overview.getDefinition().getDescriptors().add(systemDescriptor);
 			copyUncontainedDescriptors(systemDescriptor);
 		}
