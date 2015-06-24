@@ -254,7 +254,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			});
 			
 			initButton();
-			initComposite();
 		}
 		
 		private void checkWidgets(){
