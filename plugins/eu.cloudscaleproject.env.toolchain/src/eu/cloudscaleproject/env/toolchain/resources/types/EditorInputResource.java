@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -132,6 +133,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public final synchronized void load() {
+		long time = System.currentTimeMillis();
 		
 		//skip load operation if it is triggered from save or create
 		if(createInProgress || saveInProgress || deleteInProgress){
@@ -153,12 +155,18 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		
 
 		if(isDirty){
-			boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
-					"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
-			if(!load){
-				return;
-			}
+			// FIXME: possible ThreadLock - save is triggered from UI and load from another thread
+			//boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
+			//		"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
+			//if(!load){
+			//	return;
+			//}
 			
+			if (Display.getDefault().getThread() != Thread.currentThread())
+			{
+                logger.warning("FIXME: Load requested from NonGUI thread, while state was dirty -- possible ThreadLock. Thread="+Thread.currentThread().getName());
+                return;
+			}
 		}
 				
 		try {
@@ -172,7 +180,8 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			loadInProgress = false;
 		}
 		
-		pcs.firePropertyChange(PROP_LOADED, false, true);
+		//pcs.firePropertyChange(PROP_LOADED, false, true);
+		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
 	}
 	
 	@Override
