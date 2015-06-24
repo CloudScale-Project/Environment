@@ -37,16 +37,15 @@ public class InputAlternative extends EditorInputEMF
 
 	public void addSubResourceModel(IResource res)
 	{
-
-		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-
 		String key = getToolchainKey(res);
+
 		if (key == null)
 		{
 			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
 
+		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
 		super.addSubResource(key, res);
 	}
 
