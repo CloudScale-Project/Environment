@@ -10,6 +10,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -80,12 +81,17 @@ public class ValidationStatusHelper
 	{
 		int numOfwarnings = alternative.getSelfStatus().getWarningIDs().size();
 
+		Warning[] warnings = alternative.getSelfStatus().getWarnings();
 		LinkedList<Status> statuses = new LinkedList<>();
-		for (String id : alternative.getSelfStatus().getWarningIDs())
-		{
-			String warning = alternative.getSelfStatus().getWarningMessage(id);
-			Status s = new Status(IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", warning));
+		
+		for(int i=0; i<warnings.length; i++){
+			String message = warnings[i].message;
+			Status s = new Status(IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", message));
 			statuses.add(s);
+			
+			if(i > 4){
+				break;
+			}
 		}
 
 		String msg = String.format("Unable to run alternative '%s'.", alternative.getName());
