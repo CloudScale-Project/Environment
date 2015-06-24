@@ -62,7 +62,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			if (EditorInputEMF.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())
 					|| EditorInputEMF.PROP_LOADED.equals(evt.getPropertyName())){
 								
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 
 					@Override
 					public void run() {
