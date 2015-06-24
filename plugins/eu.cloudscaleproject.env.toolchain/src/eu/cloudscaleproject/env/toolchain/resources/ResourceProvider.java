@@ -293,6 +293,10 @@ public abstract class ResourceProvider
 		synchronized (resourcesLock) {
 			for (IEditorInputResource prop : resources.values())
 			{
+				if(prop == null){
+					continue;
+				}
+				
 				if (resourceName.equals(prop.getResource().getName()))
 				{
 					return prop;

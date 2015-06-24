@@ -775,6 +775,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// create measuring point repository
 		{
 			MeasuringPointRepository measureRep = retrieveMeasuringPointRepository();
+			
+			//TODO: If the usage scenario is null, Palladio throws null pointer exception
+			// Wait until the problem is fixed in Palladio 
+			
 			if (measureRep.getMeasuringPoints().isEmpty())
 			{
 				usageMeasurePoint = PcmmeasuringpointFactory.eINSTANCE.createUsageScenarioMeasuringPoint();

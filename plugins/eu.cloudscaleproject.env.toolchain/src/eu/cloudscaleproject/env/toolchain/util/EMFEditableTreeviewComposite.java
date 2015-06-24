@@ -115,7 +115,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 
-		menuSupport = new EMFPopupMenuSupport(alternative.getEditingDomain())
+		menuSupport = new EMFPopupMenuSupport(input, alternative.getEditingDomain())
 		{
 			@Override
 			public void menuAboutToShow(IMenuManager menuManager)

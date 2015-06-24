@@ -38,10 +38,12 @@ import org.eclipse.ui.PlatformUI;
 
 public class EMFPopupMenuSupport implements IMenuListener{
 	
+	private final Object root;
 	private final EditingDomain editingDomain;
 	private StructuredViewer viewer;
 	
-	public EMFPopupMenuSupport(EditingDomain ed){
+	public EMFPopupMenuSupport(Object root, EditingDomain ed){
+		this.root = root;
 		this.editingDomain = ed;		
 	}
 	
@@ -71,12 +73,17 @@ public class EMFPopupMenuSupport implements IMenuListener{
 		Collection<?> newSiblingDescriptors = null;
 		
 		IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-
+		
 		if (selection instanceof IStructuredSelection && ((IStructuredSelection)selection).size() == 1) {
 			Object object = ((IStructuredSelection)selection).getFirstElement();
 
 			newChildDescriptors = editingDomain.getNewChildDescriptors(object, null);
 			newSiblingDescriptors = editingDomain.getNewChildDescriptors(null, object);
+		}
+		else if(root != null){
+			selection = new StructuredSelection(root);
+			newChildDescriptors = editingDomain.getNewChildDescriptors(root, null);
+			newSiblingDescriptors = editingDomain.getNewChildDescriptors(null, root);
 		}
 		
 		Collection<IAction> createChildActions = generateCreateChildActions(newChildDescriptors, selection);
