@@ -164,7 +164,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		public boolean isDirty(){
 			if(this.input instanceof IEditorInputResource){
 				IEditorInputResource res = (IEditorInputResource)input;
-				return res.isDirty();
+				if(res.isDirty()){
+					return true;
+				}
 			}
 			for(ISaveable s : getSaveables()){
 				if(s.isDirty()){
@@ -222,10 +224,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				public void run() {
 					if(input instanceof IEditorInputResource){
 						
-						if(composite != null && !composite.isDisposed()){
-							composite.dispose();
-						}
-						
 						IEditorInputResource res = (IEditorInputResource)input;
 						synchronized (res) {
 							if(!res.isLoaded() || force){
@@ -233,11 +231,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 							}
 						}
 						
-						/*
-						if(isSelected){
-							select();
-						}
-						*/
 					}
 				}
 			});
@@ -245,14 +238,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 		private void initialize(){
-			BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
-				
-				@Override
-				public void run() {
-					load(false);
-				}
-			});
-			
 			initButton();
 		}
 		
@@ -308,6 +293,15 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 		private void initComposite(){
+			
+			BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+				
+				@Override
+				public void run() {
+					load(false);
+				}
+			});
+			
 			if(composite == null || composite.isDisposed()){
 				composite = createInputComposite(input, compositeArea, SWT.NONE);
 			}
