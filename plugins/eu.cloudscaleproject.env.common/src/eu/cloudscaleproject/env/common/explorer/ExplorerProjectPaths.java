@@ -374,6 +374,9 @@ public class ExplorerProjectPaths {
 	 * @return EMF Resource contained inside specified ResourceSet.
 	 */
 	public static Resource getEmfResource(ResourceSet resSet, IFile file){
+		return getEmfResource(resSet, file, true);
+	}
+	public static Resource getEmfResource(ResourceSet resSet, IFile file, boolean load){
 		if(file == null){
 			throw new NullPointerException("getEmfResource(): Specified file is null!");
 		}
@@ -381,11 +384,11 @@ public class ExplorerProjectPaths {
 				.toString(), true);
 		
 		Resource res = resSet.getResource(uri, false);
-		if(res == null){
+		if(res == null && load){
 			res = resSet.createResource(uri);
 		}
 		
-		if(file.exists()){
+		if(res != null && file.exists()){
 			try {
 				res.load(null);
 			} catch (IOException e) {
