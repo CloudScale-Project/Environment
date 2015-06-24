@@ -70,6 +70,7 @@ public class ExtractorRunJob
 			runSomox(monitor);
 			initializeDiagrams();
 			resultAlternative.save();
+			resultAlternative.load();
 
 		} catch (CoreException e)
 		{
