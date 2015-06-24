@@ -20,13 +20,13 @@ cat update-sites-nightly.txt | sed -e 's/\(.*\)/<repository><id>???<\/id><layout
 sed -i 's/\(.*\)???\(.*\)\(eclipse\/\)\(.*\)\(\/nightly\)/\1\4\2\3\4\5/g' update-sites-nightly-repository.txt
 
 echo -e "PalladioSimulator\n--------------------\n" > palladio-includes.txt
-cat features.txt | grep org.palladiosimulator.*.feature | grep -v .source. | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
+cat features.txt | grep org.palladiosimulator.*.feature | grep -v -e \.source[\. ^] | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
 
 echo -e "\n\nPalladioSimulator (sources)\n------------------\n" >> palladio-includes.txt
 cat features.txt | grep org.palladiosimulator.*.feature | grep    .source. | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
 
 echo -e "\n\nDE \n------------------\n" >> palladio-includes.txt
-cat features.txt | grep ^de.*.feature | grep    .source. | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
+cat features.txt | grep ^de.*.feature | grep    .source | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
 
 echo -e "\n\nDE (sources)\n------------------\n" >> palladio-includes.txt
 cat features.txt | grep ^de.*.feature | grep    .source. | sed -e 's/\(.*\)/<includes id="\1" version="0.0.0"\/>/g' >> palladio-includes.txt
