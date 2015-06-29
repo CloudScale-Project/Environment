@@ -14,7 +14,6 @@ Require-Bundle: org.eclipse.ui,
  eu.cloudscaleproject.env.toolchain,
  org.scaledl.overview.diagram;bundle-version="1.0.0",
  org.scaledl.overview,
- de.uka.ipd.sdq.pcm,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable,
@@ -22,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.databinding,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
  org.eclipse.e4.core.di,
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ org.palladiosimulator.pcm
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: eu.cloudscaleproject.env.overview

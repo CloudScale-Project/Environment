@@ -124,8 +124,8 @@ public class OverviewImport{
 	/*
 	private static void addInterfaces(final OperationInterfaceContainer opInterfaceContainer, final List<EObject> external){
 		for(EObject eo : external){
-			if(eo instanceof de.uka.ipd.sdq.pcm.system.System){
-				de.uka.ipd.sdq.pcm.system.System sys = (de.uka.ipd.sdq.pcm.system.System)eo;
+			if(eo instanceof org.palladiosimulator.pcm.system.System){
+				org.palladiosimulator.pcm.system.System sys = (org.palladiosimulator.pcm.system.System)eo;
 				
 				//clear interfaces
 				CsmUtil.deleteInterfaces(opInterfaceContainer.getProvidedInterfaces());

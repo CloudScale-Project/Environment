@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import de.uka.ipd.sdq.pcm.allocation.Allocation;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryResourceImpl;
+import org.palladiosimulator.pcm.allocation.Allocation;
+import org.palladiosimulator.pcm.repository.util.RepositoryResourceImpl;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -142,10 +142,10 @@ public class InputAlternative extends EditorInputEMF
 		{
 			Allocation allocModel = (Allocation) eo;
 
-			de.uka.ipd.sdq.pcm.system.System sys = allocModel.getSystem_Allocation();
+			org.palladiosimulator.pcm.system.System sys = allocModel.getSystem_Allocation();
 			EcoreUtil.resolveAll(sys);
 
-			de.uka.ipd.sdq.pcm.resourceenvironment.ResourceEnvironment resenv = allocModel.getTargetResourceEnvironment_Allocation();
+			org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment resenv = allocModel.getTargetResourceEnvironment_Allocation();
 			EcoreUtil.resolveAll(resenv);
 
 			setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, ExplorerProjectPaths.getFileFromEmfResource(sys.eResource()));

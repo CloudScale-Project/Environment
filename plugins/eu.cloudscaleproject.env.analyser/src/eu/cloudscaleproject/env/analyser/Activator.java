@@ -7,12 +7,12 @@ import org.palladiosimulator.experimentautomation.experiments.impl.ExperimentsPa
 import org.palladiosimulator.monitorrepository.impl.MonitorRepositoryPackageImpl;
 import org.palladiosimulator.servicelevelobjective.impl.ServicelevelObjectivePackageImpl;
 import org.scaledl.usageevolution.impl.UsageevolutionPackageImpl;
+import org.palladiosimulator.pcm.allocation.impl.AllocationPackageImpl;
+import org.palladiosimulator.pcm.repository.impl.RepositoryPackageImpl;
+import org.palladiosimulator.pcm.resourceenvironment.impl.ResourceenvironmentPackageImpl;
+import org.palladiosimulator.pcm.system.impl.SystemPackageImpl;
+import org.palladiosimulator.pcm.usagemodel.impl.UsagemodelPackageImpl;
 
-import de.uka.ipd.sdq.pcm.allocation.impl.AllocationPackageImpl;
-import de.uka.ipd.sdq.pcm.repository.impl.RepositoryPackageImpl;
-import de.uka.ipd.sdq.pcm.resourceenvironment.impl.ResourceenvironmentPackageImpl;
-import de.uka.ipd.sdq.pcm.system.impl.SystemPackageImpl;
-import de.uka.ipd.sdq.pcm.usagemodel.impl.UsagemodelPackageImpl;
 
 /**
  * 

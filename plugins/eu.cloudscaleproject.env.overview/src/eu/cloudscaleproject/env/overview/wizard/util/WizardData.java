@@ -6,8 +6,8 @@ import org.scaledl.overview.architecture.PlatformRuntimeService;
 import org.scaledl.overview.architecture.SoftwareService;
 import org.scaledl.overview.specification.CloudSpecification;
 
-import de.uka.ipd.sdq.pcm.repository.Repository;
-import de.uka.ipd.sdq.pcm.system.System;;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.system.System;;
 
 public class WizardData{
 	

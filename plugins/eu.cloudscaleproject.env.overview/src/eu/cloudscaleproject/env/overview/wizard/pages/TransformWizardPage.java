@@ -42,8 +42,8 @@ import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
 import org.scaledl.overview.util.OverviewUtil;
 
-import de.uka.ipd.sdq.pcm.repository.Repository;
-import de.uka.ipd.sdq.pcm.system.System;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.system.System;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;

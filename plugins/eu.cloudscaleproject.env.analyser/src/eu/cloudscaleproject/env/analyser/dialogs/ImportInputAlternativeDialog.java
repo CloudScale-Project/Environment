@@ -32,10 +32,10 @@ import org.palladiosimulator.edp2.models.ExperimentData.util.ExperimentDataAdapt
 import org.palladiosimulator.edp2.models.measuringpoint.provider.MeasuringpointItemProviderAdapterFactory;
 import org.palladiosimulator.monitorrepository.provider.MonitorRepositoryItemProviderAdapterFactory;
 
-import de.uka.ipd.sdq.pcm.allocation.util.AllocationAdapterFactory;
-import de.uka.ipd.sdq.pcm.repository.util.RepositoryAdapterFactory;
-import de.uka.ipd.sdq.pcm.seff.util.SeffAdapterFactory;
-import de.uka.ipd.sdq.pcm.system.util.SystemAdapterFactory;
+import org.palladiosimulator.pcm.allocation.util.AllocationAdapterFactory;
+import org.palladiosimulator.pcm.repository.util.RepositoryAdapterFactory;
+import org.palladiosimulator.pcm.seff.util.SeffAdapterFactory;
+import org.palladiosimulator.pcm.system.util.SystemAdapterFactory;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.dialogs.CustomResourceSelectionDialog;
