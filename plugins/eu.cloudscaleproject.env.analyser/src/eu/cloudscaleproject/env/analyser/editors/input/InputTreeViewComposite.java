@@ -23,9 +23,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.system.System;
+
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;

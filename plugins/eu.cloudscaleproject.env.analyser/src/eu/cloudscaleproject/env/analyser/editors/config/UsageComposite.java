@@ -31,11 +31,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.palladiosimulator.pcm.usagemodel.UsageScenario;
+import org.palladiosimulator.pcm.usagemodel.UsagemodelPackage;
 import org.scaledl.usageevolution.Usage;
 
 import tools.descartes.dlim.Sequence;
-import org.palladiosimulator.pcm.usagemodel.UsageScenario;
-import org.palladiosimulator.pcm.usagemodel.UsagemodelPackage;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;

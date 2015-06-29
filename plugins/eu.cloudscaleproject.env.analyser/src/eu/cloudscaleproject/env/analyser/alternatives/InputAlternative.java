@@ -14,9 +14,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.repository.util.RepositoryResourceImpl;
+
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;

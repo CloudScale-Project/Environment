@@ -15,8 +15,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.palladiosimulator.edp2.models.ExperimentData.ExperimentGroup;
 import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
+import org.palladiosimulator.edp2.models.ExperimentData.ExperimentGroup;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;

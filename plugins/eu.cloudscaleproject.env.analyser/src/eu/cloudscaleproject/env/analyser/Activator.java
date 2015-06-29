@@ -5,13 +5,13 @@ import org.osgi.framework.BundleContext;
 import org.palladiosimulator.edp2.models.measuringpoint.impl.MeasuringpointPackageImpl;
 import org.palladiosimulator.experimentautomation.experiments.impl.ExperimentsPackageImpl;
 import org.palladiosimulator.monitorrepository.impl.MonitorRepositoryPackageImpl;
-import org.palladiosimulator.servicelevelobjective.impl.ServicelevelObjectivePackageImpl;
-import org.scaledl.usageevolution.impl.UsageevolutionPackageImpl;
 import org.palladiosimulator.pcm.allocation.impl.AllocationPackageImpl;
 import org.palladiosimulator.pcm.repository.impl.RepositoryPackageImpl;
 import org.palladiosimulator.pcm.resourceenvironment.impl.ResourceenvironmentPackageImpl;
 import org.palladiosimulator.pcm.system.impl.SystemPackageImpl;
 import org.palladiosimulator.pcm.usagemodel.impl.UsagemodelPackageImpl;
+import org.palladiosimulator.servicelevelobjective.impl.ServicelevelObjectivePackageImpl;
+import org.scaledl.usageevolution.impl.UsageevolutionPackageImpl;
 
 
 /**
