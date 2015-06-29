@@ -32,8 +32,9 @@ import org.palladiosimulator.edp2.datastream.edp2source.Edp2DataTupleDataSource;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.ExperimentData.Measurement;
 import org.palladiosimulator.edp2.models.ExperimentData.RawMeasurements;
-import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
+import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
+import org.palladiosimulator.edp2.repository.local.LocalDirectoryRepositoryHelper;
 import org.palladiosimulator.edp2.visualization.IVisualisationInput;
 import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
@@ -144,7 +145,7 @@ public class AdvancedResultComposite extends Composite implements IRefreshable{
         }
         
         //if the repository for the specified path is not found
-        final LocalDirectoryRepository repo = RepositoryManager.initializeLocalDirectoryRepository(dir);
+        final LocalDirectoryRepository repo = LocalDirectoryRepositoryHelper.initializeLocalDirectoryRepository(dir);
         RepositoryManager.addRepository(RepositoryManager.getCentralRepository(), repo);
         return repo;
     }

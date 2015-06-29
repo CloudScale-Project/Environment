@@ -8,8 +8,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
-import org.palladiosimulator.edp2.models.Repository.LocalDirectoryRepository;
+import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
+import org.palladiosimulator.edp2.repository.local.LocalDirectoryRepositoryHelper;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -78,7 +79,7 @@ public class ResultAlternative extends EditorInputFolder{
         }
         
         //if the repository for the specified path is not found
-        final LocalDirectoryRepository repo = RepositoryManager.initializeLocalDirectoryRepository(dir);
+        final LocalDirectoryRepository repo = LocalDirectoryRepositoryHelper.initializeLocalDirectoryRepository(dir);
         RepositoryManager.addRepository(RepositoryManager.getCentralRepository(), repo);
         return repo;
     }
