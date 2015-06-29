@@ -8,7 +8,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
@@ -47,7 +46,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		this.resource = resource;
 	}
 	
-	protected void initialize()
+	protected void initializeValidationListener()
 	{
 		if (listener == null)
 		{

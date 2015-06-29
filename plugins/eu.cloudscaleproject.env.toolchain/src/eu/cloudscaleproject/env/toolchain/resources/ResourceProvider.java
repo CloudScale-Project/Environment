@@ -402,28 +402,18 @@ public abstract class ResourceProvider
 		if (!valid) return;
 		
 		String type = null;
-		
-		EditorInputFile preloadedResource = null;
-		
+				
 		if (res instanceof IFile && "prop".equals(res.getFileExtension()))
 		{
-			preloadedResource = new EditorInputFile(res.getProject(), (IFile) res);
-			preloadedResource.load();
+			EditorInputFile preloadedResource = new EditorInputFile(res.getProject(), (IFile) res);
 			type = preloadedResource.getProperty(PROP_TYPE);
 		} else if (res instanceof IFolder)
 		{
-			preloadedResource = new EditorInputFile(res.getProject(), ((IFolder) res).getFile(EditorInputFolder.PROP_FILENAME));
-			preloadedResource.load();
+			EditorInputFolder preloadedResource = new EditorInputFolder(res.getProject(), (IFolder)res);
 			type = preloadedResource.getProperty(PROP_TYPE);
 		}
 		
 		IEditorInputResource eir = createEditorInputResource(res, type);
-		
-		if(preloadedResource != null){
-			eir.setName(preloadedResource.getName());
-			eir.setDirty(false);
-		}
-		
 		addResource(eir);
 	}
 	

@@ -41,6 +41,7 @@ import eu.cloudscaleproject.env.common.ui.util.ColorHelper;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -239,6 +240,12 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		
 		private void initialize(){
 			initButton();
+			
+			//TODO: this is a temporal hack to register all alternatives and statuses.
+			//		In the same time only selected alternatives are loaded.
+			if(!(input instanceof EditorInputResource)){
+				initComposite();
+			}
 		}
 		
 		private void checkWidgets(){
@@ -318,6 +325,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 		public void select(){
+			
 			checkWidgets();
 			
 			for(EditorItem ei : entries.values()){
@@ -342,6 +350,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			if(composite instanceof ISelectable){
 				((ISelectable)composite).onSelect(); 
 			}
+			
 		}
 		
 		public void dispose() {

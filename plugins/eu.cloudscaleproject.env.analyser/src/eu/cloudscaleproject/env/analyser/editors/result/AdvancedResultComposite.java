@@ -125,7 +125,6 @@ public class AdvancedResultComposite extends Composite implements IRefreshable{
      */
     private LocalDirectoryRepository findOrInitRepository(final String directory) {
     	File dir = new File(directory);
-        final LocalDirectoryRepository repo = RepositoryManager.initializeLocalDirectoryRepository(dir);
         
         /*
          * Add repository to a (optional) central directory of repositories. This can be useful to
@@ -145,6 +144,7 @@ public class AdvancedResultComposite extends Composite implements IRefreshable{
         }
         
         //if the repository for the specified path is not found
+        final LocalDirectoryRepository repo = RepositoryManager.initializeLocalDirectoryRepository(dir);
         RepositoryManager.addRepository(RepositoryManager.getCentralRepository(), repo);
         return repo;
     }

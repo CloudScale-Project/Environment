@@ -42,7 +42,7 @@ public class ValidationDiagramService {
 	}
 	
 	public static void showStatus(IProject project, IValidationStatusProvider statusProvider){
-		
+				
 		showDiagram(project);
 		
 		if(statusProvider == null){
@@ -53,6 +53,7 @@ public class ValidationDiagramService {
 		if(diagramProvider != null){
 			diagramProvider.bindStatusProvider(statusProvider);
 		}
+		
 	}
 	
 	public static void clearStatus(IProject project, String id){

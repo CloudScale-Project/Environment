@@ -218,7 +218,11 @@ public class ConfigComposite extends SidebarEditorComposite
 		@Override
 		public void refresh() {
 			
-			alternative.unloadProxyResources();
+			// TODO: Unload proxy resource method is to slow! For now it is commented out.
+			// Possible solution is to hide proxy resource in treeview editors.
+			//
+			//alternative.unloadProxyResources();
+			 
 			
 			if(tabFolder.isDisposed()){
 				return;

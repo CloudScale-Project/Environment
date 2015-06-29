@@ -30,6 +30,19 @@ public class EditorInputFile extends EditorInputResource{
 			
 	public EditorInputFile(IProject project, IFile file) {
 		this(project, file, null);
+		
+		//preload
+		if(file.exists()){
+			try (InputStream is = file.getContents(true)) {
+				source.loadFromXML(is);
+			} catch (InvalidPropertiesFormatException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	public EditorInputFile(IProject project, IFile file, String validationID) {
@@ -39,7 +52,7 @@ public class EditorInputFile extends EditorInputResource{
 		this.project = project;
 		this.file = file;
 		
-		initialize();
+		initializeValidationListener();
 	}
 	
 	@Override

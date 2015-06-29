@@ -47,9 +47,14 @@ public class EditorInputFolder extends EditorInputResource{
 		this.folder = folder;
 
 		IFile file = folder.getFile(PROP_FILENAME);
+		
+		//preload
 		this.propertyInputFile = new EditorInputFile(project, file);
 		
-		initialize();
+		//init validation listener
+		if(validationID != null){
+			initializeValidationListener();
+		}
 	}
 	
 	public IProject getProject()
