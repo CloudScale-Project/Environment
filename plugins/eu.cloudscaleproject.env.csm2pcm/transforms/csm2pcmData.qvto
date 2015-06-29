@@ -1,7 +1,7 @@
 library csm2pcmData;
 
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
-modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype REPOSITORY uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.0');
 
 configuration property CSMID : String;
 

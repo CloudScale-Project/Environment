@@ -1,8 +1,8 @@
 import pcm2csmData;
 
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0'); 
-modeltype PCM uses pcm('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
-modeltype REPOSITORY uses pcm::repository('http://sdq.ipd.uka.de/PalladioComponentModel/5.0');
+modeltype PCM uses pcm('http://palladiosimulator.org/PalladioComponentModel/5.0');
+modeltype REPOSITORY uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.0');
 modeltype ECORE uses "http://www.eclipse.org/emf/2002/Ecore";
 
 transformation csm2pcm(in pcmInstance : PCM,
