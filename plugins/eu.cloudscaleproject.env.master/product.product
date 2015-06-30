@@ -66,20 +66,24 @@ Visit http://www.cloudscale-project.eu
       <!-- == Scale DL ============================================================ -->
 
       <plugin id="org.scaledl.architecturaltemplates"/>
+      <plugin id="org.scaledl.architecturaltemplates.ui"/>
+      <plugin id="org.scaledl.architecturaltemplates.api"/>
       <plugin id="org.scaledl.architecturaltemplates.completion.jobs"/>
-      <plugin id="org.scaledl.architecturaltemplates.completion.jobs.source"/>
       <plugin id="org.scaledl.architecturaltemplates.edit"/>
-      <plugin id="org.scaledl.architecturaltemplates.edit.source"/>
       <plugin id="org.scaledl.architecturaltemplates.editor"/>
-      <plugin id="org.scaledl.architecturaltemplates.editor.source"/>
       <plugin id="org.scaledl.architecturaltemplates.repositories.cloudscale"/>
-      <plugin id="org.scaledl.architecturaltemplates.source"/>
+
+      <plugin id="org.palladiosimulator.editors.util"/>
+      <plugin id="org.palladiosimulator.editors.gmf.runtime.diagram.ui.extension"/>
+      <plugin id="org.palladiosimulator.editors.composedprovidingrequiringentity.design"/>
+
       <plugin id="org.scaledl.overview"/>
       <plugin id="org.scaledl.overview.diagram"/>
       <plugin id="org.scaledl.overview.edit"/>
       <plugin id="org.scaledl.overview.editor"/>
       <plugin id="org.scaledl.overview.properties"/>
       <plugin id="org.scaledl.overview.specification"/>
+
       <plugin id="org.scaledl.usageevolution"/>
       <plugin id="org.scaledl.usageevolution.edit"/>
       <plugin id="org.scaledl.usageevolution.editor"/>
