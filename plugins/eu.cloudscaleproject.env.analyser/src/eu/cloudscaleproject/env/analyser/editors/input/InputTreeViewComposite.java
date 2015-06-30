@@ -7,6 +7,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.gmf.runtime.common.ui.services.action.contributionitem.ContributionItemService;
+import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.action.ContributionManager;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -22,6 +27,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorActionBarContributor;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.WorkbenchWindow;
+import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.menus.MenuUtil;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.system.System;
@@ -71,7 +84,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		}
 	};
 	
-	public InputTreeViewComposite(final InputAlternative input, Composite parent, int style) {
+	public InputTreeViewComposite(final IEditorPart editor, final InputAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		alternative = input;
@@ -85,7 +98,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				EObject root = EcoreUtil.getRootContainer(selectedElement);
 				if(root instanceof System || root instanceof ResourceEnvironment){
 					
-					MenuManager applyStereotypeMenu = new MenuManager("Apply Architecture Template");
+					//MenuManager applyStereotypeMenu = new MenuManager("Apply Architecture Template");
 					
 					//
 					// IProfileRegistry.INSTANCE.getRegisteredProfiles();
@@ -100,8 +113,23 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 
 					//applyStereotypeContribution.initialize(PlatformUI.getWorkbench());
 					//applyStereotypeMenu.add(applyStereotypeContribution);
+					//Applica
+					//ApplyStereotypeOnEObjectDialog d = null;
+					//SterotypeTreeSelectionDialog d = null;
 					
-					menuManager.add(applyStereotypeMenu);
+					IWorkbenchWindow iww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					IEditorSite site = editor.getEditorSite();
+					
+					((IMenuListener)(site.getActionBarContributor())).menuAboutToShow(menuManager);
+					
+					/*
+					if(iww instanceof WorkbenchWindow){
+						WorkbenchWindow ww = (WorkbenchWindow)iww;
+						IContributionItem item = ww.getMenuManager().find("org.palladiosimulator.mdsdprofiles.ui.popup");
+						menuManager.add(item);
+					}
+					*/
+					
 				}
 			}
 		};

@@ -62,7 +62,7 @@ public class InputComposite extends SidebarEditorComposite{
 			super(parent, style, input);
 			
 			alternative = input;
-			treeviewComposite = new InputTreeViewComposite(input, getContainer(), SWT.NONE);
+			treeviewComposite = new InputTreeViewComposite(editor, input, getContainer(), SWT.NONE);
 		}
 
 		@Override

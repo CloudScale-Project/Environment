@@ -13,6 +13,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="eu.cloudscaleproject.env.toolchain.editors.ProjectEditor"
+            contributorClass="org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor"
             default="true"
             extensions="cse"
             id="eu.cloudscaleproject.env.toolchain.tooleditor"

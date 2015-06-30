@@ -77,17 +77,23 @@ public class ExternalImportInputWizard extends Wizard{
 	public boolean performFinish() {
 		
 		String altName = nameSelectionPage.getName();
-		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
-		Resource[] selectedDiagramResources = importModelSelectionPage.getSelectedDiagramResources();
+		final Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
+		final Resource[] selectedDiagramResources = importModelSelectionPage.getSelectedDiagramResources();
 		boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
 		
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
-		InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
+		final InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
 		if (copyIntoProject)
-		{			
-			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
-			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
+		{
+			alternative.createSubResources(new Runnable() {
+				
+				@Override
+				public void run() {
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
+				}
+			});
 		}
 
 		for (Resource resource : selectedResources)

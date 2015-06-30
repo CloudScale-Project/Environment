@@ -31,7 +31,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
- eu.cloudscaleproject.env.common;bundle-version="1.0.0";visibility:=reexport
+ eu.cloudscaleproject.env.common;bundle-version="1.0.0";visibility:=reexport,
+ org.palladiosimulator.mdsdprofiles.edit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.2.0",
