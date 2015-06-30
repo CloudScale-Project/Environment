@@ -19,7 +19,7 @@ public class OpenMainPerspectiveHandler {
 		
 		//using old e3 show perspective call
 		try {
-			window.getWorkbench().showPerspective("de.uka.ipd.sdq.pcmbench.perspectives.palladio", window);
+			window.getWorkbench().showPerspective("org.palladiosimulator.pcmbench.perspectives.palladio", window);
 			CloudScaleBranding.initProjectExplorer();
 		} catch (WorkbenchException e) {
 			// TODO Auto-generated catch block
