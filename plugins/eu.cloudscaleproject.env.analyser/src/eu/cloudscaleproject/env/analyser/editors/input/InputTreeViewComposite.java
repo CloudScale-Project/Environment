@@ -1,19 +1,20 @@
 package eu.cloudscaleproject.env.analyser.editors.input;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.gmf.runtime.common.ui.services.action.contributionitem.ContributionItemService;
-import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.jface.action.ContributionManager;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -27,17 +28,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorActionBarContributor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.WorkbenchWindow;
-import org.eclipse.ui.menus.IMenuService;
-import org.eclipse.ui.menus.MenuUtil;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
-import org.palladiosimulator.pcm.system.System;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
@@ -94,43 +91,9 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			
 			@Override
 			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
-				
-				EObject root = EcoreUtil.getRootContainer(selectedElement);
-				if(root instanceof System || root instanceof ResourceEnvironment){
-					
-					//MenuManager applyStereotypeMenu = new MenuManager("Apply Architecture Template");
-					
-					//
-					// IProfileRegistry.INSTANCE.getRegisteredProfiles();
-					// Filter for AT profiles
-					// 
-					// org.scaledl.arc....repositories.cloudscale/CloudScaleATRepository
-					// CloudScaleATRepository
-					//
-					
-					// ApplicableStereotypesSubmenu - not present anymore
-					//ApplicableStereotypesSubmenu applyStereotypeContribution = new ApplicableStereotypesSubmenu();
 
-					//applyStereotypeContribution.initialize(PlatformUI.getWorkbench());
-					//applyStereotypeMenu.add(applyStereotypeContribution);
-					//Applica
-					//ApplyStereotypeOnEObjectDialog d = null;
-					//SterotypeTreeSelectionDialog d = null;
-					
-					IWorkbenchWindow iww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-					IEditorSite site = editor.getEditorSite();
-					
-					((IMenuListener)(site.getActionBarContributor())).menuAboutToShow(menuManager);
-					
-					/*
-					if(iww instanceof WorkbenchWindow){
-						WorkbenchWindow ww = (WorkbenchWindow)iww;
-						IContributionItem item = ww.getMenuManager().find("org.palladiosimulator.mdsdprofiles.ui.popup");
-						menuManager.add(item);
-					}
-					*/
-					
-				}
+				// TODO: AT branding
+				menuManager.add(createMDSDProfilesMenu());
 			}
 		};
 		
@@ -210,6 +173,57 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		});
 	}
 	
+	private MenuManager createMDSDProfilesMenu ()
+	{
+		final String cmdProfiles = "org.palladiosimulator.mdsdprofiles.ui.commands.ApplyUnapplyProfiles";
+		final String cmdStereotypes = "org.palladiosimulator.mdsdprofiles.ui.commands.ApplyUnapplyStereotypes";
+		MenuManager mm = new MenuManager("MDSD Profiles...");
+
+		mm.add(new Action("Apply/Unapply Profiles")
+		{
+			@Override
+			public void run()
+			{
+				executeCommand(cmdProfiles,treeviewComposite.getTreeViewer().getSelection());
+			}
+		});
+
+		mm.add(new Action("Apply/Unapply Stereotype")
+		{
+			@Override
+			public void run()
+			{
+				executeCommand(cmdStereotypes,treeviewComposite.getTreeViewer().getSelection());
+			}
+			
+		});
+
+		return mm;
+	}
+	
+	private void executeCommand (String cmdId, ISelection selection)
+	{
+
+		try  { 
+			// TODO: move to common helpers
+			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+
+		    Command command = commandService.getCommand(cmdId);
+		    
+		    EvaluationContext c = new EvaluationContext(null, "non null value");
+		    c.addVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME, selection);
+		    c.addVariable(ISources.ACTIVE_SHELL_NAME, Display.getDefault().getActiveShell());
+
+		    ExecutionEvent e = new ExecutionEvent(command, new HashMap<Object,Object>(), this, c);
+		    command.executeWithChecks(e);
+
+		} catch (Exception e) {
+		    
+		    e.printStackTrace();
+		}
+	}
+	
 	private void refreshButtonStates(){
 		List<ModelType> avaiableModelTypes = getAvaiableModelTypes();
 		if(avaiableModelTypes.isEmpty()){
@@ -252,5 +266,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 	public IPropertySheetPage getPropertySheetPage() {
 		return treeviewComposite.getPropertySheetPage();
 	}
+	
+	
 	
 }
