@@ -70,6 +70,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		else
 		{
 			namePage = new AlternativeNamePage(provider);
+			namePage.setTitle("Overview alternative name");
 			this.addPage(namePage);
 		}
 		
@@ -220,6 +221,9 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		{
 			super(provider);
 			this.data = data;
+			
+			setTitle("Select Overview alternative");
+			setDescription("Please select Overview alternative to be used as target when importing transformed PCM models.");
 		}
 
 		@Override

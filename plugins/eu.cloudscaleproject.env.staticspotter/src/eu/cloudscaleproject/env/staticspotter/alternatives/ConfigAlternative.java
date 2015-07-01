@@ -61,6 +61,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 			
 			setSubResource(KEY_CATALOG, catalog);
 			setSubResource(KEY_ENGINES, engines);
+			loadModels();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
