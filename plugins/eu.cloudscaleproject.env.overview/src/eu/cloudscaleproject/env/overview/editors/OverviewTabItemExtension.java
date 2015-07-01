@@ -57,6 +57,11 @@ public class OverviewTabItemExtension extends DIExtension implements ProjectEdit
 	public boolean isDirty() {
 		return overviewSidebarEditor.isDirty();
 	}
+	
+	@Override
+	public void setFocus() {
+		overviewSidebarEditor.refresh();
+	}
 
 	@Override
 	public void handleAction(String action) {

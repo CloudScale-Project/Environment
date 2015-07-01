@@ -115,12 +115,6 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	}
 	
 	@Override
-	public void update() {
-		sidebarBuilder.update();
-		super.update();
-	}
-	
-	@Override
 	public void showInput(IEditorInput input){
 		sidebarBuilder.showInput(input);
 	}
@@ -197,7 +191,7 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 	
 	@Override
 	public void refresh() {
-		sidebarBuilder.update();
+		sidebarBuilder.refresh();
 	}
 	
 	@Override

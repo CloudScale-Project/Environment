@@ -33,6 +33,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -67,7 +68,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 					@Override
 					public void run() {
 						if (!treeViewer.getTree().isDisposed()) {
-							treeViewer.refresh();
+							treeViewer.refresh(true);
 						}
 					}
 				});
@@ -79,10 +80,15 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	
 	public EMFEditableTreeviewComposite(EditorInputEMF ca, Composite parent, int style)
 	{
-		this(ca, ca.getResourceSet(), parent, style);
+		this(ca, ca.getResourceSet(), null, parent, style);
+	}
+	
+	public EMFEditableTreeviewComposite(EditorInputEMF ca, IEditorSite site, Composite parent, int style)
+	{
+		this(ca, ca.getResourceSet(), site, parent, style);
 	}
 
-	public EMFEditableTreeviewComposite(EditorInputEMF ca, Object input, Composite parent, int style)
+	public EMFEditableTreeviewComposite(EditorInputEMF ca, Object input, IEditorSite site, Composite parent, int style)
 	{
 		super(parent, style);
 
@@ -132,7 +138,8 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 				EMFEditableTreeviewComposite.this.menuAboutToShow(menuManager, selectedElement);
 			}
 		};
-		menuSupport.setViewer(treeViewer);
+		
+		menuSupport.setViewer(site, treeViewer);
 
 		tree.addFocusListener(new FocusListener()
 		{
@@ -149,7 +156,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		});
 
 		this.treeViewer.setInput(input);
-		this.treeViewer.refresh();
+		this.treeViewer.refresh(true);
 		
 		alternative.addPropertyChangeListener(editorInputListener);
 		addDisposeListener(new DisposeListener() {

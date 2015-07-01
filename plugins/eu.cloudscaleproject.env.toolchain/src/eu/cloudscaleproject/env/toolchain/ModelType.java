@@ -23,14 +23,13 @@ public enum ModelType{
 	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "dlim"),
 
 	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "sourcecodedecorator"),
-	 XMI(null, "xmi"),
 	 ECORE(null, "ecore");
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
 	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, AT} ;
 	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, PMS, SLO, VARIATIONS, USAGE_EVOLUTION, MEASURING_POINT} ;
-	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, XMI, ECORE} ;
+	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
 	 
 	 private final String extension;
 	 private final String name;

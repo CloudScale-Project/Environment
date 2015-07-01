@@ -77,8 +77,11 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 			@Override
 			public void run() {
 				Resource[] selectedResources = importSelectionPage.getSelectedResources();
-				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources);
+				Resource[] selectedDiagramResources = importSelectionPage.getSelectedDiagramResources();
 
+				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources);
+				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedDiagramResources);
+				
 				for (Resource resource : selectedResources)
 				{
 					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);

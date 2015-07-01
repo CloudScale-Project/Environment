@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
 
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 
-public interface ISidebarEditor extends IPropertySheetPageProvider, ISaveable{
+public interface ISidebarEditor extends IPropertySheetPageProvider, ISaveable, IRefreshable{
 	
 	public void init();
 	public void showInput(IEditorInput input);
@@ -17,9 +18,7 @@ public interface ISidebarEditor extends IPropertySheetPageProvider, ISaveable{
 	
 	public List<IEditorInput> getInputs(String section);
 	public String[] getSidebarSections();
-	
-	public void update();
-	
+		
 	public Color getSidebarSectionBackgroundColor();
 	public Color getSidebarSectionForegroundColor();
 	public Color getSidebarBackgroundColor();

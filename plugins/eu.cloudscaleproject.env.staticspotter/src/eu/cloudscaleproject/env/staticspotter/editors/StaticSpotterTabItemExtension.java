@@ -108,6 +108,11 @@ public class StaticSpotterTabItemExtension implements ProjectEditorExtension{
 	public boolean isDirty() {
 		return spotterEditor.isDirty();
 	}
+	
+	@Override
+	public void setFocus() {
+		spotterEditor.refresh();
+	}
 
 	@Override
 	public void handleAction(String action) {

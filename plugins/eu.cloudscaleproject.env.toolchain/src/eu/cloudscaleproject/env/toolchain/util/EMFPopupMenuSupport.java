@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
+import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -32,6 +33,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -41,18 +43,22 @@ public class EMFPopupMenuSupport implements IMenuListener{
 	private final Object root;
 	private final EditingDomain editingDomain;
 	private StructuredViewer viewer;
-	
+			
 	public EMFPopupMenuSupport(Object root, EditingDomain ed){
 		this.root = root;
 		this.editingDomain = ed;		
 	}
 	
-	public void setViewer(StructuredViewer viewer){
+	public void setViewer(IEditorSite site, StructuredViewer viewer){
 		this.viewer = viewer;
-		createContextMenuFor(viewer);
+		
+		MenuManager mm = createContextMenuFor(viewer);
+		if(site != null){
+			site.registerContextMenu(mm, new UnwrappingSelectionProvider(viewer));
+		}
 	}
 
-	private final void createContextMenuFor(StructuredViewer viewer) {
+	private final MenuManager createContextMenuFor(StructuredViewer viewer) {
 		
 		MenuManager contextMenu = new MenuManager("#PopUp", "eu.cloudscale.env.toolcahin.treeview.menumanager");
 		contextMenu.add(new Separator("additions"));
@@ -65,6 +71,8 @@ public class EMFPopupMenuSupport implements IMenuListener{
 		Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance() };
 		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
 		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, viewer));
+		
+		return contextMenu;
 	}
 	
 	public void menuAboutToShow(IMenuManager menuManager) {

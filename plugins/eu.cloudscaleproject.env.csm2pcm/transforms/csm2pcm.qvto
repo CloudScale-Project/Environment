@@ -63,6 +63,7 @@ main() {
 
 mapping OVERVIEW::Overview::csm2resource() : RESOURCE::ResourceEnvironment @ pcmResourceInstance {
 	
+	entityName := "Resource model";
 	resourceContainer_ResourceEnvironment := Set{};
 	
 	self.architecture.cloudEnvironments->forEach(cp){
@@ -139,6 +140,7 @@ mapping OVERVIEW::Overview::csm2resource() : RESOURCE::ResourceEnvironment @ pcm
 
 mapping OVERVIEW::Overview::csm2repository() : REPOSITORY::Repository @ pcmRepoInstance {
 
+	entityName := "Repository model";
 	//datatype mapping
 	dataTypes__Repository := self.dataTypes.types->map parameter2dataType();
 	
@@ -497,6 +499,7 @@ mapping OVERVIEW::core::OperationInterface::
 	
 mapping OVERVIEW::Overview::csm2system() : SYSTEM::System @ pcmSystemInstance {
 	
+	entityName := "System model";
 	assemblyContexts__ComposedStructure := Sequence{};
 	
 	self.architecture.cloudEnvironments->forEach(cp){
@@ -575,7 +578,7 @@ mapping OVERVIEW::application::OperationInterface::
 /////////////// Allocation mapping ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 mapping OVERVIEW::Overview::csm2allocation() : Allocation @pcmAllocationInstance{
-	entityName := "Default";
+	entityName := "Allication model";
 	
 	/*
 	targetResourceEnvironment_Allocation := pcmResourceInstance.rootObjects()![ResourceEnvironment];

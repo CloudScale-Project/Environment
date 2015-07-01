@@ -50,6 +50,11 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 	public boolean isDirty() {
 		return scaledlEditor.isDirty();
 	}
+	
+	@Override
+	public void setFocus() {
+		scaledlEditor.refresh();
+	}
 
 	@Override
 	public void handleAction(String action) {

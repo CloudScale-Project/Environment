@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.diagram.core.services.ViewService;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.palladiosimulator.pcm.allocation.AllocationFactory;
+import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 import org.palladiosimulator.pcm.system.SystemFactory;
@@ -337,6 +338,11 @@ public class PCMResourceSet extends ResourceSetImpl{
 				String msg = "createModel(): Specified 'ModelType' not supported: " + id.name();
 				logger.log(Level.SEVERE, msg);
 				throw new UnsupportedOperationException(msg);
+		}
+		
+		if(model instanceof NamedElement){
+			NamedElement e = (NamedElement)model;
+			e.setEntityName(model.eClass().getName() + " model");
 		}
 		
 		return model;

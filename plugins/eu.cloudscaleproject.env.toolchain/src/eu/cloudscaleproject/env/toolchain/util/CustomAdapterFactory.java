@@ -23,8 +23,6 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.StyledString;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceSetItemProvider;
-import org.palladiosimulator.mdsdprofiles.provider.MdsdprofilesItemProviderAdapterFactory;
-import org.palladiosimulator.mdsdprofiles.provider.StereotypableElementDecoratorAdapterFactory;
 
 public class CustomAdapterFactory extends ComposedAdapterFactory
 {
@@ -35,9 +33,8 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 	{
 		super(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
-		addAdapterFactory(new MdsdprofilesItemProviderAdapterFactory());
 		addAdapterFactory(new ResourceSetAdapterFactory());
-		addAdapterFactory(new StereotypableElementDecoratorAdapterFactory(new CustomReflectiveAdapterFactory()));
+		addAdapterFactory(new CustomReflectiveAdapterFactory());
 	}
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////

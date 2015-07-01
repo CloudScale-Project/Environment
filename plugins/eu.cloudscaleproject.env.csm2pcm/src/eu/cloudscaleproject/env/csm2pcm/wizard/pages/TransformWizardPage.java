@@ -156,7 +156,7 @@ public class TransformWizardPage extends WizardPage{
 							
 							@Override
 							public void run() {
-								lblStatus.setText("New PCM model has been created in: " + outputFolder.getFullPath());
+								lblStatus.setText("Transformation Done");
 								composite.layout();
 								composite.redraw();
 								

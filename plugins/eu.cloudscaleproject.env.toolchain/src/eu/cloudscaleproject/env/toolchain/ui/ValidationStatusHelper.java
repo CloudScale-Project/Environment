@@ -67,11 +67,11 @@ public class ValidationStatusHelper
 
 	public static int countValidationWarnings(IEditorInputResource alternative)
 	{
-		int count = alternative.getSelfStatus().getWarningIDs().size();
+		int count = alternative.getSelfStatus().getWarningIDs().length;
 
 		for (IValidationStatus status : alternative.getStatus())
 		{
-			count += status.getWarningIDs().size();
+			count += status.getWarningIDs().length;
 		}
 
 		return count;
@@ -79,7 +79,7 @@ public class ValidationStatusHelper
 
 	public static void showValidationErrorDialog(IEditorInputResource alternative)
 	{
-		int numOfwarnings = alternative.getSelfStatus().getWarningIDs().size();
+		int numOfwarnings = alternative.getSelfStatus().getWarningIDs().length;
 
 		Warning[] warnings = alternative.getSelfStatus().getWarnings();
 		LinkedList<Status> statuses = new LinkedList<>();

@@ -108,6 +108,11 @@ public class ExtractorTabItemExtension implements ProjectEditorExtension{
 	public boolean isDirty() {
 		return extractorEditor.isDirty();
 	}
+	
+	@Override
+	public void setFocus() {
+		extractorEditor.refresh();
+	}
 
 	@Override
 	public void handleAction(String action) {
