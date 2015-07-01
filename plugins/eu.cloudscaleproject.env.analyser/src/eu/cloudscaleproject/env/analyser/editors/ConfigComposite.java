@@ -39,6 +39,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -265,7 +266,9 @@ public class ConfigComposite extends SidebarEditorComposite
 						{
 							throw new IllegalStateException("Sidebar resource provider not set!");
 						}
-						resourceProvider.createNewResource(data[0], data[1]);
+						IEditorInputResource eir = resourceProvider.createNewResource(data[0], data[1]);
+						ValidationDiagramService.showStatus(project, eir);
+						OpenAlternativeUtil.openAlternative(eir);
 					}
 				});
 		dialog.open();

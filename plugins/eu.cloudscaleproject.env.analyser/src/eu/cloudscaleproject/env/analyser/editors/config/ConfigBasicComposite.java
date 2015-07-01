@@ -47,18 +47,6 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	private MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 	
 	private DataBindingContext bindingContext = null;
-	
-	/*
-	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(ConfAlternative.PROP_INPUT_ALT_SET.equals(evt.getPropertyName())){
-				refresh();
-			}
-		}
-	};
-	*/
 
 	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -66,17 +54,6 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		this.alternative = input;
 				
 		setLayout(new GridLayout(1, false));
-		
-		/*
-		Label lblUsage = new Label(this, SWT.NONE);
-		lblUsage.setText("Usage:");
-		
-		Composite compositeUsageEvolution = new Composite(this, SWT.NONE);
-		compositeUsageEvolution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		GridLayout gl_compositeMetDesc = new GridLayout(2, false);
-		gl_compositeMetDesc.marginLeft = 10;
-		compositeUsageEvolution.setLayout(gl_compositeMetDesc);
-		*/
 		
 		Label lblConfiguration = new Label(this, SWT.NONE);
 		lblConfiguration.setText("Configuration:");
@@ -117,6 +94,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			public void widgetSelected(SelectionEvent e) {
 				if(btnCheckSimTime.getSelection()){
 					textSimTime.setEnabled(true);
+					textSimTime.setText("10");
 				}
 				else{
 					textSimTime.setEnabled(false);
@@ -131,6 +109,9 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 						}
 					}));
 				}
+				
+				updateSimTimeGUI();
+				updateMeasureCountGUI();
 			}
 		});
 		btnCheckMeasureCount.addSelectionListener(new SelectionAdapter() {
@@ -138,6 +119,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			public void widgetSelected(SelectionEvent e) {
 				if(btnCheckMeasureCount.getSelection()){
 					textMeasureCount.setEnabled(true);
+					textMeasureCount.setText("100");
 				}
 				else{
 					textMeasureCount.setEnabled(false);
@@ -152,6 +134,9 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 						}
 					}));
 				}
+				
+				updateSimTimeGUI();
+				updateMeasureCountGUI();
 			}
 		});
 		

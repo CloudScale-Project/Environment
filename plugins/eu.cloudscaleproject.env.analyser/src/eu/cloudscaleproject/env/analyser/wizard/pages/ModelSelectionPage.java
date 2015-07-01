@@ -77,6 +77,12 @@ public class ModelSelectionPage extends WizardPage{
 				}				
 			}
 		});
+
+		//select all
+		for(ModelType t : types){
+			selectedModels.add(t);
+		}
+		tableView.setAllChecked(true);
 		
 		setControl(container);
 	}

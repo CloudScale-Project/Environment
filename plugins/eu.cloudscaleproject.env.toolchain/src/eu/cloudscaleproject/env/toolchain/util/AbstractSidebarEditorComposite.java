@@ -143,9 +143,8 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 		sidebarBuilder.removeSidebarEditor(ei);
 	}
 	
-	public void update(){
-		sidebarBuilder.update();
-		super.update();
+	public void refresh(){
+		sidebarBuilder.refresh();
 	}
 	
 	public Color getSidebarSectionBackgroundColor(){
@@ -175,11 +174,6 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 	
 	public void setRemoveButtonEnabled(boolean enable){
 		sidebarBuilder.setRemoveButtonEnabled(enable);
-	}
-	
-	@Override
-	public void refresh() {
-		sidebarBuilder.update();
 	}
 	
 	@Override

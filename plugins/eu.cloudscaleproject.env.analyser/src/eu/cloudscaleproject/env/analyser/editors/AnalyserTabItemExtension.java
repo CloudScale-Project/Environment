@@ -121,6 +121,11 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 			}
 		}
 	}
+	
+	@Override
+	public void setFocus() {
+		analyserEditor.refresh();
+	}
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {

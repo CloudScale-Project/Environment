@@ -37,6 +37,8 @@ import org.scaledl.usageevolution.Usage;
 
 import tools.descartes.dlim.Sequence;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -206,11 +208,20 @@ public class UsageComposite extends Composite implements IRefreshable{
 		limboComboViewer.setInput(getSequences());
 		
 		Button button = new Button(this, SWT.NONE);
-		button.setText("Edit arrival rate");
+		button.setText("Open usage evolution editor");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				openLimboEditor();
+				if(UsageComposite.this.usage.getLoadEvolution() != null){
+					openLimboEditor();
+				}
+				else{
+					CommandExecutor ce = CloudscaleContext.getCustomContext().get(CommandExecutor.class);
+					if(ce != null){
+						ce.execute("eu.cloudscaleproject.env.usageevolution.command.openeditor");
+					}
+						
+				}
 				super.widgetSelected(e);
 			}
 		});

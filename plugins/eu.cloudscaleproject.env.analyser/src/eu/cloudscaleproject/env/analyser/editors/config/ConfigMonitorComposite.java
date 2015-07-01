@@ -4,6 +4,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateListStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
@@ -19,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.uml2.common.edit.command.ChangeCommand;
 import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
 import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
@@ -67,9 +69,19 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		btnAddNew.setText("+");
 		btnAddNew.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				MeasurementSpecification ms = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
-				Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
-				masterMonitor.getMeasurementSpecifications().add(ms);
+				
+				//add measurement specification
+				CommandStack cs = ConfigMonitorComposite.this.editingDomain.getCommandStack();
+				cs.execute(new ChangeCommand(editingDomain, new Runnable() {
+					
+					@Override
+					public void run() {
+						MeasurementSpecification ms = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
+						Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
+						masterMonitor.getMeasurementSpecifications().add(ms);
+					}
+				}));
+				
 				folder.setSelection(folder.getItemCount()-1);
 			};
 		});
@@ -78,11 +90,21 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		btnRemove.setText("-");
 		btnRemove.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				int selection = folder.getSelectionIndex();
-				if(selection >= 0){
-					Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
-					masterMonitor.getMeasurementSpecifications().remove(selection);
-				}
+				
+				//remove measurement specification
+				CommandStack cs = ConfigMonitorComposite.this.editingDomain.getCommandStack();
+				cs.execute(new ChangeCommand(editingDomain, new Runnable() {
+					
+					@Override
+					public void run() {
+						int selection = folder.getSelectionIndex();
+						if(selection >= 0){
+							Monitor masterMonitor = (Monitor)monitorWrapper.getMaster();
+							masterMonitor.getMeasurementSpecifications().remove(selection);
+						}
+					}
+				}));
+				
 			};
 		});
 		folder.setTopRight(folderControlsComposite, SWT.RIGHT);

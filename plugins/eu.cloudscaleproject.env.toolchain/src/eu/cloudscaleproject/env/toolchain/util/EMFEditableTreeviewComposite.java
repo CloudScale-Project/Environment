@@ -68,7 +68,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 					@Override
 					public void run() {
 						if (!treeViewer.getTree().isDisposed()) {
-							treeViewer.refresh();
+							treeViewer.refresh(true);
 						}
 					}
 				});
@@ -156,7 +156,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		});
 
 		this.treeViewer.setInput(input);
-		this.treeViewer.refresh();
+		this.treeViewer.refresh(true);
 		
 		alternative.addPropertyChangeListener(editorInputListener);
 		addDisposeListener(new DisposeListener() {

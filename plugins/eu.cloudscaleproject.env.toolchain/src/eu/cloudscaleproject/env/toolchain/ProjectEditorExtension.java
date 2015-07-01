@@ -14,4 +14,6 @@ public interface ProjectEditorExtension extends IPropertySheetPageProvider{
 	
 	public void save();
 	public boolean isDirty();
+	
+	public void setFocus();
 }

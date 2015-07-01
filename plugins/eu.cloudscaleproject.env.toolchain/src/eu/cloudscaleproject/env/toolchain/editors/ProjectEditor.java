@@ -147,6 +147,13 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 
 	@Override
 	public void setFocus() {
+		
+		for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
+			if(tabFolder.getSelection() != null && tabFolder.getSelection().equals(pee.getTabItem())){
+				pee.setFocus();
+			}
+		}
+		
 		CloudscaleContext.registerCurrent(IProject.class, ExplorerProjectPaths.getProject(this));
 		CloudscaleContext.registerGlobal(IProject.class, ExplorerProjectPaths.getProject(this));
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));

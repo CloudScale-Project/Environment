@@ -314,7 +314,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			}
 		}
 		
-		public void update() {
+		public void refresh() {
 			checkWidgets();
 			
 			if(composite instanceof IRefreshable){
@@ -338,7 +338,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			stackLayout.topControl = composite;
 			isSelected = true;
 			
-			update();
+			refresh();
 
 			handleSelect(input);
 			
@@ -638,7 +638,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		epc.select();
 	}
 	
-	public void addSidebarEditor(IEditorInput ei, String section){
+	public synchronized void addSidebarEditor(IEditorInput ei, String section){
 
 		// Workaround - entry can already exist - thread fuck
 		if (entries.get(ei) != null) return;
@@ -653,7 +653,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		compositeSidebarList.layout(true);
 	}
 	
-	public void removeSidebarEditor(IEditorInput editorInput){
+	public synchronized void removeSidebarEditor(IEditorInput editorInput){
 		//select another item
 		int selIndex = getCurrentSelectionIndex();
 		int newIndex = selIndex > 0 ? selIndex - 1 : selIndex;
@@ -703,12 +703,12 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		return false;
 	}
 	
-	public void update(){
+	public void refresh(){
 		
 		//update selection
 		EditorItem selectedItem = getCurrentSelectionItem();
 		if(selectedItem != null){
-			selectedItem.update();
+			selectedItem.refresh();
 		}
 		
 		compositeArea.update();

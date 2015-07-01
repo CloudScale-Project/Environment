@@ -165,10 +165,11 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 				public void handle(IContainer folder) {
 					resSet.getResources().clear();
 					findAndLoadResources(folder);				
-					tableView.refresh(true);				
 					
 					selectedResources.clear();
-					selectedDiagramResources.clear();					
+					selectedDiagramResources.clear();
+					
+					tableView.refresh(true);				
 				}
 			});
 		}
@@ -283,12 +284,11 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			resSet.getResources().clear();
 			resSetDiagram.getResources().clear();
 			
-			findAndLoadResources(folder);
-			tableView.setAllChecked(false);
-			tableView.refresh(true);				
-			
 			selectedResources.clear();
 			selectedDiagramResources.clear();
+			
+			findAndLoadResources(folder);
+			tableView.refresh(true);				
 		}
 	}
 	
@@ -311,6 +311,16 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
                  ExplorerProjectPaths.getEmfResource(resSetDiagram, file);
              }
 		}
+		
+		//select all
+		for(Resource res : resSet.getResources()){
+			selectResource(res, true);
+		}
+		
+		//Refresh is needed here to recreate table items from the resource set!
+		//Only after that, table items can be selected!
+		tableView.refresh(true);
+		tableView.setAllChecked(true);
 	}
 	
 	private void createFolderSelection(Composite composite, final String name, final String text,
