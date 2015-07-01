@@ -87,11 +87,11 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		alternative = input;
 		setLayout(new GridLayout(2, false));
 		
-		treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE){
+		
+		treeviewComposite = new EMFEditableTreeviewComposite(input, editor.getEditorSite(), this, SWT.NONE){
 			
 			@Override
 			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
-
 				// TODO: AT branding
 				menuManager.add(createMDSDProfilesMenu());
 			}
@@ -204,7 +204,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 	private void executeCommand (String cmdId, ISelection selection)
 	{
 
-		try  { 
+		try  {
 			// TODO: move to common helpers
 			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);

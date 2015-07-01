@@ -49,20 +49,37 @@ public class InputAlternative extends EditorInputEMF
 		createEmpty(ModelType.GROUP_PCM);
 	}
 
-	public void createEmpty(ModelType[] types)
+	public void createEmpty(final ModelType[] types)
 	{
+		createSubResources(new Runnable() {
+			
+			@Override
+			public void run() {
+				PCMResourceSet resSet = new PCMResourceSet(getResource());
+				resSet.createAll(types);
 
-		PCMResourceSet resSet = new PCMResourceSet(getResource());
-		resSet.createAll(types);
+				for (ModelType type : types)
+				{
+					IFile file = resSet.getModelFile(type);
+					EObject root = resSet.getModelRootObject(type);
 
-		for (ModelType type : types)
-		{
-			IFile file = resSet.getModelFile(type);
-			EObject root = resSet.getModelRootObject(type);
-
-			this.resSet.getResources().add(root.eResource());
-			setSubResource(type.getToolchainFileID(), file);
-		}
+					InputAlternative.this.resSet.getResources().add(root.eResource());
+					setSubResource(type.getToolchainFileID(), file);
+					
+					EObject diagram = resSet.getDiagramRootObject(type);
+					if(diagram != null){
+						try {
+							diagram.eResource().save(null);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		
+		save();
 	}
 
 	public String getToolchainKey(IResource res)

@@ -1,7 +1,5 @@
 package eu.cloudscaleproject.env.common.notification;
 
-import java.util.Set;
-
 import org.eclipse.emf.validation.internal.modeled.model.validation.SeverityEnum;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -45,7 +43,7 @@ public interface IValidationStatus{
 	public Warning[] getWarnings();
 	public String getWarningMessage(String id);
 	public int getWarningType(String id);
-	public Set<String> getWarningIDs();
+	public String[] getWarningIDs();
 		
 	public void addWarning(String id, int severity, String message);
 	public void addWarning(String id, int severity, String message, BasicCallback<Object> handle);

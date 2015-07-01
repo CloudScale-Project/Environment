@@ -2,7 +2,6 @@ package eu.cloudscaleproject.env.common.notification;
 
 import java.beans.PropertyChangeSupport;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -69,7 +68,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public boolean hasWarnings() {
+	public synchronized boolean hasWarnings() {
 		return !warnings.isEmpty();
 	}
 
@@ -98,12 +97,12 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 		pcs.firePropertyChange(PROP_VALID, this.isValid, this.isValid = isDone);
 	}
 	
-	public Warning[] getWarnings(){
+	public synchronized Warning[] getWarnings(){
 		return warnings.values().toArray(new Warning[warnings.values().size()]);
 	}
 
 	@Override
-	public String getWarningMessage(String id) {
+	public synchronized String getWarningMessage(String id) {
 		Warning w = warnings.get(id);
 		if(w != null){
 			return w.message;
@@ -112,7 +111,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 	
 	@Override
-	public int getWarningType(String id) {
+	public synchronized int getWarningType(String id) {
 		Warning w = warnings.get(id);
 		if(w != null){
 			return w.severity;
@@ -121,12 +120,12 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	};
 
 	@Override
-	public Set<String> getWarningIDs() {
-		return warnings.keySet();
+	public synchronized String[] getWarningIDs() {
+		return warnings.keySet().toArray(new String[warnings.size()]);
 	}
 
 	@Override
-	public void addWarning(String id, int severity, String message) {
+	public synchronized void addWarning(String id, int severity, String message) {
 		
 		if(warnings.containsKey(id)){
 			return;
@@ -142,7 +141,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
+	public synchronized void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
 		
 		if(warnings.containsKey(id)){
 			return;
@@ -159,7 +158,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 	
 	@Override
-	public void checkError(String id, boolean expression, boolean throwException, 
+	public synchronized void checkError(String id, boolean expression, boolean throwException, 
 						   String message) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -173,7 +172,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 	
 	@Override
-	public void check(String id, boolean expression, boolean throwException, 
+	public synchronized void check(String id, boolean expression, boolean throwException, 
 					  int severity, String message) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -187,7 +186,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void check(String id, boolean expression, boolean throwException, 
+	public synchronized void check(String id, boolean expression, boolean throwException, 
 					  int severity, String message, BasicCallback<Object> handler) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -201,7 +200,7 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 	
 	@Override
-	public void handleWarning(String id) {
+	public synchronized void handleWarning(String id) {
 		Warning w = warnings.get(id);
 		if(w != null){
 			w.handler.handle(this);
@@ -209,13 +208,13 @@ public class ResourceValidationStatus implements IValidationStatus, IProjectProv
 	}
 
 	@Override
-	public void removeWarning(String id) {
+	public synchronized void removeWarning(String id) {
 		warnings.remove(id);
 		pcs.firePropertyChange(PROP_WARNING_REMOVE, id, null);
 	}
 
 	@Override
-	public void clearWarnings() {
+	public synchronized void clearWarnings() {
 		for (Object id : warnings.keySet().toArray()){
 			removeWarning((String)id);
 		}

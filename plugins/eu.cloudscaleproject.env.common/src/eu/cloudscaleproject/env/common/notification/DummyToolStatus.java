@@ -1,8 +1,5 @@
 package eu.cloudscaleproject.env.common.notification;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import eu.cloudscaleproject.env.common.BasicCallback;
 
 class DummyToolStatus implements IValidationStatus{
@@ -43,7 +40,7 @@ class DummyToolStatus implements IValidationStatus{
 	@Override
 	public int getWarningType(String id){return SEVERITY_ERROR;};
 	@Override
-	public Set<String> getWarningIDs() {return new HashSet<String>();}
+	public String[] getWarningIDs() {return new String[]{};}
 	@Override
 	public boolean isDirty() {
 		// TODO Auto-generated method stub

@@ -147,7 +147,7 @@ public class ConfigComposite extends SidebarEditorComposite
 				MeasuringPointRepository mpRep = mpReps.isEmpty() ? null : mpReps.get(0);
 				
 				measuringPointsComposite = new EMFEditableTreeviewComposite(input, 
-						mpRep,
+						mpRep, null,
 						tabFolder, style);
 				
 				tabItem.setControl(measuringPointsComposite);
