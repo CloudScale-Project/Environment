@@ -88,7 +88,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		setLayout(new GridLayout(2, false));
 		
 		
-		treeviewComposite = new EMFEditableTreeviewComposite(input, editor.getEditorSite(), this, SWT.NONE){
+		treeviewComposite = new EMFEditableTreeviewComposite(input, this, SWT.NONE){
 			
 			@Override
 			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
