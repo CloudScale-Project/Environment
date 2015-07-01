@@ -28,7 +28,7 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 	@Override
 	public void createTabItem(ProjectEditor editor) {
 		tabItem = new CTabItem(editor.getTabFolder(), SWT.NONE);
-		tabItem.setText("Usage evolution");
+		tabItem.setText("Limbo");
 		
 		final IProject project = ExplorerProjectPaths.getProject(editor);
 
