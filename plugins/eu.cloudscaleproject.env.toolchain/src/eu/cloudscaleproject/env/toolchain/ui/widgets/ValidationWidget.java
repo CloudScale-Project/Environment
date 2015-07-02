@@ -37,7 +37,9 @@ public class ValidationWidget extends Composite
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-				Display.getDefault().syncExec(new Runnable()
+			if (evt.getNewValue() != alternative) return;
+
+				Display.getDefault().asyncExec(new Runnable()
 				{
 					@Override
 					public void run()
@@ -55,7 +57,7 @@ public class ValidationWidget extends Composite
 		@Override
 		public void mouseDoubleClick(MouseEvent e)
 		{
-			if (!alternative.getSelfStatus().isValid())
+			if (ValidationStatusHelper.countValidationWarnings(alternative)>0)
 			{
 				ValidationStatusHelper.showValidationWarnings(alternative);
 			}
@@ -81,7 +83,7 @@ public class ValidationWidget extends Composite
 		lblText.addMouseListener(mouseListener);
 		lblIcon.addMouseListener(mouseListener);
 
-		if (alternative == null) return; // 
+		if (alternative == null) return; // TODO: check if this is needed (if yes --> refactor)
 
 		initListeners();
 		updateStatus();
@@ -105,25 +107,25 @@ public class ValidationWidget extends Composite
 	private void updateStatus()
 	{
 		IValidationStatus selfStatus = alternative.getSelfStatus();
+		int warningCount = ValidationStatusHelper.countValidationWarnings(alternative); 
 
-		if (selfStatus.isValid())
+		// Valid without warnings 
+		// Valid/Invalid with warnings (e.g. input not valid)
+		// Invalid without warning -- BUG  workaround
+
+		if (selfStatus.isValid() && warningCount == 0)
 		{
 			lblText.setText("Alternative is valid.");
 			lblIcon.setImage(CommonResources.OK);
-		} else
+		} else if (!selfStatus.isValid() && warningCount == 0)
 		{
-			int warningCount = ValidationStatusHelper.countValidationWarnings(alternative); 
 			// BUG WORKAROUND
-			if (warningCount == 0)
-			{
-				lblText.setText(String.format("Alternative is not valid.")); 
-			}
-			else
-			{
-				lblText.setText(String.format("Alternative is not valid : %s warning(s)", 
-					ValidationStatusHelper.countValidationWarnings(alternative)));
-			}
-
+			lblText.setText(String.format("Alternative is not valid.")); 
+			lblIcon.setImage(CommonResources.WARNING);
+		}
+		else
+		{
+			lblText.setText(String.format("Alternative is not valid : %s warning(s)", warningCount));
 			lblIcon.setImage(CommonResources.WARNING);
 		}
 		

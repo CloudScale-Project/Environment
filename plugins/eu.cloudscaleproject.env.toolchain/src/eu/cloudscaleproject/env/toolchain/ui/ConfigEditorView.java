@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.toolchain.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
+import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
@@ -33,9 +33,6 @@ import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 
 public abstract class ConfigEditorView extends AbstractEditorView
 {
-	
-	private static Map<IConfigAlternative, Job> JOBS_REGISTRY = new HashMap<>();
-
 	private IConfigAlternative alternative;
 
 	private Composite stackedContainer;
@@ -43,16 +40,19 @@ public abstract class ConfigEditorView extends AbstractEditorView
 	private ValidationWidget validationComposite;
 	private ResultWiget resultsComposite;
 	private Composite progressComposite;
-	
+	private AlternativeRunJob lastJob;
+
 	private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener()
 	{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			if (!isRunning()) updateControls();
+			if (evt.getNewValue() == alternative && !isRunning())
+			{
+				updateControls();
+			}
 		}
 	};
-
 
 	/**
 	 * Create the composite.
@@ -68,12 +68,13 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		new TitleWidget(getHeader(), SWT.NONE, alternative);
 
-		if (alternative == null) return; // For WindowBuilder
+		if (alternative == null)
+			return; // For WindowBuilder
 
 		initFooterContent();
 		initListeners();
 	}
-	
+
 	private void initFooterContent()
 	{
 		Composite composite = new Composite(getFooter(), SWT.None);
@@ -89,7 +90,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		progressComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		new ProgressBar(progressComposite, SWT.HORIZONTAL | SWT.INDETERMINATE);
-				
+
 		((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
 		stackedContainer.layout();
 
@@ -99,7 +100,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if (JOBS_REGISTRY.get(alternative) != null && JOBS_REGISTRY.get(alternative).getResult() == null)
+				if (isRunning())
 				{
 					stop();
 				} else
@@ -119,38 +120,22 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void initListeners()
 	{
+
 		this.addDisposeListener(new DisposeListener()
 		{
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				alternative.removePropertyChangeListener(propertyChangeListener);
+				StatusManager.getInstance().removePropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED, propertyChangeListener);
 			}
 		});
 
-		alternative.addPropertyChangeListener(propertyChangeListener);
+		StatusManager.getInstance().addPropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED, propertyChangeListener);
 	}
 
 	private void run()
 	{
-		Job job = new Job("CloudScale Run [" + alternative.getName() + "]")
-		{
-			private RunProgressMonitor internalMonitor;
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor)
-			{
-				internalMonitor = new RunProgressMonitor();
-				return alternative.run(internalMonitor);
-			}
-
-			@Override
-			protected void canceling()
-			{
-				internalMonitor.setCanceled(true);
-				super.canceling();
-			}
-		};
+		AlternativeRunJob job = new AlternativeRunJob();
 
 		job.addJobChangeListener(new JobChangeAdapter()
 		{
@@ -158,14 +143,12 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			public void done(IJobChangeEvent event)
 			{
 				updateControls();
-				JOBS_REGISTRY.put(alternative, null);
 				setEnabledRecursive(getContainer(), true);
 			}
 		});
 
 		job.schedule();
-		JOBS_REGISTRY.put(alternative, job);
-
+		lastJob = job;
 
 		updateControls();
 		setEnabledRecursive(getContainer(), false);
@@ -173,15 +156,14 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void stop()
 	{
-		JOBS_REGISTRY.get(alternative).cancel();
+		lastJob.cancel();
 	}
 
-	private boolean isRunning ()
+	private boolean isRunning()
 	{
-		Job job = JOBS_REGISTRY.get(alternative);
-		return job != null && job.getResult() == null;
+		return lastJob != null && lastJob.isRunning();
 	}
-	
+
 	private void updateControls()
 	{
 		Display.getDefault().asyncExec(new Runnable()
@@ -189,10 +171,11 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void run()
 			{
-				if(stackedContainer == null || stackedContainer.isDisposed()){
+				if (stackedContainer == null || stackedContainer.isDisposed())
+				{
 					return;
 				}
-				
+
 				if (isRunning())
 				{
 					btnRun.setText("Stop");
@@ -200,10 +183,10 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					stackedContainer.layout();
 				} else
 				{
-					Job job = JOBS_REGISTRY.get(alternative);
-					if (job != null && job.getResult() != null)
+					// WORKAROUND : if before 3s after job is finished, than show result
+					if (lastJob != null && System.currentTimeMillis() < 3000+lastJob.getEndTimestamp())
 					{
-						resultsComposite.setStatus(job.getResult());
+						resultsComposite.setStatus(lastJob.getResult());
 						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
 
 						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());
@@ -221,16 +204,17 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			}
 		});
 	}
-	
 
 	private HashMap<Control, Boolean> mapOriginalEnableSettings = new HashMap<>();
 
 	private void setEnabledRecursive(final Control ctrl, final boolean enabled)
 	{
-		Display.getDefault().syncExec(new Runnable() {
-			
+		Display.getDefault().syncExec(new Runnable()
+		{
+
 			@Override
-			public void run() {
+			public void run()
+			{
 				if (ctrl instanceof Composite)
 				{
 					Composite comp = (Composite) ctrl;
@@ -250,11 +234,63 @@ public abstract class ConfigEditorView extends AbstractEditorView
 						{
 							ctrl.setEnabled(enabled);
 						}
-					}				
+					}
+				}
+			}
+
+		});
+	}
+
+
+	private class AlternativeRunJob extends Job
+	{
+		private long startTimestamp;
+		private long endTimestamp;
+
+		public AlternativeRunJob()
+		{
+			super("CloudScale Run [" + alternative.getName() + "]");
+
+		}
+
+		private RunProgressMonitor internalMonitor;
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor)
+		{
+			try
+			{
+				startTimestamp = System.currentTimeMillis();
+				internalMonitor = new RunProgressMonitor();
+				return alternative.run(internalMonitor);
+			} finally
+			{
+				endTimestamp = System.currentTimeMillis();
 			}
 		}
+
+		@Override
+		protected void canceling()
+		{
+			internalMonitor.setCanceled(true);
+			super.canceling();
+		}
 		
-		});
+		public boolean isRunning ()
+		{
+			return startTimestamp>0 && endTimestamp==0;
+		}
+
+		@SuppressWarnings("unused")
+		public long getStartTimestamp()
+		{
+			return startTimestamp;
+		}
+
+		public long getEndTimestamp()
+		{
+			return endTimestamp;
+		}
 	}
 
 	private class RunProgressMonitor implements IProgressMonitor
@@ -270,7 +306,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 				public void run()
 				{
 					// not acctually used
-					//progressBarDeterminate.setSelection(work);
+					// progressBarDeterminate.setSelection(work);
 				}
 			});
 		}
