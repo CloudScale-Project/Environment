@@ -17,6 +17,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	private static final Logger logger = Logger.getLogger(EditorInputResource.class.getName());
 	private PropertyChangeListener listener;
 	
+	protected final Object saveLoadLock = new Object();
 	protected final IResource resource;
 	
 	private boolean isLoaded = false;
@@ -96,87 +97,96 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	}
 	
 	@Override
-	public final synchronized void create() {
-		try{
-			createInProgress = true;
-			logger.info("Creating resource: " + resource.getFullPath());
-			handleCreate();
-		}
-		finally{
-			createInProgress = false;
+	public final void create() {
+		
+		synchronized (saveLoadLock) {
+			try{
+				createInProgress = true;
+				logger.info("Creating resource: " + resource.getFullPath());
+				handleCreate();
+			}
+			finally{
+				createInProgress = false;
+			}
+			
+			save();
+			isLoaded = true;
 		}
 		
-		save();
-		isLoaded = true;		
 	}
 	
 	@Override
-	public final synchronized void save() {
+	public final void save() {
 		
-		if(createInProgress){
-			return;
-		}
-		
-		try{
-			saveInProgress = true;
-			logger.info("Saving resource: " + resource.getFullPath());
-			handleSave();
-			setDirty(false);
-		}
-		finally{
-			saveInProgress = false;
+		synchronized (saveLoadLock) {
+			if(createInProgress){
+				return;
+			}
+			
+			try{
+				saveInProgress = true;
+				logger.info("Saving resource: " + resource.getFullPath());
+				handleSave();
+				setDirty(false);
+			}
+			finally{
+				saveInProgress = false;
+			}
 		}
 		
 		pcs.firePropertyChange(PROP_SAVED, false, true);
 	}
 	
 	@Override
-	public final synchronized void load() {
+	public final void load() {
 		long time = System.currentTimeMillis();
 		
-		//skip load operation if it is triggered from save or create
-		if(createInProgress || saveInProgress || deleteInProgress){
-			return;
-		}
-		
-		if(!resource.exists()){
-			return;
-		}
-		
-		IResource res = getResource();
-		if(res == null){
-			throw new IllegalStateException("Can't load resource. Root folder is NULL!");
-		}
-		
-		if(!res.exists()){
-			throw new IllegalStateException("Can't load resource. Root folder does not exist: " + res.getLocation().toString());
-		}
-		
-
-		if(isDirty){
-			// FIXME: possible ThreadLock - save is triggered from UI and load from another thread
-			//boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
-			//		"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
-			//if(!load){
-			//	return;
-			//}
+		synchronized (saveLoadLock) {
 			
-			if (Display.getDefault().getThread() != Thread.currentThread())
-			{
-                logger.warning("FIXME: Load requested from NonGUI thread, while state was dirty -- possible ThreadLock. Thread="+Thread.currentThread().getName());
-                return;
+			//skip load operation if it is triggered from save or create
+			if(createInProgress || saveInProgress || deleteInProgress){
+				return;
 			}
-		}
+			
+			if(!resource.exists()){
+				return;
+			}
+			
+			IResource res = getResource();
+			if(res == null){
+				throw new IllegalStateException("Can't load resource. Root folder is NULL!");
+			}
+			
+			if(!res.exists()){
+				throw new IllegalStateException("Can't load resource. Root folder does not exist: " + res.getLocation().toString());
+			}
+			
+
+			if(isDirty){
+				// FIXME: possible ThreadLock - save is triggered from UI and load from another thread
+				//boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
+				//		"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
+				//if(!load){
+				//	return;
+				//}
 				
-		try {
-			loadInProgress = true;
-			logger.info("Loading resource: " + resource.getFullPath());
-			handleLoad();
-			setDirty(false);
-			isLoaded = true;
-		}
-		finally{
-			loadInProgress = false;
+				if (Display.getDefault().getThread() != Thread.currentThread())
+				{
+	                logger.warning("FIXME: Load requested from NonGUI thread, while state was dirty -- possible ThreadLock. Thread="+Thread.currentThread().getName());
+	                return;
+				}
+			}
+					
+			try {
+				loadInProgress = true;
+				logger.info("Loading resource: " + resource.getFullPath());
+				handleLoad();
+				setDirty(false);
+				isLoaded = true;
+			}
+			finally{
+				loadInProgress = false;
+			}
 		}
 		
 		pcs.firePropertyChange(PROP_LOADED, false, true);
@@ -184,20 +194,23 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	}
 	
 	@Override
-	public final synchronized void delete() {
+	public final void delete() {
 		
-		if(!resource.exists()){
-			return;
+		synchronized (saveLoadLock) {
+			if(!resource.exists()){
+				return;
+			}
+			
+			try{
+				deleteInProgress = true;
+				logger.info("Deleting resource: " + resource.getFullPath());
+				handleDelete();
+			}
+			finally{
+				deleteInProgress = false;
+			}
 		}
 		
-		try{
-			deleteInProgress = true;
-			logger.info("Deleting resource: " + resource.getFullPath());
-			handleDelete();
-		}
-		finally{
-			deleteInProgress = false;
-		}
 		pcs.firePropertyChange(PROP_DELETED, false, true);
 	}
 	

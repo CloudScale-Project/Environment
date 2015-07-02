@@ -30,7 +30,7 @@ public class InputAlternative extends EditorInputEMF
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.ANALYSER_INPUT_ID);
+		super(project, folder, ModelType.GROUP_PCM_EXTENDED, ToolchainUtils.ANALYSER_INPUT_ID);
 	}
 
 	public void importFromFolder(IContainer folder)
@@ -180,32 +180,4 @@ public class InputAlternative extends EditorInputEMF
 		}
 	}
 
-	@Override
-	protected void doLoad()
-	{
-
-		super.doLoad();
-
-		try
-		{
-			loadModels();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private final void loadModels() throws IOException
-	{
-		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
-		{
-			for (IResource f : getSubResources(type.getToolchainFileID()))
-			{
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-				res.unload();
-				res.load(null);
-			}
-		}
-	}
 }

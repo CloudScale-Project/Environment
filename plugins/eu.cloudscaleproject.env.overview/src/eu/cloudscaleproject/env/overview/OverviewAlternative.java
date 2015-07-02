@@ -1,16 +1,11 @@
 package eu.cloudscaleproject.env.overview;
 
-import java.io.IOException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.scaledl.overview.diagram.Util;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
@@ -26,7 +21,7 @@ public class OverviewAlternative extends EditorInputEMF{
 	private static final String OVERVIEW_MODEL_DIAGRAM_FILENAME = "overview.sdlo_diagram";
 		
 	public OverviewAlternative(IProject project, IFolder folder) {
-		super(project, folder, ToolchainUtils.OVERVIEW_ID);
+		super(project, folder, new ModelType[]{ModelType.OVERVIEW}, ToolchainUtils.OVERVIEW_ID);
 	}
 	
 	@Override
@@ -40,29 +35,5 @@ public class OverviewAlternative extends EditorInputEMF{
 		
 		setSubResource(ToolchainUtils.KEY_FILE_OVERVIEW, modelFile);
 		setSubResource(ToolchainUtils.KEY_FILE_OVERVIEW_DIAGRAM, diagramFile);
-	}
-
-	@Override
-	protected void doLoad() {
-		super.doLoad();
-		
-		try
-		{
-			loadModels();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void loadModels() throws IOException{
-		
-		for (IResource f : getSubResources(ModelType.OVERVIEW.getToolchainFileID()))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
 	}
 }

@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.alternatives;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,7 +116,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public ConfAlternative(IProject project, IFolder folder, Type type)
 	{
-		super(project, folder, ToolchainUtils.ANALYSER_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
+		super(project, folder, ModelType.GROUP_EXPERIMENTS, ToolchainUtils.ANALYSER_CONF_ID,
+				ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.ANALYSER_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.ANALYSER_RES_ID));
 
@@ -1115,16 +1115,13 @@ public class ConfAlternative extends AbstractConfigAlternative
 	@Override
 	protected void doLoad()
 	{
-
 		super.doLoad();
 
-		try
-		{
-			loadModels();
-		} catch (IOException e2)
-		{
-			e2.printStackTrace();
-		}
+		// load plugin models into resource set
+		URI metricDescriptions = PathmapManager.denormalizeURI(URI
+				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
+		resSet.getResource(metricDescriptions, true);
+		
 	}
 
 	@Override
@@ -1141,8 +1138,15 @@ public class ConfAlternative extends AbstractConfigAlternative
 		super.doDelete();
 	}
 
+	/*
 	private final void loadModels() throws IOException
 	{
+		//unload existing models
+		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
+			res.unload();
+		}
+		
+		//load registered models
 		for (ModelType type : ModelType.GROUP_EXPERIMENTS)
 		{
 			for (IResource f : getSubResources(type.getToolchainFileID()))
@@ -1158,6 +1162,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
 		resSet.getResource(metricDescriptions, true);
 	}
+	*/
 
 	@Override
 	protected IStatus doRun(IProgressMonitor monitor) throws CoreException

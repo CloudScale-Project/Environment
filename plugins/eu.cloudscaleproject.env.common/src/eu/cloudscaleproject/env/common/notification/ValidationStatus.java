@@ -13,13 +13,15 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	private String name;
-	private final String id;
+	protected final String id;
 	
 	private boolean isDirty = false;
-	private boolean isValid = false;	
+	private boolean isValid = false;
+	
+	private final Object warningsLock = new Object();
 	private LinkedHashMap<String, Warning> warnings = new LinkedHashMap<String, Warning>();
 	
-	private final IValidationStatusProvider provider;
+	protected final IValidationStatusProvider provider;
 	
 	public ValidationStatus(IValidationStatusProvider provider, String id) {
 		this.provider = provider;
@@ -41,23 +43,24 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 		return provider;
 	}
 	
+	public IProject getProject(){
+		if(provider instanceof IProjectProvider){
+			return ((IProjectProvider)provider).getProject();
+		}
+		return null;
+	}
+	
 	@Override
 	public String getID() {
 		return id;
 	}
-	
-	@Override
-	public IProject getProject() {
-		if(provider instanceof IProjectProvider){
-			IProjectProvider pp = (IProjectProvider)provider;
-			return pp.getProject();
-		}
-		return null;
-	}
 
 	@Override
-	public synchronized boolean hasWarnings() {
-		return !warnings.isEmpty();
+	public boolean hasWarnings() {
+		
+		synchronized (warningsLock) {
+			return !warnings.isEmpty();
+		}
 	}
 
 	@Override
@@ -90,53 +93,74 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 
 	@Override
-	public synchronized String getWarningMessage(String id) {
-		Warning w = warnings.get(id);
-		if(w != null){
-			return w.message;
+	public String getWarningMessage(String id) {
+		
+		synchronized (warningsLock) {
+			Warning w = warnings.get(id);
+			if(w != null){
+				return w.message;
+			}
+			return null;
 		}
-		return null;
 	}
 	
 	@Override
-	public synchronized int getWarningType(String id) {
-		Warning w = warnings.get(id);
-		if(w != null){
-			return w.severity;
+	public int getWarningType(String id) {
+		
+		synchronized (warningsLock) {
+			Warning w = warnings.get(id);
+			if(w != null){
+				return w.severity;
+			}
+			return SEVERITY_ERROR;
 		}
-		return SEVERITY_ERROR;
 	};
 
 	@Override
-	public synchronized String[] getWarningIDs() {
-		return warnings.keySet().toArray(new String[warnings.size()]);
+	public String[] getWarningIDs() {
+		synchronized (warningsLock) {
+			return warnings.keySet().toArray(new String[warnings.size()]);
+		}
 	}
 
 	@Override
-	public synchronized void addWarning(String id, int severity, String message) {
-		Warning w = new Warning();
-		w.severity = severity;
-		w.message = message;
-		warnings.put(id, w);
-		setIsValid(false);
+	public void addWarning(String id, int severity, String message) {
 		
+		synchronized (warningsLock) {
+			if(warnings.containsKey(id)){
+				return;
+			}
+			Warning w = new Warning();
+			w.severity = severity;
+			w.message = message;
+			warnings.put(id, w);
+		}
+		
+		setIsValid(false);
 		pcs.firePropertyChange(PROP_WARNING_ADD, null, id);
 	}
 
 	@Override
-	public synchronized void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
-		Warning w = new Warning();
-		w.severity = severity;
-		w.message = message;
-		w.handler = handler;
-		warnings.put(id, w);
-		setIsValid(false);
+	public void addWarning(String id, int severity, String message, BasicCallback<Object> handler) {
 		
+		synchronized (warningsLock) {
+			if(warnings.containsKey(id)){
+				return;
+			}
+			
+			Warning w = new Warning();
+			w.severity = severity;
+			w.message = message;
+			w.handler = handler;
+			warnings.put(id, w);
+		}
+		
+		setIsValid(false);
 		pcs.firePropertyChange(PROP_WARNING_ADD, null, id);
 	}
 	
 	@Override
-	public synchronized void checkError(String id, boolean expression, boolean throwException, 
+	public void checkError(String id, boolean expression, boolean throwException, 
 						   String message) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -150,7 +174,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 	
 	@Override
-	public synchronized void check(String id, boolean expression, boolean throwException, 
+	public void check(String id, boolean expression, boolean throwException, 
 					  int severity, String message) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -164,7 +188,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 
 	@Override
-	public synchronized void check(String id, boolean expression, boolean throwException, 
+	public void check(String id, boolean expression, boolean throwException, 
 					  int severity, String message, BasicCallback<Object> handler) throws ValidationException{
 		if(expression){
 			removeWarning(id);
@@ -178,22 +202,36 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 	
 	@Override
-	public synchronized void handleWarning(String id) {
-		Warning w = warnings.get(id);
+	public void handleWarning(String id) {
+		
+		Warning w = null;
+		synchronized (warningsLock) {
+			w = warnings.get(id);
+		}
+		
 		if(w != null){
 			w.handler.handle(this);
 		}
 	}
 
 	@Override
-	public synchronized void removeWarning(String id) {
-		warnings.remove(id);
+	public void removeWarning(String id) {
+		synchronized (warningsLock) {
+			warnings.remove(id);
+		}
+		
 		pcs.firePropertyChange(PROP_WARNING_REMOVE, id, null);
 	}
 
 	@Override
-	public synchronized void clearWarnings() {
-		for (Object id : warnings.keySet().toArray()){
+	public void clearWarnings() {
+		
+		Object[] toRemove = null;
+		synchronized (warningsLock) {
+			toRemove = warnings.keySet().toArray();
+		}
+		
+		for (Object id : toRemove){
 			removeWarning((String)id);
 		}
 	}

@@ -30,7 +30,7 @@ public class ConfigAlternative extends AbstractConfigAlternative
 
 	public ConfigAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.SPOTTER_DYN_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
+		super(project, folder, null, ToolchainUtils.SPOTTER_DYN_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.SPOTTER_DYN_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.SPOTTER_DYN_RES_ID));
 	}

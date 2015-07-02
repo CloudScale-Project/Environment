@@ -33,7 +33,7 @@ public class ConfingAlternative extends AbstractConfigAlternative
 
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.EXTRACTOR_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
+		super(project, folder, null, ToolchainUtils.EXTRACTOR_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.EXTRACTOR_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
 				ToolchainUtils.EXTRACTOR_RES_ID));
 

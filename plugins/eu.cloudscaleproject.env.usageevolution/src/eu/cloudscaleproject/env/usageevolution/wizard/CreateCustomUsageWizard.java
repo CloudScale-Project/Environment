@@ -50,8 +50,6 @@ public class CreateCustomUsageWizard extends CustomDlimModelWizard{
 		
 		if (res)
 		{
-			this.alternative.load();
-
 			// Close just opened editor
 			IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 			IWorkbenchPage page = workbenchWindow.getActivePage();

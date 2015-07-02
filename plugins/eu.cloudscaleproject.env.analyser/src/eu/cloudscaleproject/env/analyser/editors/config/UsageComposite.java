@@ -57,10 +57,17 @@ public class UsageComposite extends Composite implements IRefreshable{
 	private final ConfAlternative alternative;
 	private final Usage usage;
 	
+	private boolean refreshInProgress = false;
+	
 	private final ISelectionChangedListener scenarioComboListener = new ISelectionChangedListener() {
 		
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
+			
+			if(refreshInProgress){
+				return;
+			}
+			
 			final StructuredSelection ss = (StructuredSelection)event.getSelection();
 			
 			alternative.getEditingDomain().getCommandStack().execute(new AbstractCommand() {
@@ -97,6 +104,11 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
+			
+			if(refreshInProgress){
+				return;
+			}
+			
 			final StructuredSelection ss = (StructuredSelection)event.getSelection();
 			
 			alternative.getEditingDomain().getCommandStack().execute(new AbstractCommand() {
@@ -122,8 +134,13 @@ public class UsageComposite extends Composite implements IRefreshable{
 				@Override
 				public void execute() {
 					last = UsageComposite.this.usage.getLoadEvolution();
-					Sequence sequence = (Sequence)ss.getFirstElement();
-					UsageComposite.this.usage.setLoadEvolution(sequence);
+					
+					IEditorInputResource eir = (IEditorInputResource)ss.getFirstElement();
+					if(eir instanceof EditorInputEMF){
+						EditorInputEMF eie = (EditorInputEMF)eir;
+						EObject eo = eie.getModelRootSingle(ToolchainUtils.KEY_FILE_LIMBO);
+						UsageComposite.this.usage.setLoadEvolution((Sequence)eo);
+					}					
 				}
 			});
 		}
@@ -197,15 +214,15 @@ public class UsageComposite extends Composite implements IRefreshable{
 			
 			@Override
 			public String getText(Object element) {
-				if (element instanceof Sequence) {
-					return ((Sequence) element).getName();
+				if (element instanceof IEditorInputResource) {
+					return ((IEditorInputResource) element).getName();
 				}
 				return super.getText(element);
 			}
 			
 		});
 		limboComboViewer.setContentProvider(new ArrayContentProvider());
-		limboComboViewer.setInput(getSequences());
+		limboComboViewer.setInput(getLimboAlternatives());
 		
 		Button button = new Button(this, SWT.NONE);
 		button.setText("Open usage evolution editor");
@@ -221,8 +238,24 @@ public class UsageComposite extends Composite implements IRefreshable{
 				super.widgetSelected(e);
 			}
 		});
+		
+		limboComboViewer.addSelectionChangedListener(limboComboListener);
+		scenarioComboViewer.addSelectionChangedListener(scenarioComboListener);
 	}
 	
+	private List<IEditorInputResource> getLimboAlternatives(){
+		
+		List<IEditorInputResource> out = new ArrayList<IEditorInputResource>();
+		
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), ToolchainUtils.USAGEEVOLUTION_ID);
+		for(IEditorInputResource eir : rp.getResources()){
+			out.add(eir);
+		}
+		
+		return out;
+	}
+	
+	/*
 	private List<Sequence> getSequences(){
 		List<Sequence> out = new ArrayList<Sequence>();
 		
@@ -242,6 +275,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		return out;
 	}
+	*/
 	
 	public void openLimboEditor(){
 		IFile limboFile = ExplorerProjectPaths.getFileFromEmfResource(usage.getLoadEvolution().eResource());
@@ -261,20 +295,20 @@ public class UsageComposite extends Composite implements IRefreshable{
 	@Override
 	public void refresh() {
 		
-		limboComboViewer.removeSelectionChangedListener(limboComboListener);
-		scenarioComboViewer.removeSelectionChangedListener(scenarioComboListener);
-		
-		if(usage.getScenario() != null){
-			scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
+		try{
+			refreshInProgress = true;
+			if(usage.getScenario() != null){
+				scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
+			}
+			
+			limboComboViewer.setInput(getLimboAlternatives());
+			if(usage.getLoadEvolution() != null){
+				limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+			}
 		}
-		
-		limboComboViewer.setInput(getSequences());
-		if(usage.getLoadEvolution() != null){
-			limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+		finally{
+			refreshInProgress = false;
 		}
-		
-		limboComboViewer.addSelectionChangedListener(limboComboListener);
-		scenarioComboViewer.addSelectionChangedListener(scenarioComboListener);
 		
 	}
 }
