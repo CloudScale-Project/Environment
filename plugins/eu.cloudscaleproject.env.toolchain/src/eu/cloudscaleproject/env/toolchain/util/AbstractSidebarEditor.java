@@ -93,7 +93,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			@Override
 			public void propertyChange(final PropertyChangeEvent evt) {
 				
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						resourceChanged(evt);
 					};

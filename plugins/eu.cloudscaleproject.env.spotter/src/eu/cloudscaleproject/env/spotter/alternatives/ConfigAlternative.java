@@ -39,6 +39,12 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	protected void doLoad()
 	{
 		super.doLoad();
+	}
+	
+	@Override
+	protected void doCreate()
+	{
+		super.doCreate();
 		initModels();
 	}
 	

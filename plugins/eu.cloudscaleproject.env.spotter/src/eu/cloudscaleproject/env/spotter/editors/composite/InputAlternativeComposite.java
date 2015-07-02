@@ -142,39 +142,13 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 			meaEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
 			
 			tabItemMeasurement.setControl(meaComposite);
+			
+			initExternalEditors();
+
 		} catch (PartInitException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-				
-		/*
-		Button btnIsa = new Button(composite, SWT.NONE);
-		btnIsa.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		btnIsa.setBounds(0, 0, 64, 15);
-		btnIsa.setText("Open Instrumentation Satellite Adapter Editor...");
-		btnIsa.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IFile file = InputAlternativeComposite.this.editorInput.getResource().getFile("mEnv.xml");
-				InstrumentationEditor.openInstance(
-						(IEditorInput) ElementFactory.createEditorInput(InstrumentationEditor.ID, file), 
-						InstrumentationEditor.ID);
-			}
-		});
-		
-		Button btnMsa = new Button(composite, SWT.NONE);
-		btnMsa.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnMsa.setText("Open Measurement Satellite Adapter Editor...");
-		btnMsa.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IFile file = InputAlternativeComposite.this.editorInput.getResource().getFile("mEnv.xml");
-				MeasurementEditor.openInstance(
-						(IEditorInput) ElementFactory.createEditorInput(MeasurementEditor.ID, file), 
-						MeasurementEditor.ID);
-			}
-		});
-		*/
 	}
 	
 	private void createDefaultFile(IFile file, String string){
@@ -197,14 +171,18 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		}
 	}
 	
-	long lastRefresh = 0;
 	@Override
 	public void refresh() {
+	}
+	
+	long lastInit = 0;
+	private void initExternalEditors ()
+	{
 		// WORKAROUND - prevent  blinkering 
 		// called 2 times in a row is Main group selected
 		long time = System.currentTimeMillis();
-		if (lastRefresh > time - 500) return;
-		lastRefresh = time;
+		if (lastInit > time - 500) return;
+		lastInit = time;
 		//////
 				
 		for(Control c : meaComposite.getChildren()){
@@ -219,8 +197,6 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		
 		meaComposite.layout();
 		insComposite.layout();
-		
-		super.update();
 	}
 
 	@Override

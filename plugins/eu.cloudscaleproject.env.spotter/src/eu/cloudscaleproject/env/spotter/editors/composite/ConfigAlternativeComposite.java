@@ -98,6 +98,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		
 		initConfigurationComposites(composite);
+		initExternalEditors();
 		
 		m_bindingContext = initDataBindings();
 	}
@@ -190,9 +191,14 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		
 	}
 	
-	long lastRefresh = 0;
 	@Override
 	public void refresh() {
+		m_bindingContext.updateTargets();
+	}
+	
+	long lastRefresh = 0;
+	private void initExternalEditors()
+	{
 		// WORKAROUND - prevent  blinkering 
 		// called 2 times in a row
 		long time = System.currentTimeMillis();
@@ -226,9 +232,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		
 		this.inputAlternatives.clear();
 		this.inputAlternatives.addAll(resourceProvider.getResources());
-		
-		super.update();
-		m_bindingContext.updateTargets();
 	}
 
 	@Override
