@@ -125,6 +125,10 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 
 	@Override
 	public void refresh() {
+		IEMFEditListProperty usageProp = EMFEditProperties.list(alternative.getEditingDomain(), 
+				UsageevolutionPackage.Literals.USAGE_EVOLUTION__USAGES);
+		IObservableList usagesObs = usageProp.observe(alternative.retrieveUsageEvolution());
+		usageListComposite.initBindings(usagesObs);
 		usageListComposite.refresh();
 	}
 }

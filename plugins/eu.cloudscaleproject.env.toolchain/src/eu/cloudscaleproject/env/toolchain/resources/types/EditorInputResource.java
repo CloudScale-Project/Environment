@@ -179,7 +179,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			loadInProgress = false;
 		}
 		
-		//pcs.firePropertyChange(PROP_LOADED, false, true);
+		pcs.firePropertyChange(PROP_LOADED, false, true);
 		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
 	}
 	

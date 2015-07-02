@@ -154,6 +154,10 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 	@Override
 	public void refresh() {
 		if(listComposite != null){
+			IEMFEditListProperty slosProp = EMFEditProperties.list(alternative.getEditingDomain(), 
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE_REPOSITORY__SERVICELEVELOBJECTIVES);
+			IObservableList slosObs = slosProp.observe(alternative.retrieveSLORepository());
+			listComposite.initBindings(slosObs);
 			listComposite.refresh();
 		}
 	}

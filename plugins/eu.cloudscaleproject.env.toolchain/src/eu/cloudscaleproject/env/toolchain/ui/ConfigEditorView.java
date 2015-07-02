@@ -159,6 +159,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			{
 				updateControls();
 				JOBS_REGISTRY.put(alternative, null);
+				setEnabledRecursive(getContainer(), true);
 			}
 		});
 
@@ -167,6 +168,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 
 		updateControls();
+		setEnabledRecursive(getContainer(), false);
 	}
 
 	private void stop()
@@ -179,7 +181,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		Job job = JOBS_REGISTRY.get(alternative);
 		return job != null && job.getResult() == null;
 	}
-
+	
 	private void updateControls()
 	{
 		Display.getDefault().syncExec(new Runnable()
@@ -196,7 +198,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					btnRun.setText("Stop");
 					((StackLayout) stackedContainer.getLayout()).topControl = progressComposite;
 					stackedContainer.layout();
-					setEnabledRecursive(getContainer(), false);
 				} else
 				{
 					Job job = JOBS_REGISTRY.get(alternative);
@@ -216,7 +217,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					stackedContainer.layout();
 					stackedContainer.redraw();
 
-					setEnabledRecursive(getContainer(), true);
 				}
 			}
 		});
@@ -225,29 +225,36 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private HashMap<Control, Boolean> mapOriginalEnableSettings = new HashMap<>();
 
-	private void setEnabledRecursive(Control ctrl, boolean enabled)
+	private void setEnabledRecursive(final Control ctrl, final boolean enabled)
 	{
-		if (ctrl instanceof Composite)
-		{
-			Composite comp = (Composite) ctrl;
-			for (Control c : comp.getChildren())
-				setEnabledRecursive(c, enabled);
-		} else
-		{
-			if (enabled == ctrl.getEnabled())
-			{
-				mapOriginalEnableSettings.put(ctrl, enabled);
-			} else
-			{
-				if (mapOriginalEnableSettings.containsKey(ctrl))
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (ctrl instanceof Composite)
 				{
-					ctrl.setEnabled(mapOriginalEnableSettings.get(ctrl));
+					Composite comp = (Composite) ctrl;
+					for (Control c : comp.getChildren())
+						setEnabledRecursive(c, enabled);
 				} else
 				{
-					ctrl.setEnabled(enabled);
-				}
+					if (enabled == ctrl.getEnabled())
+					{
+						mapOriginalEnableSettings.put(ctrl, enabled);
+					} else
+					{
+						if (mapOriginalEnableSettings.containsKey(ctrl))
+						{
+							ctrl.setEnabled(mapOriginalEnableSettings.get(ctrl));
+						} else
+						{
+							ctrl.setEnabled(enabled);
+						}
+					}				
 			}
 		}
+		
+		});
 	}
 
 	private class RunProgressMonitor implements IProgressMonitor

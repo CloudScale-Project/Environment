@@ -212,16 +212,12 @@ public class UsageComposite extends Composite implements IRefreshable{
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(UsageComposite.this.usage.getLoadEvolution() != null){
-					openLimboEditor();
-				}
-				else{
-					CommandExecutor ce = CloudscaleContext.getCustomContext().get(CommandExecutor.class);
-					if(ce != null){
-						ce.execute("eu.cloudscaleproject.env.usageevolution.command.openeditor");
-					}
-						
-				}
+				
+				CommandExecutor ce = CloudscaleContext.getCustomContext().get(CommandExecutor.class);
+				if(ce != null){
+					ce.execute("eu.cloudscaleproject.env.usageevolution.command.openeditor");
+				}		
+				
 				super.widgetSelected(e);
 			}
 		});

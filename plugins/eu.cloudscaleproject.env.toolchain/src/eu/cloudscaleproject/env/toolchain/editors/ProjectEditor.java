@@ -8,6 +8,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -135,6 +137,19 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		if(!editorProvider.getToolExtensions().isEmpty()){
 			tabFolder.setSelection(editorProvider.getToolExtensions().get(0).getTabItem());
 		}
+		
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				//trigger set focus on tab change!
+				for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
+					if(pee.getTabItem() == tabFolder.getSelection()){
+						pee.setFocus();
+					}
+				}
+			}
+		});
 		
 		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));

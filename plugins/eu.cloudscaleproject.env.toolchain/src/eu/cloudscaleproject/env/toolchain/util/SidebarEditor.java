@@ -157,6 +157,7 @@ public class SidebarEditor extends AbstractSidebarEditor
 			return;
 		}
 
+		removeSidebarEditor(toDelete);
 		((IEditorInputResource)toDelete).delete();
 	}
 

@@ -1,19 +1,20 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.text.ParseException;
-
-import javax.measure.Measure;
-import javax.measure.MeasureFormat;
-
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.databinding.FeaturePath;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -21,26 +22,26 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.uml2.common.edit.command.ChangeCommand;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
+import org.palladiosimulator.servicelevelobjective.ServicelevelObjectivePackage;
 import org.palladiosimulator.servicelevelobjective.Threshold;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.Converters;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public class ConfigSLOComposite extends Composite implements IRefreshable{
 	
-	private final String DEFAULT_UPPER_BOUND = "10";
-	private final String DEFAULT_LOWER_BOUND = "1";
-	
 	private final ConfAlternative alternative;
+	private final EditingDomain editingDomain;
 	
+	private final EObjectWrapper<ServiceLevelObjective> sloWrapper;
 	private final ServiceLevelObjective slo;
 	private final ComboViewer comboMeasurementSpecViewer;
 	
+	private DataBindingContext bindingContext = null;
 		
 	private Text textUpperBound;
 	private Text textLowerBound;
@@ -48,17 +49,14 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 	private Button btnUpperBound;
 	private Button btnLowerBound;
 	
-	private ControlDecoration textUpperDecoration;
-	private ControlDecoration textLowerDecoration;
-	
 	private Label lblNewLabel;
 	
-	private boolean refreshInProfress = false;
-	
-	public ConfigSLOComposite(final ConfAlternative alt, final EObjectWrapper<ServiceLevelObjective> sloWrapper, Composite parent, int style) {
+	public ConfigSLOComposite(ConfAlternative alt, final EObjectWrapper<ServiceLevelObjective> sloWrapper, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = alt;
+		this.editingDomain = alt.getEditingDomain();
+		this.sloWrapper = sloWrapper;
 		this.slo = sloWrapper.getMaster();
 		
 		setLayout(new GridLayout(2, false));
@@ -77,146 +75,33 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 		
 		btnUpperBound = new Button(this, SWT.CHECK);
 		btnUpperBound.setText("Upper bound:");
-		btnUpperBound.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				if(refreshInProfress){
-					return;
-				}
-				
-				CommandStack cs = alt.getEditingDomain().getCommandStack();
-				cs.execute(new ChangeCommand(alt.getEditingDomain(), new Runnable() {
-					
-					@Override
-					public void run() {
-						ServiceLevelObjective slo = sloWrapper.getMaster();
-						
-						if(btnUpperBound.getSelection()){					
-							Threshold tr = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
-							slo.setUpperThreshold(tr);
-
-							textUpperBound.setText(DEFAULT_UPPER_BOUND);
-							textUpperBound.setEnabled(true);
-						}
-						else{
-							textUpperBound.setText("");
-							textUpperBound.setEnabled(false);
-							slo.setUpperThreshold(null);
-						}
-					}
-				}));
-				
-				super.widgetSelected(e);
-			}
-		});
 		
 		textUpperBound = new Text(this, SWT.BORDER);
 		GridData gd_textUpperBound = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_textUpperBound.widthHint = 100;
 		textUpperBound.setLayoutData(gd_textUpperBound);
-		textUpperBound.addModifyListener(new ModifyListener() {
-			
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if(refreshInProfress){
-					return;
-				}
-				
-				CommandStack cs = alt.getEditingDomain().getCommandStack();
-				cs.execute(new ChangeCommand(alt.getEditingDomain(), new Runnable() {
-					@Override
-					public void run() {
-						String value = textUpperBound.getText();
-						ServiceLevelObjective slo = sloWrapper.getMaster();
-						
-						try {
-							slo.getUpperThreshold().setThresholdLimit((Measure)MeasureFormat.getInstance().parseObject(value));
-						} catch (ParseException e1) {
-							textUpperDecoration.show();
-							return;
-						}
-						textUpperDecoration.hide();
-					}
-				}));
-
-			}
-		});
 		
 		btnLowerBound = new Button(this, SWT.CHECK);
 		btnLowerBound.setText("Lower bound:");
-		btnLowerBound.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				if(refreshInProfress){
-					return;
-				}
-				
-				CommandStack cs = alt.getEditingDomain().getCommandStack();
-				cs.execute(new ChangeCommand(alt.getEditingDomain(), new Runnable() {
-					
-					@Override
-					public void run() {
-						ServiceLevelObjective slo = sloWrapper.getMaster();
-						
-						if(btnLowerBound.getSelection()){
-							Threshold tr = ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold();
-							slo.setLowerThreshold(tr);
-
-							textLowerBound.setText(DEFAULT_LOWER_BOUND);
-							textLowerBound.setEnabled(true);
-						}
-						else{
-							textLowerBound.setText("");
-							textLowerBound.setEnabled(false);
-							slo.setLowerThreshold(null);
-						}
-					}
-				}));
-				
-				super.widgetSelected(e);
-			}
-		});
 		
 		textLowerBound = new Text(this, SWT.BORDER);
 		GridData gd_textLowerBound = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_textLowerBound.widthHint = 100;
 		textLowerBound.setLayoutData(gd_textLowerBound);
-		textLowerBound.addModifyListener(new ModifyListener() {
+		
+		addDisposeListener(new DisposeListener() {
 			
-			@SuppressWarnings("rawtypes")
 			@Override
-			public void modifyText(ModifyEvent e) {
-				if(refreshInProfress){
-					return;
-				}
-				
-				CommandStack cs = alt.getEditingDomain().getCommandStack();
-				cs.execute(new ChangeCommand(alt.getEditingDomain(), new Runnable() {
-					@Override
-					public void run() {
-						String value = textLowerBound.getText();
-						ServiceLevelObjective slo = sloWrapper.getMaster();
-						
-						try {
-							slo.getLowerThreshold().setThresholdLimit((Measure)MeasureFormat.getInstance().parseObject(value));
-						} catch (ParseException e1) {
-							textLowerDecoration.show();
-							return;
-						}
-						textLowerDecoration.hide();
-					}
-				}));
-					
+			public void widgetDisposed(DisposeEvent e) {
+				if(bindingContext != null){
+					bindingContext.dispose();
+					bindingContext = null;
+				}				
 			}
 		});
 		
-		textUpperDecoration = new ControlDecoration(textUpperBound,  SWT.TOP | SWT.LEFT);
-		textUpperDecoration.setImage(CommonResources.ERROR);
-		textLowerDecoration = new ControlDecoration(textLowerBound,  SWT.TOP | SWT.LEFT);
-		textLowerDecoration.setImage(CommonResources.ERROR);
+		update();
+		initBindings();
 	}
 	
 	public String getSLOName(){
@@ -224,58 +109,96 @@ public class ConfigSLOComposite extends Composite implements IRefreshable{
 		return entityName;
 	}
 	
-	public void refresh(){
+	public void initBindings(){
 		
-		try{
-			refreshInProfress = true;
-			
-			//update combo-box
-			if(comboMeasurementSpecViewer != null){
-				comboMeasurementSpecViewer.setInput(alternative.getActiveMeasurementSpecifications());
-			}
-			
-			//update lower bound
-			Threshold lowerThreshold = this.slo.getLowerThreshold();
-			if(lowerThreshold != null){
-				btnLowerBound.setSelection(true);
-				textLowerBound.setEnabled(true);
-				if(lowerThreshold.getThresholdLimit() != null){
-					textLowerBound.setText(MeasureFormat.getInstance().format(lowerThreshold.getThresholdLimit()));
-				}
-				else{
-					textLowerBound.setText("");
-				}
-			}
-			else{
-				btnLowerBound.setSelection(false);
-				textLowerBound.setEnabled(false);
-				textLowerBound.setText("");
-			}
-			
-			//update upper bound
-			Threshold upperThreshold = this.slo.getUpperThreshold();
-			if(upperThreshold != null){
-				btnUpperBound.setSelection(true);
-				textUpperBound.setEnabled(true);
+		if(bindingContext != null){
+			bindingContext.dispose();
+		}
+		bindingContext = new DataBindingContext();
+		
+		//bind combo metric description
+		{
+			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboMeasurementSpecViewer);
+			IObservableValue measurementSpecObserveValue = EMFEditObservables.observeValue(editingDomain, sloWrapper.getMaster(), 
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__MEASUREMENT_SPECIFICATION);
+			bindingContext.bindValue(observeSingleSelectionComboViewer, measurementSpecObserveValue, null, null);
+		}
+		
+		Binding upperThresholdBinding = null;
+		Binding lowerThresholdBinding = null;
+		
+		//bind upper bound checkbox
+		{
+			upperThresholdBinding = bindCreateThresholdCheck(btnUpperBound, FeaturePath.fromList(
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__UPPER_THRESHOLD), 
+					ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold());
+		}
+		
+		//bind lower bound checkbox
+		{
+			lowerThresholdBinding = bindCreateThresholdCheck(btnLowerBound, FeaturePath.fromList(
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__LOWER_THRESHOLD), 
+					ServicelevelObjectiveFactory.eINSTANCE.createHardThreshold());
+		}
+		
+		//bind upper bound
+		{	
+			bindThresholdMeasure(textUpperBound, FeaturePath.fromList(
+							ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__UPPER_THRESHOLD,
+							ServicelevelObjectivePackage.Literals.THRESHOLD__THRESHOLD_LIMIT
+					));
+		}
+		
+		//bind lower bound
+		{
+			bindThresholdMeasure(textLowerBound, FeaturePath.fromList(
+					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE__LOWER_THRESHOLD,
+					ServicelevelObjectivePackage.Literals.THRESHOLD__THRESHOLD_LIMIT
+			));
+		}
 				
-				if(upperThreshold.getThresholdLimit() != null){
-					textUpperBound.setText(MeasureFormat.getInstance().format(upperThreshold.getThresholdLimit()));
-				}
-				else{
-					textUpperBound.setText("");
-				}				
-			}
-			else{
-				btnUpperBound.setSelection(false);
-				textUpperBound.setEnabled(false);
-				textUpperBound.setText("");
-			}
-		}
-		finally{
-			refreshInProfress = false;
-		}
+		//bind GUI components		
+		IObservableValue btnUpperCheckObs = (IObservableValue)upperThresholdBinding.getTarget();
+		IObservableValue textUpperObs = WidgetProperties.enabled().observe(textUpperBound);
+		bindingContext.bindValue(textUpperObs, btnUpperCheckObs);
 		
-		layout();
-		redraw();
+		IObservableValue btnLowerCheckObs = (IObservableValue)lowerThresholdBinding.getTarget();
+		IObservableValue textLowerObs = WidgetProperties.enabled().observe(textLowerBound);
+		bindingContext.bindValue(textLowerObs, btnLowerCheckObs);
+		
+		bindingContext.updateTargets();
+	}
+	
+	private Binding bindCreateThresholdCheck(Button button, FeaturePath path, Threshold tr){
+		
+		IObservableValue thresholdObserve = EMFEditProperties.value(editingDomain, path).observe(slo);
+		IObservableValue textObserve = WidgetProperties.selection().observe(button);
+		
+		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		t2mStrategy.setConverter(Converters.getBoolEObjectConverter(tr)[0]);
+		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		m2tStrategy.setConverter(Converters.getBoolEObjectConverter(tr)[1]);
+		return bindingContext.bindValue(textObserve, thresholdObserve, t2mStrategy, m2tStrategy);
+	}
+	
+	private Binding bindThresholdMeasure(Text text, FeaturePath path){
+		
+		IObservableValue thresholdMeasureObserve = EMFEditProperties.value(editingDomain, path).observe(slo);
+		IObservableValue textObserve = WidgetProperties.text(SWT.FocusOut).observe(text);
+		
+		UpdateValueStrategy t2mStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		t2mStrategy.setConverter(Converters.getStringMeasureSecondsConverter()[0]);
+		UpdateValueStrategy m2tStrategy = new UpdateValueStrategy(UpdateValueStrategy.POLICY_UPDATE);
+		m2tStrategy.setConverter(Converters.getStringMeasureSecondsConverter()[1]);
+		return bindingContext.bindValue(textObserve, thresholdMeasureObserve, t2mStrategy, m2tStrategy);
+	}
+	
+	public void refresh(){
+		if(comboMeasurementSpecViewer != null){
+			comboMeasurementSpecViewer.setInput(alternative.getActiveMeasurementSpecifications());
+		}
+		if(bindingContext != null){
+			bindingContext.updateTargets();
+		}
 	}
 }
