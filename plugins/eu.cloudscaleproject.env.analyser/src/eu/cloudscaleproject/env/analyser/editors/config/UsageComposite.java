@@ -202,7 +202,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		//limbo model selection
 		Label lblLimbo = new Label(this, SWT.NONE);
-		lblLimbo.setText("Select usage evolution: ");
+		lblLimbo.setText("Select limbo alternative: ");
 		{
 			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 			lblScenario.setLayoutData(gridData);
@@ -225,7 +225,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		limboComboViewer.setInput(getLimboAlternatives());
 		
 		Button button = new Button(this, SWT.NONE);
-		button.setText("Open usage evolution editor");
+		button.setText("Open limbo editor");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

@@ -18,7 +18,6 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
-import eu.cloudscaleproject.env.toolchain.EMFUtils;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
@@ -111,7 +110,6 @@ public class InputValidator implements IResourceValidator {
 				resource.getURI().lastSegment());
 
 		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
-		EMFUtils.fillValidationStatus(status, diagnostic);
 		
 		status.setIsValid(modelValid);
 		
