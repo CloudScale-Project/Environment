@@ -36,6 +36,9 @@ import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+
 public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable
 {
 	private DataBindingContext m_bindingContext;
@@ -56,6 +59,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			});
 		}
 	};
+	private ControlDecoration warningDecorationNoJavaProjects;
 
 	/**
 	 * Create the composite.
@@ -66,12 +70,15 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	public ConfigAlternativeComposite(Composite parent, int style, ConfingAlternative cif)
 	{
 		super(parent, style, cif);
+		((GridData) getContainer().getLayoutData()).horizontalIndent = 1;
 
 		this.configAlternative = cif;
 
 		// this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
 		// 1));
-		getContainer().setLayout(new GridLayout(2, false));
+		GridLayout gridLayout = new GridLayout(3, false);
+		gridLayout.horizontalSpacing = 15;
+		getContainer().setLayout(gridLayout);
 
 		{
 		Label lblNewLabel = new Label(getContainer(), SWT.NONE);
@@ -82,7 +89,16 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		gd_combo.widthHint = 250;
 		combo.setLayoutData(gd_combo);
+		
+		warningDecorationNoJavaProjects = new ControlDecoration(combo, SWT.LEFT | SWT.TOP);
+		warningDecorationNoJavaProjects.setDescriptionText("No java projects loaded in workspace.");
+		warningDecorationNoJavaProjects.setImage(FieldDecorationRegistry.getDefault()
+                .getFieldDecoration(FieldDecorationRegistry.DEC_WARNING	)
+                .getImage());
+		warningDecorationNoJavaProjects.hide();
+
 		}
+		new Label(getContainer(), SWT.NONE);
 
 		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
 		//containerConfiguration.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -146,7 +162,18 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		if (m_bindingContext != null)
 			m_bindingContext.dispose();
 		m_bindingContext = initDataBindings();
+		
+		if (GlobalInputAlternative.getInstance().getJavaProjects().isEmpty())
+		{
+			warningDecorationNoJavaProjects.show();
+		}
+		else
+		{
+			warningDecorationNoJavaProjects.hide();
+		}
 	}
+	
+	
 	
 	@Override
 	protected void checkSubclass()
