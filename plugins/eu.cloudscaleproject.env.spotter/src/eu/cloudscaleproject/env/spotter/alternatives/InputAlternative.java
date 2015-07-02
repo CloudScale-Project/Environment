@@ -11,6 +11,6 @@ public class InputAlternative extends EditorInputEMF
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+		super(project, folder, null, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
 	}
 }

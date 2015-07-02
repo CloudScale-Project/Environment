@@ -206,9 +206,7 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		if (lastRefresh > time - 500) return;
 		lastRefresh = time;
 		//////
-		
-		editorInput.load();
-		
+				
 		for(Control c : meaComposite.getChildren()){
 			c.dispose();
 		}

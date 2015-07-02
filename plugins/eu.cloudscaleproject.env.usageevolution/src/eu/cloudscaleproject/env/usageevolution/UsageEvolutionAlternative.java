@@ -1,11 +1,8 @@
 package eu.cloudscaleproject.env.usageevolution;
 
-import java.io.IOException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import tools.descartes.dlim.Sequence;
@@ -19,7 +16,7 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 
 	public UsageEvolutionAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ToolchainUtils.USAGEEVOLUTION_ID);
+		super(project, folder, new ModelType[]{ModelType.LIMBO}, ToolchainUtils.USAGEEVOLUTION_ID);
 	}
 
 	public void doCreate()
@@ -31,30 +28,5 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 		res.getContents().add(sequence);
 
 		setSubResource(ToolchainUtils.KEY_FILE_LIMBO, limboFile);
-	}
-
-	@Override
-	protected void doLoad()
-	{
-
-		super.doLoad();
-
-		try
-		{
-			loadModels();
-		} catch (IOException e2)
-		{
-			e2.printStackTrace();
-		}
-	}
-
-	private final void loadModels() throws IOException
-	{
-		for (IResource f : getSubResources(ModelType.LIMBO.getToolchainFileID()))
-		{
-			Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-			res.unload();
-			res.load(null);
-		}
 	}
 }

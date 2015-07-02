@@ -85,6 +85,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		private Color color_select;
 		private Color color_hover;
 		
+		private boolean refreshInProgress = false;
 		public boolean isSelected = false;
 				
 		final PropertyChangeListener eirChangeListener = new PropertyChangeListener() {
@@ -135,8 +136,17 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				btnSelect.setText(input.getName());
 				btnSelect.redraw();
 				
-				if(composite instanceof IRefreshable){
-					((IRefreshable)composite).refresh();
+				//prevent infinite loop
+				if(!refreshInProgress){
+					try{
+						refreshInProgress = true;
+						if(composite instanceof IRefreshable){
+							((IRefreshable)composite).refresh();
+						}
+					}
+					finally{
+						refreshInProgress = false;
+					}
 				}
 			}
 			
@@ -317,9 +327,19 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		public void refresh() {
 			checkWidgets();
 			
-			if(composite instanceof IRefreshable){
-				((IRefreshable)composite).refresh(); 
+			//prevent infinite loop
+			if(!refreshInProgress){
+				try{
+					refreshInProgress = true;
+					if(composite instanceof IRefreshable){
+						((IRefreshable)composite).refresh(); 
+					}
+				}
+				finally{
+					refreshInProgress = false;
+				}
 			}
+			
 			btnSelect.setText(this.input.getName());
 			btnSelect.update();
 		}

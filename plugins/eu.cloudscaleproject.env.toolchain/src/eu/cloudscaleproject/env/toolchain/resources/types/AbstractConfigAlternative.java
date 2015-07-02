@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
@@ -21,12 +22,12 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	protected ResourceProvider inputResourceProvider;
 	private IStatus lastRunStatus;
 
-	public AbstractConfigAlternative(IProject project, IFolder folder, String validationID, 
+	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, String validationID, 
 			ResourceProvider inputResourceProvider,
 			ResourceProvider resultsResourceProvider)
 	{
 
-		super(project, folder, validationID);
+		super(project, folder, modelTypes, validationID);
 
 		this.inputResourceProvider = inputResourceProvider;
 		this.resultsResourceProvider = resultsResourceProvider;

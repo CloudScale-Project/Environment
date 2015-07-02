@@ -31,9 +31,9 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 
 	public static final String KEY_EXTRACTOR_RESULT = "extractor_result";
 
-	
+	//TODO: use EditorInputEMF loader!
 	public ConfigAlternative(IProject project, IFolder folder) {
-		super (project, folder, ToolchainUtils.SPOTTER_STA_CONF_ID,
+		super (project, folder, null, ToolchainUtils.SPOTTER_STA_CONF_ID,
 				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID),
 				ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_RES_ID)
 				);
@@ -73,8 +73,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	@Override
 	protected void doLoad() {
 		
-		super.doLoad();
-		
+		//TODO: use EditorInputEMF loader!		
 		try {
 			loadModels();
 		} catch (IOException e) {
@@ -85,6 +84,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	
 	private final void loadModels() throws IOException {
 		
+		//TODO: use EditorInputEMF loader!
 		IResource catalog = getSubResource(ConfigAlternative.KEY_CATALOG);
 		IResource engines = getSubResource(ConfigAlternative.KEY_ENGINES);
 		

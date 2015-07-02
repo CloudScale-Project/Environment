@@ -1,15 +1,10 @@
 package eu.cloudscaleproject.env.extractor.alternatives;
 
-import java.io.IOException;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.resource.Resource;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
@@ -28,7 +23,7 @@ public class ResultAlternative extends EditorInputEMF {
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
 	public ResultAlternative(IProject project, IFolder folder){
-		super(project, folder, ToolchainUtils.EXTRACTOR_RES_ID);
+		super(project, folder, ModelType.GROUP_PCM, ToolchainUtils.EXTRACTOR_RES_ID);
 	}
 	
 	@Override
@@ -51,37 +46,5 @@ public class ResultAlternative extends EditorInputEMF {
 		setSubResource(KEY_FOLDER_SOMOX, somoxFolder);
 		
 		save();
-	}
-
-	@Override
-	protected void doLoad() {
-		
-		super.doLoad();
-		
-		try {
-			loadModels();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private final void loadModels() throws IOException {
-		
-		IResource repository = getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
-		IResource system = getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
-		//IResource sourceDecorator = getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
-		//IResource java2kdm = getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
-		
-		for (IResource res : new IResource[]{repository, system})
-		{
-			if (res != null)
-			{
-				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
-				emfRes.unload();
-				emfRes.load(null);
-			}
-			
-		}
 	}
 }

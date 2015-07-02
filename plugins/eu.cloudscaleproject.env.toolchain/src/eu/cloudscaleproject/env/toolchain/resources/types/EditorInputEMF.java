@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
 public class EditorInputEMF extends EditorInputFolder{
@@ -36,9 +37,12 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected final AdapterFactoryEditingDomain editingDomain;
 	
 	protected final ResourceSet resSet;
+	protected final ModelType[] modelTypes;
 
-	public EditorInputEMF(IProject project, IFolder folder, String validationID) {
+	public EditorInputEMF(IProject project, IFolder folder, ModelType[] modelTypes, String validationID) {
 		super(project, folder, validationID);
+		
+		this.modelTypes = modelTypes != null ? modelTypes : new ModelType[]{};
 		
 		commandStack = new BasicCommandStack();
 		commandStack.addCommandStackListener(new CommandStackListener() {
@@ -213,6 +217,35 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		commandStack.saveIsDone();
+	}
+	
+	@Override
+	protected void doLoad() {
+		super.doLoad();
+		
+		//unload existing models
+		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
+			res.unload();
+		}
+		
+		//load registered models
+		for (ModelType type : modelTypes)
+		{
+			for (IResource f : getSubResources(type.getToolchainFileID()))
+			{
+				if(f == null || !f.exists()){
+					logger.warning("Registered resource does not exist: " + f.getFullPath().toString());
+					continue;
+				}
+				
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
+				try {
+					res.load(null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	@Override

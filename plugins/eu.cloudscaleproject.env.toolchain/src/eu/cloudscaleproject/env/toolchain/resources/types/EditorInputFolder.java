@@ -417,24 +417,26 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	@Override
-	public synchronized void copyFrom(IResource src) {
+	public void copyFrom(IResource src) {
 		
-		if (!src.exists() || !(src instanceof IFolder))
-			throw new IllegalStateException();
-		
-		try {
-			saveInProgress = true;
-			if (this.folder.exists())
-				this.folder.delete(true, null);
-
-			src.copy(folder.getFullPath(), true, null);
+		synchronized (saveLoadLock) {
+			if (!src.exists() || !(src instanceof IFolder))
+				throw new IllegalStateException();
 			
-		} 
-		catch (CoreException e) {
-			e.printStackTrace();
-		}
-		finally{
-			saveInProgress = false;
+			try {
+				saveInProgress = true;
+				if (this.folder.exists())
+					this.folder.delete(true, null);
+
+				src.copy(folder.getFullPath(), true, null);
+				
+			} 
+			catch (CoreException e) {
+				e.printStackTrace();
+			}
+			finally{
+				saveInProgress = false;
+			}
 		}
 		
 		load();

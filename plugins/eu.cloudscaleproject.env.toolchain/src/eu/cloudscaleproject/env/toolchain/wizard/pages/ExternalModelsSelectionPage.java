@@ -312,15 +312,15 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
              }
 		}
 		
-		//select all
-		for(Resource res : resSet.getResources()){
-			selectResource(res, true);
-		}
-		
 		//Refresh is needed here to recreate table items from the resource set!
 		//Only after that, table items can be selected!
 		tableView.refresh(true);
-		tableView.setAllChecked(true);
+				
+		//select all
+		for(ModelType mt : types){
+			selectResource(mt, true, true);
+		}
+				
 	}
 	
 	private void createFolderSelection(Composite composite, final String name, final String text,
