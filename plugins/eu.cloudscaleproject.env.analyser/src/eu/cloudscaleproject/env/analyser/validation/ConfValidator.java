@@ -160,14 +160,18 @@ public class ConfValidator implements IResourceValidator {
 	}
 	
 	private boolean validateMonitorRepository(ConfAlternative alt) throws ValidationException{
+
+		String errorID = "MonitorError";
+		String errorMonitorRepID = "MonitorRepMissing";
 		
 		MonitorRepository monitorRep = alt.getActiveMonitorRepository();
-		
 		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_MONITOR);
 		
 		for(IValidationStatus status : statusArray){
-				
-			String errorID = "MonitorError";
+			
+			status.checkError(errorMonitorRepID, monitorRep != null, true,
+					"Monitor repository does not exist!");
+			
 			for(Monitor monitor : monitorRep.getMonitors()){
 				
 				status.checkError(errorID, monitor.getMeasurementSpecifications() != null, true,
@@ -220,10 +224,14 @@ public class ConfValidator implements IResourceValidator {
 
 			boolean valid = validateModels(alternative.getProject(), alternative);
 
-			valid &= validateExperiment(alternative);
-			valid &= validateMonitorRepository(alternative);
-			valid &= validateSloRepository(alternative);
-			valid &= validateUsageEvolution(alternative);
+			try{valid &= validateExperiment(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateMonitorRepository(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateSloRepository(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateUsageEvolution(alternative);}
+			catch(ValidationException e){ valid = false;};
 			
 			//TODO: check usage evolution
 			
