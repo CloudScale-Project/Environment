@@ -11,7 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -27,7 +27,7 @@ public class ShowConfAltValidationHandler {
 			String title = "Show Analyser configuration alternative validation status";
 			String message = "Please select Analyser configuration alternative.";
 			
-			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, ToolchainUtils.ANALYSER_CONF_ID);
+			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, CSTool.ANALYSER_CONF);
 			dialog.open();
 			
 			IEditorInputResource selection = dialog.getSelection();
@@ -41,12 +41,12 @@ public class ShowConfAltValidationHandler {
 					ValidationDiagramService.showStatus(project, inputAlternative);
 				}
 				else{
-					ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_INPUT_ID);
+					ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_INPUT.getID());
 				}
 				
 				selection.validate();
 				
-				ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_RES_ID);
+				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
 				ValidationDiagramService.showStatus(project, selection);
 			}
 		}

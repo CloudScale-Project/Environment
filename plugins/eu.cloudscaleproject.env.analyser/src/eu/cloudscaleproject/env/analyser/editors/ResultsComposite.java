@@ -19,7 +19,7 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
@@ -35,7 +35,7 @@ public class ResultsComposite extends SidebarEditorComposite{
 		super(parent, style);
 		this.project = ExplorerProjectPaths.getProject(editor);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_RES_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
 
 import tools.descartes.dlim.presentation.DlimModelWizard;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 //import tools.descartes.dlim.generator.editor.wizards.CustomDlimModelWizard;
@@ -35,7 +35,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			@Override
 			public IWizard createWizard() {
 				return new CreateAlternativeWizard(project,
-						ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
+						ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION));
 			}
 		};
 		
@@ -72,7 +72,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			@Override
 			public IWizard createWizard() {
 				return new CreateCustomUsageWizard(project,
-						ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
+						ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION));
 			}
 		};
 		

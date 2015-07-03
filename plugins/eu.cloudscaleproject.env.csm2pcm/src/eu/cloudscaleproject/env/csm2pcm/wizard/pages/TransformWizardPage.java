@@ -32,6 +32,7 @@ import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.csm2pcm.handlers.TransformHandler;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -64,7 +65,7 @@ public class TransformWizardPage extends WizardPage{
 
 		this.project = project;
 		this.outputFolder = outputFolder;
-		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
 		
 		setTitle(DEFAULT_TITLE);
 		setDescription(DEFAULT_DESCRIPTION);

@@ -19,6 +19,7 @@ import org.palladiosimulator.pcm.repository.util.RepositoryResourceImpl;
 
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
@@ -30,7 +31,7 @@ public class InputAlternative extends EditorInputEMF
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ModelType.GROUP_PCM_EXTENDED, ToolchainUtils.ANALYSER_INPUT_ID);
+		super(project, folder, ModelType.GROUP_PCM_EXTENDED, CSTool.ANALYSER_INPUT.getID());
 	}
 
 	public void importFromFolder(IContainer folder)

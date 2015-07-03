@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.common.notification.views;
+package eu.cloudscaleproject.env.toolchain.ui.validation;
 
 import java.util.ArrayList;
 import java.util.Arrays;

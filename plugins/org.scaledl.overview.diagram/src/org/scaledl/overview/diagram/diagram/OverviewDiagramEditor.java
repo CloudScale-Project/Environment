@@ -6,7 +6,7 @@ import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -21,7 +21,7 @@ public class OverviewDiagramEditor extends DiagramEditor{
 		
 		if(project != null){
 			IEditorInputResource resource = ResourceRegistry.getInstance().
-					getResourceProvider(project, ToolchainUtils.OVERVIEW_ID).getResource(file);
+					getResourceProvider(project, CSTool.OVERVIEW).getResource(file);
 			
 			ValidationDiagramService.showStatus(project, resource);
 		}

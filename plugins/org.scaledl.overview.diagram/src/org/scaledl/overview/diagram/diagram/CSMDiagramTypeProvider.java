@@ -13,7 +13,7 @@ import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -34,7 +34,7 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		final IProject project = ExplorerProjectPaths.getProjectFromEmfResource(getDiagram().eResource());
 		IContainer altFolder = ExplorerProjectPaths.getFileFromEmfResource(getDiagram().eResource()).getParent();
 		
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.OVERVIEW_ID);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
 		
 		if(rp != null){
 			final IEditorInputResource resource = rp.getResource(altFolder);

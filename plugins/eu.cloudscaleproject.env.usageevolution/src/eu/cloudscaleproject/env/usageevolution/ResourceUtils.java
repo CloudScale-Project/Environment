@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.usageevolution;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class ResourceUtils {
 	
 	public static void registerResourceFactories(){
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.USAGEEVOLUTION_ID, new ResourceUtils.UsageProviderFactory());
+		ResourceRegistry.getInstance().registerFactory(CSTool.USAGEEVOLUTION, new ResourceUtils.UsageProviderFactory());
 	}
 	
 	private static class UsageProviderFactory implements IResourceProviderFactory{

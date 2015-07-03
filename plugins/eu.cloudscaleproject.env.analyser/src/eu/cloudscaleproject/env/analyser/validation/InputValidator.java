@@ -18,6 +18,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
@@ -27,7 +28,7 @@ public class InputValidator implements IResourceValidator {
 	
 	@Override
 	public String getID() {
-		return ToolchainUtils.ANALYSER_INPUT_ID;
+		return CSTool.ANALYSER_INPUT.getID();
 	}
 	
 	public boolean validateModels(IProject project, InputAlternative ia) throws CoreException, ValidationException{

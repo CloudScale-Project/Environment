@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -30,7 +30,7 @@ public class OpenStatusSelectionDialogHandler {
 			String title = "Show Overview alternative validation status";
 			String message = "Please select Overview input alternative.";
 			
-			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, ToolchainUtils.OVERVIEW_ID);
+			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, CSTool.OVERVIEW);
 			dialog.open();
 			
 			IEditorInputResource selection = dialog.getSelection();

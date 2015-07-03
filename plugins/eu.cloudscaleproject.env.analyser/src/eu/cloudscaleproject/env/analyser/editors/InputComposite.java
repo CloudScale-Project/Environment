@@ -13,8 +13,8 @@ import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -33,7 +33,7 @@ public class InputComposite extends SidebarEditorComposite{
 		
 		this.project = ExplorerProjectPaths.getProject(editor);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override
@@ -76,8 +76,8 @@ public class InputComposite extends SidebarEditorComposite{
 		@Override
 		public void onSelect() {
 			ValidationDiagramService.showStatus(project, alternative);
-			ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_CONF_ID);
-			ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_RES_ID);
+			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_CONF.getID());
+			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
 		}
 	}
 

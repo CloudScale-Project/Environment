@@ -14,8 +14,8 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.csm2pcm.wizard.pages.TransformWizardPage;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
@@ -36,7 +36,7 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		this.project = project;
 		
 		folder = createTransformOutputFolder(project);
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
 		transformPage = new TransformWizardPage(project, folder);
 		importSelectionPage = new ExternalModelsSelectionPage(
 									"Transformed models selection", 
@@ -69,7 +69,7 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		
 		String name = nameSelectionPage.getName();
 
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		final InputAlternative newInputAlternative = (InputAlternative)rp.createNewResource(name, null);
 		
 		newInputAlternative.createSubResources(new Runnable() {

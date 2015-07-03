@@ -12,6 +12,7 @@ import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
 import org.palladiosimulator.edp2.models.Repository.Repository;
 import org.palladiosimulator.edp2.repository.local.LocalDirectoryRepositoryHelper;
 
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -22,7 +23,7 @@ public class ResultAlternative extends EditorInputFolder{
 	private final ConfAlternative.Type type;
 	
 	public ResultAlternative(IProject project, IFolder folder, ConfAlternative.Type type) {
-		super(project, folder, ToolchainUtils.ANALYSER_RES_ID);
+		super(project, folder, CSTool.ANALYSER_RES.getID());
 		this.type = type;		
 	}
 	
@@ -32,7 +33,7 @@ public class ResultAlternative extends EditorInputFolder{
 	
 	public ConfAlternative getConfAlternative(){
 		IResource res = getSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE);
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
 		return (ConfAlternative) rp.getResource(res);
 	}
 	

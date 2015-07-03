@@ -11,6 +11,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 
@@ -22,7 +23,7 @@ public class UsageValidator implements IResourceValidator{
 	
 	@Override
 	public String getID() {
-		return ToolchainUtils.USAGEEVOLUTION_ID;
+		return CSTool.USAGEEVOLUTION.getID();
 	}
 	
 	private boolean validateDlimModel (UsageEvolutionAlternative alternative) throws ValidationException

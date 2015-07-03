@@ -41,6 +41,7 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -247,7 +248,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		List<IEditorInputResource> out = new ArrayList<IEditorInputResource>();
 		
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), ToolchainUtils.USAGEEVOLUTION_ID);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), CSTool.USAGEEVOLUTION);
 		for(IEditorInputResource eir : rp.getResources()){
 			out.add(eir);
 		}
@@ -261,7 +262,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 			return null;
 		}
 				
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), ToolchainUtils.USAGEEVOLUTION_ID);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), CSTool.USAGEEVOLUTION);
 		for(IEditorInputResource eir : rp.getResources()){
 			if(eir instanceof EditorInputEMF){
 				EditorInputEMF eie = (EditorInputEMF)eir;

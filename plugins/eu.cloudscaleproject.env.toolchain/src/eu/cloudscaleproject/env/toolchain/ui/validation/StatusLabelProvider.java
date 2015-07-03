@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.common.notification.views;
+package eu.cloudscaleproject.env.toolchain.ui.validation;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -10,6 +10,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 
 public class StatusLabelProvider implements ILabelProvider{
 	
@@ -59,7 +60,13 @@ public class StatusLabelProvider implements ILabelProvider{
 	public String getText(Object element) {
 		if(element instanceof IValidationStatusProvider){
 			IValidationStatusProvider sp = (IValidationStatusProvider)element;
-			return sp.getSelfStatus().getName();
+			String name = CSTool.getToolName(sp.getID());
+			if(name == null){
+				name = "";
+			}
+			
+			name += ": " + sp.getSelfStatus().getName();
+			return name;
 		}
 		if(element instanceof IValidationStatus){
 			IValidationStatus stat = (IValidationStatus)element;

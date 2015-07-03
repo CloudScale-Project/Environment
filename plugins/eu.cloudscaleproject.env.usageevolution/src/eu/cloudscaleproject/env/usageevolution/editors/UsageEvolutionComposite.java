@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -29,7 +29,7 @@ public class UsageEvolutionComposite extends SidebarEditorComposite {
 		
 		this.project = project;
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.USAGEEVOLUTION_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

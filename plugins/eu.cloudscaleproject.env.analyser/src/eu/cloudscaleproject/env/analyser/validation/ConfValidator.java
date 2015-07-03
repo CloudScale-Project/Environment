@@ -26,6 +26,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ConfValidator implements IResourceValidator {
@@ -36,7 +37,7 @@ public class ConfValidator implements IResourceValidator {
 
 	@Override
 	public String getID() {
-		return ToolchainUtils.ANALYSER_CONF_ID;
+		return CSTool.ANALYSER_CONF.getID();
 	}
 	
 	public boolean validateModels(IProject project, ConfAlternative ca) throws CoreException, ValidationException{

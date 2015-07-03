@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -41,7 +41,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.OVERVIEW_ID, new IResourceProviderFactory(){
+		ResourceRegistry.getInstance().registerFactory(CSTool.OVERVIEW, new IResourceProviderFactory(){
 
 			@Override
 			public ResourceProvider create(final IFolder folder) {

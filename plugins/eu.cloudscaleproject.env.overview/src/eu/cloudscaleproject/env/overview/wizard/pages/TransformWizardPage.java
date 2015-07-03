@@ -41,12 +41,13 @@ import org.scaledl.overview.parametertype.ParametertypeFactory;
 import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
 import org.scaledl.overview.util.OverviewUtil;
-
 import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.system.System;
+
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -158,7 +159,7 @@ public class TransformWizardPage extends WizardPage implements
 
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(
 				this.data.getProject(),
-				ToolchainUtils.EXTRACTOR_RES_ID);
+				CSTool.EXTRACTOR_RES);
 
 		final List<IEditorInputResource> results = resourceProvider.getResources();
 		for (IEditorInputResource rpf : results)

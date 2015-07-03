@@ -30,9 +30,9 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -56,7 +56,7 @@ public class ConfigComposite extends SidebarEditorComposite
 
 		this.project = ExplorerProjectPaths.getProject(editor);
 
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF));
 		setContentProvider(new SidebarContentProvider()
 		{
 
@@ -261,7 +261,7 @@ public class ConfigComposite extends SidebarEditorComposite
 					public void handle(String[] data)
 					{
 						ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
-								ToolchainUtils.ANALYSER_CONF_ID);
+								CSTool.ANALYSER_CONF);
 						if (resourceProvider == null)
 						{
 							throw new IllegalStateException("Sidebar resource provider not set!");

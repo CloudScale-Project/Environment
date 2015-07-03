@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -25,15 +25,15 @@ public class ShowInputAltValidationHandler {
 			String title = "Show Analyser input alternative validation status";
 			String message = "Please select Analyser input alternative.";
 			
-			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, ToolchainUtils.ANALYSER_INPUT_ID);
+			ResourceSelectionDialog dialog = new ResourceSelectionDialog(shell, title, message, project, CSTool.ANALYSER_INPUT);
 			dialog.open();
 			
 			IEditorInputResource selection = dialog.getSelection();
 			if(selection != null){
 				selection.validate();
 				
-				ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_RES_ID);
-				ValidationDiagramService.clearStatus(project, ToolchainUtils.ANALYSER_CONF_ID);
+				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
+				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_CONF.getID());
 				ValidationDiagramService.showStatus(project, selection);
 			}
 		}

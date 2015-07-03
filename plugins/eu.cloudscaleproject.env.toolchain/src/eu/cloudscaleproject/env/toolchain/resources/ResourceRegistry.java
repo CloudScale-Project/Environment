@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ResourceRegistry {
@@ -49,33 +50,43 @@ public class ResourceRegistry {
 	}
 	
 	/**
-	 * Register 'IResourceProviderFactory' under specified 'toolchainID'.
-	 * ToolchainID should be specified inside 'ToolchainUtils' class. 
+	 * Register 'IResourceProviderFactory' under specified 'id'.
 	 * 
-	 * @param toolchainID ID under which the specified 'IResourceProviderFactory' should be registered.
+	 * @param toolchainID ID under which the specified 'IResourceProviderFactory' will be registered.
 	 * @param factory 'IResourceProviderFactory'
 	 */
-	public synchronized void registerFactory(String toolchainID, IResourceProviderFactory factory){
-		resourceProviderFactories.put(toolchainID, factory);
-		logger.info("IResourceProviderFactory registered uder toolchainID: " + toolchainID);
+	public synchronized void registerFactory(String id, IResourceProviderFactory factory){
+		resourceProviderFactories.put(id, factory);
+		logger.info("IResourceProviderFactory registered uder toolchainID: " + id);
+	}
+	
+	/**
+	 * Register 'IResourceProviderFactory' under specified tool enum.
+	 * 
+	 * @param tool Enumerator under which the specified 'IResourceProviderFactory' will be registered.
+	 * @param factory 'IResourceProviderFactory'
+	 */
+	public synchronized void registerFactory(CSTool tool, IResourceProviderFactory factory){
+		resourceProviderFactories.put(tool.getID(), factory);
+		logger.info("IResourceProviderFactory registered uder toolchainID: " + tool.getID());
 	}
 	
 	/**
 	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet),
 	 * using registered 'IResourceProviderFactory'.
-	 * If the 'ResourceProviderFactory' is not registered for the specified 'toolchainID', this method returns null.
+	 * If the 'ResourceProviderFactory' is not registered for the specified id, this method returns null.
 	 * Returned 'ResourceProvider' root folder is equal to the specified attribute 'folder'. 
 	 * 
-	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
+	 * @param id ResourceProviderFactory id.
 	 * @param folder The root folder of the returned 'ResourceProvider'. 
 	 * @return ResourceProvider
 	 */
-	public synchronized ResourceProvider getResourceProvider(String toolchainID, IFolder folder){
+	public synchronized ResourceProvider getResourceProvider(String id, IFolder folder){
 		
 		ResourceProvider resourceProvider = resourceProviders.get(folder);
 		
 		if(resourceProvider == null){
-			IResourceProviderFactory resourceFactory = resourceProviderFactories.get(toolchainID);
+			IResourceProviderFactory resourceFactory = resourceProviderFactories.get(id);
 			if(resourceFactory == null){
 				//resource factory is not registered for the specified tool ID
 				return null;
@@ -116,23 +127,44 @@ public class ResourceRegistry {
 	
 	/**
 	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
-	 * If the 'ResourceProviderFactory' is not registered for the specified 'toolchainID', this method returns null.
+	 * If the 'ResourceProviderFactory' is not registered for the specified 'id', this method returns null.
 	 * 
 	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
 	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
 	 * @return ResourceProvider
 	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, String toolchainID){
+	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
 		
 		//Check if the resource factory is registered for the specified toolchainID
 		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
 		//because this method creates folders if they do not exist jet!
-		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(toolchainID);
+		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(id);
 		if(resourceFactory == null){
 			return null;
 		}
 		
-		return getResourceProvider(toolchainID, ToolchainUtils.getToolFolder(project, toolchainID));
+		return getResourceProvider(id, ToolchainUtils.getToolFolder(project, id));
+	}
+	
+	/**
+	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
+	 * If the 'ResourceProviderFactory' is not registered for the specified tool, this method returns null.
+	 * 
+	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
+	 * @param tool
+	 * @return ResourceProvider
+	 */
+	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
+		
+		//Check if the resource factory is registered for the specified toolchainID
+		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
+		//because this method creates folders if they do not exist jet!
+		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(tool.getID());
+		if(resourceFactory == null){
+			return null;
+		}
+		
+		return getResourceProvider(tool.getID(), ToolchainUtils.getToolFolder(project, tool.getID()));
 	}
 	
 }

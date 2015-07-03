@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IResource;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.IResourceProviderFactory;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -25,7 +26,7 @@ public class ResourceUtils {
 	
 	public static InputAlternative getGeneratedResourceInput(IProject project){
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
-												.getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID);
+												.getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_INPUT_GENERATED_RES_NAME);
 		
 		if(editorInput == null){
@@ -84,7 +85,7 @@ public class ResourceUtils {
 	public static List<ConfAlternative> getConfAlternatives(IProject project, InputAlternative inputAlt){
 		
 		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, ToolchainUtils.ANALYSER_CONF_ID);
+				getResourceProvider(project, CSTool.ANALYSER_CONF);
 		
 		List<ConfAlternative> out = new ArrayList<ConfAlternative>();
 		
@@ -95,7 +96,7 @@ public class ResourceUtils {
 					continue;
 				}
 				IEditorInputResource inputResource = ResourceRegistry.getInstance()
-					.getResourceProvider(project, ToolchainUtils.ANALYSER_INPUT_ID).getResource(inputAltFolder);
+					.getResourceProvider(project, CSTool.ANALYSER_INPUT).getResource(inputAltFolder);
 				if(inputResource == inputAlt){
 					out.add((ConfAlternative)res);
 				}
@@ -108,7 +109,7 @@ public class ResourceUtils {
 	public static void registerResourceFactories(){
 		
 		//register resource provider factories		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_INPUT_ID, new IResourceProviderFactory(){
+		ResourceRegistry.getInstance().registerFactory(CSTool.ANALYSER_INPUT, new IResourceProviderFactory(){
 
 			@Override
 			public ResourceProvider create(IFolder folder) {
@@ -143,7 +144,7 @@ public class ResourceUtils {
 			
 		});
 		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_CONF_ID, new IResourceProviderFactory(){
+		ResourceRegistry.getInstance().registerFactory(CSTool.ANALYSER_CONF, new IResourceProviderFactory(){
 
 			@Override
 			public ResourceProvider create(IFolder folder) {
@@ -183,7 +184,7 @@ public class ResourceUtils {
 			
 		});
 		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.ANALYSER_RES_ID, new IResourceProviderFactory() {
+		ResourceRegistry.getInstance().registerFactory(CSTool.ANALYSER_RES, new IResourceProviderFactory() {
 			
 			@Override
 			public ResourceProvider create(IFolder folder) {
