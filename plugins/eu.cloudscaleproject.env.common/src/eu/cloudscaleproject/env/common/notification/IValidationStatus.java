@@ -41,7 +41,7 @@ public interface IValidationStatus{
 	}
 	
 	public Warning[] getWarnings();
-	public String getWarningMessage(String id);
+	public String getWarningMessage(Object id);
 	public int getWarningType(String id);
 	public String[] getWarningIDs();
 		

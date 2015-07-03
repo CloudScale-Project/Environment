@@ -139,7 +139,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 					if(eir instanceof EditorInputEMF){
 						EditorInputEMF eie = (EditorInputEMF)eir;
 						EObject eo = eie.getModelRootSingle(ToolchainUtils.KEY_FILE_LIMBO);
-						UsageComposite.this.usage.setLoadEvolution((Sequence)eo);
+						UsageComposite.this.usage.setLoadEvolution((Sequence)eo);						
 					}					
 				}
 			});
@@ -255,27 +255,28 @@ public class UsageComposite extends Composite implements IRefreshable{
 		return out;
 	}
 	
-	/*
-	private List<Sequence> getSequences(){
-		List<Sequence> out = new ArrayList<Sequence>();
+	private IEditorInputResource getLimboAlternative(Sequence sequence){
 		
+		if(sequence == null){
+			return null;
+		}
+				
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), ToolchainUtils.USAGEEVOLUTION_ID);
 		for(IEditorInputResource eir : rp.getResources()){
 			if(eir instanceof EditorInputEMF){
-				EditorInputEMF alt = (EditorInputEMF)eir;
-				
-				for(EObject eo : alt.getModelRoot(alternative.getResourceSet(), ToolchainUtils.KEY_FILE_LIMBO)){
-					if(eo instanceof Sequence){
-						out.add((Sequence)eo);
+				EditorInputEMF eie = (EditorInputEMF)eir;
+				EObject eo = eie.getModelRootSingle(ToolchainUtils.KEY_FILE_LIMBO);
+				if(eo instanceof Sequence){
+					Sequence sq = (Sequence)eo;
+					if(sq.equals(sequence)){
+						return eir;
 					}
 				}
-				
 			}
 		}
 		
-		return out;
+		return null;
 	}
-	*/
 	
 	public void openLimboEditor(){
 		IFile limboFile = ExplorerProjectPaths.getFileFromEmfResource(usage.getLoadEvolution().eResource());
@@ -302,8 +303,9 @@ public class UsageComposite extends Composite implements IRefreshable{
 			}
 			
 			limboComboViewer.setInput(getLimboAlternatives());
-			if(usage.getLoadEvolution() != null){
-				limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+			IEditorInputResource eir = getLimboAlternative(this.usage.getLoadEvolution());
+			if(eir != null){
+				limboComboViewer.setSelection(new StructuredSelection(eir));
 			}
 		}
 		finally{

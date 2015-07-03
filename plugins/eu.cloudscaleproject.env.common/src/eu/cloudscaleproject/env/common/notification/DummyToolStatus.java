@@ -36,7 +36,7 @@ class DummyToolStatus implements IValidationStatus{
 	@Override
 	public void removeListener(IValidationStatusListener listener) {}
 	@Override
-	public String getWarningMessage(String id) {return "";}
+	public String getWarningMessage(Object id) {return "";}
 	@Override
 	public int getWarningType(String id){return SEVERITY_ERROR;};
 	@Override

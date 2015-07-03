@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
+import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
@@ -160,25 +161,47 @@ public class ConfValidator implements IResourceValidator {
 	}
 	
 	private boolean validateMonitorRepository(ConfAlternative alt) throws ValidationException{
+
+		String errorSpecMissingID = "MonitorSpecError";
+		String errorSpecIncompleteID = "MonitorSpecIncompleteError";
+
+		String errorMpID = "MonitorMpError";
+		String errorMonitorRepID = "MonitorRepMissing";
+		
+		boolean isValid = true;
 		
 		MonitorRepository monitorRep = alt.getActiveMonitorRepository();
-		
 		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_MONITOR);
 		
 		for(IValidationStatus status : statusArray){
-				
-			String errorID = "MonitorError";
+			
+			status.clearWarnings();
+			status.checkError(errorMonitorRepID, monitorRep != null, true,
+					"Monitor repository does not exist!");
+			
 			for(Monitor monitor : monitorRep.getMonitors()){
 				
-				status.checkError(errorID, monitor.getMeasurementSpecifications() != null, true,
+				try{
+					status.checkError(errorSpecMissingID, monitor.getMeasurementSpecifications() != null, true,
 						"Monitor: '"+ monitor.getEntityName() +"' needs measurement specification!");
-				status.checkError(errorID, monitor.getMeasuringPoint() != null, true,
+				
+					for(MeasurementSpecification ms : monitor.getMeasurementSpecifications()){
+						status.checkError(errorSpecIncompleteID, ms.getMetricDescription() != null, true,
+								"Monitor: '"+ monitor.getEntityName() +"' incomplete measurement specification!");
+						status.checkError(errorSpecIncompleteID, ms.getStatisticalCharacterization() != null, true,
+								"Monitor: '"+ monitor.getEntityName() +"' incomplete measurement specification!");
+					}
+				}
+				catch(ValidationException e){
+					isValid = false;
+				}
+				
+				status.checkError(errorMpID, monitor.getMeasuringPoint() != null, true,
 						"Monitor: '"+ monitor.getEntityName() +"' does not have measuring point specified!");
 			}
-			status.clearWarnings();
 		}
 
-		return true;
+		return isValid;
 	}
 	
 	private boolean validateUsageEvolution(ConfAlternative alt) throws ValidationException{
@@ -220,10 +243,14 @@ public class ConfValidator implements IResourceValidator {
 
 			boolean valid = validateModels(alternative.getProject(), alternative);
 
-			valid &= validateExperiment(alternative);
-			valid &= validateMonitorRepository(alternative);
-			valid &= validateSloRepository(alternative);
-			valid &= validateUsageEvolution(alternative);
+			try{valid &= validateExperiment(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateMonitorRepository(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateSloRepository(alternative);}
+			catch(ValidationException e){ valid = false;};
+			try{valid &= validateUsageEvolution(alternative);}
+			catch(ValidationException e){ valid = false;};
 			
 			//TODO: check usage evolution
 			

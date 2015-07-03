@@ -4,13 +4,15 @@ public class ValidationException extends Exception{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String error;
+	private Object id;
+	private String message;
 	
-	public ValidationException(String error){
-		this.error = error;
+	public ValidationException(Object id, String message){
+		this.id = id;
+		this.message = message;
 	}
 	
 	public String getObject(){
-		return error;
+		return this.id.toString() + " Message: "+ message;
 	}
 }
