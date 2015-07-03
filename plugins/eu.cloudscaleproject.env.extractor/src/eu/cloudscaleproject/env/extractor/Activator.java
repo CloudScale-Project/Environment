@@ -41,8 +41,13 @@ public class Activator extends AbstractUIPlugin {
 				new ResultResourceProviderFactory()
 		);
 		
-		SourceCodeDecoratorPackageImpl.init();
-		
+		try
+		{
+			SourceCodeDecoratorPackageImpl.init();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/*

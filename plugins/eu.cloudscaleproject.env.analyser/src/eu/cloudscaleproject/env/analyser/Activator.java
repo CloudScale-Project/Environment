@@ -13,15 +13,15 @@ import org.palladiosimulator.pcm.usagemodel.impl.UsagemodelPackageImpl;
 import org.palladiosimulator.servicelevelobjective.impl.ServicelevelObjectivePackageImpl;
 import org.scaledl.usageevolution.impl.UsageevolutionPackageImpl;
 
-
 /**
  * 
  * @author Vito Čuček <vito.cucek@xlab.si>
  * 
- * The activator class controls the plug-in life cycle
+ *         The activator class controls the plug-in life cycle
  * 
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin
+{
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "eu.cloudscaleproject.env.analyser"; //$NON-NLS-1$
@@ -29,51 +29,68 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	public static Activator plugin;
 	public static BundleContext bundleContext;
-	
+
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public Activator()
+	{
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);		
+	public void start(BundleContext context) throws Exception
+	{
+		super.start(context);
 		plugin = this;
 		bundleContext = context;
 
-		long time = System.currentTimeMillis();
-		RepositoryPackageImpl.init();
-		SystemPackageImpl.init();
-		ResourceenvironmentPackageImpl.init();
-		AllocationPackageImpl.init();
-		UsagemodelPackageImpl.init();
-		UsageevolutionPackageImpl.init();
-		
-		ExperimentsPackageImpl.init();
-		MonitorRepositoryPackageImpl.init();
-		ServicelevelObjectivePackageImpl.init();
-		MeasuringpointPackageImpl.init();
-
-		System.out.println("INIT TIME: "+(System.currentTimeMillis()-time));
-
 		ResourceUtils.registerResourceFactories();
+
+		try
+		{
+			long time = System.currentTimeMillis();
+			RepositoryPackageImpl.init();
+			SystemPackageImpl.init();
+			ResourceenvironmentPackageImpl.init();
+			AllocationPackageImpl.init();
+			UsagemodelPackageImpl.init();
+			UsageevolutionPackageImpl.init();
+
+			ExperimentsPackageImpl.init();
+			MonitorRepositoryPackageImpl.init();
+			ServicelevelObjectivePackageImpl.init();
+			MeasuringpointPackageImpl.init();
+
+			System.out.println("INIT TIME: " + (System.currentTimeMillis() - time));
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context) throws Exception
+	{
 		plugin = null;
 		bundleContext = null;
 		super.stop(context);
 	}
-	
-	public static BundleContext getContext(){
+
+	public static BundleContext getContext()
+	{
 		return bundleContext;
 	}
 
@@ -82,7 +99,8 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static Activator getDefault()
+	{
 		return plugin;
 	}
 
