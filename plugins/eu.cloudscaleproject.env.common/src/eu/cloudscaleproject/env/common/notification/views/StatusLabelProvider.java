@@ -9,6 +9,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 
 public class StatusLabelProvider implements ILabelProvider{
 	
@@ -56,6 +57,14 @@ public class StatusLabelProvider implements ILabelProvider{
 
 	@Override
 	public String getText(Object element) {
+		if(element instanceof IValidationStatusProvider){
+			IValidationStatusProvider sp = (IValidationStatusProvider)element;
+			return sp.getSelfStatus().getName();
+		}
+		if(element instanceof IValidationStatus){
+			IValidationStatus stat = (IValidationStatus)element;
+			return stat.getName();
+		}
 		if(element instanceof Warning){
 			Warning w = (Warning)element;
 			return w.message;

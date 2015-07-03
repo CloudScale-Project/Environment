@@ -93,7 +93,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 
 	@Override
-	public String getWarningMessage(String id) {
+	public String getWarningMessage(Object id) {
 		
 		synchronized (warningsLock) {
 			Warning w = warnings.get(id);
@@ -168,7 +168,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 		else{
 			addWarning(id, SEVERITY_ERROR, message);
 			if(throwException){
-				throw new ValidationException(id);
+				throw new ValidationException(id, message);
 			}
 		}
 	}
@@ -182,7 +182,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 		else{
 			addWarning(id, severity, message);
 			if(throwException){
-				throw new ValidationException(id);
+				throw new ValidationException(id, message);
 			}
 		}
 	}
@@ -196,7 +196,7 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 		else{
 			addWarning(id, severity, message, handler);
 			if(throwException){
-				throw new ValidationException(id);
+				throw new ValidationException(id, message);
 			}
 		}
 	}
