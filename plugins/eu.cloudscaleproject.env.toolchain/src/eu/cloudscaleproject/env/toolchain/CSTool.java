@@ -7,39 +7,39 @@ package eu.cloudscaleproject.env.toolchain;
  */
 public enum CSTool {
 	
-	EXTRACTOR_INPUT("Extractor input alternative", 
+	EXTRACTOR_INPUT("Extractor Input", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"),
 	EXTRACTOR_CONF("Extractor configuration alternative", 
 				   "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"),
-	EXTRACTOR_RES("Extractor results alternative", 
+	EXTRACTOR_RES("Extractor Results", 
 				  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"),
 
-	ANALYSER_INPUT("Analyser input alternative", 
+	ANALYSER_INPUT("Analyser Input", 
 				   "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"),
-	ANALYSER_CONF("Analyser configuration alternative",
+	ANALYSER_CONF("Analyser Configuration",
 				  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"),
-	ANALYSER_RES("Analyser results alternative", 
+	ANALYSER_RES("Analyser Results", 
 				 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"),
 
-	SPOTTER_DYN_INPUT("Dynamic spotter input alternative", 
+	SPOTTER_DYN_INPUT("Dynamic Spotter Input", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"),
-	SPOTTER_DYN_CONF("Dynamic spotter configuration alternative",
+	SPOTTER_DYN_CONF("Dynamic Spotter Configuration",
 					 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"),
-	SPOTTER_DYN_RES("Dynamic spotter results alternative", 
+	SPOTTER_DYN_RES("Dynamic Spotter Results", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"),
 	
-	SPOTTER_STA_INPUT("Static spotter input alternative", 
+	SPOTTER_STA_INPUT("Static Spotter Input", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"),
-	SPOTTER_STA_CONF("Static spotter configuration alternative",
+	SPOTTER_STA_CONF("Static Spotter Configuration",
 					 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"),
-	SPOTTER_STA_RES("Static spotter results alternative", 
+	SPOTTER_STA_RES("Static Spotter Results", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"),
 	
-	USAGEEVOLUTION("Usage evolution alternative", 
+	USAGEEVOLUTION("Usage Evolution", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"),
-	OVERVIEW("Overview alternative", 
+	OVERVIEW("Overview", 
 			 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"),
-	ARCHITECTURAL_TEMPLATES("Architectural templates alternative", 
+	ARCHITECTURAL_TEMPLATES("Architectural Templates", 
 							"eu.cloudscaleproject.env.toolchain.ToolchainUtils.architecturaltemplates");
 
 	private final String name;

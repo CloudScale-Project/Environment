@@ -60,13 +60,12 @@ public class StatusLabelProvider implements ILabelProvider{
 	public String getText(Object element) {
 		if(element instanceof IValidationStatusProvider){
 			IValidationStatusProvider sp = (IValidationStatusProvider)element;
-			String name = CSTool.getToolName(sp.getID());
-			if(name == null){
-				name = "";
+			String tool = CSTool.getToolName(sp.getID());
+			if(tool == null){
+				tool = "Unknown";
 			}
 			
-			name += ": " + sp.getSelfStatus().getName();
-			return name;
+			return String.format("%s [%s]", sp.getSelfStatus().getName(), tool);
 		}
 		if(element instanceof IValidationStatus){
 			IValidationStatus stat = (IValidationStatus)element;

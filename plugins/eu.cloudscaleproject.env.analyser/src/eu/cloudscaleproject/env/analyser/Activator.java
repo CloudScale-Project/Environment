@@ -68,7 +68,7 @@ public class Activator extends AbstractUIPlugin
 			MeasuringpointPackageImpl.init();
 
 			System.out.println("INIT TIME: " + (System.currentTimeMillis() - time));
-		} catch (Exception e)
+		} catch (Error e)
 		{
 			e.printStackTrace();
 		}
