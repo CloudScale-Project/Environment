@@ -1,25 +1,19 @@
 package eu.cloudscaleproject.env.spotter.editors.composite;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.InstrumentationEditor;
 import org.spotter.eclipse.ui.editors.InstrumentationEditorInput;
 import org.spotter.eclipse.ui.editors.MeasurementEditor;
@@ -28,14 +22,16 @@ import org.spotter.eclipse.ui.editors.MeasurementEditorInput;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.spotter.SpotterClientController;
+import eu.cloudscaleproject.env.spotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
+import org.eclipse.swt.widgets.Label;
 
 public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable{
 	
-	private final EditorInputFolder editorInput;
+	private final InputAlternative inputAlternative;
 	
 	private IProject project;
 	
@@ -51,157 +47,126 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		public String getContentDescription() {return "";};
 		protected void setContentDescription(String description) {};
 	};
+
+	private Composite mainComposite;
+	private Composite warningComposite;
 		
-	public InputAlternativeComposite(IProject project, Composite parent, int style, final EditorInputFolder editorInput) {
-		super(parent, style, editorInput);
+	public InputAlternativeComposite(IProject project, Composite parent, int style, final InputAlternative inputAlternative) {
+		super(parent, style, inputAlternative);
 		
 		this.project = project;
-		this.editorInput = editorInput;
+		this.inputAlternative = inputAlternative;
 
-		getContainer().setLayout(new GridLayout(2, false));
+		getContainer().setLayout(new StackLayout());
 		
-		//Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
-		//label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		warningComposite = new Composite(getContainer(), SWT.BORDER);
+		warningComposite.setLayout(new GridLayout(1, false));
+		Label lblEmpty = new Label(warningComposite, SWT.CENTER);
+		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		lblEmpty.setText("Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
 		
-		Composite composite = new Composite(getContainer(), SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
-		gd_composite.widthHint = 57;
-		composite.setLayoutData(gd_composite);
+		mainComposite = new Composite(getContainer(), SWT.NONE);
+		mainComposite.setLayout(new GridLayout(1, false));
 		
-		CTabFolder tabFolder = new CTabFolder(composite, SWT.BORDER | SWT.FLAT);
+		CTabFolder tabFolder = new CTabFolder(mainComposite, SWT.BORDER | SWT.FLAT);
 		tabFolder.setTabHeight(32);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		//tabFolder.setTabHeight(10);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));	
 		
 		//create instrumentation editor
-		try {
+		{
 			CTabItem tabItemInstrumentation = new CTabItem(tabFolder, SWT.NONE);
 			tabItemInstrumentation.setText("Instrumentations");
 			
 			insComposite = new Composite(tabFolder, SWT.NONE);
 			insComposite.setLayout(new FillLayout());
-			
-			insEditor.addPropertyListener(new IPropertyListener() {
-				@Override
-				public void propertyChanged(Object source, int propId) {
-					if(EditorPart.PROP_DIRTY == propId){
-						insEditor.doSave(null);
-					}
-				}
-			});
-			
-			IFile file = editorInput.getResource().getFile("mEnv.xml");
-			
-			if(!file.exists()){
-				createDefaultFile(file, 
-						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-						"<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\"/>"
-								);
-			}
-			
-			InstrumentationEditorInput inEditorInput = new InstrumentationEditorInput(file);
-			insEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), inEditorInput);
+
 			
 			tabItemInstrumentation.setControl(insComposite);
 			tabFolder.setSelection(tabItemInstrumentation);
-
-		} catch (PartInitException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
-		
 		//create measurements editor
-		try {
+		{
 			CTabItem tabItemMeasurement = new CTabItem(tabFolder, SWT.NONE);
 			tabItemMeasurement.setText("Measurements");
 			
 			meaComposite = new Composite(tabFolder, SWT.NONE);
 			meaComposite.setLayout(new FillLayout());
 			
-			meaEditor.addPropertyListener(new IPropertyListener() {
-				@Override
-				public void propertyChanged(Object source, int propId) {
-					if(EditorPart.PROP_DIRTY == propId){
-						meaEditor.doSave(null);
-					}
-				}
-			});
-			
-			IFile file = editorInput.getResource().getFile("mEnv.xml");
-			
-			if(!file.exists()){
-				createDefaultFile(file, 
-						"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-						"<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\"/>"
-								);
-			}
-			
-			MeasurementEditorInput measurementEditorInput = new MeasurementEditorInput(file);
-			meaEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
-			
 			tabItemMeasurement.setControl(meaComposite);
-			
-			initExternalEditors();
+		}
 
-		} catch (PartInitException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
-	
-	private void createDefaultFile(IFile file, String string){
-		if (!file.exists()) {
-		    byte[] bytes = 
-		    		("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-		    		+ "<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\"/>").getBytes();
-		    
-		    InputStream source = new ByteArrayInputStream(bytes);
-		    try {
-				file.create(source, IResource.NONE, null);
-			} catch (CoreException e1) {
-				try {
-					source.close();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}
-				e1.printStackTrace();
+		updateEditors();
+		
+		this.addDisposeListener(new DisposeListener()
+		{
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+				inputAlternative.unRegisterSpotterEditor(insEditor);
+				inputAlternative.unRegisterSpotterEditor(meaEditor);
 			}
-		}
+		});
 	}
 	
 	@Override
 	public void refresh() {
+		updateEditors();
+	}
+
+	private void updateEditors ()
+	{
+		if (SpotterClientController.getController(project).isConnected()) 
+		{
+			if (!editorsInitialized) initExternalEditors();
+			((StackLayout)getContainer().getLayout()).topControl = mainComposite;
+			getContainer().layout();
+		}
+		else
+		{
+			((StackLayout)getContainer().getLayout()).topControl = warningComposite;
+			getContainer().layout();
+		}
 	}
 	
-	long lastInit = 0;
+	
+	private boolean editorsInitialized;
 	private void initExternalEditors ()
 	{
-		// WORKAROUND - prevent  blinkering 
-		// called 2 times in a row is Main group selected
-		long time = System.currentTimeMillis();
-		if (lastInit > time - 500) return;
-		lastInit = time;
-		//////
-				
-		for(Control c : meaComposite.getChildren()){
-			c.dispose();
-		}
-		for(Control c : insComposite.getChildren()){
-			c.dispose();
+		if (editorsInitialized) return;
+		if (!SpotterClientController.getController(project).isConnected()) return;
+		
+		this.editorsInitialized = true;
+
+		try
+		{
+			IFile file = (IFile) inputAlternative.getSubResource(InputAlternative.KEY_ENVIRONMENT_CONFIG);
+			InstrumentationEditorInput inEditorInput = new InstrumentationEditorInput(file);
+			MeasurementEditorInput measurementEditorInput = new MeasurementEditorInput(file);
+
+			insEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), inEditorInput);
+			meaEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
+
+			insEditor.createPartControl(insComposite);
+			meaEditor.createPartControl(meaComposite);
+
+			insComposite.layout();
+			meaComposite.layout();
+
+			inputAlternative.registerSpotterEditor(insEditor);
+			inputAlternative.registerSpotterEditor(meaEditor);
+		} catch (PartInitException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		meaEditor.createPartControl(meaComposite);
-		insEditor.createPartControl(insComposite);
-		
-		meaComposite.layout();
-		insComposite.layout();
 	}
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, editorInput);
+		ValidationDiagramService.showStatus(project, inputAlternative);
 		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
 		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_RES_ID);
 	}

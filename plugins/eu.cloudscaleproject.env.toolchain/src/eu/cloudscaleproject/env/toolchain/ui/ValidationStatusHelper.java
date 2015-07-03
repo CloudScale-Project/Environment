@@ -88,10 +88,6 @@ public class ValidationStatusHelper
 			String message = warnings[i].message;
 			Status s = new Status(IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", message));
 			statuses.add(s);
-			
-			if(i > 4){
-				break;
-			}
 		}
 
 		String msg = String.format("Unable to run alternative '%s'.", alternative.getName());

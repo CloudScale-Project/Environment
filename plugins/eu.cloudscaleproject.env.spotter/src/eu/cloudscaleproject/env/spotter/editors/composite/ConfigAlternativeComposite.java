@@ -15,16 +15,14 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.editors.HierarchyEditorInput;
 import org.spotter.eclipse.ui.editors.SpotterConfigEditor;
@@ -35,6 +33,7 @@ import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -69,6 +68,10 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	};
 	private Combo combo;
 	private DataBindingContext m_bindingContext;
+
+	private Composite warningComposite;
+
+	private Composite mainComposite;
 	
 	public ConfigAlternativeComposite(IProject project, Composite parent, int style, final ConfigAlternative editorInput) {
 		super(parent, style, editorInput);
@@ -77,28 +80,37 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		
 		this.confAlternative = editorInput;		
 		
-		getContainer().setLayout(new GridLayout(2, false));
+		getContainer().setLayout(new StackLayout());
 		
-		Label lblSelectInput = new Label(getContainer(), SWT.NONE);
+		warningComposite = new Composite(getContainer(), SWT.BORDER);
+		warningComposite.setLayout(new GridLayout(1, false));
+		Label lblEmpty = new Label(warningComposite, SWT.CENTER);
+		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		lblEmpty.setText("Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
+		
+		mainComposite = new Composite(getContainer(), SWT.NONE);
+		mainComposite.setLayout(new GridLayout(2, false));
+		
+		Label lblSelectInput = new Label(mainComposite, SWT.NONE);
 		lblSelectInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblSelectInput.setText("Input:");
 		
-		comboViewer = new ComboViewer(getContainer(), SWT.NONE);
+		comboViewer = new ComboViewer(mainComposite, SWT.NONE);
 		combo = comboViewer.getCombo();
 		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_combo.widthHint = 170;
 		combo.setLayoutData(gd_combo);
 
-		new Label(getContainer(), SWT.NONE);
-		new Label(getContainer(), SWT.NONE);
+		new Label(mainComposite, SWT.NONE);
+		new Label(mainComposite, SWT.NONE);
 		
 		//composite with tab folder
-		Composite composite = new Composite(getContainer(), SWT.NONE);
+		Composite composite = new Composite(mainComposite, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		
 		initConfigurationComposites(composite);
-		initExternalEditors();
+		updateEditors();
 		
 		m_bindingContext = initDataBindings();
 	}
@@ -108,130 +120,113 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		CTabFolder tabFolder = new CTabFolder(container, SWT.BORDER | SWT.FLAT);
 		tabFolder.setTabHeight(32);
 		//spotter configuration tab
-		try {
+		{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-			tabItem.setText("Confuguration");
+			tabItem.setText("Configuration");
 			
 			confComposite = new Composite(tabFolder, SWT.NONE);
 			confComposite.setLayout(new FillLayout());
-
-			confEditor.addPropertyListener(new IPropertyListener() {
-				@Override
-				public void propertyChanged(Object source, int propId) {
-					if(EditorPart.PROP_DIRTY == propId){
-						confEditor.doSave(null);
-					}
-				}
-			});
-			
-			IFile file = confAlternative.getResource().getFile("spotter.conf");
-
-			SpotterConfigEditorInput editorPartInput = new SpotterConfigEditorInput(file);
-			confEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
 			
 			tabItem.setControl(confComposite);
 			tabFolder.setSelection(tabItem);
-			
-		} catch (PartInitException e1) {
-			e1.printStackTrace();
-		}
-		
+		} 		
 		//spotter workload editor tab
-		try {
+		{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Workload");
 			
 			workComposite = new Composite(tabFolder, SWT.NONE);
 			workComposite.setLayout(new FillLayout());
 			
-			workEditor.addPropertyListener(new IPropertyListener() {
-				@Override
-				public void propertyChanged(Object source, int propId) {
-					if(EditorPart.PROP_DIRTY == propId){
-						workEditor.doSave(null);
-					}
-				}
-			});
-			
-			IFile file = confAlternative.getResource().getFile("mEnv.xml");
-			WorkloadEditorInput editorPartInput = new WorkloadEditorInput(file);
-			workEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
-			
 			tabItem.setControl(workComposite);
-		} catch (PartInitException e1) {
-			e1.printStackTrace();
-		}
-		
+		}		
+
 		//spotter hierarchy editor tab
-		try {
+		{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Hierarchy");
 			
 			hierComposite = new Composite(tabFolder, SWT.NONE);
 			hierComposite.setLayout(new FillLayout());
 			
-			hierEditor.addPropertyListener(new IPropertyListener() {
-				@Override
-				public void propertyChanged(Object source, int propId) {
-					if(EditorPart.PROP_DIRTY == propId){
-						hierEditor.doSave(null);
-					}
-				}
-			});
-			
-			IFile file = confAlternative.getResource().getFile("hierarchy.xml");
-			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
-			hierEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
-			
 			tabItem.setControl(hierComposite);
-		} catch (PartInitException e1) {
-			e1.printStackTrace();
-		}
-		
+		}		
 		
 	}
 	
 	@Override
 	public void refresh() {
-		m_bindingContext.updateTargets();
-	}
-	
-	long lastRefresh = 0;
-	private void initExternalEditors()
-	{
-		// WORKAROUND - prevent  blinkering 
-		// called 2 times in a row
-		long time = System.currentTimeMillis();
-		if (lastRefresh > time - 500) return;
-		lastRefresh = time;
-		//////
-
-		confAlternative.load();
-		comboViewer.refresh(true);
-		
-		for(Control c : confComposite.getChildren()){
-			c.dispose();
-		}
-		for(Control c : workComposite.getChildren()){
-			c.dispose();
-		}
-		for(Control c : hierComposite.getChildren()){
-			c.dispose();
-		}
-		
-		confEditor.createPartControl(confComposite);
-		workEditor.createPartControl(workComposite);
-		hierEditor.createPartControl(hierComposite);
-		
-		confComposite.layout();
-		workComposite.layout();
-		hierComposite.layout();
 
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(confAlternative.getProject(),
 				ToolchainUtils.SPOTTER_DYN_INPUT_ID);
-		
+
 		this.inputAlternatives.clear();
 		this.inputAlternatives.addAll(resourceProvider.getResources());
+		comboViewer.refresh(true);
+
+		m_bindingContext.updateTargets();
+		
+		updateEditors();
+	}
+	
+	private void updateEditors ()
+	{
+		if (SpotterClientController.getController(project).isConnected()) 
+		{
+			if (!editorsInitialized) initExternalEditors();
+			((StackLayout)getContainer().getLayout()).topControl = mainComposite;
+			getContainer().layout();
+		}
+		else
+		{
+			((StackLayout)getContainer().getLayout()).topControl = warningComposite;
+			getContainer().layout();
+		}
+	}
+	
+	
+	private boolean editorsInitialized;
+	private void initExternalEditors ()
+	{
+		if (editorsInitialized) return;
+		if (!SpotterClientController.getController(project).isConnected()) return;
+		
+		this.editorsInitialized = true;
+
+		try
+		{
+			{
+			IFile file = confAlternative.getResource().getFile("spotter.conf");
+			SpotterConfigEditorInput editorPartInput = new SpotterConfigEditorInput(file);
+			confEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			confEditor.createPartControl(confComposite);
+			confComposite.layout();
+			}
+
+			{
+			IFile file = confAlternative.getResource().getFile("mEnv.xml");
+			WorkloadEditorInput editorPartInput = new WorkloadEditorInput(file);
+			workEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			workEditor.createPartControl(workComposite);
+			workComposite.layout();
+			}
+
+			{
+			IFile file = confAlternative.getResource().getFile("hierarchy.xml");
+			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
+			hierEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			hierEditor.createPartControl(hierComposite);
+			hierComposite.layout();
+			}
+			
+			confAlternative.registerSpotterEditor(confEditor);
+			confAlternative.registerSpotterEditor(workEditor);
+			confAlternative.registerSpotterEditor(hierEditor);
+		} catch (PartInitException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
