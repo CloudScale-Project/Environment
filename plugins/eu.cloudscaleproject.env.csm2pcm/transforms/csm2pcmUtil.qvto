@@ -1,11 +1,11 @@
 library csm2pcmUtil;
 
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
-modeltype REPOSITORY uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype SYSTEM uses pcm::system('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype COMPOSITION uses pcm::core::composition('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.0');
+modeltype REPOSITORY uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype SYSTEM uses pcm::system('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype COMPOSITION uses pcm::core::composition('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.1');
 
 //AssemblyContext helper querys
 

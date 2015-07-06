@@ -1,9 +1,9 @@
 library csm2pcmResource;
 
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
-modeltype RESOURCE_TYPE uses pcm::resourcetype('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.0');
-modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.0');
+modeltype RESOURCE_TYPE uses pcm::resourcetype('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.1');
 
 modeltype STOEX uses stoex('http://sdq.ipd.uka.de/StochasticExpressions/2.2');
 
