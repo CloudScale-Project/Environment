@@ -70,9 +70,13 @@ public class StatusContentProvider implements ITreeContentProvider{
 			List<IValidationStatus> statList = new ArrayList<IValidationStatus>();
 			
 			for(IValidationStatus stat : sp.getStatus()){
-				if(hasWarnings(stat) && stat != sp.getSelfStatus()){
+				if(hasWarnings(stat)){
 					statList.add(stat);
 				}
+			}
+			
+			if(hasWarnings(sp.getSelfStatus())){
+				statList.add(sp.getSelfStatus());
 			}
 			
 			return statList.toArray();

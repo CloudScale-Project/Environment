@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -29,17 +30,26 @@ public class StatusViewPart {
 	private IProject project;
 	private List<IValidationStatusProvider> statusProviders = null;
 	
+	private final Object batchExecutorKey = new Object();
+	
 	private final PropertyChangeListener startusListener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			Display.getDefault().asyncExec(new Runnable()
-			{
+			BatchExecutor.getInstance().addTask(batchExecutorKey, new Runnable() {
+				
 				@Override
-				public void run()
-				{
-					reload(project);
+				public void run() {
+					Display.getDefault().asyncExec(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							reload(project);
+						}
+					});
 				}
 			});
+			
 		}
 	};
 
