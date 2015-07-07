@@ -46,28 +46,30 @@ public class ConfValidator implements IResourceValidator {
 		boolean pms = true;
 		boolean slo = true;
 		
-		boolean hasMp = false;
-		boolean hasMonitor = false;
-		boolean hasSlo = false;
-		
 		List<IResource> mpFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
 		List<IResource> pmsFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MONITOR);
 		List<IResource> sloFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_SLO);
 		
+		ca.getSelfStatus().checkError("MeasureP missing", !mpFiles.isEmpty(), false, "Measuring points model is missing!");
+		ca.getSelfStatus().checkError("Monitor missing", !pmsFiles.isEmpty(), false, "Monitor model is missing!");
+		ca.getSelfStatus().checkError("SLO missing", !sloFiles.isEmpty(), false, "SLO model is missing!");
+		
+		if(mpFiles.isEmpty()){mp = false;}
+		if(pmsFiles.isEmpty()){pms = false;}
+		if(sloFiles.isEmpty()){slo = false;}
+
+		
 		for(IResource file : mpFiles){
-			hasMp = true;
 			mp &= validateModel(ca, (IFile)file);
 		}
 		for(IResource file : pmsFiles){
-			hasMonitor = true;
 			pms &= validateModel(ca, (IFile)file);
 		}
 		for(IResource file : sloFiles){
-			hasSlo = true;
 			pms &= validateModel(ca, (IFile)file);
 		}
 
-		return mp && pms && slo && hasMp && hasMonitor && hasSlo;
+		return mp && pms && slo;
 	}
 	
 	public boolean validateModel(ConfAlternative alt, IFile file) throws CoreException, ValidationException{
