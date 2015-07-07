@@ -33,37 +33,44 @@ public class InputValidator implements IResourceValidator {
 	
 	public boolean validateModels(IProject project, InputAlternative ia) throws CoreException, ValidationException{
 		
-		boolean rep = false;
-		boolean sys = false;
-		boolean all = false;
-		boolean res = false;
-		boolean usa = false;
+		boolean rep = true;
+		boolean sys = true;
+		boolean all = true;
+		boolean res = true;
+		boolean usa = true;
 		
 		List<IResource> repFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_REPOSITORY);
 		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
 		List<IResource> allFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_ALLOCATION);
 		List<IResource> resFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV);
 		List<IResource> usaFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGE);
+		
+		ia.getSelfStatus().checkError("Repository missing", !repFiles.isEmpty(), false, "Repository model is missing!");
+		ia.getSelfStatus().checkError("System missing", !sysFiles.isEmpty(), false, "System model is missing!");
+		ia.getSelfStatus().checkError("Allocation missing", !allFiles.isEmpty(), false, "Allocation model is missing!");
+		ia.getSelfStatus().checkError("Resource missing", !resFiles.isEmpty(), false, "Resource model is missing!");
+		ia.getSelfStatus().checkError("Usage missing", !usaFiles.isEmpty(), false, "Usage model is missing!");
+
+		if(repFiles.isEmpty()){rep = false;}
+		if(sysFiles.isEmpty()){sys = false;}
+		if(allFiles.isEmpty()){all = false;}
+		if(resFiles.isEmpty()){res = false;}
+		if(usaFiles.isEmpty()){usa = false;}
 
 		for(IResource file : repFiles){
-			rep = validateModel(ia, (IFile)file);
-			if(rep == false){break;}
+			rep &= validateModel(ia, (IFile)file);
 		}
 		for(IResource file : sysFiles){
-			sys = validateModel(ia, (IFile)file);
-			if(sys == false){break;}
+			sys &= validateModel(ia, (IFile)file);
 		}
 		for(IResource file : allFiles){
-			all = validateModel(ia, (IFile)file);
-			if(all == false){break;}
+			all &= validateModel(ia, (IFile)file);
 		}
 		for(IResource file : resFiles){
-			res = validateModel(ia, (IFile)file);
-			if(res == false){break;}
+			res &= validateModel(ia, (IFile)file);
 		}
 		for(IResource file : usaFiles){
-			usa = validateModel(ia, (IFile)file);
-			if(usa == false){break;}
+			usa &= validateModel(ia, (IFile)file);
 		}
 
 		return rep && sys && all && res && usa;
