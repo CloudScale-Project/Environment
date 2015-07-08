@@ -96,6 +96,13 @@ public class EditorInputFile extends EditorInputResource{
 		pcs.firePropertyChange(key, old, value);
 	}
 	
+	public void removeProperty(String key){
+		String old = source.getProperty(key);
+		source.remove(key);
+		setDirty(true);
+		pcs.firePropertyChange(key, old, null);
+	}
+	
 	@Override
 	public String getName(){
 		String prop = getProperty(KEY_NAME);

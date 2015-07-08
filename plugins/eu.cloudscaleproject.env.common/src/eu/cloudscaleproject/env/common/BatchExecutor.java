@@ -1,7 +1,8 @@
 package eu.cloudscaleproject.env.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,7 +23,7 @@ public class BatchExecutor {
 		return instance;
 	}
 	
-	private volatile Object lock = new Object();
+	private static volatile Object lock = new Object();
 	
 	private volatile Map<Object, Long> queueTime = new HashMap<Object, Long>();
 	private volatile Map<Object, Runnable> queueTask = new HashMap<Object, Runnable>();
@@ -35,13 +36,14 @@ public class BatchExecutor {
 			while(!Thread.interrupted()){
 				
 				while(!queueTask.isEmpty()){
+					
+					List<Object> toRemove = new ArrayList<Object>();
 										
 					//execute tasks and remove them from the queue
 					synchronized (lock) {
-						Iterator<Entry<Object, Long>> iter = queueTime.entrySet().iterator();
-						while(iter.hasNext()){
+						
+						for(Entry<Object, Long> entry : queueTime.entrySet()){
 							
-							Entry<Object, Long> entry = iter.next();							
 							Long currentTime = System.currentTimeMillis();
 
 							if(currentTime - entry.getValue() > DELAY_TIME){
@@ -51,9 +53,14 @@ public class BatchExecutor {
 								catch(Exception e){
 									e.printStackTrace();
 								}
-								queueTask.remove(entry.getKey());
-								iter.remove();
+								toRemove.add(entry.getKey());
 							}
+						}
+						
+						//remove processed
+						for(Object o : toRemove){
+							queueTask.remove(o);
+							queueTime.remove(o);
 						}
 					}
 				}
@@ -72,7 +79,7 @@ public class BatchExecutor {
 		}
 	}, "Batch executor");
 	
-	public BatchExecutor() {
+	private BatchExecutor() {
 		executor.start();
 	}
 	

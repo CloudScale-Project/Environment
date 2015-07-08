@@ -161,6 +161,20 @@ public class EditorInputFolder extends EditorInputResource{
 		updateStatusList();
 	}
 	
+	public void removeSubResources(String key){
+		
+		synchronized (subResourcesLock) {
+			List<IResource> resources = getSubResources(key);
+			resources.clear();
+			doSetSubResources(key, resources);
+		}
+		
+		setDirty(true);
+		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		
+		updateStatusList();
+	}
+	
 	public void setSubResource(String key, IResource res){
 		
 		doSetSubResource(key, res);

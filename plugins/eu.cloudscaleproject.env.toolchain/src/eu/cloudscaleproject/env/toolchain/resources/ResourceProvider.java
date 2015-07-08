@@ -347,8 +347,13 @@ public abstract class ResourceProvider
 		IEditorInputResource prop = getResource(resourceName);
 		return prop == null ? false : true;
 	}
-		
+	
 	public IEditorInputResource createNewResource(String name, String type)
+	{
+		return createNewResource(name, type, false);
+	}
+		
+	public IEditorInputResource createNewResource(String name, String type, boolean empty)
 	{
 		checkRootFolder();
 
@@ -362,10 +367,10 @@ public abstract class ResourceProvider
 			++c;
 		}
 		
-		return createNewResource(resourceName, name, type);
+		return createNewResource(resourceName, name, type, empty);
 	}
 
-	public IEditorInputResource createNewResource(String resourceName, String name, String type)
+	public IEditorInputResource createNewResource(String resourceName, String name, String type, boolean empty)
 	{
 		checkRootFolder();
 
@@ -379,7 +384,10 @@ public abstract class ResourceProvider
 		IEditorInputResource eir = createEditorInputResource(res, type);
 		eir.setProperty(PROP_TYPE, type);
 		eir.setName(name);
-		eir.create();
+		
+		if(!empty){
+			eir.create();
+		}
 
 		synchronized (resourcesLock) {
 			resources.remove(res);

@@ -10,13 +10,13 @@ public enum ModelType{
 	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
 	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "resourceenvironment"),
 	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "allocation"),
-	 AT(ToolchainUtils.KEY_FILE_AT, "xmi"),
+	 //AT(ToolchainUtils.KEY_FILE_AT, "xmi"),
 	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "usagemodel"),
 	 
 	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "usageevolution"),
-	 PMS(ToolchainUtils.KEY_FILE_MONITOR, "monitor"),
+	 PMS(ToolchainUtils.KEY_FILE_MONITOR, "monitorrepository"),
 	 VARIATIONS(ToolchainUtils.KEY_FILE_VARIATIONS, "variations"),
-	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "pcmmeasuringpoint"),
+	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "measuringpoint"),
 	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
 	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments"),
 	 
@@ -27,7 +27,7 @@ public enum ModelType{
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
-	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, AT} ;
+	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
 	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, PMS, SLO, VARIATIONS, USAGE_EVOLUTION, MEASURING_POINT} ;
 	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
 	 

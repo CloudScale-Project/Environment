@@ -1096,11 +1096,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	public void doCreate()
 	{
 		Experiment exp = retrieveExperimentModel();
-
-		// Sets initial settings.
-		// For already existing alternatives, those configurations are
-		// overridden by the load() method.
-
+		
 		initializeCommon(exp);
 
 		if (Type.NORMAL.equals(type))
