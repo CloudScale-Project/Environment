@@ -10,9 +10,34 @@
 <body>
 <h2 id="minimal-example---environment-project">Minimal Example - Environment project</h2>
 <h4 id="about">About</h4>
+<p>Minimal Cloudscale Environment example project. It contains configurations and results for the tools (Extractor, Analyser, Static and Dynamic Spotter), together with the ScaleDL models.</p>
+<h5 id="extractor">Extractor:</h5>
+<p>Simple Apache-Tomcat Fibonacci project has been imported into Cloudscale Environment workspace, configured in the Extractor Dashboard editor and extracted. Results can be seen by opening the Dashboard editor (project.cse file) under Extractor-&gt;Results tab.</p>
+<h5 id="overview">Overview:</h5>
+<p>Simple Overview model with AWS deployment has been created with the Extractor-&gt;Overview import wizard. It is saved under the '/Minimal-Example/ScaleDL models/Overview/Alternative_2015-07-06_03-21-02' folder. To view or edit the model, open overview.sdlo_diagram file, or navigate to the Overview tab in the Dashboard editor. Double clicking on the Overview tree view in the Dashboard, will open the Overview diagram editor.</p>
+<h5 id="analyser">Analyser:</h5>
+<p>Analyser input, configuration and result alternatives are saved in the Environment project Analyser folder. To view and modifie them, open the Dashboard editor by double clicking on the 'project.cse' file. Analyser alternatives are displayed under the Analyser tab.</p>
+<h6 id="input-alternatives">Input alternatives</h6>
+<p>First input alternative &quot;Fibonacci from Overview&quot; contains Extended PCM model, transformed from the Overview model. Second input alternative &quot;Fibonacci from Extractor&quot; contains Extracted partial PCM model, which is imported from the Extractor result. Third input alternative &quot;Fibonacci from External&quot; is produced with the external model import wizard. It contains models from the Analyser minimal example.</p>
+<h6 id="configuration-alternatives">Configuration alternatives</h6>
+<p>Normal alternative is configured for the &quot;Fibonacci from Overview&quot; Analyser input alternative. Capacity alternative is configured for the &quot;Fibonacci from Overview&quot; Analyser input alternative. Scalability alternative is configured for the &quot;Fibonacci from Overview&quot; Analyser input alternative.</p>
+<h6 id="results">Results</h6>
+<p>Results for all Configuration alternatives are already produced under the 'Dashboard-&gt;Analyser-&gt;Results' tab.</p>
+<h5 id="usage-evolution">Usage evolution</h5>
+<p>Simple linear ramp is created under the 'ScaleDL-&gt;Usage evolution' folder. It can be displayed and modified under the Dashboard-&gt;Limbo editor. Analyser normal configuration alternative uses this Limbo alternative to simulate usage evolution.</p>
+<h5 id="static-spotter">Static spotter:</h5>
+<p>Static spotter Fibonacci input alternative is produced with the Extractor-&gt;Static spotter import wizard. Basic configuration has been created and run. Results can be seen in the 'Dashboard-&gt;Static Spotter-&gt;Results' tab.</p>
+<h5 id="dynamic-spotter">Dynamic spotter:</h5>
+<p>TODO:</p>
+<p>Author: Vito Čuček</p>
 <h4 id="project-contents">Project contents</h4>
-<h4 id="run">Run</h4>
-<h4 id="possible-configurations">Possible configurations</h4>
-<h4 id="results">Results</h4>
+<ul>
+<li>Analyser input, configuration and results alternatives.</li>
+<li>Limbo model, describing the usage evolution for the Analyser.</li>
+<li>Partial PCM model, produced from the Fibonacci minimal example source code.</li>
+<li>Static spotter input, configuration and results alternatives. Static spotter input alternative is generated from the partial PCM model, produced by the Extractor.</li>
+<li>Dynamic spotter input, configuration and results.</li>
+<li>Minimal Overview model, produced from the Extractor partial PCM model, using the Extrator-&gt;Overview transforamtion wizard.</li>
+</ul>
 </body>
 </html>
