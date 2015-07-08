@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.editors;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -13,19 +14,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.dialogs.NewConfigAlternativeDialog;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigBasicComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigCapacity;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigMonitorListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.ConfigSLOListComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.SelectInputAltComposite;
 import eu.cloudscaleproject.env.analyser.editors.config.UsageEvolutionComposite;
-import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.analyser.wizard.config.CreateConfigAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
@@ -33,13 +32,11 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
-import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
@@ -253,6 +250,11 @@ public class ConfigComposite extends SidebarEditorComposite
 	@Override
 	public void handleNewInput(IEditorInput selected)
 	{
+		CreateConfigAlternativeSelectionWizard createconfigAltWizard = new CreateConfigAlternativeSelectionWizard(project);
+		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createconfigAltWizard);
+		wizardDialog.open();
+		
+		/*
 		NewConfigAlternativeDialog dialog = new NewConfigAlternativeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				new BasicCallback<String[]>()
 				{
@@ -272,5 +274,6 @@ public class ConfigComposite extends SidebarEditorComposite
 					}
 				});
 		dialog.open();
+		*/
 	}
 }

@@ -85,6 +85,10 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	public ExternalModelsSelectionPage() {
 		this (null, ModelType.GROUP_ALL);
 	}
+	
+	public ExternalModelsSelectionPage(ModelType[] types) {
+		this(null, types, null);
+	}
 
 	public ExternalModelsSelectionPage(IFolder from, ModelType[] types) {
 		this(from, types, null);

@@ -58,13 +58,42 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public void addSubResourceModel(IResource res) {
-		//TODO: make abstract
-		throw new UnsupportedOperationException();
+		String ext = res.getFileExtension();
+		String key = null;
+
+		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
+		{
+			if (type.getFileExtension().equals(ext))
+				key = type.getToolchainFileID();
+		}
+		
+		if(key == null){
+			logger.warning("Model with extension: " + res.getFileExtension() + "is not registred in the ModelType enum!");
+			return;
+		}
+		
+		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
+		setSubResource(key, res);
 	}
 	
 	public void removeSubResourceModel(IResource res) {
-		//TODO: make abstract
-		throw new UnsupportedOperationException();
+		String ext = res.getFileExtension();
+		String key = null;
+
+		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
+		{
+			if (type.getFileExtension().equals(ext))
+				key = type.getToolchainFileID();
+		}
+		
+		if(key == null){
+			logger.warning("Model with extension: " + res.getFileExtension() + "is not registred in the ModelType enum!");
+			return;
+		}
+		
+		Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
+		resSet.getResources().remove(resource);
+		removeSubResource(key, res);
 	}
 	
 	public ResourceSet getResourceSet(){

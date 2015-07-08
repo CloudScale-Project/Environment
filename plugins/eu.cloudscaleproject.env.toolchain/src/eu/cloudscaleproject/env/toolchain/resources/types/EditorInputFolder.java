@@ -24,6 +24,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public class EditorInputFolder extends EditorInputResource{
 
+	private static final String MULTIPATH_SEPARATOR = "<:>";
+	
 	protected final IProject project;
 	
 	private EditorInputFile propertyInputFile;
@@ -116,7 +118,7 @@ public class EditorInputFolder extends EditorInputResource{
 			if(oldPath != null){
 				String oldPathTrimed = oldPath.trim();
 				if(!oldPathTrimed.isEmpty()){
-					path = oldPathTrimed + "," + path;
+					path = oldPathTrimed + MULTIPATH_SEPARATOR + path;
 				}
 			}
 			
@@ -219,7 +221,7 @@ public class EditorInputFolder extends EditorInputResource{
 			
 			if(iter.hasNext()){
 				//TODO: find a better way to specify "multi-resource" key value!
-				value += ":";
+				value += MULTIPATH_SEPARATOR;
 			}
 		}
 		
@@ -269,8 +271,8 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		//check if this is multi-resource key
-		if(relPath.contains(":")){
-			relPath = relPath.split(":")[0];
+		if(relPath.contains(MULTIPATH_SEPARATOR)){
+			relPath = relPath.split(MULTIPATH_SEPARATOR)[0];
 		}
 		
 		IResource res = getResource().findMember(relPath);
@@ -294,8 +296,8 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 				
 		//check if this is multi-resource key
-		if(relPath.contains(":")){
-			for(String path : relPath.split(":")){
+		if(relPath.contains(MULTIPATH_SEPARATOR)){
+			for(String path : relPath.split(MULTIPATH_SEPARATOR)){
 				
 				IResource res = getResource().findMember(path);
 				
