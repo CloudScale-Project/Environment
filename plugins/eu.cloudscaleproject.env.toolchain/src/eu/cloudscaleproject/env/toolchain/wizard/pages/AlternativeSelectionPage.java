@@ -20,9 +20,9 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class AlternativeSelectionPage extends WizardPage{
+	
 	private static final String DEFAULT_TITLE = "Select alternative";
 	private static final String DEFAULT_DESCRIPTION = "Please select alternative from a list.";
-
 
 	@SuppressWarnings("unused")
 	private DataBindingContext m_bindingContext;
@@ -32,8 +32,15 @@ public class AlternativeSelectionPage extends WizardPage{
 	private ListViewer listViewer;
 
 	public AlternativeSelectionPage(ResourceProvider resourceProvider) {
-		super(DEFAULT_TITLE, DEFAULT_TITLE, null);
-		setDescription(DEFAULT_DESCRIPTION);
+		this(DEFAULT_TITLE, DEFAULT_DESCRIPTION, resourceProvider);
+		this.resourceProvider = resourceProvider;
+	}
+	
+	public AlternativeSelectionPage(String name, String description, ResourceProvider resourceProvider) {
+		super(name, name, null);
+		
+		setTitle(name);
+		setDescription(description);
 		
 		this.resourceProvider = resourceProvider;
 	}

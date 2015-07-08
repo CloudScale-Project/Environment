@@ -22,10 +22,10 @@ public class BatchExecutor {
 		return instance;
 	}
 	
-	private final Object lock = new Object();
+	private volatile Object lock = new Object();
 	
-	private final Map<Object, Long> queueTime = new HashMap<Object, Long>();
-	private final Map<Object, Runnable> queueTask = new HashMap<Object, Runnable>();
+	private volatile Map<Object, Long> queueTime = new HashMap<Object, Long>();
+	private volatile Map<Object, Runnable> queueTask = new HashMap<Object, Runnable>();
 	
 	private final Thread executor = new Thread(new Runnable() {
 		
@@ -45,26 +45,25 @@ public class BatchExecutor {
 							Long currentTime = System.currentTimeMillis();
 
 							if(currentTime - entry.getValue() > DELAY_TIME){
-								queueTask.get(entry.getKey()).run();
+								try{
+									queueTask.get(entry.getKey()).run();
+								}
+								catch(Exception e){
+									e.printStackTrace();
+								}
 								queueTask.remove(entry.getKey());
 								iter.remove();
 							}
 						}
-					}
-					
-					//wait for 30ms
-					try {
-						Thread.sleep(30);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
 				
 				//wait until next entry arrives
 				try {
 					synchronized (lock) {
-						lock.wait();
+						if(queueTask.isEmpty()){
+							lock.wait();
+						}
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

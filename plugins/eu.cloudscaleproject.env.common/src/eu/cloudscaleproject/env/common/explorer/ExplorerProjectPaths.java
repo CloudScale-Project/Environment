@@ -32,6 +32,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
+import eu.cloudscaleproject.env.common.BasicCallback;
+
 public class ExplorerProjectPaths {
 
 	private static final Logger logger = Logger
@@ -506,7 +508,7 @@ public class ExplorerProjectPaths {
 		
 		return files;
 	}
-	
+	/*
 	public static void copyEMFResources(IContainer folder, Resource[] resources)
 	{
 		for (Resource res : resources)
@@ -522,6 +524,70 @@ public class ExplorerProjectPaths {
 
 			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 			resource.setURI(uri);
+		}
+
+		for (Resource resource : resources)
+		{
+			TreeIterator<Object> allContents = EcoreUtil.getAllContents(resource, false);
+			while (allContents.hasNext())
+			{
+				Object object = (Object) allContents.next();
+
+				if (object instanceof InternalEObject)
+				{
+					InternalEObject eobj = (InternalEObject) object;
+					if (eobj.eIsProxy())
+					{
+						eobj.eSetProxyURI(null);
+					}
+				}
+			}
+		}
+
+		for (Resource resource : resources)
+		{
+			try
+			{
+				resource.save(null);
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	*/
+	
+	public static void copyEMFResources(final IContainer folder, Resource[] resources)
+	{
+		copyEMFResources(resources, new BasicCallback<Resource>() {
+			@Override
+			public void handle(Resource resource) {
+				String[] segments = resource.getURI().segments();
+				String segment = segments[segments.length - 1];
+				IFile file = folder.getFile(new Path(segment));
+
+				URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+				resource.setURI(uri);
+			}
+		});
+	}
+	
+	public static void copyEMFResources(Resource[] resources, BasicCallback<Resource> setUri)
+	{
+		for (Resource res : resources)
+		{
+			EcoreUtil.resolveAll(res);
+		}
+
+		for (Resource resource : resources)
+		{
+			//String[] segments = resource.getURI().segments();
+			//String segment = segments[segments.length - 1];
+			//IFile file = folder.getFile(new Path(segment));
+
+			setUri.handle(resource);
+			//URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+			//resource.setURI(uri);
 		}
 
 		for (Resource resource : resources)
