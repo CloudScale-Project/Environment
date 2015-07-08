@@ -61,7 +61,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		String ext = res.getFileExtension();
 		String key = null;
 
-		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
+		for (ModelType type : ModelType.GROUP_ALL)
 		{
 			if (type.getFileExtension().equals(ext))
 				key = type.getToolchainFileID();
@@ -73,14 +73,14 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-		setSubResource(key, res);
+		addSubResource(key, res);
 	}
 	
 	public void removeSubResourceModel(IResource res) {
 		String ext = res.getFileExtension();
 		String key = null;
 
-		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
+		for (ModelType type : ModelType.GROUP_ALL)
 		{
 			if (type.getFileExtension().equals(ext))
 				key = type.getToolchainFileID();

@@ -80,7 +80,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		while(iter.hasNext()){
 			EObject o = iter.next();
 			
-			System.out.println("EObject: " + o.toString());
+			//System.out.println("EObject: " + o.toString());
 			
 			{	
 				Resource res = o.eResource();
@@ -96,7 +96,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					InternalEObject ieo = (InternalEObject)child;
 					EObject eo = null;
 					
-					System.out.println("EObject feature: " + ieo.toString() + "Is proxy: " + ieo.eIsProxy());
+					//System.out.println("EObject feature: " + ieo.toString() + "Is proxy: " + ieo.eIsProxy());
 					
 					//if(ieo.eProxyURI() == null || ieo.eProxyURI().scheme().equals("pathmap")){
 					//	continue;
@@ -111,18 +111,18 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					
 					Resource res = eo.eResource();
 					if(res == null){
-						System.out.println("EObject feature res NULL!");
+						//System.out.println("EObject feature res NULL!");
 						continue;
 					}
 					
-					System.out.println("EObject feature res: " + res.toString());
+					//System.out.println("EObject feature res: " + res.toString());
 					
 					//skip resources loaded from plugin
 					if(res.getURI() != null 
 							&& res.getURI().scheme() != null 
 							&& res.getURI().scheme().equals("pathmap")){
 						
-						System.out.println("EObject feature res from plugin!");
+						//System.out.println("EObject feature res from plugin!");
 						continue;
 					}
 
@@ -183,17 +183,15 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		
 		//extract input models
 		final Set<Resource> inputResources = new HashSet<Resource>();		
-		System.out.println("INPUT: ");
+		//System.out.println("INPUT: ");
 
 		Allocation allocation = exp.getInitialModel().getAllocation();
+		inputResources.addAll(findLinked(allocation.eResource()));
 		inputResources.add(allocation.eResource());
-		inputResources.addAll(findLinked(allocation.getSystem_Allocation().eResource()));
-		inputResources.add(allocation.getSystem_Allocation().eResource());
-		inputResources.add(allocation.getTargetResourceEnvironment_Allocation().eResource());
 		inputResources.add(exp.getInitialModel().getUsageModel().eResource());
 		
 		//extract configuration models
-		System.out.println("CONFIGURATION: ");
+		//System.out.println("CONFIGURATION: ");
 		final Set<Resource> confResources = findLinked(experimentResource);
 		confResources.add(experimentResource);
 		confResources.removeAll(inputResources);
@@ -205,10 +203,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		
 		//create and save input and config alternatives
 		final InputAlternative ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
-		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name());
-		
-		//clear current models in the configuration alternative!
-		ca.getResourceSet().getResources().clear();
+		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name(), true);
 		
 		//copy all resources to input and configuration alternative
 		ia.createSubResources(new Runnable() {
