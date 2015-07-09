@@ -191,7 +191,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
 			setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 			setDirty(true);
-			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+			firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 			return false;
 		}
 
@@ -272,7 +272,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 
 		setDirty(true);
-		pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+		firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 
 		return true;
 	}

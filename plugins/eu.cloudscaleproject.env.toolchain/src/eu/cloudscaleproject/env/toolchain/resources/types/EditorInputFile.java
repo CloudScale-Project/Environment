@@ -93,14 +93,14 @@ public class EditorInputFile extends EditorInputResource{
 		}
 		
 		setDirty(true);
-		pcs.firePropertyChange(key, old, value);
+		firePropertyChange(key, old, value);
 	}
 	
 	public void removeProperty(String key){
 		String old = source.getProperty(key);
 		source.remove(key);
 		setDirty(true);
-		pcs.firePropertyChange(key, old, null);
+		firePropertyChange(key, old, null);
 	}
 	
 	@Override
@@ -118,7 +118,7 @@ public class EditorInputFile extends EditorInputResource{
 		setProperty(KEY_NAME, name);
 		
 		setDirty(true);
-		pcs.firePropertyChange(PROP_NAME, old, name);
+		firePropertyChange(PROP_NAME, old, name);
 	}
 	
 	protected void handleCreate() {

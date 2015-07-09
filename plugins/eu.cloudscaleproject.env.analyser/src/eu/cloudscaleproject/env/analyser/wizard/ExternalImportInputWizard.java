@@ -2,13 +2,18 @@ package eu.cloudscaleproject.env.analyser.wizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
 
+import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -17,6 +22,7 @@ import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
@@ -79,32 +85,61 @@ public class ExternalImportInputWizard extends Wizard{
 		String altName = nameSelectionPage.getName();
 		final Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
 		final Resource[] selectedDiagramResources = importModelSelectionPage.getSelectedDiagramResources();
-		boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
+		final boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
 		
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		final InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
-		if (copyIntoProject)
-		{
-			alternative.createSubResources(new Runnable() {
-				
-				@Override
-				public void run() {
-					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
-					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
-				}
-			});
-		}
+		EditorInputJob job = new EditorInputJob("Creating empty models.", alternative) {
+			
+			@Override
+			public IStatus execute(IProgressMonitor monitor) {
 
-		for (Resource resource : selectedResources)
-		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			alternative.addSubResourceModel(f);
-		}
-		alternative.save();
+				int tasks = copyIntoProject ? 6 : 4;
+				monitor.beginTask("Importing models...", tasks);
+
+				if (copyIntoProject)
+				{
+					monitor.subTask("Copying models...");
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
+					monitor.worked(1);
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
+					monitor.worked(1);
+				}
+				
+				for (Resource resource : selectedResources)
+				{
+					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
+					alternative.addSubResourceModel(f);
+				}
+				monitor.worked(1);
+				
+				monitor.subTask("Validating alternative...");
+				alternative.validate();
+				monitor.worked(1);
+				
+				monitor.subTask("Saving alternative...");
+				alternative.save();
+				monitor.worked(1);
+				
+				monitor.subTask("Updating UI...");
+				Display.getDefault().syncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						ValidationDiagramService.showStatus(project, alternative);
+						OpenAlternativeUtil.openAlternative(alternative);
+					}
+				});
+				monitor.worked(1);
+				monitor.done();
+				
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Empty models have been created.");
+			}
+		};
 		
-		ValidationDiagramService.showStatus(project, alternative);
-		OpenAlternativeUtil.openAlternative(alternative);
+		job.setUser(true);
+		job.schedule();
 		
 		return true;
 	}

@@ -69,16 +69,6 @@ public class EditorInputFolder extends EditorInputResource{
 		return folder;
 	}
 	
-	public void createSubResources(Runnable runnable) {
-		try{
-			saveInProgress = true;
-			runnable.run();
-		}
-		finally{
-			saveInProgress = false;
-		}
-	}
-	
 	@Override
 	public String getType() {
 		return getProperty(ResourceProvider.PROP_TYPE);
@@ -132,7 +122,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		setDirty(true);
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		updateStatusList();
 	}
 	
@@ -156,7 +146,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		setDirty(true);
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		
 		updateStatusList();
 	}
@@ -170,7 +160,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		setDirty(true);
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		
 		updateStatusList();
 	}
@@ -181,7 +171,7 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		setDirty(true);
 		
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		updateStatusList();
 	}
 	
@@ -214,7 +204,7 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		setDirty(true);
 		
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		updateStatusList();
 	}
 	
@@ -497,6 +487,12 @@ public class EditorInputFolder extends EditorInputResource{
 	@Override
 	public boolean isDirty() {
 		return super.isDirty() || propertyInputFile.isDirty();	
+	}
+	
+	@Override
+	public void setJobInProgress(boolean enable) {
+		propertyInputFile.setJobInProgress(true);
+		super.setJobInProgress(enable);
 	}
 
 	////////////////////////////////////////////////////////////////////

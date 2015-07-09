@@ -169,10 +169,6 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 				public void handle(IContainer folder) {
 					resSet.getResources().clear();
 					findAndLoadResources(folder);				
-					
-					selectedResources.clear();
-					selectedDiagramResources.clear();
-					
 					tableView.refresh(true);				
 				}
 			});

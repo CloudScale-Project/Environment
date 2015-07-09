@@ -3,10 +3,10 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.ListDiff;
+import org.eclipse.core.databinding.observable.list.ListDiffEntry;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -48,7 +48,10 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 	private final ListComposite groupsComposite;
 	
 	private final ConfAlternative alternative;
-	private List<MonitorGroup> monitorGroups = new ArrayList<MonitorGroup>();
+	
+	private WritableList monitorGroups = new WritableList(new ArrayList<MonitorGroup>(), MonitorGroup.class); 
+
+	//private List<MonitorGroup> monitorGroups = new ArrayList<MonitorGroup>();
 	
 	public ConfigMonitorListComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
@@ -138,7 +141,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 						@Override
 						public void widgetDisposed(DisposeEvent e) {
 							if(groupsComposite.getChilds().isEmpty()){
-								//remove SLO model reference from experiment
+								//remove monitor model reference from experiment
 								InitialModel im = alternative.getActiveInitialModel();
 								if(im != null){
 									im.setMonitorRepository(null);
@@ -152,22 +155,14 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				
 			};
 
-			IObservableList monitorsGroupsObs = PojoObservables.observeList(this, "monitorGroups");
-			groupsComposite.initBindings(monitorsGroupsObs);
+			groupsComposite.initBindings(monitorGroups);
+			calcMonitorGroups();
+			groupsComposite.updateTarget();
 		}
 		
 		stackLayout.topControl = groupsComposite;
 		stackedComposite.layout();
 		
-		calcMonitorGroups();
-	}
-	
-	public List<MonitorGroup> getMonitorGroups() {
-		return monitorGroups;
-	}
-
-	public void setMonitorGroups(List<MonitorGroup> monitorGroups) {
-		this.monitorGroups = monitorGroups;
 	}
 
 	private void calcMonitorGroups(){
@@ -191,8 +186,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 		
 		ListDiff diff = Diffs.computeListDiff(monitorGroups, monitorGroupsNew);
 		diff.applyTo(monitorGroups);
-		
-		groupsComposite.updateTarget();
+		groupsComposite.refresh();
 	}
 	
 	public void refresh(){
@@ -243,6 +237,33 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				return true;
 			}
 			
+			return false;
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			
+			for(Monitor m : monitors)
+			{
+			    result = result * prime + m.hashCode();
+			}
+			return result;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			
+			if(obj instanceof MonitorGroup){
+				MonitorGroup that = (MonitorGroup)obj;
+				
+				ListDiff diff = Diffs.computeListDiff(that.monitors, monitors);
+				ListDiffEntry[] lde = diff.getDifferences();
+				if(lde == null || lde.length == 0){
+					return true;
+				}
+			}
 			return false;
 		}
 	}

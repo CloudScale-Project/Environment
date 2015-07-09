@@ -14,11 +14,11 @@ public enum ModelType{
 	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "usagemodel"),
 	 
 	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "usageevolution"),
-	 PMS(ToolchainUtils.KEY_FILE_MONITOR, "monitorrepository"),
-	 VARIATIONS(ToolchainUtils.KEY_FILE_VARIATIONS, "variations"),
+	 MONITOR(ToolchainUtils.KEY_FILE_MONITOR, "monitorrepository"),
 	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "measuringpoint"),
 	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
 	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments"),
+	 VARIATION(ToolchainUtils.KEY_FILE_VARIATION, "variation"),
 	 
 	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "dlim"),
 
@@ -28,7 +28,7 @@ public enum ModelType{
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
 	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
-	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, PMS, SLO, VARIATIONS, USAGE_EVOLUTION, MEASURING_POINT} ;
+	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, MONITOR, SLO, VARIATION, USAGE_EVOLUTION, MEASURING_POINT} ;
 	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
 	 
 	 private final String extension;

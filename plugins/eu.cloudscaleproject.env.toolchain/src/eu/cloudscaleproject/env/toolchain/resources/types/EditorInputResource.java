@@ -28,11 +28,13 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	protected boolean loadInProgress = false;
 	protected boolean deleteInProgress = false;
 	
+	private boolean jobInProgress = false;
+	
 	protected abstract void handleCreate();
 	protected abstract void handleSave();
 	protected abstract void handleLoad();
 	protected abstract void handleDelete();
-	
+		
 	public EditorInputResource(IResource resource){
 		this(resource, null);
 	}
@@ -55,6 +57,11 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 				
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
+					
+					if(jobInProgress){
+						return;
+					}
+					
 					if (EditorInputResource.this.getID() != null)
 						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
 				}
@@ -66,6 +73,14 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	public IResource getResource(){
 		return resource;
+	}
+	
+	public void setJobInProgress(boolean enable){
+		this.jobInProgress = enable;
+	}
+	
+	public boolean isJobInProgress(){
+		return jobInProgress;
 	}
 	
 	public boolean isCreateInProgress() {
@@ -83,7 +98,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public void setDirty(boolean value) {
-		pcs.firePropertyChange(PROP_DIRTY, this.isDirty, this.isDirty = value);
+		firePropertyChange(PROP_DIRTY, this.isDirty, this.isDirty = value);
 	}
 	
 	@Override
@@ -134,7 +149,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			}
 		}
 		
-		pcs.firePropertyChange(PROP_SAVED, false, true);
+		firePropertyChange(PROP_SAVED, false, true);
 	}
 	
 	@Override
@@ -189,7 +204,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			}
 		}
 		
-		pcs.firePropertyChange(PROP_LOADED, false, true);
+		firePropertyChange(PROP_LOADED, false, true);
 		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
 	}
 	
@@ -211,7 +226,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			}
 		}
 		
-		pcs.firePropertyChange(PROP_DELETED, false, true);
+		firePropertyChange(PROP_DELETED, false, true);
 	}
 	
 	@Override
@@ -239,18 +254,14 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		StatusManager.getInstance().validate(getProject(), this);
 	}
 	
-	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(propertyName, listener);
-	}
 	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
-	}
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		pcs.removePropertyChangeListener(listener);
-	}
-	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		pcs.removePropertyChangeListener(propertyName, listener);
+	protected void firePropertyChange(String name, Object oldValue, Object newValue) {
+		
+		//batch changes
+		if(jobInProgress){
+			return;
+		}
+		
+		super.firePropertyChange(name, oldValue, newValue);
 	}
 }

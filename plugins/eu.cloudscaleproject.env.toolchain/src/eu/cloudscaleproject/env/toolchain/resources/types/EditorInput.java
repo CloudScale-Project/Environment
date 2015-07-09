@@ -21,7 +21,7 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	protected IValidationStatus selfStatus;
 	protected final String validatorID;
 	
-	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	//transient variables
 	private String name = "";
@@ -48,7 +48,7 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 
 	@Override
 	public void setName(String name) {
-		pcs.firePropertyChange(PROP_NAME, this.name, this.name = name);
+		firePropertyChange(PROP_NAME, this.name, this.name = name);
 	}
 	
 	public void addObject(Object key, Object value){
@@ -63,14 +63,14 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 		synchronized (statusLock) {
 			statusSet.add(status);
 		}
-		pcs.firePropertyChange(PROP_STATUS_ADDED, null, status);
+		firePropertyChange(PROP_STATUS_ADDED, null, status);
 	}
 	
 	public void removeStatus(IValidationStatus status){
 		synchronized (statusLock) {
 			statusSet.remove(status);
 		}
-		pcs.firePropertyChange(PROP_STATUS_REMOVED, status, null);
+		firePropertyChange(PROP_STATUS_REMOVED, status, null);
 	}
 	
 	@Override
@@ -110,6 +110,10 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 		if(validatorID != null){
 			StatusManager.getInstance().validate(null, this);
 		}
+	}
+	
+	protected void firePropertyChange(String name, Object oldValue, Object newValue){
+		pcs.firePropertyChange(name, oldValue, newValue);
 	}
 
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {

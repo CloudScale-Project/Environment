@@ -49,7 +49,7 @@ public class EditorInputEMF extends EditorInputFolder{
 			
 			@Override
 			public void commandStackChanged(EventObject event) {
-				pcs.firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
+				firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
 			}
 		});
 		
@@ -121,7 +121,7 @@ public class EditorInputEMF extends EditorInputFolder{
 			reloaded = true;
 		}
 		
-		pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
 	}
 	
 	public EditingDomain getEditingDomain(){
@@ -159,15 +159,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		return out;
 	}
-	
-	/*
-	public EObject getModelRoot(Resource resource) {
-		if(resource.getContents().isEmpty()){
-			return null;
-		}
-		return resource.getContents().get(0);
-	}
-	*/
 	
 	public EObject getModelRootSingle(String key){
 		return getModelRootSingle(resSet, key);

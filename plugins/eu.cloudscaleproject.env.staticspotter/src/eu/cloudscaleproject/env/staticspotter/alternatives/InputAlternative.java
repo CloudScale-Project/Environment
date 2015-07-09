@@ -26,7 +26,7 @@ public class InputAlternative extends EditorInputEMF
 
 		if (key == null)
 		{
-			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
+			firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
 
