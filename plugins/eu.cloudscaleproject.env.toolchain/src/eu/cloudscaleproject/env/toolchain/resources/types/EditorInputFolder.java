@@ -269,31 +269,34 @@ public class EditorInputFolder extends EditorInputResource{
 
 	public IResource getSubResource(String key)
 	{
-		String relPath = propertyInputFile.getProperty(key);
-		if(relPath == null || relPath.isEmpty()){
-			return null;
+		synchronized (subResourcesLock) {
+			List<IResource> resList = subResources.get(key);
+			if(resList != null && !resList.isEmpty()){
+				return resList.get(0);
+			}
 		}
 		
-		//check if this is multi-resource key
-		if(relPath.contains(MULTIPATH_SEPARATOR)){
-			relPath = relPath.split(MULTIPATH_SEPARATOR)[0];
-		}
-		
-		IResource res = getResource().findMember(relPath);
-		
-		//TODO: This could cause problems!
-		//try project relative path
-		if(res == null){
-			res = getResource().getProject().findMember(relPath);
-		}
-		
-		return res;
+		return null;
 	}
 	
 	public List<IResource> getSubResources(String key)
 	{
 		ArrayList<IResource> resources = new ArrayList<IResource>();
+		
+		synchronized (subResourcesLock) {
+			List<IResource> resList = subResources.get(key);
+			if(resList != null){
+				resources.addAll(resList);
+			}
+		}
+		
+		return resources;
+	}
 
+	private List<IResource> getSubResourcesFromWorkspace(String key)
+	{
+		ArrayList<IResource> resources = new ArrayList<IResource>();
+		
 		String relPath = propertyInputFile.getProperty(key);
 		if(relPath == null || relPath.isEmpty()){
 			return resources;
@@ -317,7 +320,12 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		else{
-			IResource res = getSubResource(key);
+			//first try to locate alternative internal resource if it exists
+			IResource res = getResource().findMember(relPath);
+			//if the internal resource does not exist, try project relative path
+			if(res == null){
+				res = getResource().getProject().findMember(relPath);
+			}			
 			if(res != null){
 				resources.add(res);
 			}
@@ -378,7 +386,7 @@ public class EditorInputFolder extends EditorInputResource{
 			synchronized (subResourcesLock) {
 				subResources.clear();
 				for(String key : propertyInputFile.getKeys()){
-					List<IResource> resources = getSubResources(key);
+					List<IResource> resources = getSubResourcesFromWorkspace(key);
 					if(!resources.isEmpty()){
 						subResources.put(key, resources);
 					}

@@ -28,6 +28,7 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.Abstractsim
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
+import org.palladiosimulator.experimentautomation.experiments.Experiment;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
@@ -165,7 +166,9 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 
 	public void refresh() {
 		
-		for(StopCondition sc : alternative.retrieveExperimentModel().getStopConditions()){
+		Experiment exp = alternative.getActiveExperiment();
+		
+		for(StopCondition sc : exp.getStopConditions()){
 			if(sc instanceof SimTimeStopCondition){
 				simTime = (SimTimeStopCondition)sc;
 			}
@@ -173,18 +176,18 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				measureCount = (MeasurementCountStopCondition)sc;
 			}
 		}
-		
+				
 		if(simTime == null){
 			simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
 			simTime.setSimulationTime(-1);
-			alternative.retrieveExperimentModel().getStopConditions().add(simTime);
+			exp.getStopConditions().add(simTime);
 			alternative.save();
 		}
 		
 		if(measureCount == null){
 			measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
 			measureCount.setMeasurementCount(-1);
-			alternative.retrieveExperimentModel().getStopConditions().add(measureCount);
+			exp.getStopConditions().add(measureCount);
 			alternative.save();
 		}
 		

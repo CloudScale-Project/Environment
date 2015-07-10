@@ -42,34 +42,40 @@ public class ConfValidator implements IResourceValidator {
 	
 	public boolean validateModels(IProject project, ConfAlternative ca) throws CoreException, ValidationException{
 		
+		boolean exp = true;
 		boolean mp = true;
 		boolean pms = true;
 		boolean slo = true;
 		
+		List<IResource> expFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS);
 		List<IResource> mpFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
-		List<IResource> pmsFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MONITOR);
+		List<IResource> monitorFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MONITOR);
 		List<IResource> sloFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_SLO);
 		
+		ca.getSelfStatus().checkError("Experiments missing", !expFiles.isEmpty(), false, "Experiments model is missing!");
 		ca.getSelfStatus().checkError("MeasureP missing", !mpFiles.isEmpty(), false, "Measuring points model is missing!");
-		ca.getSelfStatus().checkError("Monitor missing", !pmsFiles.isEmpty(), false, "Monitor model is missing!");
+		ca.getSelfStatus().checkError("Monitor missing", !monitorFiles.isEmpty(), false, "Monitor model is missing!");
 		ca.getSelfStatus().checkError("SLO missing", !sloFiles.isEmpty(), false, "SLO model is missing!");
 		
+		if(expFiles.isEmpty()){exp = false;}
 		if(mpFiles.isEmpty()){mp = false;}
-		if(pmsFiles.isEmpty()){pms = false;}
+		if(monitorFiles.isEmpty()){pms = false;}
 		if(sloFiles.isEmpty()){slo = false;}
 
-		
+		for(IResource file : expFiles){
+			exp &= validateModel(ca, (IFile)file);
+		}
 		for(IResource file : mpFiles){
 			mp &= validateModel(ca, (IFile)file);
 		}
-		for(IResource file : pmsFiles){
+		for(IResource file : monitorFiles){
 			pms &= validateModel(ca, (IFile)file);
 		}
 		for(IResource file : sloFiles){
 			pms &= validateModel(ca, (IFile)file);
 		}
 
-		return mp && pms && slo;
+		return mp && pms && slo && exp;
 	}
 	
 	public boolean validateModel(ConfAlternative alt, IFile file) throws CoreException, ValidationException{
@@ -120,7 +126,7 @@ public class ConfValidator implements IResourceValidator {
 	
 	private boolean validateExperiment(ConfAlternative alt) throws ValidationException{
 		
-		Experiment experiment = alt.retrieveExperimentModel();
+		Experiment experiment = alt.getActiveExperiment();
 	
 		IValidationStatus status = alt.getSelfStatus();
 		
@@ -246,14 +252,17 @@ public class ConfValidator implements IResourceValidator {
 
 			boolean valid = validateModels(alternative.getProject(), alternative);
 
-			try{valid &= validateExperiment(alternative);}
-			catch(ValidationException e){ valid = false;};
-			try{valid &= validateMonitorRepository(alternative);}
-			catch(ValidationException e){ valid = false;};
-			try{valid &= validateSloRepository(alternative);}
-			catch(ValidationException e){ valid = false;};
-			try{valid &= validateUsageEvolution(alternative);}
-			catch(ValidationException e){ valid = false;};
+			//additional custom constrains 
+			if(valid){
+				try{valid &= validateExperiment(alternative);}
+				catch(ValidationException e){ valid = false;};
+				try{valid &= validateMonitorRepository(alternative);}
+				catch(ValidationException e){ valid = false;};
+				try{valid &= validateSloRepository(alternative);}
+				catch(ValidationException e){ valid = false;};
+				try{valid &= validateUsageEvolution(alternative);}
+				catch(ValidationException e){ valid = false;};
+			}
 			
 			//TODO: check usage evolution
 			
