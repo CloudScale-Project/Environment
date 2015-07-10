@@ -8,7 +8,10 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -18,10 +21,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.pcm.allocation.Allocation;
 
+import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -32,6 +37,7 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
@@ -139,9 +145,47 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		outSet.remove(resource);
 		return outSet;
 	}
-
+	
 	@Override
 	public boolean performFinish() {
+		
+		final InputAlternative ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
+		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name(), true);
+		
+		EditorInputJob job = new EditorInputJob("Project import", ia, ca) {
+			
+			@Override
+			public IStatus execute(final IProgressMonitor monitor){
+								
+				try{
+					boolean done = importProject(ia, ca, monitor);
+					if(!done){
+						ia.delete();
+						ca.delete();
+					}
+				}
+				catch(Exception e){
+					e.printStackTrace();
+					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error has occured during project import!");
+				}
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Project has been imported");
+			}
+		};
+		
+		job.setUser(true);
+		job.schedule();
+		
+		return true;
+	}
+
+	public boolean importProject(final InputAlternative ia, final ConfAlternative ca, final IProgressMonitor monitor) {
+		
+		monitor.beginTask("Project import", 10);
+		
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
 		
 		//get selected experiment
 		Resource experimentResource = null;
@@ -181,6 +225,13 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			return false;
 		}
 		
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
+		
+		monitor.subTask("Allocationg models...");
+		
 		//extract input models
 		final Set<Resource> inputResources = new HashSet<Resource>();		
 		//System.out.println("INPUT: ");
@@ -189,6 +240,11 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		inputResources.addAll(findLinked(allocation.eResource()));
 		inputResources.add(allocation.eResource());
 		inputResources.add(exp.getInitialModel().getUsageModel().eResource());
+		
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
 		
 		//extract configuration models
 		//System.out.println("CONFIGURATION: ");
@@ -200,48 +256,43 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		final List<Resource> resources = new ArrayList<>();
 		resources.addAll(inputResources);
 		resources.addAll(confResources);
+				
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
 		
-		//create and save input and config alternatives
-		final InputAlternative ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
-		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name(), true);
+		monitor.subTask("Copying models...");
 		
-		//copy all resources to input and configuration alternative
-		ia.createSubResources(new Runnable() {
+		ExplorerProjectPaths.copyEMFResources(resources.toArray(new Resource[resources.size()]), new BasicCallback<Resource>() {
+			
 			@Override
-			public void run() {
-				ca.createSubResources(new Runnable() {
-					@Override
-					public void run() {
-						ExplorerProjectPaths.copyEMFResources(resources.toArray(new Resource[resources.size()]), new BasicCallback<Resource>() {
-							
-							@Override
-							public void handle(Resource res) {
-								
-								System.out.println("HANDLE: " + res.toString());
-								
-								if(inputResources.contains(res)){
-									String[] segments = res.getURI().segments();
-									String segment = segments[segments.length - 1];
-									IFile file = ia.getResource().getFile(new Path(segment));
+			public void handle(Resource res) {
+				
+				if(inputResources.contains(res)){
+					String[] segments = res.getURI().segments();
+					String segment = segments[segments.length - 1];
+					IFile file = ia.getResource().getFile(new Path(segment));
 
-									URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-									res.setURI(uri);
-								}
-								if(confResources.contains(res)){
-									String[] segments = res.getURI().segments();
-									String segment = segments[segments.length - 1];
-									IFile file = ca.getResource().getFile(new Path(segment));
+					URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+					res.setURI(uri);
+				}
+				if(confResources.contains(res)){
+					String[] segments = res.getURI().segments();
+					String segment = segments[segments.length - 1];
+					IFile file = ca.getResource().getFile(new Path(segment));
 
-									URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-									res.setURI(uri);
-								}
-							}
-						});
-					}
-				});
+					URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+					res.setURI(uri);
+				}
 			}
 		});
-
+		
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
+		
 		for (Resource resource : inputResources)
 		{
 			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
@@ -253,16 +304,56 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			ca.addSubResourceModel(f);
 		}
 		
-		ia.save();
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
 		
+		ia.save();
 		ca.setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, ia.getResource());
 		ca.save();
 		
-		ia.validate();
-		ca.validate();
+		//import has completed 
 		
-		ValidationDiagramService.showStatus(project, ca);
-		OpenAlternativeUtil.openAlternative(ca);
+		monitor.subTask("Loading new models...");
+
+		ia.load();
+		ca.load();
+		
+		monitor.subTask("Validating...");
+		
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
+		
+		ia.validate();
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
+		
+		ca.validate();
+		monitor.worked(1);
+		if(monitor.isCanceled()){
+			return false;
+		}
+
+		monitor.subTask("Updating GUI...");
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				ValidationDiagramService.showStatus(project, ca);
+				OpenAlternativeUtil.openAlternative(ia);
+				OpenAlternativeUtil.openAlternative(ca);
+			}
+		});
+		
+		if(monitor.isCanceled()){
+			return false;
+		}
+		monitor.done();
 		
 		return true;
 	}

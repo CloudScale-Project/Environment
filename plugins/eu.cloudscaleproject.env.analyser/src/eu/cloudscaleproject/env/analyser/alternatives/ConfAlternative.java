@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.measure.Measure;
 import javax.measure.unit.Unit;
@@ -35,15 +36,18 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.Abstractsim
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage;
 import org.palladiosimulator.experimentautomation.abstractsimulation.FileDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
+import org.palladiosimulator.experimentautomation.abstractsimulation.MemoryDatasource;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimuLizarConfiguration;
 import org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model.SimulizartooladapterFactory;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
+import org.palladiosimulator.experimentautomation.experiments.ExperimentDesign;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsFactory;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.experimentautomation.experiments.NestedIntervalsLongValueProvider;
+import org.palladiosimulator.experimentautomation.experiments.ResponseMeasurement;
 import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 import org.palladiosimulator.experimentautomation.experiments.Variation;
 import org.palladiosimulator.experimentautomation.variation.VariationRepository;
@@ -73,7 +77,6 @@ import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.scaledl.usageevolution.UsageEvolution;
 import org.scaledl.usageevolution.UsageevolutionFactory;
 
-import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -173,7 +176,11 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public boolean setInputAlternative(InputAlternative inputAlt)
 	{
-		Experiment exp = retrieveExperimentModel();
+		Experiment exp = getActiveExperiment();
+		if(exp == null){
+			return false;
+		}
+		
 		InitialModel initialModel = exp.getInitialModel();
 
 		if (inputAlt == null && initialModel != null)
@@ -191,7 +198,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			getSelfStatus().addWarning(ERR_INVALID_INPUT_ALTERNATIVE, IValidationStatus.SEVERITY_ERROR, "Invalid input alternative!");
 			setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 			setDirty(true);
-			pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+			firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 			return false;
 		}
 
@@ -272,7 +279,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, inputAlt.getResource());
 
 		setDirty(true);
-		pcs.firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
+		firePropertyChange(PROP_INPUT_ALT_SET, null, inputAlt);
 
 		return true;
 	}
@@ -344,11 +351,14 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public List<Variation> getVariationObjects()
 	{
-
 		List<Variation> out = new ArrayList<Variation>();
+		
+		Experiment exp = getActiveExperiment();
+		if(exp == null){
+			return out;
+		}
 
-		Experiment experiment = retrieveExperimentModel();
-		for (Variation v : experiment.getVariations())
+		for (Variation v : exp.getVariations())
 		{
 			out.add(v);
 		}
@@ -407,8 +417,13 @@ public class ConfAlternative extends AbstractConfigAlternative
 	{
 
 		List<ValueProvider> out = new ArrayList<ValueProvider>();
+		
+		Experiment exp = getActiveExperiment();
+		if(exp == null){
+			return out;
+		}
 
-		for (Variation v : retrieveExperimentModel().getVariations())
+		for (Variation v : exp.getVariations())
 		{
 			if (v.getValueProvider().eClass().equals(clazz))
 			{
@@ -448,8 +463,13 @@ public class ConfAlternative extends AbstractConfigAlternative
 	public List<StopCondition> getStopConditions(EClass clazz)
 	{
 		List<StopCondition> out = new ArrayList<StopCondition>();
+		
+		Experiment exp = getActiveExperiment();
+		if(exp == null){
+			return out;
+		}
 
-		for (StopCondition stopCon : retrieveExperimentModel().getStopConditions())
+		for (StopCondition stopCon : exp.getStopConditions())
 		{
 			if (stopCon.getClass().equals(clazz))
 			{
@@ -462,6 +482,29 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods for retrieving sub-resources
+	
+	public List<ExperimentRepository> getExperimentRepositories()
+	{
+		List<ExperimentRepository> out = new ArrayList<ExperimentRepository>();
+
+		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS))
+		{
+			if (file instanceof IFile)
+			{
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+				for (EObject eobj : res.getContents())
+				{
+					if (eobj instanceof ExperimentRepository)
+					{
+						ExperimentRepository rep = (ExperimentRepository) eobj;
+						out.add(rep);
+					}
+				}
+			}
+		}
+
+		return out;
+	}
 
 	public List<MeasuringPointRepository> getMeasuringPointRepositories()
 	{
@@ -469,7 +512,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS))
 		{
-			if (file instanceof IFile && file.exists())
+			if (file instanceof IFile)
 			{
 				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
 				for (EObject eobj : res.getContents())
@@ -492,7 +535,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_MONITOR))
 		{
-			if (file instanceof IFile && file.exists())
+			if (file instanceof IFile)
 			{
 				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
 				for (EObject eobj : res.getContents())
@@ -515,7 +558,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_SLO))
 		{
-			if (file instanceof IFile && file.exists())
+			if (file instanceof IFile)
 			{
 				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
 				for (EObject eobj : res.getContents())
@@ -538,7 +581,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION))
 		{
-			if (file instanceof IFile && file.exists())
+			if (file instanceof IFile)
 			{
 				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
 				for (EObject eobj : res.getContents())
@@ -558,48 +601,17 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for creating and returning base models
 
-	public Experiment retrieveExperimentModel()
+	public ExperimentRepository retrieveExperimentRepository()
 	{
-		IResource expFile = getSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS);
-		if (expFile == null || !expFile.exists())
-		{
-			List<IFile> files = PCMResourceSet.findResource(getResource(), ModelType.EXPERIMENTS.getFileExtension());
-			if (files.size() > 0)
-			{
-				// TODO: for now just use fist model file found
-				expFile = files.get(0);
-			} else
-			{
-				// create new Experiment model file
-				expFile = getResource().getFile(ModelType.EXPERIMENTS.getFullName());
-				setSubResource(ToolchainUtils.KEY_FILE_EXPERIMENTS, expFile);
-			}
-		}
-
-		Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) expFile);
-		EObject root = res.getContents().size() > 0 ? res.getContents().get(0) : null;
-		if (root == null)
+		if (getExperimentRepositories().isEmpty())
 		{
 			ExperimentRepository expRep = ExperimentsFactory.eINSTANCE.createExperimentRepository();
-			root = expRep;
-			res.getContents().add(expRep);
-		}
-
-		if (!(root instanceof ExperimentRepository))
+			createEMFResource("analyser.experiments", ToolchainUtils.KEY_FILE_EXPERIMENTS, expRep);
+			return expRep;
+		} else
 		{
-			throw new IllegalArgumentException("Experiments model with root object type other then ExperimentRepository is not supported!");
+			return getExperimentRepositories().get(0);
 		}
-
-		ExperimentRepository expRep = (ExperimentRepository) root;
-		Experiment firstExperiment = expRep.getExperiments().isEmpty() ? null : expRep.getExperiments().get(0);
-		if (firstExperiment == null)
-		{
-			firstExperiment = ExperimentsFactory.eINSTANCE.createExperiment();
-			firstExperiment.setRepetitions(1);
-			expRep.getExperiments().add(firstExperiment);
-		}
-
-		return (Experiment) firstExperiment;
 	}
 
 	public MeasuringPointRepository retrieveMeasuringPointRepository()
@@ -657,10 +669,18 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for retrieving referenced models from the Experiments
 	// model
+	
+	public Experiment getActiveExperiment(){
+		ExperimentRepository er = retrieveExperimentRepository();
+		if(er.getExperiments().isEmpty()){
+			return null;
+		}
+		return er.getExperiments().get(0);
+	}
 
 	public InitialModel getActiveInitialModel()
 	{
-		Experiment exp = retrieveExperimentModel();
+		Experiment exp = getActiveExperiment();
 		return exp != null ? exp.getInitialModel() : null;
 	}
 
@@ -701,7 +721,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	{
 		List<UsageScenario> scenarios = new ArrayList<UsageScenario>();
 
-		Experiment exp = retrieveExperimentModel();
+		Experiment exp = getActiveExperiment();
 		if (exp.getInitialModel() != null)
 		{
 			UsageModel usageModel = exp.getInitialModel().getUsageModel();
@@ -743,8 +763,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// Alternative initialization and configuration methods
 
 	private void initializeCommon(Experiment exp)
-	{
-
+	{	
+		
 		InitialModel initialModel = getActiveInitialModel();
 		if (initialModel == null)
 		{
@@ -864,6 +884,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		// create variation
 		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
+		var.setName("Default variation model");
+		
 		exp.getVariations().clear();
 		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
 		dvp.setMinValue(1);
@@ -1095,7 +1117,49 @@ public class ConfAlternative extends AbstractConfigAlternative
 	@Override
 	public void doCreate()
 	{
-		Experiment exp = retrieveExperimentModel();
+		Experiment exp = null;
+		
+		//create experiment
+		{
+			ExperimentRepository expRep = retrieveExperimentRepository();
+			
+			exp = ExperimentsFactory.eINSTANCE.createExperiment();
+			exp.setId(UUID.randomUUID().toString());
+			exp.setName("CloudScale experiments model");
+			exp.setDescription("Alternative experiment");
+			
+			{
+				// set memory data source
+				// this data source is later replaced with the file data source.
+				MemoryDatasource ds = AbstractsimulationFactory.eINSTANCE.createMemoryDatasource();
+				ds.setId(UUID.randomUUID().toString());
+	
+				SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
+				conf.setName("SimuLizar default configuration");
+				conf.setDatasource(ds);
+				
+				//set two dummy stop conditions
+				//TODO: find out which container is correct (SimulizarConfiguration or Experiment model).
+				MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+				msc.setMeasurementCount(10);
+				SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+				tsc.setSimulationTime(10);
+				conf.getStopConditions().add(msc);
+				conf.getStopConditions().add(tsc);
+				
+				exp.getToolConfiguration().add(conf);
+			}
+			
+			exp.setRepetitions(1);
+			
+			ResponseMeasurement rm = ExperimentsFactory.eINSTANCE.createSimulationDurationMeasurement();
+			exp.setResponseMeasurement(rm);
+			
+			ExperimentDesign ed = ExperimentsFactory.eINSTANCE.createFullFactorialDesign();
+			exp.setExperimentDesign(ed);
+			
+			expRep.getExperiments().add(exp);
+		}
 		
 		initializeCommon(exp);
 
@@ -1137,32 +1201,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 		super.doDelete();
 	}
 
-	/*
-	private final void loadModels() throws IOException
-	{
-		//unload existing models
-		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
-			res.unload();
-		}
-		
-		//load registered models
-		for (ModelType type : ModelType.GROUP_EXPERIMENTS)
-		{
-			for (IResource f : getSubResources(type.getToolchainFileID()))
-			{
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-				res.unload();
-				res.load(null);
-			}
-		}
-
-		// load plugin models into resource set
-		URI metricDescriptions = PathmapManager.denormalizeURI(URI
-				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
-		resSet.getResource(metricDescriptions, true);
-	}
-	*/
-
 	@Override
 	protected IStatus doRun(IProgressMonitor monitor) throws CoreException
 	{
@@ -1176,7 +1214,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 				.getLaunchConfigurationType("org.palladiosimulator.experimentautomation.application.launchConfigurationType");
 
 		ILaunchConfigurationWorkingCopy lcwc = lct.newInstance((IFolder) this.getResource(), this.getResource().getName());
-		lcwc.setAttribute("Experiment Automation", this.retrieveExperimentModel().eResource().getURI().toString());
+		lcwc.setAttribute("Experiment Automation", getActiveExperiment().eResource().getURI().toString());
 		lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
 		lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
 		lcwc.doSave();
@@ -1189,7 +1227,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public void configureResults()
 	{
-		Experiment exp = retrieveExperimentModel();
+		Experiment exp = getActiveExperiment();
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES);
 		// IEditorInputResource resultAlternative =
 		// resultResProvider.getResource(this.getResource().getName());
@@ -1204,6 +1242,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		ds.setLocation(resultAlternative.getResource().getLocation().toString());
 
 		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
+		conf.setName("SimuLizar default configuration");
 		conf.setDatasource(ds);
 		configureTool(conf);
 

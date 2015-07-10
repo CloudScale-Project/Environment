@@ -69,15 +69,16 @@ public abstract class ResourceProvider
  				
 				for (IResourceDelta alternativeDelta : delta.getAffectedChildren())
 				{
+					IResource resource = alternativeDelta.getResource();
 					
 					if (alternativeDelta.getKind() == IResourceDelta.ADDED)
 					{
-						loadResource(alternativeDelta.getResource());
+						loadResource(resource);
 					}
 					
 					if (alternativeDelta.getKind() == IResourceDelta.REMOVED)
 					{
-						IEditorInputResource r = resources.get(alternativeDelta.getResource());
+						IEditorInputResource r = resources.get(resource);
 						if (r != null)
 						{
 							removeResource(r);
@@ -87,7 +88,7 @@ public abstract class ResourceProvider
 					
 					if (alternativeDelta.getKind() == IResourceDelta.CHANGED)
 					{
-						final IEditorInputResource r = resources.get(alternativeDelta.getResource());
+						final IEditorInputResource r = resources.get(resource);
 						
 						if (r == null){
 							return;
@@ -95,11 +96,11 @@ public abstract class ResourceProvider
 						
 						// do not trigger re-load, if the property change is 
 						// triggered from create/save/delete operations 
-						if(r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
+						if(r.isJobInProgress() || r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
 							return;
 						}
 						
-						BatchExecutor.getInstance().addTask(alternativeDelta.getResource(), new Runnable() {
+						BatchExecutor.getInstance().addTask(resource, new Runnable() {
 							
 							@Override
 							public void run() {

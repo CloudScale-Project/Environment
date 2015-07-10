@@ -114,7 +114,7 @@ public class GlobalInputAlternative extends EditorInput
 	{
 		List<IProject> old = this.javaProjects;
 		this.javaProjects = javaProjects;
-		this.pcs.firePropertyChange("javaProjects", old, this.javaProjects);
+		firePropertyChange("javaProjects", old, this.javaProjects);
 	}
 	
 	public List<IProject> getJavaProjects ()

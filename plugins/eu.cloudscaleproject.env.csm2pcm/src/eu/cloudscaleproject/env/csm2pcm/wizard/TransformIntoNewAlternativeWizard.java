@@ -8,16 +8,22 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.csm2pcm.Activator;
 import eu.cloudscaleproject.env.csm2pcm.wizard.pages.TransformWizardPage;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
@@ -72,10 +78,10 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		final InputAlternative newInputAlternative = (InputAlternative)rp.createNewResource(name, null);
 		
-		newInputAlternative.createSubResources(new Runnable() {
+		EditorInputJob job = new EditorInputJob("Creating new input alternative", newInputAlternative) {
 			
 			@Override
-			public void run() {
+			public IStatus execute(IProgressMonitor monitor) {
 				Resource[] selectedResources = importSelectionPage.getSelectedResources();
 				Resource[] selectedDiagramResources = importSelectionPage.getSelectedDiagramResources();
 
@@ -87,15 +93,20 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
 					newInputAlternative.addSubResourceModel(f);
 				}
+				newInputAlternative.save();
 				
+				Display.getDefault().syncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						OpenAlternativeUtil.openAlternative(newInputAlternative);
+					}
+				});
+				
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, "New alternative has been created.");
 			}
-		});
-		
-		newInputAlternative.save();
-		
-		OpenAlternativeUtil.openAlternative(newInputAlternative);
-		//ValidationDiagramService.showDiagram(project);
-		//ValidationDiagramService.showStatus(project, newInputAlternative);
+		};
+		job.schedule();
 		
 		return true;
 	}

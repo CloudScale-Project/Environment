@@ -31,6 +31,8 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public boolean isLoadInProgress();
 	public boolean isDeleteInProgress();
 	
+	public boolean isJobInProgress();
+	
 	public boolean isLoaded();
 	
 	public boolean isDirty();

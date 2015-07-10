@@ -11,18 +11,23 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.repository.util.RepositoryResourceImpl;
 
+import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 
 public class InputAlternative extends EditorInputEMF
 {
@@ -52,10 +57,11 @@ public class InputAlternative extends EditorInputEMF
 
 	public void createEmpty(final ModelType[] types)
 	{
-		createSubResources(new Runnable() {
+		EditorInputJob job = new EditorInputJob("Creating empty models.", this) {
 			
 			@Override
-			public void run() {
+			public IStatus execute(IProgressMonitor monitor) {
+				
 				PCMResourceSet resSet = new PCMResourceSet(getResource());
 				resSet.createAll(types);
 
@@ -76,11 +82,14 @@ public class InputAlternative extends EditorInputEMF
 							e.printStackTrace();
 						}
 					}
+					save();
 				}
+				
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Empty models have been created.");
 			}
-		});
+		};
 		
-		save();
+		job.schedule();		
 	}
 
 	public String getToolchainKey(IResource res)
@@ -107,7 +116,7 @@ public class InputAlternative extends EditorInputEMF
 		if (key == null)
 		{
 			logger.info("addSubResourceModel(): Specified resource model file is not supported: " + res.getName());
-			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
+			firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
 
@@ -124,7 +133,7 @@ public class InputAlternative extends EditorInputEMF
 		if (key == null)
 		{
 			logger.info("removeSubResourceModel(): Specified resource model file is not supported: " + res.getName());
-			pcs.firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
+			firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
 			return;
 		}
 
