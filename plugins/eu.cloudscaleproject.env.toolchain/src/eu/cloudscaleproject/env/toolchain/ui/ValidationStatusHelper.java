@@ -50,7 +50,7 @@ public class ValidationStatusHelper
 	{
 		appendValidationWarnings(sb, alternative.getSelfStatus());
 
-		for (IValidationStatus status : alternative.getStatus())
+		for (IValidationStatus status : alternative.getSubStatuses())
 		{
 			appendValidationWarnings(sb, status);
 		}
@@ -69,7 +69,7 @@ public class ValidationStatusHelper
 	{
 		int count = alternative.getSelfStatus().getWarningIDs().length;
 
-		for (IValidationStatus status : alternative.getStatus())
+		for (IValidationStatus status : alternative.getSubStatuses())
 		{
 			count += status.getWarningIDs().length;
 		}

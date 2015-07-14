@@ -207,7 +207,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 				StatusManager.getInstance().removePropertyChangeListener(statusManagerListener);
 
 				for(IValidationStatusProvider statusProvider : providerBindings.values()){
-					statusProvider.removePropertyChangeListener(statusProviderListener);
+					statusProvider.removeStatusChangeListener(statusProviderListener);
 				}
 				for(IValidationStatus status : statusBindings.values()){
 					status.removeListener(statuslistener);
@@ -243,11 +243,11 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 		
 		bindStatus(statusProvider.getSelfStatus());
-		for(IValidationStatus status : statusProvider.getStatus()){
+		for(IValidationStatus status : statusProvider.getSubStatuses()){
 			bindStatus(status);
 		}
 		
-		statusProvider.addPropertyChangeListener(statusProviderListener);
+		statusProvider.addStatusChangeListener(statusProviderListener);
 		providerBindings.put(statusProvider.getID(), statusProvider);
 	}
 	
@@ -306,11 +306,11 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 		
 		unbindStatus(statusProvider.getSelfStatus());
-		for(IValidationStatus status : statusProvider.getStatus()){
+		for(IValidationStatus status : statusProvider.getSubStatuses()){
 			unbindStatus(status);
 		}
 		
-		statusProvider.removePropertyChangeListener(statusProviderListener);
+		statusProvider.removeStatusChangeListener(statusProviderListener);
 		providerBindings.remove(statusProvider.getID());
 	}
 	

@@ -18,12 +18,7 @@ public class CreateEmptyInputWizard extends Wizard{
 	
 	private final IProject project;
 	
-	private final ModelType[] types = new ModelType[]{
-			ModelType.REPOSITORY,
-			ModelType.SYSTEM,
-			ModelType.ALLOCATION,
-			ModelType.RESOURCE,
-			ModelType.USAGE};
+	private final ModelType[] types = ModelType.GROUP_PCM;
 	
 	private final AlternativeNamePage nameSelectionPage;
 	private final ModelSelectionPage modelSelectionPage;

@@ -27,7 +27,7 @@ public class ResultValidator implements IResourceValidator {
 		status.clearWarnings();
 		status.setIsValid(true);
 		
-		for (IValidationStatus s : statusProvider.getStatus())
+		for (IValidationStatus s : statusProvider.getSubStatuses())
 		{
 			s.clearWarnings();
 			s.setIsValid(true);

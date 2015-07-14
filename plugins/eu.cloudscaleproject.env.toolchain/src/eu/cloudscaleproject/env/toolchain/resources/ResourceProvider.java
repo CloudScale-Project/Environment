@@ -29,7 +29,8 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public abstract class ResourceProvider
 {
-
+	public static final String PROP_DISPOSED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.disposed";
+	
 	public static final String PROP_RESOURCE_CREATED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.create";
 	public static final String PROP_RESOURCE_DELETED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.delete";
 
@@ -38,9 +39,7 @@ public abstract class ResourceProvider
 	public static final String PROP_RESOURCE_MODIFIED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.modified";
 
 	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
-
 	public static final String PROP_TYPE = "resourceType";
-	public static final String PROP_ID = "providerId";
 
 	private final IFolder rootFolder;
 	private final String defaultResName;
@@ -56,7 +55,6 @@ public abstract class ResourceProvider
 	protected abstract IResource createResource(String resourceName);
 	protected abstract IEditorInputResource createEditorInputResource(IResource res, String type);
 	
-	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener()
 	{
@@ -65,7 +63,12 @@ public abstract class ResourceProvider
 		public void resourceChanged(IResourceDelta delta)
 		{
 			
-			synchronized (resourcesLock){				
+			synchronized (resourcesLock){
+				
+				if(delta.getKind() == IResourceDelta.REMOVED){
+					dispose();
+					return;
+				}
  				
 				for (IResourceDelta alternativeDelta : delta.getAffectedChildren())
 				{
@@ -155,8 +158,16 @@ public abstract class ResourceProvider
 	}
 
 	public void dispose()
-	{
+	{		
 		ExplorerChangeNotifier.getInstance().removeListener(ecl);
+		for(IEditorInputResource eir : resources.values()){
+			if (eir instanceof IValidationStatusProvider)
+			{
+				StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
+			}
+		}
+		resources.clear();
+		firePropertyChange(PROP_DISPOSED, this, null);
 	}
 
 	public void tagResource(String tag, IEditorInputResource resource)

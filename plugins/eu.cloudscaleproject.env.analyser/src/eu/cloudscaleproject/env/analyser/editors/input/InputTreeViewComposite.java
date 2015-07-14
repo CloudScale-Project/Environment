@@ -109,11 +109,11 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				List<ModelType> avaiableModelTypes = getAvaiableModelTypes();
+				ModelType[] avaiableModelTypes = getAvaiableModelTypes();
 				
 				NewPCMModelWizard createEmptyModelWizard = new NewPCMModelWizard(
 						alternative, 
-						avaiableModelTypes.toArray(new ModelType[avaiableModelTypes.size()]));
+						avaiableModelTypes);
 						
 				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
 				wizardDialog.open();
@@ -225,8 +225,9 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 	}
 	
 	private void refreshButtonStates(){
-		List<ModelType> avaiableModelTypes = getAvaiableModelTypes();
-		if(avaiableModelTypes.isEmpty()){
+		ModelType[] avaiableModelTypes = getAvaiableModelTypes();
+		
+		if(avaiableModelTypes.length == 0){
 			btnCreate.setEnabled(false);
 			btnImport.setEnabled(false);
 		}
@@ -236,14 +237,9 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		}
 	}
 	
-	private List<ModelType> getAvaiableModelTypes(){
-		ModelType[] types = new ModelType[]{
-				ModelType.REPOSITORY,
-				ModelType.SYSTEM,
-				ModelType.RESOURCE,
-				ModelType.ALLOCATION,
-				ModelType.USAGE
-		};
+	private ModelType[] getAvaiableModelTypes(){
+		
+		ModelType[] types = ModelType.GROUP_PCM;
 		
 		List<ModelType> modelTypes = new ArrayList<ModelType>();
 		for(ModelType mt : types){
@@ -253,13 +249,18 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				modelTypes.add(mt);
 				continue;
 			}
+			//allow multiple usage models
+			if(mt == ModelType.USAGE){
+				modelTypes.add(mt);
+				continue;
+			}
 			
 			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
 				modelTypes.add(mt);
 			}
 		}
 		
-		return modelTypes;
+		return modelTypes.toArray(new ModelType[modelTypes.size()]);
 	}
 
 	@Override

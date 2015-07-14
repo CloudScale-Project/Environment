@@ -37,18 +37,17 @@ public class ValidationWidget extends Composite
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			if (evt.getNewValue() != alternative) return;
-
-				Display.getDefault().asyncExec(new Runnable()
-				{
+			if(evt.getNewValue() == alternative){
+				Display.getDefault().asyncExec(new Runnable() {
 					@Override
-					public void run()
-					{
-						if(!ValidationWidget.this.isDisposed()){
+					public void run() {
+						if (!ValidationWidget.this.isDisposed()) {
 							updateStatus();
 						}
 					}
 				});
+			}
+			
 		}
 	};
 

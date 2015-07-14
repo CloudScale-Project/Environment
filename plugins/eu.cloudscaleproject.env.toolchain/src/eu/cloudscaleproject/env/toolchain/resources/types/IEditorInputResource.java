@@ -16,10 +16,15 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public static final String PROP_DELETED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propDeleted";
 	public static final String PROP_DIRTY = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propDirty";
 	
+	public static final String PROP_DISPOSED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propDisposed";
+	
 	public String getName();
 	public IResource getResource();
 	
 	public String getType();
+	
+	public boolean isDisposed();
+	public void dispose();
 	
 	public void create();
 	public void save();

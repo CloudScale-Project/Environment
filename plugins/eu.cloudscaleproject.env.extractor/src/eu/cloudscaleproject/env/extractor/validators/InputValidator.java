@@ -6,13 +6,15 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 
 public class InputValidator implements IResourceValidator {
+	
+	private static final String INFO_NO_JAVA_PROJECT = InputValidator.class.getName() + ".NoJavaProject";
 
 	@Override
 	public String getID() {
-		return ToolchainUtils.EXTRACTOR_INPUT_ID;
+		return CSTool.EXTRACTOR_INPUT.getID();
 	}
 	
 
@@ -27,7 +29,7 @@ public class InputValidator implements IResourceValidator {
 		status.clearWarnings();
 		if (GlobalInputAlternative.getInstance().getJavaProjects().isEmpty())
 		{
-			status.addWarning("", IValidationStatus.SEVERITY_ERROR, "No Java projects present in workspace.");
+			status.addWarning(INFO_NO_JAVA_PROJECT, IValidationStatus.SEVERITY_INFO, "No java project in workspace.");
 			status.setIsValid(false);
 		}
 		else

@@ -21,7 +21,7 @@ public class StatusLabelProvider implements ILabelProvider{
 	public StatusLabelProvider() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
-		infoImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING).createImage();
+		infoImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_LCL_LINKTO_HELP).createImage();
 		warningImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING).createImage();
 		errorImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR).createImage();
 	}

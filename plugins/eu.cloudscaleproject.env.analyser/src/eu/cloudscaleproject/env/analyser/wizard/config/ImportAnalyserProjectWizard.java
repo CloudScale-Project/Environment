@@ -201,6 +201,8 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			return false;
 		}
 		
+		IProject projectToImport = ExplorerProjectPaths.getFileFromEmfResource(experimentResource).getProject();
+		
 		//reload experimentResource to the new resSet
 		ResourceSet resSet = new ResourceSetImpl();
 		IFile experimentFile = ExplorerProjectPaths.getFileFromEmfResource(experimentResource);
@@ -239,7 +241,17 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		Allocation allocation = exp.getInitialModel().getAllocation();
 		inputResources.addAll(findLinked(allocation.eResource()));
 		inputResources.add(allocation.eResource());
-		inputResources.add(exp.getInitialModel().getUsageModel().eResource());
+		
+		//find usages
+		List<IFile> usageFiles = ExplorerProjectPaths.findResources(projectToImport, ModelType.USAGE.getFileExtension());
+		for(IFile file : usageFiles){
+			inputResources.add(ExplorerProjectPaths.getEmfResource(resSet, file));
+		}
+		//find usage evolution files
+		List<IFile> ueFiles = ExplorerProjectPaths.findResources(projectToImport, ModelType.USAGE_EVOLUTION.getFileExtension());
+		for(IFile file : ueFiles){
+			inputResources.add(ExplorerProjectPaths.getEmfResource(resSet, file));
+		}
 		
 		monitor.worked(1);
 		if(monitor.isCanceled()){

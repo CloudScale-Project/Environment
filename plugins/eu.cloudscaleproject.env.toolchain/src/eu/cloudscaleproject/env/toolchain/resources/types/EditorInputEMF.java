@@ -185,6 +185,19 @@ public class EditorInputEMF extends EditorInputFolder{
 			if(res instanceof IFile){
 				IFile file = (IFile)res;
 				Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, file);
+				
+				/*
+				if(emfResource.isLoaded()){
+					try {
+						emfResource.unload();
+						emfResource.load(null);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				*/
+				
 				if(emfResource.isLoaded() && !emfResource.getContents().isEmpty()){
 					out.add(emfResource.getContents().get(0));
 				}

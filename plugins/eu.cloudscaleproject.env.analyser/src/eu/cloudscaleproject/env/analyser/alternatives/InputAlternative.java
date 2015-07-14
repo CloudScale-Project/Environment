@@ -3,13 +3,11 @@ package eu.cloudscaleproject.env.analyser.alternatives;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -31,8 +29,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 
 public class InputAlternative extends EditorInputEMF
 {
-
-	private static final Logger logger = Logger.getLogger(InputAlternative.class.getName());
+	//private static final Logger logger = Logger.getLogger(InputAlternative.class.getName());
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
@@ -51,7 +48,6 @@ public class InputAlternative extends EditorInputEMF
 
 	public void createEmpty()
 	{
-
 		createEmpty(ModelType.GROUP_PCM);
 	}
 
@@ -90,54 +86,6 @@ public class InputAlternative extends EditorInputEMF
 		};
 		
 		job.schedule();		
-	}
-
-	public String getToolchainKey(IResource res)
-	{
-
-		String ext = res.getFileExtension();
-		String key = null;
-
-		for (ModelType type : ModelType.GROUP_PCM_EXTENDED)
-		{
-			if (type.getFileExtension().equals(ext))
-				return type.getToolchainFileID();
-		}
-
-		return key;
-	}
-
-	public void addSubResourceModel(IResource res)
-	{
-
-		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-
-		String key = getToolchainKey(res);
-		if (key == null)
-		{
-			logger.info("addSubResourceModel(): Specified resource model file is not supported: " + res.getName());
-			firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
-			return;
-		}
-
-		super.addSubResource(key, res);
-	}
-
-	public void removeSubResourceModel(IResource res)
-	{
-
-		Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-		resSet.getResources().remove(resource);
-
-		String key = getToolchainKey(res);
-		if (key == null)
-		{
-			logger.info("removeSubResourceModel(): Specified resource model file is not supported: " + res.getName());
-			firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, "");
-			return;
-		}
-
-		super.removeSubResource(key, res);
 	}
 
 	/**

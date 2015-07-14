@@ -13,7 +13,7 @@ import java.util.Map.Entry;
  */
 public class BatchExecutor {
 	
-	private static final Long DELAY_TIME = 1000l;
+	private static final Long DELAY_TIME = 200l;
 	
 	private static BatchExecutor instance = null;
 	public static BatchExecutor getInstance(){

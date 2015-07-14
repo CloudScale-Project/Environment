@@ -20,6 +20,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	protected final Object saveLoadLock = new Object();
 	protected final IResource resource;
 	
+	private boolean isDisposed = false;
 	private boolean isLoaded = false;
 	private boolean isDirty = false;
 	
@@ -71,27 +72,44 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		}
 	}
 	
+	@Override
 	public IResource getResource(){
 		return resource;
+	}
+	
+	@Override
+	public boolean isDisposed() {
+		return isDisposed;
+	}
+	
+	@Override
+	public void dispose() {
+		isDisposed = true;
+		firePropertyChange(PROP_DISPOSED, this, null);
 	}
 	
 	public void setJobInProgress(boolean enable){
 		this.jobInProgress = enable;
 	}
 	
+	@Override
 	public boolean isJobInProgress(){
 		return jobInProgress;
 	}
 	
+	@Override
 	public boolean isCreateInProgress() {
 		return createInProgress;
 	}
+	@Override
 	public boolean isSaveInProgress() {
 		return saveInProgress;
 	}
+	@Override
 	public boolean isLoadInProgress() {
 		return loadInProgress;
 	}
+	@Override
 	public boolean isDeleteInProgress() {
 		return deleteInProgress;
 	}
@@ -234,16 +252,14 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		return validatorID;
 	}
 	
+	@Override
 	public IProject getProject() {
 		return getResource().getProject();
 	}
 	
 	@Override
-	public IValidationStatus getSelfStatus() {
-		if(this.selfStatus == null){
-			this.selfStatus = new ResourceValidationStatus(this, getID(), getResource());
-		}
-		return selfStatus;
+	protected IValidationStatus createSelfStatus() {
+		return new ResourceValidationStatus(this, getID(), getResource());
 	}
 	
 	@Override

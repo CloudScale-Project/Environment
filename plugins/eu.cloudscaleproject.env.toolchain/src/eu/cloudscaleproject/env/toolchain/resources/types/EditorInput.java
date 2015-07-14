@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.ValidationStatus;
@@ -18,14 +20,25 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	private final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
 	private final Object statusLock = new Object();
 	
-	protected IValidationStatus selfStatus;
+	private IValidationStatus selfStatus = null;
 	protected final String validatorID;
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	private final PropertyChangeSupport pcsStatus = new PropertyChangeSupport(this);
+
 	
 	//transient variables
-	private String name = "";
+	private String name = "No name";
 	private HashMap<Object, Object> objects = new HashMap<Object, Object>();
+	
+	//wire status property change with the status provider property change support 
+	private final IValidationStatusListener statusListener = new IValidationStatusListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			pcsStatus.firePropertyChange(evt);
+		}
+	};
 	
 	public EditorInput(String name) {
 		this(name, null);
@@ -59,30 +72,54 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 		return objects.get(key);
 	}
 	
-	public void addStatus(IValidationStatus status){
-		synchronized (statusLock) {
-			statusSet.add(status);
-		}
-		firePropertyChange(PROP_STATUS_ADDED, null, status);
+	protected IValidationStatus createSelfStatus(){
+		return new ValidationStatus(this, validatorID);
 	}
 	
-	public void removeStatus(IValidationStatus status){
+	public final void addStatus(IValidationStatus status){
 		synchronized (statusLock) {
+			status.addListener(statusListener);
+			statusSet.add(status);
+		}
+		pcsStatus.firePropertyChange(PROP_STATUS_ADDED, null, status);
+	}
+	
+	public final void removeStatus(IValidationStatus status){
+		synchronized (statusLock) {
+			status.removeListener(statusListener);
 			statusSet.remove(status);
 		}
-		firePropertyChange(PROP_STATUS_REMOVED, status, null);
+		pcsStatus.firePropertyChange(PROP_STATUS_REMOVED, status, null);
 	}
 	
 	@Override
-	public IValidationStatus getSelfStatus() {
-		if(this.selfStatus == null){
-			this.selfStatus = new ValidationStatus(this, validatorID);
+	public final IValidationStatus getSelfStatus() {
+		synchronized (statusLock) {
+			if(this.selfStatus == null){
+				
+				this.selfStatus = createSelfStatus();
+				this.selfStatus.setName(getName());
+				
+				//wire alternative name together with the self status name
+				this.addPropertyChangeListener(PROP_NAME, new PropertyChangeListener() {
+					
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						Object newName = evt.getNewValue();
+						if(newName instanceof String){
+							EditorInput.this.selfStatus.setName((String)evt.getNewValue());
+						}
+					}
+				});
+				
+				this.selfStatus.addListener(statusListener);
+			}
 		}
 		return selfStatus;
 	}
 	
 	@Override
-	public IValidationStatus[] getStatus() {
+	public IValidationStatus[] getSubStatuses() {
 		IValidationStatus[] out = null;
 		synchronized (statusLock) {
 			out = statusSet.toArray(new IValidationStatus[statusSet.size()]);
@@ -91,7 +128,7 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	}
 	
 	@Override
-	public IValidationStatus[] getStatus(String id) {
+	public IValidationStatus[] getSubStatus(String id) {
 		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
 		
 		synchronized (statusLock) {
@@ -116,6 +153,8 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 		pcs.firePropertyChange(name, oldValue, newValue);
 	}
 
+	//property changes
+	@Override
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(propertyName, listener);
 	}
@@ -127,7 +166,26 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		pcs.removePropertyChangeListener(listener);
 	}
+	@Override
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		pcs.removePropertyChangeListener(propertyName, listener);
+	}
+	
+	//status changes
+	@Override
+	public void addStatusChangeListener(String propertyName, PropertyChangeListener listener) {
+		pcsStatus.addPropertyChangeListener(propertyName, listener);
+	}
+	@Override
+	public void addStatusChangeListener(PropertyChangeListener listener) {
+		pcsStatus.addPropertyChangeListener(listener);
+	}
+	@Override
+	public void removeStatusChangeListener(PropertyChangeListener listener) {
+		pcsStatus.removePropertyChangeListener(listener);
+	}
+	@Override
+	public void removeStatusChangeListener(String propertyName, PropertyChangeListener listener) {
+		pcsStatus.removePropertyChangeListener(propertyName, listener);
 	}
 }

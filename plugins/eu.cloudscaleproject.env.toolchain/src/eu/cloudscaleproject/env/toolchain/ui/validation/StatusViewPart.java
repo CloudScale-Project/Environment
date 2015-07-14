@@ -17,7 +17,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -29,26 +28,37 @@ public class StatusViewPart {
 	
 	private IProject project;
 	private List<IValidationStatusProvider> statusProviders = null;
-	
-	private final Object batchExecutorKey = new Object();
-	
+		
 	private final PropertyChangeListener startusListener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			BatchExecutor.getInstance().addTask(batchExecutorKey, new Runnable() {
+			
+			if(StatusManager.PROP_STATUS_PROVIDER_ADDED.equals(evt.getPropertyName())){
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					@Override
+					public void run() { reloadProviders(project); }
+				});
+			}
+			
+			if(StatusManager.PROP_STATUS_PROVIDER_REMOVED.equals(evt.getPropertyName())){
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					@Override
+					public void run() { reloadProviders(project); }
+				});
+			}
+			
+			if(StatusManager.PROP_STATUS_CHANGED.equals(evt.getPropertyName()) 
+					|| StatusManager.PROP_STATUS_ADDED.equals(evt.getPropertyName()) 
+					|| StatusManager.PROP_STATUS_REMOVED.equals(evt.getPropertyName()) ){
 				
-				@Override
-				public void run() {
-					Display.getDefault().asyncExec(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							reload(project);
-						}
-					});
-				}
-			});
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					@Override
+					public void run() { reload(); }
+				});
+			}
 			
 		}
 	};
@@ -69,25 +79,34 @@ public class StatusViewPart {
 	}
 	
 	@Inject
-	private void reload(@Optional IProject project){
+	private void reloadProviders(@Optional IProject project){
 		
 		if(project == null){
 			return;
 		}
 		
 		this.project = project;
-		this.statusProviders = StatusManager.getInstance().getStatusProviders(project);
 		
-		if(this.treeViewer != null && this.statusProviders != null){
+		//get project statuses
+		this.statusProviders = StatusManager.getInstance().getStatusProviders(project);
+		//get global statuses (not bound to specific project)
+		this.statusProviders.addAll(StatusManager.getInstance().getStatusProviders(null));
+		
+		if(this.treeViewer != null){
 			this.treeViewer.setInput(this.statusProviders);
 			this.treeViewer.expandAll();
-			this.treeViewer.refresh();
 		}
+	}
+	
+	private void reload(){
+		this.treeViewer.expandAll();
+		this.treeViewer.refresh(true);
 	}
 	
 	
 	@PreDestroy
 	public void preDestroy() {
+		StatusManager.getInstance().removePropertyChangeListener(startusListener);
 		ValidationDiagramService.registerDiagramFactory(null);
 	}
 	
