@@ -150,6 +150,7 @@ public class ConfigComposite extends SidebarEditorComposite
 			}
 
 			// measurements settings
+			// TODO: following composite creation is brutally slow! Fix this.
 			{
 				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 				tabItem.setText("Monitors");

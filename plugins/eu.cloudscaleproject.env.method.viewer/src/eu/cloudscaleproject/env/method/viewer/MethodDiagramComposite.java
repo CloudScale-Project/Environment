@@ -24,6 +24,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -226,9 +227,21 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	}
 	
 	public void refresh(){
-		if(getDiagramTypeProvider().getDiagramBehavior() != null){
-			getDiagramTypeProvider().getDiagramBehavior().refreshContent();
-		}
+		BatchExecutor.getInstance().addTask(MethodDiagramComposite.class.getName() + ".refresh", new Runnable() {
+			@Override
+			public void run() {
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(getDiagramTypeProvider().getDiagramBehavior() != null){
+							getDiagramTypeProvider().getDiagramBehavior().refreshContent();
+						}
+					}
+				});
+			}
+		});
+		
 	}
 	
 	public synchronized void bindStatusProvider(IValidationStatusProvider statusProvider){
@@ -249,6 +262,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		
 		statusProvider.addStatusChangeListener(statusProviderListener);
 		providerBindings.put(statusProvider.getID(), statusProvider);
+		
+		refresh();
 	}
 	
 	private String getStatusDiagramUniqueID(IValidationStatus status){
@@ -278,6 +293,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			bind(node, status);
 		}
 		statusBindings.put(getStatusDiagramUniqueID(status), status);
+		
+		refresh();
 	}
 	
 	public synchronized void unbindStatus(IValidationStatus status){
@@ -297,6 +314,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			bind(node, null);
 		}
 		statusBindings.remove(getStatusDiagramUniqueID(status));
+		
+		refresh();
 	}
 	
 	public synchronized void unbindStatusProvider(IValidationStatusProvider statusProvider){
@@ -312,6 +331,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		
 		statusProvider.removeStatusChangeListener(statusProviderListener);
 		providerBindings.remove(statusProvider.getID());
+		
+		refresh();
 	}
 	
 	public synchronized IValidationStatusProvider getActiveStatusProvider(String id){
@@ -348,8 +369,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 							req.setResource(null);
 						}
 					}
-					
-					refresh();
 				}
 			});
 			return;
@@ -380,8 +399,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 						}
 					}
 				}
-				
-				refresh();
 			}
 		});		
 	}

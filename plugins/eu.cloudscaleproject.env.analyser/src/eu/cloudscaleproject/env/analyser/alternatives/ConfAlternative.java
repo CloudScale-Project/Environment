@@ -1196,7 +1196,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
 		lcwc.doSave();
 
-		lcwc.launch(ILaunchManager.DEBUG_MODE, monitor);
+		lcwc.launch(ILaunchManager.RUN_MODE, monitor);
 		return Status.OK_STATUS;
 	}
 
