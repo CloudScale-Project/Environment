@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 import eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory;
 import eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory;
 import eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 /**
@@ -36,11 +36,11 @@ public class Activator extends AbstractUIPlugin{
 		plugin = this;
 		
 		//register resource provider factories		
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_INPUT_ID, 
+		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_INPUT, 
 				new InputResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_CONF_ID, 
+		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_CONF, 
 				new ConfigResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(ToolchainUtils.SPOTTER_DYN_RES_ID, 
+		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_RES, 
 				new ResultResourceProviderFactory());		
 		
 		

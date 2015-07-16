@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.InputAlternativeComposite;
 import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -29,7 +29,7 @@ public class InputComposite extends SidebarEditorComposite {
 		
 		this.project = project;
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_STA_INPUT_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT));
 		
 		setContentProvider(new SidebarContentProvider() {
 			

@@ -127,7 +127,7 @@ public class ExternalImportInputWizard extends Wizard{
 					
 					@Override
 					public void run() {
-						ValidationDiagramService.showStatus(project, alternative);
+						ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
 						OpenAlternativeUtil.openAlternative(alternative);
 					}
 				});

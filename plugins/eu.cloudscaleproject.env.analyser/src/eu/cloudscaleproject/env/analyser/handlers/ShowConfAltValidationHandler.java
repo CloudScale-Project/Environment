@@ -38,16 +38,11 @@ public class ShowConfAltValidationHandler {
 				
 				if(inputAlternative != null){
 					inputAlternative.validate();
-					ValidationDiagramService.showStatus(project, inputAlternative);
 				}
-				else{
-					ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_INPUT.getID());
-				}
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), inputAlternative);
 				
 				selection.validate();
-				
-				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
-				ValidationDiagramService.showStatus(project, selection);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), selection);
 			}
 		}
 		else{

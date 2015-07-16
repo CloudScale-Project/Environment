@@ -203,12 +203,9 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(configAlternative.getProject(), GlobalInputAlternative.getInstance());
-		ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative);
-		if (configAlternative.getLastResult() != null)
-			ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative.getLastResult());
-		else
-			ValidationDiagramService.clearStatus(configAlternative.getProject(), CSTool.EXTRACTOR_RES.getID());
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_INPUT.getID(), GlobalInputAlternative.getInstance());
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_CONF.getID(), configAlternative);
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_RES.getID(), configAlternative.getLastResult());
 	}
 		
 }

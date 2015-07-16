@@ -39,6 +39,7 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -99,7 +100,7 @@ public class Util
 	public static void saveAnnotations(EditorInputFolder configFolder, DetectPatternsJob job)
 	{
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().
-				getResourceProvider(configFolder.getProject(), ToolchainUtils.SPOTTER_STA_RES_ID);
+				getResourceProvider(configFolder.getProject(), CSTool.SPOTTER_STA_RES);
 
 		ResultAlternative rif = (ResultAlternative)resultResProvider
 				.createNewResource(configFolder.getName() + " " + sdf.format(new Date()), "");

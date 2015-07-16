@@ -90,7 +90,26 @@ public class ConfValidator implements IResourceValidator {
 		else{
 			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 			Resource emfRes = alt.getResourceSet().getResource(uri, true);
-			return validateModel(status, emfRes);
+			
+			boolean valid = false;
+			
+			// sometimes the model validation throws exception
+			// Measuring point name -> null pointer exception is thrown
+			//TODO: Fix this workaround
+			try{
+				valid = validateModel(status, emfRes);
+			}
+			catch (Exception e) {
+				
+				if(e instanceof ValidationException){
+					throw e;
+				}
+				
+				valid = true;
+				status.clearWarnings();
+				status.setIsValid(true);
+			}
+			return valid;
 		}		
 	}
 	

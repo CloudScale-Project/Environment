@@ -42,6 +42,7 @@ import de.uka.ipd.sdq.pcm.gmf.repository.edit.parts.RepositoryEditPart;
 import de.uka.ipd.sdq.pcm.gmf.repository.part.PalladioComponentModelRepositoryDiagramEditorPlugin;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -89,7 +90,7 @@ public class ExtractorRunJob
 	private ResultAlternative createResultPersistenceFolder() throws CoreException
 	{
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(this.configFolder.getProject(),
-				ToolchainUtils.EXTRACTOR_RES_ID);
+				CSTool.EXTRACTOR_RES);
 
 		String name = configFolder.getName() + " [" + sdf_name.format(new Date()) + "]";
 		return (ResultAlternative) resourceProvider.createNewResource(name, null);

@@ -36,8 +36,7 @@ public class OpenStatusSelectionDialogHandler {
 			IEditorInputResource selection = dialog.getSelection();
 			if(selection != null){
 				selection.validate();
-				
-				ValidationDiagramService.showStatus(project, selection);
+				ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), selection);
 			}
 		}
 		else{

@@ -36,7 +36,7 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -158,7 +158,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	public void refresh() {
 
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(confAlternative.getProject(),
-				ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+				CSTool.SPOTTER_DYN_INPUT);
 
 		this.inputAlternatives.clear();
 		this.inputAlternatives.addAll(resourceProvider.getResources());
@@ -231,13 +231,9 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, confAlternative.getInputAlternative());
-		ValidationDiagramService.showStatus(project, confAlternative);
-
-		if (confAlternative.getLastResult() != null)
-			ValidationDiagramService.showStatus(confAlternative.getProject(), confAlternative.getLastResult());
-		else
-			ValidationDiagramService.clearStatus(confAlternative.getProject(), ToolchainUtils.SPOTTER_DYN_RES_ID);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_INPUT.getID(), confAlternative.getInputAlternative());
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_CONF.getID(), confAlternative);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_RES.getID(), confAlternative.getLastResult());
 	}
 
 

@@ -4,8 +4,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class ResultAlternative extends EditorInputEMF {
@@ -23,7 +23,7 @@ public class ResultAlternative extends EditorInputEMF {
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
 	public ResultAlternative(IProject project, IFolder folder){
-		super(project, folder, ModelType.GROUP_PCM, ToolchainUtils.EXTRACTOR_RES_ID);
+		super(project, folder, ModelType.GROUP_PCM, CSTool.EXTRACTOR_RES.getID());
 	}
 	
 	@Override

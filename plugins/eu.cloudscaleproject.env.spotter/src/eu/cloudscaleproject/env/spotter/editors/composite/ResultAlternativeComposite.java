@@ -52,8 +52,6 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.lpe.common.util.LpeFileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
 import org.spotter.eclipse.ui.model.IExtensionItem;
@@ -63,7 +61,6 @@ import org.spotter.eclipse.ui.navigator.SpotterProjectParent;
 import org.spotter.eclipse.ui.providers.ResultExtensionsImageProvider;
 import org.spotter.eclipse.ui.providers.SpotterExtensionsLabelProvider;
 import org.spotter.eclipse.ui.util.WidgetUtils;
-import org.spotter.eclipse.ui.view.ResultsView;
 import org.spotter.eclipse.ui.viewers.ExtensionsGroupViewer;
 import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 import org.spotter.shared.result.ResultsLocationConstants;
@@ -79,7 +76,7 @@ import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 public class ResultAlternativeComposite extends TitleEditorView implements IRefreshable
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);
+	//private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);
 
 	// private static final String RESULTS_VIEW_TITLE = "Results";
 	private static final String DLG_RESOURCE_TITLE = "Resource '%s' (%s)";
@@ -89,10 +86,10 @@ public class ResultAlternativeComposite extends TitleEditorView implements IRefr
 	// private static final String RESULTS_EMPTY_CONTENT_DESC =
 	// "None selected.";
 	private static final String EMPTY_RESULTS = "No results selected.";
-	private static final String ERR_MSG_PARSE_ERROR = "An error occured while parsing the file '%s'.";
-	private static final String ERR_MSG_RES_REFRESH = "Error occured while refreshing resource!";
+	//private static final String ERR_MSG_PARSE_ERROR = "An error occured while parsing the file '%s'.";
+	//private static final String ERR_MSG_RES_REFRESH = "Error occured while refreshing resource!";
 	private static final String ERR_MSG_MISSING_REPORT = "Either file is missing or report is not set.";
-	private static final String ERR_MSG_MISSING_SER_FILE = "Could not find the spotter serialization file.";
+	//private static final String ERR_MSG_MISSING_SER_FILE = "Could not find the spotter serialization file.";
 
 	private static final String LABEL_NONE_SELECTED = "<none selected>";
 	private static final String LABEL_DETECTED = "Detected";

@@ -49,7 +49,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		resource.createEmpty(types);
 		resource.save();
 		
-		ValidationDiagramService.showStatus(project, resource);
+		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), resource);
 		OpenAlternativeUtil.openAlternative(resource);
 		
 		return true;

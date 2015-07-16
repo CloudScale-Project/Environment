@@ -59,7 +59,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 				synchronized (MethodDiagramComposite.this) {
 					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
 					if(statusProvider.equals(bindedProvider)){
-						unbindStatusProvider(statusProvider);
+						unbindStatusProvider(statusProvider.getID());
 					}
 				}
 				
@@ -244,15 +244,18 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		
 	}
 	
-	public synchronized void bindStatusProvider(IValidationStatusProvider statusProvider){
+	public synchronized void bindStatusProvider(String id, IValidationStatusProvider statusProvider){
 		
 		if(!isInitilized){
 			return;
 		}
 		
-		IValidationStatusProvider old = providerBindings.get(statusProvider.getID());
-		if(old != null){
-			unbindStatusProvider(old);
+		unbindStatusProvider(id);
+		providerBindings.remove(id);
+		
+		if(statusProvider == null){
+			refresh();
+			return;
 		}
 		
 		bindStatus(statusProvider.getSelfStatus());
@@ -262,6 +265,28 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		
 		statusProvider.addStatusChangeListener(statusProviderListener);
 		providerBindings.put(statusProvider.getID(), statusProvider);
+		
+		refresh();
+	}
+	
+	public synchronized void unbindStatusProvider(String id){
+
+		if(!isInitilized){
+			return;
+		}
+		
+		IValidationStatusProvider statusProvider = providerBindings.get(id);
+		if(statusProvider == null){
+			return;
+		}
+		
+		unbindStatus(statusProvider.getSelfStatus());
+		for(IValidationStatus status : statusProvider.getSubStatuses()){
+			unbindStatus(status);
+		}
+		
+		statusProvider.removeStatusChangeListener(statusProviderListener);
+		providerBindings.remove(statusProvider.getID());
 		
 		refresh();
 	}
@@ -314,23 +339,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			bind(node, null);
 		}
 		statusBindings.remove(getStatusDiagramUniqueID(status));
-		
-		refresh();
-	}
-	
-	public synchronized void unbindStatusProvider(IValidationStatusProvider statusProvider){
-
-		if(!isInitilized){
-			return;
-		}
-		
-		unbindStatus(statusProvider.getSelfStatus());
-		for(IValidationStatus status : statusProvider.getSubStatuses()){
-			unbindStatus(status);
-		}
-		
-		statusProvider.removeStatusChangeListener(statusProviderListener);
-		providerBindings.remove(statusProvider.getID());
 		
 		refresh();
 	}

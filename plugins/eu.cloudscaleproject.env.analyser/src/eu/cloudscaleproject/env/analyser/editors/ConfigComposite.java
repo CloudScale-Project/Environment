@@ -198,8 +198,9 @@ public class ConfigComposite extends SidebarEditorComposite
 		
 		@Override
 		public void onSelect() {
-			ValidationDiagramService.showStatus(project, alternative.getInputAlternative());
-			ValidationDiagramService.showStatus(project, alternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative.getInputAlternative());
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), alternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), alternative.getLastResult());
 		}
 		
 		@Override

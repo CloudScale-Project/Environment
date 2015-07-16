@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -10,8 +11,8 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 
@@ -57,8 +58,10 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 	@Override
 	public void onSelect()
 	{
-		ValidationDiagramService.showStatus(this.inputAlternative.getProject(), this.inputAlternative);
-		ValidationDiagramService.clearStatus(this.inputAlternative.getProject(), ToolchainUtils.SPOTTER_STA_CONF_ID);
-		ValidationDiagramService.clearStatus(this.inputAlternative.getProject(), ToolchainUtils.SPOTTER_STA_RES_ID);
+		IProject project = inputAlternative.getProject();
+		
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_INPUT.getID(), this.inputAlternative);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_CONF.getID(), null);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_RES.getID(), null);
 	}
 }

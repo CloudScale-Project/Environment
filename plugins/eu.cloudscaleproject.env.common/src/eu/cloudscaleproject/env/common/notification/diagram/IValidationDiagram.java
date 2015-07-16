@@ -12,8 +12,8 @@ public interface IValidationDiagram {
 	public IProject getProject();
 	public void setProject(IProject project);
 	
-	public void bindStatusProvider(IValidationStatusProvider statusProvider);
-	public void unbindStatusProvider(IValidationStatusProvider statusProvider);
+	public void bindStatusProvider(String id, IValidationStatusProvider statusProvider);
+	public void unbindStatusProvider(String id);
 
 	public void bindStatus(IValidationStatus status);
 	public void unbindStatus(IValidationStatus status);

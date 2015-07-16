@@ -31,7 +31,7 @@ public class ShowUsageAltValidationHandler {
 			
 			IEditorInputResource resource = dialog.getSelection();
 			resource.validate();
-			ValidationDiagramService.showStatus(project, resource);
+			ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), resource);
 			
 		}
 		else{

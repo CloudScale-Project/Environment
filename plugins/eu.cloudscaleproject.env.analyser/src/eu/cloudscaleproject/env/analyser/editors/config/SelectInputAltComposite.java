@@ -107,8 +107,8 @@ public class SelectInputAltComposite extends Composite{
 				InputAlternative ia = (InputAlternative)selection.getFirstElement();				
 				ca.setInputAlternative(ia);
 				
-				ValidationDiagramService.showStatus(project, ia);
-				ValidationDiagramService.showStatus(project, ca);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), ia);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
 			}
 		});
 		

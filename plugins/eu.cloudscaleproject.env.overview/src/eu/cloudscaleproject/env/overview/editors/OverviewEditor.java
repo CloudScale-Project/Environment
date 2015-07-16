@@ -11,6 +11,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -51,6 +52,6 @@ public class OverviewEditor extends InputEditorView implements ISelectable, IPro
 	
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, alternative);
+		ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), alternative);
 	}
 }

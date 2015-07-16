@@ -39,7 +39,7 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		if(rp != null){
 			final IEditorInputResource resource = rp.getResource(altFolder);
 					
-			ValidationDiagramService.showStatus(project, resource);
+			ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), resource);
 			StatusManager.getInstance().validateAsync(project, resource);
 			
 			getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {

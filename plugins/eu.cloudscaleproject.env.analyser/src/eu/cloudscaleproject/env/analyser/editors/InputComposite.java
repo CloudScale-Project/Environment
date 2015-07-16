@@ -134,9 +134,9 @@ public class InputComposite extends SidebarEditorComposite{
 		
 		@Override
 		public void onSelect() {
-			ValidationDiagramService.showStatus(project, alternative);
-			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_CONF.getID());
-			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), null);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), null);
 		}
 
 		@Override

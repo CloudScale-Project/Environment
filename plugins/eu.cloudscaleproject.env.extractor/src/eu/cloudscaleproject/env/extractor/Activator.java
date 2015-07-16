@@ -6,7 +6,7 @@ import org.somox.sourcecodedecorator.impl.SourceCodeDecoratorPackageImpl;
 
 import eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class Activator extends AbstractUIPlugin {
@@ -32,12 +32,12 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 
 		ResourceRegistry.getInstance().registerFactory(
-				ToolchainUtils.EXTRACTOR_CONF_ID,
+				CSTool.EXTRACTOR_CONF,
 				new ConfigResourceProviderFactory()
 		);
 
 		ResourceRegistry.getInstance().registerFactory(
-				ToolchainUtils.EXTRACTOR_RES_ID,
+				CSTool.EXTRACTOR_RES,
 				new ResultResourceProviderFactory()
 		);
 		

@@ -16,7 +16,7 @@ import org.somox.configuration.SoMoXConfiguration;
 
 import eu.cloudscaleproject.env.extractor.util.ExtractorRunJob;
 import eu.cloudscaleproject.env.extractor.util.SomoxConfigurationUtil;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 
@@ -33,9 +33,9 @@ public class ConfingAlternative extends AbstractConfigAlternative
 
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, null, ToolchainUtils.EXTRACTOR_CONF_ID, ResourceRegistry.getInstance().getResourceProvider(project,
-				ToolchainUtils.EXTRACTOR_INPUT_ID), ResourceRegistry.getInstance().getResourceProvider(project,
-				ToolchainUtils.EXTRACTOR_RES_ID));
+		super(project, folder, null, CSTool.EXTRACTOR_CONF.getID(), ResourceRegistry.getInstance().getResourceProvider(project,
+				CSTool.EXTRACTOR_INPUT.getID()), ResourceRegistry.getInstance().getResourceProvider(project,
+				CSTool.EXTRACTOR_RES.getID()));
 
 		initSomoxModel();
 		initModiscoModel();

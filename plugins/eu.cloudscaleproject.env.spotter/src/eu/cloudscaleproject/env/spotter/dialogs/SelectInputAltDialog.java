@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -29,7 +29,7 @@ public class SelectInputAltDialog extends Dialog{
 		super(parentShell);
 		this.project = project;
 		this.inputResourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+				getResourceProvider(project, CSTool.SPOTTER_DYN_INPUT);
 	}
 
 	@Override
@@ -55,8 +55,7 @@ public class SelectInputAltDialog extends Dialog{
 			if(selectionIndex >= 0){
 				IEditorInputResource selectedResource = inputResourceProvider.getResources().get(selectionIndex);
 				selectedResource.validate();
-				ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
-				ValidationDiagramService.showStatus(project, selectedResource);
+				ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_CONF.getID(), selectedResource);
 			}
 		}
 		super.buttonPressed(buttonId);

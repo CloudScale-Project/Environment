@@ -101,7 +101,9 @@ public class GlobalInputAlternative extends EditorInput
 					{
 						if (getInstance().getProject() != null)
 						{
-							ValidationDiagramService.showStatus(getInstance().getProject(), GlobalInputAlternative.getInstance());
+							ValidationDiagramService.showStatus(getInstance().getProject(), 
+																CSTool.EXTRACTOR_INPUT.getID(), 
+																GlobalInputAlternative.getInstance());
 						}
 					}
 				});

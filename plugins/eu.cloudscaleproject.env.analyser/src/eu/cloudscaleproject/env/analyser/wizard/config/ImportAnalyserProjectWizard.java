@@ -356,7 +356,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			
 			@Override
 			public void run() {
-				ValidationDiagramService.showStatus(project, ca);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
 				OpenAlternativeUtil.openAlternative(ia);
 				OpenAlternativeUtil.openAlternative(ca);
 			}
