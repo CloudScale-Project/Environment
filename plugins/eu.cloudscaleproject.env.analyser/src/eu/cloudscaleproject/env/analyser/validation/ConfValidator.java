@@ -90,7 +90,26 @@ public class ConfValidator implements IResourceValidator {
 		else{
 			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 			Resource emfRes = alt.getResourceSet().getResource(uri, true);
-			return validateModel(status, emfRes);
+			
+			boolean valid = false;
+			
+			// sometimes the model validation throws exception
+			// Measuring point name -> null pointer exception is thrown
+			//TODO: Fix this workaround
+			try{
+				valid = validateModel(status, emfRes);
+			}
+			catch (Exception e) {
+				
+				if(e instanceof ValidationException){
+					throw e;
+				}
+				
+				valid = true;
+				status.clearWarnings();
+				status.setIsValid(true);
+			}
+			return valid;
 		}		
 	}
 	
@@ -140,7 +159,7 @@ public class ConfValidator implements IResourceValidator {
 	private boolean validateSloRepository(ConfAlternative alt) throws ValidationException{
 		
 		ServiceLevelObjectiveRepository sloRep = alt.getActiveSLORepository();
-		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_SLO);
+		IValidationStatus[] statusArray = alt.getSubStatus(ToolchainUtils.KEY_FILE_SLO);
 		
 		for(IValidationStatus status : statusArray){
 			
@@ -180,7 +199,7 @@ public class ConfValidator implements IResourceValidator {
 		boolean isValid = true;
 		
 		MonitorRepository monitorRep = alt.getActiveMonitorRepository();
-		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_MONITOR);
+		IValidationStatus[] statusArray = alt.getSubStatus(ToolchainUtils.KEY_FILE_MONITOR);
 		
 		for(IValidationStatus status : statusArray){
 			
@@ -220,7 +239,7 @@ public class ConfValidator implements IResourceValidator {
 			return true;
 		}
 		
-		IValidationStatus[] statusArray = alt.getStatus(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		IValidationStatus[] statusArray = alt.getSubStatus(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		for(IValidationStatus status : statusArray){
 				

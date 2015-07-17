@@ -28,6 +28,7 @@ import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class SelectInputAltComposite extends Composite{
 		
@@ -90,9 +91,13 @@ public class SelectInputAltComposite extends Composite{
 		
 		IFolder inputAlt = (IFolder)ca.getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 		if(inputAlt != null){
-			comboViewerInput.setSelection(
-					new StructuredSelection(inputResourceProvider.getResource(inputAlt)), 
-					true);
+			IEditorInputResource eir = inputResourceProvider.getResource(inputAlt);
+			if(eir != null){
+				comboViewerInput.setSelection(new StructuredSelection(eir), true);
+			}
+			else{
+				comboViewerInput.setSelection(new StructuredSelection(), true);
+			}
 		}
 
 		comboViewerInput.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -102,8 +107,8 @@ public class SelectInputAltComposite extends Composite{
 				InputAlternative ia = (InputAlternative)selection.getFirstElement();				
 				ca.setInputAlternative(ia);
 				
-				ValidationDiagramService.showStatus(project, ia);
-				ValidationDiagramService.showStatus(project, ca);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), ia);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
 			}
 		});
 		

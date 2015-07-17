@@ -3,18 +3,28 @@ package eu.cloudscaleproject.env.analyser.editors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputTreeViewComposite;
+import eu.cloudscaleproject.env.analyser.editors.input.UsageEvolutionComposite;
 import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
+import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -53,16 +63,65 @@ public class InputComposite extends SidebarEditorComposite{
 		});
 	}
 	
-	private class RightPanelComposite extends InputEditorView implements ISelectable, IPropertySheetPageProvider{
+	private class RightPanelComposite extends InputEditorView implements ISelectable, IRefreshable, IPropertySheetPageProvider{
 		
 		private final InputTreeViewComposite treeviewComposite;
+		private final UsageEvolutionComposite ueComposite;
+		
 		private final InputAlternative alternative;
+		
+		private CTabFolder tabFolder;
 
 		public RightPanelComposite(IEditorPart editor, InputAlternative input, Composite parent, int style) {
 			super(parent, style, input);
-			
+
 			alternative = input;
-			treeviewComposite = new InputTreeViewComposite(editor, input, getContainer(), SWT.NONE);
+			
+			GridLayout layout = new GridLayout(1, true);
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			getContainer().setLayout(layout);
+			
+			tabFolder = new CTabFolder(getContainer(), SWT.BORDER);
+			GridData tabFolder_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+			tabFolder.setLayoutData(tabFolder_gd);
+			tabFolder.setTabHeight(32);
+			
+			//basic
+			{
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Model editor");
+				treeviewComposite = new InputTreeViewComposite(editor, input, tabFolder, SWT.NONE);
+				tabItem.setControl(treeviewComposite);
+				tabFolder.setSelection(tabItem);
+			}
+			
+			//usage evolution
+			{
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				tabItem.setText("Usage evolution");
+
+				ueComposite = new UsageEvolutionComposite(input, tabFolder, style);
+				ueComposite.pack();
+				tabItem.setControl(ueComposite);
+			}
+			
+			tabFolder.addSelectionListener(new SelectionAdapter()
+			{
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					Control c = tabFolder.getSelection().getControl();
+
+					if (c instanceof IRefreshable)
+					{
+						((IRefreshable) c).refresh();
+					}
+
+					ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
+				}
+			});
+			
 		}
 
 		@Override
@@ -75,104 +134,31 @@ public class InputComposite extends SidebarEditorComposite{
 		
 		@Override
 		public void onSelect() {
-			ValidationDiagramService.showStatus(project, alternative);
-			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_CONF.getID());
-			ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), null);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), null);
+		}
+
+		@Override
+		public void refresh() {
+			
+			if(tabFolder.isDisposed()){
+				return;
+			}
+			
+			Control c = tabFolder.getSelection().getControl();
+			if (c instanceof IRefreshable)
+			{
+				((IRefreshable) c).refresh();
+			}
 		}
 	}
 
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		//NewInputAlternativeDialog dialog = new NewInputAlternativeDialog(project, getShell());
-		//dialog.open();
 		
 		CreateInputSelectionWizard createInputAltWizard = new CreateInputSelectionWizard(project);
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createInputAltWizard);
 		wizardDialog.open();
 	}
-	
-	/*
-	@Override
-	public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
-		if(input instanceof InputAlternative){
-			return new RightPanelComposite(project, (InputAlternative)input, parent, style);
-		}
-		return null;
-	}
-
-	@Override
-	public void handleNewInput(IEditorInput selected) {
-		AnalyserUtil.createNewInputAlternative(project, "alternative."+AnalyserUtil.ALTERNATIVE_SUFIX, 
-				new BasicCallback<InputAlternative>() {
-			
-			@Override
-			public void handle(InputAlternative object) {
-				addSidebarEditor(object, SECTION_ALT);
-			}
-		});
-	}
-
-	@Override
-	public void handleNewInputFrom(final IEditorInput selected) {
-		
-		if(!(selected instanceof IEditorInputResource)){
-			return;
-		}
-		
-		AnalyserUtil.createNewInputAlternative(project, "alternative."+AnalyserUtil.ALTERNATIVE_SUFIX, new BasicCallback<InputAlternative>() {
-			@Override
-			public void handle(InputAlternative object) {
-				String name = object.getName();
-				object.copyFrom(((IEditorInputResource)selected).getResource());
-				object.setName(name);
-				addSidebarEditor(object, SECTION_ALT);
-			}
-		});	
-	}
-
-	@Override
-	public void handleInputDelete(final IEditorInput toDelete) {
-		
-		if(!(toDelete instanceof IEditorInputResource)){
-			return;
-		}
-		
-		removeSidebarEditor(toDelete);
-		((IEditorInputResource)toDelete).delete();
-	}
-
-	@Override
-	public List<IEditorInput> getInputs(final String section) {
-		
-		List<IEditorInput> alternatives = new ArrayList<IEditorInput>();
-		
-		String transformPath = AnalyserUtil.getTransformInputAlternative(project).getProjectPath();
-		
-		if(SECTION_ALT.equals(section)){
-			for(InputAlternative ia : AnalyserUtil.getInputAlternatives(project)){
-				if(transformPath == null || !transformPath.equals(ia.getProjectPath())){
-					alternatives.add(ia);
-				}
-			}
-		}
-		if(SECTION_GEN.equals(section)){
-			alternatives.add(AnalyserUtil.getTransformInputAlternative(project));
-		}
-		
-		return alternatives;
-	}
-
-	@Override 
-	public String[] getSidebarSections() {
-		return new String[]{SECTION_GEN, SECTION_ALT};
-	}
-
-	@Override
-	public IResource[] getDependentRootResource() {
-		
-		IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-		return new IResource[]{analyserFolder.getFolder(
-				ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT))};
-	}
-	*/
 }

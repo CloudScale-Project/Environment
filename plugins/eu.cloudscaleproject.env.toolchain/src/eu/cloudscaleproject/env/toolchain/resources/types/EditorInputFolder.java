@@ -70,6 +70,12 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	@Override
+	public void dispose() {
+		this.propertyInputFile.dispose();
+		super.dispose();
+	}
+	
+	@Override
 	public String getType() {
 		return getProperty(ResourceProvider.PROP_TYPE);
 	}
@@ -473,10 +479,6 @@ public class EditorInputFolder extends EditorInputResource{
 	public final void setName(String name){
 		synchronized (propertyInputFile) {
 			propertyInputFile.setName(name);
-			IValidationStatus status = getSelfStatus();
-			if(status != null){
-				status.setName(name);
-			}
 		}
 	}
 	
@@ -530,7 +532,7 @@ public class EditorInputFolder extends EditorInputResource{
 	// Validation
 	//
 	private void updateStatusList(){
-		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(Arrays.asList(getStatus()));
+		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(Arrays.asList(getSubStatuses()));
 		HashSet<IValidationStatus> newList = new HashSet<IValidationStatus>();
 		
 		if(folder.exists()){
@@ -559,14 +561,14 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	@Override
-	public IValidationStatus[] getStatus(String resourceKey) {
+	public IValidationStatus[] getSubStatus(String resourceKey) {
 		// TODO Auto-generated method stub
-		return super.getStatus(this.getID() + "." + resourceKey);
+		return super.getSubStatus(this.getID() + "." + resourceKey);
 	}
 	
 	public IValidationStatus getStatus(IResource resource){
 		List<IValidationStatus> out = new ArrayList<IValidationStatus>();
-		IValidationStatus[] statuses = getStatus();
+		IValidationStatus[] statuses = getSubStatuses();
 		
 		for(IValidationStatus status : statuses){
 			if(status instanceof ResourceValidationStatus){

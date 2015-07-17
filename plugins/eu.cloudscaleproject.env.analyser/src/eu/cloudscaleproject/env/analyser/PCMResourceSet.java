@@ -22,6 +22,7 @@ import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 import org.palladiosimulator.pcm.system.SystemFactory;
 import org.palladiosimulator.pcm.usagemodel.UsagemodelFactory;
+import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import de.uka.ipd.sdq.pcm.gmf.allocation.edit.parts.AllocationEditPart;
 import de.uka.ipd.sdq.pcm.gmf.allocation.part.PalladioComponentModelAllocationDiagramEditorPlugin;
@@ -76,19 +77,6 @@ public class PCMResourceSet extends ResourceSetImpl{
 		for(ModelType mt : ModelType.values()){
 			this.diagramFiles[mt.ordinal()] = this.rootFolder.getFile("pcm." + mt.getFileExtension() + "_diagram");
 		}
-	}
-		
-	public static ModelType getTypeFromResource(Resource res){
-		ModelType type = null;
-		
-		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
-		for(ModelType t : ModelType.values()){
-			if(t.getFileExtension().equals(file.getFileExtension())){
-				return t;
-			}
-		}
-		
-		return type;
 	}
 	
 	public static List<IFile> findResource(IContainer folder, String extension){
@@ -182,7 +170,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 			throw new IllegalStateException("create(): File not specified! ModelType: " + model.name());
 		}
 		
-		if(getDiagramFile(model) != null){
+		if(hasDiagram(model) && getDiagramFile(model) != null){
 			Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 			resD.getContents().clear();
 			resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
@@ -206,7 +194,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 			throw new IllegalStateException("clear(): File not specified! ModelType: " + model.name());
 		}
 		
-		if(getDiagramFile(model) != null){
+		if(hasDiagram(model) && getDiagramFile(model) != null){
 			Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 			if(resD != null){resD.getContents().clear();}
 		}
@@ -238,7 +226,9 @@ public class PCMResourceSet extends ResourceSetImpl{
 		
 		res.getContents().add(object);
 		//recreate diagram for the new root object
-		resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
+		if(hasDiagram(model)){
+			resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
+		}
 	}
 	
 	public void save(ModelType model){
@@ -264,7 +254,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 				throw new IllegalStateException("save(): File not specified! ModelType: " + model.name());
 			}
 			
-			if(getDiagramFile(model) != null){
+			if(hasDiagram(model) && getDiagramFile(model) != null){
 				Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 				diagramRes.save(null);
 			}
@@ -295,7 +285,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 				throw new IllegalStateException("delete(): File not specified! ModelType: " + model.name());
 			}
 			
-			if(getDiagramFile(model) != null){
+			if(hasDiagram(model) && getDiagramFile(model) != null){
 				Resource diagramRes = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 				if(diagramRes != null){
 					diagramRes.delete(null);
@@ -334,6 +324,9 @@ public class PCMResourceSet extends ResourceSetImpl{
 			case USAGE:
 				model = UsagemodelFactory.eINSTANCE.createUsageModel();
 				break;
+			case USAGE_EVOLUTION:
+				model = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
+				break;
 			default:
 				String msg = "createModel(): Specified 'ModelType' not supported: " + id.name();
 				logger.log(Level.SEVERE, msg);
@@ -351,7 +344,7 @@ public class PCMResourceSet extends ResourceSetImpl{
 	public static Diagram createDiagramRootObject(EObject model){
 		Diagram diagram = null;
 		
-		ModelType id = getTypeFromResource(model.eResource());
+		ModelType id = ModelType.getModelType(model.eResource().getURI().fileExtension());
 		if(id == null){
 			String msg = "createDiagramRootObject(): Model type can not be determined!";
 			logger.severe(msg);
@@ -399,5 +392,33 @@ public class PCMResourceSet extends ResourceSetImpl{
 		diagram.setElement(model);
 		
 		return diagram;
+	}
+	
+	public static boolean hasDiagram(ModelType modelType){
+		
+		
+		boolean hasDiagram = false;
+		
+		switch(modelType){
+			case REPOSITORY:
+				hasDiagram = true;
+				break;
+			case SYSTEM:
+				hasDiagram = true;
+				break;
+			case RESOURCE:
+				hasDiagram = true;
+				break;
+			case ALLOCATION:
+				hasDiagram = true;
+				break;
+			case USAGE:
+				hasDiagram = true;
+				break;
+			default:
+				break;
+		}
+		
+		return hasDiagram;
 	}
 }

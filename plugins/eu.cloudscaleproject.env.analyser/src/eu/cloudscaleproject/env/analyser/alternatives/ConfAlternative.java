@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
@@ -75,7 +76,6 @@ import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
 import org.scaledl.usageevolution.UsageEvolution;
-import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -154,17 +154,14 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 	}
 
-	private void configureTool(SimuLizarConfiguration simulizarConf)
+	private void configureTool(Experiment exp, SimuLizarConfiguration simulizarConf)
 	{
-		if (Type.NORMAL.equals(type))
-		{
-		} else if (Type.CAPACITY.equals(type))
-		{
-			configureToolCapacity(simulizarConf);
-		} else if (Type.SCALABILITY.equals(type))
-		{
-			configureToolScalability(simulizarConf);
+		simulizarConf.getStopConditions().clear();
+		
+		for(StopCondition sc : exp.getStopConditions()){
+			simulizarConf.getStopConditions().add(EcoreUtil.copy(sc));
 		}
+		
 	}
 
 	public InputAlternative getInputAlternative()
@@ -575,6 +572,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		return out;
 	}
 
+	/*
 	public List<UsageEvolution> getUsageEvolutions()
 	{
 		List<UsageEvolution> out = new ArrayList<UsageEvolution>();
@@ -597,6 +595,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		return out;
 	}
+	*/
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for creating and returning base models
@@ -653,6 +652,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 	}
 
+	/*
 	public UsageEvolution retrieveUsageEvolution()
 	{
 		if (getUsageEvolutions().isEmpty())
@@ -665,6 +665,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			return getUsageEvolutions().get(0);
 		}
 	}
+	*/
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for retrieving referenced models from the Experiments
@@ -861,6 +862,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		// create usage evolution
 		{
+			/*
 			UsageEvolution ue = retrieveUsageEvolution();
 			if (!ue.getUsages().isEmpty())
 			{
@@ -869,6 +871,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			{
 				getActiveInitialModel().setUsageEvolution(null);
 			}
+			*/
 		}
 	}
 
@@ -918,6 +921,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		// create variation
 		Variation var = ExperimentsFactory.eINSTANCE.createVariation();
+		var.setName("Default variation model");
+
 		exp.getVariations().clear();
 		NestedIntervalsLongValueProvider dvp = ExperimentsFactory.eINSTANCE.createNestedIntervalsLongValueProvider();
 		dvp.setMinValue(1);
@@ -948,11 +953,13 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	private void configureNormal(Experiment exp, InitialModel initialModel)
 	{
+		/*
 		UsageEvolution ue = retrieveUsageEvolution();
 		if (!ue.getUsages().isEmpty())
 		{
 			getActiveInitialModel().setUsageEvolution(ue);
 		}
+		*/
 	}
 
 	private void configureCapacity(Experiment exp, InitialModel initialModel)
@@ -1079,37 +1086,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	private void configureScalability(Experiment exp, InitialModel initialModel)
 	{
 		configureCapacity(exp, initialModel);
-	}
-
-	private void configureToolCapacity(SimuLizarConfiguration simulizarConf)
-	{
-
-		// create measurement stop condition
-		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-		msc.setMeasurementCount(100);
-
-		// create time stop condition
-		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-		tsc.setSimulationTime(-1);
-
-		simulizarConf.getStopConditions().add(msc);
-		simulizarConf.getStopConditions().add(tsc);
-	}
-
-	private void configureToolScalability(SimuLizarConfiguration simulizarConf)
-	{
-
-		// create measurement stop condition
-		MeasurementCountStopCondition msc = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-		msc.setMeasurementCount(100);
-
-		// create time stop condition
-		SimTimeStopCondition tsc = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-		tsc.setSimulationTime(-1);
-
-		simulizarConf.getStopConditions().add(msc);
-		simulizarConf.getStopConditions().add(tsc);
-	}
+	}	
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Standard alternative load/save/delete methods
@@ -1219,7 +1196,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
 		lcwc.doSave();
 
-		lcwc.launch(ILaunchManager.DEBUG_MODE, monitor);
+		lcwc.launch(ILaunchManager.RUN_MODE, monitor);
 		return Status.OK_STATUS;
 	}
 
@@ -1244,7 +1221,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
 		conf.setName("SimuLizar default configuration");
 		conf.setDatasource(ds);
-		configureTool(conf);
+		configureTool(exp, conf);
 
 		exp.getToolConfiguration().clear();
 		exp.getToolConfiguration().add(conf);

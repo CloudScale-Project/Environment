@@ -100,7 +100,7 @@ public class TransformWizardPage extends WizardPage{
 					overviewAlternative = (OverviewAlternative)alternative;					
 					overviewAlternative.validate();
 					ValidationDiagramService.showDiagram(project);
-					ValidationDiagramService.showStatus(project, overviewAlternative);
+					ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), overviewAlternative);
 					
 					if(overviewAlternative.getSelfStatus().isDone()){
 						btnTransform.setEnabled(true);

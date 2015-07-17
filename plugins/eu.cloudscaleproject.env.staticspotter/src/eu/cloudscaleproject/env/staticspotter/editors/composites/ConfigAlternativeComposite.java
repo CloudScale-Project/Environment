@@ -8,6 +8,7 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -29,8 +30,8 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -98,8 +99,8 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 	
 	private void updateExtractorResults()
 	{
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(configAlternative.getProject(),
-				ToolchainUtils.SPOTTER_STA_INPUT_ID);
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(
+													configAlternative.getProject(), CSTool.SPOTTER_STA_INPUT);
 		
 		this.inputAlternatives.clear();
 		this.inputAlternatives.addAll(resourceProvider.getResources());
@@ -135,12 +136,11 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative.getInputAlternative());
-		ValidationDiagramService.showStatus(this.configAlternative.getProject(), this.configAlternative);
-
-		if (configAlternative.getLastResult() != null)
-			ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative.getLastResult());
-		else
-			ValidationDiagramService.clearStatus(configAlternative.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
+		
+		IProject project = this.configAlternative.getProject();
+		
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_INPUT.getID(), configAlternative.getInputAlternative());
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_CONF.getID(), configAlternative);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_RES.getID(), configAlternative.getLastResult());
 	}
 }

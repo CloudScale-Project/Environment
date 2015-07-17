@@ -15,7 +15,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class InputValidator implements IResourceValidator {
@@ -25,7 +25,7 @@ public class InputValidator implements IResourceValidator {
 	
 	@Override
 	public String getID() {
-		return ToolchainUtils.SPOTTER_DYN_INPUT_ID;
+		return CSTool.SPOTTER_DYN_INPUT.getID();
 	}
 	
 	@Override

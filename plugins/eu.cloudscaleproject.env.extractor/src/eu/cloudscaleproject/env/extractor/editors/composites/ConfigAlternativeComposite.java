@@ -14,6 +14,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -33,11 +35,8 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
-
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 
 public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable
 {
@@ -204,12 +203,9 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(configAlternative.getProject(), GlobalInputAlternative.getInstance());
-		ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative);
-		if (configAlternative.getLastResult() != null)
-			ValidationDiagramService.showStatus(configAlternative.getProject(), configAlternative.getLastResult());
-		else
-			ValidationDiagramService.clearStatus(configAlternative.getProject(), ToolchainUtils.EXTRACTOR_RES_ID);
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_INPUT.getID(), GlobalInputAlternative.getInstance());
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_CONF.getID(), configAlternative);
+		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_RES.getID(), configAlternative.getLastResult());
 	}
 		
 }

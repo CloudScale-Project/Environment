@@ -64,7 +64,7 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		
 		ca.validate();
 		
-		ValidationDiagramService.showStatus(project, ca);
+		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
 		OpenAlternativeUtil.openAlternative(ca);
 		
 		return true;

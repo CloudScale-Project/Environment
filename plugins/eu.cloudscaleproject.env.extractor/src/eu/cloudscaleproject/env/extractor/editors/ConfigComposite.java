@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.editors.composites.ConfigAlternativeComposite;
 import eu.cloudscaleproject.env.extractor.wizard.CreateConfigSelectionWizard;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -29,7 +29,7 @@ public class ConfigComposite extends SidebarEditorComposite {
 		
 		this.project = project;
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.EXTRACTOR_CONF_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_CONF));
 		
 		setContentProvider(new SidebarContentProvider() {
 			

@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
 import org.spotter.eclipse.ui.editors.InstrumentationEditor;
 import org.spotter.eclipse.ui.editors.InstrumentationEditorInput;
@@ -25,9 +26,8 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
-import org.eclipse.swt.widgets.Label;
 
 public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable{
 	
@@ -166,8 +166,8 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, inputAlternative);
-		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
-		ValidationDiagramService.clearStatus(project, ToolchainUtils.SPOTTER_DYN_RES_ID);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_INPUT.getID(), inputAlternative);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_CONF.getID(), null);
+		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_RES.getID(), null);
 	}
 }

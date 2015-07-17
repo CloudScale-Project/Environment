@@ -32,9 +32,9 @@ public class ShowInputAltValidationHandler {
 			if(selection != null){
 				selection.validate();
 				
-				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_RES.getID());
-				ValidationDiagramService.clearStatus(project, CSTool.ANALYSER_CONF.getID());
-				ValidationDiagramService.showStatus(project, selection);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), null);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), null);
+				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), selection);
 			}
 		}
 		else{

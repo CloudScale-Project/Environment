@@ -24,6 +24,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -58,7 +59,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 				synchronized (MethodDiagramComposite.this) {
 					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
 					if(statusProvider.equals(bindedProvider)){
-						unbindStatusProvider(statusProvider);
+						unbindStatusProvider(statusProvider.getID());
 					}
 				}
 				
@@ -207,7 +208,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 				StatusManager.getInstance().removePropertyChangeListener(statusManagerListener);
 
 				for(IValidationStatusProvider statusProvider : providerBindings.values()){
-					statusProvider.removePropertyChangeListener(statusProviderListener);
+					statusProvider.removeStatusChangeListener(statusProviderListener);
 				}
 				for(IValidationStatus status : statusBindings.values()){
 					status.removeListener(statuslistener);
@@ -226,29 +227,68 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	}
 	
 	public void refresh(){
-		if(getDiagramTypeProvider().getDiagramBehavior() != null){
-			getDiagramTypeProvider().getDiagramBehavior().refreshContent();
-		}
+		BatchExecutor.getInstance().addTask(MethodDiagramComposite.class.getName() + ".refresh", new Runnable() {
+			@Override
+			public void run() {
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(getDiagramTypeProvider().getDiagramBehavior() != null){
+							getDiagramTypeProvider().getDiagramBehavior().refreshContent();
+						}
+					}
+				});
+			}
+		});
+		
 	}
 	
-	public synchronized void bindStatusProvider(IValidationStatusProvider statusProvider){
+	public synchronized void bindStatusProvider(String id, IValidationStatusProvider statusProvider){
 		
 		if(!isInitilized){
 			return;
 		}
 		
-		IValidationStatusProvider old = providerBindings.get(statusProvider.getID());
-		if(old != null){
-			unbindStatusProvider(old);
+		unbindStatusProvider(id);
+		providerBindings.remove(id);
+		
+		if(statusProvider == null){
+			refresh();
+			return;
 		}
 		
 		bindStatus(statusProvider.getSelfStatus());
-		for(IValidationStatus status : statusProvider.getStatus()){
+		for(IValidationStatus status : statusProvider.getSubStatuses()){
 			bindStatus(status);
 		}
 		
-		statusProvider.addPropertyChangeListener(statusProviderListener);
+		statusProvider.addStatusChangeListener(statusProviderListener);
 		providerBindings.put(statusProvider.getID(), statusProvider);
+		
+		refresh();
+	}
+	
+	public synchronized void unbindStatusProvider(String id){
+
+		if(!isInitilized){
+			return;
+		}
+		
+		IValidationStatusProvider statusProvider = providerBindings.get(id);
+		if(statusProvider == null){
+			return;
+		}
+		
+		unbindStatus(statusProvider.getSelfStatus());
+		for(IValidationStatus status : statusProvider.getSubStatuses()){
+			unbindStatus(status);
+		}
+		
+		statusProvider.removeStatusChangeListener(statusProviderListener);
+		providerBindings.remove(statusProvider.getID());
+		
+		refresh();
 	}
 	
 	private String getStatusDiagramUniqueID(IValidationStatus status){
@@ -278,6 +318,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			bind(node, status);
 		}
 		statusBindings.put(getStatusDiagramUniqueID(status), status);
+		
+		refresh();
 	}
 	
 	public synchronized void unbindStatus(IValidationStatus status){
@@ -297,21 +339,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			bind(node, null);
 		}
 		statusBindings.remove(getStatusDiagramUniqueID(status));
-	}
-	
-	public synchronized void unbindStatusProvider(IValidationStatusProvider statusProvider){
-
-		if(!isInitilized){
-			return;
-		}
 		
-		unbindStatus(statusProvider.getSelfStatus());
-		for(IValidationStatus status : statusProvider.getStatus()){
-			unbindStatus(status);
-		}
-		
-		statusProvider.removePropertyChangeListener(statusProviderListener);
-		providerBindings.remove(statusProvider.getID());
+		refresh();
 	}
 	
 	public synchronized IValidationStatusProvider getActiveStatusProvider(String id){
@@ -348,8 +377,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 							req.setResource(null);
 						}
 					}
-					
-					refresh();
 				}
 			});
 			return;
@@ -380,8 +407,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 						}
 					}
 				}
-				
-				refresh();
 			}
 		});		
 	}

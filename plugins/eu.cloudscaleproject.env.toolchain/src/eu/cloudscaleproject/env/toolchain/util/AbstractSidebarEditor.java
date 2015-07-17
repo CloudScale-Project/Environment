@@ -316,12 +316,13 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				@Override
 				public void run() {
 					load(false);
+					
+					if(composite == null || composite.isDisposed()){
+						composite = createInputComposite(input, compositeArea, SWT.NONE);
+					}
 				}
 			});
 			
-			if(composite == null || composite.isDisposed()){
-				composite = createInputComposite(input, compositeArea, SWT.NONE);
-			}
 		}
 		
 		public void refresh() {

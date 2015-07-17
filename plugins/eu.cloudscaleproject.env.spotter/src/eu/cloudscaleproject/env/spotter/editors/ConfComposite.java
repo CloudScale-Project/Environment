@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.composite.ConfigAlternativeComposite;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
@@ -23,7 +23,7 @@ public class ConfComposite extends SidebarEditorComposite {
 	public ConfComposite(final IProject project, Composite parent, int style) {
 		super(parent, style);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_CONF_ID));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_DYN_CONF));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

@@ -23,7 +23,7 @@ public class OverviewDiagramEditor extends DiagramEditor{
 			IEditorInputResource resource = ResourceRegistry.getInstance().
 					getResourceProvider(project, CSTool.OVERVIEW).getResource(file);
 			
-			ValidationDiagramService.showStatus(project, resource);
+			ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), resource);
 		}
 	}
 

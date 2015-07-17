@@ -22,8 +22,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
 
 public class GlobalInputAlternative extends EditorInput
@@ -36,10 +37,16 @@ public class GlobalInputAlternative extends EditorInput
 		if (globalInputAlternative == null)
 		{
 			globalInputAlternative = new GlobalInputAlternative();
+			StatusManager.getInstance().addStatusProvider(null, globalInputAlternative);
 			initProjectListener();
 		}
 
 		return globalInputAlternative;
+	}
+	
+	@Override
+	public String getName() {
+		return "Extractor input";
 	}
 
 	private List<IProject> javaProjects;
@@ -94,7 +101,9 @@ public class GlobalInputAlternative extends EditorInput
 					{
 						if (getInstance().getProject() != null)
 						{
-							ValidationDiagramService.showStatus(getInstance().getProject(), GlobalInputAlternative.getInstance());
+							ValidationDiagramService.showStatus(getInstance().getProject(), 
+																CSTool.EXTRACTOR_INPUT.getID(), 
+																GlobalInputAlternative.getInstance());
 						}
 					}
 				});
@@ -104,7 +113,7 @@ public class GlobalInputAlternative extends EditorInput
 
 	private GlobalInputAlternative()
 	{
-		super("Input alternative", ToolchainUtils.EXTRACTOR_INPUT_ID);
+		super("Input alternative", CSTool.EXTRACTOR_INPUT.getID());
 		setJavaProjects(findJavaProjects());
 	}
 

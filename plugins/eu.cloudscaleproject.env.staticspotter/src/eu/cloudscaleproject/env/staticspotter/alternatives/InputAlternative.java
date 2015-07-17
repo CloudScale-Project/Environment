@@ -6,6 +6,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
@@ -17,7 +18,7 @@ public class InputAlternative extends EditorInputEMF
 	{
 		super(project, folder, new ModelType[]{ModelType.SOURCECODEDECORATOR, 
 											   ModelType.REPOSITORY, 
-											   ModelType.SYSTEM}, ToolchainUtils.SPOTTER_STA_INPUT_ID);
+											   ModelType.SYSTEM}, CSTool.SPOTTER_STA_INPUT.getID());
 	}
 
 	public void addSubResourceModel(IResource res)

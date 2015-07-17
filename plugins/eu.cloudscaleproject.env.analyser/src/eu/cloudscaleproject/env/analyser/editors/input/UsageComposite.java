@@ -1,17 +1,12 @@
-package eu.cloudscaleproject.env.analyser.editors.config;
+package eu.cloudscaleproject.env.analyser.editors.input;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.command.AbstractCommand;
-import org.eclipse.emf.databinding.EMFProperties;
-import org.eclipse.emf.databinding.IEMFListProperty;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -19,8 +14,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -31,12 +24,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.palladiosimulator.pcm.usagemodel.UsageScenario;
-import org.palladiosimulator.pcm.usagemodel.UsagemodelPackage;
 import org.scaledl.usageevolution.Usage;
 
 import tools.descartes.dlim.Sequence;
-import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -55,7 +48,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 	private ComboViewer scenarioComboViewer;
 	private ComboViewer limboComboViewer;
 
-	private final ConfAlternative alternative;
+	private final InputAlternative alternative;
 	private final Usage usage;
 	
 	private boolean refreshInProgress = false;
@@ -147,19 +140,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		}
 	};
 	
-	private final PropertyChangeListener inputSetListener = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if(ConfAlternative.PROP_INPUT_ALT_SET.equals(evt.getPropertyName())){
-				IEMFListProperty usageScenListProp = EMFProperties.list(UsagemodelPackage.Literals.USAGE_MODEL__USAGE_SCENARIO_USAGE_MODEL);
-				scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getActiveUsageModel()));
-				scenarioComboViewer.refresh();
-			}
-		}
-	};
-	
-	public UsageComposite(ConfAlternative alt, Usage usage, Composite parent, int style) {
+	public UsageComposite(InputAlternative alt, Usage usage, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = alt;
@@ -189,17 +170,8 @@ public class UsageComposite extends Composite implements IRefreshable{
 			}
 			
 		});
-		scenarioComboViewer.setContentProvider(new ObservableListContentProvider());
-		IEMFListProperty usageScenListProp = EMFProperties.list(UsagemodelPackage.Literals.USAGE_MODEL__USAGE_SCENARIO_USAGE_MODEL);
-		scenarioComboViewer.setInput(usageScenListProp.observe(alternative.getActiveUsageModel()));
-		
-		alternative.addPropertyChangeListener(inputSetListener);
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				alternative.removePropertyChangeListener(inputSetListener);
-			}
-		});
+		scenarioComboViewer.setContentProvider(new ArrayContentProvider());
+		scenarioComboViewer.setInput(getUsageScenarios());
 		
 		//limbo model selection
 		Label lblLimbo = new Label(this, SWT.NONE);
@@ -242,6 +214,19 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		limboComboViewer.addSelectionChangedListener(limboComboListener);
 		scenarioComboViewer.addSelectionChangedListener(scenarioComboListener);
+	}
+	
+	private List<UsageScenario> getUsageScenarios(){
+		List<EObject> usageModels = alternative.getModelRoot(ToolchainUtils.KEY_FILE_USAGE);
+		
+		List<UsageScenario> scenarios = new ArrayList<>();
+		for(EObject eo : usageModels){
+			if(eo instanceof UsageModel){
+				UsageModel um = (UsageModel)eo;
+				scenarios.addAll(um.getUsageScenario_UsageModel());
+			}
+		}
+		return scenarios;
 	}
 	
 	private List<IEditorInputResource> getLimboAlternatives(){
@@ -299,15 +284,20 @@ public class UsageComposite extends Composite implements IRefreshable{
 		
 		try{
 			refreshInProgress = true;
+			
+			scenarioComboViewer.setInput(getUsageScenarios());
+			limboComboViewer.setInput(getLimboAlternatives());
+			
 			if(usage.getScenario() != null){
 				scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
 			}
 			
-			limboComboViewer.setInput(getLimboAlternatives());
-			IEditorInputResource eir = getLimboAlternative(this.usage.getLoadEvolution());
-			if(eir != null){
-				limboComboViewer.setSelection(new StructuredSelection(eir));
-			}
+			//IEditorInputResource eir = getLimboAlternative(this.usage.getLoadEvolution());
+			//if(eir != null){
+				if(usage.getLoadEvolution() != null){
+					limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+				}
+			//}
 		}
 		finally{
 			refreshInProgress = false;

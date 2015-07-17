@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
 
@@ -21,8 +22,13 @@ public class StatusManager {
 	
 	public static final String PROP_STATUS_PROVIDER_ADDED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerAdded";
 	public static final String PROP_STATUS_PROVIDER_REMOVED = "eu.cloudscaleproject.env.common.notification.StatusManager.providerRemoved";
-	public static final String PROP_VALIDATION_COMPLETED = "eu.cloudscaleproject.env.common.notification.StatusManager.validationCompleted";
 
+	public static final String PROP_STATUS_ADDED = "eu.cloudscaleproject.env.common.notification.StatusManager.statusAdded";
+	public static final String PROP_STATUS_REMOVED = "eu.cloudscaleproject.env.common.notification.StatusManager.statusRemoved";
+	public static final String PROP_STATUS_CHANGED = "eu.cloudscaleproject.env.common.notification.StatusManager.statusChanged";
+
+	public static final String PROP_VALIDATION_COMPLETED = "eu.cloudscaleproject.env.common.notification.StatusManager.validationCompleted";
+	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	private final Object validationLock = new Object();
@@ -30,8 +36,28 @@ public class StatusManager {
 	//forward status provider changes to this prop. change support.
 	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			pcs.firePropertyChange(evt);
+		public void propertyChange(final PropertyChangeEvent evt) {
+			
+			if(evt.getSource() instanceof IValidationStatusProvider){
+				
+				if(IValidationStatusProvider.PROP_STATUS_ADDED.equals(evt.getPropertyName())){
+					pcs.firePropertyChange(PROP_STATUS_ADDED, evt.getOldValue(), evt.getNewValue());
+				}
+				if(IValidationStatusProvider.PROP_STATUS_REMOVED.equals(evt.getPropertyName())){
+					pcs.firePropertyChange(PROP_STATUS_REMOVED, evt.getOldValue(), evt.getNewValue());
+				}
+				
+			}
+			if(evt.getSource() instanceof IValidationStatus){
+				
+				BatchExecutor.getInstance().addTask(evt.getSource(), new Runnable() {
+					
+					@Override
+					public void run() {
+						pcs.firePropertyChange(PROP_STATUS_CHANGED, null, evt.getSource());
+					}
+				});
+			}
 		}
 	};
 	
@@ -92,13 +118,13 @@ public class StatusManager {
 	
 	public synchronized void addStatusProvider(IProject project, IValidationStatusProvider statusProvider){
 		statusProviders.put(statusProvider, project);
-		statusProvider.addPropertyChangeListener(statusProviderListener);
+		statusProvider.addStatusChangeListener(statusProviderListener);
 		pcs.firePropertyChange(PROP_STATUS_PROVIDER_ADDED, null, statusProvider);
 	}
 	
 	public synchronized void removeStatusProvider(IValidationStatusProvider statusProvider){
 		statusProviders.remove(statusProvider);
-		statusProvider.removePropertyChangeListener(statusProviderListener);			
+		statusProvider.removeStatusChangeListener(statusProviderListener);			
 		pcs.firePropertyChange(PROP_STATUS_PROVIDER_REMOVED, statusProvider, null);
 	}
 	
@@ -106,7 +132,13 @@ public class StatusManager {
 		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(entry.getValue())){
+				if(project == null && entry.getValue() == null){
+					IValidationStatusProvider sp = entry.getKey();
+					if(sp != null){
+						out.add(entry.getKey());
+					}
+				}
+				if(project != null && project.equals(entry.getValue())){
 					IValidationStatusProvider sp = entry.getKey();
 					if(sp != null){
 						out.add(entry.getKey());
@@ -124,7 +156,13 @@ public class StatusManager {
 		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(entry.getValue()) && id.equals(entry.getKey().getID())){
+				if(project == null && entry.getValue() == null){
+					IValidationStatusProvider sp = entry.getKey();
+					if(sp != null){
+						out.add(entry.getKey());
+					}
+				}
+				if(project != null &&  project.equals(entry.getValue()) && id.equals(entry.getKey().getID())){
 					IValidationStatusProvider sp = entry.getKey();
 					if(sp != null){
 						out.add(entry.getKey());
@@ -138,6 +176,7 @@ public class StatusManager {
 		return out;
 	}
 	
+	//property changes
 	public void addPropertyChangeListener(String prop, PropertyChangeListener listener){
 		pcs.addPropertyChangeListener(prop, listener);
 	}
@@ -293,7 +332,12 @@ public class StatusManager {
 	public synchronized void validateAll(IProject project){
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(entry.getValue())){
+				// if global validator
+				if(entry.getValue() == null){
+					validate(null, entry.getKey());
+				}
+				// else
+				else if(project != null && project.equals(entry.getValue())){
 					validate(project, entry.getKey());
 				}
 			}
@@ -306,7 +350,12 @@ public class StatusManager {
 	public synchronized void validateAllAsync(IProject project){
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{
-				if(project.equals(entry.getValue())){
+				// if global validator
+				if(entry.getValue() == null){
+					validateAsync(null, entry.getKey());
+				}
+				// else
+				else if(project != null && project.equals(entry.getValue())){
 					validateAsync(project, entry.getKey());
 				}
 			}

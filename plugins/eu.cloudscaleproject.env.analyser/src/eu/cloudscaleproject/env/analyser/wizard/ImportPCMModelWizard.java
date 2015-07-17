@@ -5,12 +5,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
-import org.palladiosimulator.pcm.usagemodel.UsageModel;
 
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -24,31 +20,6 @@ public class ImportPCMModelWizard extends Wizard{
 	
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage importOptionsPage;
-	
-	//auto-selection
-	private final ICheckStateListener modelCheckStateListener = new ICheckStateListener() {
-		
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-			Object el = event.getElement();			
-			EObject root = null;
-			
-			//get root object
-			if (el instanceof EObject)
-			{
-				root = (EObject)el;
-			}
-			if(el instanceof Resource){
-				Resource r = (Resource)el;
-				root = r.getContents().isEmpty() ? null : r.getContents().get(0);
-			}
-			
-			if(root instanceof UsageModel){
-				importModelSelectionPage.selectResource(ModelType.USAGE, false, false);
-				importModelSelectionPage.selectResource(root.eResource(), event.getChecked());
-			}
-		}
-	};
 
 	public ImportPCMModelWizard(EditorInputEMF alternative){
 		this(alternative, null);
@@ -67,6 +38,11 @@ public class ImportPCMModelWizard extends Wizard{
 				modelTypes.add(mt);
 				continue;
 			}
+			//allow multiple usage models
+			if(mt == ModelType.USAGE){
+				modelTypes.add(mt);
+				continue;
+			}
 			
 			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
 				modelTypes.add(mt);
@@ -75,8 +51,7 @@ public class ImportPCMModelWizard extends Wizard{
 		
 		importModelSelectionPage = new ExternalModelsSelectionPage(
 				from, 
-				modelTypes.toArray(new ModelType[modelTypes.size()]), 
-				modelCheckStateListener);
+				modelTypes.toArray(new ModelType[modelTypes.size()]));
 		
 		importOptionsPage = new ImportAlternativeOptionsPage();
 	}

@@ -5,13 +5,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
-import org.palladiosimulator.pcm.usagemodel.UsageModel;
 
 import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -40,6 +38,7 @@ public class ExternalImportInputWizard extends Wizard{
 		
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
+			/*
 			Object el = event.getElement();			
 			EObject root = null;
 			
@@ -56,6 +55,7 @@ public class ExternalImportInputWizard extends Wizard{
 				importModelSelectionPage.selectResource(ModelType.USAGE, false, false);
 				importModelSelectionPage.selectResource(root.eResource(), event.getChecked());
 			}
+			*/
 		}
 	};
 	
@@ -127,7 +127,7 @@ public class ExternalImportInputWizard extends Wizard{
 					
 					@Override
 					public void run() {
-						ValidationDiagramService.showStatus(project, alternative);
+						ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
 						OpenAlternativeUtil.openAlternative(alternative);
 					}
 				});

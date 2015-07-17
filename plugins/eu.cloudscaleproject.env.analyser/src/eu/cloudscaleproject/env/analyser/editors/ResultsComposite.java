@@ -116,9 +116,9 @@ public class ResultsComposite extends SidebarEditorComposite{
 				inputAlternative = confAlternative.getInputAlternative();
 			}
 			
-			ValidationDiagramService.showStatus(project, inputAlternative);
-			ValidationDiagramService.showStatus(project, confAlternative);
-			ValidationDiagramService.showStatus(project, alternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), inputAlternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), confAlternative);
+			ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), alternative);
 		}
 		
 		@Override

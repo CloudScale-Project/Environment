@@ -189,6 +189,8 @@ public abstract class ConfigEditorView extends AbstractEditorView
 						resultsComposite.setStatus(lastJob.getResult());
 						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
 
+						//TODO: If last results is null nothing will happen.
+						//		It should clear the status from the Workbench, but the ID is unknown...
 						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());
 
 					} else

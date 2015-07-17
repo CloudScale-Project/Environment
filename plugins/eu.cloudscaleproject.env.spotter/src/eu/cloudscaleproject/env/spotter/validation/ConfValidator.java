@@ -11,7 +11,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.spotter.Util;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -23,7 +23,7 @@ public class ConfValidator implements IResourceValidator {
 	
 	@Override
 	public String getID() {
-		return ToolchainUtils.SPOTTER_DYN_CONF_ID;
+		return CSTool.SPOTTER_DYN_CONF.getID();
 	}
 
 	@Override

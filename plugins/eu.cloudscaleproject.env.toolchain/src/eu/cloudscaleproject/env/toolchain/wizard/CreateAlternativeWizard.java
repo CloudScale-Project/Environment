@@ -39,7 +39,7 @@ public class CreateAlternativeWizard extends Wizard{
 		IEditorInputResource alternative = (IEditorInputResource)provider.createNewResource(altName, null);
 		initAlternative(alternative);	
 
-		ValidationDiagramService.showStatus(project, alternative);
+		ValidationDiagramService.showStatus(project, alternative.getID(), alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;

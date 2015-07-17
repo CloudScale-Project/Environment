@@ -41,30 +41,26 @@ public class ValidationDiagramService {
 		}
 	}
 	
-	public static void showStatus(IProject project, IValidationStatusProvider statusProvider){
+	public static void showStatus(IProject project, String id, IValidationStatusProvider statusProvider){
 				
 		showDiagram(project);
 		
-		if(statusProvider == null){
-			return;
-		}
-		
 		IValidationDiagram diagramProvider = diagrams.get(project);
 		if(diagramProvider != null){
-			diagramProvider.bindStatusProvider(statusProvider);
+			diagramProvider.bindStatusProvider(id, statusProvider);
 		}
 		
 	}
 	
-	public static void clearStatus(IProject project, String id){
+	public static void showStatus(IProject project, IValidationStatusProvider statusProvider){
+		
+		showDiagram(project);
 		
 		IValidationDiagram diagramProvider = diagrams.get(project);
-		if(diagramProvider != null){
-			IValidationStatusProvider statusProvider = diagramProvider.getActiveStatusProvider(id);
-			if(statusProvider != null){
-				diagramProvider.unbindStatusProvider(statusProvider);
-			}
+		if(diagramProvider != null && statusProvider != null){
+			diagramProvider.bindStatusProvider(statusProvider.getID(), statusProvider);
 		}
+		
 	}
 	
 	public static void registerDiagramFactory(IValidationDiagramFactory factory){

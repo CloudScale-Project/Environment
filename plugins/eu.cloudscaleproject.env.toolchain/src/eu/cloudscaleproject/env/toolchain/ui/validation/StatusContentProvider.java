@@ -25,7 +25,7 @@ public class StatusContentProvider implements ITreeContentProvider{
 		List<Warning> warnings = new ArrayList<Warning>();
 		
 		warnings.addAll(Arrays.asList(provider.getSelfStatus().getWarnings()));
-		for(IValidationStatus status : provider.getStatus()){
+		for(IValidationStatus status : provider.getSubStatuses()){
 			warnings.addAll(Arrays.asList(status.getWarnings()));
 		}
 		return warnings;
@@ -66,20 +66,18 @@ public class StatusContentProvider implements ITreeContentProvider{
 		if(parentElement instanceof IValidationStatusProvider){
 			IValidationStatusProvider sp = (IValidationStatusProvider)parentElement;
 			
-			//remove self status
-			List<IValidationStatus> statList = new ArrayList<IValidationStatus>();
+			List<Object> children = new ArrayList<Object>();
 			
-			for(IValidationStatus stat : sp.getStatus()){
+			//add self warnings
+			children.addAll(Arrays.asList(sp.getSelfStatus().getWarnings()));
+			
+			for(IValidationStatus stat : sp.getSubStatuses()){
 				if(hasWarnings(stat)){
-					statList.add(stat);
+					children.add(stat);
 				}
 			}
 			
-			if(hasWarnings(sp.getSelfStatus())){
-				statList.add(sp.getSelfStatus());
-			}
-			
-			return statList.toArray();
+			return children.toArray();
 		}
 		if(parentElement instanceof IValidationStatus){
 			IValidationStatus sp = (IValidationStatus)parentElement;

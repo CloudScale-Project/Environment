@@ -12,7 +12,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 
 public class ConfigValidator implements IResourceValidator {
 
@@ -23,7 +23,7 @@ public class ConfigValidator implements IResourceValidator {
 	
 	@Override
 	public String getID() {
-		return ToolchainUtils.EXTRACTOR_CONF_ID;
+		return CSTool.EXTRACTOR_CONF.getID();
 	}
 	
 	@Override

@@ -26,8 +26,8 @@ public enum ModelType{
 	 ECORE(null, "ecore");
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
-	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
-	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE} ;
+	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION} ;
+	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION} ;
 	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, MONITOR, SLO, VARIATION, USAGE_EVOLUTION, MEASURING_POINT} ;
 	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
 	 

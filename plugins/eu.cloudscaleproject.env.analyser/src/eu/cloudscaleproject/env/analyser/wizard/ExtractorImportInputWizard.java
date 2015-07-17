@@ -80,7 +80,7 @@ public class ExtractorImportInputWizard extends Wizard
 
 		alternative.save();
 
-		ValidationDiagramService.showStatus(project, alternative);
+		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
 
 		return true;

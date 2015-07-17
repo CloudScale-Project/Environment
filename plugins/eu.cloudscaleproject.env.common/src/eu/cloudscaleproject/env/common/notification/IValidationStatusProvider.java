@@ -10,13 +10,13 @@ public interface IValidationStatusProvider {
 	public String getID();
 	
 	public IValidationStatus getSelfStatus();
-	public IValidationStatus[] getStatus();
-	public IValidationStatus[] getStatus(String id);
+	public IValidationStatus[] getSubStatuses();
+	public IValidationStatus[] getSubStatus(String id);
 	
 	public void validate();
 	
-	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
-	public void addPropertyChangeListener(PropertyChangeListener listener);
-	public void removePropertyChangeListener(PropertyChangeListener listener);
-	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
+	public void addStatusChangeListener(String propertyName, PropertyChangeListener listener);
+	public void addStatusChangeListener(PropertyChangeListener listener);
+	public void removeStatusChangeListener(PropertyChangeListener listener);
+	public void removeStatusChangeListener(String propertyName, PropertyChangeListener listener);
 }

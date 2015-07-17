@@ -157,7 +157,6 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 
 			groupsComposite.initBindings(monitorGroups);
 			calcMonitorGroups();
-			groupsComposite.updateTarget();
 		}
 		
 		stackLayout.topControl = groupsComposite;

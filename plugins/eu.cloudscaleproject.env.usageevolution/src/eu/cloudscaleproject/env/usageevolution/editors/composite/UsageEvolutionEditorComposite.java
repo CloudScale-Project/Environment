@@ -22,6 +22,7 @@ import tools.descartes.dlim.generator.editor.views.PlotCanvas;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -113,7 +114,7 @@ public class UsageEvolutionEditorComposite extends InputEditorView implements IP
 	public void onSelect()
 	{
 		ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
-		ValidationDiagramService.showStatus(project, alternative);
+		ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), alternative);
 	}
 
 	@Override

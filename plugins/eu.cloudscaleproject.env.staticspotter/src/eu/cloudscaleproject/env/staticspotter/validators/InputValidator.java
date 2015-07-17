@@ -7,13 +7,14 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
 
 	@Override
 	public String getID() {
-		return ToolchainUtils.SPOTTER_STA_INPUT_ID;
+		return CSTool.SPOTTER_STA_INPUT.getID();
 	}
 	
 

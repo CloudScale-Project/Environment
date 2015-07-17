@@ -11,7 +11,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
 
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
 public class InputAlternative extends EditorInputEMF
@@ -34,7 +34,7 @@ public class InputAlternative extends EditorInputEMF
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, null, ToolchainUtils.SPOTTER_DYN_INPUT_ID);
+		super(project, folder, null, CSTool.SPOTTER_DYN_INPUT.getID());
 	}
 
 	public void registerSpotterEditor(final AbstractSpotterEditor editor)
