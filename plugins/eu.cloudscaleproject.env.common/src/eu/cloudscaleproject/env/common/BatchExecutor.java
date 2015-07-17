@@ -1,8 +1,6 @@
 package eu.cloudscaleproject.env.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -32,37 +30,43 @@ public class BatchExecutor {
 		
 		@Override
 		public void run() {
+			
+			final Map<Object, Runnable> runTask = new HashMap<Object, Runnable>();
 						
 			while(!Thread.interrupted()){
 				
 				while(!queueTask.isEmpty()){
-					
-					List<Object> toRemove = new ArrayList<Object>();
-										
+															
 					//execute tasks and remove them from the queue
 					synchronized (lock) {
 						
 						for(Entry<Object, Long> entry : queueTime.entrySet()){
 							
 							Long currentTime = System.currentTimeMillis();
-
 							if(currentTime - entry.getValue() > DELAY_TIME){
-								try{
-									queueTask.get(entry.getKey()).run();
-								}
-								catch(Exception e){
-									e.printStackTrace();
-								}
-								toRemove.add(entry.getKey());
+								runTask.put(entry.getKey(), queueTask.get(entry.getKey()));
 							}
 						}
 						
 						//remove processed
-						for(Object o : toRemove){
+						for(Object o : runTask.keySet()){
 							queueTask.remove(o);
 							queueTime.remove(o);
 						}
 					}
+					
+					//execute tasks
+					for(Runnable runnable : runTask.values()){
+						try{
+							runnable.run();
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					
+					runTask.clear();
+					
 				}
 				
 				//wait until next entry arrives

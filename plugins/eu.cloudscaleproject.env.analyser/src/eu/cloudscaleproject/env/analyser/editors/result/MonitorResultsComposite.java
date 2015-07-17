@@ -15,6 +15,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -60,15 +61,21 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 	
 	private final ResultAlternative alternative;
 	
+	
+	private StackLayout stackLayout;
+	
 	private final ListViewer menuList;
-	private final Composite content;
+	
+	private final Composite compositeContent;
+	private final Composite compositeContentData;
+	private final Composite compositeContentMissing;
+
 	
 	public MonitorResultsComposite(ResultAlternative alternative, Composite parent, int style) {
 		super(parent, style);
 		
-		this.alternative = alternative;
-		
-		setLayout(new GridLayout(2, false));
+		setLayout(new GridLayout(2, false));		
+		this.alternative = alternative;		
 		
 		Composite sidepanel = new Composite(this, SWT.NONE);
 		sidepanel.setLayout(new FillLayout());
@@ -117,10 +124,22 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 				}
 			}
 		});
+		
+		stackLayout = new StackLayout();
+		
+		compositeContent = new Composite(this, SWT.NONE);
+		GridData gd_content = new GridData(SWT.FILL, SWT.FILL, true, true);
+		compositeContent.setLayoutData(gd_content);
+		compositeContent.setLayout(stackLayout);
+		
+		compositeContentMissing = new Composite(compositeContent, SWT.NONE);
+		compositeContentMissing.setLayout(new FillLayout());
+		Label lblMissing = new Label(compositeContentMissing, SWT.NONE);
+		lblMissing.setText("Simulation was not able not produce the results. See the advance tab.");
+		stackLayout.topControl = compositeContentMissing;
 				
-		content = new Composite(this, SWT.NONE);
-		content.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		content.setLayout(new FillLayout());
+		compositeContentData = new Composite(compositeContent, SWT.NONE);
+		compositeContentData.setLayout(new FillLayout());
 
 		//content
 	}
@@ -128,11 +147,11 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 	private void showMeasurement(MonitorItem monitorItem){
 		
 		//clear content
-		for(Control c : content.getChildren()){
+		for(Control c : compositeContentData.getChildren()){
 			c.dispose();
 		}
 		
-		monitorItem.initComposite(content, SWT.NONE);
+		monitorItem.initComposite(compositeContentData, SWT.NONE);
 		
 		this.layout(true, true);
 	}
@@ -212,7 +231,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 					@Override
 					public void mouseUp(MouseEvent e) {
 						super.mouseUp(e);
-						displayChart(0);
+						displayChart(3);
 					}
 				});
 			}
@@ -226,7 +245,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 					@Override
 					public void mouseUp(MouseEvent e) {
 						super.mouseUp(e);
-						displayChart(2);
+						displayChart(5);
 					}
 				});
 			}
@@ -240,7 +259,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 					@Override
 					public void mouseUp(MouseEvent e) {
 						super.mouseUp(e);
-						displayChart(1);
+						displayChart(4);
 					}
 				});
 			}
@@ -268,8 +287,23 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 			displayChart(null);
 		}
 		
-		@SuppressWarnings("unchecked")
 		public void displayChart(Integer type){
+			boolean canDisplay = doDisplayChart(type);
+			if(canDisplay){
+				stackLayout.topControl = compositeContentData;
+			}
+			else{
+				stackLayout.topControl = compositeContentMissing;
+			}
+			
+			compositeContent.redraw();
+			compositeContent.layout();
+		}
+		
+		@SuppressWarnings("unchecked")
+		public boolean doDisplayChart(Integer type){
+			
+			boolean canDisplay = false;
 			
 			final RawMeasurements rawMeasurements = measurement.getMeasurementRanges().get(0).getRawMeasurements();
 			if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
@@ -295,7 +329,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 					
 					//set default diagram chart type
 					if(type == null){
-						type = 1;
+						type = 5;
 					}
 					
 					ChainDescription chainDescription = ResultUtils.getApplicableChainDescriptionsFromExtensions(edp2Source).get(type);
@@ -305,14 +339,19 @@ public class MonitorResultsComposite extends Composite implements IRefreshable{
 			        input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
 			        
 			        final JFreeChart chart = ((JFreeChartVisualizationInput) input).createChart();
-			        chart.setTitle("");
-			        chartComposite.setChart(chart);
-			        chartComposite.forceRedraw();
+			        if(chart != null){
+			        	chart.setTitle("");
+			        	chartComposite.setChart(chart);
+			        	canDisplay = true;
+			        }
+			        
+			        chartComposite.layout(true);
+		        	chartComposite.forceRedraw();
+
 				}
 			}
-			else{
-				throw new RuntimeException("Empty Measurements!");
-			}
+			
+			return canDisplay;
 		}
 	
 		//edp2 viewer copy/paste
