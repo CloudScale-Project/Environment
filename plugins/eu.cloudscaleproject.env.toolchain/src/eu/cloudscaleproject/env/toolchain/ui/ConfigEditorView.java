@@ -77,8 +77,11 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void initFooterContent()
 	{
-		Composite composite = new Composite(getFooter(), SWT.None);
-		composite.setLayout(new GridLayout(2, false));
+		Composite composite = new Composite(getFooter(), SWT.NONE);
+		GridLayout gl = new GridLayout(2, false);
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		composite.setLayout(gl);
 
 		stackedContainer = new Composite(composite, SWT.NONE);
 		stackedContainer.setLayout(new StackLayout());

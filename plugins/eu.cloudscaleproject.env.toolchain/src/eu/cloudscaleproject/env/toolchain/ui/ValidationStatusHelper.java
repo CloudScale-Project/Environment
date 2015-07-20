@@ -6,11 +6,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -22,6 +22,7 @@ public class ValidationStatusHelper
 	// HACKISH : TEMPORARY SOLUTION
 	//
 
+	/*
 	public static void showValidationWarnings(IEditorInputResource alternative)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -64,46 +65,139 @@ public class ValidationStatusHelper
 			sb.append(String.format("\t- %s\n", warning));
 		}
 	}
+	*/
 
-	public static int countValidationWarnings(IEditorInputResource alternative)
+	public static int countValidationWarnings(IValidationStatusProvider sp, int severity)
 	{
-		int count = alternative.getSelfStatus().getWarningIDs().length;
+		int count = 0;
+		
+		for(Warning w : sp.getSelfStatus().getWarnings()){
+			if(w.severity == severity){
+				count++;
+			}
+		}
 
-		for (IValidationStatus status : alternative.getSubStatuses())
+		for (IValidationStatus status : sp.getSubStatuses())
 		{
-			count += status.getWarningIDs().length;
+			for(Warning w : status.getWarnings()){
+				if(w.severity == severity){
+					count++;
+				}
+			}
 		}
 
 		return count;
 	}
 
-	public static void showValidationErrorDialog(IEditorInputResource alternative)
+	public static void showValidationDialog(IEditorInputResource alternative)
 	{
-		int numOfwarnings = alternative.getSelfStatus().getWarningIDs().length;
+		int numOfWarnings = 0; //alternative.getSelfStatus().getWarningIDs().length;
+		int numOfErrors = 0;
+		
+		int numOfDepWarnings = 0;
+		int numOfDepErros = 0;
 
-		Warning[] warnings = alternative.getSelfStatus().getWarnings();
 		LinkedList<Status> statuses = new LinkedList<>();
 		
-		for(int i=0; i<warnings.length; i++){
-			String message = warnings[i].message;
-			Status s = new Status(IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", message));
+		boolean hasErrors = false;
+		boolean hasWarnings = false;
+		
+		//required alternative
+		if(alternative instanceof IConfigAlternative){
+			IEditorInput ei = ((IConfigAlternative)alternative).getInputAlternative();
+			if(ei instanceof IValidationStatusProvider){
+				IValidationStatusProvider sp = (IValidationStatusProvider)ei;
+				
+				numOfDepErros = countValidationWarnings(sp, IValidationStatus.SEVERITY_ERROR);
+				numOfDepWarnings = countValidationWarnings(sp, IValidationStatus.SEVERITY_WARNING);
+				
+				numOfErrors += numOfDepErros;
+				numOfWarnings += numOfDepWarnings;
+
+			}
+		}
+		
+		if(numOfDepErros > 0){
+			statuses.add(new Status(IStatus.ERROR, 
+					Activator.PLUGIN_ID, String.format("> %s", "Input alternative has validation errors.")));
+		}
+		if(numOfDepWarnings > 0){
+			statuses.add(new Status(IStatus.WARNING, 
+					Activator.PLUGIN_ID, String.format("> %s", "Input alternative has validation warnings.")));
+		}
+		
+		//add self status warnings
+		for(Warning warning : alternative.getSelfStatus().getWarnings()){
+			
+			if(warning.severity == IValidationStatus.SEVERITY_ERROR){
+				hasErrors = true;
+				numOfErrors++;
+			}
+			else if(warning.severity == IValidationStatus.SEVERITY_WARNING){
+				hasWarnings = true;
+				numOfWarnings++;
+			}
+			
+			String message = warning.message;
+			Status s = new Status(warning.getEclipseSeverity(), Activator.PLUGIN_ID, String.format("> %s", message));
 			statuses.add(s);
+			
+		}
+		
+		//add sub status warnings
+		for(IValidationStatus vs : alternative.getSubStatuses()){
+			for(Warning warning : vs.getWarnings()){
+				
+				if(warning.severity == IValidationStatus.SEVERITY_ERROR){
+					hasErrors = true;
+					numOfErrors++;
+				}
+				else if(warning.severity == IValidationStatus.SEVERITY_WARNING){
+					hasWarnings = true;
+					numOfWarnings++;
+				}
+				
+				String message = warning.message;
+				Status s = new Status(warning.getEclipseSeverity(), Activator.PLUGIN_ID, String.format("> %s", message));
+				statuses.add(s);				
+			}
 		}
 
-		String msg = String.format("Unable to run alternative '%s'.", alternative.getName());
+		String msg = String.format("Alternative '%s' validation status.", alternative.getName());
+		String reason = String.format("Press 'Details...' button to display suggestions.");
+		
+		if(numOfErrors > 0){
+			msg = String.format("Unable to run alternative '%s'.", alternative.getName());
 
-		String reason = String.format("Alternative validation failed. There are %s validation errors.", numOfwarnings);
-		if (numOfwarnings == 1)
-		{
-			reason = String.format("Alternative validation failed. There is %s validation error.", numOfwarnings);
-		} else if (numOfwarnings == 0)
-		{
-			reason = String.format("Alternative validation failed. Validation of input alternative failed.", numOfwarnings);
-			statuses.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, String.format("> %s", "Input alternative has validation errors.")));
+			if(numOfErrors == 1){
+				reason = String.format("Alternative validation failed. There is %s validation error.", numOfErrors);
+			}
+			else{
+				reason = String.format("Alternative validation failed. There are %s validation errors.", numOfErrors);
+			}
+		}
+		else if(numOfWarnings > 0){
+			msg = String.format("Running the alternative '%s' may produce inconsisten results.", alternative.getName());
+
+			if(numOfErrors == 1){
+				reason = String.format("Alternative validation detected %s validation warnings.", numOfWarnings);
+			}
+			else{
+				reason = String.format("Alternative validation detected %s validation warnings.", numOfWarnings);
+			}
+		}
+		
+		//calculate overall severity status
+		int severity = IStatus.INFO;
+		if(hasErrors){
+			severity = IStatus.ERROR;
+		}
+		else if(hasWarnings && severity != IStatus.ERROR){
+			severity = IStatus.WARNING;
 		}
 
-		MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, statuses.toArray(new Status[0]), reason, null);
-		ErrorDialog.openError(Display.getDefault().getActiveShell(), "Run failed", msg, ms);
+		MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, severity, statuses.toArray(new Status[0]), reason, null);
+		ErrorDialog.openError(Display.getDefault().getActiveShell(), "Validation info dialog", msg, ms);
 	}
 
 }

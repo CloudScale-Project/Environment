@@ -8,6 +8,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -56,10 +57,7 @@ public class ValidationWidget extends Composite
 		@Override
 		public void mouseDoubleClick(MouseEvent e)
 		{
-			if (ValidationStatusHelper.countValidationWarnings(alternative)>0)
-			{
-				ValidationStatusHelper.showValidationWarnings(alternative);
-			}
+			ValidationStatusHelper.showValidationDialog(alternative);
 		}
 	};
 
@@ -106,26 +104,42 @@ public class ValidationWidget extends Composite
 	private void updateStatus()
 	{
 		IValidationStatus selfStatus = alternative.getSelfStatus();
-		int warningCount = ValidationStatusHelper.countValidationWarnings(alternative); 
-
+		
+		int errorCount = ValidationStatusHelper.countValidationWarnings(alternative, IValidationStatus.SEVERITY_ERROR); 
+		int warningCount = ValidationStatusHelper.countValidationWarnings(alternative, IValidationStatus.SEVERITY_WARNING); 
+		int count = errorCount + warningCount;
+		
+		Image image = CommonResources.OK;
+		String msg = "Alternative is valid.";
+		
+		if(errorCount > 0){
+			image = CommonResources.ERROR;
+			msg = "Alternative is not valid.";
+			
+			if( warningCount > 0 ){
+				msg = String.format("Alternative is not valid! Is contains %s errors(s) and %s warning(s)", 
+						new int[]{errorCount, warningCount});
+			}
+		}
+		else if(warningCount > 0){
+			image = CommonResources.WARNING;
+			msg = String.format("Alternative is not valid! Is contains %s warning(s)", 
+					new int[]{warningCount});
+		}
+		
 		// Valid without warnings 
 		// Valid/Invalid with warnings (e.g. input not valid)
 		// Invalid without warning -- BUG  workaround
-
-		if (selfStatus.isValid() && warningCount == 0)
-		{
-			lblText.setText("Alternative is valid.");
-			lblIcon.setImage(CommonResources.OK);
-		} else if (!selfStatus.isValid() && warningCount == 0)
+		
+		if (!selfStatus.isValid() && count == 0)
 		{
 			// BUG WORKAROUND
 			lblText.setText(String.format("Alternative is not valid.")); 
 			lblIcon.setImage(CommonResources.WARNING);
 		}
-		else
-		{
-			lblText.setText(String.format("Alternative is not valid : %s warning(s)", warningCount));
-			lblIcon.setImage(CommonResources.WARNING);
+		else{
+			lblText.setText(msg); 
+			lblIcon.setImage(image);
 		}
 		
 		redraw();

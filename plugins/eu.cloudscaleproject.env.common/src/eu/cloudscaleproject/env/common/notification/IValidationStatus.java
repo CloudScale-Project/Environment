@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.common.notification;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.internal.modeled.model.validation.SeverityEnum;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -35,9 +36,27 @@ public interface IValidationStatus{
 	public void setIsValid(boolean isDone);
 	
 	public class Warning{
+		
 		public String message;
 		public int severity;
 		BasicCallback<Object> handler;
+		
+		public int getSeverity(){
+			return severity;
+		}
+		
+		public int getEclipseSeverity(){
+			switch(severity){
+				case SEVERITY_INFO:
+					return IStatus.INFO;
+				case SEVERITY_WARNING:
+					return IStatus.WARNING;
+				case SEVERITY_ERROR:
+					return IStatus.ERROR;
+			}
+			
+			throw new IllegalArgumentException("Invalid argument. Severity integer: " + severity);
+		}
 	}
 	
 	public Warning[] getWarnings();
