@@ -65,7 +65,10 @@
     </sharedElements>
     <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
       <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_LQjtoC7gEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newProject" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProject_24.png" tooltip="Create new CloudScale project" command="_czYasKLbEeOVJP61i6fIgw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_nJ9A8C7hEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newExampleProject" label="New example project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProjectWizard_24.png" tooltip="Create new CloudScale example project" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_Eap64C7iEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.toolbarseparator.0"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="Show CloudScale perspective " iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
       </children>
       <children xsi:type="menu:ToolControl" xmi:id="_3WnY4HteEeKIYfuE0pelcA" elementId="SearchField" toBeRendered="false" visible="false"/>
       <children xsi:type="menu:ToolControl" xmi:id="_Ic3vMHtfEeKIYfuE0pelcA" elementId="Search-PS Glue" toBeRendered="false" visible="false"/>
@@ -88,6 +91,7 @@
   <handlers xmi:id="_qUWXYHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.openCsPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CloudscalePerspectiveHandler" command="_pRP7oHnoEeKfc49LSeS68A"/>
   <handlers xmi:id="_KOUtIH8tEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.handler.intro" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.IntroPerspectiveHandler" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
   <handlers xmi:id="_m2_NoKLbEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handler.newProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewProjectHadler" command="_czYasKLbEeOVJP61i6fIgw"/>
+  <handlers xmi:id="_ebA54C7sEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handler.newExampleProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewExampleProjectHandler" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
   <bindingTables xmi:id="_SeXUEO8EEd6FC9cDb6iV7x" bindingContext="_SeXUHO8EEd6BC9cDb6iV7y"/>
   <rootContext xmi:id="_SeXUHO8EEd6BC9cDb6iV7y" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="%bindingcontext.name.dialogAndWindows">
     <children xmi:id="_SeXUEO8EEd6FC9cDb6iV7w" elementId="org.eclipse.ui.contexts.window" name="%bindingcontext.name.windows">
@@ -109,6 +113,7 @@
   <commands xmi:id="_pRP7oHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.command.openCsPerspectiv" commandName="openCsPerspective"/>
   <commands xmi:id="_6PggAH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.command.intro" commandName="openIntroPerspective"/>
   <commands xmi:id="_czYasKLbEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.command.newProject" commandName="createNewProject" description="Creates new project"/>
+  <commands xmi:id="_SyZ4AC7sEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.command.newExampleProject" commandName="createNewExampleProject" description="Creates new example project"/>
   <commands xmi:id="_mVVJIIMWEeSFPKTtzK8Nkg" elementId="org.eclipse.ui.views.showView" commandName="%command.showView.name" description="%command.showView.description"/>
   <commands xmi:id="_NLAHUIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.help.quickStartAction" commandName="%command.quickStart.name" description="%command.quickStart.description"/>
   <commands xmi:id="_nXdNIIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.views.properties.NewPropertySheetCommand" commandName="%Views.PropertySheet"/>

@@ -50,7 +50,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public void initialize(IWorkbenchConfigurer configurer) {
 		super.initialize(configurer);
 		
-		 // here's some of my code that does some typical RCP type configuration
 	     configurer.setSaveAndRestore(true);
 	     PlatformUI.getPreferenceStore().setValue(
 	            IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
