@@ -20,7 +20,7 @@ import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.overview.wizard.pages.DeploymentWizardPage;
 import eu.cloudscaleproject.env.overview.wizard.pages.ExposedInterfacesWizardPage;
 import eu.cloudscaleproject.env.overview.wizard.pages.RequiredInterfacesWizardPage;
-import eu.cloudscaleproject.env.overview.wizard.pages.TransformWizardPage;
+import eu.cloudscaleproject.env.overview.wizard.pages.TransformationPage;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
@@ -38,7 +38,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 	private AlternativeNamePage namePage;
 	private AlternativeSelectionPage selectionPage;
-	private TransformWizardPage transformPage = new TransformWizardPage(data);
+	private TransformationPage transformPage = new TransformationPage(data);
 	private DeploymentWizardPage deploymentWizardPage = new DeploymentWizardPage(data);
 	private ExposedInterfacesWizardPage exposedInterfacesWizardPage = new ExposedInterfacesWizardPage(data);
 	private RequiredInterfacesWizardPage requiredInterfacesWizardPage = new RequiredInterfacesWizardPage(data);
