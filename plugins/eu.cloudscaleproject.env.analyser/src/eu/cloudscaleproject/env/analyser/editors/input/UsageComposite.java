@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -246,18 +247,18 @@ public class UsageComposite extends Composite implements IRefreshable{
 		if(sequence == null){
 			return null;
 		}
+		
+		IResource limboResource = ExplorerProjectPaths.getFileFromEmfResource(sequence.eResource());
 				
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), CSTool.USAGEEVOLUTION);
 		for(IEditorInputResource eir : rp.getResources()){
 			if(eir instanceof EditorInputEMF){
 				EditorInputEMF eie = (EditorInputEMF)eir;
-				EObject eo = eie.getModelRootSingle(ToolchainUtils.KEY_FILE_LIMBO);
-				if(eo instanceof Sequence){
-					Sequence sq = (Sequence)eo;
-					if(sq.equals(sequence)){
-						return eir;
-					}
-				}
+				if (!eie.isLoaded()) eie.load();
+
+				IResource res = eie.getSubResource(ToolchainUtils.KEY_FILE_LIMBO);
+
+				if (limboResource.equals(res)) return eir;
 			}
 		}
 		
@@ -292,12 +293,12 @@ public class UsageComposite extends Composite implements IRefreshable{
 				scenarioComboViewer.setSelection(new StructuredSelection(usage.getScenario()));
 			}
 			
-			//IEditorInputResource eir = getLimboAlternative(this.usage.getLoadEvolution());
-			//if(eir != null){
+			IEditorInputResource eir = getLimboAlternative(this.usage.getLoadEvolution());
+			if(eir != null){
 				if(usage.getLoadEvolution() != null){
-					limboComboViewer.setSelection(new StructuredSelection(usage.getLoadEvolution()));
+					limboComboViewer.setSelection(new StructuredSelection(eir));
 				}
-			//}
+			}
 		}
 		finally{
 			refreshInProgress = false;
