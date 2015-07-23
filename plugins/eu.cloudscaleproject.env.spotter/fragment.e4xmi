@@ -16,7 +16,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_UbIroGjDEeSsmI_d8di9Hw" elementId="eu.cloudscaleproject.env.spotter.handler.openinputdialog" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.handlers.OpenInputAltHandler" command="_8i_x0GjCEeSsmI_d8di9Hw"/>
     <elements xsi:type="commands:Handler" xmi:id="_aFEIkGjDEeSsmI_d8di9Hw" elementId="eu.cloudscaleproject.env.spotter.handler.openconfdialog" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.handlers.OpenConfAltHandler" command="_HfiX4GjDEeSsmI_d8di9Hw"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kZ5JoC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:3">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kZ5JoC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_U0QSsC3dEeSzOMcB8sHwVA" elementId="eu.cloudscaleproject.env.spotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.spotter/resources/icons/ic-spotter-small.png" tooltip="Open Dynamic Spotter Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DshzYEPvEeSK3KV4OioXdg" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">

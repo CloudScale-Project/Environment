@@ -65,10 +65,10 @@
     </sharedElements>
     <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
       <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="Show CloudScale perspective " iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_LQjtoC7gEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newProject" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProject_24.png" tooltip="Create new CloudScale project" command="_czYasKLbEeOVJP61i6fIgw"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_nJ9A8C7hEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newExampleProject" label="New example project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProjectWizard_24.png" tooltip="Create new CloudScale example project" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_Eap64C7iEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.toolbarseparator.0"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="Show CloudScale perspective " iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
       </children>
       <children xsi:type="menu:ToolControl" xmi:id="_3WnY4HteEeKIYfuE0pelcA" elementId="SearchField" toBeRendered="false" visible="false"/>
       <children xsi:type="menu:ToolControl" xmi:id="_Ic3vMHtfEeKIYfuE0pelcA" elementId="Search-PS Glue" toBeRendered="false" visible="false"/>
