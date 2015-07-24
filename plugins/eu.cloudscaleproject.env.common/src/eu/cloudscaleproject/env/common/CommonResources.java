@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.common;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class CommonResources
@@ -24,7 +26,17 @@ public class CommonResources
 		WARNING = loadImage("warning_32.png");
 		ERROR = loadImage("error_32.png");
 		THUMB_UP = loadImage("thumbup_32.png");
-		
+
+		OK_16 = loadImage("ok_16.png");
+		WARNING_16 = loadImage("warning_16.png");
+		ERROR_16 = loadImage("error_16.png");
+		THUMB_UP_16 = loadImage("thumbup_16.png");
+
+		OK_8 = loadImage("ok_8.png");
+		WARNING_8 = loadImage("warning_8.png");
+		ERROR_8 = loadImage("error_8.png");
+		THUMB_UP_8 = loadImage("thumbup_8.png");
+
 		CHART_PIE = loadImage("chart_pie.png");
 		CHART_HISTOGRAM = loadImage("chart_histogram.png");
 		CHART_LINE = loadImage("chart_line.png");
@@ -39,6 +51,15 @@ public class CommonResources
 		String plugin = "eu.cloudscaleproject.env.common";
 		String container = "icons/common/";
 		return AbstractUIPlugin.imageDescriptorFromPlugin(plugin, container + name).createImage();
+	}
+	
+	public static Image scaleImage(Image image, int width, int height) {
+
+	    ImageData data = image.getImageData();
+	    data = data.scaledTo(width, height);
+	    Image scaled = new Image(Display.getDefault(), data);
+	    image.dispose();
+	    return scaled;
 	}
 
 	public static Image EDITABLE;
@@ -59,6 +80,16 @@ public class CommonResources
 	public static Image WARNING;
 	public static Image ERROR;
 	public static Image THUMB_UP;
+
+	public static Image OK_16;
+	public static Image WARNING_16;
+	public static Image ERROR_16;
+	public static Image THUMB_UP_16;
+
+	public static Image OK_8;
+	public static Image WARNING_8;
+	public static Image ERROR_8;
+	public static Image THUMB_UP_8;
 	
 	// Diagrams
 	public static Image CHART_PIE;
