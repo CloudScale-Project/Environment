@@ -48,6 +48,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
+			configAlternative.validate();
 			Display.getDefault().asyncExec(new Runnable()
 			{
 				@Override

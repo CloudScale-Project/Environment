@@ -38,7 +38,8 @@ public class ConfigValidator implements IResourceValidator {
 		status.clearWarnings();
 		status.setIsValid(true);
 
-		if (ca.getExtractedProject() == null)
+		IProject sourceProject = ca.getExtractedProject();
+		if (sourceProject == null || !sourceProject.exists())
 		{
 			status.addWarning("", IValidationStatus.SEVERITY_ERROR, "Input project not selected.");
 			status.setIsValid(false);

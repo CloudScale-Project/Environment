@@ -10,6 +10,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
+import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
@@ -34,6 +35,10 @@ public class ConfValidator implements IResourceValidator {
 		
 		try {
 			EditorInputFolder editorInput = (EditorInputFolder)selectedRes;
+
+			SpotterClientController controller = SpotterClientController.getController(project);
+			status.checkError(ERROR_CONF, controller.isConnected(), true, 
+					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Spotter client not initialized - check Server configuration!"));
 			
 			boolean jobCreationFailed = false;
 			try {
