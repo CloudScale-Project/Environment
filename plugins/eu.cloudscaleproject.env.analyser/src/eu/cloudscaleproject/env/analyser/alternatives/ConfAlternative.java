@@ -187,6 +187,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 
 		inputAlt.validate();
+		
 		if (inputAlt.getSelfStatus().isDone())
 		{
 			getSelfStatus().removeWarning(ERR_INVALID_INPUT_ALTERNATIVE);
@@ -1092,14 +1093,15 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// Standard alternative load/save/delete methods
 
 	@Override
-	public void doCreate()
+	public void doCreate(IProgressMonitor monitor)
 	{
+		workOn(monitor, "Creating Analyser configuration alternative.");
+		
 		Experiment exp = null;
 		
 		//create experiment
 		{
 			ExperimentRepository expRep = retrieveExperimentRepository();
-			
 			exp = ExperimentsFactory.eINSTANCE.createExperiment();
 			exp.setId(UUID.randomUUID().toString());
 			exp.setName("CloudScale experiments model");
@@ -1138,6 +1140,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 			expRep.getExperiments().add(exp);
 		}
 		
+		work(monitor);
+		workOn(monitor, "Initializing Analyser configuration alternative.");
+		
 		initializeCommon(exp);
 
 		if (Type.NORMAL.equals(type))
@@ -1150,22 +1155,35 @@ public class ConfAlternative extends AbstractConfigAlternative
 		{
 			initializeScalability(exp);
 		}
+		
+		work(monitor);
+	}
+	
+	@Override
+	public int getCreateWork() {
+		return super.getCreateWork() + 2;
 	}
 
 	@Override
-	protected void doLoad()
+	protected void doLoad(IProgressMonitor monitor)
 	{
-		super.doLoad();
-
+		super.doLoad(monitor);
+		
+		workOn(monitor, "Loading metric description.");
 		// load plugin models into resource set
 		URI metricDescriptions = PathmapManager.denormalizeURI(URI
 				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
 		resSet.getResource(metricDescriptions, true);
-		
+		work(monitor);
+	}
+	
+	@Override
+	public int getLoadWork() {
+		return super.getLoadWork() + 1;
 	}
 
 	@Override
-	protected void doDelete()
+	protected void doDelete(IProgressMonitor monitor)
 	{
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES);
 		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
@@ -1175,7 +1193,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			resultAlternative.delete();
 		}
 
-		super.doDelete();
+		super.doDelete(monitor);
 	}
 
 	@Override

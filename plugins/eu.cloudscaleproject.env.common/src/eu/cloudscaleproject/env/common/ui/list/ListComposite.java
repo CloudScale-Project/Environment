@@ -11,6 +11,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 public abstract class ListComposite extends CompositeContainer implements IRefreshable{
 	
+	private IObservableList currentObservable = null;
 	private DataBindingContext bindingContext = null;	
 	protected abstract Composite createComposite(ExpandableComposite parent, Object source);
 		
@@ -40,6 +41,10 @@ public abstract class ListComposite extends CompositeContainer implements IRefre
 	
 	public void initBindings(IObservableList modelObservable){
 		
+		if(currentObservable == modelObservable){
+			return;
+		}
+		
 		if(bindingContext != null){
 			bindingContext.dispose();
 			bindingContext = null;
@@ -58,6 +63,7 @@ public abstract class ListComposite extends CompositeContainer implements IRefre
 		
 		bindingContext.bindList(childObs, modelObservable, t2mStrategy, m2tStrategy);
 		bindingContext.updateTargets();
+		currentObservable = modelObservable;
 	}
 	
 	private IConverter[] getCompositeContainerChildConverter(final Object toType){

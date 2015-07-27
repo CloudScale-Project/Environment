@@ -148,6 +148,11 @@ public class ExplorerProjectPaths {
 			String key, String defaultValue) {
 
 		Properties p = getProjectProperties(project);
+		
+		if(p == null){
+			return defaultValue;
+		}
+		
 		String value = p.getProperty(key);
 
 		if (value == null) {

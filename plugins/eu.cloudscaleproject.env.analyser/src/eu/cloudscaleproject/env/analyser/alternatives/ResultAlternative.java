@@ -6,6 +6,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
@@ -86,9 +87,9 @@ public class ResultAlternative extends EditorInputFolder{
     }
     
     @Override
-    protected void doDelete() {
+    protected void doDelete(IProgressMonitor monitor) {
     	LocalDirectoryRepository ldr = getEDP2Model();
     	RepositoryManager.removeRepository(RepositoryManager.getCentralRepository(), ldr);
-    	super.doDelete();
+    	super.doDelete(monitor);
     }
 }

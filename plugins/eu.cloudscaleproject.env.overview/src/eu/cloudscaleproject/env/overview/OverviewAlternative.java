@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.overview;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.scaledl.overview.diagram.Util;
 
@@ -26,7 +27,7 @@ public class OverviewAlternative extends EditorInputEMF{
 	}
 	
 	@Override
-	public void doCreate() {		
+	public void doCreate(IProgressMonitor monitor) {		
 		IFile modelFile = getResource().getFile(OVERVIEW_MODEL_FILENAME);
 		IFile diagramFile = getResource().getFile(OVERVIEW_MODEL_DIAGRAM_FILENAME);
 				

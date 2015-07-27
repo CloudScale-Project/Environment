@@ -70,9 +70,9 @@ public class ConfingAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	public void doLoad()
+	public void doLoad(IProgressMonitor monitor)
 	{
-		super.doLoad();
+		super.doLoad(monitor);
 		loadSomoxModel();
 	}
 

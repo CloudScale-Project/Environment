@@ -40,7 +40,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	}
 
 	@Override
-	public void doCreate() {
+	public void doCreate(IProgressMonitor monitor) {
 
 		try {
 			IFile catalog = getResource().getFile(FILE_CATALOG);
@@ -61,28 +61,28 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 			
 			setSubResource(KEY_CATALOG, catalog);
 			setSubResource(KEY_ENGINES, engines);
-			loadModels();
+			loadModels(monitor);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 		}
 		
-		save();
+		save(monitor);
 	}
 	
 	@Override
-	protected void doLoad() {
+	protected void doLoad(IProgressMonitor monitor) {
 		
 		//TODO: use EditorInputEMF loader!		
 		try {
-			loadModels();
+			loadModels(monitor);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private final void loadModels() throws IOException {
+	private final void loadModels(IProgressMonitor monitor) throws IOException {
 		
 		//TODO: use EditorInputEMF loader!
 		IResource catalog = getSubResource(ConfigAlternative.KEY_CATALOG);

@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -119,12 +120,16 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 		sidebarBuilder.init();
 	}
 	
-	public void save(){
-		sidebarBuilder.save();
+	public void save(IProgressMonitor monitor){
+		sidebarBuilder.save(monitor);
 	}
 	
-	public void load(boolean force){
-		sidebarBuilder.load(force);
+	public void load(IProgressMonitor monitor, boolean force){
+		sidebarBuilder.load(monitor, force);
+	}
+	
+	public void unload(IProgressMonitor monitor){
+		sidebarBuilder.unload(monitor);
 	}
 	
 	public boolean isDirty(){

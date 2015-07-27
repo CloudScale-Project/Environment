@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
@@ -349,7 +350,7 @@ public class EditorInputFolder extends EditorInputResource{
 		return out;
 	}
 	
-	protected final void handleCreate() {
+	protected final void handleCreate(IProgressMonitor monitor) {
 		if(!folder.exists()){
 			try {
 				folder.create(true, true, null);
@@ -357,15 +358,16 @@ public class EditorInputFolder extends EditorInputResource{
 				e.printStackTrace();
 			}
 		}
-		propertyInputFile.handleCreate();
-		doCreate();
+		
+		propertyInputFile.handleCreate(monitor);
+		doCreate(monitor);
 	}
 	
-	protected void doCreate() {
+	protected void doCreate(IProgressMonitor monitor) {
 		//override
 	}
 	
-	protected final void handleSave() {
+	protected final void handleSave(IProgressMonitor monitor) {
 
 		if(!folder.exists()){
 			try {
@@ -375,18 +377,18 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		propertyInputFile.handleSave();
-		doSave();
+		propertyInputFile.handleSave(monitor);
+		doSave(monitor);
 		setDirty(false);
 	}
 	
-	protected void doSave(){
+	protected void doSave(IProgressMonitor monitor){
 		//override
 	}
 
-	protected final void handleLoad() {
+	protected final void handleLoad(IProgressMonitor monitor) {
 		
-		propertyInputFile.handleLoad();
+		propertyInputFile.handleLoad(monitor);
 		
 		synchronized (propertyInputFile) {
 			synchronized (subResourcesLock) {
@@ -400,23 +402,23 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		doLoad();
+		doLoad(monitor);
 		setDirty(false);
 		updateStatusList();		
 	}
 	
-	protected void doLoad(){
+	protected void doLoad(IProgressMonitor monitor){
 		//override
 	}
 
 	@Override
-	public final void handleDelete() {
+	public final void handleDelete(IProgressMonitor monitor) {
 		
-		doDelete();
+		doDelete(monitor);
 		
 		synchronized (propertyInputFile) {
 			synchronized (subResourcesLock) {
-				propertyInputFile.handleDelete();
+				propertyInputFile.handleDelete(monitor);
 				subResources.clear();
 			}
 		}
@@ -432,12 +434,16 @@ public class EditorInputFolder extends EditorInputResource{
 		updateStatusList();
 	}
 	
-	protected void doDelete(){
+	protected void doDelete(IProgressMonitor monitor){
 		//override
 	}
 	
 	@Override
-	public void copyFrom(IResource src) {
+	public void copyFrom(IResource src){
+		copyFrom(src, null);
+	}
+	
+	public void copyFrom(IResource src, IProgressMonitor monitor) {
 		
 		synchronized (saveLoadLock) {
 			if (!src.exists() || !(src instanceof IFolder))

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -144,6 +146,16 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	
 	@Override
 	public void validate() {
+		validate(null);
+	}
+	
+	@Override
+	public void validate(IProgressMonitor monitor) {
+		
+		if(monitor != null){
+			monitor.subTask("Validating " + getName());
+		}
+		
 		if(validatorID != null){
 			StatusManager.getInstance().validate(null, this);
 		}

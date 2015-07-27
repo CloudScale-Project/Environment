@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.extractor.alternatives;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -27,7 +28,7 @@ public class ResultAlternative extends EditorInputEMF {
 	}
 	
 	@Override
-	public void doCreate() {		
+	public void doCreate(IProgressMonitor monitor) {		
 		//
 		// Prepare folder structure
 		//
@@ -45,6 +46,6 @@ public class ResultAlternative extends EditorInputEMF {
 		setSubResource(KEY_FOLDER_MODISCO, modiscoFolder);
 		setSubResource(KEY_FOLDER_SOMOX, somoxFolder);
 		
-		save();
+		save(monitor);
 	}
 }

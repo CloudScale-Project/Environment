@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.overview.editors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -49,8 +50,13 @@ public class OverviewTabItemExtension extends DIExtension implements ProjectEdit
 	}
 	
 	@Override
-	public void save() {
-		overviewSidebarEditor.save();
+	public void save(IProgressMonitor monitor) {
+		overviewSidebarEditor.save(monitor);
+	}
+	
+	@Override
+	public void load(IProgressMonitor monitor) {
+		overviewSidebarEditor.load(monitor, true);
 	}
 	
 	@Override

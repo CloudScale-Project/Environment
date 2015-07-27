@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
@@ -96,8 +97,13 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 		return tabItem;
 	}
 	
-	public void save(){
-		analyserEditor.save();
+	public void save(IProgressMonitor monitor){
+		analyserEditor.save(monitor);
+	}
+	
+	@Override
+	public void load(IProgressMonitor monitor) {
+		analyserEditor.load(monitor, true);
 	}
 	
 	public boolean isDirty(){

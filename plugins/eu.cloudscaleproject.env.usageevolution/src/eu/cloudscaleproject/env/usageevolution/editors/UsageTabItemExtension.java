@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.usageevolution.editors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -42,8 +43,13 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 	}
 	
 	@Override
-	public void save() {
-		scaledlEditor.save();
+	public void save(IProgressMonitor monitor) {
+		scaledlEditor.save(monitor);
+	}
+	
+	@Override
+	public void load(IProgressMonitor monitor) {
+		scaledlEditor.load(monitor, true);
 	}
 	
 	@Override

@@ -61,6 +61,7 @@ public class SidebarEditor extends AbstractSidebarEditor
 	public void setResourceProvider(ResourceProvider resourceProvider)
 	{
 		this.resourceProvider = resourceProvider;
+		this.resourceProvider.initialize();
 		init();
 	}
 
@@ -167,6 +168,7 @@ public class SidebarEditor extends AbstractSidebarEditor
 		if (resourceProvider != null)
 		{
 			resourceProvider.removeListener(rcl);
+			resourceProvider.dispose();
 		}
 		super.dispose();
 	}

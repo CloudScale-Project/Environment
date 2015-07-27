@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
@@ -50,20 +51,20 @@ public class InputAlternative extends EditorInputEMF
 	}
 
 	@Override
-	protected void doSave()
+	protected void doSave(IProgressMonitor monitor)
 	{
-		super.doSave();
+		super.doSave(monitor);
 		
 		for (AbstractSpotterEditor editor : editors)
 		{
-			editor.doSave(null);
+			editor.doSave(monitor);
 		}
 	}
 
 	@Override
-	protected void doCreate()
+	protected void doCreate(IProgressMonitor monitor)
 	{
-		super.doCreate();
+		super.doCreate(monitor);
 		initModels();
 	}
 

@@ -67,26 +67,26 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	}
 
 	@Override
-	protected void doSave()
+	protected void doSave(IProgressMonitor monitor)
 	{
-		super.doSave();
+		super.doSave(monitor);
 		
 		for (AbstractSpotterEditor editor : editors)
 		{
-			editor.doSave(null);
+			editor.doSave(monitor);
 		}
 	}
 
 	@Override
-	protected void doLoad()
+	protected void doLoad(IProgressMonitor monitor)
 	{
-		super.doLoad();
+		super.doLoad(monitor);
 	}
 	
 	@Override
-	protected void doCreate()
+	protected void doCreate(IProgressMonitor monitor)
 	{
-		super.doCreate();
+		super.doCreate(monitor);
 		initModels();
 	}
 	

@@ -23,6 +23,7 @@ import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListe
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -153,6 +154,17 @@ public abstract class ResourceProvider
 			catch (CoreException e)
 			{
 				e.printStackTrace();
+			}
+		}
+		
+		//show validation diagram on initialization
+		for(IEditorInputResource eir : getResources()){
+			if(eir instanceof IValidationStatusProvider){
+				IValidationStatusProvider vp = (IValidationStatusProvider)eir;
+				
+				ValidationDiagramService.showDiagram(getProject());
+				ValidationDiagramService.showStatus(getProject(), vp);
+				break;
 			}
 		}
 	}
@@ -452,6 +464,14 @@ public abstract class ResourceProvider
 			public void propertyChange(PropertyChangeEvent evt) {
 				removeResource(eir);
 				firePropertyChange(PROP_RESOURCE_DELETED, eir, null);
+			}
+		});
+		
+		eir.addPropertyChangeListener(IEditorInputResource.PROP_DISPOSED, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				removeResource(eir);
 			}
 		});
 		

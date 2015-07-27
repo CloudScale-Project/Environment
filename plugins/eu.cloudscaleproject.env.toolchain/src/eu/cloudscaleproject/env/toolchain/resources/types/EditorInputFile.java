@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -121,7 +122,8 @@ public class EditorInputFile extends EditorInputResource{
 		firePropertyChange(PROP_NAME, old, name);
 	}
 	
-	protected void handleCreate() {
+	@Override
+	protected void handleCreate(IProgressMonitor monitor) {
 		
 		if (!file.exists()) {
 			setProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
@@ -135,7 +137,8 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
-	protected void handleSave() {
+	@Override
+	protected void handleSave(IProgressMonitor monitor) {
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {
@@ -158,7 +161,8 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
-	protected void handleLoad() {
+	@Override
+	protected void handleLoad(IProgressMonitor monitor) {
 
 		try (InputStream is = file.getContents(true)) {
 			synchronized (source) {
@@ -174,7 +178,8 @@ public class EditorInputFile extends EditorInputResource{
 		}		
 	}
 	
-	protected void handleDelete() {
+	@Override
+	protected void handleDelete(IProgressMonitor monitor) {
 		if (file.exists()) {
 			try {
 				file.delete(true, null);
@@ -187,6 +192,10 @@ public class EditorInputFile extends EditorInputResource{
 	
 	@Override
 	public synchronized final void copyFrom(IResource file) {
+		copyFrom(file, null);
+	}
+
+	public synchronized final void copyFrom(IResource file, IProgressMonitor monitor) {
 		
 		if(isDirty()){
 			boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 

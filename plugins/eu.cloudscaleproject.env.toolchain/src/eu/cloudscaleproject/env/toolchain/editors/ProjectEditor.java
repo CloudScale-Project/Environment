@@ -1,11 +1,16 @@
 package eu.cloudscaleproject.env.toolchain.editors;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,6 +27,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
@@ -90,7 +96,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
-			pee.save();
+			pee.save(monitor);
 		}
 		fireDirtyState();
 	}
@@ -130,9 +136,27 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		tabFolder.setTabHeight(40);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
-		for(ProjectEditorExtension tee : editorProvider.getToolExtensions()){
+		final List<ProjectEditorExtension> editors = editorProvider.getToolExtensions();
+		
+		for(ProjectEditorExtension tee : editors){
 			tee.createTabItem(this);
 		}
+		
+		WorkspaceJob job = new WorkspaceJob("Project editor initialization") {
+			
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				monitor.beginTask("Loading resources", IProgressMonitor.UNKNOWN);
+				for(ProjectEditorExtension tee : editors){
+					tee.load(monitor);
+				}
+				monitor.done();
+				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resources done.");
+			}
+		};
+		job.setPriority(WorkspaceJob.INTERACTIVE);
+		job.setUser(true);
+		job.schedule();
 		
 		if(!editorProvider.getToolExtensions().isEmpty()){
 			tabFolder.setSelection(editorProvider.getToolExtensions().get(0).getTabItem());

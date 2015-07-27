@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,6 +14,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
@@ -184,12 +186,22 @@ public class ConfigComposite extends SidebarEditorComposite
 				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
-					Control c = tabFolder.getSelection().getControl();
+					final Control c = tabFolder.getSelection().getControl();
 
-					if (c instanceof IRefreshable)
-					{
-						((IRefreshable) c).refresh();
-					}
+					BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+						
+						@Override
+						public void run() {
+							if (c instanceof ISelectable)
+							{
+								((ISelectable) c).onSelect();
+							}
+							if (c instanceof IRefreshable)
+							{
+								((IRefreshable) c).refresh();
+							}
+						}
+					});
 
 					ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 				}
@@ -243,27 +255,5 @@ public class ConfigComposite extends SidebarEditorComposite
 		CreateConfigAlternativeSelectionWizard createconfigAltWizard = new CreateConfigAlternativeSelectionWizard(project);
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createconfigAltWizard);
 		wizardDialog.open();
-		
-		/*
-		NewConfigAlternativeDialog dialog = new NewConfigAlternativeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				new BasicCallback<String[]>()
-				{
-
-					@Override
-					public void handle(String[] data)
-					{
-						ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
-								CSTool.ANALYSER_CONF);
-						if (resourceProvider == null)
-						{
-							throw new IllegalStateException("Sidebar resource provider not set!");
-						}
-						IEditorInputResource eir = resourceProvider.createNewResource(data[0], data[1]);
-						ValidationDiagramService.showStatus(project, eir);
-						OpenAlternativeUtil.openAlternative(eir);
-					}
-				});
-		dialog.open();
-		*/
 	}
 }

@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -100,7 +101,25 @@ public class EditorInputEMF extends EditorInputFolder{
 		return editingDomain.getResourceSet();
 	}
 	
-	public void unloadProxyResources(){
+	public int getUnloadProxyResourcesWork(){		
+		List<IResource> loadedSubResources = getLoadedSubResources();
+		List<Resource> loadedEMFResources = new ArrayList<Resource>();
+		
+		for(IResource res : loadedSubResources){
+			if(res instanceof IFile){
+				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				loadedEMFResources.add(emfRes);
+			}
+		}
+		
+		List<Resource> proxyResources = new ArrayList<Resource>(resSet.getResources());
+		proxyResources.removeAll(loadedEMFResources);
+		
+		return proxyResources.size();
+	}
+	
+	public void unloadProxyResources(IProgressMonitor monitor){
+				
 		List<IResource> loadedSubResources = getLoadedSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
@@ -116,9 +135,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		boolean reloaded = false;
 		
+		workOn(monitor, "Unloading proxy resources");
+
 		for(Resource r : proxyResources){
 			r.unload();
 			reloaded = true;
+			work(monitor);
 		}
 		
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
@@ -218,9 +240,10 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	@Override
-	protected void doSave() {
-
-		super.doSave();
+	protected void doSave(IProgressMonitor monitor) {
+		
+		super.doSave(monitor);
+		
 		for(IResource r : getLoadedSubResources()){
 			
 			if(r instanceof IFile){
@@ -253,13 +276,16 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	@Override
-	protected void doLoad() {
-		super.doLoad();
+	protected void doLoad(IProgressMonitor monitor) {
+		
+		super.doLoad(monitor);
 		
 		//unload existing models
 		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
 			res.unload();
 		}
+		
+		workOn(monitor, "Loading resources");
 		
 		//load registered models
 		for (ModelType type : modelTypes)
@@ -274,6 +300,7 @@ public class EditorInputEMF extends EditorInputFolder{
 				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
 				try {
 					res.load(null);
+					work(monitor);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -282,7 +309,36 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	@Override
+	public int getLoadWork() {
+		
+		int work = 0;
+		for (ModelType type : modelTypes)
+		{
+			for (IResource f : getSubResources(type.getToolchainFileID()))
+			{
+				if(f == null || !f.exists()){
+					logger.warning("Registered resource does not exist: " + f.getFullPath().toString());
+					continue;
+				}
+				work++;
+			}
+		}
+		
+		return super.getLoadWork() + work;
+	}
+	
+	@Override
 	public boolean isDirty() {
 		return super.isDirty() || ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
+	}
+	
+	@Override
+	public void dispose() {
+		
+		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
+			res.unload();
+		}
+		
+		super.dispose();
 	}
 }

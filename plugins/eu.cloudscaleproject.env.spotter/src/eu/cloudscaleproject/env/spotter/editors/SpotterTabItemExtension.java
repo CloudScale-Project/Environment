@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
@@ -109,8 +110,13 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	}
 	
 	@Override
-	public void save() {
-		spotterEditor.save();
+	public void save(IProgressMonitor monitor) {
+		spotterEditor.save(monitor);
+	}
+	
+	@Override
+	public void load(IProgressMonitor monitor) {
+		spotterEditor.load(monitor, true);
 	}
 	
 	@Override

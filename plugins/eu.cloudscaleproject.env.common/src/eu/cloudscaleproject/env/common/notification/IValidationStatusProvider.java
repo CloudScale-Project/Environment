@@ -2,6 +2,8 @@ package eu.cloudscaleproject.env.common.notification;
 
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 public interface IValidationStatusProvider {
 	
 	public static final String PROP_STATUS_ADDED = "eu.cloudscaleproject.env.common.notification.IValidationStatusProvider.added";
@@ -13,6 +15,7 @@ public interface IValidationStatusProvider {
 	public IValidationStatus[] getSubStatuses();
 	public IValidationStatus[] getSubStatus(String id);
 	
+	public void validate(IProgressMonitor monitor);
 	public void validate();
 	
 	public void addStatusChangeListener(String propertyName, PropertyChangeListener listener);

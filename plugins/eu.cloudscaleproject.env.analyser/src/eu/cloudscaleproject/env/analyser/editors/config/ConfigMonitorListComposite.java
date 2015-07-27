@@ -38,9 +38,10 @@ import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.emf.EObjectWrapper;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.ui.list.ListComposite;
 
-public class ConfigMonitorListComposite extends Composite implements IRefreshable{
+public class ConfigMonitorListComposite extends Composite implements IRefreshable, ISelectable{
 
 	private final Composite stackedComposite;
 	private final StackLayout stackLayout;
@@ -155,8 +156,8 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				
 			};
 
-			groupsComposite.initBindings(monitorGroups);
-			calcMonitorGroups();
+			//groupsComposite.initBindings(monitorGroups);
+			//calcMonitorGroups();
 		}
 		
 		stackLayout.topControl = groupsComposite;
@@ -186,6 +187,10 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 		ListDiff diff = Diffs.computeListDiff(monitorGroups, monitorGroupsNew);
 		diff.applyTo(monitorGroups);
 		groupsComposite.refresh();
+	}
+	
+	public void onSelect(){
+		groupsComposite.initBindings(monitorGroups);
 	}
 	
 	public void refresh(){

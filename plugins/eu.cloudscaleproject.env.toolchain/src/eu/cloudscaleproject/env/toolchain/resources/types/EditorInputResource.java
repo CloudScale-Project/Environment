@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -31,10 +32,10 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	private boolean jobInProgress = false;
 	
-	protected abstract void handleCreate();
-	protected abstract void handleSave();
-	protected abstract void handleLoad();
-	protected abstract void handleDelete();
+	protected abstract void handleCreate(IProgressMonitor monitor);
+	protected abstract void handleSave(IProgressMonitor monitor);
+	protected abstract void handleLoad(IProgressMonitor monitor);
+	protected abstract void handleDelete(IProgressMonitor monitor);
 		
 	public EditorInputResource(IResource resource){
 		this(resource, null);
@@ -60,6 +61,20 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 				public void propertyChange(PropertyChangeEvent evt) {
 					
 					if(jobInProgress){
+						return;
+					}
+					
+					//do not validate on those property actions
+					if(PROP_LOADED.equals(evt.getPropertyName())){
+						return;
+					}
+					if(PROP_SAVED.equals(evt.getPropertyName())){
+						return;
+					}
+					if(PROP_DELETED.equals(evt.getPropertyName())){
+						return;
+					}
+					if(PROP_DISPOSED.equals(evt.getPropertyName())){
 						return;
 					}
 					
@@ -131,12 +146,16 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public final void create() {
+		create(null);
+	}
+	
+	public final void create(IProgressMonitor monitor) {
 		
 		synchronized (saveLoadLock) {
 			try{
 				createInProgress = true;
 				logger.info("Creating resource: " + resource.getFullPath());
-				handleCreate();
+				handleCreate(monitor);
 			}
 			finally{
 				createInProgress = false;
@@ -148,8 +167,18 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		
 	}
 	
+	public int getCreateWork(){
+		return 0;
+	}
+	
 	@Override
 	public final void save() {
+		save(null);
+	}
+	
+	public final void save(IProgressMonitor monitor) {
+		
+		workOn(monitor, "Saving resource " + getName());
 		
 		synchronized (saveLoadLock) {
 			if(createInProgress){
@@ -159,7 +188,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			try{
 				saveInProgress = true;
 				logger.info("Saving resource: " + resource.getFullPath());
-				handleSave();
+				handleSave(monitor);
 				setDirty(false);
 			}
 			finally{
@@ -172,6 +201,13 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public final void load() {
+		load(null);
+	}
+	
+	public final void load(IProgressMonitor monitor) {
+		
+		workOn(monitor, "Loading resource " + getName());
+		
 		long time = System.currentTimeMillis();
 		
 		synchronized (saveLoadLock) {
@@ -213,7 +249,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			try {
 				loadInProgress = true;
 				logger.info("Loading resource: " + resource.getFullPath());
-				handleLoad();
+				handleLoad(monitor);
 				setDirty(false);
 				isLoaded = true;
 			}
@@ -226,8 +262,16 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
 	}
 	
+	public int getLoadWork(){
+		return 0;
+	}
+	
 	@Override
 	public final void delete() {
+		delete(null);
+	}
+	
+	public final void delete(IProgressMonitor monitor) {
 		
 		synchronized (saveLoadLock) {
 			if(!resource.exists()){
@@ -237,7 +281,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			try{
 				deleteInProgress = true;
 				logger.info("Deleting resource: " + resource.getFullPath());
-				handleDelete();
+				handleDelete(monitor);
 			}
 			finally{
 				deleteInProgress = false;
@@ -264,10 +308,30 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public void validate() {
+		validate(null);
+	}
+	
+	@Override
+	public void validate(IProgressMonitor monitor) {
+		
+		workOn(monitor, "Validationg " + getName());
+		
 		if(!isLoaded()){
-			load();
+			return;
 		}
 		StatusManager.getInstance().validate(getProject(), this);
+	}
+	
+	protected void work(IProgressMonitor monitor){
+		if(monitor != null){
+			monitor.worked(1);
+		}
+	}
+	
+	protected void workOn(IProgressMonitor monitor, String name){
+		if(monitor != null){
+			monitor.subTask(name);
+		}
 	}
 	
 	@Override
