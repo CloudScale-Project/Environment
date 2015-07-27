@@ -80,7 +80,8 @@ public class ResultsComposite extends SidebarEditorComposite{
 			
 			getContainer().setLayout(new FillLayout());
 			
-			this.tabFolder = new CTabFolder(getContainer(), SWT.BOTTOM);
+			this.tabFolder = new CTabFolder(getContainer(), SWT.BORDER);
+			tabFolder.setTabHeight(32);
 			
 			CTabItem tabBasicResults = new CTabItem(tabFolder, SWT.NONE);
 			if(alternative.getTypeEnum().equals(ConfAlternative.Type.NORMAL)){
@@ -92,12 +93,12 @@ public class ResultsComposite extends SidebarEditorComposite{
 			else if(alternative.getTypeEnum().equals(ConfAlternative.Type.SCALABILITY)){
 				basicResultComposite = new ScalabilityResultComposite(alternative, tabFolder, SWT.NONE);
 			}
-			tabBasicResults.setText("Basic result viewer");
+			tabBasicResults.setText("Results View");
 			tabBasicResults.setControl(basicResultComposite);
 			
 			CTabItem tabAdvancedResults = new CTabItem(tabFolder, SWT.NONE);
 			advancedResultComposite = new AdvancedResultComposite(alternative, tabFolder, SWT.NONE);
-			tabAdvancedResults.setText("Advanced result viewer");
+			tabAdvancedResults.setText("EDP2 Results View");
 			tabAdvancedResults.setControl(advancedResultComposite);
 			
 			tabFolder.setSelection(tabBasicResults);

@@ -12,7 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.palladiosimulator.edp2.local.LocalDirectoryRepository;
@@ -47,9 +46,6 @@ public abstract class ReportResultComposite extends Composite implements IRefres
 		
 		this.alternative = alternative;
 		setLayout(new GridLayout(1, false));
-		
-		Label lblResults = new Label(this, SWT.NONE);
-		lblResults.setText("Results:");
 		
 		tableViewer = new TableViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
