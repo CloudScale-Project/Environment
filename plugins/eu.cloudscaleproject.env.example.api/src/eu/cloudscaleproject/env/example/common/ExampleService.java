@@ -1,7 +1,8 @@
 package eu.cloudscaleproject.env.example.common;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.LinkedList;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -112,9 +112,14 @@ public class ExampleService
 	private String getProjectName(Example.Resource r) throws IOException
 	{
 		URL entryUrl = new URL("jar:" + r.getArchive() + "!/.project");
-		InputStream is = entryUrl.openStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(entryUrl.openStream()));
 		StringWriter writer = new StringWriter();
-		IOUtils.copy(is, writer);
+		
+		String line = "";
+		while((line = br.readLine()) != null){
+			writer.append(line);
+		}
+		
 		String theString = writer.toString();
 
 		int from = theString.indexOf("<name>") + 6;
