@@ -22,6 +22,10 @@ public class CommonResources
 		INTERFACE_LIST = loadImage("interface_list.png");
 		OPERATION = loadImage("operation.png");
 
+		REFRESH = loadImage("refresh_32.png");
+		REFRESH_16 = loadImage("refresh_16.png");
+		REFRESH_8 = loadImage("refresh_8.png");
+		
 		OK = loadImage("ok_32.png");
 		WARNING = loadImage("warning_32.png");
 		ERROR = loadImage("error_32.png");
@@ -74,6 +78,11 @@ public class CommonResources
 	public static Image INTERFACE;
 	public static Image INTERFACE_LIST;
 	public static Image OPERATION;
+	
+	// General
+	public static Image REFRESH;
+	public static Image REFRESH_16;
+	public static Image REFRESH_8;
 
 	// Validation
 	public static Image OK;
