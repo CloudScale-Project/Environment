@@ -314,7 +314,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	@Override
 	public void validate(IProgressMonitor monitor) {
 		
-		workOn(monitor, "Validationg " + getName());
+		workOn(monitor, "Validating " + getName());
 		
 		if(!isLoaded()){
 			return;

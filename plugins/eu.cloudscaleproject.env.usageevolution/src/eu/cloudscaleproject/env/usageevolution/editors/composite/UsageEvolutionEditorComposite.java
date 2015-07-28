@@ -94,14 +94,11 @@ public class UsageEvolutionEditorComposite extends InputEditorView implements IP
 	private void updatePlotCanvas ()
 	{
 		Resource modelResource = this.alternative.getModelResource(ToolchainUtils.KEY_FILE_LIMBO);
-		/*
+	
 		if(modelResource == null){
 			return;
 		}
-		if(isDisposed()){
-			return;
-		}
-	*/	
+		
 		EList<EObject> contents = modelResource.getContents();
 		if (!contents.isEmpty())
 		{

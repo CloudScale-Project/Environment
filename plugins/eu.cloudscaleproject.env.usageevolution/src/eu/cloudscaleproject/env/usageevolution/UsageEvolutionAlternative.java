@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.usageevolution;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import tools.descartes.dlim.Sequence;
@@ -20,7 +21,8 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 		super(project, folder, new ModelType[]{ModelType.LIMBO}, CSTool.USAGEEVOLUTION.getID());
 	}
 
-	public void doCreate()
+	@Override
+	public void doCreate(IProgressMonitor monitor)
 	{
 		IFile limboFile = getResource().getFile("limbo.dlim");
 

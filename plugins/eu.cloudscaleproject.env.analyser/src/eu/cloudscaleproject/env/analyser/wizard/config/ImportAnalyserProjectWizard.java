@@ -1,9 +1,11 @@
 package eu.cloudscaleproject.env.analyser.wizard.config;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -37,6 +39,7 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
@@ -53,9 +56,12 @@ public class ImportAnalyserProjectWizard extends Wizard{
 	
 	private final ResourceProvider inputResourceProvider;
 	private final ResourceProvider confResourceProvider;
+	private final ResourceProvider limboResourceProvider;
 
 	private final AlternativeNamePage selectNamePage;
 	private final ExternalModelsSelectionPage modelSelectionPage;
+	
+	private final Map<Resource, EditorInputEMF> limboAlternatives  = new HashMap<Resource, EditorInputEMF>();
 	
 	public ImportAnalyserProjectWizard(IProject project) {
 		
@@ -63,6 +69,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
+		this.limboResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION);
 		
 		//TODO: here only configuration resource provider is used
 		//		In this wizard we are creating input wizard with the same name! Could this be a problem?
@@ -86,8 +93,6 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		while(iter.hasNext()){
 			EObject o = iter.next();
 			
-			//System.out.println("EObject: " + o.toString());
-			
 			{	
 				Resource res = o.eResource();
 				if(res != null && !outSet.contains(res)){
@@ -102,12 +107,6 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					InternalEObject ieo = (InternalEObject)child;
 					EObject eo = null;
 					
-					//System.out.println("EObject feature: " + ieo.toString() + "Is proxy: " + ieo.eIsProxy());
-					
-					//if(ieo.eProxyURI() == null || ieo.eProxyURI().scheme().equals("pathmap")){
-					//	continue;
-					//}
-					
 					if(ieo.eProxyURI() != null){
 						eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), true);
 					}
@@ -117,18 +116,14 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					
 					Resource res = eo.eResource();
 					if(res == null){
-						//System.out.println("EObject feature res NULL!");
 						continue;
 					}
 					
-					//System.out.println("EObject feature res: " + res.toString());
 					
 					//skip resources loaded from plugin
 					if(res.getURI() != null 
 							&& res.getURI().scheme() != null 
 							&& res.getURI().scheme().equals("pathmap")){
-						
-						//System.out.println("EObject feature res from plugin!");
 						continue;
 					}
 
@@ -141,17 +136,39 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			
 		}
 		
-		//remove self from this list!
+		//remove self from this list
 		outSet.remove(resource);
+		
+		//remove non PCM resources
+		Iterator<Resource> i = outSet.iterator();
+		while(i.hasNext()){
+			Resource res = i.next();
+			
+			boolean isPCMResource = false;
+			
+			for(ModelType mt : ModelType.values()){
+				if(mt.getFileExtension().equals(res.getURI().fileExtension())){
+					isPCMResource = true;
+					break;
+				}
+			}
+			
+			if(!isPCMResource){
+				i.remove();
+			}
+		}
+		
 		return outSet;
 	}
 	
 	@Override
 	public boolean performFinish() {
 		
+		limboAlternatives.clear();
+		
 		final InputAlternative ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
 		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name(), true);
-		
+
 		EditorInputJob job = new EditorInputJob("Project import", ia, ca) {
 			
 			@Override
@@ -162,6 +179,9 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					if(!done){
 						ia.delete();
 						ca.delete();
+						for(EditorInputEMF eir : limboAlternatives.values()){
+							eir.delete();
+						}
 					}
 				}
 				catch(Exception e){
@@ -178,7 +198,8 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		return true;
 	}
 
-	public boolean importProject(final InputAlternative ia, final ConfAlternative ca, final IProgressMonitor monitor) {
+	public boolean importProject(final InputAlternative ia, 
+								 final ConfAlternative ca, final IProgressMonitor monitor) {
 		
 		monitor.beginTask("Project import", 10);
 		
@@ -235,7 +256,8 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		monitor.subTask("Allocationg models...");
 		
 		//extract input models
-		final Set<Resource> inputResources = new HashSet<Resource>();		
+		final Set<Resource> inputResources = new HashSet<Resource>();
+		final Set<Resource> limboResources = new HashSet<Resource>();	
 		//System.out.println("INPUT: ");
 
 		Allocation allocation = exp.getInitialModel().getAllocation();
@@ -252,6 +274,19 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		for(IFile file : ueFiles){
 			inputResources.add(ExplorerProjectPaths.getEmfResource(resSet, file));
 		}
+		//find limbo files
+		List<IFile> limboFiles = ExplorerProjectPaths.findResources(projectToImport, ModelType.LIMBO.getFileExtension());
+		for(IFile file : limboFiles){
+			limboResources.add(ExplorerProjectPaths.getEmfResource(resSet, file));
+		}
+				
+		if(limboResourceProvider != null){
+			for(Resource res : limboResources){
+				EditorInputEMF eir = (EditorInputEMF)limboResourceProvider
+												.createNewResource(selectNamePage.getName(), null, true);
+				limboAlternatives.put(res, eir);
+			}
+		}
 		
 		monitor.worked(1);
 		if(monitor.isCanceled()){
@@ -262,12 +297,15 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		//System.out.println("CONFIGURATION: ");
 		final Set<Resource> confResources = findLinked(experimentResource);
 		confResources.add(experimentResource);
+		
 		confResources.removeAll(inputResources);
+		confResources.removeAll(limboResources);
 		
 		//collect all resources
 		final List<Resource> resources = new ArrayList<>();
 		resources.addAll(inputResources);
 		resources.addAll(confResources);
+		resources.addAll(limboResources);
 				
 		monitor.worked(1);
 		if(monitor.isCanceled()){
@@ -297,6 +335,17 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 					res.setURI(uri);
 				}
+				if(limboResources.contains(res) && limboResourceProvider != null){
+					
+					EditorInputEMF eir = limboAlternatives.get(res);
+					
+					String[] segments = res.getURI().segments();
+					String segment = segments[segments.length - 1];
+					IFile file = eir.getResource().getFile(new Path(segment));
+
+					URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+					res.setURI(uri);
+				}
 			}
 		});
 		
@@ -307,13 +356,25 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		
 		for (Resource resource : inputResources)
 		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			ia.addSubResourceModel(f);
+			if(ia != null){
+				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
+				ia.addSubResourceModel(f);
+			}
+		}
+		for (Resource resource : limboResources)
+		{
+			EditorInputEMF eir = limboAlternatives.get(resource);
+			if(eir != null){
+				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
+				eir.addSubResourceModel(f);
+			}
 		}
 		for (Resource resource : confResources)
 		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			ca.addSubResourceModel(f);
+			if(ca != null){
+				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
+				ca.addSubResourceModel(f);
+			}
 		}
 		
 		monitor.worked(1);
@@ -321,16 +382,36 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			return false;
 		}
 		
-		ia.save();
-		ca.setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, ia.getResource());
-		ca.save();
+		//save input
+		if(ia != null){
+			ia.save();
+		}
+		//save limbo
+		for(EditorInputEMF eir : limboAlternatives.values()){
+			eir.save();
+		}
+		//save configuration
+		if(ca != null){
+			ca.setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, ia.getResource());
+			ca.save();
+		}
 		
 		//import has completed 
 		
 		monitor.subTask("Loading new models...");
 
-		ia.load();
-		ca.load();
+		//load input
+		if(ia != null){
+			ia.load();
+		}
+		//load limbo
+		for(EditorInputEMF eir : limboAlternatives.values()){
+			eir.load();
+		}
+		//load configuration
+		if(ca != null){
+			ca.load();
+		}
 		
 		monitor.subTask("Validating...");
 		
@@ -339,16 +420,31 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			return false;
 		}
 		
-		ia.validate();
-		monitor.worked(1);
-		if(monitor.isCanceled()){
-			return false;
+		//validate input
+		if(ia != null){
+			ia.validate();
+			monitor.worked(1);
+			if(monitor.isCanceled()){
+				return false;
+			}
 		}
 		
-		ca.validate();
-		monitor.worked(1);
-		if(monitor.isCanceled()){
-			return false;
+		//validate limbo
+		for(EditorInputEMF eir : limboAlternatives.values()){
+			eir.validate();
+			monitor.worked(1);
+			if(monitor.isCanceled()){
+				return false;
+			}
+		}
+		
+		//validate configuration
+		if(ca != null){
+			ca.validate();
+			monitor.worked(1);
+			if(monitor.isCanceled()){
+				return false;
+			}
 		}
 
 		monitor.subTask("Updating GUI...");
@@ -356,9 +452,18 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			
 			@Override
 			public void run() {
-				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
-				OpenAlternativeUtil.openAlternative(ia);
-				OpenAlternativeUtil.openAlternative(ca);
+				if(ca != null){
+					ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
+				}
+				if(!limboAlternatives.isEmpty()){
+					ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), limboAlternatives.values().iterator().next());
+				}
+				if(ia != null){
+					OpenAlternativeUtil.openAlternative(ia);
+				}
+				if(ca != null){
+					OpenAlternativeUtil.openAlternative(ca);
+				}
 			}
 		});
 		

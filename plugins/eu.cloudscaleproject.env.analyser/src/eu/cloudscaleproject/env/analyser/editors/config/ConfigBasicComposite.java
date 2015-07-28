@@ -35,6 +35,7 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStop
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.palladiosimulator.pcm.usagemodel.UsageScenario;
 import org.scaledl.usageevolution.UsageEvolution;
@@ -162,7 +163,16 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		gd.widthHint = 180;
 		usageList.getCombo().setLayoutData(gd);
 		usageList.setContentProvider(new ArrayContentProvider());
-		usageList.setLabelProvider(new LabelProvider());
+		usageList.setLabelProvider(new LabelProvider(){
+			@Override
+			public String getText(Object element) {
+				if(element instanceof NamedElement){
+					return ((NamedElement)element).getEntityName();
+				}
+				return element.toString();
+			}
+		});
+		
 		usageList.addSelectionChangedListener(new ISelectionChangedListener() {
 			
 			@Override
