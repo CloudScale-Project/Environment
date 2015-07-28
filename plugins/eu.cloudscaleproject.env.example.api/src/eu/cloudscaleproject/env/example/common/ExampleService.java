@@ -119,6 +119,7 @@ public class ExampleService
 		while((line = br.readLine()) != null){
 			writer.append(line);
 		}
+		br.close();
 		
 		String theString = writer.toString();
 
