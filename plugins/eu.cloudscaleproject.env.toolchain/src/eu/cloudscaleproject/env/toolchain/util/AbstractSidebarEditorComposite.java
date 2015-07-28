@@ -187,6 +187,9 @@ public abstract class AbstractSidebarEditorComposite extends Composite implement
 		if(selection != null){
 			selection.select();
 		}
+		else{
+			sidebarBuilder.setCurrentSelectionIndex(0);
+		}
 	}
 	
 	@Override

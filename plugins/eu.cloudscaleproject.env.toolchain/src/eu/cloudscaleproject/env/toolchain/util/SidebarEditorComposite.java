@@ -206,6 +206,9 @@ public class SidebarEditorComposite extends Composite implements ISidebarEditor,
 		if(selection != null){
 			selection.select();
 		}
+		else{
+			sidebarBuilder.setCurrentSelectionIndex(0);
+		}
 	}
 
 	@Override

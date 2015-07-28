@@ -117,7 +117,7 @@ public class ExtractorTabItemExtension implements ProjectEditorExtension{
 	
 	@Override
 	public void setFocus() {
-		extractorEditor.refresh();
+		extractorEditor.onSelect();
 	}
 
 	@Override

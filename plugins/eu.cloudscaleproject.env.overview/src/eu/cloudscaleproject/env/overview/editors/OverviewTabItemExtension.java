@@ -66,7 +66,7 @@ public class OverviewTabItemExtension extends DIExtension implements ProjectEdit
 	
 	@Override
 	public void setFocus() {
-		overviewSidebarEditor.refresh();
+		overviewSidebarEditor.onSelect();
 	}
 
 	@Override

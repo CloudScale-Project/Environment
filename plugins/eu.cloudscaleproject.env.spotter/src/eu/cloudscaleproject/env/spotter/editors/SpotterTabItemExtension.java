@@ -126,7 +126,7 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 	
 	@Override
 	public void setFocus() {
-		spotterEditor.refresh();
+		spotterEditor.onSelect();
 	}
 
 	@Override

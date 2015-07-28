@@ -108,7 +108,13 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					EObject eo = null;
 					
 					if(ieo.eProxyURI() != null){
-						eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), true);
+						try{
+							eo = o.eResource().getResourceSet().getEObject(ieo.eProxyURI(), true);
+						}
+						catch(Exception e){
+							e.printStackTrace();
+							continue;
+						}
 					}
 					else{
 						eo = ieo;

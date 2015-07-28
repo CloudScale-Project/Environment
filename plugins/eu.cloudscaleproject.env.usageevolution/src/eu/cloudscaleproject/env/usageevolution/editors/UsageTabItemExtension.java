@@ -59,7 +59,7 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 	
 	@Override
 	public void setFocus() {
-		scaledlEditor.refresh();
+		scaledlEditor.onSelect();
 	}
 
 	@Override
