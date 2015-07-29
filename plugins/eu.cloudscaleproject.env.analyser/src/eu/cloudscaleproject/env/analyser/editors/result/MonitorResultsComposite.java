@@ -50,6 +50,7 @@ import org.palladiosimulator.edp2.visualization.jfreechart.input.JFreeChartVisua
 import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.analyser.editors.result.ResultUtils.ChartType;
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
@@ -65,7 +66,6 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 	private static final Logger LOGGER = Logger.getLogger(MonitorResultsComposite.MonitorItem.class.getName());
 
 	private final ResultAlternative alternative;
-
 
 	private final ListViewer menuList;
 
@@ -158,10 +158,11 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 		this.layout(true, true);
 	}
-	
-	private void init ()
+
+	private void init()
 	{
-		if (menuList.getInput() != null) return;
+		if (menuList.getInput() != null)
+			return;
 
 		List<MonitorItem> monitors = new ArrayList<>();
 
@@ -208,8 +209,8 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 		private final ExperimentSetting expSettings;
 
 		private ChartComposite chartComposite;
-		private final Integer DEFAULT_TYPE = 5;
-		private Integer currentType = null;
+		private final ChartType DEFAULT_TYPE = ChartType.XY;
+		private ChartType currentType = null;
 		private Composite chartContainer;
 		private Composite emptyComposite;
 		private Label lblEmptyText;
@@ -246,18 +247,20 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 			// diagram view controls
 
-			// Pie chart icon
+
+
+			// XY chart icon
 			{
 				Label icon = new Label(viewPanel, SWT.NONE);
 				icon.setLayoutData(new RowData(16, 16));
-				icon.setBackgroundImage(CommonResources.CHART_PIE_16);
+				icon.setBackgroundImage(CommonResources.CHART_LINE_16);
 				icon.addMouseListener(new MouseAdapter()
 				{
 					@Override
 					public void mouseUp(MouseEvent e)
 					{
 						super.mouseUp(e);
-						displayChart(3);
+						displayChart(ChartType.XY);
 					}
 				});
 			}
@@ -273,28 +276,28 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 					public void mouseUp(MouseEvent e)
 					{
 						super.mouseUp(e);
-						displayChart(5);
+						displayChart(ChartType.HISTOGRAM);
 					}
 				});
 			}
 
-			// Histogram chart icon
+			// Pie chart icon
 			{
 				Label icon = new Label(viewPanel, SWT.NONE);
 				icon.setLayoutData(new RowData(16, 16));
-				icon.setBackgroundImage(CommonResources.CHART_LINE_16);
+				icon.setBackgroundImage(CommonResources.CHART_PIE_16);
 				icon.addMouseListener(new MouseAdapter()
 				{
 					@Override
 					public void mouseUp(MouseEvent e)
 					{
 						super.mouseUp(e);
-						displayChart(4);
+						displayChart(ChartType.PIE);
 					}
 				});
 			}
-			
-			chartContainer = new Composite (composite,SWT.NONE);
+
+			chartContainer = new Composite(composite, SWT.NONE);
 			chartContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 			chartContainer.setLayout(new StackLayout());
 
@@ -304,11 +307,11 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 			emptyComposite.setLayout(new GridLayout(1, false));
 			emptyComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 			emptyComposite.setBackground(getBackground());
-			
+
 			Composite inner = new Composite(emptyComposite, SWT.BORDER);
 			inner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 			inner.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			inner.setLayout(new GridLayout(1,false));
+			inner.setLayout(new GridLayout(1, false));
 
 			lblEmptyText = new Label(inner, SWT.CENTER);
 			lblEmptyText.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
@@ -339,10 +342,9 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 			displayChart(null);
 		}
-		
 
 		@SuppressWarnings("unchecked")
-		public void displayChart(Integer type)
+		public void displayChart(ChartType type)
 		{
 			String emptyText = null;
 
@@ -355,17 +357,15 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 				if (dataStreamSize > 0)
 				{
 					// set default diagram chart type
-					currentType = type!=null ? type : (currentType!=null? currentType : DEFAULT_TYPE); 
+					currentType = type != null ? type : (currentType != null ? currentType : DEFAULT_TYPE);
 
-					ChainDescription chainDescription = ResultUtils.getApplicableChainDescriptionsFromExtensions(edp2Source).get(currentType);
-
-					@SuppressWarnings("rawtypes")
-					IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
-					input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
-
+					ChainDescription chainDescription = ResultUtils.getChainDescriptionByChartType(currentType);
 
 					try
 					{
+						@SuppressWarnings("rawtypes")
+						IVisualisationInput input = (IVisualisationInput) chainDescription.getVisualizationInput();
+						input.addInput(input.createNewInput(chainDescription.attachRootDataSource(edp2Source)));
 						final JFreeChart chart = ((JFreeChartVisualizationInput) input).createChart();
 						chart.setTitle("");
 						chartComposite.setChart(chart);
@@ -379,29 +379,26 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 					chartComposite.layout(true);
 					chartComposite.forceRedraw();
-				}
-				else
+				} else
 				{
-						emptyText = "Empty datasource.";
+					emptyText = "Empty datasource.";
 				}
-			}
-			else
+			} else
 			{
 				emptyText = "Measruements missing.";
 			}
 
 			if (emptyText != null)
 			{
-				lblEmptyText.setText("Unable to show chart\n\n > "+emptyText);
+				lblEmptyText.setText("Unable to show chart\n\n > " + emptyText);
 				emptyComposite.layout();
 				lblEmptyText.getParent().layout();
-				((StackLayout)chartContainer.getLayout()).topControl = emptyComposite;
-			}
-			else
+				((StackLayout) chartContainer.getLayout()).topControl = emptyComposite;
+			} else
 			{
-				((StackLayout)chartContainer.getLayout()).topControl = chartComposite;
+				((StackLayout) chartContainer.getLayout()).topControl = chartComposite;
 			}
-			
+
 			chartContainer.layout();
 			compositeContent.redraw();
 			compositeContent.layout();
