@@ -58,6 +58,7 @@ public class ExampleSelectionPage extends WizardSelectionPage
 
 		projectType = new TableViewer(composite);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.minimumWidth = 100;
 		gridData.widthHint = 200;
 		gridData.grabExcessHorizontalSpace = false;
 		projectType.getTable().setLayoutData(gridData);
@@ -80,7 +81,12 @@ public class ExampleSelectionPage extends WizardSelectionPage
 
 		Composite container = new Composite(composite, SWT.BORDER);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_container = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_container.heightHint = 400;
+		gd_container.widthHint = 500;
+		gd_container.minimumWidth = 100;
+		gd_container.minimumHeight = 100;
+		container.setLayoutData(gd_container);
 		
 		browser = new Browser(container, SWT.NONE);
 		
