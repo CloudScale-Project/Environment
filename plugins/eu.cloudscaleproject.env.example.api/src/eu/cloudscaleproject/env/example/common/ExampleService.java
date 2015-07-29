@@ -64,7 +64,7 @@ public class ExampleService
 		return null;
 	}
 
-	public void createExampleResourceProject(Example.Resource r) throws Exception
+	public IProject createExampleResourceProject(Example.Resource r) throws Exception
 	{
 		// Prepare project
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName(r));
@@ -83,6 +83,8 @@ public class ExampleService
 		{
 			Logger.getLogger(ExampleService.class.getName()).info("Example project already exists : "+project.getName());
 		}
+		
+		return project;
 	}
 
 	public static IProject unpackResourceProject(IProject project, Example.Resource resource) throws Exception

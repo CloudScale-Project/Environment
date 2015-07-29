@@ -1,11 +1,13 @@
 package eu.cloudscaleproject.env.common.explorer;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 
 public class ExplorerUtils {
@@ -25,6 +27,19 @@ public class ExplorerUtils {
 		if(explorerPart != null && explorerPart instanceof ISetSelectionTarget){
 			((ISetSelectionTarget)explorerPart).selectReveal(new StructuredSelection(resource));
 		}
+	}
+	
+	public static void openFile (IFile file)
+	{
+		if (file.exists()) {
+		    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		 
+		    try {
+		        IDE.openEditor(page, file);
+		    } catch ( Exception e ) {
+		    	e.printStackTrace();
+		    }
+		} 
 	}
 	
 }

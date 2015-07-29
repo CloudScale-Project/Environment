@@ -9,7 +9,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -116,13 +115,11 @@ public class CloudScaleProjectSupport
 			try
 			{
 				p.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-
-				// expand created project
-				for (IResource r : p.members())
-				{
-					ExplorerUtils.selectAndReveal(r);
-				}
-
+				
+				IFile propertyFile = ExplorerProjectPaths.getPropertyFile(p);
+				ExplorerUtils.selectAndReveal(propertyFile);
+				ExplorerUtils.openFile(propertyFile);
+				
 			} catch (CoreException e)
 			{
 				// TODO Auto-generated catch block

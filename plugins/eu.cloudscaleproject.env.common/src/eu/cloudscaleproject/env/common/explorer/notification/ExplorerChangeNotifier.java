@@ -19,11 +19,11 @@ public class ExplorerChangeNotifier implements IResourceChangeListener{
 	
 	private HashSet<ExplorerChangeListener> listeners = new HashSet<ExplorerChangeListener>();
 	
-	public synchronized void addListener(ExplorerChangeListener r){
+	public void addListener(ExplorerChangeListener r){
 		listeners.add(r);
 	}
 	
-	public synchronized void removeListener(ExplorerChangeListener r){
+	public void removeListener(ExplorerChangeListener r){
 		listeners.remove(r);
 	}
 	

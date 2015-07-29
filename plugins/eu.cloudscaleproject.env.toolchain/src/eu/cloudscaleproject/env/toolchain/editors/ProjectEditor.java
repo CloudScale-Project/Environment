@@ -6,6 +6,10 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -20,6 +24,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -41,10 +46,26 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	
 	@Inject
 	private ProjectEditorProvider editorProvider;
+	
+	private IResourceChangeListener editorCloser = new IResourceChangeListener() {
+        public void resourceChanged(IResourceChangeEvent event) {
+            final IResource closingProject = event.getResource();
+            Display.getDefault().asyncExec(new Runnable(){
+                public void run() {
+                    for (IWorkbenchPage page : getSite().getWorkbenchWindow().getPages()) {
+                    	IProject p = ExplorerProjectPaths.getProject(ProjectEditor.this);
+                        if (p.equals(closingProject)) page.closeEditor(page.findEditor(ProjectEditor.this.getEditorInput()), true);
+                    }
+                }
+            });
+        }   
+    };
 		
 	public ProjectEditor() {
 		CloudscaleContext.inject(this);
 	}
+	
+	
 	
 	@Override
 	public String getPartName() {
@@ -110,6 +131,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(editorCloser, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE);
 		setSite(site);
 		setInputWithNotify(input);
 	}
@@ -182,6 +204,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 	@Override
 	public void dispose() {
 		super.dispose();
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener(editorCloser);
 	}
 
 	@Override
