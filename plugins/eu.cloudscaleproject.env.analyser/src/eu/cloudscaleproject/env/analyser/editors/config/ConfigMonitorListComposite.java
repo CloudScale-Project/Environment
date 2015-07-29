@@ -10,12 +10,11 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,7 +25,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
@@ -83,7 +81,9 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					MonitorRepository monitorRep = alternative.retrieveMonitorRepository();
+					MonitorRepository monitorRep = alternative.initActiveMonitorRepository();
+					
+					
 					Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 					
 					MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
@@ -99,7 +99,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 					Control control = stackLayout.topControl;
 					if(control instanceof ListComposite){
 						ListComposite lc = (ListComposite)control;
-						lc.showChild(monitor);
+						lc.showChild(getMonitorGroup(monitor));
 					}
 				}
 			}
@@ -128,64 +128,73 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 					EObjectWrapper<Monitor> wrapper = new EObjectWrapper<Monitor>(group.getMonitors());
 					ConfigMonitorComposite monitorComposite = new ConfigMonitorComposite(alternative, wrapper, parent, SWT.NONE);
 					
-					//If this is the first child, set Monitor repository model reference to the initial model
-					if(groupsComposite.getChilds().isEmpty()){
-						InitialModel im = alternative.getActiveInitialModel();
-						//Monitor repository found to the initial model
-						if(im != null){
-							im.setMonitorRepository(alternative.retrieveMonitorRepository());
-						}
-					}
-					//If this is the last child, remove Monitor repository reference from the initial model
-					monitorComposite.addDisposeListener(new DisposeListener() {
-						
-						@Override
-						public void widgetDisposed(DisposeEvent e) {
-							if(groupsComposite.getChilds().isEmpty()){
-								//remove monitor model reference from experiment
-								InitialModel im = alternative.getActiveInitialModel();
-								if(im != null){
-									im.setMonitorRepository(null);
-								}
-							}
-						}
-					});
-					
 					return monitorComposite;
 				}
 				
+				@Override
+				public void postDeleteChild(Object o) {
+					
+					super.postDeleteChild(o);
+					
+					if(o instanceof MonitorGroup){
+						MonitorGroup mg = (MonitorGroup)o;
+						for(Monitor m : mg.getMonitors()){
+							EcoreUtil.delete(m);
+						}
+					}
+				}
+				
 			};
-
-			//groupsComposite.initBindings(monitorGroups);
-			//calcMonitorGroups();
 		}
 		
 		stackLayout.topControl = groupsComposite;
 		stackedComposite.layout();
-		
+	}
+	
+	private MonitorGroup getMonitorGroup(Monitor monitor){
+		for(Object o : monitorGroups){
+			if(o instanceof MonitorGroup){
+				MonitorGroup mg = (MonitorGroup)o;
+				for(Monitor m : mg.getMonitors()){
+					if(m == monitor){
+						return mg;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	private void calcMonitorGroups(){
-		
+
 		List<MonitorGroup> monitorGroupsNew = new ArrayList<MonitorGroup>();
-				
-		for(Monitor m : alternative.retrieveMonitorRepository().getMonitors()){
-			boolean hasBeenAdded = false;
-			for(MonitorGroup mc : monitorGroupsNew){
-				if(mc.add(m)){
-					hasBeenAdded = true;
-					break;
-				}
+		
+		synchronized (alternative.getSaveLoadLock()) {
+			if(alternative.getActiveMonitorRepository() == null){
+				monitorGroups.clear();
+				groupsComposite.refresh();
+				return;
 			}
-			
-			if(!hasBeenAdded){
-				MonitorGroup newMc = new MonitorGroup(m);
-				monitorGroupsNew.add(newMc);
+					
+			for(Monitor m : alternative.getActiveMonitorRepository().getMonitors()){
+				boolean hasBeenAdded = false;
+				for(MonitorGroup mc : monitorGroupsNew){
+					if(mc.add(m)){
+						hasBeenAdded = true;
+						break;
+					}
+				}
+				
+				if(!hasBeenAdded){
+					MonitorGroup newMc = new MonitorGroup(m);
+					monitorGroupsNew.add(newMc);
+				}
 			}
 		}
 		
 		ListDiff diff = Diffs.computeListDiff(monitorGroups, monitorGroupsNew);
 		diff.applyTo(monitorGroups);
+		
 		groupsComposite.refresh();
 	}
 	

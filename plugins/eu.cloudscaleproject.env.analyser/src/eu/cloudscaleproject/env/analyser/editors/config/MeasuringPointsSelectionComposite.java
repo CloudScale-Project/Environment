@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.monitorrepository.Monitor;
+import org.palladiosimulator.monitorrepository.MonitorRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.dialogs.ListSelectionDialog;
@@ -103,8 +104,11 @@ public class MeasuringPointsSelectionComposite extends Composite implements IRef
 					Monitor monitor = EcoreUtil.copy(monitorWrapper.getMaster());
 					monitor.setMeasuringPoint((MeasuringPoint)selection);
 					
-					alternative.retrieveMonitorRepository().getMonitors().add(monitor);
-					monitorWrapper.getSlaves().add(monitor);
+					MonitorRepository mr = alternative.getActiveMonitorRepository();
+					if(mr != null){
+						mr.getMonitors().add(monitor);
+						monitorWrapper.getSlaves().add(monitor);
+					}
 				}
 				alternative.setDirty(true);
 				refresh();

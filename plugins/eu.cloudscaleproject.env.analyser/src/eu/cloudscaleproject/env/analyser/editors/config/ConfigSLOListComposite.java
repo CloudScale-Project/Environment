@@ -8,8 +8,6 @@ import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,7 +18,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.palladiosimulator.experimentautomation.experiments.InitialModel;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjective;
 import org.palladiosimulator.servicelevelobjective.ServiceLevelObjectiveRepository;
 import org.palladiosimulator.servicelevelobjective.ServicelevelObjectiveFactory;
@@ -69,12 +66,13 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					ServiceLevelObjectiveRepository sloRep = alternative.retrieveSLORepository();
+					ServiceLevelObjectiveRepository sloRep = alternative.initActiveSLORepository();
 					ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 					
 					slo.setName(dialog.getText());
 					sloRep.getServicelevelobjectives().add(slo);
 					
+					refresh();
 					alternative.setDirty(true);
 					
 					//show it
@@ -112,39 +110,10 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 						= new EObjectWrapper<ServiceLevelObjective>(slo, new ArrayList<ServiceLevelObjective>());
 					
 					ConfigSLOComposite sloComposite = new ConfigSLOComposite(alternative, wrapper, parent, SWT.NONE);
-					
-					//If this is the first child, set SLO repository model reference to the initial model
-					if(listComposite.getChilds().isEmpty()){
-						InitialModel im = alternative.getActiveInitialModel();
-						//Set SLO repository found to the initial model
-						if(im != null){
-							im.setServiceLevelObjectives(alternative.retrieveSLORepository());
-						}
-					}
-					//If this is the last child, remove SLO repository reference from the initial model
-					sloComposite.addDisposeListener(new DisposeListener() {
-						
-						@Override
-						public void widgetDisposed(DisposeEvent e) {
-							if(listComposite.getChilds().isEmpty()){
-								//remove SLO model reference from experiment
-								InitialModel im = alternative.getActiveInitialModel();
-								if(im != null){
-									im.setServiceLevelObjectives(null);
-								}
-							}
-						}
-					});
-					
 					return sloComposite;
 				}
 				
 			};
-					
-			IEMFEditListProperty slosProp = EMFEditProperties.list(alternative.getEditingDomain(), 
-					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE_REPOSITORY__SERVICELEVELOBJECTIVES);
-			IObservableList slosObs = slosProp.observe(alternative.retrieveSLORepository());
-			listComposite.initBindings(slosObs);
 		}
 		
 		stackLayout.topControl = listComposite;
@@ -153,12 +122,11 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 
 	@Override
 	public void refresh() {
-		if(listComposite != null){
-			IEMFEditListProperty slosProp = EMFEditProperties.list(alternative.getEditingDomain(), 
-					ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE_REPOSITORY__SERVICELEVELOBJECTIVES);
-			IObservableList slosObs = slosProp.observe(alternative.retrieveSLORepository());
-			listComposite.initBindings(slosObs);
-			listComposite.refresh();
-		}
+		IEMFEditListProperty slosProp = EMFEditProperties.list(alternative.getEditingDomain(), 
+				ServicelevelObjectivePackage.Literals.SERVICE_LEVEL_OBJECTIVE_REPOSITORY__SERVICELEVELOBJECTIVES);
+		
+		IObservableList slosObs = slosProp.observe(alternative.getActiveSLORepository());
+		listComposite.initBindings(slosObs);
+		listComposite.refresh();
 	}
 }

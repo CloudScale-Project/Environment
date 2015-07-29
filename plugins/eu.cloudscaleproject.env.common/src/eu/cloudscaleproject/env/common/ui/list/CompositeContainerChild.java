@@ -41,6 +41,7 @@ public abstract class CompositeContainerChild {
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
 				container.removeChild(-1, CompositeContainerChild.this);
+				container.postDeleteChild(getSource());
 			}
 		});
 		btnDelete.setText("Delete");

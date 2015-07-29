@@ -87,6 +87,10 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		}
 	}
 	
+	public Object getSaveLoadLock(){
+		return saveLoadLock;
+	}
+	
 	@Override
 	public IResource getResource(){
 		return resource;

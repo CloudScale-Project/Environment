@@ -47,6 +47,11 @@ public class ConfValidator implements IResourceValidator {
 		boolean pms = true;
 		boolean slo = true;
 		
+		boolean needsSlo = false;
+		if(ConfAlternative.Type.CAPACITY.equals(ca.getTypeEnum()) || ConfAlternative.Type.SCALABILITY.equals(ca.getTypeEnum())){
+			needsSlo = true;
+		}
+		
 		List<IResource> expFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_EXPERIMENTS);
 		List<IResource> mpFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MESURPOINTS);
 		List<IResource> monitorFiles = ca.getSubResources(ToolchainUtils.KEY_FILE_MONITOR);
@@ -55,12 +60,15 @@ public class ConfValidator implements IResourceValidator {
 		ca.getSelfStatus().checkError("Experiments missing", !expFiles.isEmpty(), false, "Experiments model is missing!");
 		ca.getSelfStatus().checkError("MeasureP missing", !mpFiles.isEmpty(), false, "Measuring points model is missing!");
 		ca.getSelfStatus().checkError("Monitor missing", !monitorFiles.isEmpty(), false, "Monitor model is missing!");
-		ca.getSelfStatus().checkError("SLO missing", !sloFiles.isEmpty(), false, "SLO model is missing!");
+		
+		if(needsSlo){
+			ca.getSelfStatus().checkError("SLO missing", !sloFiles.isEmpty(), false, "SLO model is missing!");
+		}
 		
 		if(expFiles.isEmpty()){exp = false;}
 		if(mpFiles.isEmpty()){mp = false;}
 		if(monitorFiles.isEmpty()){pms = false;}
-		if(sloFiles.isEmpty()){slo = false;}
+		if(needsSlo && sloFiles.isEmpty()){slo = false;}
 
 		for(IResource file : expFiles){
 			exp &= validateModel(ca, (IFile)file);

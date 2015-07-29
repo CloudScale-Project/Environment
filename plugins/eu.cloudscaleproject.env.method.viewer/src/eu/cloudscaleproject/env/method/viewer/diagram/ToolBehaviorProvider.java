@@ -151,7 +151,7 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
-				cd.setBackgroundColor(new ColorConstant(MethodColorConstants.REQUIREMENT_WARNING));
+				cd.setBackgroundColor(new ColorConstant(MethodColorConstants.REQUIREMENT_ERROR));
 				cd.setMessage("Section contains errors. Resove them before continue!");
 				decorators.add(cd);
 			}
@@ -159,16 +159,18 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				
 				advancePositionRequ(position);
 				
-				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_MISSING_SMALL);
+				ImageDecorator imageRenderingDecorator = new ImageDecorator(DiagramImageProvider.IMG_NOT_DONE);
 				imageRenderingDecorator.setMessage("Requirement is missing!");
 				imageRenderingDecorator.setX(position[0]);
 				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
 				
+				/*
 				ColorDecorator cd = new ColorDecorator();
 				cd.setBackgroundColor(new ColorConstant(MethodColorConstants.REQUIREMENT_WARNING));
 				cd.setMessage("Requirement missing!");
 				decorators.add(cd);
+				*/
 			}
 		}
 		else{
@@ -190,7 +192,7 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				}
 				
 				ColorDecorator cd = new ColorDecorator();
-				cd.setBackgroundColor(new ColorConstant(MethodColorConstants.STATUS_NODE_WARNING));
+				cd.setBackgroundColor(new ColorConstant(MethodColorConstants.STATUS_NODE_ERROR));
 				cd.setMessage("Section contains errors. Resove them before continue!");
 				decorators.add(cd);
 			}
@@ -249,6 +251,13 @@ public class ToolBehaviorProvider extends DefaultToolBehaviorProvider{
 				imageRenderingDecorator.setX(position[0]);
 				imageRenderingDecorator.setY(position[1]);
 				decorators.add(imageRenderingDecorator);
+				
+				if(errors.isEmpty()){
+					ColorDecorator cd = new ColorDecorator();
+					cd.setBackgroundColor(new ColorConstant(MethodColorConstants.STATUS_NODE_WARNING));
+					cd.setMessage("Section contains errors. Resove them before continue!");
+					decorators.add(cd);
+				}
 				
 				//show only first
 				//advancePositionRequ(position);

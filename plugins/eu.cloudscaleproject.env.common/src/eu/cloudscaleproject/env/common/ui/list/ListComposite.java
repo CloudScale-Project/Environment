@@ -120,6 +120,7 @@ public abstract class ListComposite extends CompositeContainer implements IRefre
 	}
 	
 	public void refresh(){
+
 		for(CompositeContainerChild child : getChilds()){
 			Composite clientComposite = child.getClient();
 			if(clientComposite instanceof IRefreshable){

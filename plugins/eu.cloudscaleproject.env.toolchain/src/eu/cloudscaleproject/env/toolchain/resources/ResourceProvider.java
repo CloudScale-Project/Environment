@@ -108,7 +108,10 @@ public abstract class ResourceProvider
 							
 							@Override
 							public void run() {
+								
 								r.load();
+								r.validate();
+								
 								firePropertyChange(PROP_RESOURCE_MODIFIED, null, r);
 							}
 						});
@@ -133,12 +136,12 @@ public abstract class ResourceProvider
 		this.defaultResName = defaultResName;
 
 		initialize();
-		ExplorerChangeNotifier.getInstance().addListener(ecl);
 	}
 	
 	public final void initialize()
 	{
 		checkRootFolder();
+		ExplorerChangeNotifier.getInstance().addListener(ecl);
 
 		synchronized (resourcesLock) {
 			try

@@ -30,6 +30,11 @@ public class CompositeContainer extends ScrolledComposite{
 	}
 	
 	public void showChild(Object childSource){
+		
+		if(childSource == null){
+			return;
+		}
+		
 		for(CompositeContainerChild child : getChilds()){
 			if(childSource.equals(child.getSource())){
 				Composite childComposite = child.getComposite();
@@ -88,6 +93,10 @@ public class CompositeContainer extends ScrolledComposite{
 		composite.layout();
 		composite.redraw();
 		composite.pack();
+	}
+	
+	public void postDeleteChild(Object o){
+		//override
 	}
 	
 	public List<CompositeContainerChild> getChilds(){

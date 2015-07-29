@@ -601,7 +601,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for creating and returning base models
 
-	public ExperimentRepository retrieveExperimentRepository()
+	private ExperimentRepository retrieveExperimentRepository()
 	{
 		if (getExperimentRepositories().isEmpty())
 		{
@@ -614,7 +614,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 	}
 
-	public MeasuringPointRepository retrieveMeasuringPointRepository()
+	private MeasuringPointRepository retrieveMeasuringPointRepository()
 	{
 		if (getMeasuringPointRepositories().isEmpty())
 		{
@@ -627,7 +627,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 	}
 
-	public ServiceLevelObjectiveRepository retrieveSLORepository()
+	private ServiceLevelObjectiveRepository retrieveSLORepository()
 	{
 		if (getSLORepositories().isEmpty())
 		{
@@ -640,7 +640,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		}
 	}
 
-	public MonitorRepository retrieveMonitorRepository()
+	private MonitorRepository retrieveMonitorRepository()
 	{
 		if (getMonitorRepositories().isEmpty())
 		{
@@ -652,21 +652,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 			return getMonitorRepositories().get(0);
 		}
 	}
-
-	/*
-	public UsageEvolution retrieveUsageEvolution()
-	{
-		if (getUsageEvolutions().isEmpty())
-		{
-			UsageEvolution usageEvolution = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
-			createEMFResource("analyser.usageevolution", ToolchainUtils.KEY_FILE_USAGEEVOLUTION, usageEvolution);
-			return usageEvolution;
-		} else
-		{
-			return getUsageEvolutions().get(0);
-		}
-	}
-	*/
 
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for retrieving referenced models from the Experiments
@@ -694,7 +679,38 @@ public class ConfAlternative extends AbstractConfigAlternative
 			return null;
 		}
 
-		return im.getMonitorRepository();
+		MonitorRepository mr = im.getMonitorRepository();
+		if(mr != null && mr.eResource() != null){
+			return mr;
+		}
+		return null;
+	}
+	
+	public MonitorRepository initActiveMonitorRepository(){
+		
+		MonitorRepository mr = null;
+		
+		boolean needToSave = false;
+		
+		synchronized (getSaveLoadLock()) {
+			if(getActiveMonitorRepository() == null){
+				mr = retrieveMonitorRepository();
+				Experiment experiment = getActiveExperiment();
+				if(experiment != null && experiment.getInitialModel() != null){
+					experiment.getInitialModel().setMonitorRepository(mr);
+				}
+				needToSave = true;
+			}
+			else{
+				mr = getActiveMonitorRepository();
+			}
+		}
+		
+		if(needToSave){
+			save();
+		}
+		
+		return mr;
 	}
 
 	public ServiceLevelObjectiveRepository getActiveSLORepository()
@@ -705,7 +721,38 @@ public class ConfAlternative extends AbstractConfigAlternative
 			return null;
 		}
 
-		return im.getServiceLevelObjectives();
+		ServiceLevelObjectiveRepository sloRep = im.getServiceLevelObjectives();
+		if(sloRep != null && sloRep.eResource() != null){
+			return sloRep;
+		}
+		return null;
+	}
+	
+	public ServiceLevelObjectiveRepository initActiveSLORepository(){
+		
+		ServiceLevelObjectiveRepository sloRep = null;
+		
+		boolean needToSave = false;
+		
+		synchronized (getSaveLoadLock()) {
+			if(getActiveSLORepository() == null){
+				sloRep = retrieveSLORepository();
+				Experiment experiment = getActiveExperiment();
+				if(experiment != null && experiment.getInitialModel() != null){
+					experiment.getInitialModel().setServiceLevelObjectives(sloRep);
+				}
+				needToSave = true;
+			}
+			else{
+				sloRep = getActiveSLORepository();
+			}
+		}
+		
+		if(needToSave){
+			save();
+		}
+		
+		return sloRep;
 	}
 
 	public UsageEvolution getActiveUsageEvolutionModel()
