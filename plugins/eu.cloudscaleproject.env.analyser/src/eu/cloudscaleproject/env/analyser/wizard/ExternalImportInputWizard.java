@@ -96,14 +96,14 @@ public class ExternalImportInputWizard extends Wizard{
 			public IStatus execute(IProgressMonitor monitor) {
 
 				int tasks = copyIntoProject ? 6 : 4;
-				monitor.beginTask("Importing models...", tasks);
+				monitor.beginTask("Importing models...", tasks + selectedResources.length * 6);
 
 				if (copyIntoProject)
 				{
 					monitor.subTask("Copying models...");
-					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources, monitor);
 					monitor.worked(1);
-					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources);
+					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources, monitor);
 					monitor.worked(1);
 				}
 				

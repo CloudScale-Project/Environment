@@ -49,7 +49,6 @@ public class ExtractorImportInputWizard extends Wizard
 	@Override
 	public boolean performFinish()
 	{
-
 		String altName = nameSelectionPage.getName();
 
 		// Prepare Input Alternative
@@ -70,7 +69,7 @@ public class ExtractorImportInputWizard extends Wizard
 
 		Resource[] resources = rs.getResources().toArray(new Resource[0]);
 
-		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), resources);
+		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), resources, null);
 
 		for (Resource resource : resources)
 		{

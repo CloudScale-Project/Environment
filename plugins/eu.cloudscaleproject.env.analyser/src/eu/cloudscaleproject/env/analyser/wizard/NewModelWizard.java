@@ -1,21 +1,19 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.analyser.PCMResourceSet;
+import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 
-public class NewPCMModelWizard extends Wizard{
+public class NewModelWizard extends Wizard{
 
 	private final EditorInputEMF alternative;
 	
 	private ModelSelectionPage modelSelectionPage;
 	
-	public NewPCMModelWizard(EditorInputEMF alternative, ModelType[] types) {
+	public NewModelWizard(EditorInputEMF alternative, ModelType[] types) {
 		this.alternative = alternative;
 		
 		modelSelectionPage = new ModelSelectionPage("Empty model creation", alternative.getAdapterFactory(), types);
@@ -30,18 +28,8 @@ public class NewPCMModelWizard extends Wizard{
 	@Override
 	public boolean performFinish() {
 		
-		ModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
-		
-		PCMResourceSet resSet = new PCMResourceSet(alternative.getResource());
-		resSet.createAll(selectedModels);
-		
-		for(ModelType type : selectedModels){
-			IFile file = resSet.getModelFile(type);
-			EObject root = resSet.getModelRootObject(type);
-			
-			alternative.getResourceSet().getResources().add(root.eResource());
-			alternative.setSubResource(type.getToolchainFileID(), file);
-		}
+		final ModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
+		ModelUtils.executeCreateModels(alternative, selectedModels);
 		
 		return true;
 	}

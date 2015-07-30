@@ -19,10 +19,12 @@ import org.scaledl.usageevolution.UsageEvolution;
 import org.scaledl.usageevolution.UsageevolutionFactory;
 import org.scaledl.usageevolution.UsageevolutionPackage;
 
+import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.ui.list.ListComposite;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 
@@ -30,11 +32,14 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 		
 	private final InputAlternative alternative;
 	private ListComposite usageListComposite;
+	
+	private UsageEvolution usageEvolution;
 
 	public UsageEvolutionComposite(final InputAlternative alt, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = alt;
+		this.usageEvolution = (UsageEvolution)alt.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		setLayout(new GridLayout(1, false));
 		
@@ -66,9 +71,12 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 					Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
 					usage.setEntityName(dialog.getText());
 					
-					UsageEvolution ue = (UsageEvolution)alt.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-					ue.getUsages().add(usage);
-					
+					if(usageEvolution == null){
+						ModelUtils.createModels(alternative, null, ModelType.USAGE_EVOLUTION);
+						usageEvolution = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+						initBinding();
+					}
+					usageEvolution.getUsages().add(usage);
 					alternative.setDirty(true);
 					
 					//show it
@@ -93,26 +101,27 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 		usageListComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		//usage list binding
-		IEMFEditListProperty usageProp = EMFEditProperties.list(alternative.getEditingDomain(), 
+		initBinding();
+		layout();
+	}
+	
+	private void initBinding(){
+		final IEMFEditListProperty usageProp = EMFEditProperties.list(alternative.getEditingDomain(), 
 				UsageevolutionPackage.Literals.USAGE_EVOLUTION__USAGES);
 		
-		UsageEvolution ue = (UsageEvolution)alt.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-		IObservableList usagesObs = usageProp.observe(ue);
+		IObservableList usagesObs = usageProp.observe(usageEvolution);
 		usageListComposite.initBindings(usagesObs);
 		usageListComposite.refresh();
-		
-		layout();
 	}
 
 	@Override
 	public void refresh() {
-		IEMFEditListProperty usageProp = EMFEditProperties.list(alternative.getEditingDomain(), 
-				UsageevolutionPackage.Literals.USAGE_EVOLUTION__USAGES);
 		
 		UsageEvolution ue = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		if(usageEvolution != ue){
+			usageEvolution = ue;
+			initBinding();
+		}
 		
-		IObservableList usagesObs = usageProp.observe(ue);
-		usageListComposite.initBindings(usagesObs);
-		usageListComposite.refresh();
 	}
 }

@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain;
 
+import org.eclipse.emf.ecore.resource.Resource;
+
 
 
 public enum ModelType{
@@ -38,6 +40,15 @@ public enum ModelType{
 	 public static ModelType getModelType(String extension){
 		 for(ModelType mt : ModelType.values()){
 			 if(mt.extension.equals(extension)){
+				 return mt;
+			 }
+		 }
+		 return null;
+	 }
+	 
+	 public static ModelType getModelType(Resource resource){
+		 for(ModelType mt : ModelType.values()){
+			 if(mt.extension.equals(resource.getURI().fileExtension())){
 				 return mt;
 			 }
 		 }

@@ -71,7 +71,7 @@ public class ImportExtractorResultWizard extends Wizard
 
 		Resource[] resources = rs.getResources().toArray(new Resource[0]);
 
-		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), resources);
+		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), resources, null);
 
 		for (Resource resource : resources)
 		{

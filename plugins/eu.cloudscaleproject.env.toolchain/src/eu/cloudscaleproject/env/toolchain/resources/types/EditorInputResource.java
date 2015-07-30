@@ -148,6 +148,18 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		return isLoaded;
 	}
 	
+	public int getCreateWork(){
+		return 0;
+	}
+	
+	public int getLoadWork(){
+		return 0;
+	}
+	
+	public int getSaveWork(){
+		return 0;
+	}
+	
 	@Override
 	public final void create() {
 		create(null);
@@ -169,10 +181,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			isLoaded = true;
 		}
 		
-	}
-	
-	public int getCreateWork(){
-		return 0;
 	}
 	
 	@Override
@@ -264,10 +272,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 		
 		firePropertyChange(PROP_LOADED, false, true);
 		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
-	}
-	
-	public int getLoadWork(){
-		return 0;
 	}
 	
 	@Override

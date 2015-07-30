@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
+import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -29,6 +30,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
 		
 		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
+		modelSelectionPage.selectAll();
 		modelSelectionPage.setDescription("Please select PCM models to start with");
 	}
 	
@@ -42,15 +44,15 @@ public class CreateEmptyInputWizard extends Wizard{
 	public boolean performFinish() {
 		
 		String name = nameSelectionPage.getName();
-		ModelType[] types = modelSelectionPage.getSelectedModelTypes();
+		final ModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
 		
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
-		InputAlternative resource = (InputAlternative)provider.createNewResource(name, null);
-		resource.createEmpty(types);
-		resource.save();
+		final InputAlternative alternative = (InputAlternative)provider.createNewResource(name, null);
 		
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), resource);
-		OpenAlternativeUtil.openAlternative(resource);
+		ModelUtils.executeCreateModels(alternative, selectedModels);
+		
+		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
+		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;
 	}

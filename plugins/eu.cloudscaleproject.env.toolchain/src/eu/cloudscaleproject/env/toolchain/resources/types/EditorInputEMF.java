@@ -59,14 +59,10 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public void addSubResourceModel(IResource res) {
+		
 		String ext = res.getFileExtension();
-		String key = null;
-
-		for (ModelType type : ModelType.GROUP_ALL)
-		{
-			if (type.getFileExtension().equals(ext))
-				key = type.getToolchainFileID();
-		}
+		ModelType type = ModelType.getModelType(ext);
+		String key = type != null ? type.getToolchainFileID() : null;
 		
 		if(key == null){
 			logger.warning("Model with extension: " + res.getFileExtension() + "is not registred in the ModelType enum!");
@@ -256,8 +252,14 @@ public class EditorInputEMF extends EditorInputFolder{
 					//do not save auto-loaded resources
 					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)r, false); 
 					
-					if(res!= null && !res.getContents().isEmpty()){
+					if(res != null && !res.getContents().isEmpty()){
+						if(monitor != null){
+							monitor.subTask("Saving resource '" + res.getURI().lastSegment() + "'");
+						}
 						res.save(null);
+						if(monitor != null){
+							monitor.worked(1);
+						}
 					}
 				} catch (UnknownServiceException e){
 					//ignore - file can not be saved
@@ -330,6 +332,23 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		return super.getLoadWork() + work;
+	}
+	
+	@Override
+	public int getSaveWork() {
+		
+		int work = super.getSaveWork();
+		for (IResource r : getLoadedSubResources()) {
+			if (r instanceof IFile) {
+				
+				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) r, false);
+				if (res != null && !res.getContents().isEmpty()) {
+					work++;
+				}
+			}
+		}
+
+		return work;
 	}
 	
 	@Override

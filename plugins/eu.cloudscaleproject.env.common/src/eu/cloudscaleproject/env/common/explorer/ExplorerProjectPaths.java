@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -342,7 +343,6 @@ public class ExplorerProjectPaths {
 	}
 
 	/**
-	 * 
 	 * Retrieves <code>IFile</code> from project. File is retrieved by using
 	 * file path, specified under 'fileKey' tag in project configuration file.<br>
 	 * 
@@ -367,6 +367,97 @@ public class ExplorerProjectPaths {
 		}
 
 		return file;
+	}
+	
+	/**
+	 * Removes file extension.
+	 * In other words, it removes last dot followed by one or more characters.
+	 * 
+	 * @param filename String from which to remove file extension.
+	 * @return Filename string without extension.
+	 */
+	public static String removeFileExtension(String filename){
+		return filename.replaceFirst("[.][^.]+$", "");
+	}
+	
+	/**
+	 * Search for <code>IFile</code>'s with the specified extension under specified <code>IFolder</code> hierarchy.
+	 * 
+	 * @param folder Base folder to search in.
+	 * @param extension File extension to look for.
+	 * @param recursive If true all sub-folders are searched as well.
+	 * 
+	 * @return List of files with the matching extension
+	 */
+	public static List<IFile> findFiles(IContainer folder, String name, String extension, boolean recursive){
+		
+		List<IFile> files = new ArrayList<IFile>();
+		
+		if(!folder.exists()){
+			return files;
+		}
+		
+		try {
+			for(IResource r : folder.members()){
+				if(r instanceof IContainer){
+					if(recursive){
+						IContainer f = (IContainer)r;
+						files.addAll(findFiles(f, name, extension, recursive));
+					}
+				}
+				if(r instanceof IFile){
+					IFile f = (IFile)r;
+					if(f.getName().equals(name + "." + extension)){
+						files.add(f);
+					}
+				}
+			}
+		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		return files;
+	}
+	
+	/**
+	 * Search for <code>IFile</code>'s with the specified extension under specified <code>IFolder</code> hierarchy.
+	 * 
+	 * @param folder Base folder to search in.
+	 * @param extension File extension to look for.
+	 * @param recursive If true all sub-folders are searched as well.
+	 * 
+	 * @return List of files with the matching extension
+	 */
+	public static List<IFile> findFilesByExtension(IContainer folder, String extension, boolean recursive){
+		
+		List<IFile> files = new ArrayList<IFile>();
+		
+		if(!folder.exists()){
+			return files;
+		}
+		
+		try {
+			for(IResource r : folder.members()){
+				if(r instanceof IContainer){
+					if(recursive){
+						IContainer f = (IContainer)r;
+						files.addAll(findFilesByExtension(f, extension, recursive));
+					}
+				}
+				if(r instanceof IFile){
+					IFile f = (IFile)r;
+					if(f.getFileExtension().equals(extension)){
+						files.add(f);
+					}
+				}
+			}
+		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		return files;
 	}
 	
 	/**
@@ -481,6 +572,18 @@ public class ExplorerProjectPaths {
 		return out;
 	}
 	
+	public static IFile getNonexistingSubFile(IFolder folder, String name, String extension){
+		
+		IFile out = folder.getFile(name + "." + extension);
+		
+		int counter = 1;
+		while(out.exists()){
+			out = folder.getFile(name + "_" +counter + "." + extension);
+			counter++;
+		}
+		return out;
+	}
+	
 	public static List<IFile> findResources (IContainer folder, String[] extensions)
 	{
 		List<IFile> files = new ArrayList<IFile>();
@@ -570,7 +673,7 @@ public class ExplorerProjectPaths {
 	}
 	*/
 	
-	public static void copyEMFResources(final IContainer folder, Resource[] resources)
+	public static void copyEMFResources(final IContainer folder, Resource[] resources, IProgressMonitor monitor)
 	{
 		copyEMFResources(resources, new BasicCallback<Resource>() {
 			@Override
@@ -582,14 +685,25 @@ public class ExplorerProjectPaths {
 				URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 				resource.setURI(uri);
 			}
-		});
+		}, monitor);
 	}
 	
-	public static void copyEMFResources(Resource[] resources, BasicCallback<Resource> setUri)
+	public static void copyEMFResources(Resource[] resources, BasicCallback<Resource> setUri, IProgressMonitor monitor)
 	{
+		if(monitor != null){
+			monitor.subTask("Resolving resources");
+		}
+		
 		for (Resource res : resources)
 		{
 			EcoreUtil.resolveAll(res);
+			if(monitor != null){
+				monitor.worked(1);
+			}
+		}
+		
+		if(monitor != null){
+			monitor.subTask("Configuring new URIs");
 		}
 
 		for (Resource resource : resources)
@@ -619,6 +733,13 @@ public class ExplorerProjectPaths {
 					}
 				}
 			}
+			if(monitor != null){
+				monitor.worked(1);
+			}
+		}
+		
+		if(monitor != null){
+			monitor.subTask("Saving resources");
 		}
 
 		for (Resource resource : resources)
@@ -629,6 +750,10 @@ public class ExplorerProjectPaths {
 			} catch (IOException e)
 			{
 				e.printStackTrace();
+			}
+			
+			if(monitor != null){
+				monitor.worked(1);
 			}
 		}
 	}

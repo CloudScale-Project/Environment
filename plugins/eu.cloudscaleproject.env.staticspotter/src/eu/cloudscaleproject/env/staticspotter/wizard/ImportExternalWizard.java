@@ -47,7 +47,7 @@ public class ImportExternalWizard extends Wizard{
 		InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
 		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
-		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
+		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources, null);
 
 		for (Resource resource : selectedResources)
 		{
