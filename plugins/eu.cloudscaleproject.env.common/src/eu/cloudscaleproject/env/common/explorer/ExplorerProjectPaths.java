@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -390,9 +389,12 @@ public class ExplorerProjectPaths {
 		URI uri = URI.createPlatformResourceURI(file.getFullPath()
 				.toString(), true);
 		
-		Resource res = resSet.getResource(uri, false);
-		if(res == null && load){
-			res = resSet.createResource(uri);
+		Resource res = null;
+		synchronized (resSet) {
+			res = resSet.getResource(uri, false);
+			if(res == null && load){
+				res = resSet.createResource(uri);
+			}
 		}
 		
 		if(res != null && file.exists()){
@@ -420,7 +422,11 @@ public class ExplorerProjectPaths {
 		URI uri = URI.createPlatformResourceURI(file.getFullPath()
 				.toString(), true);
 		
-		Resource res = resSet.getResource(uri, false);
+		Resource res = null;
+		synchronized (resSet) {
+			res = resSet.getResource(uri, false);
+		}
+		
 		if(res == null){
 			return false;
 		}
@@ -439,8 +445,7 @@ public class ExplorerProjectPaths {
 	 *            String that identified file path in project properties file.
 	 * @return Resource or null, if the resource can not be retrieved
 	 */
-	public static Resource getProjectEmfResource(IProject project,
-			String fileKey) {
+	public static Resource getProjectEmfResource(IProject project, ResourceSet resSet, String fileKey) {
 		Resource res = null;
 
 		try {
@@ -452,8 +457,11 @@ public class ExplorerProjectPaths {
 
 			URI uri = URI.createPlatformResourceURI(file.getFullPath()
 					.toString(), true);
-			ResourceSet resSet = new ResourceSetImpl();
-			res = resSet.getResource(uri, true);
+			
+			synchronized (resSet) {
+				res = resSet.getResource(uri, true);
+			}
+			
 		} catch (Exception e) {
 			// ignore
 		}

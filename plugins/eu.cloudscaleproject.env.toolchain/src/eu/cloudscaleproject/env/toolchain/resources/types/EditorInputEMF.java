@@ -92,8 +92,11 @@ public class EditorInputEMF extends EditorInputFolder{
 			return;
 		}
 		
-		Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-		resSet.getResources().remove(resource);
+		synchronized (resSet) {
+			Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
+			resSet.getResources().remove(resource);
+		}
+		
 		removeSubResource(key, res);
 	}
 	
@@ -112,7 +115,8 @@ public class EditorInputEMF extends EditorInputFolder{
 			}
 		}
 		
-		List<Resource> proxyResources = new ArrayList<Resource>(resSet.getResources());
+		List<Resource> proxyResources = new ArrayList<Resource>();
+		proxyResources.addAll(resSet.getResources());
 		proxyResources.removeAll(loadedEMFResources);
 		
 		return proxyResources.size();
@@ -130,7 +134,8 @@ public class EditorInputEMF extends EditorInputFolder{
 			}
 		}
 		
-		List<Resource> proxyResources = new ArrayList<Resource>(resSet.getResources());
+		List<Resource> proxyResources = new ArrayList<Resource>();		
+		proxyResources.addAll(resSet.getResources());
 		proxyResources.removeAll(loadedEMFResources);
 		
 		boolean reloaded = false;
