@@ -66,7 +66,10 @@ public class InputAlternative extends EditorInputEMF
 					IFile file = resSet.getModelFile(type);
 					EObject root = resSet.getModelRootObject(type);
 
-					InputAlternative.this.resSet.getResources().add(root.eResource());
+					synchronized (InputAlternative.this.resSet) {
+						InputAlternative.this.resSet.getResources().add(root.eResource());
+					}
+					
 					setSubResource(type.getToolchainFileID(), file);
 					
 					EObject diagram = resSet.getDiagramRootObject(type);
@@ -127,7 +130,7 @@ public class InputAlternative extends EditorInputEMF
 			setSubResource(ToolchainUtils.KEY_FILE_RESOURCEENV, ExplorerProjectPaths.getFileFromEmfResource(resenv.eResource()));
 
 			List<IFile> repositoryFiles = new ArrayList<IFile>();
-			for (Resource loadedRes : resSet.getResources())
+			for (Resource loadedRes : new ArrayList<Resource>(resSet.getResources()))
 			{
 				if (loadedRes instanceof RepositoryResourceImpl)
 				{

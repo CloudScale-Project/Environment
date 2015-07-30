@@ -298,7 +298,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
 
-		for (Resource res : resSet.getResources())
+		for (Resource res : new ArrayList<Resource>(resSet.getResources()))
 		{
 			if (res != null && !res.getContents().isEmpty())
 			{
@@ -327,7 +327,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		List<MeasuringPoint> mps = new ArrayList<MeasuringPoint>();
 
-		for (Resource res : resSet.getResources())
+		for (Resource res : new ArrayList<Resource>(resSet.getResources()))
 		{
 			if (res != null && !res.getContents().isEmpty())
 			{
@@ -370,7 +370,12 @@ public class ConfAlternative extends AbstractConfigAlternative
 		List<VariationType> out = new ArrayList<VariationType>();
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		Resource resource = resSet.getResource(variations, true);
+		
+		Resource resource = null;
+		synchronized (resSet) {
+			resource = resSet.getResource(variations, true);
+		}
+		
 		List<EObject> content = resource.getContents();
 		if (!content.isEmpty())
 		{
@@ -391,7 +396,12 @@ public class ConfAlternative extends AbstractConfigAlternative
 	{
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		Resource resource = resSet.getResource(variations, true);
+		
+		Resource resource = null;
+		synchronized (resSet) {
+			resource = resSet.getResource(variations, true);
+		}
+		
 		List<EObject> content = resource.getContents();
 		if (!content.isEmpty())
 		{
@@ -952,7 +962,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 		exp.getVariations().add(var);
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		resSet.getResource(variations, true);
+		
+		synchronized (resSet) {
+			resSet.getResource(variations, true);
+		}
 
 		// create SLO
 		{
@@ -988,7 +1001,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 		exp.getModifications().add(ExperimentsFactory.eINSTANCE.createSchedulingPolicy2DelayModification());
 
 		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		resSet.getResource(variations, true);
+		
+		synchronized (resSet) {
+			resSet.getResource(variations, true);
+		}
 
 		// create SLO
 		{
@@ -1220,7 +1236,11 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// load plugin models into resource set
 		URI metricDescriptions = PathmapManager.denormalizeURI(URI
 				.createURI("pathmap://METRIC_SPEC_MODELS/models/commonMetrics.metricspec"));
-		resSet.getResource(metricDescriptions, true);
+		
+		synchronized (resSet) {
+			resSet.getResource(metricDescriptions, true);
+		}
+		
 		work(monitor);
 	}
 	
