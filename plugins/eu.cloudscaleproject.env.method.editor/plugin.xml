@@ -98,6 +98,7 @@
             contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
             default="false"
             extensions="workflow"
+            icon="icons/diagram_32.png"
             id="eu.cloudscaleproject.env.method.editor.editor1"
             name="Workflow editor">
       </editor>
