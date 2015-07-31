@@ -24,7 +24,7 @@
       </children>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1XyOIC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:4">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1XyOIC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_Uz4ooC3EEeSb4vEDETI_1g" elementId="eu.cloudscaleproject.env.analyser.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/ic-analyser-24.png" tooltip="Open Analyser Perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
   </fragments>
 </fragment:ModelFragments>
