@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
@@ -149,6 +150,7 @@ public class CommandFeature extends AbstractCustomFeature{
 			if(eobject instanceof Node){
 				Node n = (Node)eobject;
 				Object source = n.getSource();
+				//if (source == null) 
 				if(source instanceof IValidationStatus){
 					validationStatus = (IValidationStatus) source;
 				}
@@ -156,9 +158,21 @@ public class CommandFeature extends AbstractCustomFeature{
 			eobject = eobject.eContainer();
 		}
 		
-		//inject section source into cloudscale context
-
-		CloudscaleContext.getActiveContext().set(IValidationStatus.class, validationStatus);
+		String validationId = null;
+		eobject = node;
+		while(eobject != null){
+			if(eobject instanceof StatusNode){
+				StatusNode n = (StatusNode)eobject;
+				validationId = n.getId();
+				break;
+			}
+			eobject = eobject.eContainer();
+		}
+		
+		
+		eu.cloudscaleproject.env.common.notification.MethodStatusContext validationContext = 
+				new eu.cloudscaleproject.env.common.notification.MethodStatusContext(validationId, validationStatus);
+		CloudscaleContext.getActiveContext().set(eu.cloudscaleproject.env.common.notification.MethodStatusContext.class, validationContext);
 
 		if (node.getCommandParam().isEmpty()) {
 			executor.execute(node.getCommandId());

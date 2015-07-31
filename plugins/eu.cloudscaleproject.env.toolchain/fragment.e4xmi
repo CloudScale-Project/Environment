@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NrKYIKO8EeOVJP61i6fIgw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="commands:Command" xmi:id="_OQq48KO8EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.0" commandName="runAnalyser" description="Run simulation using analyser tool"/>
     <elements xsi:type="commands:Command" xmi:id="_L3EzAKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.openprojecteditor" commandName="openProjectEditor" description="Opens project editor">
       <parameters xmi:id="_cyx5UKhjEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.tabid" name="tabId" typeId="" optional="false"/>
       <parameters xmi:id="_BJ560DN2EeST0Ld0GviNaA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.action" name="action" typeId=""/>
     </elements>
+    <elements xsi:type="commands:Command" xmi:id="_CUOMsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod" commandName="selectAlternativeMethod" description="Run simulation using analyser tool"/>
+    <elements xsi:type="commands:Command" xmi:id="_V4xegDasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.openAlternative" commandName="openAlternative" description="Run simulation using analyser tool"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PBqRAKO8EeOVJP61i6fIgw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="commands:Handler" xmi:id="_Po3a8KO8EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.handler.runAnalyser" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.AnalyserHandler" command="_OQq48KO8EeOVJP61i6fIgw"/>
     <elements xsi:type="commands:Handler" xmi:id="_Q14PUKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenProjectEditorHandler" command="_L3EzAKR6EeOVJP61i6fIgw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_gZunsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.handler.SelectAlternativeMethodHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.SelectAlternativeMethodHandler" command="_CUOMsDafEeW2k9p_RsN0yg"/>
+    <elements xsi:type="commands:Handler" xmi:id="_ZdjM0DasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.handler.OpenAlternativeHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenAlternativeHandler" command="_V4xegDasEeWRRJlfUN4Dxg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.bottom">
     <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Validation status"/>

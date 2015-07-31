@@ -6,13 +6,9 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_OuRY4DHXEeO3JJACK76kDw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_aPymADGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspective" commandName="Open archimetrix perspective" description="Open archimetrix perspective"/>
-    <elements xsi:type="commands:Command" xmi:id="_90Z7gC3LEeSaD7cZMXxbKA" elementId="eu.cloudscaleproject.env.extractor.command.openeditor" commandName="Open Extractor Editor">
-      <parameters xmi:id="_D_2Y4DRVEeSMLJ8vnBP-0A" elementId="eu.cloudscaleproject.env.extractor.commandparameter.action" name="action"/>
-    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PRJccDHXEeO3JJACK76kDw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_lT1iQDGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorHandler" command="_aPymADGwEeO3JJACK76kDw"/>
-    <elements xsi:type="commands:Handler" xmi:id="_KSSYgC3MEeSaD7cZMXxbKA" elementId="eu.cludscale.environment.extractor.handler.openeditor" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorEditorHandler" command="_90Z7gC3LEeSaD7cZMXxbKA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pm0KcDHXEeO3JJACK76kDw" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_LwkNoHuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
