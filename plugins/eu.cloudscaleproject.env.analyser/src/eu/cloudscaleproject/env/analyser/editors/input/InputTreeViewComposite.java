@@ -37,8 +37,9 @@ import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.wizard.ImportPCMModelWizard;
-import eu.cloudscaleproject.env.analyser.wizard.NewPCMModelWizard;
+import eu.cloudscaleproject.env.analyser.wizard.ImportModelWizard;
+import eu.cloudscaleproject.env.analyser.wizard.NewModelWizard;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -111,7 +112,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				
 				ModelType[] avaiableModelTypes = getAvaiableModelTypes();
 				
-				NewPCMModelWizard createEmptyModelWizard = new NewPCMModelWizard(
+				NewModelWizard createEmptyModelWizard = new NewModelWizard(
 						alternative, 
 						avaiableModelTypes);
 						
@@ -130,7 +131,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				//ImportInputAlternativeDialog dialog = new ImportInputAlternativeDialog(Display.getDefault().getActiveShell());
 				//dialog.open();
 				
-				ImportPCMModelWizard createEmptyModelWizard = new ImportPCMModelWizard(input);
+				ImportModelWizard createEmptyModelWizard = new ImportModelWizard(input);
 				WizardDialog wizardDialog = new WizardDialog(InputTreeViewComposite.this.getShell(), createEmptyModelWizard);
 				wizardDialog.setTitle("asdf");
 				wizardDialog.open();
@@ -147,16 +148,26 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = treeviewComposite.getSelectedModelFile();
 				if(file != null){
-					boolean isInternal = input.isResourceInternal(file);
 					input.removeSubResourceModel(file);
-					
-					if(isInternal){
+					if(input.isResourceInternal(file)){
 						try {
+							ModelType type = ModelType.getModelType(file.getFileExtension());
+							String filename = ExplorerProjectPaths.removeFileExtension(file.getName());
+							
+							List<IFile> diagramFiles = ExplorerProjectPaths.findFiles(
+									alternative.getResource(), 
+									filename, type.getDiagramFileExtension(), true);
+							
+							for(IFile diagramFile : diagramFiles){
+								diagramFile.delete(true, null);
+							}
 							file.delete(true, null);
+							
 						} catch (CoreException e1) {
 							e1.printStackTrace();
 						}
 					}
+					input.save();
 				}
 				
 				refreshButtonStates();

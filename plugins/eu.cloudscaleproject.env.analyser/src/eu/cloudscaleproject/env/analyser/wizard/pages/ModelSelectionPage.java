@@ -29,6 +29,9 @@ public class ModelSelectionPage extends WizardPage{
 	private ModelType[] types;
 	private Resource resource = new ResourceImpl();
 	
+	private CheckboxTableViewer tableView;
+	private boolean selectAll = false;
+	
 	public ModelSelectionPage(String name, AdapterFactory adapterFacoty, ModelType[] types) {
 		super(name, name, null);
 		
@@ -40,6 +43,20 @@ public class ModelSelectionPage extends WizardPage{
 	
 	public ModelType[] getSelectedModelTypes(){
 		return selectedModels.toArray(new ModelType[selectedModels.size()]);
+	}
+	
+	public void selectAll(){
+		if(tableView != null){
+			doSelectAll();
+		}
+		selectAll = true;
+	}
+	
+	private void doSelectAll(){
+		for(ModelType t : types){
+			selectedModels.add(t);
+		}
+		tableView.setAllChecked(true);
 	}
 
 	@Override
@@ -53,8 +70,7 @@ public class ModelSelectionPage extends WizardPage{
 			resource.getContents().add(rootObject);
 		}
 				
-		final CheckboxTableViewer tableView = 
-				CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+		tableView = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
 		tableView.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
 		tableView.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
 				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, tableView)));
@@ -77,12 +93,10 @@ public class ModelSelectionPage extends WizardPage{
 				}				
 			}
 		});
-
-		//select all
-		for(ModelType t : types){
-			selectedModels.add(t);
+		
+		if(selectAll){
+			doSelectAll();
 		}
-		tableView.setAllChecked(true);
 		
 		setControl(container);
 	}

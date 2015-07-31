@@ -82,18 +82,23 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 			
 			@Override
 			public IStatus execute(IProgressMonitor monitor) {
+				
 				Resource[] selectedResources = importSelectionPage.getSelectedResources();
 				Resource[] selectedDiagramResources = importSelectionPage.getSelectedDiagramResources();
 
-				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources);
-				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedDiagramResources);
+				monitor.beginTask("Copying models into the new alternative", selectedResources.length * 3 
+																		   + selectedDiagramResources.length * 3
+																		   + newInputAlternative.getSaveWork());
+				
+				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedResources, monitor);
+				ExplorerProjectPaths.copyEMFResources(newInputAlternative.getResource(), selectedDiagramResources, monitor);
 				
 				for (Resource resource : selectedResources)
 				{
 					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
 					newInputAlternative.addSubResourceModel(f);
 				}
-				newInputAlternative.save();
+				newInputAlternative.save(monitor);
 				
 				Display.getDefault().syncExec(new Runnable() {
 					
@@ -106,6 +111,8 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "New alternative has been created.");
 			}
 		};
+		
+		job.setUser(true);
 		job.schedule();
 		
 		return true;

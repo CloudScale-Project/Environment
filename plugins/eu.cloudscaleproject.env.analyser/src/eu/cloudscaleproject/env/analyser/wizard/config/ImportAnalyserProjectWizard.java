@@ -353,7 +353,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 					res.setURI(uri);
 				}
 			}
-		});
+		}, null);
 		
 		monitor.worked(1);
 		if(monitor.isCanceled()){

@@ -3,29 +3,28 @@ package eu.cloudscaleproject.env.analyser.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 
+import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 
-public class ImportPCMModelWizard extends Wizard{
+public class ImportModelWizard extends Wizard{
 	
 	private EditorInputEMF alternative = null;
 	
 	private ExternalModelsSelectionPage importModelSelectionPage;
 	private ImportAlternativeOptionsPage importOptionsPage;
 
-	public ImportPCMModelWizard(EditorInputEMF alternative){
+	public ImportModelWizard(EditorInputEMF alternative){
 		this(alternative, null);
 	}
 	
-	public ImportPCMModelWizard(EditorInputEMF alternative, IFolder from){
+	public ImportModelWizard(EditorInputEMF alternative, IFolder from){
 		
 		this.alternative = alternative;
 		setWindowTitle("Analyser - Import wizard");
@@ -65,19 +64,8 @@ public class ImportPCMModelWizard extends Wizard{
 	@Override
 	public boolean performFinish() {
 		
-		Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
-
-		if (importOptionsPage.getCopyIntoProjectParam())
-		{
-			ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedResources);
-		}
-
-		for (Resource resource : selectedResources)
-		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			alternative.addSubResourceModel(f);
-		}
-		
+		final Resource[] selectedResources = importModelSelectionPage.getSelectedResources();
+		ModelUtils.executeImportModels(alternative, selectedResources, importOptionsPage.getCopyIntoProjectParam());
 		return true;
 	}
 	
