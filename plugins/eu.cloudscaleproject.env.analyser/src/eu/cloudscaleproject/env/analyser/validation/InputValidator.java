@@ -38,12 +38,14 @@ public class InputValidator implements IResourceValidator {
 		boolean all = true;
 		boolean res = true;
 		boolean usa = true;
+		boolean use = true;
 		
 		List<IResource> repFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_REPOSITORY);
 		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
 		List<IResource> allFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_ALLOCATION);
 		List<IResource> resFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_RESOURCEENV);
 		List<IResource> usaFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGE);
+		List<IResource> useFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		ia.getSelfStatus().checkError("Repository missing", !repFiles.isEmpty(), false, "Repository model is missing!");
 		ia.getSelfStatus().checkError("System missing", !sysFiles.isEmpty(), false, "System model is missing!");
@@ -72,8 +74,11 @@ public class InputValidator implements IResourceValidator {
 		for(IResource file : usaFiles){
 			usa &= validateModel(ia, (IFile)file);
 		}
+		for(IResource file : useFiles){
+			use &= validateModel(ia, (IFile)file);
+		}
 
-		return rep && sys && all && res && usa;
+		return rep && sys && all && res && usa && use;
 		
 	}
 	

@@ -903,6 +903,6 @@
     <nodes xsi:type="method:Action" id="action_import_ext_analyser" name="Import" description="Import" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openextractorimportwizard" next="/1/@links.0" previous="/1/@links.14"/>
     <nodes xsi:type="method:Action" id="action_import_ext_overview" name="Transform" description="Import repository and system model, extracted from source code, into overview model." tooltip="Import extracted model into overview" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cludscale.environment.overview.openImportWizard" next="/1/@links.1" previous="/1/@links.15"/>
     <nodes xsi:type="method:Action" id="action_import_ext_ss" name="Import" description="Import input for StaticSpotter" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.staticspotter.command.openinputwizard" next="/1/@links.12" previous="/1/@links.13"/>
-    <nodes xsi:type="method:Action" id="_kQmOgPo5EeSga-ySs5-xDw" name="Import external" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openpcmimportdialog" next="/1/@links.16 /1/@links.17"/>
+    <nodes xsi:type="method:Action" id="_kQmOgPo5EeSga-ySs5-xDw" name="Import external" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.openAnalyserImportWizard" next="/1/@links.16 /1/@links.17"/>
   </method:Method>
 </xmi:XMI>
