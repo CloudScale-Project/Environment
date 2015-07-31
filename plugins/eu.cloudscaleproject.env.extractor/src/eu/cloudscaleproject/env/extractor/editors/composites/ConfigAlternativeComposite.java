@@ -54,7 +54,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 				@Override
 				public void run()
 				{
-					refresh();
+					if (!ConfigAlternativeComposite.this.isDisposed()) refresh();
 				}
 			});
 		}

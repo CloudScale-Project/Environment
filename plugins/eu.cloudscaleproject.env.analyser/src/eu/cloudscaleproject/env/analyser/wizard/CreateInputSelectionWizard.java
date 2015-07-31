@@ -106,12 +106,12 @@ public class CreateInputSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Import existing project";
+			return "Import external models";
 		}
 
 		@Override
 		public String getDescription() {
-			return "Creates new input alternative from existing PCM model";
+			return "Creates new input alternative from existing PCM models";
 		}
 
 	}

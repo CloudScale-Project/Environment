@@ -21,6 +21,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ValidationStatusHelper;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class ValidationWidget extends Composite
 {
@@ -64,26 +65,32 @@ public class ValidationWidget extends Composite
 	private Label lblIcon;
 	private Label lblText;
 
+	private Label lblMore;
+
 	public ValidationWidget(Composite parent, int style, IEditorInputResource alternative)
 	{
 		super(parent, style);
 
+		if (alternative == null) return; // TODO: check if this is needed (if yes --> refactor)
+
 		this.alternative = alternative;
-		setLayout(new GridLayout(2, false));
+
+		setLayout(new GridLayout(3, false));
 
 		lblIcon = new Label(this, SWT.NONE);
 		lblIcon.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
 
 		lblText = new Label(this, SWT.NONE);
-		lblText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
+		lblText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
 
-		lblText.addMouseListener(mouseListener);
+		lblMore = new Label(this, SWT.NONE);
+		lblMore.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblMore.setForeground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
+		lblMore.setText("(more...)");
+
 		lblIcon.addMouseListener(mouseListener);
-		this.addMouseListener(mouseListener);
-
-		if (alternative == null) return; // TODO: check if this is needed (if yes --> refactor)
-		
-		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
+		lblMore.addMouseListener(mouseListener);
+		lblMore.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
 		initListeners();
 		updateStatus();
@@ -114,10 +121,12 @@ public class ValidationWidget extends Composite
 		
 		Image image = CommonResources.OK;
 		String msg = "Alternative is valid.";
+		lblMore.setVisible(false);
 		
 		if(errorCount > 0){
 			image = CommonResources.ERROR;
 			msg = "Alternative is not valid.";
+			lblMore.setVisible(true);
 			
 			if( warningCount > 0 ){
 				msg = String.format("Alternative is not valid! Is contains %s errors(s) and %s warning(s)", 
@@ -128,6 +137,7 @@ public class ValidationWidget extends Composite
 			image = CommonResources.WARNING;
 			msg = String.format("Alternative is not valid! Is contains %s warning(s)", 
 					new int[]{warningCount});
+			lblMore.setVisible(true);
 		}
 		
 		// Valid without warnings 
@@ -144,6 +154,8 @@ public class ValidationWidget extends Composite
 			lblText.setText(msg); 
 			lblIcon.setImage(image);
 		}
+
+		pack();
 		
 		redraw();
 	}

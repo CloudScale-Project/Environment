@@ -165,7 +165,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Import Analyser project";
+			return "Import external experiment";
 		}
 
 		@Override

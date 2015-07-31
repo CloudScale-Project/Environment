@@ -26,8 +26,8 @@ public class ImportAnalyserSelectionWizard extends Wizard{
 		nodes.add(new ExternalImportProjectNode(project));
 		nodes.add(new ExternalImportInputNode(project));
 		
-		newInputSelectionPage = new WizardSelectionPage("Import Palladio project selection page",
-														"Import Palladio PCM models into the Analyser", nodes);
+		newInputSelectionPage = new WizardSelectionPage("Import external projects",
+														"Choose among different import options.", nodes);
 		
 	}
 	
@@ -65,7 +65,7 @@ public class ImportAnalyserSelectionWizard extends Wizard{
 
 		@Override
 		public String getName() {
-			return "Import PCM models and configurations";
+			return "Import experiment";
 		}
 
 		@Override
