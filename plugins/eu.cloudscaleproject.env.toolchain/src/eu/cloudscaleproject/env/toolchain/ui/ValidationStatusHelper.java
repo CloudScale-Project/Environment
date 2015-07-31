@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -196,8 +197,16 @@ public class ValidationStatusHelper
 			severity = IStatus.WARNING;
 		}
 
-		MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, severity, statuses.toArray(new Status[0]), reason, null);
-		ErrorDialog.openError(Display.getDefault().getActiveShell(), "Validation info dialog", msg, ms);
+		if (severity != IStatus.INFO)
+		{
+			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, severity, statuses.toArray(new Status[0]), reason, null);
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), "Validation info dialog", msg, ms);
+		}
+		else
+		{
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Validation status", "Alternative is valid. \nValidation mechanism didn't find any problems with selected alternative.");
+		}
+		
 	}
 
 }

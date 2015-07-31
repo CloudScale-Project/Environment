@@ -8,6 +8,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,11 +55,10 @@ public class ValidationWidget extends Composite
 
 	private MouseAdapter mouseListener = new MouseAdapter()
 	{
-		@Override
-		public void mouseDoubleClick(MouseEvent e)
-		{
+		public void mouseUp(MouseEvent e) {
 			ValidationStatusHelper.showValidationDialog(alternative);
-		}
+		};
+
 	};
 
 	private Label lblIcon;
@@ -79,8 +79,11 @@ public class ValidationWidget extends Composite
 
 		lblText.addMouseListener(mouseListener);
 		lblIcon.addMouseListener(mouseListener);
+		this.addMouseListener(mouseListener);
 
 		if (alternative == null) return; // TODO: check if this is needed (if yes --> refactor)
+		
+		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
 		initListeners();
 		updateStatus();
