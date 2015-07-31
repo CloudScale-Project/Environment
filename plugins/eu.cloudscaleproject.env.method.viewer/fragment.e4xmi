@@ -3,6 +3,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RQdxgDoqEeOZJ4ynIlEqHQ" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_chhPADoqEeOZJ4ynIlEqHQ" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5Wu24O8ZEeSfKfXpjK3rwg" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="0">
-    <elements xsi:type="basic:Part" xmi:id="_LjQcQO8bEeSfKfXpjK3rwg" elementId="eu.cloudscaleproject.env.method.viewer.part.diagram" contributionURI="bundleclass://eu.cloudscaleproject.env.method.viewer/eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart" label="Project Workflow diagram" closeable="true"/>
+    <elements xsi:type="basic:Part" xmi:id="_LjQcQO8bEeSfKfXpjK3rwg" elementId="eu.cloudscaleproject.env.method.viewer.part.diagram" contributionURI="bundleclass://eu.cloudscaleproject.env.method.viewer/eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart" label="Project Workflow diagram" iconURI="platform:/plugin/eu.cloudscaleproject.env.method.viewer/icons/diagram_16.png"/>
   </fragments>
 </fragment:ModelFragments>
