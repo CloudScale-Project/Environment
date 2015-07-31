@@ -786,13 +786,17 @@ Visit http://www.cloudscale-project.eu
 
       <!-- == Misc Packages ============================================================ -->
       <plugin id="org.modelversioning.emfprofile"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.gmf"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.reflective"/>
       <plugin id="org.modelversioning.emfprofile.application.registry"/>
       <plugin id="org.modelversioning.emfprofile.application.registry.ui"/>
       <plugin id="org.modelversioning.emfprofile.diagram"/>
       <plugin id="org.modelversioning.emfprofile.edit"/>
       <plugin id="org.modelversioning.emfprofile.editor"/>
       <plugin id="org.modelversioning.emfprofile.project"/>
+      <plugin id="org.modelversioning.emfprofile.project.ui"/>
       <plugin id="org.modelversioning.emfprofile.registry"/>
+      <plugin id="org.modelversioning.emfprofile.registry.ui"/>
 
       <!-- == Misc Packages ============================================================ -->
       <plugin id="javax.annotation"/>
