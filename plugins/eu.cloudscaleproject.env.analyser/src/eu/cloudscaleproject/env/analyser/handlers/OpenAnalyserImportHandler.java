@@ -9,11 +9,11 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.analyser.wizard.ExternalImportInputWizard;
+import eu.cloudscaleproject.env.analyser.wizard.ImportAnalyserSelectionWizard;
 
-public class OpenPCMImportHandler {
+public class OpenAnalyserImportHandler {
 	
-	private Logger logger = Logger.getLogger(OpenPCMImportHandler.class.getName());
+	private Logger logger = Logger.getLogger(OpenAnalyserImportHandler.class.getName());
 
 	@Execute
 	public void execute(@Active IProject project){
@@ -21,7 +21,7 @@ public class OpenPCMImportHandler {
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		
 		if(project != null){
-			ExternalImportInputWizard createInputAltWizard = new ExternalImportInputWizard(project);
+			ImportAnalyserSelectionWizard createInputAltWizard = new ImportAnalyserSelectionWizard(project);
 			WizardDialog wizardDialog = new WizardDialog(shell, createInputAltWizard);
 			wizardDialog.open();
 		}

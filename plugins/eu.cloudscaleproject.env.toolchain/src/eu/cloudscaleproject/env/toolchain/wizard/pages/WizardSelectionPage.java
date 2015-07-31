@@ -41,7 +41,7 @@ public class WizardSelectionPage extends org.eclipse.jface.wizard.WizardSelectio
 
 		tableViewer = new TableViewer(container);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.widthHint = 200;
+		gridData.widthHint = 220;
 		gridData.grabExcessHorizontalSpace = false;
 		tableViewer.getTable().setLayoutData(gridData);
 		tableViewer.setContentProvider(new ArrayContentProvider());
