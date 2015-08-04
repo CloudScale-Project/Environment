@@ -1,11 +1,16 @@
 package eu.cloudscaleproject.env.toolchain.explorer.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 
-import eu.cloudscaleproject.env.common.ExtensionRetriever;
-import eu.cloudscaleproject.env.toolchain.ITool;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -18,7 +23,6 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 public class ToolNodeFactory extends ExplorerNodeFactory{
 	
 	private final IProject project;
-	private ExtensionRetriever extensionRetriever = new ExtensionRetriever();
 
 	public ToolNodeFactory(IProject project) {
 		this.project = project;
@@ -26,16 +30,41 @@ public class ToolNodeFactory extends ExplorerNodeFactory{
 
 	@Override
 	public List<? extends Object> getKeys() {
-		return extensionRetriever.retrieveExtensionObjects("eu.cloudscaleproject.env.toolchain.tool", "class", ITool.class);
+		
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionPoint point = registry.getExtensionPoint("eu.cloudscaleproject.env.toolchain.tool");
+		
+		List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
+		
+		for(IExtension extension : point.getExtensions()){
+			for(IConfigurationElement el : extension.getConfigurationElements()){
+				if(el.getName().equals("tool")){
+					toolElements.add(el);
+				}
+			}
+		}
+		
+		return toolElements;
 	}
 
 	@Override
 	public IExplorerNode getChild(Object key) {
 		
-		ITool tool = (ITool)key;		
-		return new ExplorerNode(tool.getToolID(), 
-								tool.getToolName(), 
-								new ToolContainerFactory(project, tool));
+		IConfigurationElement tool = (IConfigurationElement)key;
+		
+		String id = tool.getAttribute("toolID");
+		String name = tool.getAttribute("toolName");
+		//String iconResource = tool.getAttribute("toolIcon");
+		
+		List<CSTool> csTools = new ArrayList<CSTool>();
+		
+		for(IConfigurationElement resourceElement : tool.getChildren()){
+			String resourceFactoryId = resourceElement.getAttribute("id");
+			csTools.add(CSTool.getTool(resourceFactoryId));
+		}
+		
+		IExplorerNode node = new ExplorerNode(id, name, new ToolResourceProviderNodeFactory(project, csTools));
+		return node;
 	}
 
 }
