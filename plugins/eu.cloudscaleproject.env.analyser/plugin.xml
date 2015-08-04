@@ -38,6 +38,25 @@
             target="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/">
       </mapping>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.tool">
+      <tool
+            toolID="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"
+            toolName="Analyser">
+         <resource
+               class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
+               id="eu.cloudscaleproject.env.analyser.resource2">
+         </resource>
+         <resource
+               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf">
+         </resource>
+         <resource
+               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes">
+         </resource>
+      </tool>
+   </extension>
 
 
 </plugin>

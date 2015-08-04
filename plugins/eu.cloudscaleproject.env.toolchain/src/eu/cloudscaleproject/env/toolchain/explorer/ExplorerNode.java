@@ -63,8 +63,11 @@ public class ExplorerNode implements IExplorerNode{
 		this.context = EclipseContextFactory.create();
 		
 		this.childFactory = childFactory;
-		this.childFactory.addPropertyChangeListener(factoryListener);
-		this.childFactory.initialize(this);
+		
+		if(this.childFactory != null){
+			this.childFactory.addPropertyChangeListener(factoryListener);
+			this.childFactory.initialize(this);
+		}
 	}
 	
 	public String getID() {
@@ -121,8 +124,10 @@ public class ExplorerNode implements IExplorerNode{
 		ExplorerNode en = (ExplorerNode)parent;
 		en.removeChild(this);
 		
-		this.childFactory.removePropertyChangeListener(factoryListener);
-		this.childFactory.dispose();
+		if(this.childFactory != null){
+			this.childFactory.removePropertyChangeListener(factoryListener);
+			this.childFactory.dispose();
+		}
 		
 		this.context.dispose();
 	}

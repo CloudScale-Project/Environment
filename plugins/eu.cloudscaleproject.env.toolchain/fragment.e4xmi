@@ -22,4 +22,7 @@
       </toolbar>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O51YUDqPEeWkq9wwFkaR-A" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.upperLeft">
+    <elements xsi:type="basic:Part" xmi:id="_BFfesDqPEeWkq9wwFkaR-A" elementId="eu.cloudscaleproject.env.toolchain.part.explorer" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerViewPart" label="Explorer"/>
+  </fragments>
 </fragment:ModelFragments>
