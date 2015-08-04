@@ -7,20 +7,26 @@ package eu.cloudscaleproject.env.toolchain;
  */
 public enum CSTool {
 	
+	EXTRACTOR("Extractor", 
+			"eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"),
 	EXTRACTOR_INPUT("Extractor Input", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"),
 	EXTRACTOR_CONF("Extractor configuration alternative", 
 				   "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"),
 	EXTRACTOR_RES("Extractor Results", 
 				  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"),
-
+				  
+	ANALYSER("Analyser", 
+				"eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"),
 	ANALYSER_INPUT("Analyser Input", 
-				   "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"),
+				  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"),
 	ANALYSER_CONF("Analyser Configuration",
 				  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"),
 	ANALYSER_RES("Analyser Results", 
 				 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"),
 
+	SPOTTER_DYN("Dynamic Spotter", 
+					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"),
 	SPOTTER_DYN_INPUT("Dynamic Spotter Input", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"),
 	SPOTTER_DYN_CONF("Dynamic Spotter Configuration",
@@ -28,6 +34,8 @@ public enum CSTool {
 	SPOTTER_DYN_RES("Dynamic Spotter Results", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"),
 	
+	SPOTTER_STA("Static Spotter", 
+					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"),
 	SPOTTER_STA_INPUT("Static Spotter Input", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"),
 	SPOTTER_STA_CONF("Static Spotter Configuration",
@@ -35,6 +43,9 @@ public enum CSTool {
 	SPOTTER_STA_RES("Static Spotter Results", 
 					"eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"),
 	
+	SCALE_DL("ScaleDL", 
+			  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"),
+					
 	USAGEEVOLUTION("Usage Evolution", 
 					  "eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"),
 	OVERVIEW("Overview", 

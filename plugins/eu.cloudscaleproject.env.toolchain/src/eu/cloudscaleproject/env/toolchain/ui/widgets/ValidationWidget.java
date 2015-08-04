@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.Label;
 import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ValidationStatusHelper;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 public class ValidationWidget extends Composite
 {
