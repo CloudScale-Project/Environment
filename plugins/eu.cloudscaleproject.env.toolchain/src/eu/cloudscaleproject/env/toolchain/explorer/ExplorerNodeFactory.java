@@ -50,7 +50,7 @@ public abstract class ExplorerNodeFactory {
 				IExplorerNode node = getChild(entry.getElement());
 				nodes.add(entry.getPosition(), node);
 				
-				pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, getChild(entry.getElement()));
+				pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
 			}
 			else{
 				
@@ -61,6 +61,7 @@ public abstract class ExplorerNodeFactory {
 			}
 		}
 		
+		diff.applyTo(keys);
 	}
 	
 	public void dispose(){

@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.explorer.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -21,6 +22,8 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
  *
  */
 public class ToolNodeFactory extends ExplorerNodeFactory{
+	
+	private static final Logger logger = Logger.getLogger(ToolNodeFactory.class.getName());
 	
 	private final IProject project;
 
@@ -58,9 +61,19 @@ public class ToolNodeFactory extends ExplorerNodeFactory{
 		
 		List<CSTool> csTools = new ArrayList<CSTool>();
 		
-		for(IConfigurationElement resourceElement : tool.getChildren()){
-			String resourceFactoryId = resourceElement.getAttribute("id");
-			csTools.add(CSTool.getTool(resourceFactoryId));
+		for(IConfigurationElement childEl : tool.getChildren()){
+			if(childEl.getName().equals("resource")){
+				
+				String toolID = childEl.getAttribute("id");
+				
+				CSTool csTool = CSTool.getTool(toolID);
+				if(csTool != null){
+					csTools.add(CSTool.getTool(toolID));
+				}
+				else{
+					logger.warning("Tool with id '" + toolID + "' has not been found in the CSTool enum!");
+				}
+			}
 		}
 		
 		IExplorerNode node = new ExplorerNode(id, name, new ToolResourceProviderNodeFactory(project, csTools));

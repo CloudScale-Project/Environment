@@ -45,7 +45,7 @@
             toolName="Analyser">
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
-               id="eu.cloudscaleproject.env.analyser.resource2">
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
@@ -57,6 +57,5 @@
          </resource>
       </tool>
    </extension>
-
 
 </plugin>

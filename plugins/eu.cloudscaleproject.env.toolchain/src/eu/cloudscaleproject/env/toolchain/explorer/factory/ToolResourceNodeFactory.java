@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.explorer.factory;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -19,8 +21,17 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 	
 	private final ResourceProvider resourceProvider;
 	
+	private final PropertyChangeListener resourceProviderListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			refresh();
+		}
+	};
+	
 	public ToolResourceNodeFactory(IProject project, ResourceProvider resourceProvider) {
 		this.resourceProvider = resourceProvider;
+		this.resourceProvider.addListener(resourceProviderListener);
 	}
 
 	@Override
@@ -36,6 +47,12 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 		ExplorerNode node = new ExplorerNode(resource.getID(), resource.getName(), null);
 		return node;
 		
+	}
+	
+	@Override
+	public void dispose() {
+		resourceProvider.removeListener(resourceProviderListener);
+		super.dispose();
 	}
 
 }

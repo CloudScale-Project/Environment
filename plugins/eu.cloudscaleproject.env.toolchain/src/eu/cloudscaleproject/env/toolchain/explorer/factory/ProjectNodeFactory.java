@@ -79,7 +79,7 @@ public class ProjectNodeFactory extends ExplorerNodeFactory{
 	public IExplorerNode getChild(Object key) {
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
-			return new ExplorerNode(project.getName(), project.getName(), null);
+			return new ExplorerNode(project.getName(), project.getName(), new ToolNodeFactory(project));
 		}
 		return null;
 	}

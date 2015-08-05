@@ -418,8 +418,10 @@ public abstract class ResourceProvider
 
 		synchronized (resourcesLock) {
 			resources.remove(res);
-			addResource(eir);
 		}
+			
+		addResource(eir);
+		
 		
 		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);
 		return eir;

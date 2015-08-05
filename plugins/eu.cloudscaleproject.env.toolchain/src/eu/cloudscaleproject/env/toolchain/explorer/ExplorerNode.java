@@ -16,10 +16,6 @@ import org.eclipse.swt.graphics.Image;
  *
  */
 public class ExplorerNode implements IExplorerNode{
-	
-	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.childAdded";
-	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.childRemoved";
-
 
 	private final String id;
 	private final String name;
@@ -77,6 +73,12 @@ public class ExplorerNode implements IExplorerNode{
 	public String getName() {
 		return name;
 	}
+	
+	public void setIcon(Image icon){
+		this.icon = icon;
+		
+		pcs.firePropertyChange(PROP_ICON, this.icon, icon);
+	}
 
 	public Image getIcon() {
 		return icon;
@@ -97,6 +99,11 @@ public class ExplorerNode implements IExplorerNode{
 	}
 
 	private void addChild(IExplorerNode node) {
+		
+		if(node == null){
+			return;
+		}
+		
 		children.add(node);
 		((ExplorerNode)node).parent = this;
 		
@@ -107,6 +114,11 @@ public class ExplorerNode implements IExplorerNode{
 	}
 
 	private void removeChild(IExplorerNode node) {
+		
+		if(node == null){
+			return;
+		}
+		
 		children.remove(node);
 		((ExplorerNode)node).parent = null;
 		
@@ -114,6 +126,11 @@ public class ExplorerNode implements IExplorerNode{
 		node.removePropertyChangeListener(childListener);
 		
 		pcs.firePropertyChange(PROP_CHILD_REMOVED, node, null);
+	}
+	
+	@Override
+	public void onSelect() {
+		context.activateBranch();
 	}
 	
 	@Override
