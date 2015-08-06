@@ -42,8 +42,8 @@ public class StatusLabelProvider implements ILabelProvider{
 
 	@Override
 	public Image getImage(Object element) {
-		if(element instanceof Warning){
-			Warning w = (Warning)element;			
+		if(element instanceof WarningNode){
+			Warning w = ((WarningNode)element).getWarning();			
 			switch(w.severity){
 				case IValidationStatus.SEVERITY_INFO:
 					return infoImage;
@@ -71,8 +71,8 @@ public class StatusLabelProvider implements ILabelProvider{
 			IValidationStatus stat = (IValidationStatus)element;
 			return stat.getName();
 		}
-		if(element instanceof Warning){
-			Warning w = (Warning)element;
+		if(element instanceof WarningNode){
+			Warning w = ((WarningNode)element).getWarning();
 			return w.message;
 		}
 		return "";

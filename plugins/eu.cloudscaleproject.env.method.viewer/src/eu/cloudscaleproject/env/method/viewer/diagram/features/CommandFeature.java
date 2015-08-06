@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
@@ -21,6 +20,7 @@ import org.eclipse.ui.ide.IDE;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.MethodStatusContext;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
@@ -170,9 +170,8 @@ public class CommandFeature extends AbstractCustomFeature{
 		}
 		
 		
-		eu.cloudscaleproject.env.common.notification.MethodStatusContext validationContext = 
-				new eu.cloudscaleproject.env.common.notification.MethodStatusContext(validationId, validationStatus);
-		CloudscaleContext.getActiveContext().set(eu.cloudscaleproject.env.common.notification.MethodStatusContext.class, validationContext);
+		MethodStatusContext validationContext = new MethodStatusContext(validationId, validationStatus);
+		CloudscaleContext.getActiveContext().set(MethodStatusContext.class, validationContext);
 
 		if (node.getCommandParam().isEmpty()) {
 			executor.execute(node.getCommandId());

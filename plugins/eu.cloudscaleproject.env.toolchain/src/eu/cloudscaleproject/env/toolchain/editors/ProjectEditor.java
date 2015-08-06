@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -134,6 +135,9 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(editorCloser, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE);
 		setSite(site);
 		setInputWithNotify(input);
+		
+		IEclipseContext context = (IEclipseContext)site.getService(IEclipseContext.class);
+		context.set(IProject.class, ExplorerProjectPaths.getProject(this));
 	}
 
 	@Override
@@ -216,8 +220,6 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 			}
 		}
 		
-		CloudscaleContext.registerCurrent(IProject.class, ExplorerProjectPaths.getProject(this));
-		CloudscaleContext.registerGlobal(IProject.class, ExplorerProjectPaths.getProject(this));
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
 	}
 }

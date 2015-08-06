@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 
 public class ValidationDiagramService {
@@ -33,6 +34,7 @@ public class ValidationDiagramService {
 			}
 			
 			if(diagram != null){
+				CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, diagram);
 				diagram.show();
 			}
 		}

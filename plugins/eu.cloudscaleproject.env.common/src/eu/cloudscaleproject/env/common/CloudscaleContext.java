@@ -7,6 +7,9 @@ import org.eclipse.e4.core.services.translation.TranslationService;
 
 public class CloudscaleContext {
 	
+	//model named objects
+	public static final String ACTIVE_VALIDATION_DIAGRAM = "eu.cloudscaleproject.env.common.CloudscaleContext.validationDiagram";
+	
 	private static IEclipseContext csContext = EclipseContextFactory.create("CloudscaleContext");
 	private static IEclipseContext apContext = null;
 	
@@ -53,6 +56,10 @@ public class CloudscaleContext {
 		csContext.set(clazz, object);
 	}
 	
+	public static <T> void registerCustom(String name, T object){
+		csContext.set(name, object);
+	}
+	
 	public static <T> void registerCurrent(Class<T> clazz){
 		IEclipseContext current = getActiveContext();
 		registerCurrent(clazz, ContextInjectionFactory.make(clazz, current));
@@ -74,6 +81,15 @@ public class CloudscaleContext {
 		}
 		
 		apContext.set(clazz, object);
+	}
+	
+	public static <T> void registerGlobal(String name, T object){
+		
+		if(apContext == null){
+			throw new IllegalStateException("Main application context is not initialized jet.");
+		}
+		
+		apContext.set(name, object);
 	}
 	
 	public static <T> void register(Class<T> clazz, IEclipseContext context){

@@ -38,6 +38,19 @@ public class StatusContentProvider implements ITreeContentProvider{
 	private boolean hasWarnings(IValidationStatus stat){
 		return stat.getWarnings().length > 0;
 	}
+	
+	private WarningNode[] createWarningNodes(Object parent, Warning... warnings){
+		
+		List<WarningNode> warningNodes = new ArrayList<WarningNode>();
+		
+		for(Warning w : warnings){
+			WarningNode wn = new WarningNode(w);
+			wn.setParent(parent);
+			warningNodes.add(wn);
+		}
+		
+		return warningNodes.toArray(new WarningNode[warningNodes.size()]);
+	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
@@ -69,7 +82,8 @@ public class StatusContentProvider implements ITreeContentProvider{
 			List<Object> children = new ArrayList<Object>();
 			
 			//add self warnings
-			children.addAll(Arrays.asList(sp.getSelfStatus().getWarnings()));
+			WarningNode[] warningNodes = createWarningNodes(parentElement, sp.getSelfStatus().getWarnings());			
+			children.addAll(Arrays.asList(warningNodes));
 			
 			for(IValidationStatus stat : sp.getSubStatuses()){
 				if(hasWarnings(stat)){
@@ -81,7 +95,7 @@ public class StatusContentProvider implements ITreeContentProvider{
 		}
 		if(parentElement instanceof IValidationStatus){
 			IValidationStatus sp = (IValidationStatus)parentElement;
-			return sp.getWarnings();
+			return createWarningNodes(sp, sp.getWarnings());
 		}
 			
 		return null;
@@ -93,7 +107,10 @@ public class StatusContentProvider implements ITreeContentProvider{
 			IValidationStatus stat = (IValidationStatus)element;
 			return stat.getProvider();
 		}
-		//TODO: can not get warning parent!
+		if(element instanceof WarningNode){
+			WarningNode wn = (WarningNode)element;
+			return wn.getParent();
+		}
 		return null;
 	}
 
