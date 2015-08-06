@@ -110,4 +110,11 @@
             priority="high">
       </content-type>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="eu.cloudscaleproject.env.product.views.category.cloudscale"
+            name="CloudScale">
+      </category>
+   </extension>
 </plugin>

@@ -35,6 +35,7 @@ public class Activator extends AbstractUIPlugin
 		plugin = this;
 
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(ExplorerChangeNotifier.getInstance(), IResourceChangeEvent.POST_CHANGE);
+		Extensions.getInstance().retrieveExtensions();
 	}
 
 	/*

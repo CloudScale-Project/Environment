@@ -13,7 +13,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_gZunsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.handler.SelectAlternativeMethodHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.SelectAlternativeMethodHandler" command="_CUOMsDafEeW2k9p_RsN0yg"/>
     <elements xsi:type="commands:Handler" xmi:id="_ZdjM0DasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.handler.OpenAlternativeHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenAlternativeHandler" command="_V4xegDasEeWRRJlfUN4Dxg"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.bottom">
-    <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Validation status"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="">
+    <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Validation status" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/status_view_16.png" closeable="true"/>
   </fragments>
 </fragment:ModelFragments>

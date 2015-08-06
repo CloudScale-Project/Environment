@@ -2,29 +2,21 @@ package eu.cloudscaleproject.env.method.viewer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.ui.editor.DiagramComposite;
-import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -36,18 +28,27 @@ import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
 import eu.cloudscaleproject.env.method.common.method.Warning;
-import eu.cloudscaleproject.env.method.viewer.diagram.IDiagramView;
 
-public class MethodDiagramComposite extends DiagramComposite implements IValidationDiagram{
-		
-	private boolean isInitilized = false;
-	private IDiagramView part;
+/**
+ *
+ * @author Vito Čuček <vito.cucek@xlab.si>
+ *
+ */
+public class ValidationDiagram implements IValidationDiagram{
+	
+	public static final String PROP_STATUS_CHANGED = "eu.cloudscaleproject.env.method.viewer.ValidationDiagram.statusChanged";
+	
+	private final Resource resource;
+	
 	private IProject project;
+	private TransactionalEditingDomain editingDomain = null;
 		
 	private HashMap<String, StatusNode> nodes = new HashMap<String, StatusNode>();
 	
 	private HashMap<String, IValidationStatusProvider> providerBindings = new HashMap<String, IValidationStatusProvider>();
 	private HashMap<String, IValidationStatus> statusBindings = new HashMap<String, IValidationStatus>();
+	
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	PropertyChangeListener statusManagerListener = new PropertyChangeListener() {
 		
@@ -56,7 +57,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			if(StatusManager.PROP_STATUS_PROVIDER_REMOVED.equals(pce.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)pce.getOldValue();
 				
-				synchronized (MethodDiagramComposite.this) {
+				synchronized (ValidationDiagram.this) {
 					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
 					if(statusProvider.equals(bindedProvider)){
 						unbindStatusProvider(statusProvider.getID());
@@ -75,7 +76,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			if(IValidationStatusProvider.PROP_STATUS_ADDED.equals(evt.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)evt.getSource();
 				
-				synchronized (MethodDiagramComposite.this) {
+				synchronized (ValidationDiagram.this) {
 					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
 					IValidationStatus status = (IValidationStatus)evt.getNewValue();
 					if(statusProvider.equals(bindedProvider)){
@@ -87,7 +88,7 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			if(IValidationStatusProvider.PROP_STATUS_REMOVED.equals(evt.getPropertyName())){
 				IValidationStatusProvider statusProvider = (IValidationStatusProvider)evt.getSource();
 				
-				synchronized (MethodDiagramComposite.this) {
+				synchronized (ValidationDiagram.this) {
 					IValidationStatusProvider bindedProvider = providerBindings.get(statusProvider.getID());
 					IValidationStatus status = (IValidationStatus)evt.getOldValue();
 					if(statusProvider.equals(bindedProvider)){
@@ -103,10 +104,14 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		@Override
 		public void propertyChange(final PropertyChangeEvent pce) {
 			
-			final TransactionalEditingDomain editingDomain = getDiagramTypeProvider().getDiagramBehavior().getEditingDomain();
-			final CommandStack commandStack = editingDomain.getCommandStack();
+			TransactionalEditingDomain ed = editingDomain;
+			if(ed == null){
+				return;
+			}
 			
-			commandStack.execute(new RecordingCommand((TransactionalEditingDomain) editingDomain){
+			final CommandStack commandStack = ed.getCommandStack();
+			
+			commandStack.execute(new RecordingCommand((TransactionalEditingDomain) ed){
 				
 				protected void doExecute(){
 					
@@ -155,44 +160,20 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 	};
 	
-	public MethodDiagramComposite(IDiagramView part, Composite parent){
-		
-		super(parent, SWT.NONE);
-		this.part = part;		
+	public ValidationDiagram(Resource resource){
+		this.resource = resource;
 		StatusManager.getInstance().addPropertyChangeListener(statusManagerListener);
 	}
 	
-	@Override
-	public IProject getProject() {
-		return project;
-	}
-
-	@Override
-	public void setProject(IProject project) {
-		this.project = project;
-	}
-	
-	@Override
-	public void setInput(IDiagramEditorInput input) {
-		super.setInput(input);
-		initialize();
-	}
-	
-	@Override
-	public void setInput(TransactionalEditingDomain editingDomain, IDiagramEditorInput input) {
-		super.setInput(editingDomain, input);
-		initialize();
-	}
-	
-	private void initialize(){
+	public void initialize(IDiagramTypeProvider diagramTypeProvider){
 				
-		TreeIterator<EObject> iter = EcoreUtil.getAllContents(getDiagramTypeProvider().getDiagram(), true);
+		TreeIterator<EObject> iter = EcoreUtil.getAllContents(diagramTypeProvider.getDiagram(), true);
 		while(iter.hasNext()){
 			EObject eobject = iter.next();
 			Object bo = null;
 			
 			if(eobject instanceof PictogramElement){
-				bo = getDiagramTypeProvider().getFeatureProvider().getBusinessObjectForPictogramElement((PictogramElement)eobject);
+				bo = diagramTypeProvider.getFeatureProvider().getBusinessObjectForPictogramElement((PictogramElement)eobject);
 			}
 			
 			if(bo instanceof StatusNode){
@@ -201,54 +182,52 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			}
 		}
 		
-		addDisposeListener(new DisposeListener() {
-			
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				StatusManager.getInstance().removePropertyChangeListener(statusManagerListener);
-
-				for(IValidationStatusProvider statusProvider : providerBindings.values()){
-					statusProvider.removeStatusChangeListener(statusProviderListener);
-				}
-				for(IValidationStatus status : statusBindings.values()){
-					status.removeListener(statuslistener);
-				}
-				providerBindings.clear();
-				statusBindings.clear();
-			}
-		});
+		this.editingDomain = diagramTypeProvider.getDiagramBehavior().getEditingDomain(); 
 		
-		isInitilized = true;
+		
+		for(IValidationStatus status : new ArrayList<IValidationStatus>(statusBindings.values())){
+			bindStatus(status);
+		}
 	}
 	
 	@Override
 	public void show() {
-		this.part.setTopDiagram(this);
+	}
+
+	public Resource getResource(){
+		return this.resource;
+	}
+	
+	@Override
+	public IProject getProject() {
+		return this.project;
+	}
+
+	@Override
+	public void setProject(IProject project) {
+		this.project = project;
 	}
 	
 	public void refresh(){
-		BatchExecutor.getInstance().addTask(MethodDiagramComposite.class.getName() + ".refresh", new Runnable() {
-			@Override
-			public void run() {
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						if(getDiagramTypeProvider().getDiagramBehavior() != null){
-							getDiagramTypeProvider().getDiagramBehavior().refreshContent();
-						}
-					}
-				});
-			}
-		});
+		pcs.firePropertyChange(PROP_STATUS_CHANGED, null, this);
+	}
+	
+	public void dispose(){
+		StatusManager.getInstance().removePropertyChangeListener(statusManagerListener);
+
+		for(IValidationStatusProvider statusProvider : providerBindings.values()){
+			statusProvider.removeStatusChangeListener(statusProviderListener);
+		}
+		for(IValidationStatus status : statusBindings.values()){
+			status.removeListener(statuslistener);
+		}
+		providerBindings.clear();
+		statusBindings.clear();
+		nodes.clear();
 		
 	}
 	
 	public synchronized void bindStatusProvider(String id, IValidationStatusProvider statusProvider){
-		
-		if(!isInitilized){
-			return;
-		}
 		
 		unbindStatusProvider(id);
 		providerBindings.remove(id);
@@ -270,10 +249,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	}
 	
 	public synchronized void unbindStatusProvider(String id){
-
-		if(!isInitilized){
-			return;
-		}
 		
 		IValidationStatusProvider statusProvider = providerBindings.get(id);
 		if(statusProvider == null){
@@ -298,10 +273,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	
 	public synchronized void bindStatus(IValidationStatus status){
 		
-		if(!isInitilized){
-			return;
-		}
-		
 		if(status == null){
 			return;
 		}
@@ -324,10 +295,6 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	
 	public synchronized void unbindStatus(IValidationStatus status){
 		
-		if(!isInitilized){
-			return;
-		}
-		
 		if(status == null){
 			return;
 		}
@@ -349,14 +316,18 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 	
 	private void bind(final StatusNode statusNode, final IValidationStatus status){
 		
+		TransactionalEditingDomain ed = editingDomain;
+		if(ed == null){
+			return;
+		}
+		
 		assert(statusNode != null);
 		
 		if(status == null){
 			//clear status
-			final TransactionalEditingDomain editingDomain = getDiagramTypeProvider().getDiagramBehavior().getEditingDomain();
-			final CommandStack commandStack = editingDomain.getCommandStack();
+			final CommandStack commandStack = ed.getCommandStack();
 			
-			commandStack.execute(new RecordingCommand((TransactionalEditingDomain) editingDomain) {
+			commandStack.execute(new RecordingCommand((TransactionalEditingDomain) ed) {
 				
 				protected void doExecute() {
 					
@@ -382,10 +353,8 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 			return;
 		}
 		
-		final TransactionalEditingDomain editingDomain = getDiagramTypeProvider().getDiagramBehavior().getEditingDomain();
-		final CommandStack commandStack = editingDomain.getCommandStack();
-		
-		commandStack.execute(new RecordingCommand((TransactionalEditingDomain) editingDomain) {
+		final CommandStack commandStack = ed.getCommandStack();
+		commandStack.execute(new RecordingCommand((TransactionalEditingDomain) ed) {
 			
 			protected void doExecute() {
 				
@@ -424,79 +393,11 @@ public class MethodDiagramComposite extends DiagramComposite implements IValidat
 		}
 	}
 
-	//ZOOM Workaround!
+	public void addPropertyChangeListener(PropertyChangeListener listener){
+		this.pcs.addPropertyChangeListener(listener);
+	}
 	
-	private final Object lock = new Object();
-	private boolean resize = false;
-	
-	public void initializeGraphicalViewer() {
-		super.initializeGraphicalViewer();
-				
-		//set zoom
-		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);
-		zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_NEVER);
-		
-		getGraphicalViewer().getControl().addControlListener(new ControlListener() {
-			
-			@Override
-			public void controlResized(ControlEvent e) {
-				synchronized (lock) {
-					resize = true;
-					lock.notifyAll();
-				}
-			}
-			
-			@Override
-			public void controlMoved(ControlEvent e) {
-			}
-		});
-		
-		if(getGraphicalViewer().getControl() instanceof FigureCanvas){
-			FigureCanvas fc = (FigureCanvas)getGraphicalViewer().getControl();
-			
-			fc.setVerticalScrollBarVisibility(FigureCanvas.NEVER);
-			fc.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
-		}
-		
-		Thread t = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while(!Thread.currentThread().isInterrupted()){
-					try {
-						synchronized (lock) {
-							if(!resize){
-								lock.wait();
-							}
-							resize = false;
-						}
-						
-						try {
-							Thread.sleep(300);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						Display.getDefault().asyncExec(new Runnable() {
-							public void run() {
-								zoomManager.setZoomAsText(ZoomManager.FIT_ALL);
-							}
-						});
-						
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-					} catch (InterruptedException e) {
-					}
-					
-				}
-			}
-		});
-		t.start();
+	public void removePropertyChangeListener(PropertyChangeListener listener){
+		this.pcs.removePropertyChangeListener(listener);
 	}
 }

@@ -37,7 +37,7 @@ public class Activator extends AbstractUIPlugin {
 		
 		MethodPackageImpl.init();
 		PictogramsPackageImpl.init();
-		MmPackageImpl.init();
+		MmPackageImpl.init();		
 	}
 
 	/*

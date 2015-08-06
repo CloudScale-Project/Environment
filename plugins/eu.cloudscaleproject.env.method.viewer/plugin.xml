@@ -84,4 +84,22 @@
             id="eu.cloudscaleproject.env.method.viewer.diagram.DiagramImageProvider">
       </imageProvider>
    </extension>
+   <extension
+         name="Workflow diagram"
+         point="eu.cloudscaleproject.env.common.notification.diagram">
+      <diagram
+            class="eu.cloudscaleproject.env.method.viewer.ValidationDiagramFactory">
+      </diagram>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <e4view
+            category="eu.cloudscaleproject.env.product.views.category.cloudscale"
+            class="eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart"
+            icon="icons/diagram_16.png"
+            id="eu.cloudscaleproject.env.method.viewer.Workflow"
+            name="Workflow diagram"
+            restorable="true">
+      </e4view>
+   </extension>
 </plugin>

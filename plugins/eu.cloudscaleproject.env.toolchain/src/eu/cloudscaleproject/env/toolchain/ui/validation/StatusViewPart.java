@@ -27,7 +27,6 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagram;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 
@@ -116,12 +115,18 @@ public class StatusViewPart {
 		});
 		
 		StatusManager.getInstance().addPropertyChangeListener(startusListener);
+		doReloadProviders(currentProject);
 	}
 	
 	@Inject
 	private void reloadProviders(@Named(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM) @Optional IValidationDiagram diagram){
-						
-		this.currentProject = diagram != null ? diagram.getProject() : null;		
+		
+		this.currentProject = diagram != null ? diagram.getProject() : null;
+		
+		if(composite == null || composite.isDisposed()){
+			return;
+		}
+		
 		doReloadProviders(this.currentProject);
 	}
 	
@@ -143,7 +148,7 @@ public class StatusViewPart {
 		//get global statuses (not bound to specific project)
 		this.statusProviders.addAll(StatusManager.getInstance().getStatusProviders(null));
 		
-		if(this.treeViewer != null){
+		if(this.treeViewer != null && !treeViewer.getTree().isDisposed()){
 			this.treeViewer.setInput(this.statusProviders);
 			this.treeViewer.expandAll();
 		}
@@ -158,7 +163,6 @@ public class StatusViewPart {
 	@PreDestroy
 	public void preDestroy() {
 		StatusManager.getInstance().removePropertyChangeListener(startusListener);
-		ValidationDiagramService.registerDiagramFactory(null);
 	}
 	
 	@Focus

@@ -26,5 +26,16 @@
             class="eu.cloudscaleproject.env.toolchain.wizard.ProjectWizardExtension">
       </client>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <e4view
+            category="eu.cloudscaleproject.env.product.views.category.cloudscale"
+            class="eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart"
+            icon="icons/status_view_16.png"
+            id="eu.cloudscaleproject.env.toolchain.StatusView"
+            name="Validation view"
+            restorable="true">
+      </e4view>
+   </extension>
 
 </plugin>

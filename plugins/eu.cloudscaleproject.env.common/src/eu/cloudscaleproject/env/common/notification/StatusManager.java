@@ -10,13 +10,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.ExtensionRetriever;
+import eu.cloudscaleproject.env.common.Extensions;
 
 public class StatusManager {
 	
@@ -104,7 +102,6 @@ public class StatusManager {
 	
 	private static final Logger logger = Logger.getLogger(StatusManager.class.getName());
 		
-	private List<IResourceValidator> validators = null;
 	private HashMap<IValidationStatusProvider, IProject> statusProviders = new HashMap<IValidationStatusProvider, IProject>();
 		
 	private static StatusManager instance = null;
@@ -230,21 +227,9 @@ public class StatusManager {
 		validationThread.start();
 	}
 	
-	@Inject
-	private ExtensionRetriever er;
-	
-	public List<IResourceValidator> getValidators(){
-		if(validators == null){
-			validators = er.retrieveExtensionObjects(
-					"eu.cloudscaleproject.env.common.notification.validator",
-					"class", IResourceValidator.class);
-		}
-		return validators;
-	}
-	
 	public boolean hasValidator(String id){
 		boolean validatorFound = false;
-		for (IResourceValidator v : getValidators()) {
+		for (IResourceValidator v : Extensions.getInstance().getResourceValidators()) {
 			if (v.getID().equals(id)) {
 				validatorFound = true;
 			}
@@ -303,7 +288,7 @@ public class StatusManager {
 	private void doValidate(IProject project, IValidationStatusProvider statusProvider) {
 		try{
 			boolean validatorFound = false;
-			for (IResourceValidator v : getValidators()) {				
+			for (IResourceValidator v : Extensions.getInstance().getResourceValidators()) {				
 				if (v.getID().equals(statusProvider.getID())) {
 					validatorFound = true;
 					

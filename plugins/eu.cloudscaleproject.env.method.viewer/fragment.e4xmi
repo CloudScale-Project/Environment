@@ -2,7 +2,7 @@
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_NRbJEDoqEeOZJ4ynIlEqHQ">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RQdxgDoqEeOZJ4ynIlEqHQ" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_chhPADoqEeOZJ4ynIlEqHQ" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application"/>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5Wu24O8ZEeSfKfXpjK3rwg" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="0">
-    <elements xsi:type="basic:Part" xmi:id="_LjQcQO8bEeSfKfXpjK3rwg" elementId="eu.cloudscaleproject.env.method.viewer.part.diagram" contributionURI="bundleclass://eu.cloudscaleproject.env.method.viewer/eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart" label="Project Workflow diagram" iconURI="platform:/plugin/eu.cloudscaleproject.env.method.viewer/icons/diagram_16.png"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5Wu24O8ZEeSfKfXpjK3rwg" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="first">
+    <elements xsi:type="basic:Part" xmi:id="_LjQcQO8bEeSfKfXpjK3rwg" elementId="eu.cloudscaleproject.env.method.viewer.part.diagram" contributionURI="bundleclass://eu.cloudscaleproject.env.method.viewer/eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart" label="Workflow diagram" iconURI="platform:/plugin/eu.cloudscaleproject.env.method.viewer/icons/diagram_16.png" closeable="true"/>
   </fragments>
 </fragment:ModelFragments>

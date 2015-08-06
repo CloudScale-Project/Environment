@@ -1,42 +1,39 @@
 package eu.cloudscaleproject.env.common.notification.diagram;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.Extensions;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 
 public class ValidationDiagramService {
 	
-	private static IValidationDiagramFactory diagramFactory = null;
 	private static HashMap<IProject, IValidationDiagram> diagrams = new HashMap<IProject, IValidationDiagram>();
 	
-	private static List<IProject> deferredRequests = new ArrayList<IProject>();
-
 	public static void showDiagram(IProject project){
-		
-		assert(project != null);
+
+		if(project == null){
+			CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, null);
+			return;
+		}
 		
 		try{
 			IValidationDiagram diagram = diagrams.get(project);
 			if(diagram == null){
-				if(diagramFactory != null){
-					diagram = diagramFactory.createDiagram(null);
+				
+				List<IValidationDiagramFactory> factories = Extensions.getInstance().getValiadtionDiagramFactories();
+				
+				if(!factories.isEmpty()){
+					diagram = factories.get(0).createDiagram(null);
 					diagram.setProject(project);
 					diagrams.put(project, diagram);
 				}
-				else{
-					deferredRequests.add(project);
-				}
 			}
 			
-			if(diagram != null){
-				CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, diagram);
-				diagram.show();
-			}
+			CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, diagram);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -63,14 +60,5 @@ public class ValidationDiagramService {
 			diagramProvider.bindStatusProvider(statusProvider.getID(), statusProvider);
 		}
 		
-	}
-	
-	public static void registerDiagramFactory(IValidationDiagramFactory factory){
-		diagramFactory = factory;
-		
-		for(IProject project : deferredRequests){
-			showDiagram(project);
-		}
-		deferredRequests.clear();
 	}
 }
