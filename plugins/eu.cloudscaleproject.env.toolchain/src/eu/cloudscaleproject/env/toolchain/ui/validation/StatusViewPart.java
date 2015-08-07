@@ -132,13 +132,13 @@ public class StatusViewPart {
 	
 	private void doReloadProviders(IProject project){
 		if(project == null){
-			part.setLabel("Validation status");
+			part.setLabel("Status");
 			part.setDescription("Open Dashboard editor to show current project status");
 			
 			this.statusProviders = new ArrayList<IValidationStatusProvider>();
 		}
 		else{
-			part.setLabel("Validation status [" + project.getName() + "]");
+			part.setLabel("Status [" + project.getName() + "]");
 			part.setDescription("Current project validation status");
 			
 			//get project statuses

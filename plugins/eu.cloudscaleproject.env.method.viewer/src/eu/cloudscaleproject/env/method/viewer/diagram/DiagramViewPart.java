@@ -81,7 +81,7 @@ public class DiagramViewPart{
 		}
 		
 		CloudscaleContext.getActiveContext().set(IProject.class, diagram.getProject());
-		part.setLabel("Workflow diagram ["+diagram.getProject().getName()+"]");
+		part.setLabel("Workflow ["+diagram.getProject().getName()+"]");
 	}
 	
 	

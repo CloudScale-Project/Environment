@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NrKYIKO8EeOVJP61i6fIgw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_L3EzAKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.openprojecteditor" commandName="openProjectEditor" description="Opens project editor">
       <parameters xmi:id="_cyx5UKhjEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.tabid" name="tabId" typeId="" optional="false"/>
@@ -7,6 +7,7 @@
     </elements>
     <elements xsi:type="commands:Command" xmi:id="_CUOMsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod" commandName="selectAlternativeMethod" description="Run simulation using analyser tool"/>
     <elements xsi:type="commands:Command" xmi:id="_V4xegDasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.openAlternative" commandName="openAlternative" description="Run simulation using analyser tool"/>
+    <elements xsi:type="commands:Command" xmi:id="_lPWUsDzzEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.command.pinstatus" commandName="pinStatus" description="Pin status view to the current selection"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PBqRAKO8EeOVJP61i6fIgw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_Q14PUKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenProjectEditorHandler" command="_L3EzAKR6EeOVJP61i6fIgw"/>
@@ -14,6 +15,11 @@
     <elements xsi:type="commands:Handler" xmi:id="_ZdjM0DasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.handler.OpenAlternativeHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenAlternativeHandler" command="_V4xegDasEeWRRJlfUN4Dxg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="">
-    <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Validation status" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/status_view_16.png" closeable="true"/>
+    <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Status" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/status_view_16.png" closeable="true">
+      <handlers xmi:id="_0Tx9MDzzEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.handler.pinstatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.PinStatusHandler" command="_lPWUsDzzEeWpPejK7esD1g"/>
+      <toolbar xmi:id="_i104kDzzEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_jL9goDzzEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.handledtoolitem.0" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin this Status view to the current selection" type="Check" command="_lPWUsDzzEeWpPejK7esD1g"/>
+      </toolbar>
+    </elements>
   </fragments>
 </fragment:ModelFragments>

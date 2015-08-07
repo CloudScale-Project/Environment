@@ -23,6 +23,8 @@ import eu.cloudscaleproject.env.common.BatchExecutor;
 public class ValidationDiagramComposite extends DiagramComposite{
 	
 	private final ValidationDiagram diagram;
+	
+	private Thread zoomThread = null;
 
 	private final PropertyChangeListener diagramListener = new PropertyChangeListener(){
 		
@@ -60,6 +62,11 @@ public class ValidationDiagramComposite extends DiagramComposite{
 			
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
+				
+				if(zoomThread != null){
+					zoomThread.interrupt();
+				}
+				
 				ValidationDiagramComposite.this.diagram.removePropertyChangeListener(diagramListener);
 				ValidationDiagramComposite.this.diagram.dispose();
 			}
@@ -101,7 +108,7 @@ public class ValidationDiagramComposite extends DiagramComposite{
 			fc.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
 		}
 		
-		Thread t = new Thread(new Runnable() {
+		zoomThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -114,25 +121,17 @@ public class ValidationDiagramComposite extends DiagramComposite{
 							resize = false;
 						}
 						
-						try {
-							Thread.sleep(300);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						Thread.sleep(300);
 						
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
-								zoomManager.setZoomAsText(ZoomManager.FIT_ALL);
+								if(!ValidationDiagramComposite.this.isDisposed()){
+									zoomManager.setZoomAsText(ZoomManager.FIT_ALL);
+								}
 							}
 						});
 						
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						Thread.sleep(1000);
 						
 					} catch (InterruptedException e) {
 					}
@@ -140,7 +139,7 @@ public class ValidationDiagramComposite extends DiagramComposite{
 				}
 			}
 		});
-		t.start();
+		zoomThread.start();
 	}
 
 }
