@@ -5,9 +5,9 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeProviderNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
@@ -37,7 +37,7 @@ public class ToolResourceProviderNodeFactory extends ExplorerNodeFactory{
 		CSTool tool = (CSTool)key;
 		
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, tool);
-		ExplorerNode node = new ExplorerNode(tool.getID(), tool.getName(), new ToolResourceNodeFactory(project, rp));
+		AlternativeProviderNode node = new AlternativeProviderNode(tool, rp);
 		return node;
 		
 	}

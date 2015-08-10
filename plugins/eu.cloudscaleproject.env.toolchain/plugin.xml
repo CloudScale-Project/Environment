@@ -38,5 +38,26 @@
             restorable="true">
       </e4view>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.toolchain.definition.alternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <instanceof
+                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode">
+            </instanceof>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.toolchain.definition.alternativeProviderNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <instanceof
+                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeProviderNode">
+            </instanceof>
+         </with>
+      </definition>
+   </extension>
 
 </plugin>

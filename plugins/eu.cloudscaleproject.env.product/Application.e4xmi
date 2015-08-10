@@ -124,6 +124,11 @@
   <commands xmi:id="_AeeC8FxlEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.command.openperspective" commandName="openPerspective" description="Open perspective with the specified ID">
     <parameters xmi:id="_EZLlAFxlEeWT--3X3lai2w" elementId="PerspectiveId" name="PerspectiveId" optional="false"/>
   </commands>
+  <commands xmi:id="_3fw-8D0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.import" commandName="%command.import.name" description="%command.import.description"/>
+  <commands xmi:id="_3gKAgD0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.export" commandName="%command.export.name" description="%command.export.description"/>
+  <commands xmi:id="_3gf-wD0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.save" commandName="%command.save.name" description="%command.save.description"/>
+  <commands xmi:id="_3g0H0D0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.refresh" commandName="%command.refresh.name" description="%command.refresh.description"/>
+  <commands xmi:id="_3hIQ4D0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.edit.delete" commandName="%command.delete.name" description="%command.delete.description"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXh" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXi" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

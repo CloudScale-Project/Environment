@@ -12,9 +12,9 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ExplorerNode;
 
 /**
  *

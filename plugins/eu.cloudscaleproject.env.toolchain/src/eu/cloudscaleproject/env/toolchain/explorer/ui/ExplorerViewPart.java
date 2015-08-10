@@ -9,6 +9,8 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -27,11 +29,19 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
  */
 public class ExplorerViewPart {
 	
+	private static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.popupmenu.explorer";
+	
 	private Composite composite;
 	private TreeViewer treeViewer;
 	
 	@Inject
 	private MPart part;
+	
+	@Inject
+	private EMenuService menuService;
+	
+	@Inject
+	private ESelectionService selectionService;
 	
 	@PostConstruct
 	public void postConstruct(Composite parent) {
@@ -64,8 +74,18 @@ public class ExplorerViewPart {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				
+				if(selection == null){
+					return;
+				}
+				
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
-				node.onSelect();
+				
+				if(node != null){
+					node.onSelect();
+				}
+				
+				selectionService.setSelection(node);
 			}
 		});
 		
@@ -74,6 +94,7 @@ public class ExplorerViewPart {
 		
 		this.treeViewer.setInput(explorer.getRoot());
 		
+		menuService.registerContextMenu(this.treeViewer.getControl(), POPUP_MENU_ELEMENT);
 	}
 	
 	@PreDestroy

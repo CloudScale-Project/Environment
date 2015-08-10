@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.explorer;
+package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -9,6 +9,9 @@ import java.util.List;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
+
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 
 /**
  *
@@ -56,7 +59,7 @@ public class ExplorerNode implements IExplorerNode{
 		this.id = id;
 		this.name = name;
 		
-		this.context = EclipseContextFactory.create();
+		this.context = EclipseContextFactory.create(name);
 		
 		this.childFactory = childFactory;
 		
@@ -154,6 +157,10 @@ public class ExplorerNode implements IExplorerNode{
 			((ExplorerNode)node).disposeChildren();
 			node.dispose();
 		}
+	}
+	
+	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue){
+		this.pcs.firePropertyChange(propertyName, oldValue, newValue);
 	}
 
 	@Override

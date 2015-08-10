@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_OU0TMG-cEeK1goHNX4VHjw">
+  <imports xsi:type="commands:Command" xmi:id="_GIFakD0bEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.product.command.newProject"/>
+  <imports xsi:type="commands:Command" xmi:id="_SRVrYD0bEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.product.command.newExampleProject"/>
+  <imports xsi:type="commands:Command" xmi:id="_50s2AD0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.import"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NrKYIKO8EeOVJP61i6fIgw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_L3EzAKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.command.openprojecteditor" commandName="openProjectEditor" description="Opens project editor">
       <parameters xmi:id="_cyx5UKhjEeOG6cOE6pIkzA" elementId="eu.cloudscaleproject.env.toolchain.commandparameter.tabid" name="tabId" typeId="" optional="false"/>
@@ -23,6 +26,19 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O51YUDqPEeWkq9wwFkaR-A" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.upperLeft">
-    <elements xsi:type="basic:Part" xmi:id="_BFfesDqPEeWkq9wwFkaR-A" elementId="eu.cloudscaleproject.env.toolchain.part.explorer" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerViewPart" label="CloudScale Project Explorer" closeable="true"/>
+    <elements xsi:type="basic:Part" xmi:id="_BFfesDqPEeWkq9wwFkaR-A" elementId="eu.cloudscaleproject.env.toolchain.part.explorer" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerViewPart" label="CloudScale Explorer" tooltip="" closeable="true">
+      <menus xsi:type="menu:PopupMenu" xmi:id="_qyXNIDz6EeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.popupmenu.explorer">
+        <children xsi:type="menu:Menu" xmi:id="_WEZaMD0DEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.menu.new" label="New">
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_eNkJoD0XEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.cloudscaleProject" label="Cloudscale project" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/project.png" command="_GIFakD0bEeWij6XaP9iBUA"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_UC8L4D0bEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.cloudscaleExampleProject" label="Cloudscale Example project" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/project.png" command="_SRVrYD0bEeWij6XaP9iBUA"/>
+        </children>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_JSf0AD0OEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_SkLVYDz7EeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.open" label="Open" command="_V4xegDasEeWRRJlfUN4Dxg">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ICdKoD0dEeWij6XaP9iBUA" coreExpressionId="eu.cloudscaleproject.env.toolchain.definition.alternativeNode"/>
+        </children>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_b8AH8D0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.menuseparator.2"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_dwFUsD0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.import" label="Import..." command="_50s2AD0dEeWij6XaP9iBUA"/>
+      </menus>
+    </elements>
   </fragments>
 </fragment:ModelFragments>

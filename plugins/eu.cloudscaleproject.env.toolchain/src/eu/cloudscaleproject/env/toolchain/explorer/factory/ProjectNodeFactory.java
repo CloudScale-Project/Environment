@@ -13,9 +13,9 @@ import org.eclipse.core.runtime.CoreException;
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ExplorerResourceNode;
 
 /**
  *
@@ -79,7 +79,11 @@ public class ProjectNodeFactory extends ExplorerNodeFactory{
 	public IExplorerNode getChild(Object key) {
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
-			return new ExplorerNode(project.getName(), project.getName(), new ToolNodeFactory(project));
+			ExplorerResourceNode node = new ExplorerResourceNode(project.getName(), 
+																 project.getName(), 
+																 new ToolNodeFactory(project));
+			node.setResource(project);
+			return node;
 		}
 		return null;
 	}

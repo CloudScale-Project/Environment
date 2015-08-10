@@ -4,11 +4,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -19,6 +18,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 	
+	private final CSTool tool;
 	private final ResourceProvider resourceProvider;
 	
 	private final PropertyChangeListener resourceProviderListener = new PropertyChangeListener() {
@@ -29,7 +29,8 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 		}
 	};
 	
-	public ToolResourceNodeFactory(IProject project, ResourceProvider resourceProvider) {
+	public ToolResourceNodeFactory(CSTool tool, ResourceProvider resourceProvider) {
+		this.tool = tool;
 		this.resourceProvider = resourceProvider;
 		this.resourceProvider.addListener(resourceProviderListener);
 	}
@@ -44,7 +45,7 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 		
 		IEditorInputResource resource = (IEditorInputResource)key;
 		
-		ExplorerNode node = new ExplorerNode(resource.getID(), resource.getName(), null);
+		AlternativeNode node = new AlternativeNode(tool, resource);
 		return node;
 		
 	}

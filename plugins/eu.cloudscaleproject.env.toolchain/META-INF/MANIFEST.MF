@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.cloudscaleproject.env.toolchain.Activator
 Export-Package: eu.cloudscaleproject.env.toolchain,
  eu.cloudscaleproject.env.toolchain.editors,
+ eu.cloudscaleproject.env.toolchain.explorer,
  eu.cloudscaleproject.env.toolchain.handlers,
  eu.cloudscaleproject.env.toolchain.resources,
  eu.cloudscaleproject.env.toolchain.resources.dialogs,
@@ -31,12 +32,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
- eu.cloudscaleproject.env.common;bundle-version="1.0.0";visibility:=reexport,
  org.palladiosimulator.mdsdprofiles.edit,
  org.eclipse.e4.ui.di,
  org.eclipse.e4.ui.services,
- org.eclipse.e4.ui.workbench
+ org.eclipse.e4.ui.workbench,
+ javax.inject,
+ org.eclipse.core.expressions;bundle-version="3.4.600",
+ eu.cloudscaleproject.env.common;bundle-version="1.0.0";visibility:=reexport,
+ eu.cloudscaleproject.env.product;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.2.0",
  javax.inject
+Bundle-ActivationPolicy: lazy
