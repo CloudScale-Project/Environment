@@ -181,7 +181,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 			}
 		};
 		job.setPriority(WorkspaceJob.INTERACTIVE);
-		job.setUser(true);
+		job.setUser(false);
 		job.schedule();
 		
 		if(!editorProvider.getToolExtensions().isEmpty()){

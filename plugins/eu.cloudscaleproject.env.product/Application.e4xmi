@@ -87,6 +87,7 @@
         <tags>Draggable</tags>
       </children>
     </trimBars>
+    <trimBars xmi:id="_lSORED85EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.product.trimbar.bottom" side="Bottom"/>
   </children>
   <handlers xmi:id="_qUWXYHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.openCsPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CloudscalePerspectiveHandler" command="_pRP7oHnoEeKfc49LSeS68A"/>
   <handlers xmi:id="_KOUtIH8tEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.handler.intro" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.IntroPerspectiveHandler" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
@@ -127,4 +128,5 @@
   <addons xmi:id="_bqcWME2EEd-DfN2vYY4Lew" elementId="DnD Addon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
   <addons xmi:id="_00yosOXqEeGugqEu_OWUGQ" elementId="org.eclipse.ui.workbench.addon.0" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_7GC6sGp-Ed-QyNZjH9g15Q" elementId="MinMax Addon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
+  <addons xmi:id="_m1yG0D8_EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.product.addon.trimbarbottomfix" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.addons.BottomTrimbarAddon"/>
 </application:Application>
