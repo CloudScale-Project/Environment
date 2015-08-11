@@ -19,6 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 
@@ -54,14 +55,27 @@ public class ExplorerViewPart {
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				IExplorerNode node = (IExplorerNode)evt.getSource();
-				
+				final IExplorerNode node = (IExplorerNode)evt.getSource();
+								
 				if(IExplorerNode.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
-					treeViewer.refresh(node);
+					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+						
+						@Override
+						public void run() {
+							treeViewer.refresh(node);
+						}
+					});
 				}
 				if(IExplorerNode.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
-					treeViewer.refresh(node);
+					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+						
+						@Override
+						public void run() {
+							treeViewer.refresh(node);
+						}
+					});
 				}
+				
 			}
 		});
 		

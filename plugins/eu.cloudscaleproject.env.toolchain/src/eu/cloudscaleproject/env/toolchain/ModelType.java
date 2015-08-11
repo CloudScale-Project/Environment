@@ -6,26 +6,26 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 public enum ModelType{
 	
-	 OVERVIEW(ToolchainUtils.KEY_FILE_OVERVIEW, "sdlo"),
+	 OVERVIEW(ToolchainUtils.KEY_FILE_OVERVIEW, "Overview model", "sdlo"),
 	
-	 REPOSITORY(ToolchainUtils.KEY_FILE_REPOSITORY, "repository"), 
-	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "system"),
-	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "resourceenvironment"),
-	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "allocation"),
+	 REPOSITORY(ToolchainUtils.KEY_FILE_REPOSITORY, "Repository model", "repository"), 
+	 SYSTEM(ToolchainUtils.KEY_FILE_SYSTEM, "System model" ,"system"),
+	 RESOURCE(ToolchainUtils.KEY_FILE_RESOURCEENV, "Resource environment model", "resourceenvironment"),
+	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "Allocation model", "allocation"),
 	 //AT(ToolchainUtils.KEY_FILE_AT, "xmi"),
-	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "usagemodel"),
+	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "Usage model", "usagemodel"),
 	 
-	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "usageevolution"),
-	 MONITOR(ToolchainUtils.KEY_FILE_MONITOR, "monitorrepository"),
-	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "measuringpoint"),
-	 SLO(ToolchainUtils.KEY_FILE_SLO, "slo"),
-	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "experiments"),
-	 VARIATION(ToolchainUtils.KEY_FILE_VARIATION, "variation"),
+	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "Usage evolution model", "usageevolution"),
+	 MONITOR(ToolchainUtils.KEY_FILE_MONITOR, "Monitors model", "monitorrepository"),
+	 MEASURING_POINT(ToolchainUtils.KEY_FILE_MESURPOINTS, "Measuring points model", "measuringpoint"),
+	 SLO(ToolchainUtils.KEY_FILE_SLO, "SLO model", "slo"),
+	 EXPERIMENTS(ToolchainUtils.KEY_FILE_EXPERIMENTS, "Experiments model", "experiments"),
+	 VARIATION(ToolchainUtils.KEY_FILE_VARIATION, "Variations model", "variation"),
 	 
-	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "dlim"),
+	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "Limbo model", "dlim"),
 
-	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "sourcecodedecorator"),
-	 ECORE(null, "ecore");
+	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "Source decorator model", "sourcecodedecorator"),
+	 ECORE(null, "ECore model", "ecore");
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION} ;
@@ -35,6 +35,7 @@ public enum ModelType{
 	 
 	 private final String extension;
 	 private final String name;
+	 private final String displayName;
 	 private final String toolcahinId;
 	 
 	 public static ModelType getModelType(String extension){
@@ -55,14 +56,19 @@ public enum ModelType{
 		 return null;
 	 }
 	 
-	 ModelType(String toolchainId, String modelExtension){
+	 ModelType(String toolchainId, String displayName, String modelExtension){
 		 this.extension = modelExtension;
 		 this.name = "pcm";
+		 this.displayName = displayName;
 		 this.toolcahinId = toolchainId;
 	 }
 	 
 	 public String getFullName(){
 		 return name + "." + this.extension;
+	 }
+	 
+	 public String getDisplayName(){
+		 return this.displayName;
 	 }
 	 
 	 public String getFileExtension(){

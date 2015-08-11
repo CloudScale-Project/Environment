@@ -6,8 +6,11 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.Extensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ResourceRegistry {
@@ -47,6 +50,17 @@ public class ResourceRegistry {
 		//register basic resource provider factories
 		registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory(FOLDER_RESOURCE_PROVIDER_ID));
 		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
+		
+		//register factories from extension points
+		for(IConfigurationElement el : Extensions.getInstance().getResourceProviderFactoryElements()){
+			try {
+				String id = el.getAttribute("id");
+				Object o = el.createExecutableExtension("class");
+				resourceProviderFactories.put(id, (IResourceProviderFactory)o);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**

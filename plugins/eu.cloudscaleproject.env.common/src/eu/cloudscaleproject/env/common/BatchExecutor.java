@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.swt.widgets.Display;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
@@ -24,7 +26,28 @@ public class BatchExecutor {
 	private static volatile Object lock = new Object();
 	
 	private volatile Map<Object, Long> queueTime = new HashMap<Object, Long>();
-	private volatile Map<Object, Runnable> queueTask = new HashMap<Object, Runnable>();
+	private volatile Map<Object, BatchRunnable> queueTask = new HashMap<Object, BatchRunnable>();
+	
+	private static class BatchRunnable implements Runnable{
+		
+		private final Runnable runnable;
+		private final boolean ui;
+		
+		public BatchRunnable(Runnable runnable, boolean ui) {
+			this.runnable = runnable;
+			this.ui = ui;
+		}
+		
+		@Override
+		public void run() {
+			if(ui){
+				Display.getDefault().asyncExec(runnable);
+			}
+			else{
+				runnable.run();
+			}
+		}
+	}
 	
 	private final Thread executor = new Thread(new Runnable() {
 		
@@ -91,7 +114,16 @@ public class BatchExecutor {
 		synchronized (lock) {
 			Long time = System.currentTimeMillis();
 			queueTime.put(key, time);
-			queueTask.put(key, task);
+			queueTask.put(key, new BatchRunnable(task, false));
+			lock.notifyAll();
+		}
+	}
+	
+	public void addUITask(Object key, Runnable task){
+		synchronized (lock) {
+			Long time = System.currentTimeMillis();
+			queueTime.put(key, time);
+			queueTask.put(key, new BatchRunnable(task, true));
 			lock.notifyAll();
 		}
 	}

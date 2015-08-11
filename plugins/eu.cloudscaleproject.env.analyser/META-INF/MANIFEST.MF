@@ -84,7 +84,8 @@ Require-Bundle: javax.xml;bundle-version="1.3.4",
  org.scaledl.usageevolution.wizard;bundle-version="1.0.0",
  eu.cloudscaleproject.env.common;bundle-version="1.0.0",
  eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0",
- javax.inject
+ javax.inject,
+ org.eclipse.e4.ui.services
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: eu.cloudscaleproject.env.product.branding,

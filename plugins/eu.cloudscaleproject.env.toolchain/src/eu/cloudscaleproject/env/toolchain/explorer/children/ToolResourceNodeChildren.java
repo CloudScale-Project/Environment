@@ -1,14 +1,15 @@
-package eu.cloudscaleproject.env.toolchain.explorer.factory;
+package eu.cloudscaleproject.env.toolchain.explorer.children;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
-import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
@@ -16,9 +17,8 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ToolResourceNodeFactory extends ExplorerNodeFactory{
+public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 	
-	private final CSTool tool;
 	private final ResourceProvider resourceProvider;
 	
 	private final PropertyChangeListener resourceProviderListener = new PropertyChangeListener() {
@@ -29,8 +29,8 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 		}
 	};
 	
-	public ToolResourceNodeFactory(CSTool tool, ResourceProvider resourceProvider) {
-		this.tool = tool;
+	public ToolResourceNodeChildren(ResourceProvider resourceProvider, boolean lazy) {
+		super(lazy);
 		this.resourceProvider = resourceProvider;
 		this.resourceProvider.addListener(resourceProviderListener);
 	}
@@ -45,7 +45,16 @@ public class ToolResourceNodeFactory extends ExplorerNodeFactory{
 		
 		IEditorInputResource resource = (IEditorInputResource)key;
 		
-		AlternativeNode node = new AlternativeNode(tool, resource);
+		IExplorerNodeChildren children = null;
+		
+		if(resource instanceof EditorInputEMF){
+			children = new AlternativeChildren((EditorInputEMF)resource, true);
+		}
+		
+		ExplorerResourceNode node = new ExplorerResourceNode(resource.getID(), resource.getResource(), children);
+		node.setName(resource.getName());
+		node.setData(resource);
+		
 		return node;
 		
 	}

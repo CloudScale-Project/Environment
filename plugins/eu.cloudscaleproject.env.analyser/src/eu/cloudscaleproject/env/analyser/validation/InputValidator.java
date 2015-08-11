@@ -11,7 +11,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
@@ -111,9 +110,7 @@ public class InputValidator implements IResourceValidator {
 			status.setIsValid(false);
 			return false;
 		}
-		
-		EcoreUtil.resolveAll(resource);
-		
+				
 		EObject eObject = resource.getContents().get(0);
 		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;

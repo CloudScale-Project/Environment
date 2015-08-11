@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.explorer.nodes;
+package eu.cloudscaleproject.env.toolchain.explorer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -6,30 +6,31 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.Extensions;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ExplorerNode implements IExplorerNode{
+public class ExplorerNode extends PlatformObject implements IExplorerNode{
 
 	private final String id;
-	private final String name;
 	
-	private Image icon;
+	private String name = "Unknown";
 	
-	private final IEclipseContext context;
-	private final ExplorerNodeFactory childFactory;
+	private boolean iconDisposeable = false;
+	private Image icon = null;
+	
+	protected final IEclipseContext context;
+	private final List<IExplorerNodeChildren> nodeChildren = new ArrayList<IExplorerNodeChildren>();
 	
 	protected IExplorerNode parent;
-	private final List<IExplorerNode> children = new ArrayList<IExplorerNode>();
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
@@ -37,10 +38,10 @@ public class ExplorerNode implements IExplorerNode{
 		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if(ExplorerNodeFactory.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
+			if(ExplorerNodeChildren.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
 				ExplorerNode.this.addChild((IExplorerNode)evt.getNewValue());
 			}
-			if(ExplorerNodeFactory.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
+			if(ExplorerNodeChildren.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
 				ExplorerNode.this.removeChild((IExplorerNode)evt.getOldValue());
 			}
 		}
@@ -55,32 +56,73 @@ public class ExplorerNode implements IExplorerNode{
 		}
 	};
 	
-	public ExplorerNode(String id, String name, ExplorerNodeFactory childFactory) {
-		this.id = id;
-		this.name = name;
-		
+	public ExplorerNode(String id, IExplorerNodeChildren children) {
+		this.id = id;		
 		this.context = EclipseContextFactory.create(name);
 		
-		this.childFactory = childFactory;
-		
-		if(this.childFactory != null){
-			this.childFactory.addPropertyChangeListener(factoryListener);
-			this.childFactory.initialize(this);
+		if(children != null){
+			addNodeChildren(children);
 		}
+		
+		//retrieve children from extension points
+		for(IExplorerNodeChildrenProvider childrenProvider : Extensions.getInstance().getNodeChildrenProviders()){
+			if(childrenProvider.canCreate(this)){
+				addNodeChildren(childrenProvider.create(this));
+			}
+		}
+	}
+	
+	private void addNodeChildren(final IExplorerNodeChildren children){
+		
+		if(children == null){
+			return;
+		}
+		
+		this.nodeChildren.add(children);
+		children.addPropertyChangeListener(factoryListener);
+		children.initialize();
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Object getAdapter(Class adapter) {
+		
+		Object o = this.context.get(IExplorerConstants.NODE_DATA);
+
+		if(this.getClass().equals(adapter)){
+			return this;
+		}
+		if(adapter.isAssignableFrom(o.getClass())){
+			return o;
+		}
+		
+		return super.getAdapter(adapter);
 	}
 	
 	public String getID() {
 		return id;
 	}
 
+	public void setName(String name){
+		pcs.firePropertyChange(PROP_NAME, this.name, this.name = name);
+	}
+	
 	public String getName() {
 		return name;
 	}
 	
-	public void setIcon(Image icon){
-		this.icon = icon;
+	public void setData(Object data){
+		this.context.set(IExplorerConstants.NODE_DATA, data);
+	}
+	
+	public void setIcon(Image icon, boolean disposeable){
 		
-		pcs.firePropertyChange(PROP_ICON, this.icon, icon);
+		if(icon != null && iconDisposeable){
+			icon.dispose();
+		}
+		
+		this.iconDisposeable = disposeable;
+		pcs.firePropertyChange(PROP_ICON, this.icon, this.icon = icon);
 	}
 
 	public Image getIcon() {
@@ -98,7 +140,13 @@ public class ExplorerNode implements IExplorerNode{
 
 	@Override
 	public IExplorerNode[] getChildren() {
-		return children.toArray(new IExplorerNode[children.size()]);
+		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
+		
+		for(IExplorerNodeChildren children : nodeChildren){
+			out.addAll(children.getChildren());
+		}
+		
+		return out.toArray(new IExplorerNode[out.size()]);
 	}
 
 	private void addChild(IExplorerNode node) {
@@ -107,7 +155,6 @@ public class ExplorerNode implements IExplorerNode{
 			return;
 		}
 		
-		children.add(node);
 		((ExplorerNode)node).parent = this;
 		
 		node.getContext().setParent(this.getContext());
@@ -122,7 +169,6 @@ public class ExplorerNode implements IExplorerNode{
 			return;
 		}
 		
-		children.remove(node);
 		((ExplorerNode)node).parent = null;
 		
 		node.getContext().setParent(null);
@@ -144,11 +190,16 @@ public class ExplorerNode implements IExplorerNode{
 		ExplorerNode en = (ExplorerNode)parent;
 		en.removeChild(this);
 		
-		if(this.childFactory != null){
-			this.childFactory.removePropertyChangeListener(factoryListener);
-			this.childFactory.dispose();
+		for(IExplorerNodeChildren children : this.nodeChildren){
+			children.removePropertyChangeListener(factoryListener);
+			children.dispose();
 		}
 		
+		if(icon != null && iconDisposeable){
+			icon.dispose();
+		}
+		
+		this.nodeChildren.clear();
 		this.context.dispose();
 	}
 	

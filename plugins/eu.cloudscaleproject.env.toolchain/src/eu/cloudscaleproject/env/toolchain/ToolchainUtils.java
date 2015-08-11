@@ -118,80 +118,95 @@ public class ToolchainUtils {
 		IFolder folder = null;
 				
 		//extractor
-		if(EXTRACTOR_INPUT_ID.equals(id)){
+		if(CSTool.EXTRACTOR.getID().equals(id)){
+			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
+		}
+		else if(CSTool.EXTRACTOR_INPUT.getID().equals(id)){
 			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
 			if(extractorFolder != null)
 				folder = extractorFolder.getFolder(inputFolderName);
 		}
-		else if(EXTRACTOR_CONF_ID.equals(id)){
+		else if(CSTool.EXTRACTOR_CONF.getID().equals(id)){
 			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
 			if(extractorFolder != null)
 				folder = extractorFolder.getFolder(configFolderName);
 		}
-		else if(EXTRACTOR_RES_ID.equals(id)){
+		else if(CSTool.EXTRACTOR_RES.getID().equals(id)){
 			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
 			if(extractorFolder != null)
 				folder = extractorFolder.getFolder(resultFolderName);
 		}
 		
 		//analyzer
-		else if(ANALYSER_INPUT_ID.equals(id)){
+		else if(CSTool.ANALYSER.getID().equals(id)){
+			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
+		}
+		else if(CSTool.ANALYSER_INPUT.getID().equals(id)){
 			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 			if(analyserFolder != null)
 				folder = analyserFolder.getFolder(inputFolderName);
 		}
-		else if(ANALYSER_CONF_ID.equals(id)){
+		else if(CSTool.ANALYSER_CONF.getID().equals(id)){
 			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 			if(analyserFolder != null)
 				folder = analyserFolder.getFolder(configFolderName);
 		}
-		else if(ANALYSER_RES_ID.equals(id)){
+		else if(CSTool.ANALYSER_RES.getID().equals(id)){
 			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
 			if(analyserFolder != null)
 				folder = analyserFolder.getFolder(resultFolderName);
 		}
 		
 		//dynamic spotter
-		else if(SPOTTER_DYN_INPUT_ID.equals(id)){
+		else if(CSTool.SPOTTER_DYN.getID().equals(id)){
+			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
+		}
+		else if(CSTool.SPOTTER_DYN_INPUT.getID().equals(id)){
 			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
 			if(spotterDynFolder != null)
 				folder = spotterDynFolder.getFolder(inputFolderName);
 		}
-		else if(SPOTTER_DYN_CONF_ID.equals(id)){
+		else if(CSTool.SPOTTER_DYN_CONF.getID().equals(id)){
 			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
 			if(spotterDynFolder != null)
 				folder = spotterDynFolder.getFolder(configFolderName);
 		}
-		else if(SPOTTER_DYN_RES_ID.equals(id)){
+		else if(CSTool.SPOTTER_DYN_RES.getID().equals(id)){
 			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
 			if(spotterDynFolder != null)
 				folder = spotterDynFolder.getFolder(resultFolderName);
 		}
 		
 		//static spotter
-		else if(SPOTTER_STA_INPUT_ID.equals(id)){
+		else if(CSTool.SPOTTER_STA.getID().equals(id)){
+			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
+		}
+		else if(CSTool.SPOTTER_STA_INPUT.getID().equals(id)){
 			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
 			if(spotterStaFolder != null)
 				folder = spotterStaFolder.getFolder(inputFolderName);
 		}
-		else if(SPOTTER_STA_CONF_ID.equals(id)){
+		else if(CSTool.SPOTTER_STA_CONF.getID().equals(id)){
 			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
 			if(spotterStaFolder != null)
 				folder = spotterStaFolder.getFolder(configFolderName);
 		}
-		else if(SPOTTER_STA_RES_ID.equals(id)){
+		else if(CSTool.SPOTTER_STA_RES.getID().equals(id)){
 			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
 			if(spotterStaFolder != null)
 				folder = spotterStaFolder.getFolder(resultFolderName);
 		}
 		
 		//usage evolution
-		else if(USAGEEVOLUTION_ID.equals(id)){
+		else if(CSTool.SCALE_DL.getID().equals(id)){
+			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
+		}
+		else if(CSTool.USAGEEVOLUTION.getID().equals(id)){
 			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
 			if(scaledlFolder != null)
 				folder = scaledlFolder.getFolder(usageEvFolderName);
 		}
-		else if(OVERVIEW_ID.equals(id)){
+		else if(CSTool.OVERVIEW.getID().equals(id)){
 			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
 			if(scaledlFolder != null)
 				folder = scaledlFolder.getFolder(overviewFolderName);

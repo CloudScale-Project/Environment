@@ -14,33 +14,54 @@ import org.eclipse.core.databinding.observable.list.ListDiffEntry;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public abstract class ExplorerNodeFactory {
+public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory,childAdded";
 	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory,childAdded";
-	
-	private IExplorerNode node;
-	
+		
 	private final List<Object> keys = new ArrayList<Object>();
 	private final List<IExplorerNode> nodes = new ArrayList<IExplorerNode>();
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	
+	private final boolean lazyLoad;
+	protected boolean initialized = false;
 
-	public ExplorerNodeFactory() {
+	public ExplorerNodeChildren(boolean lazyLoad) {
+		this.lazyLoad = lazyLoad;
+	}
+	
+	public void initialize(){
+		if(!lazyLoad){
+			initialized = true;
+			keys.clear();
+			refresh();
+		}
+	}
+	
+	public List<IExplorerNode> getChildren(){
 		
-	}
-	
-	public void initialize(IExplorerNode node){
-		this.node = node;
-		keys.clear();
-		refresh();
-	}
-	
-	public IExplorerNode getNode(){
-		return node;
+		if(!initialized){
+			initialized = true;
+			keys.clear();
+			refresh();
+		}
+		
+		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
+		for(IExplorerNode node : nodes){
+			if(node != null){
+				out.add(node);
+			}
+		}
+		return out;
 	}
 	
 	public void refresh(){
+		
+		if(!initialized){
+			return;
+		}
+		
 		List<? extends Object> currentKeys = getKeys();
 		ListDiff diff = Diffs.computeListDiff(keys, currentKeys);
 		
@@ -49,14 +70,12 @@ public abstract class ExplorerNodeFactory {
 				
 				IExplorerNode node = getChild(entry.getElement());
 				nodes.add(entry.getPosition(), node);
-				
 				pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
 			}
 			else{
 				
 				IExplorerNode node = nodes.get(entry.getPosition());
 				nodes.remove(entry.getPosition());
-				
 				pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, entry.getPosition(), node, null);
 			}
 		}
@@ -65,7 +84,7 @@ public abstract class ExplorerNodeFactory {
 	}
 	
 	public void dispose(){
-		//override
+		nodes.clear();
 	}
 
 	public abstract List<? extends Object> getKeys();

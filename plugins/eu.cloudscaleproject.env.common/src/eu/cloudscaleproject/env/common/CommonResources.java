@@ -10,6 +10,8 @@ public class CommonResources
 
 	static
 	{
+		PROJECT_16 = loadImage("project_16.png");
+		
 		EDITABLE = loadImage("edit.png");
 		LIST = loadImage("list.gif");
 		ENTITY = loadImage("entity.png");
@@ -65,6 +67,8 @@ public class CommonResources
 	    image.dispose();
 	    return scaled;
 	}
+	
+	public static Image PROJECT_16;
 
 	public static Image EDITABLE;
 	public static Image LIST;

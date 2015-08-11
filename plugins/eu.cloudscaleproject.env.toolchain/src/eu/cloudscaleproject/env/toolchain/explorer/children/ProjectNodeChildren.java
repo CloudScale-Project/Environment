@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.toolchain.explorer.factory;
+package eu.cloudscaleproject.env.toolchain.explorer.children;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +11,19 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
+import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
-import eu.cloudscaleproject.env.toolchain.explorer.nodes.ExplorerResourceNode;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ProjectNodeFactory extends ExplorerNodeFactory{
+public class ProjectNodeChildren extends ExplorerNodeChildren{
 	
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
 		
@@ -52,7 +53,8 @@ public class ProjectNodeFactory extends ExplorerNodeFactory{
 		}
 	};
 	
-	public ProjectNodeFactory() {
+	public ProjectNodeChildren(boolean lazy) {
+		super(lazy);
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 	}
 
@@ -80,9 +82,10 @@ public class ProjectNodeFactory extends ExplorerNodeFactory{
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
 			ExplorerResourceNode node = new ExplorerResourceNode(project.getName(), 
-																 project.getName(), 
-																 new ToolNodeFactory(project));
-			node.setResource(project);
+																 project,
+																 new ToolNodeChildren(project, false));
+			node.setName(project.getName());
+			node.setIcon(CommonResources.PROJECT_16, false);
 			return node;
 		}
 		return null;

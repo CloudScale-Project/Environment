@@ -41,21 +41,67 @@
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
       <tool
-            toolID="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"
-            toolName="Analyser">
+            icon="resources/icons/analyser_16.png"
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"
+            name="Analyser">
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
+               icon="resources/icons/input_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
+               name="Input">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf">
+               icon="resources/icons/configuration_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
+               name="Config">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes">
+               icon="resources/icons/results_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
+               name="Results">
          </resource>
       </tool>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.analyser.inputAlternative">
+         <with
+               variable="org.eclipse.ui.selection">
+            <adapt
+                  type="eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource">
+               <instanceof
+                     value="eu.cloudscaleproject.env.analyser.alternatives.InputAlternative">
+               </instanceof>
+            </adapt>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.confAlternative">
+         <with
+               variable="org.eclipse.ui.selection">
+            <with
+                  variable="data">
+               <instanceof
+                     value="eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative">
+               </instanceof>
+            </with>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.resultAlternative">
+         <with
+               variable="org.eclipse.ui.selection">
+            <with
+                  variable="data">
+               <instanceof
+                     value="eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative">
+               </instanceof>
+            </with>
+         </with>
+      </definition>
    </extension>
 
 </plugin>

@@ -50,8 +50,6 @@ public class Activator extends AbstractUIPlugin
 		plugin = this;
 		bundleContext = context;
 
-		ResourceUtils.registerResourceFactories();
-
 		try
 		{
 			long time = System.currentTimeMillis();

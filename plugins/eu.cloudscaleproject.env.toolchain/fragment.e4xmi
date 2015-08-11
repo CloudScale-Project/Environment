@@ -37,7 +37,7 @@
           <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ICdKoD0dEeWij6XaP9iBUA" coreExpressionId="eu.cloudscaleproject.env.toolchain.definition.alternativeNode"/>
         </children>
         <children xsi:type="menu:MenuSeparator" xmi:id="_b8AH8D0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.menuseparator.2"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_dwFUsD0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.import" label="Import..." command="_50s2AD0dEeWij6XaP9iBUA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_dwFUsD0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.import" label="Import..." iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" command="_50s2AD0dEeWij6XaP9iBUA"/>
       </menus>
     </elements>
   </fragments>
