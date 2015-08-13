@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.swt.widgets.Display;
 
@@ -159,9 +160,15 @@ public abstract class ResourceProvider
 				e.printStackTrace();
 			}
 		}
-		
+	}
+	
+	public void loadAndValidate(IProgressMonitor monitor){
 		//show validation diagram on initialization
 		for(IEditorInputResource eir : getResources()){
+			
+			eir.load(monitor);
+			eir.validate(monitor);
+			
 			if(eir instanceof IValidationStatusProvider){
 				IValidationStatusProvider vp = (IValidationStatusProvider)eir;
 				

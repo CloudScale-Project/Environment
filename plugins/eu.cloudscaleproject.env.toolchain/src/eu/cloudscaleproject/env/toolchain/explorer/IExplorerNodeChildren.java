@@ -12,6 +12,7 @@ public interface IExplorerNodeChildren {
 
 	public void initialize();
 	
+	public boolean hasChildren();
 	public List<IExplorerNode> getChildren();
 	
 	public void refresh();

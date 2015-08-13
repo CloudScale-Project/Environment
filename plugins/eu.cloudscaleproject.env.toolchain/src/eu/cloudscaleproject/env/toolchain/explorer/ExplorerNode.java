@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.PlatformObject;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
@@ -58,7 +59,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	
 	public ExplorerNode(String id, IExplorerNodeChildren children) {
 		this.id = id;		
-		this.context = EclipseContextFactory.create(name);
+		this.context = EclipseContextFactory.create(this.getClass().getSimpleName() + "("+ id + ")");
 		
 		if(children != null){
 			addNodeChildren(children);
@@ -139,6 +140,16 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	}
 
 	@Override
+	public boolean hasChildren() {
+		for(IExplorerNodeChildren children : nodeChildren){
+			if(children.hasChildren()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
 	public IExplorerNode[] getChildren() {
 		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
 		
@@ -158,6 +169,8 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		((ExplorerNode)node).parent = this;
 		
 		node.getContext().setParent(this.getContext());
+		ContextInjectionFactory.inject(node, this.getContext());
+		
 		node.addPropertyChangeListener(childListener);
 		
 		pcs.firePropertyChange(PROP_CHILD_ADDED, null, node);
@@ -172,6 +185,8 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		((ExplorerNode)node).parent = null;
 		
 		node.getContext().setParent(null);
+		node.getContext().dispose();
+		
 		node.removePropertyChangeListener(childListener);
 		
 		pcs.firePropertyChange(PROP_CHILD_REMOVED, node, null);

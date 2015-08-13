@@ -46,18 +46,21 @@
             name="Analyser">
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
                name="Input">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
                icon="resources/icons/configuration_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
                name="Config">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
                icon="resources/icons/results_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
                name="Results">

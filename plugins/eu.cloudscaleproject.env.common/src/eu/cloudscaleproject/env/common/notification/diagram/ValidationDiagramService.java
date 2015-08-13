@@ -13,11 +13,10 @@ public class ValidationDiagramService {
 	
 	private static HashMap<IProject, IValidationDiagram> diagrams = new HashMap<IProject, IValidationDiagram>();
 	
-	public static void showDiagram(IProject project){
-
+	public static IValidationDiagram getDiagram(IProject project){
 		if(project == null){
 			CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, null);
-			return;
+			return null;
 		}
 		
 		try{
@@ -32,19 +31,27 @@ public class ValidationDiagramService {
 					diagrams.put(project, diagram);
 				}
 			}
-			
-			CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, diagram);
+
+			return diagram;
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		return null;
+	}
+	
+	public static void showDiagram(IProject project){
+
+		IValidationDiagram diagram = getDiagram(project);
+		if(diagram != null){
+			CloudscaleContext.registerGlobal(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM, diagram);
+		}
 	}
 	
 	public static void showStatus(IProject project, String id, IValidationStatusProvider statusProvider){
-				
-		showDiagram(project);
-		
-		IValidationDiagram diagramProvider = diagrams.get(project);
+						
+		IValidationDiagram diagramProvider = getDiagram(project);
 		if(diagramProvider != null){
 			diagramProvider.bindStatusProvider(id, statusProvider);
 		}
@@ -52,10 +59,8 @@ public class ValidationDiagramService {
 	}
 	
 	public static void showStatus(IProject project, IValidationStatusProvider statusProvider){
-		
-		showDiagram(project);
-		
-		IValidationDiagram diagramProvider = diagrams.get(project);
+				
+		IValidationDiagram diagramProvider = getDiagram(project);
 		if(diagramProvider != null && statusProvider != null){
 			diagramProvider.bindStatusProvider(statusProvider.getID(), statusProvider);
 		}

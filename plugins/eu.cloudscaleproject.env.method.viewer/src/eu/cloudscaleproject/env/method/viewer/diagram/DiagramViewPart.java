@@ -19,6 +19,7 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -58,7 +59,7 @@ public class DiagramViewPart{
 	}
 	
 	@Inject
-	private void showDiagram(@Named(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM) @Optional ValidationDiagram diagram){
+	private void showDiagram(@Named(CloudscaleContext.ACTIVE_VALIDATION_DIAGRAM) @Optional final ValidationDiagram diagram){
 		
 		if(composite == null){
 			return;
@@ -68,20 +69,27 @@ public class DiagramViewPart{
 			return;
 		}
 		
-		ValidationDiagramComposite composite = composites.get(diagram);
-		if(composite == null){
-			composite = createDiagramComposite(diagram);
-			composites.put(diagram, composite);
-		}
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				ValidationDiagramComposite composite = composites.get(diagram);
+				if(composite == null){
+					composite = createDiagramComposite(diagram);
+					composites.put(diagram, composite);
+				}
+				
+				if(!composite.isDisposed()){
+					stackLayout.topControl = composite;
+					composite.layout();
+					composite.redraw();
+				}
+				
+				CloudscaleContext.getActiveContext().set(IProject.class, diagram.getProject());
+				part.setLabel("Workflow ["+diagram.getProject().getName()+"]");
+			}
+		});
 		
-		if(!composite.isDisposed()){
-			stackLayout.topControl = composite;
-			composite.layout();
-			composite.redraw();
-		}
-		
-		CloudscaleContext.getActiveContext().set(IProject.class, diagram.getProject());
-		part.setLabel("Workflow ["+diagram.getProject().getName()+"]");
 	}
 	
 	

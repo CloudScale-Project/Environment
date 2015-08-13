@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.ModelType;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
@@ -25,7 +25,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class AlternativeChildren extends ExplorerNodeChildren{
+public class EMFModelChildren extends ExplorerNodeChildren{
 	
 	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
@@ -39,7 +39,7 @@ public class AlternativeChildren extends ExplorerNodeChildren{
 
 	private final EditorInputEMF alternative;
 	
-	public AlternativeChildren(EditorInputEMF alternative, boolean lazy) {
+	public EMFModelChildren(EditorInputEMF alternative, boolean lazy) {
 		super(lazy);
 		
 		this.alternative = alternative;
@@ -49,8 +49,8 @@ public class AlternativeChildren extends ExplorerNodeChildren{
 			
 			@Override
 			public IStatus execute(IProgressMonitor monitor) {
-				if(!AlternativeChildren.this.alternative.isLoaded()){
-					AlternativeChildren.this.alternative.load(monitor);
+				if(!EMFModelChildren.this.alternative.isLoaded()){
+					EMFModelChildren.this.alternative.load(monitor);
 				}
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resource done.");
 			}
@@ -74,7 +74,7 @@ public class AlternativeChildren extends ExplorerNodeChildren{
 			return null;
 		}
 		
-		ExplorerResourceNode node = new ExplorerResourceNode(file.getName(), file, null);
+		ExplorerEditorNode node = new ExplorerEditorNode(file.getName(), file, null);
 		node.setData(file);
 		
 		ModelType type = ModelType.getModelType(res);

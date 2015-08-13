@@ -29,7 +29,8 @@ public interface IExplorerNode extends IAdaptable{
 	
 	public IEclipseContext getContext();
 	
-	public IExplorerNode getParent();	
+	public IExplorerNode getParent();
+	public boolean hasChildren();
 	public IExplorerNode[] getChildren();
 	
 	public void setData(Object data);

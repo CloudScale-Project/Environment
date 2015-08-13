@@ -35,6 +35,15 @@ public class CloudscaleContext {
 		return apContext.getActiveLeaf();
 	}
 	
+	public static IEclipseContext getGlobalContext(){
+		
+		if(apContext == null){
+			throw new IllegalStateException("Main application context is not initialized jet.");
+		}
+		
+		return apContext;
+	}
+	
 	public static void inject(Object object){
 		ContextInjectionFactory.inject(object, getActiveContext());
 	}

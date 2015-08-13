@@ -4,8 +4,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -19,6 +20,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 	
+	private final String editorID;
 	private final ResourceProvider resourceProvider;
 	
 	private final PropertyChangeListener resourceProviderListener = new PropertyChangeListener() {
@@ -29,8 +31,10 @@ public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 		}
 	};
 	
-	public ToolResourceNodeChildren(ResourceProvider resourceProvider, boolean lazy) {
+	public ToolResourceNodeChildren(String editorID, ResourceProvider resourceProvider, boolean lazy) {
 		super(lazy);
+		
+		this.editorID = editorID;
 		this.resourceProvider = resourceProvider;
 		this.resourceProvider.addListener(resourceProviderListener);
 	}
@@ -48,12 +52,14 @@ public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 		IExplorerNodeChildren children = null;
 		
 		if(resource instanceof EditorInputEMF){
-			children = new AlternativeChildren((EditorInputEMF)resource, true);
+			children = new EMFModelChildren((EditorInputEMF)resource, true);
 		}
 		
-		ExplorerResourceNode node = new ExplorerResourceNode(resource.getID(), resource.getResource(), children);
+		ExplorerEditorNode node = new ExplorerEditorNode(resource.getID(), resource.getResource(), children);
 		node.setName(resource.getName());
 		node.setData(resource);
+		
+		node.getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
 		
 		return node;
 		

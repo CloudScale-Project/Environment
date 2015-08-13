@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -30,6 +31,11 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public void save();
 	public void load();
 	public void delete();
+	
+	public void create(IProgressMonitor monitor);
+	public void save(IProgressMonitor monitor);
+	public void load(IProgressMonitor monitor);
+	public void delete(IProgressMonitor monitor);
 	
 	public boolean isCreateInProgress();
 	public boolean isSaveInProgress();

@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
  org.eclipse.e4.core.di,
  org.eclipse.e4.core.contexts,
- org.palladiosimulator.pcm
+ org.palladiosimulator.pcm,
+ eu.cloudscaleproject.env.common
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: eu.cloudscaleproject.env.overview

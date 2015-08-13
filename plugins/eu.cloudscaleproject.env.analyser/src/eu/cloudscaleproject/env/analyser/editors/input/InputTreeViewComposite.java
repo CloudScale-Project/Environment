@@ -29,7 +29,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -82,7 +81,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		}
 	};
 	
-	public InputTreeViewComposite(final IEditorPart editor, final InputAlternative input, Composite parent, int style) {
+	public InputTreeViewComposite(final InputAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		alternative = input;

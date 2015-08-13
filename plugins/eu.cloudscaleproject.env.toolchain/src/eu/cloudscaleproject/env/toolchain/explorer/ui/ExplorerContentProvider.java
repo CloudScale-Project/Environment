@@ -42,7 +42,7 @@ public class ExplorerContentProvider implements ITreeContentProvider{
 	public boolean hasChildren(Object element) {
 		if(element instanceof IExplorerNode){
 			IExplorerNode node = (IExplorerNode)element;
-			return node.getChildren().length > 0;
+			return node.hasChildren();
 		}
 		return false;
 	}

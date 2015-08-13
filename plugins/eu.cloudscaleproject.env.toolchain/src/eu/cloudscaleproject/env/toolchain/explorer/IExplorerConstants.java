@@ -8,8 +8,9 @@ package eu.cloudscaleproject.env.toolchain.explorer;
 public interface IExplorerConstants {
 
 	// Explorer context constants
-	public static final String NODE_DATA = "data";
-	public static final String NODE_RESOURCE = "resource";
+	public static final String NODE_EDITOR_ID = "node_editor_id";
+	public static final String NODE_DATA = "node_data";
+	public static final String NODE_RESOURCE = "node_resource";
 
 	
 }

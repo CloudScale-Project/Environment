@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
@@ -244,6 +243,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			
 
 			if(isDirty){
+				/*
 				// FIXME: possible ThreadLock - save is triggered from UI and load from another thread
 				//boolean load = DialogUtils.openConfirm("Reload confirmation dialog", 
 				//		"Resource "+ getName() +" has been modified without beeing saved. Do you want to override changes?");
@@ -256,6 +256,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	                logger.warning("FIXME: Load requested from NonGUI thread, while state was dirty -- possible ThreadLock. Thread="+Thread.currentThread().getName());
 	                return;
 				}
+				*/
 			}
 					
 			try {

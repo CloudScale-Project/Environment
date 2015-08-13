@@ -7,20 +7,29 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 
 /**
@@ -62,7 +71,9 @@ public class ExplorerViewPart {
 						
 						@Override
 						public void run() {
-							treeViewer.refresh(node);
+							if(!treeViewer.getTree().isDisposed()){
+								treeViewer.refresh(node);
+							}
 						}
 					});
 				}
@@ -71,7 +82,9 @@ public class ExplorerViewPart {
 						
 						@Override
 						public void run() {
-							treeViewer.refresh(node);
+							if(!treeViewer.getTree().isDisposed()){
+								treeViewer.refresh(node);
+							}
 						}
 					});
 				}
@@ -85,6 +98,8 @@ public class ExplorerViewPart {
 		this.treeViewer = new TreeViewer(composite);
 		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			
+			ExplorerResourceNode lastProjectNode = null;
+			
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -95,11 +110,50 @@ public class ExplorerViewPart {
 				
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
 				
+				final ExplorerResourceNode projectNode = ExplorerUtils.getProjectNode(node);
+				if(projectNode != null && lastProjectNode != projectNode){
+					
+					BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+						@Override
+						public void run() {
+							ValidationDiagramService.showDiagram((IProject)projectNode.getResource());
+						}
+					});
+					
+				}
+				lastProjectNode = projectNode;
+				
 				if(node != null){
 					node.onSelect();
 				}
 				
 				selectionService.setSelection(node);
+			}
+		});
+		
+		this.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				
+				if(selection == null){
+					return;
+				}
+				
+				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
+				if(node instanceof ExplorerEditorNode){
+					
+					final ExplorerEditorNode editorNode = (ExplorerEditorNode)node;
+					BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+						
+						@Override
+						public void run() {
+							editorNode.openEditor();
+						}
+					});
+					
+				}
 			}
 		});
 		

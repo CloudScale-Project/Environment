@@ -9,6 +9,9 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.analyser.editors.config.ConfigSidebarComposite;
+import eu.cloudscaleproject.env.analyser.editors.input.InputSidebarComposite;
+import eu.cloudscaleproject.env.analyser.editors.result.ResultsSidebarComposite;
 import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
@@ -74,13 +77,13 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 					return new IntroComposite(editor, parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
-					return new InputComposite(editor, parent, SWT.NONE);
+					return new InputSidebarComposite(editor, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new ConfigComposite(editor, parent, SWT.NONE);
+					return new ConfigSidebarComposite(editor, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
-					return new ResultsComposite(editor, parent, SWT.NONE);
+					return new ResultsSidebarComposite(editor, parent, SWT.NONE);
 				}
 				
 				return null;

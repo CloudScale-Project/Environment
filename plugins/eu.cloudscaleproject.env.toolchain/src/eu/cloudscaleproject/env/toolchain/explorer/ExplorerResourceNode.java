@@ -12,6 +12,8 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
  *
  */
 public class ExplorerResourceNode extends ExplorerNode{
+
+	public final IResource resource;
 		
 	public ExplorerResourceNode(String id, IResource resource, IExplorerNodeChildren childFactory) {
 		super(id, childFactory);
@@ -24,6 +26,7 @@ public class ExplorerResourceNode extends ExplorerNode{
 			}
 		}
 		
+		this.resource = resource;
 		this.getContext().set(IExplorerConstants.NODE_RESOURCE, resource);
 	}
 	
@@ -44,6 +47,36 @@ public class ExplorerResourceNode extends ExplorerNode{
 		}
 		
 		return super.getAdapter(adapter);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((resource == null) ? 0 : resource.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {return true;}
+		if (obj == null) {return false;}
+		
+		if (getClass() != obj.getClass()){
+			return false;
+		}
+		
+		ExplorerResourceNode other = (ExplorerResourceNode) obj;
+		if (resource == null) {
+			if (other.resource != null){
+				return false;
+			}
+		} 
+		else if (!resource.equals(other.resource)){
+			return false;
+		}
+		
+		return true;
 	}
 
 }
