@@ -1,5 +1,5 @@
  
-package eu.cloudscaleproject.env.toolchain.handlers;
+package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
 import javax.inject.Named;
 
@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 
-public class OpenEditorHandler {
+public class OpenExplorerNodeHandler {
 	
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable) {

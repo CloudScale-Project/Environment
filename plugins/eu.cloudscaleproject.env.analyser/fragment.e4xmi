@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_KlvP4HE9EeKZuZyaRJL9mw">
+  <imports xsi:type="commands:Command" xmi:id="_KX77MEJ2EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.command.openpart"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_g9n6kHnSEeKfc49LSeS68A" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_Z1yUsDdmEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.command.openinputdialog" commandName="showInputAltValidationHandler"/>
     <elements xsi:type="commands:Command" xmi:id="_DpYPAGN7EeSorYO_PWJo-g" elementId="eu.cloudscaleproject.env.analyser.command.openconfdialog" commandName="ShowConfAltValidationHandler"/>
@@ -7,9 +8,11 @@
     <elements xsi:type="commands:Command" xmi:id="_sXzQEHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openAnalyserResultsPerspective" commandName="openAnalyserResultsPerspective"/>
     <elements xsi:type="commands:Command" xmi:id="_7aE9wH7CEeSFeMpKzb1lqA" elementId="eu.cloudscaleproject.env.analyser.command.openAnalyserImportWizard" commandName="openAnalyserImportWizard" description="Opens up a dialog for importing PCM models into input alternative."/>
     <elements xsi:type="commands:Command" xmi:id="_GH2-cP_NEeS5RODqduHOWQ" elementId="eu.cloudscaleproject.env.analyser.command.openextractorimportwizard" commandName="Extractor Import Wizard" description="Opens wizard for importing Extractor results into input alternative."/>
-    <elements xsi:type="commands:Command" xmi:id="_1cDkID0EEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.analyser.command.createModel" commandName="createModel">
+    <elements xsi:type="commands:Command" xmi:id="_1cDkID0EEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.analyser.command.createmodelwizard" commandName="createModelWizard" description="Create PCM model wizard">
       <parameters xmi:id="_aM6qkD0KEeWD1Y8rdAbgWQ" elementId="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" name="File extension" optional="false"/>
     </elements>
+    <elements xsi:type="commands:Command" xmi:id="_1hSi0EJ9EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.command.importmodelwizard" commandName="importModelWizard" description="Import PCM model wizard"/>
+    <elements xsi:type="commands:Command" xmi:id="_z4GAUEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.command.createalternative" commandName="createAlternative"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Lh83oHncEeKfc49LSeS68A" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_BRIrMDgLEeSsq_TBtPScgQ" elementId="eu.cloudscaleproject.env.analyser.handler.openinputdialog" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.ShowInputAltValidationHandler" command="_Z1yUsDdmEeSsq_TBtPScgQ"/>
@@ -18,7 +21,9 @@
     <elements xsi:type="commands:Handler" xmi:id="_vlhJQHtOEeSNHIyeGGCx9A" elementId="eu.cloudscaleproject.env.analyser.openResultsPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenResultsPerspective" command="_sXzQEHtOEeSNHIyeGGCx9A"/>
     <elements xsi:type="commands:Handler" xmi:id="_MqOP4H7DEeSFeMpKzb1lqA" elementId="eu.cloudscaleproject.env.analyser.handler.openpcmimport" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenAnalyserImportHandler" command="_7aE9wH7CEeSFeMpKzb1lqA"/>
     <elements xsi:type="commands:Handler" xmi:id="_PkyL4P_NEeS5RODqduHOWQ" elementId="eu.cloudscaleproject.env.analyser.handler.openextractorimportwizard" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.OpenExtractorImportHandler" command="_GH2-cP_NEeS5RODqduHOWQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_5fLbUD0EEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.analyser.handler.createmodel" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.CreateModelHandler" command="_1cDkID0EEeWpPejK7esD1g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_5fLbUD0EEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.analyser.handler.createmodel" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.CreateModelWizardHandler" command="_1cDkID0EEeWpPejK7esD1g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_Czrl8EJ-EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.ImportModelWizardHandler" command="_1hSi0EJ9EeW-jpWqcIfmeQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_1tqa0EKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.handlers.CreateAlternativeHandler" command="_z4GAUEKREeW-jpWqcIfmeQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wHppMHncEeKfc49LSeS68A" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_clTQ4DgUEeSZvujNsROb0w" elementId="eu.cloudscaleproject.env.analyser.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
@@ -33,6 +38,8 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.menu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_lEiRAD9SEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.menuseparator.0"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_bxxgkEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newAlternative" label="New alternative" tooltip="Create new alternative" command="_z4GAUEKREeW-jpWqcIfmeQ"/>
+    <elements xsi:type="menu:MenuSeparator" xmi:id="_aWUPMEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.menuseparator.2"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_T7pJUD9FEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.repository" label="Repository" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/Repository.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ymE2UD9FEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternative"/>
       <parameters xmi:id="_w9IJQD9KEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="repository"/>
@@ -58,7 +65,18 @@
       <parameters xmi:id="_ey9Iwj9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="usageevolution"/>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DOYR0EJmEeW-jpWqcIfmeQ" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.popupmenu.explorer" positionInList="">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_MTIYYEJ9EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.importModel" label="Import model..." iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.gif" tooltip="Import external PCM model into selected alternative." command="_1hSi0EJ9EeW-jpWqcIfmeQ">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OuvfMEJ9EeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.alternative"/>
+    </elements>
+    <elements xsi:type="menu:MenuSeparator" xmi:id="_i6b8cEJ9EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.menuseparator.1"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Wb8S4EJmEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.help" label="Intro..." command="_KX77MEJ2EeW-jpWqcIfmeQ">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_kTwXQEJmEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.alternative"/>
+      <parameters xmi:id="_sG03sEJ2EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.parameter.1" name="part_id" value="eu.cloudscaleproject.env.analyser.partdescriptor.analyserIntro"/>
+    </elements>
+  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mLu_IED-EeWsDNl2NuiWtA" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_n1cCYEJzEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserIntro" label="Analyser intro" closeable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.views.IntroView"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_yXNdgED-EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput" label="Analyser input" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.editors.InputEditor"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_kIb6UEGxEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig" label="Analyser config" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.editors.ConfigEditor"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_kwn7sEGxEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults" label="Analyser results" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.editors.ResultsEditor"/>

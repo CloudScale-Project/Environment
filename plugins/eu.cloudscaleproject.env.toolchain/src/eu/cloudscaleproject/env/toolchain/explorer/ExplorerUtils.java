@@ -10,12 +10,27 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
 public class ExplorerUtils {
+	
+	public static IProject getProject(IExplorerNode node){
+		while(node != null){
+			if(node instanceof ExplorerResourceNode){
+				ExplorerResourceNode resNode = (ExplorerResourceNode)node;
+				if(resNode.getResource() instanceof IProject){
+					return (IProject)resNode.getResource();
+				}
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
 	
 	public static ExplorerResourceNode getProjectNode(IExplorerNode node){
 		while(node != null){
@@ -24,6 +39,17 @@ public class ExplorerUtils {
 				if(resNode.getResource() instanceof IProject){
 					return (ExplorerResourceNode)node;
 				}
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
+	
+	public static ExplorerResourceNode getResourceProviderNode(IExplorerNode node){
+		while(node != null){
+			ResourceProvider rp = (ResourceProvider)node.getAdapter(ResourceProvider.class);
+			if(rp != null){
+				return (ExplorerResourceNode)node;
 			}
 			node = node.getParent();
 		}

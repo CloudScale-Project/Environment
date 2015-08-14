@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
@@ -16,8 +17,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-
-import eu.cloudscaleproject.env.common.CloudscaleContext;
 
 /**
  *
@@ -62,18 +61,21 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 		MPart part = partService.findPart(editorID);
 		
 		Object data = getContext().get(IExplorerConstants.NODE_DATA);
-		CloudscaleContext.getGlobalContext().set(data.getClass().getName(), data);
 		
 		if(part == null){
-			if(part == null){
-				MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
-				if(stack != null){
-					part = partService.createPart(editorID);
-					stack.getChildren().add(part);
-				}
+			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
+			if(stack != null){
+				part = partService.createPart(editorID);
+				stack.getChildren().add(part);
 			}
 		}
 		
 		partService.showPart(part, PartState.ACTIVATE);
+		
+		//fill in context data
+		IEclipseContext context = part.getContext();
+		
+		context.set(data.getClass().getName(), data);
+		context.set(ExplorerEditorNode.class, this);
 	}
 }

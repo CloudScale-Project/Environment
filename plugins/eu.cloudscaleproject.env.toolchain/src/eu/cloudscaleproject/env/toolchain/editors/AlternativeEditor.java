@@ -12,8 +12,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
@@ -26,14 +26,12 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  *
  */
 public class AlternativeEditor {
-		
-	@Inject
-	MPart part;
 	
 	@Inject
-	MDirtyable dirtyable;
+	private MDirtyable dirtyable;
+	@Inject
+	private Composite parentComposite;
 	
-	private Composite editorComposite;
 	private IEditorInputResource alternative;
 	
 	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
@@ -44,14 +42,22 @@ public class AlternativeEditor {
 				dirtyable.setDirty(alternative.isDirty());
 			}
 			if(IEditorInputResource.PROP_LOADED.equals(evt.getPropertyName())){
-				if(editorComposite instanceof IRefreshable){
-					((IRefreshable)editorComposite).refresh();
+				
+				for(Control control : parentComposite.getChildren()){
+					if(control instanceof IRefreshable){
+						((IRefreshable)control).refresh();
+					}
 				}
+				
 			}
 		}
 	};
 	
-	public void configure(Composite composite, final IEditorInputResource alternative){
+	protected IEditorInputResource getAlternative(){
+		return this.alternative;
+	}
+	
+	protected void setAlternative(final IEditorInputResource alternative){
 		
 		if(this.alternative != null){
 			this.alternative.removePropertyChangeListener(alternativeListener);
@@ -60,12 +66,6 @@ public class AlternativeEditor {
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
 				
-		if(editorComposite != null && !editorComposite.isDisposed()){
-			editorComposite.dispose();
-		}
-		
-		part.setLabel("Analyser results ["+ alternative.getName() +"]");
-		
 		if(!alternative.isLoaded()){
 			EditorInputJob loadJob = new EditorInputJob("Loading alternative") {
 				
@@ -83,17 +83,14 @@ public class AlternativeEditor {
 			loadJob.setUser(true);
 			loadJob.schedule();
 		}
-		
-		this.editorComposite = composite;
-		
-		composite.getParent().layout();
-		composite.getParent().redraw();
 	}
 	
 	@Focus
 	public void focus(){
-		if(this.editorComposite != null && (this.editorComposite instanceof ISelectable)){
-			((ISelectable)this.editorComposite).onSelect();
+		for(Control control : parentComposite.getChildren()){
+			if(control instanceof ISelectable){
+				((ISelectable)control).onSelect();
+			}
 		}
 	}
 	

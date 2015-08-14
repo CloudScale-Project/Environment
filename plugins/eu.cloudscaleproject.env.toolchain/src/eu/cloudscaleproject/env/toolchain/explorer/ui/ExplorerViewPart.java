@@ -6,17 +6,27 @@ import java.beans.PropertyChangeListener;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.IPartListener;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -30,6 +40,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 
 /**
@@ -46,12 +57,50 @@ public class ExplorerViewPart {
 	
 	@Inject
 	private MPart part;
-	
 	@Inject
 	private EMenuService menuService;
-	
 	@Inject
 	private ESelectionService selectionService;
+	@Inject
+	private EPartService partService;
+	
+	private boolean linkWithEditor = false;
+	
+	private final IPartListener partServiceListener = new IPartListener() {
+		
+		@Override
+		public void partVisible(MPart part) {}
+		@Override
+		public void partHidden(MPart part) {}
+		@Override
+		public void partDeactivated(MPart part) {}
+		@Override
+		public void partBroughtToTop(MPart part) {}
+		
+		@Override
+		public void partActivated(MPart part) {
+			if(linkWithEditor){
+				ExplorerEditorNode node = part.getContext().get(ExplorerEditorNode.class);
+				if(node != null){
+					//selectionService.setSelection(node);
+					treeViewer.setSelection(new StructuredSelection(node));
+				}
+			}
+		}
+	};
+	
+	private final ISelectionListener selectionListener = new ISelectionListener() {
+		
+		@Override
+		public void selectionChanged(MPart part, Object selection) {
+			if(linkWithEditor){
+				if(selection instanceof ExplorerEditorNode){
+					ExplorerEditorNode node = (ExplorerEditorNode)selection;
+					node.openEditor();
+				}
+			}
+		}
+	};
 	
 	@PostConstruct
 	public void postConstruct(Composite parent) {
@@ -163,10 +212,39 @@ public class ExplorerViewPart {
 		this.treeViewer.setInput(explorer.getRoot());
 		
 		menuService.registerContextMenu(this.treeViewer.getControl(), POPUP_MENU_ELEMENT);
+		
+		this.partService.addPartListener(partServiceListener);
+		this.selectionService.addPostSelectionListener(selectionListener);
+	}
+	
+	@Inject
+	@Optional
+	private void linkWithEditor(MApplication application, 
+								EModelService modelService, 
+								@Named(IExplorerConstants.LINK_WITH_EDITOR) Boolean enable){
+		
+		this.linkWithEditor = enable;
+		if(enable){
+			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
+			MStackElement element = stack.getSelectedElement();
+			
+			if(element instanceof MPart){
+				MPart part = (MPart)element;
+				ExplorerEditorNode node = part.getContext().get(ExplorerEditorNode.class);
+				if(node != null){
+					if(treeViewer != null && !treeViewer.getTree().isDisposed()){
+						treeViewer.setSelection(new StructuredSelection(node), true);
+					}
+				}
+			}
+			
+		}
 	}
 	
 	@PreDestroy
 	public void preDestroy() {
+		this.partService.removePartListener(partServiceListener);
+		this.selectionService.removePostSelectionListener(selectionListener);
 	}
 	
 	@Focus

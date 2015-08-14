@@ -74,7 +74,7 @@ public class AnalyserTabItemExtension extends DIExtension implements ProjectEdit
 			public Composite createInputComposite(IEditorInput input, Composite parent, int style) {
 				
 				if(introInput.equals(input)){
-					return new IntroComposite(editor, parent, SWT.NONE);
+					return new IntroComposite(parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
 					return new InputSidebarComposite(editor, parent, SWT.NONE);

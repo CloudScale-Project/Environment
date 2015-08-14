@@ -11,13 +11,20 @@
     <elements xsi:type="commands:Command" xmi:id="_CUOMsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod" commandName="selectAlternativeMethod" description="Run simulation using analyser tool"/>
     <elements xsi:type="commands:Command" xmi:id="_V4xegDasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.openAlternative" commandName="openAlternative" description="Run simulation using analyser tool"/>
     <elements xsi:type="commands:Command" xmi:id="_lPWUsDzzEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.command.pinstatus" commandName="pinStatus" description="Pin status view to the current selection"/>
-    <elements xsi:type="commands:Command" xmi:id="_xJ1O8ED_EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.toolchain.command.openeditor" commandName="openEditor"/>
+    <elements xsi:type="commands:Command" xmi:id="_xJ1O8ED_EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.toolchain.command.openExplorerNode" commandName="openExplorerNode" description="Open active selection editor node"/>
+    <elements xsi:type="commands:Command" xmi:id="_TDjX0EHDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.command.deleteExplorerNode" commandName="deleteExplorerNode" description="Delete active selection editor node"/>
+    <elements xsi:type="commands:Command" xmi:id="_l82ToEJ0EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.command.openpart" commandName="openPart" description="Oben part by ID">
+      <parameters xmi:id="_pMCzgEJ0EeW-jpWqcIfmeQ" elementId="part_id" name="Part ID" optional="false"/>
+    </elements>
+    <elements xsi:type="commands:Command" xmi:id="_Fw-10EKEEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.command.linkexplorerwitheditor" commandName="linkExplorerWithEditor" description="Link the Explorer selection with the editor"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PBqRAKO8EeOVJP61i6fIgw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_Q14PUKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenProjectEditorHandler" command="_L3EzAKR6EeOVJP61i6fIgw"/>
     <elements xsi:type="commands:Handler" xmi:id="_gZunsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.handler.SelectAlternativeMethodHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.SelectAlternativeMethodHandler" command="_CUOMsDafEeW2k9p_RsN0yg"/>
     <elements xsi:type="commands:Handler" xmi:id="_ZdjM0DasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.handler.OpenAlternativeHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenAlternativeHandler" command="_V4xegDasEeWRRJlfUN4Dxg"/>
-    <elements xsi:type="commands:Handler" xmi:id="_2Yr5cED_EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.toolchain.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenEditorHandler" command="_xJ1O8ED_EeWsDNl2NuiWtA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_2Yr5cED_EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.toolchain.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.handlers.OpenExplorerNodeHandler" command="_xJ1O8ED_EeWsDNl2NuiWtA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_rLN7YEHDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handler.2" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.handlers.DeleteExplorerNodeHandler" command="_TDjX0EHDEeW-jpWqcIfmeQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_q3CVsEJ0EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handler.3" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenPartHandler" command="_l82ToEJ0EeW-jpWqcIfmeQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="">
     <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Status" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/status_view_16.png" closeable="true">
@@ -28,7 +35,8 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O51YUDqPEeWkq9wwFkaR-A" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.upperLeft">
-    <elements xsi:type="basic:Part" xmi:id="_BFfesDqPEeWkq9wwFkaR-A" elementId="eu.cloudscaleproject.env.toolchain.part.explorer" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerViewPart" label="CloudScale Explorer" tooltip="" closeable="true">
+    <elements xsi:type="basic:Part" xmi:id="_BFfesDqPEeWkq9wwFkaR-A" elementId="eu.cloudscaleproject.env.toolchain.part.explorer" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerViewPart" label="CloudScale Explorer" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/project.png" tooltip="" closeable="true">
+      <handlers xmi:id="_QSK8oEKEEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handler.4" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.explorer.handlers.LinkWithEditorhandler" command="_Fw-10EKEEeW-jpWqcIfmeQ"/>
       <menus xsi:type="menu:PopupMenu" xmi:id="_qyXNIDz6EeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.popupmenu.explorer">
         <children xsi:type="menu:Menu" xmi:id="_WEZaMD0DEeWpPejK7esD1g" elementId="eu.cloudscaleproject.env.toolchain.menu.new" label="New">
           <children xsi:type="menu:HandledMenuItem" xmi:id="_eNkJoD0XEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.cloudscaleProject" label="Cloudscale project" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/project.png" command="_GIFakD0bEeWij6XaP9iBUA"/>
@@ -41,6 +49,9 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_b8AH8D0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.menuseparator.2"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_dwFUsD0dEeWij6XaP9iBUA" elementId="eu.cloudscaleproject.env.toolchain.handledmenuitem.import" label="Import..." iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" command="_50s2AD0dEeWij6XaP9iBUA"/>
       </menus>
+      <toolbar xmi:id="_xSrloEKDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.toolbar.1">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_y42SMEKDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handledtoolitem.linkWithEditor" label="Link with editor" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/link_to_editor.gif" type="Check" command="_Fw-10EKEEeW-jpWqcIfmeQ"/>
+      </toolbar>
     </elements>
   </fragments>
 </fragment:ModelFragments>

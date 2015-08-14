@@ -1,16 +1,16 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputComposite;
+import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 
 /**
@@ -19,52 +19,25 @@ import eu.cloudscaleproject.env.analyser.editors.input.InputComposite;
  * 
  */
 
-public class InputEditor{
+public class InputEditor extends AlternativeEditor{
 		
 	@Inject
-	MPart part;
+	private MPart part;
+	private InputComposite composite;
 	
 	@Inject
-	MDirtyable dirtyable;
-	
-	private InputComposite inputComposite;
-	private InputAlternative alternative;
-	
-	@Inject
-	public void initAlternative(Composite composite, InputAlternative alternative){
+	@Optional
+	@PostConstruct
+	public void postConstruct(Composite parent, InputAlternative alternative){
 		
-		this.alternative = alternative;
-		
-		if(inputComposite != null && !inputComposite.isDisposed()){
-			inputComposite.dispose();
+		if(composite != null){
+			composite.dispose();
 		}
 		
 		part.setLabel("Analyser input ["+ alternative.getName() +"]");
+		composite = new InputComposite(alternative, parent, SWT.NONE);
 		
-		if(!alternative.isLoaded()){
-			alternative.load();
-		}
-		
-		alternative.validate();
-		
-		this.inputComposite = new InputComposite(alternative, composite, SWT.NONE);
-		
-		composite.layout();
-		composite.redraw();
-	}
-	
-	@Focus
-	public void focus(){
-		if(this.inputComposite != null){
-			this.inputComposite.onSelect();
-		}
-	}
-	
-	@Persist
-	public void persist(){
-		if(this.alternative != null){
-			this.alternative.save();
-		}
+		setAlternative(alternative);
 	}
 
 }
