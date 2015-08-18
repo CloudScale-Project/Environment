@@ -50,6 +50,7 @@ public class EditorInputEMF extends EditorInputFolder{
 			
 			@Override
 			public void commandStackChanged(EventObject event) {
+				setDirty(true);
 				firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
 			}
 		});
@@ -351,10 +352,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		return work;
 	}
 	
+	/*
 	@Override
 	public boolean isDirty() {
 		return super.isDirty() || ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
 	}
+	*/
 	
 	@Override
 	public void dispose() {

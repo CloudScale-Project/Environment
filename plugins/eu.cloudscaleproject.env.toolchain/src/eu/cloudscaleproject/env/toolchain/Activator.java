@@ -40,7 +40,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		
 		//retrieve extensions
-		Extensions.getInstance().retrieveExtensions();
+		ToolchainExtensions.getInstance().retrieveExtensions();
 	}
 	
 	/*

@@ -1,10 +1,18 @@
 package eu.cloudscaleproject.env.toolchain;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -85,7 +93,34 @@ public class ToolchainUtils {
 	// Extractor results 
 	public static final String KEY_FILE_SOURCEDECORATOR = "path_sourcedecorator";
 	
+	public static HashSet<IEditorInputResource> getOpenedAlternatives(EModelService modelService, MApplication app){
+		
+		HashSet<IEditorInputResource> out = new HashSet<IEditorInputResource>();
+		MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", app);
+		
+		for(MStackElement el : stack.getChildren()){
+			if(el instanceof MPart){
+				MPart part = (MPart)el;
+				IEditorInputResource alternative = part.getContext().get(IEditorInputResource.class);
+				if(alternative != null){
+					out.add(alternative);
+				}
+			}
+		}
+		return out;
+	}
 	
+	public static IFile getEMFDiagramFileFromModel(IFile modelFile){
+		
+		String fileName = ExplorerProjectPaths.removeFileExtension(modelFile.getName());
+		String fileExtension = modelFile.getFileExtension();
+
+		List<IFile> files = ExplorerProjectPaths.findFiles(modelFile.getParent(), fileName, fileExtension, true);
+		IFile diagramFile = files.isEmpty() ? null : files.get(0);
+		return diagramFile;
+	}
+	
+	@Deprecated
 	public static IEditorInputResource getToolSelectedResource(IProject project, String toolID){
 		IEditorInputResource selectedResource = null;
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().

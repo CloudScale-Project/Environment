@@ -12,8 +12,6 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.toolchain.Extensions;
-
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
@@ -66,7 +64,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		}
 		
 		//retrieve children from extension points
-		for(IExplorerNodeChildrenProvider childrenProvider : Extensions.getInstance().getNodeChildrenProviders()){
+		for(IExplorerNodeChildrenProvider childrenProvider : ExplorerExtensions.getInstance().getNodeChildrenProviders()){
 			if(childrenProvider.canCreate(this)){
 				addNodeChildren(childrenProvider.create(this));
 			}

@@ -4,11 +4,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -18,7 +17,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ToolResourceNodeChildren extends ExplorerNodeChildren{
+public class AlternativeProviderNodeChildren extends ExplorerNodeChildren{
 	
 	private final String editorID;
 	private final ResourceProvider resourceProvider;
@@ -31,7 +30,7 @@ public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 		}
 	};
 	
-	public ToolResourceNodeChildren(String editorID, ResourceProvider resourceProvider, boolean lazy) {
+	public AlternativeProviderNodeChildren(String editorID, ResourceProvider resourceProvider, boolean lazy) {
 		super(lazy);
 		
 		this.editorID = editorID;
@@ -48,19 +47,15 @@ public class ToolResourceNodeChildren extends ExplorerNodeChildren{
 	public IExplorerNode getChild(Object key) {
 		
 		IEditorInputResource resource = (IEditorInputResource)key;
-		
-		IExplorerNodeChildren children = null;
-		
+
+		IExplorerNodeChildren children = null;		
 		if(resource instanceof EditorInputEMF){
-			children = new EMFModelChildren((EditorInputEMF)resource, true);
+			children = new AlternativeNodeChildren((EditorInputEMF)resource, true);
 		}
 		
-		ExplorerEditorNode node = new ExplorerEditorNode(resource.getID(), resource.getResource(), children);
+		AlternativeNode node = new AlternativeNode(editorID, resource, children);		
 		node.setName(resource.getName());
-		node.setData(resource);
-		
-		node.getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
-		
+				
 		return node;
 		
 	}

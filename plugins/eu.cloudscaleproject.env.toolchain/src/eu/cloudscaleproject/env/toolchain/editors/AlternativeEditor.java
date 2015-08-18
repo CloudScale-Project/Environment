@@ -11,12 +11,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -31,6 +36,8 @@ public class AlternativeEditor {
 	private MDirtyable dirtyable;
 	@Inject
 	private Composite parentComposite;
+	@Inject
+	private MPart part;
 	
 	private IEditorInputResource alternative;
 	
@@ -43,9 +50,11 @@ public class AlternativeEditor {
 			}
 			if(IEditorInputResource.PROP_LOADED.equals(evt.getPropertyName())){
 				
-				for(Control control : parentComposite.getChildren()){
-					if(control instanceof IRefreshable){
-						((IRefreshable)control).refresh();
+				if(!parentComposite.isDisposed()){
+					for(Control control : parentComposite.getChildren()){
+						if(control instanceof IRefreshable){
+							((IRefreshable)control).refresh();
+						}
 					}
 				}
 				
@@ -62,6 +71,8 @@ public class AlternativeEditor {
 		if(this.alternative != null){
 			this.alternative.removePropertyChangeListener(alternativeListener);
 		}
+		
+		part.getContext().set(IEditorInputResource.class, alternative);
 		
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
@@ -83,10 +94,17 @@ public class AlternativeEditor {
 			loadJob.setUser(true);
 			loadJob.schedule();
 		}
+		
+		focus();
 	}
 	
 	@Focus
 	public void focus(){
+		
+		if(alternative != null){
+			ValidationDiagramService.showDiagram(alternative.getProject());
+		}
+
 		for(Control control : parentComposite.getChildren()){
 			if(control instanceof ISelectable){
 				((ISelectable)control).onSelect();
@@ -102,7 +120,18 @@ public class AlternativeEditor {
 	}
 	
 	@PreDestroy
-	public void preDestroy(){
+	public void preDestroy(EModelService modelService, MApplication app){
+		
+		part.getContext().remove(IEditorInputResource.class);
+		
+		if(alternative != null){
+			boolean openedElsewhere = ToolchainUtils.getOpenedAlternatives(modelService, app).contains(alternative);
+			if(!openedElsewhere){
+				alternative.load();
+				alternative.validate();
+			}
+		}
+		
 		this.alternative.removePropertyChangeListener(alternativeListener);
 	}
 	

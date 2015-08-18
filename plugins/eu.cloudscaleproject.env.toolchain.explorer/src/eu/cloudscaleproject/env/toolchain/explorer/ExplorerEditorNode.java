@@ -34,8 +34,9 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 	@Inject
 	private MApplication application;
 	
-	public ExplorerEditorNode(String partID, IResource resource, IExplorerNodeChildren childFactory) {
-		super(partID, resource, childFactory);
+	public ExplorerEditorNode(String id, String editorID, IResource resource, IExplorerNodeChildren childFactory) {
+		super(id, resource, childFactory);
+		getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
 	}
 	
 	public void openEditor(){
@@ -59,9 +60,7 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 		}
 		
 		MPart part = partService.findPart(editorID);
-		
-		Object data = getContext().get(IExplorerConstants.NODE_DATA);
-		
+				
 		if(part == null){
 			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
 			if(stack != null){
@@ -75,7 +74,11 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 		//fill in context data
 		IEclipseContext context = part.getContext();
 		
-		context.set(data.getClass().getName(), data);
+		Object data = getContext().get(IExplorerConstants.NODE_DATA);
+		if(data != null){
+			context.set(data.getClass().getName(), data);
+		}
+		
 		context.set(ExplorerEditorNode.class, this);
 	}
 }

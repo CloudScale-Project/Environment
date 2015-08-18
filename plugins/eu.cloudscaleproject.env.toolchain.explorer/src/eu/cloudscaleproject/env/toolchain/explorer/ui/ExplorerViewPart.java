@@ -203,6 +203,10 @@ public class ExplorerViewPart {
 					});
 					
 				}
+				else if(node.hasChildren()){
+					boolean expanded = treeViewer.getExpandedState(node);
+					treeViewer.setExpandedState(node, !expanded);
+				}
 			}
 		});
 		

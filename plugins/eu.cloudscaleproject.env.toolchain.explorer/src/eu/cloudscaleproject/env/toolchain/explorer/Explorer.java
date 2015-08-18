@@ -1,6 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
-import eu.cloudscaleproject.env.toolchain.explorer.children.ProjectNodeChildren;
+import eu.cloudscaleproject.env.toolchain.explorer.children.RootNodeChildren;
 
 /**
  *
@@ -21,7 +21,7 @@ public class Explorer {
 	private final IExplorerNode rootNode;
 	
 	public Explorer() {
-		rootNode = new ExplorerNode("eu.cloudscaleproject.env.toolchain.explorer.rootNode", new ProjectNodeChildren(false));
+		rootNode = new ExplorerNode("eu.cloudscaleproject.env.toolchain.explorer.rootNode", new RootNodeChildren(false));
 		rootNode.setName("Explorer root node");
 	}
 	

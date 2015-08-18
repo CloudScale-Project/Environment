@@ -1,7 +1,8 @@
 package eu.cloudscaleproject.env.toolchain.resources;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
@@ -10,7 +11,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.Extensions;
+import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ResourceRegistry {
@@ -29,12 +30,11 @@ public class ResourceRegistry {
 		}
 		
 		//dispose unused resource providers
-		Iterator<IFolder> iter = instance.resourceProviders.keySet().iterator();
-		while(iter.hasNext()){
-			IFolder folder = iter.next();
+		List<IFolder> folders = new ArrayList<IFolder>(instance.resourceProviders.keySet());
+		for(IFolder folder : folders){
 			if(!folder.exists()){
-				instance.resourceProviders.get(folder).dispose();
-				iter.remove();
+				ResourceProvider rp = instance.resourceProviders.get(folder);
+				instance.removeProvider(rp);
 			}
 		}
 		
@@ -45,6 +45,8 @@ public class ResourceRegistry {
 											= new HashMap<String, IResourceProviderFactory>();
 	private HashMap<IFolder, ResourceProvider> resourceProviders 
 											= new HashMap<IFolder, ResourceProvider>();
+	private HashMap<ResourceProvider, String> resourceProviderIds
+											= new HashMap<ResourceProvider, String>();
 	
 	public ResourceRegistry() {
 		//register basic resource provider factories
@@ -52,7 +54,7 @@ public class ResourceRegistry {
 		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
 		
 		//register factories from extension points
-		for(IConfigurationElement el : Extensions.getInstance().getResourceProviderFactoryElements()){
+		for(IConfigurationElement el : ToolchainExtensions.getInstance().getResourceProviderFactoryElements()){
 			try {
 				String id = el.getAttribute("id");
 				Object o = el.createExecutableExtension("class");
@@ -61,6 +63,18 @@ public class ResourceRegistry {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private synchronized void addProvider(String id, ResourceProvider rp){
+		IFolder folder = rp.getRootFolder();
+		resourceProviders.put(folder, rp);
+		resourceProviderIds.put(rp, id);
+	}
+	
+	private synchronized void removeProvider(ResourceProvider rp){
+		IFolder folder = rp.getRootFolder();
+		resourceProviders.remove(folder);
+		resourceProviderIds.remove(rp);
 	}
 	
 	/**
@@ -85,6 +99,10 @@ public class ResourceRegistry {
 		logger.info("IResourceProviderFactory registered uder toolchainID: " + tool.getID());
 	}
 	
+	public synchronized String getResourceProviderID(ResourceProvider rp){
+		return resourceProviderIds.get(rp);
+	}
+	
 	/**
 	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet),
 	 * using registered 'IResourceProviderFactory'.
@@ -107,7 +125,7 @@ public class ResourceRegistry {
 			}
 			else{
 				resourceProvider = resourceFactory.create(folder);
-				resourceProviders.put(folder, resourceProvider);
+				addProvider(id, resourceProvider);
 			}			
 		}
 		

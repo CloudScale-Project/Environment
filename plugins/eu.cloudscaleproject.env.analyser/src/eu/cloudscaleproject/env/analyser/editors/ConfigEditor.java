@@ -28,16 +28,19 @@ public class ConfigEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	@PostConstruct
-	public void postConstruct(Composite composite, ConfAlternative alternative){
+	public void postConstruct(Composite parent, ConfAlternative alternative){
 		
 		if(configComposite != null){
 			configComposite.dispose();
 		}
 		
 		part.setLabel("Analyser config ["+ alternative.getName() +"]");
-		configComposite = new ConfigComposite(alternative, composite, SWT.NONE);
+		configComposite = new ConfigComposite(alternative, parent, SWT.NONE);
 		
 		setAlternative(alternative);
+		
+		parent.layout();
+		parent.redraw();
 	}
 	
 }

@@ -39,17 +39,4 @@
             restorable="true">
       </e4view>
    </extension>
-   <extension
-         point="org.eclipse.core.expressions.definitions">
-      <definition
-            id="eu.cloudscaleproject.env.toolchain.explorer.editornode">
-         <with
-               variable="org.eclipse.ui.selection">
-            <instanceof
-                  value="eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode">
-            </instanceof>
-         </with>
-      </definition>
-   </extension>
-
 </plugin>

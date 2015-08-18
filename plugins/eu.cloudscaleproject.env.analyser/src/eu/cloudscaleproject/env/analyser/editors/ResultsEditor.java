@@ -28,16 +28,19 @@ public class ResultsEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	@PostConstruct
-	public void postConstruct(Composite composite, ResultAlternative alternative){
+	public void postConstruct(Composite parent, ResultAlternative alternative){
 		
 		if(resultsComposite != null){
 			resultsComposite.dispose();
 		}
 		
 		part.setLabel("Analyser results ["+ alternative.getName() +"]");
-		resultsComposite = new ResultsComposite(alternative, composite, SWT.NONE);
+		resultsComposite = new ResultsComposite(alternative, parent, SWT.NONE);
 		
 		setAlternative(alternative);
+		
+		parent.layout();
+		parent.redraw();
 	}
 
 }

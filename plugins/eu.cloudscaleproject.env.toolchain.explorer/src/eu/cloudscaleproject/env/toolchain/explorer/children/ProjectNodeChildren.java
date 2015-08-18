@@ -7,30 +7,30 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.toolchain.Extensions;
+import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ToolNode;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ToolNodeChildren extends ExplorerNodeChildren{
+public class ProjectNodeChildren extends ExplorerNodeChildren{
 		
 	private final IProject project;
 
-	public ToolNodeChildren(IProject project, boolean lazy) {
+	public ProjectNodeChildren(IProject project, boolean lazy) {
 		super(lazy);
 		this.project = project;
 	}
 
 	@Override
 	public List<? extends Object> getKeys() {		
-		List<IConfigurationElement> toolElements = Extensions.getInstance().getToolElements();
+		List<IConfigurationElement> toolElements = ToolchainExtensions.getInstance().getToolElements();
 		return toolElements;
 	}
 
@@ -45,7 +45,7 @@ public class ToolNodeChildren extends ExplorerNodeChildren{
 		
 		IFolder folder = ToolchainUtils.getToolFolder(project, id);
 		
-		IExplorerNode node = new ExplorerResourceNode(id, folder, new ToolResourceProviderNodeChildren(project, id, false));
+		ToolNode node = new ToolNode(id, folder);		
 		node.setIcon(icon, true);
 		node.setName(name);
 		

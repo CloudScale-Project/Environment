@@ -14,29 +14,31 @@ import org.eclipse.swt.widgets.Display;
 import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
 import eu.cloudscaleproject.env.analyser.wizard.config.CreateConfigAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public class CreateAlternativeHandler {
 	
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable) {
 		
-		IExplorerNode node = (IExplorerNode)adaptable.getAdapter(IExplorerNode.class);
-		IProject project = ExplorerUtils.getProject(node);
-		IExplorerNode rpNode = ExplorerUtils.getResourceProviderNode(node);
-		
-		CSTool tool = CSTool.getTool(rpNode.getID());
-		
-		if(CSTool.ANALYSER_INPUT.equals(tool)){
-			CreateInputSelectionWizard createInputAltWizard = new CreateInputSelectionWizard(project);
-			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
-			wizardDialog.open();
-		}
-		else if(CSTool.ANALYSER_CONF.equals(tool)){
-			CreateConfigAlternativeSelectionWizard createInputAltWizard = new CreateConfigAlternativeSelectionWizard(project);
-			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
-			wizardDialog.open();
+		ResourceProvider rp = (ResourceProvider)adaptable.getAdapter(ResourceProvider.class);
+		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		IProject project = rp.getProject();
+
+		if(rp != null){
+			CSTool tool = CSTool.getTool(id);
+			
+			if(CSTool.ANALYSER_INPUT.equals(tool)){
+				CreateInputSelectionWizard createInputAltWizard = new CreateInputSelectionWizard(project);
+				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
+				wizardDialog.open();
+			}
+			else if(CSTool.ANALYSER_CONF.equals(tool)){
+				CreateConfigAlternativeSelectionWizard createInputAltWizard = new CreateConfigAlternativeSelectionWizard(project);
+				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
+				wizardDialog.open();
+			}
 		}
 		
 	}
@@ -44,23 +46,12 @@ public class CreateAlternativeHandler {
 	@CanExecute
 	public boolean canExecute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable){
 		
-		IExplorerNode node = (IExplorerNode)adaptable.getAdapter(IExplorerNode.class);
-		if(node == null){
-			return false;
+		ResourceProvider rp = (ResourceProvider)adaptable.getAdapter(ResourceProvider.class);
+		if(rp != null){
+			return true;
 		}
 		
-		IProject project = ExplorerUtils.getProject(node);
-		if(project == null){
-			return false;
-		}
-		
-		IExplorerNode rpNode = ExplorerUtils.getResourceProviderNode(node);
-		
-		if(rpNode == null){
-			return false;
-		}
-		
-		return true;
+		return false;
 	}
 		
 }

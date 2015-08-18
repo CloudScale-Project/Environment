@@ -70,7 +70,7 @@
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="eu.cloudscaleproject.env.analyser.inputAlternative">
+            id="eu.cloudscaleproject.env.analyser.inputAlternativeNode">
          <with
                variable="org.eclipse.ui.selection">
             <adapt
@@ -82,7 +82,7 @@
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.analyser.confAlternative">
+            id="eu.cloudscaleproject.env.analyser.confAlternativeNode">
          <with
                variable="org.eclipse.ui.selection">
             <with
@@ -94,7 +94,7 @@
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.analyser.resultAlternative">
+            id="eu.cloudscaleproject.env.analyser.resultAlternativeNode">
          <with
                variable="org.eclipse.ui.selection">
             <with
@@ -106,19 +106,47 @@
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.analyser.alternative">
+            id="eu.cloudscaleproject.env.analyser.inputAltProviderNode">
          <with
                variable="org.eclipse.ui.selection">
-            <or>
-               <reference
-                     definitionId="eu.cloudscaleproject.env.analyser.inputAlternative">
-               </reference>
-               <reference
-                     definitionId="eu.cloudscaleproject.env.analyser.confAlternative">
-               </reference>
-               <reference
-                     definitionId="eu.cloudscaleproject.env.analyser.resultAlternative">
-               </reference></or>
+            <test
+                  forcePluginActivation="true"
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.resultAltProviderNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  forcePluginActivation="true"
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.confAltProviderNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  forcePluginActivation="true"
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.toolNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  forcePluginActivation="true"
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser">
+            </test>
          </with>
       </definition>
    </extension>

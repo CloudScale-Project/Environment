@@ -3,35 +3,30 @@ package eu.cloudscaleproject.env.toolchain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildrenProvider;
-
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class Extensions {
+public class ToolchainExtensions {
 
-	private static Extensions instance = null;
-	public static Extensions getInstance(){
+	private static ToolchainExtensions instance = null;
+	public static ToolchainExtensions getInstance(){
 		if(instance == null){
-			instance = new Extensions();
+			instance = new ToolchainExtensions();
 		}
 		return instance;
 	}
 	
 	private List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
 	private List<IConfigurationElement> resourceProviderFactoryElements = new ArrayList<IConfigurationElement>();
-	
-	private List<IExplorerNodeChildrenProvider> nodeChildrenProviders = new ArrayList<IExplorerNodeChildrenProvider>();
-	
+		
 	public List<IConfigurationElement> getToolElements(){
 		return toolElements;
 	}
@@ -56,10 +51,6 @@ public class Extensions {
 			}
 		}
 		return null;
-	}
-	
-	public List<IExplorerNodeChildrenProvider> getNodeChildrenProviders(){
-		return nodeChildrenProviders;
 	}
 	
 	public List<IConfigurationElement> getResourceProviderFactoryElements(String toolID){
@@ -99,29 +90,6 @@ public class Extensions {
 							}
 						}
 											
-					}
-				}
-			}
-		}
-		
-		//retrieve explorer extensions
-		{
-			IExtensionRegistry registry = Platform.getExtensionRegistry();
-			IExtensionPoint point = registry.getExtensionPoint("eu.cloudscaleproject.env.toolcahin.explorer");
-					
-			for(IExtension extension : point.getExtensions()){
-				for(IConfigurationElement el : extension.getConfigurationElements()){
-					if(el.getName().equals("children")){
-						
-						try {
-							Object o = el.createExecutableExtension("class");
-							if(o instanceof IExplorerNodeChildrenProvider){
-								nodeChildrenProviders.add((IExplorerNodeChildrenProvider)o);
-							}
-						} catch (CoreException e) {
-							e.printStackTrace();
-						}
-						
 					}
 				}
 			}

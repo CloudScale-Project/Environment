@@ -38,6 +38,9 @@ public class InputEditor extends AlternativeEditor{
 		composite = new InputComposite(alternative, parent, SWT.NONE);
 		
 		setAlternative(alternative);
+		
+		parent.layout();
+		parent.redraw();
 	}
 
 }

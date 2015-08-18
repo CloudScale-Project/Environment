@@ -15,15 +15,15 @@ import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ProjectNode;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ProjectNodeChildren extends ExplorerNodeChildren{
+public class RootNodeChildren extends ExplorerNodeChildren{
 	
 	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
 		
@@ -53,7 +53,7 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		}
 	};
 	
-	public ProjectNodeChildren(boolean lazy) {
+	public RootNodeChildren(boolean lazy) {
 		super(lazy);
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 	}
@@ -81,11 +81,11 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 	public IExplorerNode getChild(Object key) {
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
-			ExplorerResourceNode node = new ExplorerResourceNode(project.getName(), 
-																 project,
-																 new ToolNodeChildren(project, false));
+			
+			ProjectNode node = new ProjectNode(project);
 			node.setName(project.getName());
 			node.setIcon(CommonResources.PROJECT_16, false);
+			
 			return node;
 		}
 		return null;
