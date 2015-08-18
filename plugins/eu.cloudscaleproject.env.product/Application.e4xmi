@@ -12,17 +12,17 @@
             <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.upperLeft" selectedElement="_I9w4QIsiEeKkW7h3XzrPnQ">
               <tags>org.eclipse.e4.primaryNavigationStack</tags>
               <tags>newtablook</tags>
-              <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" containerData="7500" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.lowerLeft"/>
+            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.lowerLeft">
+              <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" containerData="7500" ref="_mc-PMDZ_EeOUZvbZvEH41A" closeable="true"/>
+            </children>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_GM8WcIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="60">
             <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="70">
               <children xsi:type="advanced:Placeholder" xmi:id="_imeVUKLIEeOVJP61i6fIgw" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.bottom" containerData="30">
-              <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" ref="_mc-PMDZ_EeOUZvbZvEH41A"/>
-            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.bottom" visible="false" containerData="30"/>
           </children>
         </children>
       </children>
@@ -47,7 +47,7 @@
       </menus>
       <toolbar xmi:id="_4UXAUdSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_mc-PMDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_mc-PMDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/prop_ps.png" closeable="true"/>
     <sharedElements xsi:type="basic:Part" xmi:id="__0KigMbuEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simucontroller.gui.DockStatusViewPart" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Simulation Dock Status" iconURI="platform:/plugin/de.uka.ipd.sdq.codegen.simucontroller/icons/screen_blue_small.gif" closeable="true">
       <tags>View</tags>
       <menus xmi:id="__0LJkMbuEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simucontroller.gui.DockStatusViewPart">

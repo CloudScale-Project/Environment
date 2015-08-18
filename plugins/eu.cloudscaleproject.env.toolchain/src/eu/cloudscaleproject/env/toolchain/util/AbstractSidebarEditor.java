@@ -124,6 +124,10 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 		}
 		
 		public void resourceChanged(PropertyChangeEvent evt){
+			
+			if(compositeSidebar.isDisposed() || compositeArea.isDisposed()){
+				return;
+			}
 		
 			initButton();
 			

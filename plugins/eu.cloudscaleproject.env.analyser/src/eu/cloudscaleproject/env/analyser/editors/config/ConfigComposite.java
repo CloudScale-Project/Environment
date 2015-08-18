@@ -3,18 +3,22 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -98,11 +102,31 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 			List<MeasuringPointRepository> mpReps = alternative.getMeasuringPointRepositories();
 			MeasuringPointRepository mpRep = mpReps.isEmpty() ? null : mpReps.get(0);
 			
-			measuringPointsComposite = new EMFEditableTreeviewComposite(input, 
-					mpRep, null,
-					tabFolder, style);
+			Composite composite = new Composite(tabFolder, SWT.NONE);
+			composite.setLayout(new GridLayout(1, false));
 			
-			tabItem.setControl(measuringPointsComposite);
+			measuringPointsComposite = new EMFEditableTreeviewComposite(input, mpRep, null, composite, style);
+			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+			gridData.minimumHeight = 260;
+			gridData.heightHint = 300;
+			measuringPointsComposite.setLayoutData(gridData);
+
+			Composite pageSheet = new Composite(composite, SWT.NONE);
+			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			pageSheet.setLayout(new FillLayout());
+			
+			final PropertySheetPage page = (PropertySheetPage)measuringPointsComposite.getPropertySheetPage();
+			page.createControl(pageSheet);
+			
+			ProjectEditorSelectionService.getInstance().addPostSelectionChangedListener(new ISelectionChangedListener() {
+				
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					page.selectionChanged(null, event.getSelection());					
+				}
+			});
+			
+			tabItem.setControl(composite);			
 		}
 
 		// measurements settings
@@ -130,9 +154,29 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 		{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Advanced editor");
+			
+			Composite composite = new Composite(tabFolder, SWT.NONE);
+			composite.setLayout(new GridLayout(1, false));
+			
+			advancedTreeview = new EMFEditableTreeviewComposite(input, composite, SWT.NONE);
+			advancedTreeview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-			advancedTreeview = new EMFEditableTreeviewComposite(input, tabFolder, style);
-			tabItem.setControl(advancedTreeview);
+			Composite pageSheet = new Composite(composite, SWT.NONE);
+			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			pageSheet.setLayout(new FillLayout());
+			
+			final PropertySheetPage page = (PropertySheetPage)advancedTreeview.getPropertySheetPage();
+			page.createControl(pageSheet);
+			
+			ProjectEditorSelectionService.getInstance().addPostSelectionChangedListener(new ISelectionChangedListener() {
+				
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					page.selectionChanged(null, event.getSelection());					
+				}
+			});
+			
+			tabItem.setControl(composite);
 		}
 
 		tabFolder.addSelectionListener(new SelectionAdapter()
@@ -193,12 +237,14 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 	@Override
 	public IPropertySheetPage getPropertySheetPage()
 	{
+		/* This is not needed anymore... PropSheetpage is integrated into this composite 
 		Control c = tabFolder.getSelection().getControl();
 		if (c instanceof EMFEditableTreeviewComposite)
 		{
 			return ((EMFEditableTreeviewComposite) c).getPropertySheetPage();
 		}
-
+		*/
+		
 		return null;
 	}
 }

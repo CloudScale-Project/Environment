@@ -61,8 +61,6 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		CloudscaleContext.inject(this);
 	}
 	
-	
-	
 	@Override
 	public String getPartName() {
 		IProject p = ExplorerProjectPaths.getProject(this);
@@ -162,24 +160,6 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		for(ProjectEditorExtension tee : editors){
 			tee.createTabItem(this);
 		}
-		
-		/*
-		WorkspaceJob job = new WorkspaceJob("Project editor initialization") {
-			
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				monitor.beginTask("Loading resources", IProgressMonitor.UNKNOWN);
-				for(ProjectEditorExtension tee : editors){
-					tee.load(monitor);
-				}
-				monitor.done();
-				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resources done.");
-			}
-		};
-		job.setPriority(WorkspaceJob.INTERACTIVE);
-		job.setUser(false);
-		job.schedule();
-		*/
 		
 		if(!editorProvider.getToolExtensions().isEmpty()){
 			tabFolder.setSelection(editorProvider.getToolExtensions().get(0).getTabItem());
