@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +15,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -93,7 +95,17 @@ public class ToolchainUtils {
 	// Extractor results 
 	public static final String KEY_FILE_SOURCEDECORATOR = "path_sourcedecorator";
 	
-	public static HashSet<IEditorInputResource> getOpenedAlternatives(EModelService modelService, MApplication app){
+	public static HashSet<IEditorInputResource> getOpenedAlternatives(){
+		
+		EModelService modelService = CloudscaleContext.getActiveContext().get(EModelService.class);
+		MApplication app = CloudscaleContext.getActiveContext().get(MApplication.class);
+
+		if(modelService == null){
+			throw new IllegalSelectorException();
+		}
+		if(app == null){
+			throw new IllegalSelectorException();
+		}
 		
 		HashSet<IEditorInputResource> out = new HashSet<IEditorInputResource>();
 		MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", app);
@@ -101,9 +113,11 @@ public class ToolchainUtils {
 		for(MStackElement el : stack.getChildren()){
 			if(el instanceof MPart){
 				MPart part = (MPart)el;
-				IEditorInputResource alternative = part.getContext().get(IEditorInputResource.class);
-				if(alternative != null){
-					out.add(alternative);
+				if(part.getContext() != null){
+					IEditorInputResource alternative = part.getContext().get(IEditorInputResource.class);
+					if(alternative != null){
+						out.add(alternative);
+					}
 				}
 			}
 		}

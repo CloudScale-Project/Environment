@@ -17,6 +17,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
@@ -50,13 +51,19 @@ public class AlternativeEditor {
 			}
 			if(IEditorInputResource.PROP_LOADED.equals(evt.getPropertyName())){
 				
-				if(!parentComposite.isDisposed()){
-					for(Control control : parentComposite.getChildren()){
-						if(control instanceof IRefreshable){
-							((IRefreshable)control).refresh();
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(!parentComposite.isDisposed()){
+							for(Control control : parentComposite.getChildren()){
+								if(control instanceof IRefreshable){
+									((IRefreshable)control).refresh();
+								}
+							}
 						}
 					}
-				}
+				});
 				
 			}
 		}
@@ -77,23 +84,23 @@ public class AlternativeEditor {
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
 				
-		if(!alternative.isLoaded()){
-			EditorInputJob loadJob = new EditorInputJob("Loading alternative") {
+		EditorInputJob loadJob = new EditorInputJob("Loading alternative") {
+			
+			@Override
+			public IStatus execute(IProgressMonitor monitor) {
 				
-				@Override
-				public IStatus execute(IProgressMonitor monitor) {
-					
-					monitor.beginTask("Loading '"+alternative.getName()+"' alternative", IProgressMonitor.UNKNOWN);
+				monitor.beginTask("Loading '"+alternative.getName()+"' alternative", IProgressMonitor.UNKNOWN);
+				if(!alternative.isLoaded()){
 					alternative.load(monitor);
-					alternative.validate(monitor);
-					monitor.done();
-					
-					return Status.OK_STATUS;
 				}
-			};
-			loadJob.setUser(true);
-			loadJob.schedule();
-		}
+				alternative.validate(monitor);
+				monitor.done();
+				
+				return Status.OK_STATUS;
+			}
+		};
+		loadJob.setUser(true);
+		loadJob.schedule();
 		
 		focus();
 	}
@@ -125,10 +132,9 @@ public class AlternativeEditor {
 		part.getContext().remove(IEditorInputResource.class);
 		
 		if(alternative != null){
-			boolean openedElsewhere = ToolchainUtils.getOpenedAlternatives(modelService, app).contains(alternative);
+			boolean openedElsewhere = ToolchainUtils.getOpenedAlternatives().contains(alternative);
 			if(!openedElsewhere){
 				alternative.load();
-				alternative.validate();
 			}
 		}
 		

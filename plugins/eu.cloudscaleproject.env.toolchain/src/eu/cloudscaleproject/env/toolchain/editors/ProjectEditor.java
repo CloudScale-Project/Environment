@@ -10,11 +10,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -33,7 +29,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
@@ -168,6 +163,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 			tee.createTabItem(this);
 		}
 		
+		/*
 		WorkspaceJob job = new WorkspaceJob("Project editor initialization") {
 			
 			@Override
@@ -183,6 +179,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		job.setPriority(WorkspaceJob.INTERACTIVE);
 		job.setUser(false);
 		job.schedule();
+		*/
 		
 		if(!editorProvider.getToolExtensions().isEmpty()){
 			tabFolder.setSelection(editorProvider.getToolExtensions().get(0).getTabItem());

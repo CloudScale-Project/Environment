@@ -58,6 +58,17 @@ public class ValidationDiagramService {
 		
 	}
 	
+	public static void showStatusIfEmpty(IProject project, IValidationStatusProvider statusProvider){
+		
+		IValidationDiagram diagramProvider = getDiagram(project);
+		if(diagramProvider != null && statusProvider != null){
+			if(diagramProvider.getActiveStatusProvider(statusProvider.getID()) == null){
+				diagramProvider.bindStatusProvider(statusProvider.getID(), statusProvider);
+			}
+		}
+		
+	}
+	
 	public static void showStatus(IProject project, IValidationStatusProvider statusProvider){
 				
 		IValidationDiagram diagramProvider = getDiagram(project);

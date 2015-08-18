@@ -319,22 +319,9 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			
 			if(input instanceof EditorInputResource){
 				final EditorInputResource eir = (EditorInputResource)input;
+				
+				//don't initialize composite if the alternative is not loaded
 				if(!eir.isLoaded()){
-					
-					/*
-					EditorInputJob job = new EditorInputJob("Loading resource", eir) {
-						
-						@Override
-						public IStatus execute(IProgressMonitor monitor) {
-							eir.load(monitor);
-							return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading done");
-						}
-					};
-					
-					job.setUser(true);
-					job.schedule();
-					*/
-					
 					return;
 				}
 			}
@@ -380,6 +367,13 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 								
 					btnSelect.setSelection(true);
 					isSelected = true;
+					
+					if(input instanceof EditorInputResource){
+						final EditorInputResource eir = (EditorInputResource)input;
+						if(!eir.isLoaded()){
+							eir.load();
+						}
+					}
 					
 					initComposite();
 					

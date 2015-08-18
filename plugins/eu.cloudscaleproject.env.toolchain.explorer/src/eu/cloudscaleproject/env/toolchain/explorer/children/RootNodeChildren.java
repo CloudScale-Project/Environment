@@ -40,6 +40,9 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 				if(projectDelta.getKind() == IResourceDelta.REMOVED){
 					refresh = true;
 				}
+				if(projectDelta.getKind() == IResourceDelta.CHANGED){
+					refresh = true;
+				}
 			}
 			
 			if(refresh){

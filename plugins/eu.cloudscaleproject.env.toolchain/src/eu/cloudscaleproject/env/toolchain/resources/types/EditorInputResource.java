@@ -271,6 +271,8 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 			}
 		}
 		
+		validate(monitor);
+		
 		firePropertyChange(PROP_LOADED, false, true);
 		System.out.println("LOAD TIME : "+ (System.currentTimeMillis()-time));
 	}

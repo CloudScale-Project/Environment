@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.swt.widgets.Display;
 
@@ -24,7 +23,6 @@ import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListe
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -64,62 +62,55 @@ public abstract class ResourceProvider
 		@Override
 		public void resourceChanged(IResourceDelta delta)
 		{
+			if(delta.getKind() == IResourceDelta.REMOVED){
+				dispose();
+				return;
+			}
 			
-			synchronized (resourcesLock){
+			for (IResourceDelta alternativeDelta : delta.getAffectedChildren())
+			{
+				IResource resource = alternativeDelta.getResource();
 				
-				if(delta.getKind() == IResourceDelta.REMOVED){
-					dispose();
-					return;
-				}
- 				
-				for (IResourceDelta alternativeDelta : delta.getAffectedChildren())
+				if (alternativeDelta.getKind() == IResourceDelta.ADDED)
 				{
-					IResource resource = alternativeDelta.getResource();
-					
-					if (alternativeDelta.getKind() == IResourceDelta.ADDED)
+					loadResource(resource);
+				}
+				
+				if (alternativeDelta.getKind() == IResourceDelta.REMOVED)
+				{
+					IEditorInputResource r = resources.get(resource);
+					if (r != null)
 					{
-						loadResource(resource);
+						removeResource(r);
+						firePropertyChange(PROP_RESOURCE_DELETED, r, null);
+					}
+				}
+				
+				if (alternativeDelta.getKind() == IResourceDelta.CHANGED)
+				{
+					final IEditorInputResource r = resources.get(resource);
+					
+					if (r == null){
+						return;
 					}
 					
-					if (alternativeDelta.getKind() == IResourceDelta.REMOVED)
-					{
-						IEditorInputResource r = resources.get(resource);
-						if (r != null)
-						{
-							removeResource(r);
-							firePropertyChange(PROP_RESOURCE_DELETED, r, null);
-						}
+					// do not trigger re-load, if the property change is 
+					// triggered from create/save/delete operations 
+					if(r.isJobInProgress() || r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
+						return;
 					}
 					
-					if (alternativeDelta.getKind() == IResourceDelta.CHANGED)
-					{
-						final IEditorInputResource r = resources.get(resource);
+					BatchExecutor.getInstance().addTask(resource, new Runnable() {
 						
-						if (r == null){
-							return;
+						@Override
+						public void run() {
+							r.load();								
+							firePropertyChange(PROP_RESOURCE_MODIFIED, null, r);
 						}
-						
-						// do not trigger re-load, if the property change is 
-						// triggered from create/save/delete operations 
-						if(r.isJobInProgress() || r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
-							return;
-						}
-						
-						BatchExecutor.getInstance().addTask(resource, new Runnable() {
-							
-							@Override
-							public void run() {
-								
-								r.load();
-								r.validate();
-								
-								firePropertyChange(PROP_RESOURCE_MODIFIED, null, r);
-							}
-						});
-						
-					}
+					});
 					
 				}
+				
 			}
 			
 		}
@@ -139,7 +130,7 @@ public abstract class ResourceProvider
 		initialize();
 	}
 	
-	public final void initialize()
+	private final void initialize()
 	{
 		checkRootFolder();
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
@@ -162,7 +153,8 @@ public abstract class ResourceProvider
 		}
 	}
 	
-	public void loadAndValidate(IProgressMonitor monitor){
+	/*
+	public void loadAll(IProgressMonitor monitor){
 		//show validation diagram on initialization
 		for(IEditorInputResource eir : getResources()){
 			
@@ -178,17 +170,22 @@ public abstract class ResourceProvider
 			}
 		}
 	}
+	*/
 
-	public void dispose()
+	private void dispose()
 	{		
 		ExplorerChangeNotifier.getInstance().removeListener(ecl);
-		for(IEditorInputResource eir : resources.values()){
-			if (eir instanceof IValidationStatusProvider)
-			{
-				StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
+		
+		synchronized (resourcesLock) {
+			for(IEditorInputResource eir : resources.values()){
+				if (eir instanceof IValidationStatusProvider)
+				{
+					StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
+				}
 			}
+			resources.clear();
 		}
-		resources.clear();
+		
 		firePropertyChange(PROP_DISPOSED, this, null);
 	}
 
@@ -311,9 +308,7 @@ public abstract class ResourceProvider
 
 	public List<IEditorInputResource> getResources()
 	{
-		synchronized (resourcesLock) {
-			return new ArrayList<IEditorInputResource>(resources.values());			
-		}
+		return new ArrayList<IEditorInputResource>(resources.values());
 	}
 
 	public IEditorInputResource getResource(String resourceName)

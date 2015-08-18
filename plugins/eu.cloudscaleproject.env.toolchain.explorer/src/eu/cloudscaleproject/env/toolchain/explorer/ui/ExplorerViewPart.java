@@ -146,9 +146,7 @@ public class ExplorerViewPart {
 		
 		this.treeViewer = new TreeViewer(composite);
 		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			ExplorerResourceNode lastProjectNode = null;
-			
+						
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -160,7 +158,7 @@ public class ExplorerViewPart {
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
 				
 				final ExplorerResourceNode projectNode = ExplorerUtils.getProjectNode(node);
-				if(projectNode != null && lastProjectNode != projectNode){
+				if(projectNode != null){
 					
 					BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
 						@Override
@@ -170,7 +168,6 @@ public class ExplorerViewPart {
 					});
 					
 				}
-				lastProjectNode = projectNode;
 				
 				if(node != null){
 					node.onSelect();

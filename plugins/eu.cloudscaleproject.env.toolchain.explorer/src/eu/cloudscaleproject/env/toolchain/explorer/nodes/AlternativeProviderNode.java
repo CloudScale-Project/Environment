@@ -35,13 +35,16 @@ public class AlternativeProviderNode extends ExplorerResourceNode{
 				
 				for(IEditorInputResource eir : resourceProvider.getResources()){
 					
-					eir.load(monitor);
-					eir.validate(monitor);
+					if(!eir.isLoaded()){
+						eir.load(monitor);
+					}
 					
 					if(eir instanceof IValidationStatusProvider){
+						
+						//show only status of the first alternative
 						IValidationStatusProvider vp = (IValidationStatusProvider)eir;						
-						ValidationDiagramService.showStatus(resourceProvider.getProject(), vp);
-						//break;
+						ValidationDiagramService.showStatusIfEmpty(resourceProvider.getProject(), vp);						
+						break;
 					}
 				}
 				
