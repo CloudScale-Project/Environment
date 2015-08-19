@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -39,13 +40,18 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	protected final ResourceSet resSet;
 	protected final ModelType[] modelTypes;
-
+	
 	public EditorInputEMF(IProject project, IFolder folder, ModelType[] modelTypes, String validationID) {
 		super(project, folder, validationID);
 		
 		this.modelTypes = modelTypes != null ? modelTypes : new ModelType[]{};
 		
-		commandStack = new BasicCommandStack();
+		commandStack = new BasicCommandStack(){
+			@Override
+			public void execute(Command command) {
+				super.execute(command);
+			}
+		};
 		commandStack.addCommandStackListener(new CommandStackListener() {
 			
 			@Override

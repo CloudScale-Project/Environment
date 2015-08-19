@@ -3,21 +3,13 @@ package eu.cloudscaleproject.env.toolchain.util;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.CloneAlternativeWizard;
@@ -69,37 +61,6 @@ public class SidebarEditor extends AbstractSidebarEditor
 	public void setResourceProvider(final ResourceProvider resourceProvider)
 	{
 		this.resourceProvider = resourceProvider;
-		
-		EditorInputJob job = new EditorInputJob("Loading Dashboard") {
-			
-			@Override
-			public IStatus execute(IProgressMonitor monitor) {
-				
-				monitor.beginTask("Loading Dasboard...", IProgressMonitor.UNKNOWN);
-				
-				for(IEditorInputResource eir : resourceProvider.getResources()){
-					
-					if(!eir.isLoaded()){
-						eir.load(monitor);
-					}
-					eir.validate(monitor);
-					
-					if(eir instanceof IValidationStatusProvider){
-						IValidationStatusProvider vp = (IValidationStatusProvider)eir;
-						
-						ValidationDiagramService.showDiagram(resourceProvider.getProject());
-						ValidationDiagramService.showStatus(resourceProvider.getProject(), vp);
-						break;
-					}
-				}
-				
-				return Status.OK_STATUS;
-			}
-		};
-		
-		job.setUser(true);
-		job.schedule();
-		
 		init();
 	}
 
@@ -205,14 +166,6 @@ public class SidebarEditor extends AbstractSidebarEditor
 	{
 		if (resourceProvider != null)
 		{
-			List<IEditorInputResource> closedAlternatives = resourceProvider.getResources();
-			HashSet<IEditorInputResource> openedAlternatives = ToolchainUtils.getOpenedAlternatives();
-			closedAlternatives.removeAll(openedAlternatives);
-			
-			for(IEditorInputResource eir : closedAlternatives){
-				eir.load();
-			}
-			
 			resourceProvider.removeListener(rcl);
 		}
 		super.dispose();

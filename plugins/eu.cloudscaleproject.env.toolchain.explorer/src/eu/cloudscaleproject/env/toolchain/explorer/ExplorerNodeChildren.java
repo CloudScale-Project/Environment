@@ -39,8 +39,7 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		}
 	}
 	
-	@Override
-	public boolean hasChildren() {
+	public boolean hasChildren(){
 		return !getKeys().isEmpty();
 	}
 	

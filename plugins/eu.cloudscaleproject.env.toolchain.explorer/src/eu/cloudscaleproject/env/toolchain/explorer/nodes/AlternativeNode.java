@@ -16,7 +16,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 	}
 	
 	public AlternativeNode(String editorID, IEditorInputResource alternative, IExplorerNodeChildren children) {
-		super(alternative.getID(), editorID, alternative.getResource(), null);
+		super(alternative.getID(), editorID, alternative.getResource(), children);
 		
 		setName(alternative.getName());
 		setData(alternative);

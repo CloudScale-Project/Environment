@@ -133,8 +133,19 @@ public class AlternativeEditor {
 		
 		if(alternative != null){
 			boolean openedElsewhere = ToolchainUtils.getOpenedAlternatives().contains(alternative);
-			if(!openedElsewhere){
-				alternative.load();
+			if(!openedElsewhere && alternative.isDirty()){
+				EditorInputJob job = new EditorInputJob("Discarding changes...") {
+					
+					@Override
+					public IStatus execute(IProgressMonitor monitor) {
+						monitor.beginTask("Discarding changes", IProgressMonitor.UNKNOWN);
+						alternative.load();
+						monitor.done();
+						return Status.OK_STATUS;
+					}
+				};
+				job.setUser(false);
+				job.schedule();				
 			}
 		}
 		

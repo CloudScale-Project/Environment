@@ -137,13 +137,13 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				btnSelect.setText(input.getName());
 				btnSelect.redraw();
 				
-				/*
 				if(isSelected){
 					initComposite();
 					doSelect();
 				}
-				*/
-				doRefresh();
+				else{
+					doRefresh();
+				}
 			}
 			
 			if(IEditorInputResource.PROP_NAME.equals(evt.getPropertyName())){
@@ -230,7 +230,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 				synchronized (res) {
 					if(!res.isLoaded() || force){
 						res.load(monitor);
-						res.validate(monitor);
 					}
 				}
 			}
@@ -372,13 +371,6 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 					btnSelect.setSelection(true);
 					isSelected = true;
 					
-					if(input instanceof EditorInputResource){
-						final EditorInputResource eir = (EditorInputResource)input;
-						if(!eir.isLoaded()){
-							eir.load();
-						}
-					}
-					
 					initComposite();
 					
 					if(composite != null){
@@ -499,7 +491,7 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 			createSidebarSection(null, SWT.NONE);
 		}
 		
-		//select the first item or show the empty panel
+		//select first item or show the empty panel
 		{
 			Iterator<EditorItem> iter = entries.values().iterator();
 			if(iter.hasNext()){

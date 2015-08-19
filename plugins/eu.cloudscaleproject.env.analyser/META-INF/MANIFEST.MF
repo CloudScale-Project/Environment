@@ -83,6 +83,7 @@ Require-Bundle: javax.xml;bundle-version="1.3.4",
  org.scaledl.usageevolution.wizard;bundle-version="1.0.0",
  eu.cloudscaleproject.env.common;bundle-version="1.0.0",
  eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0",
+ eu.cloudscaleproject.env.toolchain.explorer;bundle-version="1.0.0",
  javax.annotation,
  javax.inject
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

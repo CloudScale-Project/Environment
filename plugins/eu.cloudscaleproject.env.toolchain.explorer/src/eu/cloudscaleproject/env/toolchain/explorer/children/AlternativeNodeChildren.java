@@ -33,24 +33,29 @@ public class AlternativeNodeChildren extends ExplorerNodeChildren{
 			if(EditorInputFolder.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())){
 				refresh();
 			}
+			if(EditorInputFolder.PROP_LOADED.equals(evt.getPropertyName())){
+				refresh();
+			}
 		}
 	};
 
 	private final EditorInputEMF alternative;
 	
-	public AlternativeNodeChildren(EditorInputEMF alternative, boolean lazy) {
+	public AlternativeNodeChildren(final EditorInputEMF alternative, boolean lazy) {
 		super(lazy);
 		
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
 		
-		EditorInputJob job = new EditorInputJob("Loading...") {
+		EditorInputJob job = new EditorInputJob("Loading alternative ["+ this.alternative.getName() +"]...") {
 			
 			@Override
 			public IStatus execute(IProgressMonitor monitor) {
+				monitor.beginTask("Loading alternative ["+ alternative.getName() +"]", IProgressMonitor.UNKNOWN);
 				if(!AlternativeNodeChildren.this.alternative.isLoaded()){
 					AlternativeNodeChildren.this.alternative.load(monitor);
 				}
+				monitor.done();
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resource done.");
 			}
 		};

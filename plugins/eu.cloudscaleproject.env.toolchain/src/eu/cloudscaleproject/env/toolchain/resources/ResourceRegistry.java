@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.toolchain.resources;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
@@ -97,6 +98,19 @@ public class ResourceRegistry {
 	public synchronized void registerFactory(CSTool tool, IResourceProviderFactory factory){
 		resourceProviderFactories.put(tool.getID(), factory);
 		logger.info("IResourceProviderFactory registered uder toolchainID: " + tool.getID());
+	}
+	
+	public synchronized List<ResourceProvider> getResourceProviders(IProject project){
+		
+		List<ResourceProvider> out = new ArrayList<ResourceProvider>();
+		
+		for(Entry<IFolder, ResourceProvider> entry : resourceProviders.entrySet()){
+			if(project.equals(entry.getKey().getProject())){
+				out.add(entry.getValue());
+			}
+		}
+		
+		return out;
 	}
 	
 	public synchronized String getResourceProviderID(ResourceProvider rp){

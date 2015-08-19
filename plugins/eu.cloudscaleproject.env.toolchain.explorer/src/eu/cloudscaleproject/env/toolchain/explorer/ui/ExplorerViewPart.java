@@ -50,7 +50,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
  */
 public class ExplorerViewPart {
 	
-	private static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.popupmenu.explorer";
+	private static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.explorer.popupmenu.explorer";
 	
 	private Composite composite;
 	private TreeViewer treeViewer;

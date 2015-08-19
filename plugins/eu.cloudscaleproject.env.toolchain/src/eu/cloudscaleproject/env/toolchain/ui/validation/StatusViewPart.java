@@ -155,8 +155,10 @@ public class StatusViewPart {
 	}
 	
 	private void reload(){
-		this.treeViewer.expandAll();
-		this.treeViewer.refresh(true);
+		if(!this.treeViewer.getTree().isDisposed()){
+			this.treeViewer.expandAll();
+			this.treeViewer.refresh(true);
+		}
 	}
 	
 	

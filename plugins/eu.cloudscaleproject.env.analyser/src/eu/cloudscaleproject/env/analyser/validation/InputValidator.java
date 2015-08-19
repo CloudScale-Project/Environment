@@ -110,7 +110,7 @@ public class InputValidator implements IResourceValidator {
 			status.setIsValid(false);
 			return false;
 		}
-				
+		
 		EObject eObject = resource.getContents().get(0);
 		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;

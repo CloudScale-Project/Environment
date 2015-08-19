@@ -88,7 +88,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		
 		Object o = this.context.get(IExplorerConstants.NODE_DATA);
 
-		if(this.getClass().equals(adapter)){
+		if(adapter.isAssignableFrom(this.getClass())){
 			return this;
 		}
 		if(adapter.isAssignableFrom(o.getClass())){

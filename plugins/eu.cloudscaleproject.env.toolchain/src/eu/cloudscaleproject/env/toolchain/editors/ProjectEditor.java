@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.editors;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,6 +12,8 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -32,6 +35,11 @@ import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramSer
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 
@@ -180,12 +188,69 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		
 		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
+		
+		//final IProject project = ExplorerProjectPaths.getProject(this);
+		
+		//load all resources
+		EditorInputJob job = new EditorInputJob("Loading Dashboard resources...") {
+			
+			@Override
+			public IStatus execute(IProgressMonitor monitor) {
+				
+				monitor.beginTask("Loading Dasboard resources", IProgressMonitor.UNKNOWN);
+				
+				for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
+					pee.load(monitor);
+				}
+				
+				/*
+				for(ResourceProvider resourceProvider : ResourceRegistry.getInstance().getResourceProviders(project)){
+					for(IEditorInputResource eir : resourceProvider.getResources()){
+						if(!eir.isLoaded()){
+							eir.load(monitor);
+						}
+					}
+				}
+				*/
+				
+				return Status.OK_STATUS;
+			}
+		};
+		
+		job.setUser(true);
+		job.schedule();
 	}
 	
 	@Override
 	public void dispose() {
-		super.dispose();
+		
+		//discard editor changes
+		final HashSet<IEditorInputResource> openedAlternatives = ToolchainUtils.getOpenedAlternatives();
+		final IProject project = ExplorerProjectPaths.getProject(this);
+		
+		EditorInputJob job = new EditorInputJob("Discarding changes...") {
+			
+			@Override
+			public IStatus execute(IProgressMonitor monitor) {
+				monitor.beginTask("Discarding editor changes", IProgressMonitor.UNKNOWN);
+				
+				for(ResourceProvider rp : ResourceRegistry.getInstance().getResourceProviders(project)){
+					for(IEditorInputResource eir : rp.getResources()){
+						if(!openedAlternatives.contains(eir) && eir.isDirty()){
+							eir.load();
+						}
+					}
+				}
+				
+				monitor.done();
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(false);
+		job.schedule();
+		
         ResourcesPlugin.getWorkspace().removeResourceChangeListener(editorCloser);
+		super.dispose();
 	}
 
 	@Override
