@@ -55,13 +55,15 @@ public class ResourceRegistry {
 		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
 		
 		//register factories from extension points
-		for(IConfigurationElement el : ToolchainExtensions.getInstance().getResourceProviderFactoryElements()){
-			try {
-				String id = el.getAttribute("id");
-				Object o = el.createExecutableExtension("class");
-				resourceProviderFactories.put(id, (IResourceProviderFactory)o);
-			} catch (CoreException e) {
-				e.printStackTrace();
+		for(IConfigurationElement el : ToolchainExtensions.getInstance().getToolChildElements()){
+			if(el.getName().equals("resource")){
+				try {
+					String id = el.getAttribute("id");
+					Object o = el.createExecutableExtension("class");
+					resourceProviderFactories.put(id, (IResourceProviderFactory)o);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

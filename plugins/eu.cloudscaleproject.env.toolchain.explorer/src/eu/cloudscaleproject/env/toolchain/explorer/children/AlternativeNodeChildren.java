@@ -76,7 +76,7 @@ public class AlternativeNodeChildren extends ExplorerNodeChildren{
 			return null;
 		}
 		
-		AlternativeResourceNode node = new AlternativeResourceNode(alternative, (IFile)res);		
+		AlternativeResourceNode node = new AlternativeResourceNode(getNode().getContext(), alternative, (IFile)res);		
 		return node;
 		
 	}

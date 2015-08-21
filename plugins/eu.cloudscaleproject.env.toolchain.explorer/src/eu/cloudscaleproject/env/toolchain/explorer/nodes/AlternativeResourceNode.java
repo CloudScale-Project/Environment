@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
@@ -55,8 +56,8 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 		}
 	};
 	
-	public AlternativeResourceNode(EditorInputEMF alternative, IFile file) {
-		super(file.getName(), null, file, null);
+	public AlternativeResourceNode(IEclipseContext context, EditorInputEMF alternative, IFile file) {
+		super(context, file.getName(), null, file, null);
 		
 		setData(file);
 

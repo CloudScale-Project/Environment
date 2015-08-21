@@ -9,6 +9,7 @@ import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -34,7 +35,7 @@ public class ToolNodeChildren extends ExplorerNodeChildren{
 	
 	@Override
 	public List<? extends Object> getKeys() {
-		return ToolchainExtensions.getInstance().getResourceProviderFactoryElements(toolID);	
+		return ToolchainExtensions.getInstance().getToolChildElements(toolID);	
 	}
 
 	@Override
@@ -42,6 +43,19 @@ public class ToolNodeChildren extends ExplorerNodeChildren{
 		
 		IConfigurationElement element = (IConfigurationElement)key;
 		
+		IExplorerNode node = null;
+		
+		if(element.getName().equals("resource")){
+			node = createResourceNode(element);
+		}
+		if(element.getName().equals("view")){
+			node = createViewNode(element);
+		}
+				
+		return node;	
+	}
+	
+	private final IExplorerNode createResourceNode(IConfigurationElement element){
 		String id = element.getAttribute("id");
 		String name = element.getAttribute("name");
 		String editor = element.getAttribute("editor");
@@ -51,11 +65,23 @@ public class ToolNodeChildren extends ExplorerNodeChildren{
 		IFolder folder = ToolchainUtils.getToolFolder(project, id);
 		final ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(id, folder);
 		
-		AlternativeProviderNode node = new AlternativeProviderNode(id, editor, rp);		
+		AlternativeProviderNode node = new AlternativeProviderNode(getNode().getContext(), id, editor, rp);		
 		node.setName(name);
 		node.setIcon(icon, false);
 				
-		return node;	
+		return node;
+	}
+	
+	private final IExplorerNode createViewNode(IConfigurationElement element){
+		String id = element.getAttribute("id");
+		String name = element.getAttribute("name");
+		Image icon = ExplorerResources.getImage(element, "icon", 16, 16);
+		
+		ExplorerEditorNode node = new ExplorerEditorNode(getNode().getContext(), id, id, null, null);		
+		node.setName(name);
+		node.setIcon(icon, false);
+				
+		return node;
 	}
 
 }

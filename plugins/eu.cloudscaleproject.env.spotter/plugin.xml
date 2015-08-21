@@ -60,6 +60,11 @@
                name="Results"
                position="30">
          </resource>
+         <view
+               id="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
+               name="Server configuration"
+               position="5">
+         </view>
       </tool>
    </extension>
 

@@ -56,9 +56,15 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		}
 	};
 	
-	public ExplorerNode(String id, IExplorerNodeChildren children) {
-		this.id = id;		
+	public ExplorerNode(IEclipseContext context, String id, IExplorerNodeChildren children) {
+		
+		this.id = id;
 		this.context = EclipseContextFactory.create(this.getClass().getSimpleName() + "("+ id + ")");
+		
+		if(context != null){
+			this.context.setParent(context);
+		}
+		
 		
 		if(children != null){
 			addNodeChildren(children);
@@ -80,7 +86,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		
 		this.nodeChildren.add(children);
 		children.addPropertyChangeListener(factoryListener);
-		children.initialize();
+		children.initialize(this);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -180,9 +186,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 			return;
 		}
 		
-		((ExplorerNode)node).parent = this;
-		
-		node.getContext().setParent(this.getContext());
+		((ExplorerNode)node).parent = this;		
 		ContextInjectionFactory.inject(node, this.getContext());
 		
 		node.addPropertyChangeListener(childListener);		

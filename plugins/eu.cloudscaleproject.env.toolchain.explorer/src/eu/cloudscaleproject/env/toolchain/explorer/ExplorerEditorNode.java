@@ -34,8 +34,8 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 	@Inject
 	private MApplication application;
 	
-	public ExplorerEditorNode(String id, String editorID, IResource resource, IExplorerNodeChildren childFactory) {
-		super(id, resource, childFactory);
+	public ExplorerEditorNode(IEclipseContext context, String id, String editorID, IResource resource, IExplorerNodeChildren childFactory) {
+		super(context, id, resource, childFactory);
 		getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
 	}
 	
@@ -77,6 +77,11 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 		Object data = getContext().get(IExplorerConstants.NODE_DATA);
 		if(data != null){
 			context.set(data.getClass().getName(), data);
+		}
+		
+		IResource resource = (IResource)getContext().get(IExplorerConstants.NODE_RESOURCE);
+		if(resource != null){
+			context.set(IResource.class, resource);
 		}
 		
 		context.set(ExplorerEditorNode.class, this);

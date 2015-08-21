@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -20,8 +21,11 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class AlternativeProviderNode extends ExplorerResourceNode{
 
-	public AlternativeProviderNode(String providerID, String editorID, final ResourceProvider resourceProvider) {
-		super(providerID, resourceProvider.getRootFolder(), 
+	public AlternativeProviderNode(IEclipseContext context, 
+								   String providerID, 
+								   String editorID, final ResourceProvider resourceProvider) {
+		
+		super(context, providerID, resourceProvider.getRootFolder(), 
 						  new AlternativeProviderNodeChildren(editorID, resourceProvider, true));
 		
 		setData(resourceProvider);

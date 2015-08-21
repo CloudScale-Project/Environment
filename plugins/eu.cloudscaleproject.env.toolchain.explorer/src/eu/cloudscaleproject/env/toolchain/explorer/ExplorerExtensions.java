@@ -10,8 +10,6 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
-
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
@@ -31,22 +29,6 @@ public class ExplorerExtensions {
 	
 	public List<IExplorerNodeChildrenProvider> getNodeChildrenProviders(){
 		return nodeChildrenProviders;
-	}
-	
-	public List<IConfigurationElement> getResourceProviderFactoryElements(String toolID){
-		
-		List<IConfigurationElement> elements = new ArrayList<IConfigurationElement>();
-		List<IConfigurationElement> resProviderFactoryElements = ToolchainExtensions.getInstance().getResourceProviderFactoryElements();
-		
-		for(IConfigurationElement el : resProviderFactoryElements){
-			IConfigurationElement parent = (IConfigurationElement)el.getParent();
-			
-			String id = parent.getAttribute("id");
-			if(toolID.equals(id)){
-				elements.add(el);
-			}
-		}
-		return elements;
 	}
 	
 	public void retrieveExtensions(){

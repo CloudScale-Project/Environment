@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IExplorerNodeChildren {
 
-	public void initialize();
+	public void initialize(IExplorerNode node);
 	
 	public boolean hasChildren();
 	public List<IExplorerNode> getChildren();

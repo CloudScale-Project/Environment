@@ -11,6 +11,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 
 /**
  *
@@ -27,14 +28,14 @@ public class DeleteExplorerNodeHandler {
 		if(selection instanceof Object[]){
 			for(Object o : (Object[])selection){
 				
-				if(o instanceof ExplorerEditorNode){
+				if(o instanceof ExplorerResourceNode){
 					final ExplorerEditorNode node = (ExplorerEditorNode)o;					
 					deleteNode(node);
 				}
 			}
 		}
-		else if(selection instanceof ExplorerEditorNode){
-			final ExplorerEditorNode node = (ExplorerEditorNode)selection;
+		else if(selection instanceof ExplorerResourceNode){
+			final ExplorerResourceNode node = (ExplorerResourceNode)selection;
 			deleteNode(node);
 		}
 		
@@ -59,7 +60,7 @@ public class DeleteExplorerNodeHandler {
 		return true;
 	}
 	
-	private void deleteNode(final ExplorerEditorNode node){
+	private void deleteNode(final ExplorerResourceNode node){
 		WorkspaceJob job = new WorkspaceJob("Deleting resource...") {
 			
 			@Override

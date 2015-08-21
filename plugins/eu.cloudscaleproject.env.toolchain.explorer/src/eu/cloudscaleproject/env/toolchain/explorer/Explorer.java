@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
+
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.toolchain.explorer.children.RootNodeChildren;
 
 /**
@@ -21,7 +24,13 @@ public class Explorer {
 	private final IExplorerNode rootNode;
 	
 	public Explorer() {
-		rootNode = new ExplorerNode("eu.cloudscaleproject.env.toolchain.explorer.rootNode", new RootNodeChildren(false));
+		
+		IEclipseContext context = CloudscaleContext.getGlobalContext();
+		
+		rootNode = new ExplorerNode(context, 
+									"eu.cloudscaleproject.env.toolchain.explorer.rootNode", 
+									new RootNodeChildren(false));
+		
 		rootNode.setName("Explorer root node");
 	}
 	

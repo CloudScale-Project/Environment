@@ -1,6 +1,8 @@
 package eu.cloudscaleproject.env.toolchain;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -25,7 +27,7 @@ public class ToolchainExtensions {
 	}
 	
 	private List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
-	private List<IConfigurationElement> resourceProviderFactoryElements = new ArrayList<IConfigurationElement>();
+	private List<IConfigurationElement> toolChildElements = new ArrayList<IConfigurationElement>();
 		
 	public List<IConfigurationElement> getToolElements(){
 		return toolElements;
@@ -40,24 +42,15 @@ public class ToolchainExtensions {
 		return null;
 	}
 
-	public List<IConfigurationElement> getResourceProviderFactoryElements(){
-		return resourceProviderFactoryElements;
+	public List<IConfigurationElement> getToolChildElements(){
+		return toolChildElements;
 	}
 	
-	public IConfigurationElement getResourceProviderFactoryElement(String id){
-		for(IConfigurationElement el : resourceProviderFactoryElements){
-			if(id.equals(el.getAttribute("id"))){
-				return el;
-			}
-		}
-		return null;
-	}
-	
-	public List<IConfigurationElement> getResourceProviderFactoryElements(String toolID){
+	public List<IConfigurationElement> getToolChildElements(String toolID){
 		
 		List<IConfigurationElement> elements = new ArrayList<IConfigurationElement>();
 		
-		for(IConfigurationElement el : resourceProviderFactoryElements){
+		for(IConfigurationElement el : toolChildElements){
 			IConfigurationElement parent = (IConfigurationElement)el.getParent();
 			
 			String id = parent.getAttribute("id");
@@ -65,6 +58,7 @@ public class ToolchainExtensions {
 				elements.add(el);
 			}
 		}
+		
 		return elements;
 	}
 	
@@ -83,18 +77,36 @@ public class ToolchainExtensions {
 						toolElements.add(el);
 						
 						for(IConfigurationElement child : el.getChildren()){
-							if(child.getName().equals("resource")){
-	
-								resourceProviderFactoryElements.add(child);
-								
-							}
+							toolChildElements.add(child);
 						}
 											
 					}
 				}
 			}
+			
+			Collections.sort(toolChildElements, comparator);
+			Collections.sort(toolElements, comparator);
 		}
-		
 	}
+	
+	private Comparator<IConfigurationElement> comparator = new Comparator<IConfigurationElement>() {
+
+		@Override
+		public int compare(IConfigurationElement o1, IConfigurationElement o2) {
+			
+			String o1P = o1.getAttribute("position");
+			String o2P = o2.getAttribute("position");
+
+			try{
+				int o1Pos = Integer.parseInt(o1P);
+				int o2Pos = Integer.parseInt(o2P);
+				return (int)Math.signum(o1Pos - o2Pos);
+			}
+			catch(NumberFormatException e){
+				return 0;
+			}
+
+		}
+	};
 	
 }

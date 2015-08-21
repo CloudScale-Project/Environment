@@ -19,8 +19,12 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	public static final String PROP_REFRESH = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.refresh";
 	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.childAdded";
 	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.childRemoved";
-		
+	
+	private IExplorerNode node;
+	
 	private final List<Object> keys = new ArrayList<Object>();
+	
+	//Nodes in the following list can be NULL!
 	private final List<IExplorerNode> nodes = new ArrayList<IExplorerNode>();
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -32,7 +36,12 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		this.lazyLoad = lazyLoad;
 	}
 	
-	public void initialize(){
+	protected IExplorerNode getNode(){
+		return node;
+	}
+	
+	public void initialize(IExplorerNode node){
+		this.node = node;
 		if(!lazyLoad){
 			doInitialize();
 		}
@@ -80,19 +89,19 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 			if(entry.isAddition()){
 				
 				IExplorerNode node = getChild(entry.getElement());
-				if(node == null){
-					continue;
-				}
-				
 				nodes.add(entry.getPosition(), node);
-				pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
+				if(node != null){
+					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
+				}
 			}
 			else{
 				
 				IExplorerNode node = nodes.get(entry.getPosition());
 				nodes.remove(entry.getPosition());
-				node.dispose();
-				pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, entry.getPosition(), node, null);
+				if(node != null){
+					node.dispose();
+					pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, entry.getPosition(), node, null);
+				}
 			}
 		}
 		
@@ -101,7 +110,9 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	public void dispose(){
 		for(IExplorerNode node : nodes){
-			node.dispose();
+			if(node != null){
+				node.dispose();
+			}
 		}
 		nodes.clear();
 	}

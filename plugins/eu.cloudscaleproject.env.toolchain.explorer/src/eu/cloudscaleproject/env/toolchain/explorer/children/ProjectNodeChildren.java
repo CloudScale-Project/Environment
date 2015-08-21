@@ -45,7 +45,7 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		
 		IFolder folder = ToolchainUtils.getToolFolder(project, id);
 		
-		ToolNode node = new ToolNode(id, folder);		
+		ToolNode node = new ToolNode(getNode().getContext(), id, folder);		
 		node.setIcon(icon, false);
 		node.setName(name);
 		

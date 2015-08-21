@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.swt.graphics.Image;
@@ -41,12 +42,12 @@ public class AlternativeNode extends ExplorerEditorNode{
 		}
 	}; 
 	
-	public AlternativeNode(String editorID, IEditorInputResource alternative) {
-		this(editorID, alternative, null);
+	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative) {
+		this(context, editorID, alternative, null);
 	}
 	
-	public AlternativeNode(String editorID, IEditorInputResource alternative, IExplorerNodeChildren children) {
-		super(alternative.getID(), editorID, alternative.getResource(), children);
+	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, IExplorerNodeChildren children) {
+		super(context, alternative.getID(), editorID, alternative.getResource(), children);
 		
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);

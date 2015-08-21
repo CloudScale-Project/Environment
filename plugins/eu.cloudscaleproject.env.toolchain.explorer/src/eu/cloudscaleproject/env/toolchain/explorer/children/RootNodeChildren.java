@@ -85,7 +85,7 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
 			
-			ProjectNode node = new ProjectNode(project);
+			ProjectNode node = new ProjectNode(getNode().getContext(), project);
 			node.setName(project.getName());
 			node.setIcon(CommonResources.PROJECT_16, false);
 			
