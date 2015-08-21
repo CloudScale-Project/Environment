@@ -97,8 +97,8 @@ public class ToolchainUtils {
 	
 	public static HashSet<IEditorInputResource> getOpenedAlternatives(){
 		
-		EModelService modelService = CloudscaleContext.getActiveContext().get(EModelService.class);
-		MApplication app = CloudscaleContext.getActiveContext().get(MApplication.class);
+		EModelService modelService = CloudscaleContext.getGlobalContext().get(EModelService.class);
+		MApplication app = CloudscaleContext.getGlobalContext().get(MApplication.class);
 
 		if(modelService == null){
 			throw new IllegalSelectorException();
@@ -127,7 +127,7 @@ public class ToolchainUtils {
 	public static IFile getEMFDiagramFileFromModel(IFile modelFile){
 		
 		String fileName = ExplorerProjectPaths.removeFileExtension(modelFile.getName());
-		String fileExtension = modelFile.getFileExtension();
+		String fileExtension = modelFile.getFileExtension() + "_diagram";
 
 		List<IFile> files = ExplorerProjectPaths.findFiles(modelFile.getParent(), fileName, fileExtension, true);
 		IFile diagramFile = files.isEmpty() ? null : files.get(0);

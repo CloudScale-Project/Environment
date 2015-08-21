@@ -4,11 +4,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.somox.sourcecodedecorator.impl.SourceCodeDecoratorPackageImpl;
 
-import eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory;
-import eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-
 public class Activator extends AbstractUIPlugin {
 
 	private static BundleContext context;
@@ -30,16 +25,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
 		plugin = this;
-
-		ResourceRegistry.getInstance().registerFactory(
-				CSTool.EXTRACTOR_CONF,
-				new ConfigResourceProviderFactory()
-		);
-
-		ResourceRegistry.getInstance().registerFactory(
-				CSTool.EXTRACTOR_RES,
-				new ResultResourceProviderFactory()
-		);
 		
 		try
 		{

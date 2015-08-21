@@ -53,9 +53,7 @@ public class AlternativeProviderNodeChildren extends ExplorerNodeChildren{
 			children = new AlternativeNodeChildren((EditorInputEMF)resource, true);
 		}
 		
-		AlternativeNode node = new AlternativeNode(editorID, resource, children);		
-		node.setName(resource.getName());
-				
+		AlternativeNode node = new AlternativeNode(editorID, resource, children);				
 		return node;
 		
 	}

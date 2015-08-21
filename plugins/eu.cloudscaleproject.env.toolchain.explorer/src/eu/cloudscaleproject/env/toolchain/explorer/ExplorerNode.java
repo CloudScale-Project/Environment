@@ -11,6 +11,7 @@ import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 /**
  *
@@ -87,12 +88,16 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	public Object getAdapter(Class adapter) {
 		
 		Object o = this.context.get(IExplorerConstants.NODE_DATA);
+		Object contextObject = getContext().get(adapter);
 
 		if(adapter.isAssignableFrom(this.getClass())){
 			return this;
 		}
-		if(adapter.isAssignableFrom(o.getClass())){
+		if(o != null && adapter.isAssignableFrom(o.getClass())){
 			return o;
+		}
+		if(contextObject != null){
+			return contextObject;
 		}
 		
 		return super.getAdapter(adapter);
@@ -158,8 +163,19 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		return out.toArray(new IExplorerNode[out.size()]);
 	}
 
-	private void addChild(IExplorerNode node) {
+	private void addChild(final IExplorerNode node) {
 		
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				doAddChild(node);
+			}
+		});
+		pcs.firePropertyChange(PROP_CHILD_ADDED, null, node);
+	}
+	
+	private void doAddChild(IExplorerNode node) {
 		if(node == null){
 			return;
 		}
@@ -169,25 +185,28 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		node.getContext().setParent(this.getContext());
 		ContextInjectionFactory.inject(node, this.getContext());
 		
-		node.addPropertyChangeListener(childListener);
-		
-		pcs.firePropertyChange(PROP_CHILD_ADDED, null, node);
+		node.addPropertyChangeListener(childListener);		
 	}
 
-	private void removeChild(IExplorerNode node) {
+	private void removeChild(final IExplorerNode node) {
 		
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				doRemoveChild(node);
+			}
+		});
+		pcs.firePropertyChange(PROP_CHILD_REMOVED, node, null);
+	}
+	
+	private void doRemoveChild(IExplorerNode node) {
 		if(node == null){
 			return;
 		}
-		
-		((ExplorerNode)node).parent = null;
-		
-		node.getContext().setParent(null);
-		node.getContext().dispose();
-		
 		node.removePropertyChangeListener(childListener);
-		
-		pcs.firePropertyChange(PROP_CHILD_REMOVED, node, null);
+		node.getContext().setParent(null);
+		((ExplorerNode)node).parent = null;
 	}
 	
 	@Override
@@ -196,30 +215,32 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	}
 	
 	@Override
-	public void dispose() {
+	public void refresh() {
+		for(IExplorerNodeChildren children : nodeChildren){
+			children.refresh();
+		}
 		
-		disposeChildren();
-		
-		ExplorerNode en = (ExplorerNode)parent;
-		en.removeChild(this);
+		pcs.firePropertyChange(PROP_REFRESH, false, true);
+	}
+	
+	@Override
+	public void dispose(){
 		
 		for(IExplorerNodeChildren children : this.nodeChildren){
 			children.removePropertyChangeListener(factoryListener);
 			children.dispose();
 		}
+		this.nodeChildren.clear();
 		
 		if(icon != null && iconDisposeable){
 			icon.dispose();
 		}
 		
-		this.nodeChildren.clear();
 		this.context.dispose();
-	}
-	
-	private void disposeChildren(){
-		for(IExplorerNode node : getChildren()){
-			((ExplorerNode)node).disposeChildren();
-			node.dispose();
+		
+		if(parent != null){
+			ExplorerNode en = (ExplorerNode)parent;
+			en.removeChild(this);
 		}
 	}
 	

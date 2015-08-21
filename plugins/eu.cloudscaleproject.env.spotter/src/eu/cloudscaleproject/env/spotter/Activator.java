@@ -4,12 +4,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory;
-import eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory;
-import eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -34,15 +28,6 @@ public class Activator extends AbstractUIPlugin{
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
-		//register resource provider factories		
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_INPUT, 
-				new InputResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_CONF, 
-				new ConfigResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_DYN_RES, 
-				new ResultResourceProviderFactory());		
-		
 		
 		/*
 		 * TODO: Execute this in the Dashboard and in workflow diagram!

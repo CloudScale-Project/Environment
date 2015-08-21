@@ -7,7 +7,7 @@ package eu.cloudscaleproject.env.toolchain.explorer;
  *
  */
 public interface IExplorerNodeChildrenProvider {
-	
+		
 	public IExplorerNodeChildren create(IExplorerNode node);
 	public boolean canCreate(IExplorerNode node);
 

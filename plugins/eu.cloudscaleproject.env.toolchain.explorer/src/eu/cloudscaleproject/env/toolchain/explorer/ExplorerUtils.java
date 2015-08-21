@@ -1,15 +1,16 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
-import java.io.IOException;
-import java.net.URL;
+import java.nio.channels.IllegalSelectorException;
+import java.util.HashSet;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.Bundle;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 /**
@@ -18,6 +19,32 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
  *
  */
 public class ExplorerUtils {
+	
+	public static HashSet<MPart> getOpenedEditors(){
+		
+		EModelService modelService = CloudscaleContext.getGlobalContext().get(EModelService.class);
+		MApplication app = CloudscaleContext.getGlobalContext().get(MApplication.class);
+
+		if(modelService == null){
+			throw new IllegalSelectorException();
+		}
+		if(app == null){
+			throw new IllegalSelectorException();
+		}
+		
+		HashSet<MPart> out = new HashSet<MPart>();
+		MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", app);
+		
+		for(MStackElement el : stack.getChildren()){
+			if(el instanceof MPart){
+				MPart part = (MPart)el;
+				if(part.getContext() != null){
+					out.add(part);
+				}
+			}
+		}
+		return out;
+	}
 	
 	public static IProject getProject(IExplorerNode node){
 		while(node != null){
@@ -53,27 +80,6 @@ public class ExplorerUtils {
 			}
 			node = node.getParent();
 		}
-		return null;
-	}
-	
-	public static Image createImage(IConfigurationElement element, String attribute){
-		
-		String iconPath = element.getAttribute(attribute);
-		
-		Image image = null;
-		if(iconPath != null && !iconPath.isEmpty()){
-			
-			Bundle bundle = Platform.getBundle(element.getContributor().getName());
-			URL url = bundle.getResource(iconPath);
-			
-			try {
-				image = new Image(Display.getDefault(), url.openStream());
-				return image;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
 		return null;
 	}
 

@@ -299,6 +299,8 @@ public class EditorInputEMF extends EditorInputFolder{
 			res.unload();
 		}
 		
+		resSet.getResources().clear();
+		
 		workOn(monitor, "Loading resources");
 		
 		//load registered models

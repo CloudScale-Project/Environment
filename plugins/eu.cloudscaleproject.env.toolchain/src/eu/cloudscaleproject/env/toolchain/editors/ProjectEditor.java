@@ -188,9 +188,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		
 		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
 		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
-		
-		//final IProject project = ExplorerProjectPaths.getProject(this);
-		
+				
 		//load all resources
 		EditorInputJob job = new EditorInputJob("Loading Dashboard resources...") {
 			
@@ -198,21 +196,9 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 			public IStatus execute(IProgressMonitor monitor) {
 				
 				monitor.beginTask("Loading Dasboard resources", IProgressMonitor.UNKNOWN);
-				
 				for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
 					pee.load(monitor);
 				}
-				
-				/*
-				for(ResourceProvider resourceProvider : ResourceRegistry.getInstance().getResourceProviders(project)){
-					for(IEditorInputResource eir : resourceProvider.getResources()){
-						if(!eir.isLoaded()){
-							eir.load(monitor);
-						}
-					}
-				}
-				*/
-				
 				return Status.OK_STATUS;
 			}
 		};

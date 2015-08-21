@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Image;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeProviderNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -46,14 +46,14 @@ public class ToolNodeChildren extends ExplorerNodeChildren{
 		String name = element.getAttribute("name");
 		String editor = element.getAttribute("editor");
 
-		Image icon = ExplorerUtils.createImage(element, "icon");
+		Image icon = ExplorerResources.getImage(element, "icon", 16, 16);
 		
 		IFolder folder = ToolchainUtils.getToolFolder(project, id);
 		final ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(id, folder);
 		
 		AlternativeProviderNode node = new AlternativeProviderNode(id, editor, rp);		
 		node.setName(name);
-		node.setIcon(icon, true);
+		node.setIcon(icon, false);
 				
 		return node;	
 	}

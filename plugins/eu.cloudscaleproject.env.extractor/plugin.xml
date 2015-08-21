@@ -27,4 +27,29 @@
             class="eu.cloudscaleproject.env.extractor.validators.ResultValidator">
       </client>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.tool">
+      <tool
+            icon="resources/icons/extractor_16.png"
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
+            name="Extractor"
+            position="20">
+         <resource
+               class="eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
+               icon="resources/icons/configuration_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
+               name="Configuration"
+               position="10">
+         </resource>
+         <resource
+               class="eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
+               icon="resources/icons/results_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
+               name="Results"
+               position="20">
+         </resource>
+      </tool>
+   </extension>
 </plugin>

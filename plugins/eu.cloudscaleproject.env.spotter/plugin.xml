@@ -29,5 +29,38 @@
             class="eu.cloudscaleproject.env.spotter.validation.ResultValidator">
       </client>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.tool">
+      <tool
+            icon="resources/icons/spotter_16.png"
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
+            name="Dynamic Spotter"
+            position="30">
+         <resource
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
+               icon="resources/icons/input_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
+               name="Input"
+               position="10">
+         </resource>
+         <resource
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor"
+               icon="resources/icons/configuration_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"
+               name="Configuration"
+               position="20">
+         </resource>
+         <resource
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor"
+               icon="resources/icons/results_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"
+               name="Results"
+               position="30">
+         </resource>
+      </tool>
+   </extension>
 
 </plugin>

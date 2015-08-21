@@ -1,12 +1,16 @@
 package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
-import javax.inject.Named;
-
-import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 
 /**
  *
@@ -14,14 +18,75 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
  *
  */
 public class DeleteExplorerNodeHandler {
-
+	
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable) {
+	public void execute(ESelectionService selectionService) {
 		
-		//TODO: implement
-		//IExplore rNode node = (IExplorerNode)adaptable.getAdapter(IExplorerNode.class);
+		Object selection = selectionService.getSelection();
 		
+		if(selection instanceof Object[]){
+			for(Object o : (Object[])selection){
+				
+				if(o instanceof ExplorerEditorNode){
+					final ExplorerEditorNode node = (ExplorerEditorNode)o;					
+					deleteNode(node);
+				}
+			}
+		}
+		else if(selection instanceof ExplorerEditorNode){
+			final ExplorerEditorNode node = (ExplorerEditorNode)selection;
+			deleteNode(node);
+		}
 		
+	}
+	
+	@CanExecute
+	public boolean canExecute(ESelectionService selectionService){
+		
+		Object selection = selectionService.getSelection();
+		
+		if(selection instanceof Object[]){
+			for(Object o : (Object[])selection){			
+				if(!(o instanceof ExplorerEditorNode)){
+					return false;
+				}
+			}
+		}
+		else if(!(selection instanceof ExplorerEditorNode)){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void deleteNode(final ExplorerEditorNode node){
+		WorkspaceJob job = new WorkspaceJob("Deleting resource...") {
+			
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				
+				monitor.beginTask("Deleting resource...", IProgressMonitor.UNKNOWN);
+				
+				Display.getDefault().syncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						node.dispose();
+						try {
+							node.getResource().delete(true, null);
+						} catch (CoreException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				monitor.done();
+				
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(true);
+		job.schedule();
 	}
 	
 }

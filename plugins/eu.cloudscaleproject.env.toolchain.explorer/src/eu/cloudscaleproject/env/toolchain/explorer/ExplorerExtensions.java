@@ -54,11 +54,11 @@ public class ExplorerExtensions {
 		//retrieve explorer extensions
 		{
 			IExtensionRegistry registry = Platform.getExtensionRegistry();
-			IExtensionPoint point = registry.getExtensionPoint("eu.cloudscaleproject.env.toolcahin.explorer");
+			IExtensionPoint point = registry.getExtensionPoint("eu.cloudscaleproject.env.toolchain.explorer");
 					
 			for(IExtension extension : point.getExtensions()){
 				for(IConfigurationElement el : extension.getConfigurationElements()){
-					if(el.getName().equals("children")){
+					if(el.getName().equals("nodes")){
 						
 						try {
 							Object o = el.createExecutableExtension("class");

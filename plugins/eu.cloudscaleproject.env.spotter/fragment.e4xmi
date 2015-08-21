@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_g1zG8K4CEeOG6cOE6pIkzA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_g1zG8K4CEeOG6cOE6pIkzA">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4Kp1AC3cEeSzOMcB8sHwVA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_F-Q3YEPtEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.command.perspective" commandName="Open Dynamic Spotter perspective"/>
   </fragments>
@@ -15,5 +15,10 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_3NNzcHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.perspective" label="Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
       </children>
     </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pxe34EgKEeWZc5LD3U6YSw" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_REkQYEgKEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor" label="Static Spotter input" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.InputEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_RdftwEgKEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor" label="Static Spotter config" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.ConfigEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_chowoEgKEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor" label="Static Spotter result" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.ResultEditor"/>
   </fragments>
 </fragment:ModelFragments>

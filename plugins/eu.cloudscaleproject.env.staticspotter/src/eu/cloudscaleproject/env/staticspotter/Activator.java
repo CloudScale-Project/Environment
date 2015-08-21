@@ -3,12 +3,6 @@ package eu.cloudscaleproject.env.staticspotter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.cloudscaleproject.env.staticspotter.alternatives.providers.ConfigResourceProviderFactory;
-import eu.cloudscaleproject.env.staticspotter.alternatives.providers.InputResourceProviderFactory;
-import eu.cloudscaleproject.env.staticspotter.alternatives.providers.ResultResourceProviderFactory;
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -39,11 +33,6 @@ public class Activator extends AbstractUIPlugin
 	{
 		super.start(context);
 		plugin = this;
-
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_STA_INPUT, new InputResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_STA_CONF, new ConfigResourceProviderFactory());
-		ResourceRegistry.getInstance().registerFactory(CSTool.SPOTTER_STA_RES, new ResultResourceProviderFactory());
-
 	}
 
 	/*

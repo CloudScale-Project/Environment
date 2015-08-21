@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Image;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ToolNode;
 
@@ -41,12 +41,12 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		
 		String id = tool.getAttribute("id");
 		String name = tool.getAttribute("name");
-		Image icon = ExplorerUtils.createImage(tool, "icon");
+		Image icon = ExplorerResources.getImage(tool, "icon", 16, 16);
 		
 		IFolder folder = ToolchainUtils.getToolFolder(project, id);
 		
 		ToolNode node = new ToolNode(id, folder);		
-		node.setIcon(icon, true);
+		node.setIcon(icon, false);
 		node.setName(name);
 		
 		return node;

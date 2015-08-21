@@ -299,6 +299,21 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		return resources;
 	}
+	
+	public List<IResource> getSubResources()
+	{
+		ArrayList<IResource> resources = new ArrayList<IResource>();
+		
+		synchronized (subResourcesLock) {
+			for(List<IResource> resList : subResources.values()){
+				for(IResource res : resList){
+					resources.add(res);
+				}
+			}
+		}
+		
+		return resources;
+	}
 
 	private List<IResource> getSubResourcesFromWorkspace(String key)
 	{

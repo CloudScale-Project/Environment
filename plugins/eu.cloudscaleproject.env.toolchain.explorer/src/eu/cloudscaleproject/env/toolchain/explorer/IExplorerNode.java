@@ -19,6 +19,9 @@ public interface IExplorerNode extends IAdaptable{
 	public static final String PROP_NAME = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.name";
 	public static final String PROP_ICON = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.icon";
 	
+	public static final String PROP_REFRESH = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.refresh";
+
+	
 	public String getID();
 	
 	public void setName(String name);
@@ -37,6 +40,7 @@ public interface IExplorerNode extends IAdaptable{
 	
 	public void onSelect();
 	
+	public void refresh();
 	public void dispose();
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_nlLzYC3jEeSFlZh2WowR_Q">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_nlLzYC3jEeSFlZh2WowR_Q">
   <imports xsi:type="commands:Command" xmi:id="_cB6fwHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective"/>
   <imports xsi:type="commands:Command" xmi:id="_P7ECAIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.control.start"/>
   <imports xsi:type="commands:Command" xmi:id="_oVRuIIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.ui.OpenMatchingViews"/>
@@ -19,5 +19,10 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_pr90QIGWEeSoC_STLYPGdw" elementId="eu.cloudscaleproject.env.staticspotter.handledmenuitem.openMatchingViews" label="Open Matching Views" command="_oVRuIIGWEeSoC_STLYPGdw"/>
       </children>
     </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_eF1VAEgPEeWZc5LD3U6YSw" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_i9r0wEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor" label="Static Spotter input" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/input_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.InputEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_jVIEYEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor" label="Static Spotter config" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/configuration_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.ConfigEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_jrA00EgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor" label="Static Spotter result" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/results_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.ResultEditor"/>
   </fragments>
 </fragment:ModelFragments>

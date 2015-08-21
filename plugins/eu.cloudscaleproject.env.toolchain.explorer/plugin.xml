@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
 <plugin>
+   
+   <extension-point id="eu.cloudscaleproject.env.toolchain.explorer" name="Toolchain explorer extension" schema="schema/eu.cloudscaleproject.env.toolchain.explorer.exsd"/>
 
    <extension
          id="eu.cloudscaleproject.env.toolchain.explorer.fragment"
@@ -39,15 +42,6 @@
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.toolchain.explorer.isProjectNode">
-         <with
-               variable="org.eclipse.ui.selection">
-            <instanceof
-                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.ProjectNode">
-            </instanceof>
-         </with>
-      </definition>
-      <definition
             id="eu.cloudscaleproject.env.toolchain.explorer.isToolNode">
          <with
                variable="org.eclipse.ui.selection">
@@ -62,6 +56,15 @@
                variable="org.eclipse.ui.selection">
             <instanceof
                   value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode">
+            </instanceof>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeProviderNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <instanceof
+                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeProviderNode">
             </instanceof>
          </with>
       </definition>

@@ -7,7 +7,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 
-public class LinkWithEditorhandler {
+public class LinkWithEditorHandler {
 	
 	@Execute
 	public void execute(MPart part) {

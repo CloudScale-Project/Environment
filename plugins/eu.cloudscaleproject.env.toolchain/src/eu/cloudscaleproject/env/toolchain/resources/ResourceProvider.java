@@ -82,6 +82,7 @@ public abstract class ResourceProvider
 					if (r != null)
 					{
 						removeResource(r);
+						r.delete();
 						firePropertyChange(PROP_RESOURCE_DELETED, r, null);
 					}
 				}

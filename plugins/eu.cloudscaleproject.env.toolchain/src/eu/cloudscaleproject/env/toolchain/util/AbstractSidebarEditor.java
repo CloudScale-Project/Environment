@@ -29,6 +29,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -102,14 +104,30 @@ public abstract class AbstractSidebarEditor implements ISidebarEditor{
 
 				// When non GUI thread => WorkbenchWidow == null
                 if (Display.getDefault().getThread() != Thread.currentThread()) return;
-				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				//IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				
+				IEditorReference[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+												.getActivePage().getEditorReferences();
 
+				for(IEditorReference er : editors){
+					IWorkbenchPart part = er.getPart(false);
+					if(part instanceof IEditorPart){
+						IEditorPart editorPart = (IEditorPart)part;
+						IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editorPart.getAdapter(IDirtyAdapter.class);
+						if(dirtyAdapter != null){
+							dirtyAdapter.fireDirtyState();
+						}
+					}
+				}
+				
+				/*
 				if(editor != null){
 					IDirtyAdapter dirtyAdapter = (IDirtyAdapter)editor.getAdapter(IDirtyAdapter.class);
 					if(dirtyAdapter != null){
 						dirtyAdapter.fireDirtyState();
 					}
 				}
+				*/
 			}
 		};
 		

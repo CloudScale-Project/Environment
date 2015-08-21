@@ -22,5 +22,17 @@
             class="eu.cloudscaleproject.env.overview.validation.OverviewValidator">
       </client>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.tool">
+      <tool
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
+            name="ScaleDL">
+         <resource
+               class="eu.cloudscaleproject.env.overview.OverviewAlternativeProviderFactory"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
+               name="Overview">
+         </resource>
+      </tool>
+   </extension>
 
 </plugin>

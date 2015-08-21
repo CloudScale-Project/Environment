@@ -5,12 +5,11 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.resource.Resource;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -66,19 +65,18 @@ public class AlternativeNodeChildren extends ExplorerNodeChildren{
 	
 	@Override
 	public List<? extends Object> getKeys() {
-		return alternative.getResourceSet().getResources();
+		return alternative.getSubResources();
 	}
 
 	@Override
 	public IExplorerNode getChild(Object key) {
 		
-		Resource res = (Resource)key;
-		IFile file = ExplorerProjectPaths.getFileFromEmfResource(res);
-		if(file == null || !file.exists()){
+		IResource res = (IResource)key;
+		if(!(res instanceof IFile) || !res.exists()){
 			return null;
 		}
 		
-		AlternativeResourceNode node = new AlternativeResourceNode(alternative, file);
+		AlternativeResourceNode node = new AlternativeResourceNode(alternative, (IFile)res);		
 		return node;
 		
 	}

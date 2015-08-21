@@ -1,15 +1,23 @@
 package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
+import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelStyle;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -19,7 +27,34 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  *
  */
 public class AlternativeResourceNode extends ExplorerEditorNode{
-
+	
+	private static final AbstractLabelStyle DEFAULT_LABEL_STYLE = new AbstractLabelStyle() {
+		
+		@Override
+		public StyledString getStyledText(Object element) {
+			if(element instanceof IExplorerNode){
+				
+				IExplorerNode node = (IExplorerNode)element;
+			
+				return new StyledString(node.getName(), new Styler() {
+					
+					@Override
+					public void applyStyles(TextStyle textStyle) {
+						textStyle.foreground = ColorResources.COLOR_CS_BLUE_DARK;						
+					}
+					
+				});
+				
+			}
+			return null;
+		}
+		
+		@Override
+		public Image getImage(Object element) {
+			return null;
+		}
+	};
+	
 	public AlternativeResourceNode(EditorInputEMF alternative, IFile file) {
 		super(file.getName(), null, file, null);
 		
@@ -32,6 +67,8 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 		else{
 			setName(file.getName());
 		}
+		
+		getContext().set(IStyledLabelProvider.class, DEFAULT_LABEL_STYLE);
 	}
 	
 	public IEditorInputResource getAlternative(){

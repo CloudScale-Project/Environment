@@ -43,27 +43,31 @@
       <tool
             icon="resources/icons/analyser_16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"
-            name="Analyser">
+            name="Analyser"
+            position="10">
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
-               name="Input">
+               name="Input"
+               position="10">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
                icon="resources/icons/configuration_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-               name="Config">
+               name="Config"
+               position="20">
          </resource>
          <resource
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
                icon="resources/icons/results_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
-               name="Results">
+               name="Results"
+               position="30">
          </resource>
       </tool>
    </extension>
@@ -109,33 +113,48 @@
             id="eu.cloudscaleproject.env.analyser.inputAltProviderNode">
          <with
                variable="org.eclipse.ui.selection">
-            <test
-                  forcePluginActivation="true"
-                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
-            </test>
+            <and>
+               <test
+                     forcePluginActivation="true"
+                     property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                     value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
+               </test>
+               <reference
+                     definitionId="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeProviderNode">
+               </reference>
+            </and>
          </with>
       </definition>
       <definition
             id="eu.cloudscaleproject.env.analyser.resultAltProviderNode">
          <with
                variable="org.eclipse.ui.selection">
-            <test
-                  forcePluginActivation="true"
-                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes">
-            </test>
+            <and>
+               <test
+                     forcePluginActivation="true"
+                     property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                     value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes">
+               </test>
+               <reference
+                     definitionId="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeProviderNode">
+               </reference>
+            </and>
          </with>
       </definition>
       <definition
             id="eu.cloudscaleproject.env.analyser.confAltProviderNode">
          <with
                variable="org.eclipse.ui.selection">
-            <test
-                  forcePluginActivation="true"
-                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf">
-            </test>
+            <and>
+               <test
+                     forcePluginActivation="true"
+                     property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                     value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf">
+               </test>
+               <reference
+                     definitionId="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeProviderNode">
+               </reference>
+            </and>
          </with>
       </definition>
       <definition

@@ -16,8 +16,9 @@ import org.eclipse.core.databinding.observable.list.ListDiffEntry;
  */
 public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
-	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory,childAdded";
-	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory,childAdded";
+	public static final String PROP_REFRESH = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.refresh";
+	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.childAdded";
+	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeFactory.childRemoved";
 		
 	private final List<Object> keys = new ArrayList<Object>();
 	private final List<IExplorerNode> nodes = new ArrayList<IExplorerNode>();
@@ -33,22 +34,28 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	public void initialize(){
 		if(!lazyLoad){
-			initialized = true;
-			keys.clear();
-			refresh();
+			doInitialize();
 		}
 	}
 	
+	private void doInitialize(){
+		initialized = true;
+		keys.clear();
+		refresh();
+	}
+	
 	public boolean hasChildren(){
+		if(!initialized){
+			doInitialize();
+		}
+		
 		return !getKeys().isEmpty();
 	}
 	
 	public List<IExplorerNode> getChildren(){
 		
 		if(!initialized){
-			initialized = true;
-			keys.clear();
-			refresh();
+			doInitialize();
 		}
 		
 		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
@@ -73,6 +80,10 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 			if(entry.isAddition()){
 				
 				IExplorerNode node = getChild(entry.getElement());
+				if(node == null){
+					continue;
+				}
+				
 				nodes.add(entry.getPosition(), node);
 				pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
 			}
@@ -80,6 +91,7 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 				
 				IExplorerNode node = nodes.get(entry.getPosition());
 				nodes.remove(entry.getPosition());
+				node.dispose();
 				pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, entry.getPosition(), node, null);
 			}
 		}
@@ -88,6 +100,9 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	}
 	
 	public void dispose(){
+		for(IExplorerNode node : nodes){
+			node.dispose();
+		}
 		nodes.clear();
 	}
 

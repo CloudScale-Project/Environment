@@ -285,17 +285,15 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	public final void delete(IProgressMonitor monitor) {
 		
 		synchronized (saveLoadLock) {
-			if(!resource.exists()){
-				return;
-			}
-			
-			try{
-				deleteInProgress = true;
-				logger.info("Deleting resource: " + resource.getFullPath());
-				handleDelete(monitor);
-			}
-			finally{
-				deleteInProgress = false;
+			if(resource.exists()){
+				try{
+					deleteInProgress = true;
+					logger.info("Deleting resource: " + resource.getFullPath());
+					handleDelete(monitor);
+				}
+				finally{
+					deleteInProgress = false;
+				}
 			}
 		}
 		

@@ -31,11 +31,7 @@ public class ExplorerResourceNode extends ExplorerNode{
 	}
 	
 	public IResource getResource(){
-		Object resource = this.getContext().get(IExplorerConstants.NODE_RESOURCE);
-		if(resource instanceof IResource){
-			return (IResource)resource;
-		}
-		return null;
+		return resource;
 	}
 	
 	@SuppressWarnings({ "rawtypes" })

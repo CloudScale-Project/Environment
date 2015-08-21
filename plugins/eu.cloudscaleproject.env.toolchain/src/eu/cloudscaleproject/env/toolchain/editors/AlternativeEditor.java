@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -39,6 +40,8 @@ public class AlternativeEditor {
 	private Composite parentComposite;
 	@Inject
 	private MPart part;
+	@Inject
+	private EPartService partService;
 	
 	private IEditorInputResource alternative;
 	
@@ -65,6 +68,15 @@ public class AlternativeEditor {
 					}
 				});
 				
+			}
+			if(IEditorInputResource.PROP_DELETED.equals(evt.getPropertyName())){
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						partService.hidePart(part, true);
+					}
+				});
 			}
 		}
 	};
@@ -103,6 +115,8 @@ public class AlternativeEditor {
 		loadJob.schedule();
 		
 		focus();
+		
+		dirtyable.setDirty(alternative.isDirty());
 	}
 	
 	@Focus

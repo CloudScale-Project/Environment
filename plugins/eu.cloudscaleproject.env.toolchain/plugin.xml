@@ -3,7 +3,6 @@
 <plugin>
    <extension-point id="eu.cloudscaleproject.env.toolchain.editors" name="Toolchain editors extension point" schema="schema/eu.cloudscaleproject.env.toolchain.editors.exsd"/>
    <extension-point id="eu.cloudscaleproject.env.toolchain.tool" name="Tool extension point" schema="schema/eu.cloudscaleproject.env.toolchain.tool.exsd"/>
-   <extension-point id="eu.cloudscaleproject.env.toolcahin.explorer" name="Explorer extension point" schema="schema/eu.cloudscaleproject.env.toolcahin.explorer.exsd"/>
    <extension
          id="eu.cloudscaleproject.env.toolchain.modelfragment"
          point="org.eclipse.e4.workbench.model">

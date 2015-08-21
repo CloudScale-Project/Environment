@@ -114,7 +114,18 @@ public class ExplorerViewPart {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				final IExplorerNode node = (IExplorerNode)evt.getSource();
-								
+						
+				if(IExplorerNode.PROP_REFRESH.equals(evt.getPropertyName())){
+					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+						
+						@Override
+						public void run() {
+							if(!treeViewer.getTree().isDisposed()){
+								treeViewer.refresh(node);
+							}
+						}
+					});
+				}
 				if(IExplorerNode.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
 					BatchExecutor.getInstance().addUITask(this, new Runnable() {
 						
@@ -173,7 +184,7 @@ public class ExplorerViewPart {
 					node.onSelect();
 				}
 				
-				selectionService.setSelection(node);
+				selectionService.setSelection(selection.size() == 1 ? node : selection.toArray());
 			}
 		});
 		
@@ -208,7 +219,8 @@ public class ExplorerViewPart {
 		});
 		
 		this.treeViewer.setContentProvider(new ExplorerContentProvider());
-		this.treeViewer.setLabelProvider(new ExplorerLabelProvider());
+		this.treeViewer.setLabelProvider(
+				new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(new ExplorerLabelProvider()));
 		
 		this.treeViewer.setInput(explorer.getRoot());
 		
