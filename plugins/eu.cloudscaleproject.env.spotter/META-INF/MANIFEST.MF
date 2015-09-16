@@ -4,8 +4,7 @@ Bundle-Name: Spotter
 Bundle-SymbolicName: eu.cloudscaleproject.env.spotter;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.cloudscaleproject.env.spotter.Activator
-Require-Bundle: org.spotter.eclipse.ui;bundle-version="1.0.1",
- org.eclipse.ui,
+Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  eu.cloudscaleproject.env.toolchain,
  org.eclipse.swt,
@@ -24,7 +23,8 @@ Require-Bundle: org.spotter.eclipse.ui;bundle-version="1.0.1",
  org.eclipse.core.databinding,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
- org.eclipse.core.databinding.beans
+ org.eclipse.core.databinding.beans,
+ org.spotter.eclipse.ui;bundle-version="1.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,

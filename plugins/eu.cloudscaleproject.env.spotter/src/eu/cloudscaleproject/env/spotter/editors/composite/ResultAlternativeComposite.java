@@ -133,7 +133,7 @@ public class ResultAlternativeComposite extends TitleEditorView implements IRefr
 		this.resultAlternative = resultAlternative;
 
 		this.resourceShells = new HashMap<>();
-		this.extensionItemFactory = new ImmutableExtensionItemFactory(resultAlternative.getName());
+		this.extensionItemFactory = new ImmutableExtensionItemFactory();
 
 		CTabFolder folder = new CTabFolder(getContainer(), SWT.BORDER);
 		folder.setTabHeight(32);
@@ -177,7 +177,7 @@ public class ResultAlternativeComposite extends TitleEditorView implements IRefr
 		parent.setLayout(new FillLayout());
 		SashForm container = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
 
-		hierarchyTreeViewer = ExtensionsGroupViewer.createTreeViewer(container, extensionItemFactory.createExtensionItem(), null, false);
+		hierarchyTreeViewer = ExtensionsGroupViewer.createTreeViewer(container, extensionItemFactory.createExtensionItem());
 		SpotterExtensionsLabelProvider labelProvider = (SpotterExtensionsLabelProvider) hierarchyTreeViewer.getLabelProvider();
 		imageProvider = new ResultExtensionsImageProvider();
 		labelProvider.setImageProvider(imageProvider);

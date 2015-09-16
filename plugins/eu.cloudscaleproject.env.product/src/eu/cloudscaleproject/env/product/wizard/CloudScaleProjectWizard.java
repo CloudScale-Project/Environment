@@ -45,7 +45,11 @@ public class CloudScaleProjectWizard extends BasicNewProjectResourceWizard {
 
 	@Override
 	protected void updatePerspective() {
-		commandExecutor.execute("eu.cloudscaleproject.env.product.command.openCsPerspectiv");
+		//commandExecutor.execute("eu.cloudscaleproject.env.product.command.openCsPerspectiv");
+		
+		commandExecutor.execute("eu.cloudscaleproject.env.product.command.openperspective", 
+								"eu.cloudscaleproject.env.product.perspective.main");
+
 	}
 
 }

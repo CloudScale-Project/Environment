@@ -41,7 +41,7 @@
          </property>
          <property
                name="aboutText"
-               value="CloudScale Environment&#x0A;Version: 0.8&#x0A;&#x0A;Visit http://www.cloudscale-project.eu">
+               value="CloudScale Environment&#x0A;Version: 3.1&#x0A;&#x0A;Visit http://www.cloudscale-project.eu">
          </property>
          <property
                name="startupProgressRect"

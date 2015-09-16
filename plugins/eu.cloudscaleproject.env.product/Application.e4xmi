@@ -65,7 +65,9 @@
     </sharedElements>
     <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
       <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="Show CloudScale perspective " iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_MryMcKSFEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handledtoolitem.openperspective" label="Show CloudScale perspective " iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/explorer/project_24.png" tooltip="CloudScale perspective" command="_AeeC8FxlEeWT--3X3lai2w">
+          <parameters xmi:id="_wo24UFxoEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.parameter.2" name="PerspectiveId" value="eu.cloudscaleproject.env.product.perspective.main"/>
+        </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_LQjtoC7gEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newProject" label="New project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProject_24.png" tooltip="Create new CloudScale project" command="_czYasKLbEeOVJP61i6fIgw"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_nJ9A8C7hEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handledtoolitem.newExampleProject" label="New example project" iconURI="platform:/plugin/eu.cloudscaleproject.env.product/resources/icons/toolbar/newProjectWizard_24.png" tooltip="Create new CloudScale example project" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_Eap64C7iEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.toolbarseparator.0"/>
@@ -89,10 +91,9 @@
     </trimBars>
     <trimBars xmi:id="_lSORED85EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.product.trimbar.bottom" side="Bottom"/>
   </children>
-  <handlers xmi:id="_qUWXYHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.openCsPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CloudscalePerspectiveHandler" command="_pRP7oHnoEeKfc49LSeS68A"/>
-  <handlers xmi:id="_KOUtIH8tEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.handler.intro" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.IntroPerspectiveHandler" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
   <handlers xmi:id="_m2_NoKLbEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handler.newProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewProjectHadler" command="_czYasKLbEeOVJP61i6fIgw"/>
   <handlers xmi:id="_ebA54C7sEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handler.newExampleProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewExampleProjectHandler" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
+  <handlers xmi:id="_H4LbcFxlEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.OpenPerspectiveHandler" command="_AeeC8FxlEeWT--3X3lai2w"/>
   <bindingTables xmi:id="_SeXUEO8EEd6FC9cDb6iV7x" bindingContext="_SeXUHO8EEd6BC9cDb6iV7y"/>
   <rootContext xmi:id="_SeXUHO8EEd6BC9cDb6iV7y" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="%bindingcontext.name.dialogAndWindows">
     <children xmi:id="_SeXUEO8EEd6FC9cDb6iV7w" elementId="org.eclipse.ui.contexts.window" name="%bindingcontext.name.windows">
@@ -101,23 +102,28 @@
     <children xmi:id="_SeXUEO8EEd6FC9cDb6iV7x" elementId="org.eclipse.ui.contexts.dialog" name="%bindingcontext.name.dialogs"/>
   </rootContext>
   <menuContributions xmi:id="_dprbkHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution" parentId="cloudscale.environment.product.menu.tools">
-    <children xsi:type="menu:HandledMenuItem" xmi:id="_kEDxgH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.intro" label="Intro" command="_6PggAH8sEeKbPfR9EFmuvQ"/>
+    <children xsi:type="menu:HandledMenuItem" xmi:id="_kEDxgH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.intro" label="Intro" command="_AeeC8FxlEeWT--3X3lai2w">
+      <parameters xmi:id="_45l04FxnEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.parameter.1" name="PerspectiveId" value="eu.cloudscaleproject.env.product.perspective.intro"/>
+    </children>
     <children xsi:type="menu:HandledMenuItem" xmi:id="_LYK_IIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.handledmenuitem.showView" label="Show view" command="_mVVJIIMWEeSFPKTtzK8Nkg"/>
     <children xsi:type="menu:HandledMenuItem" xmi:id="_RDfb0IMZEeSuqtISG5JKZg" elementId="eu.cloudscaleproject.env.product.handledmenuitem.0" command="_nXdNIIMZEeSuqtISG5JKZg"/>
     <children xsi:type="menu:MenuSeparator" xmi:id="_zAUOAIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.menuseparator.0"/>
-    <children xsi:type="menu:Menu" xmi:id="_1eGfEIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.menu.envrionment" label="Envrionment">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_juk9QHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.cloudscalePerspective" label="Perspective" command="_pRP7oHnoEeKfc49LSeS68A"/>
+    <children xsi:type="menu:Menu" xmi:id="_1eGfEIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.menu.envrionment" label="Environment">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_juk9QHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.cloudscalePerspective" label="Perspective" command="_AeeC8FxlEeWT--3X3lai2w">
+        <parameters xmi:id="_yZm5sFxnEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.parameter.0" name="PerspectiveID" value="eu.cloudscaleproject.env.product.perspective.main"/>
+      </children>
     </children>
   </menuContributions>
   <menuContributions xmi:id="_QRPFQH9CEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.help.contribution" parentId="cloudscale.environment.product.menu.tools"/>
   <menuContributions xmi:id="_I5MoYEP2EeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.product.menucontribution.view" parentId="cloudscale.environment.product.menu.view"/>
-  <commands xmi:id="_pRP7oHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.command.openCsPerspectiv" commandName="openCsPerspective"/>
-  <commands xmi:id="_6PggAH8sEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.command.intro" commandName="openIntroPerspective"/>
   <commands xmi:id="_czYasKLbEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.command.newProject" commandName="createNewProject" description="Creates new project"/>
   <commands xmi:id="_SyZ4AC7sEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.command.newExampleProject" commandName="createNewExampleProject" description="Creates new example project"/>
   <commands xmi:id="_mVVJIIMWEeSFPKTtzK8Nkg" elementId="org.eclipse.ui.views.showView" commandName="%command.showView.name" description="%command.showView.description"/>
   <commands xmi:id="_NLAHUIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.help.quickStartAction" commandName="%command.quickStart.name" description="%command.quickStart.description"/>
   <commands xmi:id="_nXdNIIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.views.properties.NewPropertySheetCommand" commandName="%Views.PropertySheet"/>
+  <commands xmi:id="_AeeC8FxlEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.command.openperspective" commandName="openPerspective" description="Open perspective with the specified ID">
+    <parameters xmi:id="_EZLlAFxlEeWT--3X3lai2w" elementId="PerspectiveId" name="PerspectiveId" optional="false"/>
+  </commands>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXh" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXi" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

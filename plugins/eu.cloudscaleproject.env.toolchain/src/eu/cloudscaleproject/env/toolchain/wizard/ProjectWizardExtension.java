@@ -28,7 +28,11 @@ public class ProjectWizardExtension implements NewProjectExtension{
 	    try {
 	        ProjectEditor editor = (ProjectEditor)IDE.openEditor(page, editorInput, "eu.cloudscaleproject.env.toolchain.tooleditor");
 	        editor.getSite().getPage().activate(editor);
-	    } catch ( PartInitException e ) {
+	    } 
+	    catch ( PartInitException e ) {
+	        //Put your exception handler here if you wish to
+	    }
+	    catch ( IllegalArgumentException e ) {
 	        //Put your exception handler here if you wish to
 	    }
 	}

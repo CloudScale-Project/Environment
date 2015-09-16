@@ -126,7 +126,11 @@ public class ResourceSelectionPage extends WizardPage
 			}
 		});
 
-		table.getItems()[0].setChecked(true);
+		//select all examples
+		for(TableItem item : table.getItems()){
+			item.setChecked(true);
+		}
+		
 		tableViewer.getTable().select(0);
 		updateSelection();
 

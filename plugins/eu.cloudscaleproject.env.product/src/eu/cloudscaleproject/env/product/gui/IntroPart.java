@@ -128,7 +128,10 @@ public class IntroPart {
 		workspace.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				commandExecutor.execute("eu.cloudscaleproject.env.product.command.openCsPerspectiv");
+				commandExecutor.execute("eu.cloudscaleproject.env.product.command.openperspective", 
+										"eu.cloudscaleproject.env.product.perspective.main");
+				
+				//commandExecutor.execute("eu.cloudscaleproject.env.product.command.openCsPerspectiv");
 			}
 		});
 		
