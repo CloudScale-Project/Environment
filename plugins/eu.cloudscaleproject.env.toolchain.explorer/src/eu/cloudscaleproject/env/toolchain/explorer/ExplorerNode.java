@@ -239,7 +239,6 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		if(icon != null && iconDisposeable){
 			icon.dispose();
 		}
-		
 		this.context.dispose();
 		
 		if(parent != null){

@@ -92,10 +92,19 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 			protected Composite createComposite(ExpandableComposite parent, Object source) {
 				
 				Usage usage = (Usage)source;
-				parent.setText("Usage evolution: " + ((UsageEvolution)usage.eContainer()).getUsages().indexOf(usage));
+				parent.setText("Usage evolution: " + usage.getEntityName());
 				UsageComposite usageComposite = new UsageComposite(alternative, (Usage)source, parent, SWT.NONE);
 				
 				return usageComposite;
+			}
+			
+			@Override
+			protected void refreshComposite(ExpandableComposite parent, Composite client, Object source) {
+				
+				Usage usage = (Usage)source;
+				parent.setText("Usage evolution: " + usage.getEntityName());
+				
+				super.refreshComposite(parent, client, source);
 			}
 		};
 		usageListComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -123,5 +132,6 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 			initBinding();
 		}
 		
+		usageListComposite.refresh();
 	}
 }

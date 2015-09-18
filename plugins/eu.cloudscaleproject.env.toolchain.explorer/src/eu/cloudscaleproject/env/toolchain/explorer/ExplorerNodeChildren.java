@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.list.ListDiff;
-import org.eclipse.core.databinding.observable.list.ListDiffEntry;
+import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 
 /**
  *
@@ -49,16 +49,25 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	private void doInitialize(){
 		initialized = true;
+		
 		keys.clear();
+		nodes.clear();
+		
 		refresh();
 	}
 	
 	public boolean hasChildren(){
+		
 		if(!initialized){
 			doInitialize();
 		}
 		
-		return !getKeys().isEmpty();
+		List<? extends Object> keys = getKeys();
+		if(keys == null){
+			return false;
+		}
+		
+		return !keys.isEmpty();
 	}
 	
 	public List<IExplorerNode> getChildren(){
@@ -76,48 +85,75 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		return out;
 	}
 	
-	public void refresh(){
+	public synchronized void refresh(){
 		
 		if(!initialized){
 			return;
 		}
 		
-		List<? extends Object> currentKeys = getKeys();
-		ListDiff diff = Diffs.computeListDiff(keys, currentKeys);
-		
-		for(ListDiffEntry entry : diff.getDifferences()){
-			if(entry.isAddition()){
-				
-				IExplorerNode node = getChild(entry.getElement());
-				nodes.add(entry.getPosition(), node);
+		//try to resolve null nodes
+		for(int i=0; i<nodes.size(); i++){
+			IExplorerNode node = nodes.get(i);
+			if(node == null){
+				node = getChild(keys.get(i));
 				if(node != null){
-					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, entry.getPosition(), null, node);
-				}
-			}
-			else{
-				
-				IExplorerNode node = nodes.get(entry.getPosition());
-				nodes.remove(entry.getPosition());
-				if(node != null){
-					node.dispose();
-					pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, entry.getPosition(), node, null);
+					nodes.set(i, node);
+					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, i, null, node);
 				}
 			}
 		}
 		
-		diff.applyTo(keys);
+		//create nodes for the new keys
+		List<? extends Object> currentKeys = getKeys();
+		if(currentKeys == null){
+			return;
+		}
+		
+		ListDiff diff = Diffs.computeListDiff(keys, currentKeys);
+		
+		diff.accept(new ListDiffVisitor() {
+			
+			@Override
+			public void handleAdd(int index, Object element) {
+				
+				IExplorerNode node = getChild(element);
+				nodes.add(index, node);
+				keys.add(index, element);
+				
+				if(node != null){
+					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, index, null, node);
+				}
+			}
+			
+			@Override
+			public void handleRemove(int index, Object element) {
+				
+				IExplorerNode node = nodes.get(index);
+				nodes.remove(index);
+				keys.remove(index);
+				
+				if(node != null){
+					node.dispose();
+					pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, index, node, null);
+				}
+			}
+			
+		});
+		
 	}
 	
-	public void dispose(){
+	public synchronized void dispose(){
 		for(IExplorerNode node : nodes){
 			if(node != null){
 				node.dispose();
 			}
 		}
+		
+		keys.clear();
 		nodes.clear();
 	}
 
-	public abstract List<? extends Object> getKeys();
+	protected abstract List<? extends Object> getKeys();
 	public abstract IExplorerNode getChild(Object key);
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl){

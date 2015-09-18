@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -10,7 +11,6 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 
 /**
@@ -29,7 +29,7 @@ public class DeleteExplorerNodeHandler {
 			for(Object o : (Object[])selection){
 				
 				if(o instanceof ExplorerResourceNode){
-					final ExplorerEditorNode node = (ExplorerEditorNode)o;					
+					final ExplorerResourceNode node = (ExplorerResourceNode)o;					
 					deleteNode(node);
 				}
 			}
@@ -47,17 +47,25 @@ public class DeleteExplorerNodeHandler {
 		Object selection = selectionService.getSelection();
 		
 		if(selection instanceof Object[]){
-			for(Object o : (Object[])selection){			
-				if(!(o instanceof ExplorerEditorNode)){
+			for(Object o : (Object[])selection){
+				if(!canDelete(o)){
 					return false;
 				}
 			}
 		}
-		else if(!(selection instanceof ExplorerEditorNode)){
+		else if(!canDelete(selection)){
 			return false;
 		}
 		
 		return true;
+	}
+	
+	private boolean canDelete(Object object){
+		if(object instanceof ExplorerResourceNode){
+			ExplorerResourceNode node = (ExplorerResourceNode)object;
+			return node.canDelete();
+		}
+		return false;
 	}
 	
 	private void deleteNode(final ExplorerResourceNode node){
@@ -72,12 +80,20 @@ public class DeleteExplorerNodeHandler {
 					
 					@Override
 					public void run() {
+						
 						node.dispose();
-						try {
-							node.getResource().delete(true, null);
-						} catch (CoreException e) {
-							e.printStackTrace();
-						}
+						
+						WorkspaceJob job = new WorkspaceJob("Deleting resource") {
+							
+							@Override
+							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+								
+								monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
+								node.getResource().delete(IProject.FORCE, null);
+								return Status.OK_STATUS;
+							}
+						};
+						job.schedule();
 					}
 				});
 				

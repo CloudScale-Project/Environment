@@ -14,9 +14,11 @@ public abstract class CompositeContainerChild {
 	
 	private Object data;
 	
+	private ExpandableComposite expComposite;
 	private Composite composite = null;
 	private Composite clientComposite = null;
 	
+	protected abstract void doRefreshComposite(ExpandableComposite parent, Composite client, Object source);
 	protected abstract Composite doCreateComposite(ExpandableComposite parent, Object source);
 	
 	public Composite createComposite(final CompositeContainer container){
@@ -26,7 +28,7 @@ public abstract class CompositeContainerChild {
 		}
 		
 		//
-		ExpandableComposite expComposite = new ExpandableComposite(container.getCompositeArea(), SWT.BORDER,
+		expComposite = new ExpandableComposite(container.getCompositeArea(), SWT.BORDER,
 				ExpandableComposite.CLIENT_INDENT
 				| ExpandableComposite.COMPACT
 				| ExpandableComposite.TITLE_BAR
@@ -61,6 +63,10 @@ public abstract class CompositeContainerChild {
 		});
 		composite = expComposite;
 		return composite;
+	}
+	
+	public void refreshComposite(){
+		doRefreshComposite(expComposite, getClient(), getSource());
 	}
 	
 	public void disposeComposite(){

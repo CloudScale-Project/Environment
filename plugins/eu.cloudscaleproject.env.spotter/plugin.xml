@@ -35,7 +35,7 @@
             icon="resources/icons/spotter_16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
             name="Dynamic Spotter"
-            position="30">
+            position="40">
          <resource
                class="eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory"
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"

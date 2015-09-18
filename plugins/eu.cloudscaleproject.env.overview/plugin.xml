@@ -26,7 +26,8 @@
          point="eu.cloudscaleproject.env.toolchain.tool">
       <tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="ScaleDL">
+            name="ScaleDL"
+            position="50">
          <resource
                class="eu.cloudscaleproject.env.overview.OverviewAlternativeProviderFactory"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"

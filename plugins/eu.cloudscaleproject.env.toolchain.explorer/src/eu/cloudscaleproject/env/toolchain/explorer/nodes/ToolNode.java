@@ -17,4 +17,8 @@ public class ToolNode extends ExplorerResourceNode{
 		super(context, toolID, folder, new ToolNodeChildren(folder.getProject(), toolID, false));
 	}
 
+	@Override
+	public boolean canDelete() {
+		return false;
+	}
 }

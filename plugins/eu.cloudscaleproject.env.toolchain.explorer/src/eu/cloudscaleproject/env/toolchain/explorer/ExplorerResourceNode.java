@@ -37,6 +37,10 @@ public class ExplorerResourceNode extends ExplorerNode{
 		return resource;
 	}
 	
+	public boolean canDelete(){
+		return true;
+	}
+	
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public Object getAdapter(Class adapter) {

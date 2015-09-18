@@ -12,7 +12,8 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 public abstract class ListComposite extends CompositeContainer implements IRefreshable{
 	
 	private IObservableList currentObservable = null;
-	private DataBindingContext bindingContext = null;	
+	private DataBindingContext bindingContext = null;
+	
 	protected abstract Composite createComposite(ExpandableComposite parent, Object source);
 		
 	private class Child extends CompositeContainerChild{
@@ -21,10 +22,19 @@ public abstract class ListComposite extends CompositeContainer implements IRefre
 		protected Composite doCreateComposite(ExpandableComposite parent, Object source) {
 			return ListComposite.this.createComposite(parent, source);
 		}
+		
+		@Override
+		protected void doRefreshComposite(ExpandableComposite parent, Composite client, Object source) {
+			ListComposite.this.refreshComposite(parent, client, source);
+		}
 	}
 	
 	public ListComposite(Composite parent, int style) {		
 		super(parent, style);
+	}
+	
+	protected void refreshComposite(ExpandableComposite parent, Composite client, Object source){
+		//override
 	}
 	
 	public void updateTarget(){
@@ -122,6 +132,9 @@ public abstract class ListComposite extends CompositeContainer implements IRefre
 	public void refresh(){
 
 		for(CompositeContainerChild child : getChilds()){
+			
+			child.refreshComposite();
+			
 			Composite clientComposite = child.getClient();
 			if(clientComposite instanceof IRefreshable){
 				((IRefreshable)clientComposite).refresh();

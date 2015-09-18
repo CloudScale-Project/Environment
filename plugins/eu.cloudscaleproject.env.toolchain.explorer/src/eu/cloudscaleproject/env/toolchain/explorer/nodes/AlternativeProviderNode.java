@@ -60,5 +60,10 @@ public class AlternativeProviderNode extends ExplorerResourceNode{
 		job.setUser(false);
 		job.schedule();
 	}
+	
+	@Override
+	public boolean canDelete() {
+		return false;
+	}
 
 }

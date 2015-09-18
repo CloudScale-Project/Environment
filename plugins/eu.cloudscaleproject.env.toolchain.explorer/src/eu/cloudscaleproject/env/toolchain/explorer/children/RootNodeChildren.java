@@ -15,6 +15,7 @@ import eu.cloudscaleproject.env.common.CommonResources;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ProjectNode;
 
@@ -65,19 +66,26 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 	public List<? extends Object> getKeys() {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		
-		List<IProject> cseProjects = new ArrayList<IProject>();
+		List<IProject> csProjects = new ArrayList<IProject>();
+		List<IProject> importedProjects = new ArrayList<IProject>();
+		
 		for(IProject project : projects){
 			try {
 				IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
 				if(pn != null){
-					cseProjects.add(project);
+					csProjects.add(project);
+				}
+				else{
+					importedProjects.add(project);
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
+				importedProjects.add(project);
 			}
 		}
 		
-		return cseProjects;
+		csProjects.addAll(importedProjects);
+		return csProjects;
 	}
 	
 	@Override
@@ -85,9 +93,29 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 		if(key instanceof IProject){
 			IProject project = (IProject)key;
 			
-			ProjectNode node = new ProjectNode(getNode().getContext(), project);
-			node.setName(project.getName());
-			node.setIcon(CommonResources.PROJECT_16, false);
+			boolean isCloudscale = false;
+			try{
+				IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
+				if(pn != null){
+					isCloudscale = true;
+				}
+			}
+			catch (CoreException e) {
+				//ignore
+			}
+			
+			IExplorerNode node;
+			
+			if(isCloudscale){
+				node = new ProjectNode(getNode().getContext(), project);
+				node.setName(project.getName());
+				node.setIcon(CommonResources.PROJECT_16, false);
+			}
+			else{
+				node = new ExplorerResourceNode(getNode().getContext(), project.getName(), project, null);
+				node.setName(project.getName());
+				node.setIcon(CommonResources.OPERATION, false);
+			}
 			
 			return node;
 		}
