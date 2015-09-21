@@ -21,7 +21,7 @@ public class ExplorerPropertyTester extends PropertyTester {
 		
 		if(receiver instanceof IExplorerNode){
 			IExplorerNode node = (IExplorerNode)receiver;
-			
+						
 			if(PROP_NODE_ID.equals(property)){
 				if(expectedValue.equals(node.getID())){
 					return true;

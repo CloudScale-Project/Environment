@@ -52,4 +52,17 @@
          </resource>
       </tool>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.extractor.confAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf">
+            </test>
+         </with>
+      </definition>
+   </extension>
 </plugin>

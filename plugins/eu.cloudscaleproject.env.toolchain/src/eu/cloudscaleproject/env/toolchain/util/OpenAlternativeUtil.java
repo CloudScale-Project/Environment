@@ -2,21 +2,13 @@ package eu.cloudscaleproject.env.toolchain.util;
 
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.FileEditorInput;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.AbstractSidebarEditor.EditorItem;
@@ -26,6 +18,7 @@ public class OpenAlternativeUtil
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(OpenAlternativeUtil.class.getName());
 	
+	/*
 	public static void openAlternative(IEditorInputResource alternative)
 	{
 		IProject project = alternative.getProject();
@@ -47,6 +40,18 @@ public class OpenAlternativeUtil
 			e.printStackTrace();
 		}
 
+	}
+	*/
+	
+	public static void openAlternative(IEditorInputResource alternative)
+	{
+		ResourceRegistry.getInstance().openResourceEditor(alternative);
+		/*
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), alternative.getID());
+		rp.get
+		ToolchainExtensions.getInstance().getToolChildElements()
+		alternative.get
+		*/
 	}
 
 	public static void openAlternative(ProjectEditor pe, IEditorInput alternative)

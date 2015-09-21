@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_qlGRoCOREeS1oPSD-5Nz5Q">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_qlGRoCOREeS1oPSD-5Nz5Q">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EmZ0YCOzEeS1oPSD-5Nz5Q" featurename="addons" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="application:Addon" xmi:id="_GzJ_0COzEeS1oPSD-5Nz5Q" elementId="eu.cloudscaleproject.env.common.addon.0" contributionURI="bundleclass://eu.cloudscaleproject.env.common/eu.cloudscaleproject.env.common.FragmentAddon"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DSmXgF4SEeWKs5YPUow6lg" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_F_Ek0F4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.command.openwizard" commandName="openWizard" description="Open wizard with the specified id">
+      <parameters xmi:id="_IwY14F4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.commandparameter.0" name="id" optional="false"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Le98AF4SEeWKs5YPUow6lg" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_N6rwgF4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.common/eu.cloudscaleproject.env.common.handlers.OpenWizardHandler" command="_F_Ek0F4SEeWKs5YPUow6lg"/>
   </fragments>
 </fragment:ModelFragments>

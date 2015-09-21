@@ -14,12 +14,14 @@
     <elements xsi:type="commands:Command" xmi:id="_l82ToEJ0EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.command.openpart" commandName="openPart" description="Oben part by ID">
       <parameters xmi:id="_pMCzgEJ0EeW-jpWqcIfmeQ" elementId="part_id" name="Part ID" optional="false"/>
     </elements>
+    <elements xsi:type="commands:Command" xmi:id="_Ql8c4GCDEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.toolchain.command.createalternative" commandName="createAlternative" description="Creates new alternative using current selection"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PBqRAKO8EeOVJP61i6fIgw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_Q14PUKR6EeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.toolchain.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenProjectEditorHandler" command="_L3EzAKR6EeOVJP61i6fIgw"/>
     <elements xsi:type="commands:Handler" xmi:id="_gZunsDafEeW2k9p_RsN0yg" elementId="eu.cloudscaleproject.env.toolchain.handler.SelectAlternativeMethodHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.SelectAlternativeMethodHandler" command="_CUOMsDafEeW2k9p_RsN0yg"/>
     <elements xsi:type="commands:Handler" xmi:id="_ZdjM0DasEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.toolchain.handler.OpenAlternativeHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenAlternativeHandler" command="_V4xegDasEeWRRJlfUN4Dxg"/>
     <elements xsi:type="commands:Handler" xmi:id="_q3CVsEJ0EeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handler.3" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.OpenPartHandler" command="_l82ToEJ0EeW-jpWqcIfmeQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_ehbgUGCDEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.toolchain.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.handlers.CreateAlternativeHandler" command="_Ql8c4GCDEeWayeVD4LyD5g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k1ZAACF9EeWxsLqMhWe9xA" featurename="children" parentElementId="eu.cloudscaleproject.env.product.partstack.lowerLeft" positionInList="first">
     <elements xsi:type="basic:Part" xmi:id="_oAg4MCF9EeWxsLqMhWe9xA" elementId="eu.cloudscaleproject.env.toolchain.part.validationStatus" contributionURI="bundleclass://eu.cloudscaleproject.env.toolchain/eu.cloudscaleproject.env.toolchain.ui.validation.StatusViewPart" label="Status" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain/icons/status_view_16.png" closeable="true">

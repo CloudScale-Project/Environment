@@ -9,7 +9,7 @@
       <children xsi:type="advanced:Perspective" xmi:id="_U_BGcHnFEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.perspective.main" selectedElement="_-CLUcIshEeKkW7h3XzrPnQ" label="Main perspective">
         <children xsi:type="basic:PartSashContainer" xmi:id="_-CLUcIshEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" selectedElement="_CzIiAIsiEeKkW7h3XzrPnQ" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_CzIiAIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="40" selectedElement="_IaJN0IsiEeKkW7h3XzrPnQ">
-            <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.upperLeft" selectedElement="_I9w4QIsiEeKkW7h3XzrPnQ">
+            <children xsi:type="basic:PartStack" xmi:id="_IaJN0IsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partstack.upperLeft">
               <tags>org.eclipse.e4.primaryNavigationStack</tags>
               <tags>newtablook</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" containerData="7500" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
@@ -34,7 +34,7 @@
         <tags>EditorStack</tags>
       </children>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_sS7Q8NS1EeGBn6dQ9VPexA" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources//icons/full/eview16/resource_persp.gif">
+    <sharedElements xsi:type="basic:Part" xmi:id="_sS7Q8NS1EeGBn6dQ9VPexA" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources//icons/full/eview16/resource_persp.gif" closeable="true">
       <tags>View</tags>
       <tags>categoryTag:General</tags>
       <menus xmi:id="_4UXAUNSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer">

@@ -4,6 +4,7 @@ Bundle-Name: Dashboard
 Bundle-SymbolicName: eu.cloudscaleproject.env.overview;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.cloudscaleproject.env.overview.Activator
+Export-Package: eu.cloudscaleproject.env.overview
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -23,7 +24,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.di,
  org.eclipse.e4.core.contexts,
  org.palladiosimulator.pcm,
- eu.cloudscaleproject.env.common
-Bundle-ActivationPolicy: lazy
+ eu.cloudscaleproject.env.common,
+ org.eclipse.core.expressions;bundle-version="3.4.600",
+ javax.inject
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: eu.cloudscaleproject.env.overview
+Bundle-ActivationPolicy: lazy

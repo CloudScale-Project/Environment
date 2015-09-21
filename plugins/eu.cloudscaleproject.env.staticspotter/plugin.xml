@@ -58,5 +58,29 @@
          </resource>
       </tool>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.staticspotter.inputAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  forcePluginActivation="true"
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.staticspotter.configAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf">
+            </test>
+         </with>
+      </definition>
+   </extension>
 
 </plugin>

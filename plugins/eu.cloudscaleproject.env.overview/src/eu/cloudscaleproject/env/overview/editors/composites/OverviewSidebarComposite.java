@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.overview.editors;
+package eu.cloudscaleproject.env.overview.editors.composites;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class OverviewComposite extends SidebarEditorComposite {
+public class OverviewSidebarComposite extends SidebarEditorComposite {
 	
 	private final IProject project;
 	private static final String[] SECTIONS = new String[]{"Overview models:"};
@@ -23,7 +23,7 @@ public class OverviewComposite extends SidebarEditorComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public OverviewComposite(IProject project, Composite parent, int style) {
+	public OverviewSidebarComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
 		this.project = project;
@@ -45,7 +45,7 @@ public class OverviewComposite extends SidebarEditorComposite {
 			public Composite createComposite(Composite parent, int style, IEditorInputResource resource) {
 				
 				if(resource instanceof OverviewAlternative){				
-					return new OverviewEditor((OverviewAlternative)resource, parent, style);
+					return new OverviewComposite(parent, style, (OverviewAlternative)resource);
 				}
 				return null;
 			}

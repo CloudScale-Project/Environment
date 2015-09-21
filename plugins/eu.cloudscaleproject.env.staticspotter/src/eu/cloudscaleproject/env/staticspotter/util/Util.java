@@ -72,7 +72,7 @@ public class Util
 		//
 		// Configurations
 		//
-		ReportLevel reportLevel = ReportLevel.MINIMAL;
+		ReportLevel reportLevel = ReportLevel.DEBUG;
 		AnnotationEvaluatorItem evaluator = InferenceExtensionsHelper.getRegisteredEvaluators().get(0);
 		boolean searchForAdditionalElements = false;
 

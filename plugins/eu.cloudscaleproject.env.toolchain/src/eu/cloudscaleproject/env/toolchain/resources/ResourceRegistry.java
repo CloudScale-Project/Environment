@@ -10,10 +10,20 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceRegistry {
 	
@@ -42,8 +52,23 @@ public class ResourceRegistry {
 		return instance;
 	}
 	
-	private HashMap<String, IResourceProviderFactory> resourceProviderFactories 
-											= new HashMap<String, IResourceProviderFactory>();
+	private static class ResourceExtensionItem{
+		
+		@SuppressWarnings("unused")
+		public final String id;
+		public final String editorId;
+		public final IResourceProviderFactory factory;
+		
+		public ResourceExtensionItem(String id, String editorId, IResourceProviderFactory factory) {
+			this.id = id;
+			this.editorId = editorId;
+			this.factory = factory;
+		}
+		
+	}
+	
+	private HashMap<String, ResourceExtensionItem> resourceExtensionItems 
+											= new HashMap<String, ResourceExtensionItem>();
 	private HashMap<IFolder, ResourceProvider> resourceProviders 
 											= new HashMap<IFolder, ResourceProvider>();
 	private HashMap<ResourceProvider, String> resourceProviderIds
@@ -51,16 +76,22 @@ public class ResourceRegistry {
 	
 	public ResourceRegistry() {
 		//register basic resource provider factories
-		registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory(FOLDER_RESOURCE_PROVIDER_ID));
-		registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
+		//registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory(FOLDER_RESOURCE_PROVIDER_ID));
+		//registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
 		
 		//register factories from extension points
 		for(IConfigurationElement el : ToolchainExtensions.getInstance().getToolChildElements()){
 			if(el.getName().equals("resource")){
 				try {
 					String id = el.getAttribute("id");
+					String editorId = el.getAttribute("editor");
 					Object o = el.createExecutableExtension("class");
-					resourceProviderFactories.put(id, (IResourceProviderFactory)o);
+					
+					ResourceExtensionItem rei = new ResourceExtensionItem(id, editorId, (IResourceProviderFactory)o);
+					resourceExtensionItems.put(id, rei);
+					
+					logger.info("Resource extension registered uder toolchainID: " + id);
+
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -80,26 +111,64 @@ public class ResourceRegistry {
 		resourceProviderIds.remove(rp);
 	}
 	
-	/**
-	 * Register 'IResourceProviderFactory' under specified 'id'.
-	 * 
-	 * @param toolchainID ID under which the specified 'IResourceProviderFactory' will be registered.
-	 * @param factory 'IResourceProviderFactory'
-	 */
-	public synchronized void registerFactory(String id, IResourceProviderFactory factory){
-		resourceProviderFactories.put(id, factory);
-		logger.info("IResourceProviderFactory registered uder toolchainID: " + id);
+	public synchronized void openResourceEditor(final IEditorInputResource eir){
+		
+		if(eir == null){
+			logger.severe("Can not open editor! Specified editor resource is NULL!");
+			return;
+		}
+		
+		for(ResourceProvider rp : resourceProviders.values()){
+			if(rp.getResources().contains(eir)){
+				final String editorPartID = resourceExtensionItems.get(resourceProviderIds.get(rp)).editorId;
+				if(editorPartID != null && !editorPartID.isEmpty()){
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							doOpenResourceEditor(eir, editorPartID);
+						}
+					});
+				}
+			}
+		}
 	}
 	
-	/**
-	 * Register 'IResourceProviderFactory' under specified tool enum.
-	 * 
-	 * @param tool Enumerator under which the specified 'IResourceProviderFactory' will be registered.
-	 * @param factory 'IResourceProviderFactory'
-	 */
-	public synchronized void registerFactory(CSTool tool, IResourceProviderFactory factory){
-		resourceProviderFactories.put(tool.getID(), factory);
-		logger.info("IResourceProviderFactory registered uder toolchainID: " + tool.getID());
+	private void doOpenResourceEditor(IEditorInputResource eir, String editorPartID){
+		
+		MApplication application = CloudscaleContext.getGlobalContext().get(MApplication.class);
+		EModelService modelService = CloudscaleContext.getGlobalContext().get(EModelService.class);
+		EPartService partService = CloudscaleContext.getGlobalContext().get(EPartService.class);
+		
+		MPart part = partService.findPart(editorPartID);
+		
+		if(part == null){
+			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
+			if(stack != null){
+				part = partService.createPart(editorPartID);
+				stack.getChildren().add(part);
+			}
+		}
+		
+		partService.showPart(part, PartState.ACTIVATE);
+		
+		//fill in context data
+		IEclipseContext context = part.getContext();
+		context.set(eir.getClass().getName(), eir);
+		
+		/*
+		 * TODO: find out where this values are used and how can this code be avoided!
+		 * 
+		 * ExplorerEditorNode.class : used for editor <-> explorer link action
+		 * IResource.class : ??
+		 * 
+		IResource resource = (IResource)getContext().get(IExplorerConstants.NODE_RESOURCE);
+		if(resource != null){
+			context.set(IResource.class, resource);
+		}
+		
+		context.set(ExplorerEditorNode.class, this);
+		*/
 	}
 	
 	public synchronized List<ResourceProvider> getResourceProviders(IProject project){
@@ -134,13 +203,13 @@ public class ResourceRegistry {
 		ResourceProvider resourceProvider = resourceProviders.get(folder);
 		
 		if(resourceProvider == null){
-			IResourceProviderFactory resourceFactory = resourceProviderFactories.get(id);
-			if(resourceFactory == null){
+			ResourceExtensionItem resourceExtension = resourceExtensionItems.get(id);
+			if(resourceExtension == null){
 				//resource factory is not registered for the specified tool ID
 				return null;
 			}
 			else{
-				resourceProvider = resourceFactory.create(folder);
+				resourceProvider = resourceExtension.factory.create(folder);
 				addProvider(id, resourceProvider);
 			}			
 		}
@@ -183,11 +252,11 @@ public class ResourceRegistry {
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
 		
-		//Check if the resource factory is registered for the specified toolchainID
+		//Check if the resource extension is registered for the specified toolchainID
 		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
 		//because this method creates folders if they do not exist jet!
-		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(id);
-		if(resourceFactory == null){
+		ResourceExtensionItem rei = resourceExtensionItems.get(id);
+		if(rei == null){
 			return null;
 		}
 		
@@ -204,11 +273,11 @@ public class ResourceRegistry {
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
 		
-		//Check if the resource factory is registered for the specified toolchainID
+		//Check if the resource extension is registered for the specified toolchainID
 		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
 		//because this method creates folders if they do not exist jet!
-		IResourceProviderFactory resourceFactory = resourceProviderFactories.get(tool.getID());
-		if(resourceFactory == null){
+		ResourceExtensionItem rei = resourceExtensionItems.get(tool.getID());
+		if(rei == null){
 			return null;
 		}
 		

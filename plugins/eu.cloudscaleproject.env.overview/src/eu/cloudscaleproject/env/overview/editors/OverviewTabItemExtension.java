@@ -8,6 +8,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.overview.editors.composites.OverviewSidebarComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
@@ -39,7 +40,7 @@ public class OverviewTabItemExtension extends DIExtension implements ProjectEdit
 		
 		final IProject project = ExplorerProjectPaths.getProject(editor);
 
-		overviewSidebarEditor = new OverviewComposite(project, editor.getTabFolder(), SWT.NONE);
+		overviewSidebarEditor = new OverviewSidebarComposite(project, editor.getTabFolder(), SWT.NONE);
 		
 		tabItem.setControl(overviewSidebarEditor);
 	}

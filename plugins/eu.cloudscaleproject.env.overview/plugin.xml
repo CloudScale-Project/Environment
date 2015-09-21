@@ -30,10 +30,25 @@
             position="50">
          <resource
                class="eu.cloudscaleproject.env.overview.OverviewAlternativeProviderFactory"
+               editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
+               icon="resources/icons/overview_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
                name="Overview">
          </resource>
       </tool>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.overview.overviewAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview">
+            </test>
+         </with>
+      </definition>
    </extension>
 
 </plugin>

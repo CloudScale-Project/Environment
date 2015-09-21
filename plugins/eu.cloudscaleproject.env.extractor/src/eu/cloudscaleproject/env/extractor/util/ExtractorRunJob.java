@@ -79,7 +79,7 @@ public class ExtractorRunJob
 		}
 		catch (Exception e)
 		{
-			Status s = new Status(Status.ERROR, Activator.PLUGIN_ID, "Message : "+e.getMessage());
+			Status s = new Status(Status.ERROR, Activator.PLUGIN_ID, "Message : "+e.getMessage(), e);
 			throw new CoreException(s);
 		}
 

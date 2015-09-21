@@ -1,57 +1,38 @@
 package eu.cloudscaleproject.env.overview.editors;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
-import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.overview.editors.composites.OverviewComposite;
+import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
-/**
- *
- * @author Vito Čuček <vito.cucek@xlab.si>
- *
- */
-public class OverviewEditor extends InputEditorView implements ISelectable, IPropertySheetPageProvider{
+public class OverviewEditor extends AlternativeEditor{
 
-	private final IProject project;
-	private final OverviewAlternative alternative;
-
-	private EMFEditableTreeviewComposite treeviewComposite;
-
+	@Inject
+	private MPart part;
+	private OverviewComposite configComposite;
 	
-	public OverviewEditor(OverviewAlternative input, Composite parent, int style) {
-		super(parent, style, input);
+	@Inject
+	@Optional
+	@PostConstruct
+	public void postConstruct(Composite parent, OverviewAlternative alternative){
 		
-		this.project = input.getProject();
-		this.alternative = input;
-		
-		Composite mainContainer = new Composite(getContainer(), SWT.NONE);
-		mainContainer.setLayout(new GridLayout());
-		
-		this.treeviewComposite = new EMFEditableTreeviewComposite(input, mainContainer, SWT.NONE);
-		this.treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-	}
-
-	@Override
-	public IPropertySheetPage getPropertySheetPage() {
-		if(treeviewComposite != null && !treeviewComposite.isDisposed()){
-			return treeviewComposite.getPropertySheetPage();
+		if(configComposite != null){
+			configComposite.dispose();
 		}
-		return null;
-	}
-	
-	@Override
-	public void onSelect() {
-		ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), alternative);
+		
+		part.setLabel("Overview alternative ["+ alternative.getName() +"]");
+		configComposite = new OverviewComposite(parent, SWT.NONE, alternative);
+		
+		setAlternative(alternative);
+		
+		parent.layout();
+		parent.redraw();
 	}
 }

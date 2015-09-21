@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.explorer.children;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -81,6 +82,27 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		}
 		
 		List<IConfigurationElement> toolElements = ToolchainExtensions.getInstance().getToolElements();
+		
+		//filter element with the same ID
+		for(IConfigurationElement el1 : new ArrayList<IConfigurationElement>(toolElements)){
+			
+			int count = 0;
+			
+			for(IConfigurationElement el2 : new ArrayList<IConfigurationElement>(toolElements)){
+				String id1 = el1.getAttribute("id");
+				String id2 = el2.getAttribute("id");
+
+				if(id1 != null && id1.equals(id2)){
+					count++;
+				}
+				
+				if(count > 1){
+					toolElements.remove(el1);
+					break;
+				}
+			}
+		}
+		
 		return toolElements;
 	}
 

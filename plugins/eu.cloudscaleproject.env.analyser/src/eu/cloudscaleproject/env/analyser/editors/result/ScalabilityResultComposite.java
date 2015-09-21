@@ -31,8 +31,12 @@ public class ScalabilityResultComposite extends ReportResultComposite{
 								
 				for(int j=0; j<measurement.getMeasurementRanges().size(); j++){
 					RawMeasurements rawMeasurements = measurement.getMeasurementRanges().get(j).getRawMeasurements();
-					
-					if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()) {
+						
+					if (rawMeasurements != null 
+							&& !rawMeasurements.getDataSeries().isEmpty()
+							&& rawMeasurements.cdoResource() != null
+							&& rawMeasurements.cdoResource().isExisting()){
+						
 						final IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
 	
 						Iterator<IMeasureProvider> iter = edp2Source.getDataStream().iterator();

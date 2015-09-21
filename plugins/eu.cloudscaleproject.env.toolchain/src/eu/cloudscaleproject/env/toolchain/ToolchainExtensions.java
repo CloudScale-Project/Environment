@@ -30,7 +30,7 @@ public class ToolchainExtensions {
 	private List<IConfigurationElement> toolChildElements = new ArrayList<IConfigurationElement>();
 		
 	public List<IConfigurationElement> getToolElements(){
-		return toolElements;
+		return new ArrayList<IConfigurationElement>(toolElements);
 	}
 	
 	public IConfigurationElement getToolElement(String id){
@@ -43,7 +43,7 @@ public class ToolchainExtensions {
 	}
 
 	public List<IConfigurationElement> getToolChildElements(){
-		return toolChildElements;
+		return new ArrayList<IConfigurationElement>(toolChildElements);
 	}
 	
 	public List<IConfigurationElement> getToolChildElements(String toolID){

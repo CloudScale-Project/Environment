@@ -36,7 +36,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1XyOIC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_Uz4ooC3EEeSb4vEDETI_1g" elementId="eu.cloudscaleproject.env.analyser.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/analyser_24.png" tooltip="Open Analyser Perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.menu.new">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_lEiRAD9SEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.menuseparator.0"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_bxxgkEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newInputAlternative" label="New input alternative" tooltip="Create new input alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Hg_ZsETbEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAltProviderNode"/>
