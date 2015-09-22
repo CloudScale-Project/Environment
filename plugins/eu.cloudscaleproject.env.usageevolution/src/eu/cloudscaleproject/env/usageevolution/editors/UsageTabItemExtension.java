@@ -10,13 +10,14 @@ import eu.cloudscaleproject.env.common.DIExtension;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
+import eu.cloudscaleproject.env.usageevolution.editors.composite.UsageEvolutionSidebarComposite;
 
 public class UsageTabItemExtension extends DIExtension implements ProjectEditorExtension{
 	
 	public static final String ID = "eu.cloudscaleproject.env.usageevolution.tabitemextension";
 	
 	private CTabItem tabItem = null;
-	private UsageEvolutionComposite scaledlEditor;
+	private UsageEvolutionSidebarComposite scaledlEditor;
 
 	@Override
 	public String getID() {
@@ -33,7 +34,7 @@ public class UsageTabItemExtension extends DIExtension implements ProjectEditorE
 		
 		final IProject project = ExplorerProjectPaths.getProject(editor);
 
-		scaledlEditor = new UsageEvolutionComposite(project, editor.getTabFolder(), SWT.NONE);
+		scaledlEditor = new UsageEvolutionSidebarComposite(project, editor.getTabFolder(), SWT.NONE);
 		tabItem.setControl(scaledlEditor);
 	}
 

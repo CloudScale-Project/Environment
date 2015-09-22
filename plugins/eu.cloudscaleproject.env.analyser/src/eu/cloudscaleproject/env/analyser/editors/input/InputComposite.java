@@ -1,20 +1,16 @@
 package eu.cloudscaleproject.env.analyser.editors.input;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
@@ -24,6 +20,7 @@ import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
+import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
 /**
  *
@@ -65,20 +62,9 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 			treeviewComposite = new InputTreeViewComposite(input, composite, SWT.NONE);
 			treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-			Composite pageSheet = new Composite(composite, SWT.NONE);
+			PropertyPageComposite pageSheet = new PropertyPageComposite(
+					composite, SWT.NONE, treeviewComposite.getPropertySheetPage());
 			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			pageSheet.setLayout(new FillLayout());
-			
-			final PropertySheetPage page = (PropertySheetPage)treeviewComposite.getPropertySheetPage();
-			page.createControl(pageSheet);
-			
-			ProjectEditorSelectionService.getInstance().addPostSelectionChangedListener(new ISelectionChangedListener() {
-				
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-					page.selectionChanged(null, event.getSelection());					
-				}
-			});
 			
 			tabItem.setControl(composite);			
 			tabFolder.setSelection(tabItem);

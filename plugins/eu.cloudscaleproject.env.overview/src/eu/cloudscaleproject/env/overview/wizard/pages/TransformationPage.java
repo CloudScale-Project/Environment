@@ -597,6 +597,7 @@ public class TransformationPage extends WizardPage implements IWizardPageControl
 
 	}
 
+	@SuppressWarnings("unused")
 	private void addFakeIneterfaces(SoftwareService ss)
 	{
 		if (ss.getRequiredInterfaces().isEmpty())

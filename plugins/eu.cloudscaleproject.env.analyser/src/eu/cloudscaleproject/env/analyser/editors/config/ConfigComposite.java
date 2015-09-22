@@ -3,22 +3,17 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
@@ -26,17 +21,17 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ConfigComposite extends ConfigEditorView implements IPropertySheetPageProvider, IRefreshable, ISelectable{
+public class ConfigComposite extends ConfigEditorView implements IRefreshable, ISelectable{
 
 	private SelectInputAltComposite editComposite;
 	private Composite configComposite;
@@ -111,20 +106,9 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 			gridData.heightHint = 300;
 			measuringPointsComposite.setLayoutData(gridData);
 
-			Composite pageSheet = new Composite(composite, SWT.NONE);
+			PropertyPageComposite pageSheet = new PropertyPageComposite(
+						composite, SWT.NONE, measuringPointsComposite.getPropertySheetPage());
 			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			pageSheet.setLayout(new FillLayout());
-			
-			final PropertySheetPage page = (PropertySheetPage)measuringPointsComposite.getPropertySheetPage();
-			page.createControl(pageSheet);
-			
-			ProjectEditorSelectionService.getInstance().addPostSelectionChangedListener(new ISelectionChangedListener() {
-				
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-					page.selectionChanged(null, event.getSelection());					
-				}
-			});
 			
 			tabItem.setControl(composite);			
 		}
@@ -161,20 +145,9 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 			advancedTreeview = new EMFEditableTreeviewComposite(input, composite, SWT.NONE);
 			advancedTreeview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-			Composite pageSheet = new Composite(composite, SWT.NONE);
+			PropertyPageComposite pageSheet = new PropertyPageComposite(
+					composite, SWT.NONE, advancedTreeview.getPropertySheetPage());
 			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			pageSheet.setLayout(new FillLayout());
-			
-			final PropertySheetPage page = (PropertySheetPage)advancedTreeview.getPropertySheetPage();
-			page.createControl(pageSheet);
-			
-			ProjectEditorSelectionService.getInstance().addPostSelectionChangedListener(new ISelectionChangedListener() {
-				
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-					page.selectionChanged(null, event.getSelection());					
-				}
-			});
 			
 			tabItem.setControl(composite);
 		}
@@ -232,19 +205,5 @@ public class ConfigComposite extends ConfigEditorView implements IPropertySheetP
 			((IRefreshable) c).refresh();
 		}
 		ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
-	}
-
-	@Override
-	public IPropertySheetPage getPropertySheetPage()
-	{
-		/* This is not needed anymore... PropSheetpage is integrated into this composite 
-		Control c = tabFolder.getSelection().getControl();
-		if (c instanceof EMFEditableTreeviewComposite)
-		{
-			return ((EMFEditableTreeviewComposite) c).getPropertySheetPage();
-		}
-		*/
-		
-		return null;
 	}
 }

@@ -35,10 +35,24 @@
             position="50">
          <resource
                class="eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternativeFactory"
+               editor="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"
                name="Usage evolution">
          </resource>
       </tool>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.usageevolution.usageEvolutionAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution">
+            </test>
+         </with>
+      </definition>
    </extension>
 
 </plugin>

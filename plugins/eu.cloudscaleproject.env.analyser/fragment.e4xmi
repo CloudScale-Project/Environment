@@ -38,10 +38,10 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_lEiRAD9SEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.menuseparator.0"/>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_bxxgkEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newInputAlternative" label="New input alternative" tooltip="Create new input alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_bxxgkEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newInputAlternative" label="New input alternative..." tooltip="Create new input alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Hg_ZsETbEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAltProviderNode"/>
     </elements>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_K7jJIEToEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newConfigAlternative" label="New configuration alternative" tooltip="Create new configuration alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_K7jJIEToEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newConfigAlternative" label="New configuration alternative..." tooltip="Create new configuration alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_K7jJIUToEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.confAltProviderNode"/>
     </elements>
     <elements xsi:type="menu:MenuSeparator" xmi:id="_aWUPMEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.menuseparator.2"/>
