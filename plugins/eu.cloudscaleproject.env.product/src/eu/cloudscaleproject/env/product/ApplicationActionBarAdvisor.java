@@ -76,11 +76,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         newAction.setText("New");
         register(newAction);
 
+        //TODO: save and save all actions are not compatible with e4
+        //		fix this!
         saveAction = ActionFactory.SAVE.create(window);
         register(saveAction);
         
         saveAllAction = ActionFactory.SAVE_ALL.create(window);
         register(saveAllAction);
+        //
         
         aboutAction = ActionFactory.ABOUT.create(window);
         register(aboutAction);
@@ -138,11 +141,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         // File
         
         //printAction.setEnabled(false);
-        
+        /*
         fileMenu.add(newAction);
         fileMenu.add(new Separator());
-        fileMenu.add(saveAction);
-        fileMenu.add(saveAllAction);
+        //fileMenu.add(saveAction);
+        //fileMenu.add(saveAllAction);
         fileMenu.add(printAction);
         fileMenu.add(new Separator());
         fileMenu.add(importAction);
@@ -151,6 +154,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         fileMenu.add(quickAction);
         fileMenu.add(new Separator());
         fileMenu.add(exitAction);
+        */
         
         editMenu.add(undoAction);
         editMenu.add(redoAction);
