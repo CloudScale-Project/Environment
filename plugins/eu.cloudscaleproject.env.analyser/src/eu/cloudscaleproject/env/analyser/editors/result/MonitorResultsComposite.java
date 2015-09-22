@@ -60,6 +60,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
+@SuppressWarnings("deprecation")
 public class MonitorResultsComposite extends Composite implements IRefreshable
 {
 

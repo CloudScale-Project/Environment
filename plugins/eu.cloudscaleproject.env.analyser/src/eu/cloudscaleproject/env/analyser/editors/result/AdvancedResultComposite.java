@@ -44,6 +44,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
+@SuppressWarnings("deprecation")
 public class AdvancedResultComposite extends Composite implements IRefreshable{
 	
 	private final Tree tree;
