@@ -13,18 +13,21 @@ import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 @Creatable
 @Singleton
 public class CommandExecutor {
-	
-	//TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
-	
+		
 	private static final Logger logger = Logger.getLogger(CommandExecutor.class.getName());
 		
 	private ECommandService commandService;
 	private EHandlerService handlerService;
+	
+	public static CommandExecutor getInstance(){
+		return CloudscaleContext.getGlobalContext().get(CommandExecutor.class);
+	}
 	
 	@Inject
 	public CommandExecutor(ECommandService commandService, EHandlerService handlerService) {
@@ -32,11 +35,6 @@ public class CommandExecutor {
 		this.handlerService = handlerService;
 	}
 
-	/**
-	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
-	 * 
-	 * @param id
-	 */
 	public void execute(String id){
 		Command command = commandService.getCommand(id);
 		
@@ -52,16 +50,40 @@ public class CommandExecutor {
 		}
 	}
 	
+	public void execute(String id, IEclipseContext staticContext){
+		Command command = commandService.getCommand(id);
+		
+		if(command == null){
+			logger.warning("execute("+ id +"): Command with specified ID was not found!");
+			return;
+		}
+		
+		ParameterizedCommand pc = new ParameterizedCommand(command, null);
+		
+		if(handlerService.canExecute(pc, staticContext)){
+			handlerService.executeHandler(pc, staticContext);
+		}
+	}
+	
 	/**
 	 * 
-	 * Execute command with parameters .
-	 * 
-	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
+	 * Execute command with parameters.
 	 * 
 	 * @param id : command id
 	 * @param param : array of parameters
 	 */
 	public void execute(String id, Map<String, String> param){
+		execute(id, null, param);
+	}
+	
+	/**
+	 * 
+	 * Execute command with parameters.
+	 *
+	 * @param id : command id
+	 * @param param : array of parameters
+	 */
+	public void execute(String id, IEclipseContext staticContext, Map<String, String> param){
 		Command command = commandService.getCommand(id);
 		
 		if(command == null){
@@ -85,8 +107,15 @@ public class CommandExecutor {
 			return;
 		}
 		
-		if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
-			handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
+		if(staticContext == null){
+			if(handlerService.canExecute(pc)){
+				handlerService.executeHandler(pc);
+			}
+		}
+		else{
+			if(handlerService.canExecute(pc, staticContext)){
+				handlerService.executeHandler(pc, staticContext);
+			}
 		}
 		
 	}
@@ -96,12 +125,22 @@ public class CommandExecutor {
 	 * Execute command with parameters without parameter id.
 	 * Prameters are filled into command in order - from first to last.
 	 * 
-	 * TODO: CommandExecutor does not work for commands, where the handler has to inject e4 objects!
-	 * 
 	 * @param id : command id
 	 * @param param : array of parameters
 	 */
 	public void execute(String id, String... params){
+		execute(id, null, params);
+	}
+	
+	/**
+	 * 
+	 * Execute command with parameters without parameter id.
+	 * Prameters are filled into command in order - from first to last.
+	 * 
+	 * @param id : command id
+	 * @param param : array of parameters
+	 */
+	public void execute(String id, IEclipseContext staticContext, String... params){
 		Command command = commandService.getCommand(id);
 		
 		if(command == null){
@@ -135,8 +174,15 @@ public class CommandExecutor {
 			return;
 		}
 		
-		if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
-			handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
+		if(staticContext == null){
+			if(handlerService.canExecute(pc)){
+				handlerService.executeHandler(pc);
+			}
+		}
+		else{
+			if(handlerService.canExecute(pc, CloudscaleContext.getActiveContext())){
+				handlerService.executeHandler(pc, CloudscaleContext.getActiveContext());
+			}
 		}
 		
 	}

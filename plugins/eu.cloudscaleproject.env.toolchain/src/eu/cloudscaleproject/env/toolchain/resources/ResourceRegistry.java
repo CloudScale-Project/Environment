@@ -10,16 +10,11 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -52,9 +47,8 @@ public class ResourceRegistry {
 		return instance;
 	}
 	
-	private static class ResourceExtensionItem{
+	public static class ResourceExtensionItem{
 		
-		@SuppressWarnings("unused")
 		public final String id;
 		public final String editorId;
 		public final IResourceProviderFactory factory;
@@ -111,6 +105,14 @@ public class ResourceRegistry {
 		resourceProviderIds.remove(rp);
 	}
 	
+	public List<ResourceExtensionItem> getResourceExtensionItems(){
+		return new ArrayList<ResourceExtensionItem>(resourceExtensionItems.values());
+	}
+	
+	public ResourceExtensionItem getResourceExtensionItem(String id){
+		return resourceExtensionItems.get(id);
+	}
+	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){
 		
 		if(eir == null){
@@ -118,57 +120,15 @@ public class ResourceRegistry {
 			return;
 		}
 		
-		for(ResourceProvider rp : resourceProviders.values()){
-			if(rp.getResources().contains(eir)){
-				final String editorPartID = resourceExtensionItems.get(resourceProviderIds.get(rp)).editorId;
-				if(editorPartID != null && !editorPartID.isEmpty()){
-					Display.getDefault().asyncExec(new Runnable() {
-						
-						@Override
-						public void run() {
-							doOpenResourceEditor(eir, editorPartID);
-						}
-					});
-				}
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				IEclipseContext staticContext = EclipseContextFactory.create();
+				staticContext.set(IEditorInputResource.class, eir);
+				CommandExecutor.getInstance().execute("eu.cloudscaleproject.env.toolchain.openAlternative", staticContext);
+				staticContext.dispose();
 			}
-		}
-	}
-	
-	private void doOpenResourceEditor(IEditorInputResource eir, String editorPartID){
-		
-		MApplication application = CloudscaleContext.getGlobalContext().get(MApplication.class);
-		EModelService modelService = CloudscaleContext.getGlobalContext().get(EModelService.class);
-		EPartService partService = CloudscaleContext.getGlobalContext().get(EPartService.class);
-		
-		MPart part = partService.findPart(editorPartID);
-		
-		if(part == null){
-			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
-			if(stack != null){
-				part = partService.createPart(editorPartID);
-				stack.getChildren().add(part);
-			}
-		}
-		
-		partService.showPart(part, PartState.ACTIVATE);
-		
-		//fill in context data
-		IEclipseContext context = part.getContext();
-		context.set(eir.getClass().getName(), eir);
-		
-		/*
-		 * TODO: find out where this values are used and how can this code be avoided!
-		 * 
-		 * ExplorerEditorNode.class : used for editor <-> explorer link action
-		 * IResource.class : ??
-		 * 
-		IResource resource = (IResource)getContext().get(IExplorerConstants.NODE_RESOURCE);
-		if(resource != null){
-			context.set(IResource.class, resource);
-		}
-		
-		context.set(ExplorerEditorNode.class, this);
-		*/
+		});
 	}
 	
 	public synchronized List<ResourceProvider> getResourceProviders(IProject project){

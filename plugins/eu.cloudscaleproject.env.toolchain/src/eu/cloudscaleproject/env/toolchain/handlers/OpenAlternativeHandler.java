@@ -20,6 +20,7 @@ import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 
+@Deprecated
 public class OpenAlternativeHandler
 {
 	private static final String EXTRACTOR_ID="eu.cloudscaleproject.env.extractor.tabitemextension";

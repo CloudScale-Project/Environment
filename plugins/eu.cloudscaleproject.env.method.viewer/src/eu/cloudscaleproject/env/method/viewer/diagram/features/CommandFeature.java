@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -20,6 +22,7 @@ import org.eclipse.ui.ide.IDE;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.MethodStatusContext;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
@@ -173,12 +176,21 @@ public class CommandFeature extends AbstractCustomFeature{
 		MethodStatusContext validationContext = new MethodStatusContext(validationId, validationStatus);
 		CloudscaleContext.getActiveContext().set(MethodStatusContext.class, validationContext);
 
+		IEclipseContext staticContext = EclipseContextFactory.create();
+		staticContext.set(IValidationStatus.class, validationStatus);
+		
+		IValidationStatusProvider statusProvider = validationStatus.getProvider();
+		if(statusProvider != null){
+			staticContext.set(CloudscaleContext.ACTIVE_ALTERNATIVE, statusProvider);
+		}
+		
 		if (node.getCommandParam().isEmpty()) {
-			executor.execute(node.getCommandId());
+			executor.execute(node.getCommandId(), staticContext);
 		} else {
-			executor.execute(node.getCommandId(), node.getCommandParam()
+			executor.execute(node.getCommandId(), staticContext, node.getCommandParam()
 					.toArray(new String[node.getCommandParam().size()]));
 		}
 		
+		staticContext.dispose();
 	}
 }

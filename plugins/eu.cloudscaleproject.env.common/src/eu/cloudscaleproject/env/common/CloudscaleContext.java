@@ -9,6 +9,7 @@ public class CloudscaleContext {
 	
 	//model named objects
 	public static final String ACTIVE_VALIDATION_DIAGRAM = "eu.cloudscaleproject.env.common.CloudscaleContext.validationDiagram";
+	public static final String ACTIVE_ALTERNATIVE = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource";
 	
 	private static IEclipseContext csContext = EclipseContextFactory.create("CloudscaleContext");
 	private static IEclipseContext apContext = null;
