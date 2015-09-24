@@ -33,8 +33,7 @@ public class ConfingAlternative extends AbstractConfigAlternative
 
 	public ConfingAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, null, CSTool.EXTRACTOR_CONF.getID(), ResourceRegistry.getInstance().getResourceProvider(project,
-				CSTool.EXTRACTOR_INPUT.getID()), ResourceRegistry.getInstance().getResourceProvider(project,
+		super(project, folder, null, CSTool.EXTRACTOR_CONF.getID(), null, ResourceRegistry.getInstance().getResourceProvider(project,
 				CSTool.EXTRACTOR_RES.getID()));
 
 		initSomoxModel();

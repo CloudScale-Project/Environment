@@ -34,6 +34,10 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class AlternativeEditor {
 	
+	private static final String ALTERNATIVE_RESOURCE = "alternative_resource";
+	//private static final String ALTERNATIVE_PROVIDER_RESOURCE = "alternative_provider_resource";
+	//private static final String ALTERNATIVE_PROVIDER_ID = "alternative_provider_id";
+	
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -81,6 +85,25 @@ public class AlternativeEditor {
 		}
 	};
 	
+	/*
+	@Inject
+	public AlternativeEditor(MPart part){
+		
+		String portableString = part.getPersistedState().get(ALTERNATIVE_RESOURCE);
+		IPath path = Path.fromPortableString(portableString);
+		
+		// Tukaj ostal - dej zrihti ta persistance problem
+		// pobrisi tiste bedarije v ResourceRegistry...
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		resource.getPersistentProperties().
+				
+		ResourceRegistry.getInstance().getResourceProvider(project, tool)
+		
+	}
+	*/
+	
+	
+	
 	protected IEditorInputResource getAlternative(){
 		return this.alternative;
 	}
@@ -117,6 +140,9 @@ public class AlternativeEditor {
 		focus();
 		
 		dirtyable.setDirty(alternative.isDirty());
+		
+		part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
+		part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
 	}
 	
 	@Focus

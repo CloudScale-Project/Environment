@@ -24,11 +24,6 @@ public class ResourceRegistry {
 	
 	private static final Logger logger = Logger.getLogger(ResourceRegistry.class.getName());
 	
-	private static final String FOLDER_RESOURCE_PROVIDER_ID 
-		= "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.defaultFolderResourceFactory";
-	private static final String FILE_RESOURCE_PROVIDER_ID 
-		= "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.defaultFileResourceFactory";
-	
 	private static ResourceRegistry instance = null;
 	public static ResourceRegistry getInstance(){
 		if(instance == null){
@@ -63,15 +58,13 @@ public class ResourceRegistry {
 	
 	private HashMap<String, ResourceExtensionItem> resourceExtensionItems 
 											= new HashMap<String, ResourceExtensionItem>();
+	
 	private HashMap<IFolder, ResourceProvider> resourceProviders 
 											= new HashMap<IFolder, ResourceProvider>();
 	private HashMap<ResourceProvider, String> resourceProviderIds
 											= new HashMap<ResourceProvider, String>();
 	
 	public ResourceRegistry() {
-		//register basic resource provider factories
-		//registerFactory(FOLDER_RESOURCE_PROVIDER_ID, new FolderResourceProviderFactory(FOLDER_RESOURCE_PROVIDER_ID));
-		//registerFactory(FILE_RESOURCE_PROVIDER_ID, new FileResourceProviderFactory(FILE_RESOURCE_PROVIDER_ID));
 		
 		//register factories from extension points
 		for(IConfigurationElement el : ToolchainExtensions.getInstance().getToolChildElements()){
@@ -90,7 +83,7 @@ public class ResourceRegistry {
 					e.printStackTrace();
 				}
 			}
-		}
+		}		
 	}
 	
 	private synchronized void addProvider(String id, ResourceProvider rp){
@@ -105,12 +98,109 @@ public class ResourceRegistry {
 		resourceProviderIds.remove(rp);
 	}
 	
+	private synchronized ResourceProvider createProvider(IProject project, String id){
+		
+		ResourceProvider resourceProvider = null;
+		IFolder folder = ToolchainUtils.getToolFolder(project, id);
+		
+		ResourceExtensionItem resourceExtension = resourceExtensionItems.get(id);
+		if(resourceExtension != null){
+			resourceProvider = resourceExtension.factory.create(folder);
+		}
+				
+		return resourceProvider;
+	}
+	
+	private synchronized void collectResourceProviders(IProject project){
+		for(Entry<String, ResourceExtensionItem> entry : resourceExtensionItems.entrySet()){
+			String id = entry.getKey();
+			
+			if(resourceProviderIds.values().contains(id)){
+				continue;
+			}
+			
+			ResourceProvider rp = createProvider(project, id);
+			if(rp != null){
+				addProvider(id, rp);
+			}
+		}
+	}
+	
 	public List<ResourceExtensionItem> getResourceExtensionItems(){
 		return new ArrayList<ResourceExtensionItem>(resourceExtensionItems.values());
 	}
 	
 	public ResourceExtensionItem getResourceExtensionItem(String id){
 		return resourceExtensionItems.get(id);
+	}
+	
+	public synchronized List<ResourceProvider> getResourceProviders(IProject project){
+		
+		collectResourceProviders(project);
+		
+		List<ResourceProvider> out = new ArrayList<ResourceProvider>();
+		
+		for(Entry<IFolder, ResourceProvider> entry : resourceProviders.entrySet()){
+			if(project.equals(entry.getKey().getProject())){
+				out.add(entry.getValue());
+			}
+		}
+		
+		return out;
+	}
+	
+	public synchronized String getResourceProviderID(ResourceProvider rp){
+		collectResourceProviders(rp.getProject());
+		return resourceProviderIds.get(rp);
+	}
+	
+	/**
+	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
+	 * If the 'ResourceProviderFactory' is not registered for the specified 'id', this method returns null.
+	 * 
+	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
+	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
+	 * @return ResourceProvider
+	 */
+	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
+				
+		IFolder folder = ToolchainUtils.getToolFolder(project, id);
+		if(folder == null){
+			String msg = "ResourceProvider root folder can not be retrieved! ID: " + id;
+			logger.severe(msg);
+			throw new IllegalArgumentException(msg);
+		}
+
+		ResourceProvider resourceProvider = resourceProviders.get(folder);
+		
+		if(resourceProvider == null){
+			resourceProvider = createProvider(project, id);
+			
+			if(resourceProvider == null){
+				String msg = "ResourceProviderFactory returned NULL! ID: " + id;
+				logger.severe(msg);
+				throw new IllegalArgumentException(msg);
+			}
+			
+			addProvider(id, resourceProvider);
+		}
+		
+		//resource factory should not return null resource
+		//note: this method can return null resource provider, if the resource factory is not registered for the specified ID!
+		assert(resourceProvider != null);
+		return resourceProvider;		
+	}
+	
+	/**
+	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
+	 * If the 'ResourceProviderFactory' is not registered for the specified tool, this method returns null.
+	 * 
+	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
+	 * @param tool
+	 * @return ResourceProvider
+	 */
+	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
+		return getResourceProvider(project, tool.getID());
 	}
 	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){
@@ -129,119 +219,6 @@ public class ResourceRegistry {
 				staticContext.dispose();
 			}
 		});
-	}
-	
-	public synchronized List<ResourceProvider> getResourceProviders(IProject project){
-		
-		List<ResourceProvider> out = new ArrayList<ResourceProvider>();
-		
-		for(Entry<IFolder, ResourceProvider> entry : resourceProviders.entrySet()){
-			if(project.equals(entry.getKey().getProject())){
-				out.add(entry.getValue());
-			}
-		}
-		
-		return out;
-	}
-	
-	public synchronized String getResourceProviderID(ResourceProvider rp){
-		return resourceProviderIds.get(rp);
-	}
-	
-	/**
-	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet),
-	 * using registered 'IResourceProviderFactory'.
-	 * If the 'ResourceProviderFactory' is not registered for the specified id, this method returns null.
-	 * Returned 'ResourceProvider' root folder is equal to the specified attribute 'folder'. 
-	 * 
-	 * @param id ResourceProviderFactory id.
-	 * @param folder The root folder of the returned 'ResourceProvider'. 
-	 * @return ResourceProvider
-	 */
-	public synchronized ResourceProvider getResourceProvider(String id, IFolder folder){
-		
-		ResourceProvider resourceProvider = resourceProviders.get(folder);
-		
-		if(resourceProvider == null){
-			ResourceExtensionItem resourceExtension = resourceExtensionItems.get(id);
-			if(resourceExtension == null){
-				//resource factory is not registered for the specified tool ID
-				return null;
-			}
-			else{
-				resourceProvider = resourceExtension.factory.create(folder);
-				addProvider(id, resourceProvider);
-			}			
-		}
-		
-		//resource factory should not return null resource
-		//note: this method can return null resource provider, if the resource factory is not registered for the specified ID!
-		assert(resourceProvider != null);
-		return resourceProvider;
-	}
-	
-	/**
-	 * Returns 'ResourceProvider', created from default 'FolderResourceProviderFactory'
-	 * This is convenient method for creating/retrieving 'ResourceProvider'.  
-	 * 
-	 * @param folder The root folder of the returned 'ResourceProvider'.
-	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
-	 */
-	public synchronized ResourceProvider getFolderResourceProvider(IFolder folder){
-		return getResourceProvider(FOLDER_RESOURCE_PROVIDER_ID, folder);
-	}
-	
-	/**
-	 * Returns 'ResourceProvider', created from default 'FileResourceProviderFactory'
-	 * This is convenient method for creating/retrieving 'ResourceProvider'.  
-	 * 
-	 * @param folder The root folder of the returned 'ResourceProvider'.
-	 * @return ResourceProvider, with root folder equal to specified attribute 'folder' 
-	 */
-	public synchronized ResourceProvider getFileResourceProvider(IFolder folder){
-		return getResourceProvider(FILE_RESOURCE_PROVIDER_ID, folder);
-	}
-	
-	/**
-	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
-	 * If the 'ResourceProviderFactory' is not registered for the specified 'id', this method returns null.
-	 * 
-	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
-	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
-	 * @return ResourceProvider
-	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
-		
-		//Check if the resource extension is registered for the specified toolchainID
-		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
-		//because this method creates folders if they do not exist jet!
-		ResourceExtensionItem rei = resourceExtensionItems.get(id);
-		if(rei == null){
-			return null;
-		}
-		
-		return getResourceProvider(id, ToolchainUtils.getToolFolder(project, id));
-	}
-	
-	/**
-	 * Retrieves 'ResourceProvider' from this registry, or creates it (if it does not exist jet) using registered 'IResourceProviderFactory'.
-	 * If the 'ResourceProviderFactory' is not registered for the specified tool, this method returns null.
-	 * 
-	 * @param project IProject used for retrieving/creating 'ResourceProvider' root folder.
-	 * @param tool
-	 * @return ResourceProvider
-	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
-		
-		//Check if the resource extension is registered for the specified toolchainID
-		//If it is not, we don't want to call method 'ToolchainUtils.getToolFolder(project, toolchainID)',
-		//because this method creates folders if they do not exist jet!
-		ResourceExtensionItem rei = resourceExtensionItems.get(tool.getID());
-		if(rei == null){
-			return null;
-		}
-		
-		return getResourceProvider(tool.getID(), ToolchainUtils.getToolFolder(project, tool.getID()));
 	}
 	
 }

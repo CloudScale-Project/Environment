@@ -59,8 +59,6 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 	public AlternativeResourceNode(IEclipseContext context, EditorInputEMF alternative, IFile file) {
 		super(context, file.getName(), null, file, null);
 		
-		setData(file);
-
 		ModelType type = ModelType.getModelType(file.getFileExtension());
 		if(type != null){
 			setName(type.getDisplayName());
@@ -69,6 +67,7 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 			setName(file.getName());
 		}
 		
+		getContext().set(IFile.class, file);
 		getContext().set(IStyledLabelProvider.class, DEFAULT_LABEL_STYLE);
 	}
 	

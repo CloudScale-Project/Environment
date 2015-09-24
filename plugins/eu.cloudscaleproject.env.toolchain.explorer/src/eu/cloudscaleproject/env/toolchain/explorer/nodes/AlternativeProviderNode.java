@@ -28,7 +28,7 @@ public class AlternativeProviderNode extends ExplorerResourceNode{
 		super(context, providerID, resourceProvider.getRootFolder(), 
 						  new AlternativeProviderNodeChildren(editorID, resourceProvider, true));
 		
-		setData(resourceProvider);
+		getContext().set(ResourceProvider.class, resourceProvider);
 		
 		EditorInputJob job = new EditorInputJob("Initializing alternatives") {
 			

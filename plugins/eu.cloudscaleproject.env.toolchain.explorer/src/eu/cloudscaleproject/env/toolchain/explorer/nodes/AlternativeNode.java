@@ -51,9 +51,9 @@ public class AlternativeNode extends ExplorerEditorNode{
 		
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
-		setData(alternative);
 		
 		getContext().set(ILabelDecorator.class, DEFAULT_DECORATOR);
+		getContext().set(IEditorInputResource.class, alternative);
 	}
 
 }
