@@ -29,7 +29,7 @@ Visit http://www.cloudscale-project.eu
       startupProgressRect="50,280,445,10"
       startupMessageRect="50,295,445,20"
       startupForegroundColor="FFFFFF" />
-   <launcher>
+   <launcher name="cse">
       <macosx icon="/resources/icons/launcher.icns"/>
       <solaris/>
       <win useIco="true">
