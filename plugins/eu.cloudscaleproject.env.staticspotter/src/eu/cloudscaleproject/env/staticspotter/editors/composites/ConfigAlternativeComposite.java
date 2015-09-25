@@ -88,6 +88,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		PropertyPageComposite propertyComposite = new PropertyPageComposite(getContainer(), SWT.NONE, this.treeViewComposite.getPropertySheetPage());
 		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		
+		updateExtractorResults();
 		m_bindingContext = initDataBindings();
 	}
 
