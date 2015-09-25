@@ -1,17 +1,16 @@
-package eu.cloudscaleproject.env.staticspotter.editors;
+package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.staticspotter.editors.composites.SingleResultComposite;
+import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class ResultComposite extends SidebarEditorComposite {
+public class ResultSidebarComposite extends SidebarEditorComposite {
 	
 	private final String[] sections = new String[]{"Results:"};
 	
@@ -20,10 +19,11 @@ public class ResultComposite extends SidebarEditorComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public ResultComposite(IProject project, Composite parent, int style) {
+	public ResultSidebarComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_RES));
+		
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_RES));
 		
 		setContentProvider(new SidebarContentProvider() {
 			
@@ -44,7 +44,7 @@ public class ResultComposite extends SidebarEditorComposite {
 				return new SingleResultComposite(parent, style, (ResultAlternative)resource);
 			}
 		});
-
+		
 		setNewButtonEnabled(false);
 		setNewFromButtonEnabled(false);
 	}

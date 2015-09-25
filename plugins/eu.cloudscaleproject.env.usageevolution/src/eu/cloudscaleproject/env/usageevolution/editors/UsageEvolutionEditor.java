@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.usageevolution.editors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -14,14 +13,11 @@ import eu.cloudscaleproject.env.usageevolution.editors.composite.UsageEvolutionC
 
 public class UsageEvolutionEditor extends AlternativeEditor{
 
-	@Inject
-	private MPart part;
 	private UsageEvolutionComposite configComposite;
 	
 	@Inject
 	@Optional
-	@PostConstruct
-	public void postConstruct(Composite parent, UsageEvolutionAlternative alternative){
+	public void setAlternative(MPart part, Composite parent, UsageEvolutionAlternative alternative){
 		
 		if(configComposite != null){
 			configComposite.dispose();

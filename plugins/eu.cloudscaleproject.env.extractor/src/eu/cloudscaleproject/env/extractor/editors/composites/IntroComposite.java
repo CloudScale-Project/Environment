@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.extractor.editors;
+package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import java.net.URL;
 

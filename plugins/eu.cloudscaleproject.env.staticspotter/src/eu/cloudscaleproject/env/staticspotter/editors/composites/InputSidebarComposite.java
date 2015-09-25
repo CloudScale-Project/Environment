@@ -1,12 +1,11 @@
-package eu.cloudscaleproject.env.extractor.editors;
+package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
-import eu.cloudscaleproject.env.extractor.editors.composites.ConfigAlternativeComposite;
-import eu.cloudscaleproject.env.extractor.wizard.CreateConfigSelectionWizard;
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -14,9 +13,9 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class ConfigComposite extends SidebarEditorComposite {
+public class InputSidebarComposite extends SidebarEditorComposite {
 	
-	private final String[] sections = new String[]{"Configurations:"};
+	private final String[] sections = new String[]{"Inputs:"};
 	private IProject project;
 	
 	/**
@@ -24,12 +23,12 @@ public class ConfigComposite extends SidebarEditorComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigComposite(IProject project, Composite parent, int style) {
+	public InputSidebarComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
 		this.project = project;
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_CONF));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT));
 		
 		setContentProvider(new SidebarContentProvider() {
 			
@@ -46,20 +45,18 @@ public class ConfigComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new ConfigAlternativeComposite(parent, style, (ConfingAlternative)resource);
+				return new InputAlternativeComposite(parent, style, (InputAlternative)resource);
 			}
 		});
-		
-		//init();
 	}
-	
+
 	@Override
-	public void handleNewInput(IEditorInput selected)
-	{
-		CreateConfigSelectionWizard createInputAltWizard = new CreateConfigSelectionWizard(this.project);
-		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createInputAltWizard);
+	public void handleNewInput(IEditorInput selected) {
+		InputSelectionWizard inputSelectionWizard = new InputSelectionWizard(project);
+		WizardDialog wizardDialog = new WizardDialog(this.getShell(), inputSelectionWizard);
 		wizardDialog.open();
 	}
+	
 	
 	@Override
 	public void update() {

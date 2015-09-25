@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.spotter.editors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -20,14 +19,11 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  */
 public class InputEditor extends AlternativeEditor{
 
-	@Inject
-	private MPart part;
 	private InputAlternativeComposite composite;
 	
 	@Inject
 	@Optional
-	@PostConstruct
-	public void postConstruct(Composite parent, InputAlternative alternative){
+	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
 		
 		if(composite != null){
 			composite.dispose();

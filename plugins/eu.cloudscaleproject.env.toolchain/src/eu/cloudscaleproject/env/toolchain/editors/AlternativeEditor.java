@@ -3,14 +3,19 @@ package eu.cloudscaleproject.env.toolchain.editors;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.di.PersistState;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -24,6 +29,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -35,8 +41,6 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class AlternativeEditor {
 	
 	private static final String ALTERNATIVE_RESOURCE = "alternative_resource";
-	//private static final String ALTERNATIVE_PROVIDER_RESOURCE = "alternative_provider_resource";
-	//private static final String ALTERNATIVE_PROVIDER_ID = "alternative_provider_id";
 	
 	@Inject
 	private MDirtyable dirtyable;
@@ -85,30 +89,35 @@ public class AlternativeEditor {
 		}
 	};
 	
-	/*
-	@Inject
-	public AlternativeEditor(MPart part){
+	@PostConstruct
+	public void postConstruct(IEclipseContext context){
 		
-		String portableString = part.getPersistedState().get(ALTERNATIVE_RESOURCE);
-		IPath path = Path.fromPortableString(portableString);
-		
-		// Tukaj ostal - dej zrihti ta persistance problem
-		// pobrisi tiste bedarije v ResourceRegistry...
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-		resource.getPersistentProperties().
-				
-		ResourceRegistry.getInstance().getResourceProvider(project, tool)
-		
+		String resourcePath = part.getPersistedState().get(ALTERNATIVE_RESOURCE);
+		if(resourcePath != null){
+			setInput(context, resourcePath);
+		}
 	}
-	*/
 	
-	
+	@Inject
+	public void setInput(IEclipseContext context, @Named("input") String resourcePath){
+		
+		IEditorInputResource eir = ResourceRegistry.getInstance().getResource(resourcePath);
+		if(eir != null){
+			context.set(IResource.class, eir.getResource());
+			context.set(eir.getClass().getName(), eir);
+		}
+	}
 	
 	protected IEditorInputResource getAlternative(){
+		
 		return this.alternative;
 	}
 	
 	protected void setAlternative(final IEditorInputResource alternative){
+		
+		if(this.alternative == alternative){
+			return;
+		}
 		
 		if(this.alternative != null){
 			this.alternative.removePropertyChangeListener(alternativeListener);
@@ -139,10 +148,7 @@ public class AlternativeEditor {
 		
 		focus();
 		
-		dirtyable.setDirty(alternative.isDirty());
-		
-		part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
-		part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
+		dirtyable.setDirty(alternative.isDirty());		
 	}
 	
 	@Focus
@@ -163,6 +169,13 @@ public class AlternativeEditor {
 	public void persist(){
 		if(this.alternative != null){
 			this.alternative.save();
+		}
+	}
+	
+	@PersistState
+	public void persistState(){
+		if(this.alternative != null){
+			part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
 		}
 	}
 	
@@ -187,9 +200,10 @@ public class AlternativeEditor {
 				job.setUser(false);
 				job.schedule();				
 			}
+			
+			this.alternative.removePropertyChangeListener(alternativeListener);
 		}
 		
-		this.alternative.removePropertyChangeListener(alternativeListener);
 	}
 	
 }

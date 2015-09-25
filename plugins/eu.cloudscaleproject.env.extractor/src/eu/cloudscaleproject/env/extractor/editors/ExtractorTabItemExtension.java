@@ -11,6 +11,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.extractor.editors.composites.ConfigSidebarComposite;
+import eu.cloudscaleproject.env.extractor.editors.composites.InputSidebarComposite;
+import eu.cloudscaleproject.env.extractor.editors.composites.IntroComposite;
+import eu.cloudscaleproject.env.extractor.editors.composites.ResultSidebarComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
@@ -77,13 +81,13 @@ public class ExtractorTabItemExtension implements ProjectEditorExtension{
 					return new IntroComposite(parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
-					return new InputComposite(project, parent, SWT.NONE);
+					return new InputSidebarComposite(project, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new ConfigComposite(project, parent, SWT.NONE);
+					return new ConfigSidebarComposite(project, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
-					return new ResultComposite(project, parent, SWT.NONE);
+					return new ResultSidebarComposite(project, parent, SWT.NONE);
 				}
 				
 				return null;

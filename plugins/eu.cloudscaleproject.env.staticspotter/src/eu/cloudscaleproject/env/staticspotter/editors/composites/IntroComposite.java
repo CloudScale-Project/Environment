@@ -1,4 +1,4 @@
-package eu.cloudscaleproject.env.staticspotter.editors;
+package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import java.net.URL;
 

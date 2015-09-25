@@ -64,21 +64,27 @@ public class OpenAlternativeEditorHandler {
 		if(part == null){
 			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
 			if(stack != null){
+				
 				part = partService.createPart(editorPartID);
-				stack.getChildren().add(part);
+				part.getProperties().put("input", eir.getResource().getFullPath().toPortableString());
+				
+				stack.getChildren().add(part);				
+				partService.showPart(part, PartState.ACTIVATE);
+			}
+		}
+		else{
+			
+			partService.showPart(part, PartState.ACTIVATE);
+			
+			IEclipseContext context = part.getContext();
+			context.set(eir.getClass().getName(), eir);
+			
+			IResource resource = eir.getResource();
+			if(resource != null){
+				context.set(IResource.class, resource);
 			}
 		}
 		
-		partService.showPart(part, PartState.ACTIVATE);
-		
-		//fill in context data
-		IEclipseContext context = part.getContext();
-		context.set(eir.getClass().getName(), eir);
-		
-		IResource resource = eir.getResource();
-		if(resource != null){
-			context.set(IResource.class, resource);
-		}
 	}
 	
 	private String findEditorID(IEditorInputResource eir){

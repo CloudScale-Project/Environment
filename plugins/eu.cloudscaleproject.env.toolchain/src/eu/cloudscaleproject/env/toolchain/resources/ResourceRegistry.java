@@ -8,8 +8,12 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.widgets.Display;
@@ -201,6 +205,26 @@ public class ResourceRegistry {
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
 		return getResourceProvider(project, tool.getID());
+	}
+	
+	public IEditorInputResource getResource(String resourcePath){
+		IPath path = Path.fromPortableString(resourcePath);
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		if(resource == null){
+			logger.warning("IResource for the specified path does not exist! Path: " + resourcePath);
+			return null;
+		}
+		
+		List<ResourceProvider> providers = ResourceRegistry.getInstance().getResourceProviders(resource.getProject());
+		for(ResourceProvider rp : providers){
+			
+			if(!rp.getRootFolder().getFullPath().isPrefixOf(path)){
+				continue;
+			}
+			return rp.getResource(resource);
+		}
+		logger.warning("IEditorInputResource for the specified path can not be retrieved! Path: " + resourcePath);
+		return null;
 	}
 	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){

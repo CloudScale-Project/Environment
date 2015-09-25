@@ -1,30 +1,28 @@
-package eu.cloudscaleproject.env.extractor.editors;
+package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.extractor.editors.composites.SingleResultComposite;
+import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class ResultComposite extends SidebarEditorComposite {
+public class ConfigSidebarComposite extends SidebarEditorComposite {
 	
-	private final String[] sections = new String[]{"Results:"};
+	private final String[] sections = new String[]{"Configurations:"};
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ResultComposite(IProject project, Composite parent, int style) {
+	public ConfigSidebarComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
-		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_RES));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_CONF));
 		
 		setContentProvider(new SidebarContentProvider() {
 			
@@ -41,17 +39,16 @@ public class ResultComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-
-				return new SingleResultComposite(parent, style, (ResultAlternative)resource);
+				return new ConfigAlternativeComposite(parent, style, (ConfigAlternative)resource);
 			}
 		});
 		
-		setNewButtonEnabled(false);
-		setNewFromButtonEnabled(false);
+		//init();
 	}
-	
+
 	@Override
 	public void update() {
+		// TODO Auto-generated method stub
 		super.update();
 	}
 }

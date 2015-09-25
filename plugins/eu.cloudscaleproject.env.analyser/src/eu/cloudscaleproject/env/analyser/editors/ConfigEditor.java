@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -21,14 +20,11 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 public class ConfigEditor extends AlternativeEditor{
 
-	@Inject
-	private MPart part;
 	private ConfigComposite configComposite;
 	
 	@Inject
 	@Optional
-	@PostConstruct
-	public void postConstruct(Composite parent, ConfAlternative alternative){
+	public void setAlternative(MPart part, Composite parent, ConfAlternative alternative){
 		
 		if(configComposite != null){
 			configComposite.dispose();

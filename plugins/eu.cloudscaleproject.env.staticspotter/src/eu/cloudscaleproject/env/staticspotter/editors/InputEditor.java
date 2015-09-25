@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.staticspotter.editors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -19,20 +18,17 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  */
 public class InputEditor extends AlternativeEditor{
 
-	@Inject
-	private MPart part;
 	private InputAlternativeComposite composite;
 	
 	@Inject
 	@Optional
-	@PostConstruct
-	public void postConstruct(Composite parent, InputAlternative alternative){
+	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
 		
 		if(composite != null){
 			composite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Static spotter input ["+ alternative.getName() +"]");
 		composite = new InputAlternativeComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -31,14 +30,14 @@ import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
-public class ConfigAlternativeComposite extends ConfigEditorView implements IPropertySheetPageProvider, IRefreshable, ISelectable
+public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable
 {
 	private DataBindingContext m_bindingContext;
 
@@ -85,7 +84,10 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(configAlternative, containerEditor, SWT.NONE);
-
+		
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(getContainer(), SWT.NONE, this.treeViewComposite.getPropertySheetPage());
+		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		
 		m_bindingContext = initDataBindings();
 	}
 
@@ -104,12 +106,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IPro
 		
 		this.inputAlternatives.clear();
 		this.inputAlternatives.addAll(resourceProvider.getResources());
-	}
-
-	@Override
-	public IPropertySheetPage getPropertySheetPage()
-	{
-		return treeViewComposite.getPropertySheetPage();
 	}
 
 	@Override

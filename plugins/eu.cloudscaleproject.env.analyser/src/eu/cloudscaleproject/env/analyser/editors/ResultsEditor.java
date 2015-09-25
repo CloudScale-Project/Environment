@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -21,14 +20,11 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 public class ResultsEditor extends AlternativeEditor{
 		
-	@Inject
-	private MPart part;
 	private ResultsComposite resultsComposite;
 	
 	@Inject
 	@Optional
-	@PostConstruct
-	public void postConstruct(Composite parent, ResultAlternative alternative){
+	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
 		
 		if(resultsComposite != null){
 			resultsComposite.dispose();

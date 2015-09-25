@@ -1,17 +1,16 @@
-package eu.cloudscaleproject.env.extractor.editors;
+package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.extractor.editors.composites.InputAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
 import eu.cloudscaleproject.env.toolchain.util.SidebarEditorComposite;
 
-public class InputComposite extends SidebarEditorComposite {
+public class InputSidebarComposite extends SidebarEditorComposite {
 	
 	private final String[] sections = new String[]{"Inputs:"};
 	
@@ -20,7 +19,7 @@ public class InputComposite extends SidebarEditorComposite {
 	 * @param parent
 	 * @param style
 	 */
-	public InputComposite(IProject project, Composite parent, int style) {
+	public InputSidebarComposite(IProject project, Composite parent, int style) {
 		super(parent, style);
 		
 		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_INPUT.getID()));

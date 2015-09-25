@@ -13,6 +13,7 @@ import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
 public class SingleResultComposite extends TitleEditorView implements IPropertySheetPageProvider, IRefreshable{
 
@@ -41,6 +42,9 @@ public class SingleResultComposite extends TitleEditorView implements IPropertyS
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(resultPersistenceFolder, containerEditor, SWT.NONE);
+		
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(getContainer(), style, this.treeViewComposite.getPropertySheetPage());
+		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 	}
 	
 	
