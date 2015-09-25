@@ -41,10 +41,11 @@ Visit http://www.cloudscale-project.eu
    <vm>
    </vm>
 
-
    <plugins>
 
-      <!-- == CSE ============================================================ -->
+      <!--
+        CloudScale - Environemnt & ScaleDL
+      -->
 
       <plugin id="eu.cloudscaleproject.env.analyser"/>
       <plugin id="eu.cloudscaleproject.env.common"/>
@@ -55,26 +56,13 @@ Visit http://www.cloudscale-project.eu
       <plugin id="eu.cloudscaleproject.env.help"/>
       <plugin id="eu.cloudscaleproject.env.method.common"/>
       <plugin id="eu.cloudscaleproject.env.method.viewer"/>
+      <plugin id="eu.cloudscaleproject.env.overview"/>
       <plugin id="eu.cloudscaleproject.env.product"/>
       <plugin id="eu.cloudscaleproject.env.spotter"/>
       <plugin id="eu.cloudscaleproject.env.staticspotter"/>
       <plugin id="eu.cloudscaleproject.env.toolchain"/>
-      <plugin id="eu.cloudscaleproject.env.overview"/>
       <plugin id="eu.cloudscaleproject.env.usageevolution"/>
-
-      <!-- == Scale DL ============================================================ -->
-
-      <plugin id="org.scaledl.architecturaltemplates"/>
-      <plugin id="org.scaledl.architecturaltemplates.ui"/>
-      <plugin id="org.scaledl.architecturaltemplates.api"/>
-      <plugin id="org.scaledl.architecturaltemplates.completion.jobs"/>
-      <plugin id="org.scaledl.architecturaltemplates.edit"/>
-      <plugin id="org.scaledl.architecturaltemplates.editor"/>
-      <plugin id="org.scaledl.architecturaltemplates.repositories.cloudscale"/>
-
-      <plugin id="org.palladiosimulator.editors.util"/>
-      <plugin id="org.palladiosimulator.editors.gmf.runtime.diagram.ui.extension"/>
-      <plugin id="org.palladiosimulator.editors.composedprovidingrequiringentity.design"/>
+      <plugin id="org.spotter.eclipse.ui"/>
 
       <plugin id="org.scaledl.overview"/>
       <plugin id="org.scaledl.overview.diagram"/>
@@ -83,279 +71,284 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.scaledl.overview.properties"/>
       <plugin id="org.scaledl.overview.specification"/>
 
+      <plugin id="org.scaledl.architecturaltemplates"/>
+      <plugin id="org.scaledl.architecturaltemplates.api"/>
+      <plugin id="org.scaledl.architecturaltemplates.completion.jobs"/>
+      <plugin id="org.scaledl.architecturaltemplates.edit"/>
+      <plugin id="org.scaledl.architecturaltemplates.editor"/>
+      <plugin id="org.scaledl.architecturaltemplates.repositories.cloudscale"/>
+      <plugin id="org.scaledl.architecturaltemplates.ui"/>
+
       <plugin id="org.scaledl.usageevolution"/>
       <plugin id="org.scaledl.usageevolution.edit"/>
       <plugin id="org.scaledl.usageevolution.editor"/>
       <plugin id="org.scaledl.usageevolution.wizard"/>
 
-      <!-- == Analyser ============================================================ -->
-      <!-- crawler -->
+      <plugin id="tools.descartes.dlim.exporter"/>
+      <plugin id="tools.descartes.dlim.extractor"/>
+      <plugin id="tools.descartes.dlim.generator"/>
+      <plugin id="tools.descartes.dlim.generator.edit"/>
+      <plugin id="tools.descartes.dlim.generator.editor"/>
 
-        <plugin id="ca.umontreal.iro.lecuyer.ssj"/>
-        <plugin id="ca.umontreal.iro.lecuyer.ssj.linux"/>
-        <plugin id="ca.umontreal.iro.lecuyer.ssj.win32"/>
+      <!--
+        [IMPORTANT] OS Deps, multi version deps...
+      -->
 
-        <plugin id="ch.ethz.iks.r_osgi.remote" version="0.0.0"/>
-        <plugin id="com.ibm.icu" version="0.0.0"/>
-        <plugin id="de.desmoj" version="0.0.0"/>
-        <plugin id="de.ikv.medini.qvt.plugin" version="0.0.0"/>
-        <plugin id="de.mdelab.sdm.interpreter.core" version="0.0.0"/>
-        <plugin id="de.mdelab.sdm.interpreter.core.eclipse" version="0.0.0"/>
-        <plugin id="de.mdelab.sdm.interpreter.ocl" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.codegen.simucontroller" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.codegen.simudatavisualisation.datatypes" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dialogs" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.analysis.cost" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.analysis.lqn" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.analysis.reliability" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.analysis.simucom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.bayesnets" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.qml" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.qml.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.qml.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.dsexplore.qml.handling" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.errorhandling" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featureconfig" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featureconfig.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featureconfig.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featureinstance.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featuremodel" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featuremodel.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.featuremodel.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.identifier" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.identifier.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.codegen.m2m" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.codegen.simucom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.cost" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.cost.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.cost.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.designdecision" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.designdecision.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.designdecision.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.custom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.helper" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.composite" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.custom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.helper" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.repository" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.custom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.helper" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.seff" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.seff.custom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.seff.helper" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.toolbar" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.usage" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.usage.custom" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.gmf.usage.helper" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.pcm.stochasticexpressions" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.probfunction" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.probfunction.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.probfunction.math" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.qvtrengine.medini" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.scheduler" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.scheduler.configuration" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.scheduler.configuration.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.adapter" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.dialogs" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.filter" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.storage" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.visualisation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.jfreechartvisualisation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.rvisualisation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.statistics" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simucomframework" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simucomframework.simucomstatus" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simucomframework.simulationdock" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simucomframework.variables" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simucom.rerunsimulation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simulation" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simulation.abstractsimengine" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.simulation.abstractsimengine.desmoj" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.statistics" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.stoex" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.stoex.analyser" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.stoex.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.tcfmoop" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.units" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.units.edit" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.units.editor" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow.launchconfig" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow.logging.console" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow.mdsd" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow.ui" version="0.0.0"/>
-        <plugin id="de.uka.ipd.sdq.workflow.workbench" version="0.0.0"/>
-        <plugin id="de.upb.swt.core" version="0.0.0"/>
-        <plugin id="de.upb.swt.core.ui" version="0.0.0"/>
-        <plugin id="de.upb.swt.core.ui.properties" version="0.0.0"/>
-        <plugin id="edu.kit.ipd.sdq.pcm.simulation.scheduler.exact" version="0.0.0"/>
-        <plugin id="javax.xml" version="0.0.0"/>
-        <plugin id="org.apache.batik.css" version="0.0.0"/>
-        <plugin id="org.apache.batik.util" version="0.0.0"/>
-        <plugin id="org.apache.batik.util.gui" version="0.0.0"/>
-        <plugin id="org.apache.chemistry.opencmis" version="0.0.0"/>
-        <plugin id="org.apache.commons.collections15" version="0.0.0"/>
-        <plugin id="org.apache.commons.logging" version="0.0.0"/>
-        <plugin id="org.apache.commons.logging.fragment" version="0.0.0"/>
-        <plugin id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
-        <plugin id="org.apache.jasper.glassfish" version="0.0.0"/>
-        <plugin id="org.apache.lucene.analysis" version="0.0.0"/>
-        <plugin id="org.apache.lucene.core" version="0.0.0"/>
-        <plugin id="org.fujaba.commons" version="0.0.0"/>
-        <plugin id="org.jfree.jfreechart" version="0.0.0"/>
-        <plugin id="org.jscience" version="0.0.0"/>
-        <plugin id="org.opt4j" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.accuracy" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.completions" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.quality" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.quality.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.quality.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.resultdecorator" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.resultdecorator.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.resultdecorator.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.analyzer.workflow" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.commons" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.editors.dialogs" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.editors.propertytabs" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.editors.tabs" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.dao" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.datastream" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.examples" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.repository.local" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.repository.local.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.ui" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.util" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.visualization" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.edp2.visualization.jfreechart" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.application" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.model" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.experimentautomation.examples.espresso" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.mdsdprofiles" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.mdsdprofiles.api" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.mdsdprofiles.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.mdsdprofiles.ui" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.measurementframework" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.metricspec" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.metricspec.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.metricspec.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.monitorrepository" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.monitorrepository.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.monitorrepository.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.monitorrepository.tests" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.help" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.pcm.ui" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.probeframework" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.probeframework.probes.example" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.protocom" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.protocom.framework.java.ee" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.protocom.framework.java.se" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.protocom.workflow" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.recorderframework" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.recorderframework.edp2" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.recorderframework.sensorframework" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.markov" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.markov.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.markov.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.sensitivity" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.sensitivity.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.reliability.sensitivity.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.servicelevelobjective" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.servicelevelobjective.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.servicelevelobjective.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.servicelevelobjective.edp2" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simucom.reliability" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulation.abstractsimengine.ssj" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.action" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.action.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.action.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.action.repository" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.measuringpoint" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.measuringpoint.create" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.reconfiguration.qvto" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.reconfiguration.storydiagram" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.runtimemeasurement" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.runtimemeasurement.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.ui" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.ui.perspective" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.simulizar.ui.wizards" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.context" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.context.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.context.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.lqn" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.lqn.edit" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.lqn.editor" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.reliability" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.spa" version="0.0.0"/>
-        <plugin id="org.palladiosimulator.solver.spa.basicsolver" version="0.0.0"/>
-        <plugin id="org.rosuda.JRI" version="0.0.0"/>
-        <plugin id="org.storydriven.core" version="0.0.0"/>
-        <plugin id="org.storydriven.core.edit" version="0.0.0"/>
-        <plugin id="org.storydriven.core.ui" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.diagram" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.diagram.custom" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.diagram.interpreter" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.diagram.ocl" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.edit" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.editor" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.expressions" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.expressions.common" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.interpreter.core" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.interpreter.eclipse" version="0.0.0"/>
-        <plugin id="org.storydriven.storydiagrams.ui" version="0.0.0"/>
-        <plugin id="org.w3c.css.sac" version="0.0.0"/>
-        <plugin id="org.w3c.dom.events" version="0.0.0"/>
-        <plugin id="org.w3c.dom.smil" version="0.0.0"/>
-        <plugin id="org.w3c.dom.svg" version="0.0.0"/>
-        <plugin id="tools.descartes.dlim.exporter" version="0.0.0"/>
-        <plugin id="tools.descartes.dlim.extractor" version="0.0.0"/>
-        <plugin id="tools.descartes.dlim.generator" version="0.0.0"/>
-        <plugin id="tools.descartes.dlim.generator.edit" version="0.0.0"/>
-        <plugin id="tools.descartes.dlim.generator.editor" version="0.0.0"/>
+      <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
+      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
+
+      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
+      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
+      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
+      <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
+
+      <plugin id="org.eclipse.swt"/>
+      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
+
+      <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.java7" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
+
+      <plugin id="org.eclipse.core.net"/>
+      <plugin id="org.eclipse.core.net.linux.x86_64" fragment="true"/>
 
 
+      <!--
+        Palladio & friends
+      -->
 
+      <plugin id="org.fujaba.commons"/>
+      <plugin id="ca.umontreal.iro.lecuyer.ssj"/>
+      <plugin id="ca.umontreal.iro.lecuyer.ssj.linux"/>
+      <plugin id="ca.umontreal.iro.lecuyer.ssj.win32"/>
+      <plugin id="ch.ethz.iks.r_osgi.remote"/>
 
-      <!-- == Extractor & Static Spotter ============================================================ -->
-      <plugin id="org.somox.analyzer.sissymodelanalyzer"/>
-      <plugin id="org.somox.analyzer.sissymodelanalyzer.ui"/>
-      <plugin id="org.somox.core"/>
-      <plugin id="org.somox.filter"/>
-      <plugin id="org.somox.gast2seff"/>
-      <plugin id="org.somox.kdmhelper"/>
-      <plugin id="org.somox.metrics"/>
-      <plugin id="org.somox.metrics.dsl"/>
-      <plugin id="org.somox.metrics.dsl.ui"/>
-      <plugin id="org.somox.metricvaluesstorage"/>
-      <plugin id="org.somox.seff2javaast"/>
-      <plugin id="org.somox.seff2javaast.edit"/>
-      <plugin id="org.somox.seff2javaast.editor"/>
-      <plugin id="org.somox.sourcecodedecorator"/>
-      <plugin id="org.somox.sourcecodedecorator.edit"/>
-      <plugin id="org.somox.sourcecodedecorator.editor"/>
-      <plugin id="org.somox.ui"/>
+      <plugin id="de.desmoj"/>
+      <plugin id="de.ikv.medini.qvt.plugin"/>
+      <plugin id="de.mdelab.sdm.interpreter.core"/>
+      <plugin id="de.mdelab.sdm.interpreter.core.eclipse"/>
+      <plugin id="de.mdelab.sdm.interpreter.ocl"/>
+      <plugin id="de.uka.ipd.sdq.codegen.simucontroller"/>
+      <plugin id="de.uka.ipd.sdq.codegen.simudatavisualisation.datatypes"/>
+      <plugin id="de.uka.ipd.sdq.dialogs"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.analysis.cost"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.analysis.lqn"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.analysis.reliability"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.analysis.simucom"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.bayesnets"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.qml"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.qml.edit"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.qml.editor"/>
+      <plugin id="de.uka.ipd.sdq.dsexplore.qml.handling"/>
+      <plugin id="de.uka.ipd.sdq.errorhandling"/>
+      <plugin id="de.uka.ipd.sdq.featureconfig"/>
+      <plugin id="de.uka.ipd.sdq.featureconfig.edit"/>
+      <plugin id="de.uka.ipd.sdq.featureconfig.editor"/>
+      <plugin id="de.uka.ipd.sdq.featureinstance.editor"/>
+      <plugin id="de.uka.ipd.sdq.featuremodel"/>
+      <plugin id="de.uka.ipd.sdq.featuremodel.edit"/>
+      <plugin id="de.uka.ipd.sdq.featuremodel.editor"/>
+      <plugin id="de.uka.ipd.sdq.identifier"/>
+      <plugin id="de.uka.ipd.sdq.identifier.edit"/>
+      <plugin id="de.uka.ipd.sdq.pcm.codegen.m2m"/>
+      <plugin id="de.uka.ipd.sdq.pcm.codegen.simucom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.cost"/>
+      <plugin id="de.uka.ipd.sdq.pcm.cost.edit"/>
+      <plugin id="de.uka.ipd.sdq.pcm.cost.editor"/>
+      <plugin id="de.uka.ipd.sdq.pcm.designdecision"/>
+      <plugin id="de.uka.ipd.sdq.pcm.designdecision.edit"/>
+      <plugin id="de.uka.ipd.sdq.pcm.designdecision.editor"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.allocation.helper"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.composite"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.composite.helper"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.repository"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.repository.helper"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.resource"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.seff"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.seff.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.seff.helper"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.toolbar"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.usage"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.usage.custom"/>
+      <plugin id="de.uka.ipd.sdq.pcm.gmf.usage.helper"/>
+      <plugin id="de.uka.ipd.sdq.pcm.stochasticexpressions"/>
+      <plugin id="de.uka.ipd.sdq.probfunction"/>
+      <plugin id="de.uka.ipd.sdq.probfunction.edit"/>
+      <plugin id="de.uka.ipd.sdq.probfunction.math"/>
+      <plugin id="de.uka.ipd.sdq.qvtrengine.medini"/>
+      <plugin id="de.uka.ipd.sdq.scheduler"/>
+      <plugin id="de.uka.ipd.sdq.scheduler.configuration"/>
+      <plugin id="de.uka.ipd.sdq.scheduler.configuration.edit"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.adapter"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.dialogs"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.filter"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.storage"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.visualisation"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.jfreechartvisualisation"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.rvisualisation"/>
+      <plugin id="de.uka.ipd.sdq.sensorframework.visualisation.statistics"/>
+      <plugin id="de.uka.ipd.sdq.simucom.rerunsimulation"/>
+      <plugin id="de.uka.ipd.sdq.simucomframework"/>
+      <plugin id="de.uka.ipd.sdq.simucomframework.simucomstatus"/>
+      <plugin id="de.uka.ipd.sdq.simucomframework.simulationdock"/>
+      <plugin id="de.uka.ipd.sdq.simucomframework.variables"/>
+      <plugin id="de.uka.ipd.sdq.simulation"/>
+      <plugin id="de.uka.ipd.sdq.simulation.abstractsimengine"/>
+      <plugin id="de.uka.ipd.sdq.simulation.abstractsimengine.desmoj"/>
+      <plugin id="de.uka.ipd.sdq.statistics"/>
+      <plugin id="de.uka.ipd.sdq.stoex"/>
+      <plugin id="de.uka.ipd.sdq.stoex.analyser"/>
+      <plugin id="de.uka.ipd.sdq.stoex.edit"/>
+      <plugin id="de.uka.ipd.sdq.tcfmoop"/>
+      <plugin id="de.uka.ipd.sdq.units"/>
+      <plugin id="de.uka.ipd.sdq.units.edit"/>
+      <plugin id="de.uka.ipd.sdq.units.editor"/>
+      <plugin id="de.uka.ipd.sdq.workflow"/>
+      <plugin id="de.uka.ipd.sdq.workflow.launchconfig"/>
+      <plugin id="de.uka.ipd.sdq.workflow.logging.console"/>
+      <plugin id="de.uka.ipd.sdq.workflow.mdsd"/>
+      <plugin id="de.uka.ipd.sdq.workflow.ui"/>
+      <plugin id="de.uka.ipd.sdq.workflow.workbench"/>
+      <plugin id="de.upb.swt.core"/>
+      <plugin id="de.upb.swt.core.ui"/>
+      <plugin id="de.upb.swt.core.ui.properties"/>
+      <plugin id="edu.kit.ipd.sdq.pcm.simulation.scheduler.exact"/>
+      <plugin id="org.modelversioning.emfprofile"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.gmf"/>
+      <plugin id="org.modelversioning.emfprofile.application.decorator.reflective"/>
+      <plugin id="org.modelversioning.emfprofile.application.registry"/>
+      <plugin id="org.modelversioning.emfprofile.application.registry.ui"/>
+      <plugin id="org.modelversioning.emfprofile.diagram"/>
+      <plugin id="org.modelversioning.emfprofile.edit"/>
+      <plugin id="org.modelversioning.emfprofile.editor"/>
+      <plugin id="org.modelversioning.emfprofile.project"/>
+      <plugin id="org.modelversioning.emfprofile.project.ui"/>
+      <plugin id="org.modelversioning.emfprofile.registry"/>
+      <plugin id="org.modelversioning.emfprofile.registry.ui"/>
+
+      <plugin id="org.palladiosimulator.analyzer.accuracy"/>
+      <plugin id="org.palladiosimulator.analyzer.completions"/>
+      <plugin id="org.palladiosimulator.analyzer.quality"/>
+      <plugin id="org.palladiosimulator.analyzer.quality.edit"/>
+      <plugin id="org.palladiosimulator.analyzer.quality.editor"/>
+      <plugin id="org.palladiosimulator.analyzer.resultdecorator"/>
+      <plugin id="org.palladiosimulator.analyzer.resultdecorator.edit"/>
+      <plugin id="org.palladiosimulator.analyzer.resultdecorator.editor"/>
+      <plugin id="org.palladiosimulator.analyzer.workflow"/>
+      <plugin id="org.palladiosimulator.commons"/>
+      <plugin id="org.palladiosimulator.editors.composedprovidingrequiringentity.design"/>
+      <plugin id="org.palladiosimulator.editors.dialogs"/>
+      <plugin id="org.palladiosimulator.editors.gmf.runtime.diagram.ui.extension"/>
+      <plugin id="org.palladiosimulator.editors.propertytabs"/>
+      <plugin id="org.palladiosimulator.editors.tabs"/>
+      <plugin id="org.palladiosimulator.editors.util"/>
+      <plugin id="org.palladiosimulator.edp2"/>
+      <plugin id="org.palladiosimulator.edp2.dao"/>
+      <plugin id="org.palladiosimulator.edp2.datastream"/>
+      <plugin id="org.palladiosimulator.edp2.edit"/>
+      <plugin id="org.palladiosimulator.edp2.editor"/>
+      <plugin id="org.palladiosimulator.edp2.examples"/>
+      <plugin id="org.palladiosimulator.edp2.repository.local"/>
+      <plugin id="org.palladiosimulator.edp2.repository.local.edit"/>
+      <plugin id="org.palladiosimulator.edp2.ui"/>
+      <plugin id="org.palladiosimulator.edp2.util"/>
+      <plugin id="org.palladiosimulator.edp2.visualization"/>
+      <plugin id="org.palladiosimulator.edp2.visualization.jfreechart"/>
+      <plugin id="org.palladiosimulator.experimentautomation"/>
+      <plugin id="org.palladiosimulator.experimentautomation.application"/>
+      <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom"/>
+      <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simucom.model"/>
+      <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar"/>
+      <plugin id="org.palladiosimulator.experimentautomation.application.tooladapter.simulizar.model"/>
+      <plugin id="org.palladiosimulator.experimentautomation.edit"/>
+      <plugin id="org.palladiosimulator.experimentautomation.editor"/>
+      <plugin id="org.palladiosimulator.experimentautomation.examples.espresso"/>
+      <plugin id="org.palladiosimulator.mdsdprofiles"/>
+      <plugin id="org.palladiosimulator.mdsdprofiles.api"/>
+      <plugin id="org.palladiosimulator.mdsdprofiles.edit"/>
+      <plugin id="org.palladiosimulator.mdsdprofiles.ui"/>
+      <plugin id="org.palladiosimulator.measurementframework"/>
+      <plugin id="org.palladiosimulator.metricspec"/>
+      <plugin id="org.palladiosimulator.metricspec.edit"/>
+      <plugin id="org.palladiosimulator.metricspec.editor"/>
+      <plugin id="org.palladiosimulator.metricspec.resources"/>
+      <plugin id="org.palladiosimulator.monitorrepository"/>
+      <plugin id="org.palladiosimulator.monitorrepository.edit"/>
+      <plugin id="org.palladiosimulator.monitorrepository.editor"/>
+      <plugin id="org.palladiosimulator.monitorrepository.tests"/>
+      <plugin id="org.palladiosimulator.pcm"/>
+      <plugin id="org.palladiosimulator.pcm.edit"/>
+      <plugin id="org.palladiosimulator.pcm.editor"/>
+      <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint"/>
+      <plugin id="org.palladiosimulator.pcm.edp2.measuringpoint.edit"/>
+      <plugin id="org.palladiosimulator.pcm.help"/>
+      <plugin id="org.palladiosimulator.pcm.resources"/>
+      <plugin id="org.palladiosimulator.pcm.ui"/>
+      <plugin id="org.palladiosimulator.probeframework"/>
+      <plugin id="org.palladiosimulator.probeframework.probes.example"/>
+      <plugin id="org.palladiosimulator.protocom"/>
+      <plugin id="org.palladiosimulator.protocom.framework.java.ee"/>
+      <plugin id="org.palladiosimulator.protocom.framework.java.se"/>
+      <plugin id="org.palladiosimulator.protocom.resourcestrategies"/>
+      <plugin id="org.palladiosimulator.protocom.workflow"/>
+      <plugin id="org.palladiosimulator.recorderframework"/>
+      <plugin id="org.palladiosimulator.recorderframework.edp2"/>
+      <plugin id="org.palladiosimulator.recorderframework.sensorframework"/>
+      <plugin id="org.palladiosimulator.reliability"/>
+      <plugin id="org.palladiosimulator.reliability.markov"/>
+      <plugin id="org.palladiosimulator.reliability.markov.edit"/>
+      <plugin id="org.palladiosimulator.reliability.markov.editor"/>
+      <plugin id="org.palladiosimulator.reliability.sensitivity"/>
+      <plugin id="org.palladiosimulator.reliability.sensitivity.edit"/>
+      <plugin id="org.palladiosimulator.reliability.sensitivity.editor"/>
+      <plugin id="org.palladiosimulator.servicelevelobjective"/>
+      <plugin id="org.palladiosimulator.servicelevelobjective.edit"/>
+      <plugin id="org.palladiosimulator.servicelevelobjective.editor"/>
+      <plugin id="org.palladiosimulator.servicelevelobjective.edp2"/>
+      <plugin id="org.palladiosimulator.simucom.reliability"/>
+      <plugin id="org.palladiosimulator.simulation.abstractsimengine.ssj"/>
+      <plugin id="org.palladiosimulator.simulizar"/>
+      <plugin id="org.palladiosimulator.simulizar.action"/>
+      <plugin id="org.palladiosimulator.simulizar.action.edit"/>
+      <plugin id="org.palladiosimulator.simulizar.action.editor"/>
+      <plugin id="org.palladiosimulator.simulizar.action.repository"/>
+      <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint"/>
+      <plugin id="org.palladiosimulator.simulizar.edp2.measuringpoint.edit"/>
+      <plugin id="org.palladiosimulator.simulizar.measuringpoint"/>
+      <plugin id="org.palladiosimulator.simulizar.measuringpoint.create"/>
+      <plugin id="org.palladiosimulator.simulizar.reconfiguration.qvto"/>
+      <plugin id="org.palladiosimulator.simulizar.reconfiguration.storydiagram"/>
+      <plugin id="org.palladiosimulator.simulizar.runtimemeasurement"/>
+      <plugin id="org.palladiosimulator.simulizar.runtimemeasurement.edit"/>
+      <plugin id="org.palladiosimulator.simulizar.ui"/>
+      <plugin id="org.palladiosimulator.simulizar.ui.perspective"/>
+      <plugin id="org.palladiosimulator.simulizar.ui.wizards"/>
+      <plugin id="org.palladiosimulator.solver"/>
+      <plugin id="org.palladiosimulator.solver.context"/>
+      <plugin id="org.palladiosimulator.solver.context.edit"/>
+      <plugin id="org.palladiosimulator.solver.context.editor"/>
+      <plugin id="org.palladiosimulator.solver.lqn"/>
+      <plugin id="org.palladiosimulator.solver.lqn.edit"/>
+      <plugin id="org.palladiosimulator.solver.lqn.editor"/>
+      <plugin id="org.palladiosimulator.solver.reliability"/>
+      <plugin id="org.palladiosimulator.solver.spa"/>
+      <plugin id="org.palladiosimulator.solver.spa.basicsolver"/>
+      <plugin id="org.palladiosimulator.solver.spa.resourcemodel"/>
 
       <plugin id="org.reclipse.generator"/>
       <plugin id="org.reclipse.generator.ui"/>
@@ -374,9 +367,77 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.reclipse.structure.specification.editor"/>
       <plugin id="org.reclipse.structure.specification.navigator"/>
       <plugin id="org.reclipse.structure.specification.ui"/>
+      <plugin id="org.rosuda.JRI"/>
+      <plugin id="org.sat4j.core"/>
+      <plugin id="org.sat4j.pb"/>
 
+      <plugin id="org.somox.analyzer.sissymodelanalyzer"/>
+      <plugin id="org.somox.analyzer.sissymodelanalyzer.ui"/>
+      <plugin id="org.somox.core"/>
+      <plugin id="org.somox.filter"/>
+      <plugin id="org.somox.gast2seff"/>
+      <plugin id="org.somox.kdmhelper"/>
+      <plugin id="org.somox.metrics"/>
+      <plugin id="org.somox.metrics.dsl"/>
+      <plugin id="org.somox.metrics.dsl.ui"/>
+      <plugin id="org.somox.metricvaluesstorage"/>
+      <plugin id="org.somox.seff2javaast"/>
+      <plugin id="org.somox.seff2javaast.edit"/>
+      <plugin id="org.somox.seff2javaast.editor"/>
+      <plugin id="org.somox.sourcecodedecorator"/>
+      <plugin id="org.somox.sourcecodedecorator.edit"/>
+      <plugin id="org.somox.sourcecodedecorator.editor"/>
+      <plugin id="org.somox.ui"/>
 
-      <!-- == Eclipse & Apache Packages ============================================================ -->
+      <plugin id="org.storydriven.core"/>
+      <plugin id="org.storydriven.core.edit"/>
+      <plugin id="org.storydriven.core.ui"/>
+      <plugin id="org.storydriven.storydiagrams"/>
+      <plugin id="org.storydriven.storydiagrams.diagram"/>
+      <plugin id="org.storydriven.storydiagrams.diagram.custom"/>
+      <plugin id="org.storydriven.storydiagrams.diagram.interpreter"/>
+      <plugin id="org.storydriven.storydiagrams.diagram.ocl"/>
+      <plugin id="org.storydriven.storydiagrams.edit"/>
+      <plugin id="org.storydriven.storydiagrams.editor"/>
+      <plugin id="org.storydriven.storydiagrams.expressions"/>
+      <plugin id="org.storydriven.storydiagrams.expressions.common"/>
+      <plugin id="org.storydriven.storydiagrams.interpreter.core"/>
+      <plugin id="org.storydriven.storydiagrams.interpreter.eclipse"/>
+      <plugin id="org.storydriven.storydiagrams.ui"/>
+
+      <!--
+        Eclipse & Other deps
+      -->
+
+      <plugin id="org.w3c.css.sac"/>
+      <plugin id="org.w3c.dom.events"/>
+      <plugin id="org.w3c.dom.smil"/>
+      <plugin id="org.w3c.dom.svg"/>
+
+      <plugin id="com.google.guava"/>
+      <plugin id="com.google.inject"/>
+      <plugin id="com.ibm.icu"/>
+
+      <plugin id="javax.annotation"/>
+      <plugin id="javax.el"/>
+      <plugin id="javax.inject"/>
+      <plugin id="javax.servlet"/>
+      <plugin id="javax.servlet.jsp"/>
+      <plugin id="javax.websocket"/>
+      <plugin id="javax.xml"/>
+
+      <plugin id="lpg.runtime.java"/>
+      <plugin id="net.sourceforge.secondstring"/>
+
+      <plugin id="org.hamcrest.core"/>
+      <plugin id="org.jfree.jfreechart"/>
+      <plugin id="org.jgrapht"/>
+      <plugin id="org.jscience"/>
+      <plugin id="org.junit"/>
+      <plugin id="org.objectweb.asm"/>
+      <plugin id="org.opt4j"/>
+      <plugin id="org.tukaani.xz"/>
+
       <plugin id="org.apache.ant"/>
       <plugin id="org.apache.batik.bridge"/>
       <plugin id="org.apache.batik.dom"/>
@@ -387,6 +448,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.batik.svggen"/>
       <plugin id="org.apache.batik.transcoder"/>
       <plugin id="org.apache.batik.xml"/>
+      <plugin id="org.apache.chemistry.opencmis"/>
       <plugin id="org.apache.commons.cli"/>
       <plugin id="org.apache.commons.codec"/>
       <plugin id="org.apache.commons.collections15"/>
@@ -397,13 +459,20 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.apache.commons.logging.fragment" fragment="true"/>
       <plugin id="org.apache.commons.math"/>
       <plugin id="org.apache.derby"/>
+      <plugin id="org.apache.httpcomponents.httpclient"/>
+      <plugin id="org.apache.httpcomponents.httpcore"/>
       <plugin id="org.apache.jasper.glassfish"/>
       <plugin id="org.apache.log4j"/>
       <plugin id="org.apache.lucene.analysis"/>
       <plugin id="org.apache.lucene.core"/>
+      <plugin id="org.apache.xerces"/>
+      <plugin id="org.apache.xml.resolver"/>
+      <plugin id="org.apache.xml.serializer"/>
+
       <plugin id="org.eclipse.acceleo.common"/>
       <plugin id="org.eclipse.acceleo.engine"/>
       <plugin id="org.eclipse.acceleo.model"/>
+      <plugin id="org.eclipse.acceleo.parser"/>
       <plugin id="org.eclipse.acceleo.profiler"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.ant.launching"/>
@@ -431,8 +500,10 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.e4.core.commands"/>
       <plugin id="org.eclipse.e4.core.contexts"/>
       <plugin id="org.eclipse.e4.core.di"/>
+      <plugin id="org.eclipse.e4.core.di.annotations"/>
       <plugin id="org.eclipse.e4.core.di.extensions"/>
       <plugin id="org.eclipse.e4.core.services"/>
+      <plugin id="org.eclipse.e4.emf.xpath"/>
       <plugin id="org.eclipse.e4.ui.bindings"/>
       <plugin id="org.eclipse.e4.ui.css.core"/>
       <plugin id="org.eclipse.e4.ui.css.swt"/>
@@ -440,6 +511,7 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.e4.ui.di"/>
       <plugin id="org.eclipse.e4.ui.model.workbench"/>
       <plugin id="org.eclipse.e4.ui.services"/>
+      <plugin id="org.eclipse.e4.ui.swt.gtk" fragment="true"/>
       <plugin id="org.eclipse.e4.ui.widgets"/>
       <plugin id="org.eclipse.e4.ui.workbench"/>
       <plugin id="org.eclipse.e4.ui.workbench.addons.swt"/>
@@ -477,12 +549,8 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.emf.facet.custom.core"/>
       <plugin id="org.eclipse.emf.facet.custom.metamodel"/>
       <plugin id="org.eclipse.emf.facet.custom.ui"/>
-      <plugin id="org.eclipse.emf.facet.efacet"/>
-      <plugin id="org.eclipse.emf.facet.efacet.catalog"/>
       <plugin id="org.eclipse.emf.facet.efacet.core"/>
       <plugin id="org.eclipse.emf.facet.efacet.metamodel"/>
-      <plugin id="org.eclipse.emf.facet.infra.common.core"/>
-      <plugin id="org.eclipse.emf.facet.query.java"/>
       <plugin id="org.eclipse.emf.facet.query.java.core"/>
       <plugin id="org.eclipse.emf.facet.query.java.metamodel"/>
       <plugin id="org.eclipse.emf.facet.util.core"/>
@@ -645,9 +713,19 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.jdt.junit.runtime"/>
       <plugin id="org.eclipse.jdt.launching"/>
       <plugin id="org.eclipse.jdt.ui"/>
+      <plugin id="org.eclipse.jem"/>
+      <plugin id="org.eclipse.jem.util"/>
+      <plugin id="org.eclipse.jem.workbench"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.text"/>
+      <plugin id="org.eclipse.jst.common.annotations.controller"/>
+      <plugin id="org.eclipse.jst.common.annotations.core"/>
+      <plugin id="org.eclipse.jst.common.frameworks"/>
+      <plugin id="org.eclipse.jst.common.project.facet.core"/>
+      <plugin id="org.eclipse.jst.j2ee"/>
+      <plugin id="org.eclipse.jst.j2ee.core"/>
+      <plugin id="org.eclipse.jst.server.core"/>
       <plugin id="org.eclipse.ltk.core.refactoring"/>
       <plugin id="org.eclipse.ltk.ui.refactoring"/>
       <plugin id="org.eclipse.m2m.atl"/>
@@ -724,9 +802,22 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.search"/>
       <plugin id="org.eclipse.sirius"/>
       <plugin id="org.eclipse.sirius.common"/>
+      <plugin id="org.eclipse.sirius.common.acceleo.mtl"/>
+      <plugin id="org.eclipse.sirius.common.ui"/>
+      <plugin id="org.eclipse.sirius.diagram"/>
+      <plugin id="org.eclipse.sirius.diagram.layoutdata"/>
+      <plugin id="org.eclipse.sirius.diagram.ui"/>
       <plugin id="org.eclipse.sirius.ecore.extender"/>
       <plugin id="org.eclipse.sirius.ext.base"/>
+      <plugin id="org.eclipse.sirius.ext.draw2d"/>
+      <plugin id="org.eclipse.sirius.ext.e3.ui"/>
       <plugin id="org.eclipse.sirius.ext.emf"/>
+      <plugin id="org.eclipse.sirius.ext.emf.tx"/>
+      <plugin id="org.eclipse.sirius.ext.emf.ui"/>
+      <plugin id="org.eclipse.sirius.ext.gef"/>
+      <plugin id="org.eclipse.sirius.ext.gmf.runtime"/>
+      <plugin id="org.eclipse.sirius.ext.swt"/>
+      <plugin id="org.eclipse.sirius.ui"/>
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
@@ -757,6 +848,19 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.uml2.uml.edit"/>
       <plugin id="org.eclipse.uml2.uml.editor"/>
       <plugin id="org.eclipse.update.configurator"/>
+      <plugin id="org.eclipse.wst.common.core"/>
+      <plugin id="org.eclipse.wst.common.emf"/>
+      <plugin id="org.eclipse.wst.common.emfworkbench.integration"/>
+      <plugin id="org.eclipse.wst.common.environment"/>
+      <plugin id="org.eclipse.wst.common.frameworks"/>
+      <plugin id="org.eclipse.wst.common.modulecore"/>
+      <plugin id="org.eclipse.wst.common.project.facet.core"/>
+      <plugin id="org.eclipse.wst.common.uriresolver"/>
+      <plugin id="org.eclipse.wst.server.core"/>
+      <plugin id="org.eclipse.wst.sse.core"/>
+      <plugin id="org.eclipse.wst.validation"/>
+      <plugin id="org.eclipse.wst.web"/>
+      <plugin id="org.eclipse.wst.xml.core"/>
       <plugin id="org.eclipse.xpand"/>
       <plugin id="org.eclipse.xtend"/>
       <plugin id="org.eclipse.xtend.core"/>
@@ -782,66 +886,6 @@ Visit http://www.cloudscale-project.eu
       <plugin id="org.eclipse.xtext.xbase"/>
       <plugin id="org.eclipse.xtext.xbase.junit"/>
       <plugin id="org.eclipse.xtext.xbase.lib"/>
-
-      <!-- == Misc Packages ============================================================ -->
-      <plugin id="org.modelversioning.emfprofile"/>
-      <plugin id="org.modelversioning.emfprofile.application.decorator.gmf"/>
-      <plugin id="org.modelversioning.emfprofile.application.decorator.reflective"/>
-      <plugin id="org.modelversioning.emfprofile.application.registry"/>
-      <plugin id="org.modelversioning.emfprofile.application.registry.ui"/>
-      <plugin id="org.modelversioning.emfprofile.diagram"/>
-      <plugin id="org.modelversioning.emfprofile.edit"/>
-      <plugin id="org.modelversioning.emfprofile.editor"/>
-      <plugin id="org.modelversioning.emfprofile.project"/>
-      <plugin id="org.modelversioning.emfprofile.project.ui"/>
-      <plugin id="org.modelversioning.emfprofile.registry"/>
-      <plugin id="org.modelversioning.emfprofile.registry.ui"/>
-
-      <!-- == Misc Packages ============================================================ -->
-      <plugin id="javax.annotation"/>
-      <plugin id="javax.el"/>
-      <plugin id="javax.inject"/>
-      <plugin id="javax.servlet"/>
-      <plugin id="javax.servlet.jsp"/>
-      <plugin id="javax.xml"/>
-      <plugin id="lpg.runtime.java"/>
-      <plugin id="net.sourceforge.secondstring"/>
-      <plugin id="org.hamcrest.core"/>
-      <plugin id="org.jgrapht"/>
-      <plugin id="org.junit"/>
-      <plugin id="org.objectweb.asm"/>
-      <plugin id="org.sat4j.core"/>
-      <plugin id="org.sat4j.pb"/>
-
-      <!-- == OS Dep. Packages ============================================================ -->
-      <plugin id="org.antlr.runtime" version="3.0.0.v200803061811"/>
-      <plugin id="org.antlr.runtime" version="3.2.0.v201101311130"/>
-      <plugin id="org.apache.batik.css" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.css" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util" version="1.7.0.v201011041433"/>
-      <plugin id="org.apache.batik.util" version="1.6.0.v201011041432"/>
-      <plugin id="org.apache.batik.util.gui" version="1.7.0.v200903091627"/>
-      <plugin id="org.apache.batik.util.gui" version="1.6.0.v201011041432"/>
-      <plugin id="org.eclipse.jdt.annotation" version="1.1.0.v20140129-1625"/>
-
-      <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx" fragment="true"/>
-      <plugin id="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.gtk.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
-
-      <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.java7" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
-      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
-
-      <plugin id="org.eclipse.core.net"/>
-      <plugin id="org.eclipse.core.net.linux.x86_64" fragment="true"/>
-
    </plugins>
 
    <configurations>

@@ -70,9 +70,9 @@ Package : mvn install
 	<repository><id>CloudScale Toolchain</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/</url></repository>
 
 	<!-- Eclipse update-sites -->
-	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/luna/</url></repository>
+	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/mars/</url></repository>
 
-	<repository><id>Eclipse 4.4 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.4/</url></repository>
+	<repository><id>Eclipse 4.5 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.5/</url></repository>
 
 	<repository><id>Xtext All In One (Releases)</id><layout>p2</layout><url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url></repository>
 
