@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<!-- 
+<!--
 Use : -o for mvn offline mode (do not re-fetch repositories)
 Run : mvn tycho-eclipserun:eclipse-run ;; does not work
 Package : mvn install
@@ -20,15 +20,16 @@ Package : mvn install
   </properties>
 
   <modules>
-    <!-- 
+    <!--
      Plugins - env and scaledl.overview
      -->
     <module>plugins/eu.cloudscaleproject.env.common</module>
     <module>plugins/eu.cloudscaleproject.env.master</module>
     <module>plugins/eu.cloudscaleproject.env.product</module>
-    
-    <module>plugins/eu.cloudscaleproject.env.toolchain</module>	
-    
+
+    <module>plugins/eu.cloudscaleproject.env.toolchain</module>
+    <module>plugins/eu.cloudscaleproject.env.toolchain.explorer</module>
+
     <module>plugins/eu.cloudscaleproject.env.extractor</module>
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
@@ -52,7 +53,7 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.method.common</module>
     <module>plugins/eu.cloudscaleproject.env.method.viewer</module>
     <module>plugins/eu.cloudscaleproject.env.method.editor</module>
-    
+
     <module>externals/DynamicSpotter/org.spotter.eclipse.ui</module>
 
     <!--
@@ -61,12 +62,12 @@ Package : mvn install
     <module>features/eu.cloudscaleproject.feature.method</module>
     <module>features/eu.cloudscaleproject.feature.environment</module>
     <module>features/eu.cloudscaleproject.updatesite.environment</module>
-    
+
   </modules>
   <!-- Export "Available Software Sites" (properties > install/update) from eclipse and use following sed command on it -->
   <!--sed -r 's;.*url="(.*?)" sel.*name="(.*)".*;<repository><id>\2</id><layout>p2</layout><url>\1</url></repository>;g' sites.xml -->
 <repositories>
-	<!-- CloudScale update-sites --> 
+	<!-- CloudScale update-sites -->
 	<repository><id>CloudScale Toolchain</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/</url></repository>
 
 	<!-- Eclipse update-sites -->
@@ -77,11 +78,11 @@ Package : mvn install
 	<repository><id>Xtext All In One (Releases)</id><layout>p2</layout><url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</url></repository>
 
 </repositories>
- 
+
   <build>
 <pluginManagement>
       <plugins>
-        
+
 
       </plugins>
     </pluginManagement>
@@ -126,11 +127,6 @@ Package : mvn install
 					<environment>
 						<os>macosx</os>
 						<ws>cocoa</ws>
-						<arch>x86</arch>
-					</environment>
-					<environment>
-						<os>macosx</os>
-						<ws>cocoa</ws>
 						<arch>x86_64</arch>
 					</environment>
 					<environment>
@@ -149,12 +145,3 @@ Package : mvn install
 	</plugins>
   </build>
 </project>
-
-
-
-
-
-
-
-
-
