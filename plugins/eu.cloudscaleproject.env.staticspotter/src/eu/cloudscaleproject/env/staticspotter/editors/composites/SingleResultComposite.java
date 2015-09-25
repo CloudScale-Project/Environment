@@ -2,18 +2,13 @@ package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import java.util.Collection;
 
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PlatformUI;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
-import org.reclipse.structure.inference.ui.views.annotations.AnnotationView;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
+import eu.cloudscaleproject.env.staticspotter.editors.composites.annotations.AnnotationComposite;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 
@@ -22,8 +17,8 @@ import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 public class SingleResultComposite extends TitleEditorView implements IRefreshable{
 
 	private ResultAlternative resultFolder;
-	private AnnotationView annotationView;
 	private Collection<ASGAnnotation> annotations;
+	private AnnotationComposite annotationComposite;
 
 	/**
 	 * Create the composite.
@@ -36,52 +31,22 @@ public class SingleResultComposite extends TitleEditorView implements IRefreshab
 		
 		this.resultFolder = rif;
 		
+		this.annotationComposite = new AnnotationComposite(getContainer());
+		
 		init();
-		initAnnotationView();
 	}
 	
-	private void init()
+	private void init ()
 	{
+		if (this.annotations == null)
+		{
 			this.annotations = Util.loadAnnotations(this.resultFolder);
-			if (annotations != null && annotationView != null)
-                annotationView.loadAnnotations(annotations);
-	}
-
-	private void initAnnotationView()
-	{
-		this.annotationView = new AnnotationView()
-		{
-			@Override
-			public IWorkbenchPartSite getSite()
-			{
-				return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
-
-			}
-		};
-
-		Display.getDefault().asyncExec(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				StackLayout stackLayout = new StackLayout();
-				getContainer().setLayout(stackLayout);
-				annotationView.createPartControl(getContainer());
-
-				Control annotationTable = ((Composite)getContainer().getChildren()[0]).getChildren()[0];
-				annotationTable.setParent(getContainer());
-				
-				stackLayout.topControl = annotationTable;
-				getContainer().layout();
-			}
-
-		});
+			if (this.annotations != null) this.annotationComposite.loadAnnotations(annotations);
+		}
 	}
 	
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		//resultFolder.load();
-		init();
+		init(); // Workaround - composite can be created before results are available
 	}
 }
