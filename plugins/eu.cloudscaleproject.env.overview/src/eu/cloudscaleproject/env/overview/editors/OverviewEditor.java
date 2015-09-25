@@ -23,7 +23,7 @@ public class OverviewEditor extends AlternativeEditor{
 			configComposite.dispose();
 		}
 		
-		part.setLabel("Overview alternative ["+ alternative.getName() +"]");
+		part.setLabel("Overview ["+ alternative.getName() +"]");
 		configComposite = new OverviewComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

@@ -28,7 +28,7 @@ public class ConfigEditor extends AlternativeEditor{
 			composite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Dynamic spotter config ["+ alternative.getName() +"]");
 		composite = new ConfigAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

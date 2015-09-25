@@ -28,7 +28,7 @@ public class ResultEditor extends AlternativeEditor{
 			composite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Dynamic spotter result ["+ alternative.getName() +"]");
 		composite = new ResultAlternativeComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

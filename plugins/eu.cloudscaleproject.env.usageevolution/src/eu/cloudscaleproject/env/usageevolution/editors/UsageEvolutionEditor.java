@@ -23,7 +23,7 @@ public class UsageEvolutionEditor extends AlternativeEditor{
 			configComposite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Usage evilution ["+ alternative.getName() +"]");
 		configComposite = new UsageEvolutionComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

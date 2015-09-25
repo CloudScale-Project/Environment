@@ -28,7 +28,7 @@ public class ConfigEditor extends AlternativeEditor{
 			composite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Static spotter config ["+ alternative.getName() +"]");
 		composite = new ConfigAlternativeComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

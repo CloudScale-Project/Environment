@@ -28,7 +28,7 @@ public class ConfigEditor extends AlternativeEditor{
 			configComposite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Extractor config ["+ alternative.getName() +"]");
 		configComposite = new ConfigAlternativeComposite(parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);

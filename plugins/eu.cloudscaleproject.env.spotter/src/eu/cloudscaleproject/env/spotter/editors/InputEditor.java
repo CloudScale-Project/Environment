@@ -29,7 +29,7 @@ public class InputEditor extends AlternativeEditor{
 			composite.dispose();
 		}
 		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
+		part.setLabel("Dynamic spotter input ["+ alternative.getName() +"]");
 		composite = new InputAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative);
 		
 		setAlternative(alternative);
