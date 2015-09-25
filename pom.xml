@@ -28,6 +28,7 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.product</module>
 
     <module>plugins/eu.cloudscaleproject.env.toolchain</module>
+    <module>plugins/eu.cloudscaleproject.env.toolchain.explorer</module>
 
     <module>plugins/eu.cloudscaleproject.env.extractor</module>
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
