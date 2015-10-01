@@ -18,29 +18,30 @@ public class BottomTrimbarAddon
 
 	@Inject
 	@Optional
-	public void applicationStarted(@EventTopic(UIEvents.UILifeCycle.APP_STARTUP_COMPLETE) Event event, MApplication app)
-	{
-		final MTrimmedWindow window = (MTrimmedWindow) app.getChildren().get(0);
-
-		Display.getDefault().asyncExec(new Runnable()
-		{
+	public void applicationStarted(@EventTopic(UIEvents.UILifeCycle.APP_STARTUP_COMPLETE) Event event, final MApplication app) {
+		
+		Display.getDefault().syncExec(new Runnable() {
+			
 			@Override
-			public void run()
-			{
-				for (MTrimBar trimbar : window.getTrimBars())
-				{
-					for (MTrimElement element : trimbar.getChildren())
-					{
-						if ("org.eclipse.ui.ProgressBar".equals(element.getElementId()))
-						{
-							element.setToBeRendered(true);
-							element.setVisible(true);
-						}
-					}
+			public void run() {
+				showProgressBar(app);
+			}
+		});
+		
+	}
+	
+	private void showProgressBar(MApplication app){
+		MTrimmedWindow window = (MTrimmedWindow) app.getChildren().get(0);
+		
+		for(MTrimBar trimbar : window.getTrimBars()){
+			for(MTrimElement element : trimbar.getChildren()){
+				if("org.eclipse.ui.ProgressBar".equals(element.getElementId())){
+					element.setToBeRendered(true);
+					element.setVisible(true);
 				}
 
 			}
-		});
+		}
 	}
 
 }

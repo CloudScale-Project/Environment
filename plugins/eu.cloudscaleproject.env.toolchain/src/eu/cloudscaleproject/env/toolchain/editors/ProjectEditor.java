@@ -75,19 +75,20 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		return "Dashboard ("+p.getName()+")";
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
+		
 		if (adapter.equals(IPropertySheetPage.class)) {
 			for(ProjectEditorExtension pee : editorProvider.getToolExtensions()){
 				if(tabFolder.getSelection() != null && tabFolder.getSelection().equals(pee.getTabItem())){
-					return pee.getPropertySheetPage();
+					return (T)pee.getPropertySheetPage();
 				}
 			}
 			return super.getAdapter(adapter);
 		}
 		else if(adapter.equals(IDirtyAdapter.class)){
-			return this;
+			return (T)this;
 		}
 		else {
 			return super.getAdapter(adapter);

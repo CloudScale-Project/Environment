@@ -1,19 +1,17 @@
 package eu.cloudscaleproject.env.common.explorer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,8 +29,11 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.common.CloudScaleConstants;
 
 public class ExplorerProjectPaths {
 
@@ -40,7 +41,7 @@ public class ExplorerProjectPaths {
 			.getLogger(ExplorerProjectPaths.class.getName());
 
 	// TODO: use those paths when creating files
-	public static final String FILE_PROJECT_PROPERTIES = "project.cse";
+	public static final String FILE_PROJECT_DASHBOARD = "project.cse";
 	//
 
 	// diagram and model used for notifications and project progress status
@@ -73,8 +74,13 @@ public class ExplorerProjectPaths {
 
 		List<IProject> filtered = new ArrayList<IProject>();
 		for(IProject p : projects){
-			if(getPropertyFile(p).exists()){
-				filtered.add(p);
+			try {
+				IProjectNature pn = p.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
+				if(pn != null){
+					filtered.add(p);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
 		
@@ -90,8 +96,8 @@ public class ExplorerProjectPaths {
 	 *            Project in question
 	 * @return boolean
 	 */
-	public static boolean hasPropertyFile(IProject project) {
-		IFile file = project.getFile(FILE_PROJECT_PROPERTIES);
+	public static boolean hasDashboardFile(IProject project) {
+		IFile file = project.getFile(FILE_PROJECT_DASHBOARD);
 		return file.exists();
 	}
 
@@ -103,30 +109,14 @@ public class ExplorerProjectPaths {
 	 * @param project
 	 * @return IFile resource
 	 */
-	public static IFile getPropertyFile(IProject project) {
-		return project.getFile(FILE_PROJECT_PROPERTIES);
+	public static IFile getDashboardFile(IProject project) {
+		return project.getFile(FILE_PROJECT_DASHBOARD);
 	}
 
-	public static synchronized Properties getProjectProperties(IProject project) {
-		IFile file = project.getFile(FILE_PROJECT_PROPERTIES);
-
-		if (!file.exists()) {
-			logger.severe("In project " + project.toString() + ": File " + FILE_PROJECT_PROPERTIES + " doesn't exist!");
-			return null;
-		}
-
-		try {
-			Properties p = new Properties();
-			InputStream is = file.getContents(true);
-			p.load(is);
-			is.close();
-
-			return p;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
+	public static synchronized Preferences getProjectProperties(IProject project) {
+		
+		ProjectScope scope = new ProjectScope(project);
+		return scope.getNode("project").node("general");
 	}
 
 	/**
@@ -144,70 +134,23 @@ public class ExplorerProjectPaths {
 	 *            do not exist jet.
 	 * @return Value of the specified key.
 	 */
-	public static synchronized String getProjectProperty(IProject project,
-			String key, String defaultValue) {
-
-		Properties p = getProjectProperties(project);
-		
-		if(p == null){
-			return defaultValue;
-		}
-		
-		String value = p.getProperty(key);
-
-		if (value == null) {
-			if (defaultValue != null) {
-				setProjectProperty(project, key, defaultValue);
-				value = defaultValue;
-
-			} else {
-				logger.warning("Project properties file '"
-						+ FILE_PROJECT_PROPERTIES + "': unknown propertie: '"
-						+ key + "'");
-			}
-		}
-
-		return value;
+	public static synchronized String getProjectProperty(IProject project, String key, String defaultValue) {
+		Preferences preferences = getProjectProperties(project);
+		return preferences.get(key, defaultValue);
 	}
 
-	public static synchronized void deleteProjectProperty(IProject project,
-			String key) {
+	public static synchronized void deleteProjectProperty(IProject project, String key) {
 		setProjectProperty(project, key, null);
 	}
 
-	public static synchronized void setProjectProperty(IProject project,
-			String key, String value) {
-		IFile file = project.getFile(FILE_PROJECT_PROPERTIES);
-
-		if (!file.exists()) {
-			logger.severe("File " + FILE_PROJECT_PROPERTIES + " doesn't exist!");
-			// create new properties file if it don't exist.
-			return;
-		}
-
+	public static synchronized void setProjectProperty(IProject project, String key, String value) {
+		Preferences preferences = getProjectProperties(project);
+		preferences.put(key, value);
 		try {
-			Properties p = getProjectProperties(project);
-
-			p.remove(key);
-			if (value != null)
-				p.setProperty(key, value);
-
-
-			// TODO: find out how to fix this nonsense!
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			p.store(bos, "");
-			ByteArrayInputStream bais = new ByteArrayInputStream(
-					bos.toByteArray());
-
-			file.delete(true, null);
-			file.create(bais, true, null);
-			bais.close();
-			//
-
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
+			preferences.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

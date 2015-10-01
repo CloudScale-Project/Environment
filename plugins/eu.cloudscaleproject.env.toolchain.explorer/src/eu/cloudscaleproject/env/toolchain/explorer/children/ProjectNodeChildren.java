@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -12,7 +11,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
@@ -72,14 +70,6 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 
 	@Override
 	public List<? extends Object> getKeys() {
-		
-		// Check if the project property file exists. 
-		// If not skip child creation and wait for the resource change listener event to trigger refresh,
-		// until properties file is created.
-		IFile projectProp = ExplorerProjectPaths.getPropertyFile(project);
-		if(projectProp == null || !projectProp.exists()){
-			return null;
-		}
 		
 		List<IConfigurationElement> toolElements = ToolchainExtensions.getInstance().getToolElements();
 		

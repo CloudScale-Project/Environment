@@ -50,7 +50,7 @@ public class OpenProjectEditorHandler {
 		}
 
 			
-		IFile file = ExplorerProjectPaths.getPropertyFile(project);
+		IFile file = ExplorerProjectPaths.getDashboardFile(project);
 
 		IEditorInput editorInput = new FileEditorInput(file);
 		IWorkbenchPage page = PlatformUI.getWorkbench()

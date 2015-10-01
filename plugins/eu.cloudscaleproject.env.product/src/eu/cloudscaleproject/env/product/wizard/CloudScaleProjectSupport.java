@@ -1,9 +1,7 @@
 package eu.cloudscaleproject.env.product.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.net.URI;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -19,7 +17,6 @@ import org.eclipse.core.runtime.SafeRunner;
 
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
 
 public class CloudScaleProjectSupport
@@ -83,18 +80,7 @@ public class CloudScaleProjectSupport
 		try
 		{
 			addProjectNature(p);
-
-			// Create Project file
-			IFile projectFile = p.getFile(ExplorerProjectPaths.FILE_PROJECT_PROPERTIES);
-			Properties prop = createDefaultProperties();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			prop.store(out, "");
-
-			if (!projectFile.exists())
-				projectFile.create(new ByteArrayInputStream(out.toByteArray()), true, null);
-
-			// projectFile.setHidden(true);
-
+			
 			IFolder extractorFolder = createFolder(p, DEFAULT_FOLDER_EXTRACTOR);
 			IFolder analyserFolder = createFolder(p, DEFAULT_FOLDER_ANALYSER);
 			IFolder dsFolder = createFolder(p, DEFAULT_FOLDER_DYNAMIC_SPOTTER);
@@ -107,7 +93,16 @@ public class CloudScaleProjectSupport
 
 			createFolder(p, DEFAULT_FOLDER_SCALEDL);
 			createFolder(p, DEFAULT_FOLDER_GENERATED);
+			
+			// Create Project file
+			createDefaultProperties(p);
 
+			// projectFile.setHidden(true);
+
+			IFile dashboardFile = p.getFile(ExplorerProjectPaths.FILE_PROJECT_DASHBOARD);
+			if (!dashboardFile.exists())
+				dashboardFile.create(new ByteArrayInputStream(new byte[]{}), true, null);
+			
 			// call all new project extensions
 			handleExtensions(p);
 
@@ -116,9 +111,10 @@ public class CloudScaleProjectSupport
 			{
 				p.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				
-				IFile propertyFile = ExplorerProjectPaths.getPropertyFile(p);
-				ExplorerUtils.selectAndReveal(propertyFile);
-				ExplorerUtils.openFile(propertyFile);
+				//Removed in CSE 3.2
+				//IFile propertyFile = ExplorerProjectPaths.getPropertyFile(p);
+				//ExplorerUtils.selectAndReveal(propertyFile);
+				//ExplorerUtils.openFile(propertyFile);
 				
 			} catch (CoreException e)
 			{
@@ -185,26 +181,21 @@ public class CloudScaleProjectSupport
 	private static final String DEFAULT_FOLDER_CONFIGURATION = "Configuration";
 	private static final String DEFAULT_FOLDER_RESULTS = "Results";
 
-	private static Properties createDefaultProperties()
+	private static void createDefaultProperties(IProject project)
 	{
-		Properties prop = new Properties();
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_GENERATED, DEFAULT_FOLDER_GENERATED);
+		
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT, DEFAULT_FOLDER_INPUT);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION, DEFAULT_FOLDER_CONFIGURATION);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS, DEFAULT_FOLDER_RESULTS);
 
-		// folders
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_GENERATED, DEFAULT_FOLDER_GENERATED);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER, DEFAULT_FOLDER_ANALYSER);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR, DEFAULT_FOLDER_EXTRACTOR);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER, DEFAULT_FOLDER_DYNAMIC_SPOTTER);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER, DEFAULT_FOLDER_STATIC_SPOTTER);
 
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_INPUT, DEFAULT_FOLDER_INPUT);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION, DEFAULT_FOLDER_CONFIGURATION);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_RESULTS, DEFAULT_FOLDER_RESULTS);
-
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_ANALYSER, DEFAULT_FOLDER_ANALYSER);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR, DEFAULT_FOLDER_EXTRACTOR);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER, DEFAULT_FOLDER_DYNAMIC_SPOTTER);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER, DEFAULT_FOLDER_STATIC_SPOTTER);
-
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_SCALEDL, DEFAULT_FOLDER_SCALEDL);
-		prop.setProperty(ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, DEFAULT_FOLDER_USAGE_EVOLUTION);
-
-		return prop;
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL, DEFAULT_FOLDER_SCALEDL);
+		ExplorerProjectPaths.setProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, DEFAULT_FOLDER_USAGE_EVOLUTION);
 	}
 
 	private static IFolder createFolder(IProject p, String folderName)

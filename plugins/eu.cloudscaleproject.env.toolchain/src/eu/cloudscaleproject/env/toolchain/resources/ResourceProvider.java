@@ -136,6 +136,11 @@ public abstract class ResourceProvider
 		checkRootFolder();
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 
+		//if the root folder does not exist jet
+		if(!rootFolder.exists()){
+			return;
+		}
+		
 		synchronized (resourcesLock) {
 			try
 			{
@@ -153,25 +158,6 @@ public abstract class ResourceProvider
 			}
 		}
 	}
-	
-	/*
-	public void loadAll(IProgressMonitor monitor){
-		//show validation diagram on initialization
-		for(IEditorInputResource eir : getResources()){
-			
-			eir.load(monitor);
-			eir.validate(monitor);
-			
-			if(eir instanceof IValidationStatusProvider){
-				IValidationStatusProvider vp = (IValidationStatusProvider)eir;
-				
-				ValidationDiagramService.showDiagram(getProject());
-				ValidationDiagramService.showStatus(getProject(), vp);
-				break;
-			}
-		}
-	}
-	*/
 
 	private void dispose()
 	{		
@@ -276,25 +262,18 @@ public abstract class ResourceProvider
 		return null;
 	}
 
-	public synchronized final boolean checkRootFolder()
+	private synchronized final void checkRootFolder()
 	{
-		boolean modified = false;
-		try
-		{
-			if (!rootFolder.exists())
-			{
-				if (rootFolder.getParent().exists())
-				{
+		if (!rootFolder.exists()) {
+			if (rootFolder.getParent().exists()) {
+				try {
 					rootFolder.create(true, true, null);
-					modified = true;
+				} 
+				catch (CoreException e) {
+					e.printStackTrace();
 				}
 			}
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
 		}
-
-		return modified;
 	}
 	
 	public IFolder getRootFolder()
@@ -385,8 +364,6 @@ public abstract class ResourceProvider
 		
 	public IEditorInputResource createNewResource(String name, String type, boolean empty)
 	{
-		checkRootFolder();
-
 		String resourceNameBase = defaultResName + "_" + result_postix_format.format(new Date());
 		String resourceName = resourceNameBase;
 		

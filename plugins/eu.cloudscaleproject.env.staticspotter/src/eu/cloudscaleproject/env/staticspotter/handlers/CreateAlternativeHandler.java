@@ -46,6 +46,10 @@ public class CreateAlternativeHandler {
 	@CanExecute
 	public boolean canExecute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable){
 		
+		if(adaptable == null){
+			return false;
+		}
+		
 		ResourceProvider rp = (ResourceProvider)adaptable.getAdapter(ResourceProvider.class);
 		if(rp != null){
 			return true;

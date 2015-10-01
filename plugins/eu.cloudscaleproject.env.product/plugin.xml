@@ -36,10 +36,6 @@
                value="50,295,445,20">
          </property>
          <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-         <property
                name="aboutText"
                value="CloudScale Environment&#x0A;Version: 3.1&#x0A;&#x0A;Visit http://www.cloudscale-project.eu">
          </property>
@@ -58,6 +54,10 @@
          <property
                name="lifeCycleURI"
                value="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.LifeCycleManager">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

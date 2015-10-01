@@ -73,7 +73,7 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 					{
 						IProject project = ExampleService.getInstance().createExampleResourceProject(resource);
 
-						IFile propertyFile = ExplorerProjectPaths.getPropertyFile(project);
+						IFile propertyFile = ExplorerProjectPaths.getDashboardFile(project);
 						if (propertyFile != null && propertyFile.exists()) // TODO: check nature
 						{
 							cseProjectFile = propertyFile;

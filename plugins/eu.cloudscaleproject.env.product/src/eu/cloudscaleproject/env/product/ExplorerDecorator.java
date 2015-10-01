@@ -183,7 +183,7 @@ public class ExplorerDecorator extends LabelProvider implements
 	
 	private Properties getProjectProperties (IProject p)
 	{
-		IFile f = p.getFile(ExplorerProjectPaths.FILE_PROJECT_PROPERTIES);
+		IFile f = p.getFile(ExplorerProjectPaths.FILE_PROJECT_DASHBOARD);
 		
 		if (!f.exists()) return null;
 		

@@ -8,7 +8,11 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
@@ -265,12 +269,20 @@ public class ToolchainUtils {
 		}
 		
 		if(folder != null && !folder.exists()){
-			try {
-				folder.create(true, true, null);
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			final IFolder unexistingFolder = folder;
+			
+			WorkspaceJob job = new WorkspaceJob("Creating project folder") {
+				
+				@Override
+				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+					unexistingFolder.create(true, true, null);
+					return Status.OK_STATUS;
+				}
+			};
+			job.setUser(false);
+			job.schedule();
+			
 		}
 		
 		return folder;

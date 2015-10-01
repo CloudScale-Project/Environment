@@ -143,7 +143,7 @@ public class ImportModelWizard extends Wizard {
 	private IFolder getImportedFolder (IProject project) {
 		try
 		{
-			IFile file = project.getFile(ExplorerProjectPaths.FILE_PROJECT_PROPERTIES);
+			IFile file = project.getFile(ExplorerProjectPaths.FILE_PROJECT_DASHBOARD);
 			Properties p = new Properties();
 			p.load(file.getContents(true));
 			String genFolderName = p.getProperty(ExplorerProjectPaths.KEY_FOLDER_IMPORT);

@@ -1,11 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 
 /**
  *
@@ -18,14 +14,6 @@ public class ExplorerResourceNode extends ExplorerNode{
 		
 	public ExplorerResourceNode(IEclipseContext context, String id, IResource resource, IExplorerNodeChildren childFactory) {
 		super(context, id, childFactory);
-		
-		if(resource instanceof IFolder){
-			try {
-				ExplorerProjectPaths.prepareFolder((IFolder)resource);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		this.resource = resource;
 		if(resource != null){

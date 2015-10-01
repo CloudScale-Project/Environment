@@ -3,6 +3,11 @@ package eu.cloudscaleproject.env.product.wizard;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -33,12 +38,23 @@ public class CloudScaleProjectWizard extends BasicNewProjectResourceWizard {
 	@Override
 	public boolean performFinish() {
 
-		boolean b = super.performFinish();
+		final boolean b = super.performFinish();
 
-		if (b && getNewProject() != null) {
-			IProject p = getNewProject();
-			CloudScaleProjectSupport.createDefaultProject(p);
-		}
+		WorkspaceJob job = new WorkspaceJob("Configuring Cloudscale project") {
+			
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor arg0) throws CoreException {
+				if (b && getNewProject() != null) {
+					IProject p = getNewProject();
+					CloudScaleProjectSupport.createDefaultProject(p);
+				}
+				
+				return Status.OK_STATUS;
+			}
+		};
+		
+		job.setUser(true);
+		job.schedule();
 
 		return b;
 	}

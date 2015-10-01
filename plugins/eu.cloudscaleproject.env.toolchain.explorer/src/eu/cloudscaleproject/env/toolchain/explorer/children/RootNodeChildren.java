@@ -57,6 +57,48 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 		}
 	};
 	
+	private static class ProjectKey{
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((nature == null) ? 0 : nature.hashCode());
+			result = prime * result + ((project == null) ? 0 : project.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ProjectKey other = (ProjectKey) obj;
+			if (nature == null) {
+				if (other.nature != null)
+					return false;
+			} else if (!nature.equals(other.nature))
+				return false;
+			if (project == null) {
+				if (other.project != null)
+					return false;
+			} else if (!project.equals(other.project))
+				return false;
+			return true;
+		}
+
+		private final IProject project;
+		private final IProjectNature nature;
+		
+		public ProjectKey(IProject project, IProjectNature nature) {
+			this.project = project;
+			this.nature = nature;
+		}
+	}
+	
 	public RootNodeChildren(boolean lazy) {
 		super(lazy);
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
@@ -66,21 +108,20 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 	public List<? extends Object> getKeys() {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		
-		List<IProject> csProjects = new ArrayList<IProject>();
-		List<IProject> importedProjects = new ArrayList<IProject>();
+		List<ProjectKey> csProjects = new ArrayList<ProjectKey>();
+		List<ProjectKey> importedProjects = new ArrayList<ProjectKey>();
 		
 		for(IProject project : projects){
 			try {
 				IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
 				if(pn != null){
-					csProjects.add(project);
+					csProjects.add(new ProjectKey(project, pn));
 				}
 				else{
-					importedProjects.add(project);
+					importedProjects.add(new ProjectKey(project, pn));
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
-				importedProjects.add(project);
 			}
 		}
 		
@@ -90,36 +131,34 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 	
 	@Override
 	public IExplorerNode getChild(Object key) {
-		if(key instanceof IProject){
-			IProject project = (IProject)key;
 			
-			boolean isCloudscale = false;
-			try{
-				IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
-				if(pn != null){
-					isCloudscale = true;
-				}
+		IProject project = ((ProjectKey)key).project;
+		
+		boolean isCloudscale = false;
+		try{
+			IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
+			if(pn != null){
+				isCloudscale = true;
 			}
-			catch (CoreException e) {
-				//ignore
-			}
-			
-			IExplorerNode node;
-			
-			if(isCloudscale){
-				node = new ProjectNode(getNode().getContext(), project);
-				node.setName(project.getName());
-				node.setIcon(CommonResources.PROJECT_16, false);
-			}
-			else{
-				node = new ExplorerResourceNode(getNode().getContext(), project.getName(), project, null);
-				node.setName(project.getName());
-				node.setIcon(CommonResources.OPERATION, false);
-			}
-			
-			return node;
 		}
-		return null;
+		catch (CoreException e) {
+			//ignore
+		}
+		
+		IExplorerNode node;
+		
+		if(isCloudscale){
+			node = new ProjectNode(getNode().getContext(), project);
+			node.setName(project.getName());
+			node.setIcon(CommonResources.PROJECT_16, false);
+		}
+		else{
+			node = new ExplorerResourceNode(getNode().getContext(), project.getName(), project, null);
+			node.setName(project.getName());
+			node.setIcon(CommonResources.OPERATION, false);
+		}
+		
+		return node;
 	}
 	
 	@Override

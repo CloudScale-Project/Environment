@@ -115,7 +115,7 @@ public class ResourceRegistry {
 		return resourceProvider;
 	}
 	
-	private synchronized void collectResourceProviders(IProject project){
+	public synchronized void collectResourceProviders(IProject project){
 		for(Entry<String, ResourceExtensionItem> entry : resourceExtensionItems.entrySet()){
 			String id = entry.getKey();
 			
