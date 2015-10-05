@@ -111,20 +111,28 @@ public class CloudScaleProjectSupport
 			{
 				p.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				
-				//Removed in CSE 3.2
-				//IFile propertyFile = ExplorerProjectPaths.getPropertyFile(p);
-				//ExplorerUtils.selectAndReveal(propertyFile);
-				//ExplorerUtils.openFile(propertyFile);
+				//This operation causes thread-lock
+				/*
+				final IFile propertyFile = ExplorerProjectPaths.getDashboardFile(p);
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						ExplorerUtils.selectAndReveal(propertyFile);
+						ExplorerUtils.openFile(propertyFile);
+					}
+				});
+				*/
 				
-			} catch (CoreException e)
+			} 
+			catch (CoreException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

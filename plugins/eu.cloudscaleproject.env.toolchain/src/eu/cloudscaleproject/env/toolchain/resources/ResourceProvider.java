@@ -133,7 +133,6 @@ public abstract class ResourceProvider
 	
 	private final void initialize()
 	{
-		checkRootFolder();
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 
 		//if the root folder does not exist jet

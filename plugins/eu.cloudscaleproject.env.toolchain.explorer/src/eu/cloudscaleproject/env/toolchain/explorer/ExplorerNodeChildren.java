@@ -9,6 +9,8 @@ import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
@@ -53,7 +55,7 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		keys.clear();
 		nodes.clear();
 		
-		refresh();
+		doRefresh();
 	}
 	
 	public boolean hasChildren(){
@@ -86,6 +88,16 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	}
 	
 	public synchronized void refresh(){
+		BatchExecutor.getInstance().addTask(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				doRefresh();
+			}
+		});
+	}
+	
+	public synchronized void doRefresh(){
 		
 		if(!initialized){
 			return;

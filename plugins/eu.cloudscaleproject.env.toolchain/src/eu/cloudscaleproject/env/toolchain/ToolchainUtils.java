@@ -98,7 +98,7 @@ public class ToolchainUtils {
 
 	// Extractor results 
 	public static final String KEY_FILE_SOURCEDECORATOR = "path_sourcedecorator";
-	
+		
 	public static HashSet<IEditorInputResource> getOpenedAlternatives(){
 		
 		EModelService modelService = CloudscaleContext.getGlobalContext().get(EModelService.class);
@@ -276,13 +276,12 @@ public class ToolchainUtils {
 				
 				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-					unexistingFolder.create(true, true, null);
+					ExplorerProjectPaths.prepareFolder(unexistingFolder);
 					return Status.OK_STATUS;
 				}
 			};
 			job.setUser(false);
-			job.schedule();
-			
+			job.schedule();	
 		}
 		
 		return folder;

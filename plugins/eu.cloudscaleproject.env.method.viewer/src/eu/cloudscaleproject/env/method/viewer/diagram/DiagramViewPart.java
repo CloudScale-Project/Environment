@@ -81,8 +81,8 @@ public class DiagramViewPart{
 				
 				if(!composite.isDisposed()){
 					stackLayout.topControl = composite;
-					composite.layout();
-					composite.redraw();
+					DiagramViewPart.this.composite.layout();
+					DiagramViewPart.this.composite.redraw();
 				}
 				
 				CloudscaleContext.getActiveContext().set(IProject.class, diagram.getProject());

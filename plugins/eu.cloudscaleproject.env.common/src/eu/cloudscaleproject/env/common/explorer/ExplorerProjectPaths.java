@@ -173,7 +173,7 @@ public class ExplorerProjectPaths {
 	 * @param folder Folder to create, including all parent folders.
 	 * @throws CoreException if the folder hierarchy can not be created.
 	 */
-	public static void prepareFolder(IFolder folder) throws CoreException {
+	public static synchronized void prepareFolder(IFolder folder) throws CoreException {
 		IContainer parent = folder.getParent();
 		if (parent instanceof IFolder) {
 			prepareFolder((IFolder)parent);
