@@ -17,24 +17,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  *
  */
 public class ResultEditor extends AlternativeEditor{
-
-	private ResultAlternativeComposite composite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
 		
-		if(composite != null){
-			composite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new ResultAlternativeComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Dynamic spotter result ["+ alternative.getName() +"]");
-		composite = new ResultAlternativeComposite(parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 	
 }

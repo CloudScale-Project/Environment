@@ -17,24 +17,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  *
  */
 public class ConfigEditor extends AlternativeEditor{
-
-	private ConfigAlternativeComposite composite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ConfigAlternative alternative){
 		
-		if(composite != null){
-			composite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new ConfigAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative));
 		
 		part.setLabel("Dynamic spotter config ["+ alternative.getName() +"]");
-		composite = new ConfigAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 	
 }

@@ -95,6 +95,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public static final String PROP_INPUT_ALT_SET = ConfAlternative.class.getName() + "propInputAltSet";
 	public static final String PROP_USAGE_EVOLUTION_SET = ConfAlternative.class.getName() + "propUsageEvolutionSet";
+	
+	private static final String ERROR_DIALOG_TITLE = "Analyser alternative error";
+	private static final String WARNING_DIALOG_TITLE = "Analyser alternative warning";
 
 	private final String ERR_INVALID_INPUT_ALTERNATIVE = "eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.invalidInputAlt";
 
@@ -892,7 +895,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 			if (metric == null)
 			{
-				DialogUtils.openError("Required metric description (Response time) can not be found!");
+				DialogUtils.openError(ERROR_DIALOG_TITLE, "Required metric description (Response time) can not be found!");
 			} else
 			{
 				specification.setMetricDescription(metric);
@@ -1038,7 +1041,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		if (usageScenario == null)
 		{
-			DialogUtils.openWarning("Usage scenario can not be found. Please configure all properties regarding this model manually.");
+			DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Usage scenario can not be found. Please configure all properties regarding this model manually.");
 		}
 
 		List<MeasuringPoint> mps = getMeasuringPointObjects(PcmmeasuringpointPackage.Literals.USAGE_SCENARIO_MEASURING_POINT);
@@ -1048,7 +1051,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			usmp.setUsageScenario(usageScenario);
 		} else
 		{
-			DialogUtils.openWarning("Usage scenario measuring point has been removed! Please create and configure it manually.");
+			DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Usage scenario measuring point has been removed! Please create and configure it manually.");
 		}
 
 		MonitorRepository monitorRep = retrieveMonitorRepository();
@@ -1077,7 +1080,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 			if (metric == null)
 			{
-				DialogUtils.openError("Required metric description (Response time) can not be found!");
+				DialogUtils.openError(ERROR_DIALOG_TITLE, "Required metric description (Response time) can not be found!");
 			} else
 			{
 				specification.setMetricDescription(metric);
@@ -1088,7 +1091,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			usageMeasurementSpec = specification;
 		} else
 		{
-			DialogUtils.openWarning("Monitor object has been removed! Please create and configure it manually.");
+			DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Monitor object has been removed! Please create and configure it manually.");
 		}
 
 		List<Variation> variations = getVariationObjects();
@@ -1101,7 +1104,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 				Workload workload = usageScenario.getWorkload_UsageScenario();
 				if (workload == null)
 				{
-					DialogUtils.openWarning("Usage scenario workload can not be found! Please configure it manually.");
+					DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Usage scenario workload can not be found! Please configure it manually.");
 				}
 
 				VariationType type = null;
@@ -1118,14 +1121,14 @@ public class ConfAlternative extends AbstractConfigAlternative
 					v.setType(type);
 				} else
 				{
-					DialogUtils.openError("Required variation type can not be found! Please configure it manually.");
+					DialogUtils.openError(ERROR_DIALOG_TITLE, "Required variation type can not be found! Please configure it manually.");
 				}
 
 				v.setVariedObjectId(usageScenario.getId());
 			}
 		} else
 		{
-			DialogUtils.openWarning("Variation has been removed! Please create and configure it manually.");
+			DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Variation has been removed! Please create and configure it manually.");
 		}
 
 		ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
@@ -1143,7 +1146,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 			slo.setUpperThreshold(ut);
 		} else
 		{
-			DialogUtils.openWarning("Service level objective has been removed! Please create and configure it manually.");
+			DialogUtils.openWarning(WARNING_DIALOG_TITLE, "Service level objective has been removed! Please create and configure it manually.");
 		}
 	}
 

@@ -17,24 +17,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  *
  */
 public class ResultEditor extends AlternativeEditor{
-
-	private SingleResultComposite composite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
 		
-		if(composite != null){
-			composite.dispose();
-		}
-		
-		part.setLabel("Extractor input ["+ alternative.getName() +"]");
-		composite = new SingleResultComposite(parent, SWT.NONE, alternative);
-		
 		setAlternative(alternative);
+		setControl(new SingleResultComposite(parent, SWT.NONE, alternative));
 		
-		parent.layout();
-		parent.redraw();
+		part.setLabel("Static spotter result ["+ alternative.getName() +"]");
 	}
 	
 }

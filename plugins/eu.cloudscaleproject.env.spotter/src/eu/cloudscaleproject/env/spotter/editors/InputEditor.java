@@ -18,24 +18,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  *
  */
 public class InputEditor extends AlternativeEditor{
-
-	private InputAlternativeComposite composite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
 		
-		if(composite != null){
-			composite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new InputAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative));
 		
 		part.setLabel("Dynamic spotter input ["+ alternative.getName() +"]");
-		composite = new InputAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 	
 }

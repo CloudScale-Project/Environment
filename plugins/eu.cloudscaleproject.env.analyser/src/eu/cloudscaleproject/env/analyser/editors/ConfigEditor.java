@@ -19,24 +19,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  */
 
 public class ConfigEditor extends AlternativeEditor{
-
-	private ConfigComposite configComposite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ConfAlternative alternative){
 		
-		if(configComposite != null){
-			configComposite.dispose();
-		}
-		
-		part.setLabel("Analyser config ["+ alternative.getName() +"]");
-		configComposite = new ConfigComposite(alternative, parent, SWT.NONE);
-		
 		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
+		setControl(new ConfigComposite(alternative, parent, SWT.NONE));
+
+		part.setLabel("Analyser config ["+ alternative.getName() +"]");
 	}
 	
 }

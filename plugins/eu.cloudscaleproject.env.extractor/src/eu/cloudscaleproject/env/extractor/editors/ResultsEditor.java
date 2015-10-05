@@ -17,24 +17,15 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  *
  */
 public class ResultsEditor extends AlternativeEditor{
-
-	private SingleResultComposite resultComposite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
 		
-		if(resultComposite != null){
-			resultComposite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new SingleResultComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Extractor result ["+ alternative.getName() +"]");
-		resultComposite = new SingleResultComposite(parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 	
 }

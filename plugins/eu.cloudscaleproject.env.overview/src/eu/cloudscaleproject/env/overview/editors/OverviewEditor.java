@@ -12,23 +12,14 @@ import eu.cloudscaleproject.env.overview.editors.composites.OverviewComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 public class OverviewEditor extends AlternativeEditor{
-
-	private OverviewComposite configComposite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, OverviewAlternative alternative){
 		
-		if(configComposite != null){
-			configComposite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new OverviewComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Overview ["+ alternative.getName() +"]");
-		configComposite = new OverviewComposite(parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 }

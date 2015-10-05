@@ -20,22 +20,13 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 public class InputEditor extends AlternativeEditor{
 	
-	private InputComposite composite;
-
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
-		
-		if(composite != null){
-			composite.dispose();
-		}
+				
+		setAlternative(alternative);
+		setControl(new InputComposite(alternative, parent, SWT.NONE));
 		
 		part.setLabel("Analyser input ["+ alternative.getName() +"]");
-		composite = new InputComposite(alternative, parent, SWT.NONE);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 }

@@ -18,22 +18,13 @@ import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
  */
 public class ConfigEditor extends AlternativeEditor{
 
-	private ConfigAlternativeComposite configComposite;
-	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ConfingAlternative alternative){
-		
-		if(configComposite != null){
-			configComposite.dispose();
-		}
+				
+		setAlternative(alternative);
+		setControl(new ConfigAlternativeComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Extractor config ["+ alternative.getName() +"]");
-		configComposite = new ConfigAlternativeComposite(parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 }

@@ -12,24 +12,15 @@ import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 import eu.cloudscaleproject.env.usageevolution.editors.composite.UsageEvolutionComposite;
 
 public class UsageEvolutionEditor extends AlternativeEditor{
-
-	private UsageEvolutionComposite configComposite;
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, UsageEvolutionAlternative alternative){
 		
-		if(configComposite != null){
-			configComposite.dispose();
-		}
+		setAlternative(alternative);
+		setControl(new UsageEvolutionComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Usage evilution ["+ alternative.getName() +"]");
-		configComposite = new UsageEvolutionComposite(parent, SWT.NONE, alternative);
-		
-		setAlternative(alternative);
-		
-		parent.layout();
-		parent.redraw();
 	}
 	
 }

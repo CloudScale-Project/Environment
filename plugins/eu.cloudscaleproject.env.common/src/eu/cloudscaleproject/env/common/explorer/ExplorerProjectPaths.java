@@ -116,7 +116,7 @@ public class ExplorerProjectPaths {
 	public static synchronized Preferences getProjectProperties(IProject project) {
 		
 		ProjectScope scope = new ProjectScope(project);
-		return scope.getNode("project").node("general");
+		return scope.getNode("eu.cloudscaleproject.env.common").node("explorer");
 	}
 
 	/**
@@ -136,23 +136,20 @@ public class ExplorerProjectPaths {
 	 */
 	public static synchronized String getProjectProperty(IProject project, String key, String defaultValue) {
 		Preferences preferences = getProjectProperties(project);
-		return preferences.get(key, defaultValue);
-	}
-
-	public static synchronized void deleteProjectProperty(IProject project, String key) {
-		setProjectProperty(project, key, null);
-	}
-
-	public static synchronized void setProjectProperty(IProject project, String key, String value) {
-		Preferences preferences = getProjectProperties(project);
-		preferences.put(key, value);
-		try {
-			preferences.flush();
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
+		String value = preferences.get(key, null);
+		if(value == null && defaultValue != null){
+			try {
+				preferences.put(key, defaultValue);
+				preferences.flush();
+				value = defaultValue;
+			} 
+			catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
 		}
+		return value;
 	}
-
+	
 	/**
 	 * 
 	 * Retrieves property from project properties file. </br>
@@ -165,6 +162,48 @@ public class ExplorerProjectPaths {
 	 */
 	public static String getProjectProperty(IProject project, String key) {
 		return getProjectProperty(project, key, null);
+	}
+
+	/**
+	 * 
+	 * Removes specified property key from the project properties file.
+	 * 
+	 * @param project 
+	 * 			Project in explorer tree view.
+	 * @param key 
+	 * 			Key to remove from the properties.
+	 */
+	public static synchronized void deleteProjectProperty(IProject project, String key) {
+		Preferences preferences = getProjectProperties(project);
+		preferences.remove(key);
+		
+		try {
+			preferences.flush();
+		}
+		catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * Sets project property under specified key.
+	 * 
+	 * @param project
+	 * 			Project in explorer tree view.
+	 * @param key
+	 * 			Key under which to store specified property.
+	 * @param value
+	 * 			Value to be stored.
+	 */
+	public static synchronized void setProjectProperty(IProject project, String key, String value) {
+		Preferences preferences = getProjectProperties(project);
+		preferences.put(key, value);
+		try {
+			preferences.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

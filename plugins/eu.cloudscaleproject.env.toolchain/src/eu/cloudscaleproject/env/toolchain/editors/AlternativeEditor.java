@@ -21,10 +21,16 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
@@ -52,6 +58,10 @@ public class AlternativeEditor {
 	private EPartService partService;
 	
 	private IEditorInputResource alternative;
+	
+	private Composite composite;
+	private Composite loadingComposite;
+	private StackLayout stackLayout;
 	
 	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
@@ -113,6 +123,36 @@ public class AlternativeEditor {
 		return this.alternative;
 	}
 	
+	protected void setControl(Composite composite){
+		
+		if(this.stackLayout == null){
+			stackLayout = new StackLayout();
+			parentComposite.setLayout(stackLayout);
+		}
+		
+		if(this.loadingComposite == null){
+			loadingComposite = new Composite(parentComposite, SWT.NONE);
+			GridLayout gl = new GridLayout();
+			loadingComposite.setLayout(gl);
+			Label lblLoading = new Label(loadingComposite, SWT.NONE);
+			lblLoading.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+			lblLoading.setText("Loading alternative...");			
+		}
+		
+		this.stackLayout.topControl = loadingComposite;
+		this.parentComposite.layout();
+		this.parentComposite.redraw();
+
+		if(this.composite != null){
+			this.composite.dispose();
+		}
+		this.composite = composite;
+		this.stackLayout.topControl = composite;
+		
+		this.parentComposite.layout();
+		this.parentComposite.redraw();
+	}
+	
 	protected void setAlternative(final IEditorInputResource alternative){
 		
 		if(this.alternative == alternative){
@@ -121,6 +161,15 @@ public class AlternativeEditor {
 		
 		if(this.alternative != null){
 			this.alternative.removePropertyChangeListener(alternativeListener);
+			if(this.alternative.isDirty()){
+				boolean keep = DialogUtils.openQuestion("Save changes?", "Alternative has unsaved changes. Do you want to keep them?");
+				if(keep){
+					this.alternative.save();
+				}
+				else{
+					this.alternative.load();
+				}
+			}
 		}
 		
 		part.getContext().set(IEditorInputResource.class, alternative);
