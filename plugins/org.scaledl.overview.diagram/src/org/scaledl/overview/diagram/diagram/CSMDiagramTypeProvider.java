@@ -12,7 +12,6 @@ import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -38,8 +37,7 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		
 		if(rp != null){
 			final IEditorInputResource resource = rp.getResource(altFolder);
-					
-			ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), resource);
+			
 			StatusManager.getInstance().validateAsync(project, resource);
 			
 			getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {

@@ -32,10 +32,8 @@ import org.somox.common.MetricsDetails.GroupID;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 
 public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable
@@ -204,9 +202,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_INPUT.getID(), GlobalInputAlternative.getInstance());
-		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_CONF.getID(), configAlternative);
-		ValidationDiagramService.showStatus(configAlternative.getProject(), CSTool.EXTRACTOR_RES.getID(), configAlternative.getLastResult());
 	}
 		
 }

@@ -31,7 +31,6 @@ import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.CommonResources;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -111,10 +110,7 @@ public class SelectInputAltComposite extends Composite{
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				InputAlternative ia = (InputAlternative)selection.getFirstElement();				
-				alternative.setInputAlternative(ia);
-				
-				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), ia);
-				ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), alternative);
+				alternative.setInputAlternative(ia);				
 			}
 		});
 		

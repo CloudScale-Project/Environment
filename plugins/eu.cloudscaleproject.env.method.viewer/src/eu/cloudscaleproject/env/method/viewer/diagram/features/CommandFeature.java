@@ -4,8 +4,10 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.internal.databinding.ClassLookupSupport;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -23,10 +25,12 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.MethodStatusContext;
 import eu.cloudscaleproject.env.method.common.method.Node;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
+import eu.cloudscaleproject.env.method.common.method.Section;
 import eu.cloudscaleproject.env.method.common.method.StatusNode;
+import eu.cloudscaleproject.env.method.viewer.ValidationDiagram;
+import eu.cloudscaleproject.env.method.viewer.ValidationDiagramService;
 
 
 public class CommandFeature extends AbstractCustomFeature{
@@ -44,6 +48,19 @@ public class CommandFeature extends AbstractCustomFeature{
 	@Override
 	public String getName() {
 		return "Run...";
+	}
+	
+	private String findSectionID(Node node){
+		//find selected section ID
+		EObject tmp = node;
+		while (tmp != null && !(tmp instanceof Section)) {
+			tmp = tmp.eContainer();
+		}
+		if(tmp instanceof Section){
+			return ((Section)tmp).getId();
+		}
+		
+		return null;
 	}
 	
 	private Object findBusinessObject(ICustomContext context){
@@ -88,12 +105,14 @@ public class CommandFeature extends AbstractCustomFeature{
 		return false;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void execute(final ICustomContext context) {
 
 		final Object bo = findBusinessObject(context);
 		final Node node = (Node)bo;
 		
+		//open resource file
 		if(bo instanceof StatusNode){
 			StatusNode statusNode = (StatusNode)bo;
 			
@@ -146,42 +165,38 @@ public class CommandFeature extends AbstractCustomFeature{
 			return;
 		}
 		
-		IValidationStatus validationStatus = null;
+		//fill all informations in this static context
+		IEclipseContext staticContext = EclipseContextFactory.create();
 		
-		EObject eobject = node;
-		while(eobject != null && validationStatus == null){
-			if(eobject instanceof Node){
-				Node n = (Node)eobject;
-				Object source = n.getSource();
-				//if (source == null) 
-				if(source instanceof IValidationStatus){
-					validationStatus = (IValidationStatus) source;
+		ValidationDiagramService diagramService = CloudscaleContext.getActiveContext().get(ValidationDiagramService.class);
+		if(diagramService == null){
+			logger.severe("Can not execute command:'" + node.getCommandId() + "'. Validation diagram service does not exist!");
+			return;
+		}
+		
+		diagramService.setSelectedNodeID(node.getId());
+		diagramService.setSelectedSectionID(findSectionID(node));
+		
+		ValidationDiagram diagram = diagramService.getActiveDiagram();
+		IValidationStatusProvider statusProvider = diagramService.getActiveStatusProvider(node.getId());
+		IValidationStatus status = diagramService.getActiveStatus(node.getId());
+				
+		if(diagram != null){
+			staticContext.set(IProject.class, diagram.getProject());
+		}
+		if(statusProvider != null){
+			for(Class clazz : ClassLookupSupport.getTypeHierarchyFlattened(statusProvider.getClass())){
+				if(clazz.isInterface()){
+					staticContext.set(clazz, statusProvider);
 				}
 			}
-			eobject = eobject.eContainer();
 		}
-		
-		String validationId = null;
-		eobject = node;
-		while(eobject != null){
-			if(eobject instanceof StatusNode){
-				StatusNode n = (StatusNode)eobject;
-				validationId = n.getId();
-				break;
+		if(status != null){
+			for(Class clazz : ClassLookupSupport.getTypeHierarchyFlattened(status.getClass())){
+				if(clazz.isInterface()){
+					staticContext.set(clazz, status);
+				}
 			}
-			eobject = eobject.eContainer();
-		}
-		
-		
-		MethodStatusContext validationContext = new MethodStatusContext(validationId, validationStatus);
-		CloudscaleContext.getActiveContext().set(MethodStatusContext.class, validationContext);
-
-		IEclipseContext staticContext = EclipseContextFactory.create();
-		staticContext.set(IValidationStatus.class, validationStatus);
-		
-		IValidationStatusProvider statusProvider = validationStatus.getProvider();
-		if(statusProvider != null){
-			staticContext.set(CloudscaleContext.ACTIVE_ALTERNATIVE, statusProvider);
 		}
 		
 		if (node.getCommandParam().isEmpty()) {

@@ -60,6 +60,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 	}
 	
+	@Override
 	public IProject getProject()
 	{
 		return project;

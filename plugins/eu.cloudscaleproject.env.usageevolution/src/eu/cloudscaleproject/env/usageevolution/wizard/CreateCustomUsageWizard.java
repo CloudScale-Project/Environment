@@ -8,14 +8,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import tools.descartes.dlim.generator.editor.wizards.CustomDlimModelWizard;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
+import tools.descartes.dlim.generator.editor.wizards.CustomDlimModelWizard;
 
 public class CreateCustomUsageWizard extends CustomDlimModelWizard{
 
@@ -60,7 +58,6 @@ public class CreateCustomUsageWizard extends CustomDlimModelWizard{
 			// setActivePage is called async in DlimEditor
 			// Not really a problem
 
-			ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), alternative);
 			OpenAlternativeUtil.openAlternative(alternative);
 		}
 		else

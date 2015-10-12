@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.command.CommandStack;
@@ -22,7 +23,6 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagram;
 import eu.cloudscaleproject.env.method.common.method.MethodFactory;
 import eu.cloudscaleproject.env.method.common.method.Requirement;
 import eu.cloudscaleproject.env.method.common.method.Section;
@@ -34,7 +34,9 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ValidationDiagram implements IValidationDiagram{
+public class ValidationDiagram{
+	
+	private static final Logger logger = Logger.getLogger(ValidationDiagram.class.getName());
 	
 	public static final String PROP_STATUS_CHANGED = "eu.cloudscaleproject.env.method.viewer.ValidationDiagram.statusChanged";
 	
@@ -189,21 +191,15 @@ public class ValidationDiagram implements IValidationDiagram{
 			bindStatus(status);
 		}
 	}
-	
-	@Override
-	public void show() {
-	}
 
 	public Resource getResource(){
 		return this.resource;
 	}
 	
-	@Override
 	public IProject getProject() {
 		return this.project;
 	}
 
-	@Override
 	public void setProject(IProject project) {
 		this.project = project;
 	}
@@ -311,7 +307,20 @@ public class ValidationDiagram implements IValidationDiagram{
 	}
 	
 	public synchronized IValidationStatusProvider getActiveStatusProvider(String id){
-		return providerBindings.get(id);
+		IValidationStatus status = getActiveStatus(id);
+		if(status != null){
+			return status.getProvider();
+		}
+		return null;
+	}
+	
+	public synchronized IValidationStatus getActiveStatus(String id){
+		StatusNode node = nodes.get(id);
+		if(node == null){
+			logger.warning("Node with ID:'" + id + "' does not exist!");
+			return null;
+		}
+		return (IValidationStatus)node.getSource();
 	}
 	
 	private void bind(final StatusNode statusNode, final IValidationStatus status){

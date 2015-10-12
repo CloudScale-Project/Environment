@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.toolchain.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
@@ -38,8 +37,6 @@ public class CreateAlternativeWizard extends Wizard{
 
 		IEditorInputResource alternative = (IEditorInputResource)provider.createNewResource(altName, null);
 		initAlternative(alternative);	
-
-		ValidationDiagramService.showStatus(project, alternative.getID(), alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;

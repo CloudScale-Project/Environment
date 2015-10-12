@@ -8,6 +8,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -33,7 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
@@ -158,7 +159,7 @@ public class AlternativeEditor {
 		if(this.alternative == alternative){
 			return;
 		}
-		
+				
 		if(this.alternative != null){
 			this.alternative.removePropertyChangeListener(alternativeListener);
 			if(this.alternative.isDirty()){
@@ -172,8 +173,10 @@ public class AlternativeEditor {
 			}
 		}
 		
+		part.getContext().set(IProject.class, alternative.getProject());
 		part.getContext().set(IEditorInputResource.class, alternative);
-		
+		part.getContext().set(IValidationStatusProvider.class, alternative);
+
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
 				
@@ -202,10 +205,6 @@ public class AlternativeEditor {
 	
 	@Focus
 	public void focus(){
-		
-		if(alternative != null){
-			ValidationDiagramService.showDiagram(alternative.getProject());
-		}
 
 		for(Control control : parentComposite.getChildren()){
 			if(control instanceof ISelectable){

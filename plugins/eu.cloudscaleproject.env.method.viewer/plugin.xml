@@ -85,13 +85,6 @@
       </imageProvider>
    </extension>
    <extension
-         name="Workflow diagram"
-         point="eu.cloudscaleproject.env.common.notification.diagram">
-      <diagram
-            class="eu.cloudscaleproject.env.method.viewer.ValidationDiagramFactory">
-      </diagram>
-   </extension>
-   <extension
          point="org.eclipse.ui.views">
       <e4view
             category="eu.cloudscaleproject.env.product.views.category.cloudscale"

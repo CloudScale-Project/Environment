@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,18 +33,29 @@ public class TransformHandler {
 	}
 	
 	public void execute(IFile file, BasicCallback<IFolder> callback) {
-		IFolder generatedFolder = ExplorerProjectPaths.getProjectFolder(file.getProject(), ExplorerProjectPaths.KEY_FOLDER_GENERATED);
-		DateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm");
-		String date = df.format(new Date(System.currentTimeMillis()));
 		
-		IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM [ "+ date +" ]");
-		try {
-			outputFolder.create(true, true, null);
-		} catch (CoreException e) {
+		try{
+			IProject project = file.getProject();
+			
+			String generatedFolderName = ExplorerProjectPaths.getProjectProperty(project, 
+					ExplorerProjectPaths.FOLDER_GENERATED_KEY, 
+					ExplorerProjectPaths.FOLDER_GENERATED_DEFAULT);
+	
+			IFolder generatedFolder = project.getFolder(generatedFolderName);
+			ExplorerProjectPaths.prepareFolder(generatedFolder);
+			
+			DateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm");
+			String date = df.format(new Date(System.currentTimeMillis()));
+			
+			IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM [ "+ date +" ]");
+			ExplorerProjectPaths.prepareFolder(outputFolder);
+			
+			execute(file, outputFolder, callback);
+		}
+		catch(CoreException e){
 			e.printStackTrace();
 		}
 		
-		execute(file, outputFolder, callback);
 	}
 	
 	public void execute(IFile file, IFolder outputFolder, BasicCallback<IFolder> callback) {

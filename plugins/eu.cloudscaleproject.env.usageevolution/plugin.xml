@@ -31,13 +31,13 @@
          point="eu.cloudscaleproject.env.toolchain.tool">
       <tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="ScaleDL"
+            name="ScaleDL models"
             position="50">
          <resource
                class="eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternativeFactory"
                editor="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"
-               name="Usage evolution">
+               name="Usage Evolution">
          </resource>
       </tool>
    </extension>

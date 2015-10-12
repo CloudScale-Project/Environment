@@ -15,22 +15,40 @@ import org.eclipse.core.runtime.IStatus;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative
 {
+	private final String inputAlternativeID;
+	private final String resultAlternativeID;
+	
 	protected ResourceProvider resultsResourceProvider;
 	protected ResourceProvider inputResourceProvider;
 	private IStatus lastRunStatus;
 
-	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, String validationID, 
-			ResourceProvider inputResourceProvider,
-			ResourceProvider resultsResourceProvider)
+	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, 
+			String configID, String inputID, String resultID)
 	{
 
-		super(project, folder, modelTypes, validationID);
+		super(project, folder, modelTypes, configID);
 
-		this.inputResourceProvider = inputResourceProvider;
-		this.resultsResourceProvider = resultsResourceProvider;
+		this.inputAlternativeID = inputID;
+		this.resultAlternativeID = resultID;
+		
+		ResourceRegistry.getInstance().getResourceProvider(project, inputID);
+		
+		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
+		this.resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, resultID);
+	}
+	
+	@Override
+	public String getInputAlternativeID() {
+		return inputAlternativeID;
+	}
+	
+	@Override
+	public String getResultAlternativeID() {
+		return resultAlternativeID;
 	}
 
 	public void setInputAlternative(IEditorInputResource input)
@@ -39,12 +57,12 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	}
 
 	@Override
-	public IEditorInputResource getInputAlternative()
+	public IInputAlternative getInputAlternative()
 	{
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
 		if (res != null)
-			return inputResourceProvider.getResource(res);
+			return (IInputAlternative)inputResourceProvider.getResource(res);
 		else
 			return null;
 	}

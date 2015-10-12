@@ -8,7 +8,6 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -27,7 +26,6 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -133,11 +131,5 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		
-		IProject project = this.configAlternative.getProject();
-		
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_INPUT.getID(), configAlternative.getInputAlternative());
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_CONF.getID(), configAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_RES.getID(), configAlternative.getLastResult());
 	}
 }

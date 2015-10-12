@@ -15,10 +15,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -44,7 +44,6 @@ public abstract class ResourceProvider
 	private final IFolder rootFolder;
 	private final String defaultResName;
 	
-	private final Object propLock = new Object();
 	private final Object resourcesLock = new Object();
 		
 	private final LinkedHashMap<IResource, IEditorInputResource> resources = new LinkedHashMap<IResource, IEditorInputResource>();
@@ -101,7 +100,7 @@ public abstract class ResourceProvider
 						return;
 					}
 					
-					BatchExecutor.getInstance().addTask(resource, new Runnable() {
+					BatchExecutor.getInstance().addTask(this, resource, new Runnable() {
 						
 						@Override
 						public void run() {
@@ -175,102 +174,13 @@ public abstract class ResourceProvider
 		firePropertyChange(PROP_DISPOSED, this, null);
 	}
 
-	public void tagResource(String tag, IEditorInputResource resource)
-	{
-		IProject project = rootFolder.getProject();
-
-		// save tags into project persisted storage
-		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
-		try
-		{
-			synchronized (propLock) {
-				project.setPersistentProperty(key, resource != null ? resource.getResource().getName() : "");				
-			}
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public boolean hasTag(String tag, IEditorInputResource resource)
-	{
-		IProject project = rootFolder.getProject();
-
-		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
-		try
-		{
-			String tagedResourceName;
-			synchronized (propLock) {
-				tagedResourceName = project.getPersistentProperties().get(key);
-			}
-			
-			if (tagedResourceName == null || tagedResourceName.isEmpty())
-			{
-				return false;
-			}
-
-			IEditorInputResource res = getResource(tagedResourceName);
-			if (res == null || !res.getResource().exists())
-			{
-				return false;
-			}
-
-			if (res.equals(resource))
-			{
-				return true;
-			}
-
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-
-		return false;
-	}
-
-	public IEditorInputResource getTaggedResource(String tag)
-	{
-		IProject project = rootFolder.getProject();
-
-		QualifiedName key = new QualifiedName(rootFolder.getLocationURI().toString(), tag);
-		try
-		{
-			String tagedResourceName;
-			synchronized (propLock) {
-				tagedResourceName = project.getPersistentProperties().get(key);
-			}
-			
-			if (tagedResourceName == null || tagedResourceName.isEmpty())
-			{
-				return null;
-			}
-
-			IEditorInputResource res = getResource(tagedResourceName);
-			if (res == null || !res.getResource().exists())
-			{
-				return null;
-			}
-
-			return res;
-
-		} catch (CoreException e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
 	private synchronized final void checkRootFolder()
 	{
 		if (!rootFolder.exists()) {
-			if (rootFolder.getParent().exists()) {
-				try {
-					rootFolder.create(true, true, null);
-				} 
-				catch (CoreException e) {
-					e.printStackTrace();
-				}
+			try {
+				ExplorerProjectPaths.prepareFolder(rootFolder);
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
 	}

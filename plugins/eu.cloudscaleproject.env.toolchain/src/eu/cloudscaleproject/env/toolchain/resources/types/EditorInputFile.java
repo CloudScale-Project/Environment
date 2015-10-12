@@ -66,6 +66,11 @@ public class EditorInputFile extends EditorInputResource{
 		return file;
 	}
 	
+	@Override
+	public IProject getProject(){
+		return this.project;
+	}
+	
 	public String getProperty(String key){
 		synchronized (source) {
 			return source.getProperty(key);

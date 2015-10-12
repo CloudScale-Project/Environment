@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.csm2pcm.handlers.TransformHandler;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
@@ -43,7 +42,6 @@ public class TransformWizardPage extends WizardPage{
 	private static final String DEFAULT_TITLE = "Overview model transformation";
 	private static final String DEFAULT_DESCRIPTION = "Transform Overview model into PCM. PCM model can then be used as an input for the Analyser tool.";
 	
-	private final IProject project;
 	private final IFolder outputFolder;
 
 	private OverviewAlternative overviewAlternative;
@@ -63,7 +61,6 @@ public class TransformWizardPage extends WizardPage{
 	public TransformWizardPage(IProject project ,IFolder outputFolder) {
 		super("Overview model transformation");
 
-		this.project = project;
 		this.outputFolder = outputFolder;
 		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
 		
@@ -99,9 +96,7 @@ public class TransformWizardPage extends WizardPage{
 				if(alternative instanceof OverviewAlternative){
 					overviewAlternative = (OverviewAlternative)alternative;					
 					overviewAlternative.validate();
-					ValidationDiagramService.showDiagram(project);
-					ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), overviewAlternative);
-					
+										
 					if(overviewAlternative.getSelfStatus().isDone()){
 						btnTransform.setEnabled(true);
 						lblStatus.setText("");

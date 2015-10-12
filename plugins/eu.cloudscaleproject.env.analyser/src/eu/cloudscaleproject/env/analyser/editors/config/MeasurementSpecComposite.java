@@ -8,7 +8,7 @@ import java.util.List;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.conversion.NumberToStringConverter;
 import org.eclipse.core.databinding.conversion.StringToNumberConverter;
 import org.eclipse.core.databinding.observable.ChangeEvent;
@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -192,7 +191,10 @@ public class MeasurementSpecComposite extends Composite{
 		//bind combo metric description
 		{
 			ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MetricDescription.class, "name");
+			//IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MetricDescription.class, "name");
+			
+			IObservableMap observeMap = Properties.observeEach(
+					listContentProvider.getKnownElements(), PojoProperties.values(new String[]{"name"}))[0];
 			
 			comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 			comboViewer.setContentProvider(listContentProvider);
@@ -206,7 +208,10 @@ public class MeasurementSpecComposite extends Composite{
 		//bind combo metric description
 		{
 			ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), StatisticalCharacterizationEnum.class, "name");
+			//IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), StatisticalCharacterizationEnum.class, "name");
+			
+			IObservableMap observeMap = Properties.observeEach(
+					listContentProvider.getKnownElements(), PojoProperties.values(new String[]{"name"}))[0];
 			
 			comboViewer_1.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 			comboViewer_1.setContentProvider(listContentProvider);
@@ -228,9 +233,7 @@ public class MeasurementSpecComposite extends Composite{
 			
 			SelectObservableValue intervalObservable = new SelectObservableValue(TemporalCharacterization.class);
 			
-			IObservableValue btnIntervalObserveSelection = SWTObservables  
-		            .observeSelection(btnInterval);
-			
+			IObservableValue btnIntervalObserveSelection = WidgetProperties.selection().observe(btnInterval);
 			if(interval instanceof Intervall){
 				intervalObservable.addOption(interval, btnIntervalObserveSelection);
 			}
@@ -238,9 +241,7 @@ public class MeasurementSpecComposite extends Composite{
 				intervalObservable.addOption(MonitorRepositoryFactory.eINSTANCE.createIntervall(), btnIntervalObserveSelection);
 			}
 			
-			IObservableValue btnDIntervalObserveSelection = SWTObservables  
-		            .observeSelection(btnDInterval);  
-			
+			IObservableValue btnDIntervalObserveSelection = WidgetProperties.selection().observe(btnDInterval);
 			if(interval instanceof DelayedIntervall){
 				intervalObservable.addOption(interval, btnDIntervalObserveSelection);
 			}
@@ -248,9 +249,7 @@ public class MeasurementSpecComposite extends Composite{
 				intervalObservable.addOption(MonitorRepositoryFactory.eINSTANCE.createDelayedIntervall(), btnDIntervalObserveSelection);
 			}
 			
-			IObservableValue btnTimeFrameObserveSelection = SWTObservables  
-		            .observeSelection(btnTimeFrame);
-			
+			IObservableValue btnTimeFrameObserveSelection = WidgetProperties.selection().observe(btnTimeFrame);			
 			if(interval instanceof TimeFrame){
 				intervalObservable.addOption(interval, btnTimeFrameObserveSelection);
 			}

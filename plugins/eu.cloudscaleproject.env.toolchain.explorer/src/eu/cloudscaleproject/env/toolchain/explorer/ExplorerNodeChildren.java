@@ -87,8 +87,8 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		return out;
 	}
 	
-	public synchronized void refresh(){
-		BatchExecutor.getInstance().addTask(this, new Runnable() {
+	public void refresh(){
+		BatchExecutor.getInstance().addTask(this, "refresh",  new Runnable() {
 			
 			@Override
 			public void run() {

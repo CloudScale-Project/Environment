@@ -59,6 +59,14 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 	
 	private static class ProjectKey{
 		
+		private final IProject project;
+		private final IProjectNature nature;
+		
+		public ProjectKey(IProject project, IProjectNature nature) {
+			this.project = project;
+			this.nature = nature;
+		}
+		
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -89,14 +97,7 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 				return false;
 			return true;
 		}
-
-		private final IProject project;
-		private final IProjectNature nature;
 		
-		public ProjectKey(IProject project, IProjectNature nature) {
-			this.project = project;
-			this.nature = nature;
-		}
 	}
 	
 	public RootNodeChildren(boolean lazy) {
@@ -113,13 +114,17 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 		
 		for(IProject project : projects){
 			try {
-				IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
-				if(pn != null){
-					csProjects.add(new ProjectKey(project, pn));
+				
+				if(project.isAccessible()){
+					if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
+						IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
+						csProjects.add(new ProjectKey(project, pn));
+					}
+					else{
+						importedProjects.add(new ProjectKey(project, null));
+					}
 				}
-				else{
-					importedProjects.add(new ProjectKey(project, pn));
-				}
+				
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}

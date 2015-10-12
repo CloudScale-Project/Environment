@@ -31,7 +31,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
@@ -188,8 +187,7 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 		});
 		
 		getSite().setSelectionProvider(ProjectEditorSelectionService.getInstance());
-		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
-				
+		
 		//load all resources
 		EditorInputJob job = new EditorInputJob("Loading Dashboard resources...") {
 			
@@ -247,8 +245,6 @@ public class ProjectEditor extends EditorPart implements IDirtyAdapter{
 			if(tabFolder.getSelection() != null && tabFolder.getSelection().equals(pee.getTabItem())){
 				pee.setFocus();
 			}
-		}
-		
-		ValidationDiagramService.showDiagram(ExplorerProjectPaths.getProject(this));
+		}		
 	}
 }

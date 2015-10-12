@@ -399,7 +399,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			if(alternative.getActiveUsageEvolutionModel() != null){
 				usageList.setSelection(new StructuredSelection(alternative.getActiveUsageEvolutionModel()));
 			}
-			else{
+			else if(alternative.getActiveUsageModel() != null){
 				usageList.setSelection(new StructuredSelection(alternative.getActiveUsageModel()));
 			}
 		}

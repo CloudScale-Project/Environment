@@ -105,7 +105,7 @@ public class ResourceRegistry {
 	private synchronized ResourceProvider createProvider(IProject project, String id){
 		
 		ResourceProvider resourceProvider = null;
-		IFolder folder = ToolchainUtils.getToolFolder(project, id);
+		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
 		
 		ResourceExtensionItem resourceExtension = resourceExtensionItems.get(id);
 		if(resourceExtension != null){
@@ -168,7 +168,7 @@ public class ResourceRegistry {
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
 				
-		IFolder folder = ToolchainUtils.getToolFolder(project, id);
+		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
 		if(folder == null){
 			String msg = "ResourceProvider root folder can not be retrieved! ID: " + id;
 			logger.severe(msg);

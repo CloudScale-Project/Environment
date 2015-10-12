@@ -6,7 +6,6 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.Type;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -21,7 +20,6 @@ import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
  */
 public class CreateConfigAlternativeWizard extends Wizard{
 	
-	private final IProject project;
 	private final Type type;
 	
 	private final ResourceProvider inputResourceProvider;
@@ -31,7 +29,6 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	private final AlternativeSelectionPage alternativeSelectionPage;
 	
 	public CreateConfigAlternativeWizard(IProject project, ConfAlternative.Type type) {
-		this.project = project;
 		this.type = type;
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
@@ -60,11 +57,7 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		if(alternativeSelectionPage.getSelection() != null){
 			ca.setInputAlternative((InputAlternative)alternativeSelectionPage.getSelection());
 			ca.save();
-		}
-		
-		ca.validate();
-		
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
+		}		
 		OpenAlternativeUtil.openAlternative(ca);
 		
 		return true;

@@ -13,6 +13,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
@@ -23,24 +24,40 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class OpenAlternativeEditorHandler {
+public class OpenAlternativeHandler {
 
 	@Inject
 	public MApplication application;
 	@Inject
 	public EModelService modelService;
-	@Inject
-	public EPartService partService;
 	
 	@Execute
-	public void execute(@Active final IEditorInputResource eir){
+	public void execute(MApplication app, @Active final IEditorInputResource eir){
 		
-		BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+		//TODO: fix this workaround ("No active window exception")!
+		List<MWindow> windowList = app.getChildren();
+		if(windowList.isEmpty()){
+			return;
+		}
+		
+		final MWindow window = windowList.get(0);
+		
+		Display.getDefault().asyncExec(new Runnable() {
+			
 			@Override
 			public void run() {
-				openEditor(eir);
+				
+				BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
+					@Override
+					public void run() {
+						EPartService partService = window.getContext().get(EPartService.class);
+						openEditor(partService, eir);
+					}
+				});
+				
 			}
-		});
+		});		
+		
 	}
 	
 	@CanExecute
@@ -57,7 +74,7 @@ public class OpenAlternativeEditorHandler {
 		return false;
 	}
 	
-	private void openEditor(IEditorInputResource eir){
+	private void openEditor(EPartService partService, IEditorInputResource eir){
 		String editorPartID = findEditorID(eir);
 		MPart part = partService.findPart(editorPartID);
 		

@@ -8,11 +8,8 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
@@ -21,49 +18,12 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ToolchainUtils {
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ToolchainUtils.class.getName());
-
-	// tool folders
-	@Deprecated
-	public static final String EXTRACTOR_INPUT_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput";
-	@Deprecated
-	public static final String EXTRACTOR_CONF_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf";
-	@Deprecated
-	public static final String EXTRACTOR_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes";
-	
-	@Deprecated
-	public static final String ANALYSER_INPUT_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput";
-	@Deprecated
-	public static final String ANALYSER_CONF_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf";
-	@Deprecated
-	public static final String ANALYSER_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes";
-
-	@Deprecated
-	public static final String SPOTTER_DYN_INPUT_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput";
-	@Deprecated
-	public static final String SPOTTER_DYN_CONF_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf";
-	@Deprecated
-	public static final String SPOTTER_DYN_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes";
-	
-	@Deprecated
-	public static final String SPOTTER_STA_INPUT_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput";
-	@Deprecated
-	public static final String SPOTTER_STA_CONF_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf";
-	@Deprecated
-	public static final String SPOTTER_STA_RES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes";
-	
-	@Deprecated
-	public static final String USAGEEVOLUTION_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution";
-	@Deprecated
-	public static final String OVERVIEW_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview";
-	@Deprecated
-	public static final String ARCHITECTURAL_TEMPLATES_ID = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.architecturaltemplates";
 	
 	// folder serources
 	public static final String KEY_INPUT_ALTERNATIVE = "input_alternative";
@@ -138,152 +98,50 @@ public class ToolchainUtils {
 		return diagramFile;
 	}
 	
-	@Deprecated
-	public static IEditorInputResource getToolSelectedResource(IProject project, String toolID){
-		IEditorInputResource selectedResource = null;
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, toolID);
-		
-		if(resourceProvider == null){
-			logger.warning("getSelectedResource(): Resource provider does not exist. Tool id: " + toolID);
-			return null;
-		}
-		
-		selectedResource = resourceProvider.getTaggedResource(ResourceProvider.TAG_SELECTED);
-		
-		if(selectedResource == null){
-			selectedResource = resourceProvider.getResources().isEmpty() ? 
-					null : resourceProvider.getResources().get(0);
-			resourceProvider.tagResource(ResourceProvider.TAG_SELECTED, selectedResource);
-		}
-		
-		return selectedResource;
-	}
-	
 	public static IFolder getToolFolder(IProject project, String id){
-				
-		String inputFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_INPUT, "Input");
-		String configFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION, "Configuration");
-		String resultFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS, "Result");
-		String usageEvFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_USAGE_EVOLUTION, "Usage evolution");
-		String overviewFolderName = ExplorerProjectPaths.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_OVERVIEW, "Overview");
+		
+		IConfigurationElement toolElement = ToolchainExtensions.getInstance().getToolElement(id);
+		String toolName = toolElement.getAttribute("name");
 
-		IFolder folder = null;
-				
-		//extractor
-		if(CSTool.EXTRACTOR.getID().equals(id)){
-			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-		}
-		else if(CSTool.EXTRACTOR_INPUT.getID().equals(id)){
-			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-			if(extractorFolder != null)
-				folder = extractorFolder.getFolder(inputFolderName);
-		}
-		else if(CSTool.EXTRACTOR_CONF.getID().equals(id)){
-			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-			if(extractorFolder != null)
-				folder = extractorFolder.getFolder(configFolderName);
-		}
-		else if(CSTool.EXTRACTOR_RES.getID().equals(id)){
-			IFolder extractorFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR);
-			if(extractorFolder != null)
-				folder = extractorFolder.getFolder(resultFolderName);
-		}
+		toolName = ExplorerProjectPaths.getProjectProperty(project, id, toolName);
 		
-		//analyzer
-		else if(CSTool.ANALYSER.getID().equals(id)){
-			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-		}
-		else if(CSTool.ANALYSER_INPUT.getID().equals(id)){
-			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-			if(analyserFolder != null)
-				folder = analyserFolder.getFolder(inputFolderName);
-		}
-		else if(CSTool.ANALYSER_CONF.getID().equals(id)){
-			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-			if(analyserFolder != null)
-				folder = analyserFolder.getFolder(configFolderName);
-		}
-		else if(CSTool.ANALYSER_RES.getID().equals(id)){
-			IFolder analyserFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_ANALYSER);
-			if(analyserFolder != null)
-				folder = analyserFolder.getFolder(resultFolderName);
-		}
+		IFolder folder = project.getFolder(toolName);
 		
-		//dynamic spotter
-		else if(CSTool.SPOTTER_DYN.getID().equals(id)){
-			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
-		}
-		else if(CSTool.SPOTTER_DYN_INPUT.getID().equals(id)){
-			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
-			if(spotterDynFolder != null)
-				folder = spotterDynFolder.getFolder(inputFolderName);
-		}
-		else if(CSTool.SPOTTER_DYN_CONF.getID().equals(id)){
-			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
-			if(spotterDynFolder != null)
-				folder = spotterDynFolder.getFolder(configFolderName);
-		}
-		else if(CSTool.SPOTTER_DYN_RES.getID().equals(id)){
-			IFolder spotterDynFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER);
-			if(spotterDynFolder != null)
-				folder = spotterDynFolder.getFolder(resultFolderName);
-		}
-		
-		//static spotter
-		else if(CSTool.SPOTTER_STA.getID().equals(id)){
-			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-		}
-		else if(CSTool.SPOTTER_STA_INPUT.getID().equals(id)){
-			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-			if(spotterStaFolder != null)
-				folder = spotterStaFolder.getFolder(inputFolderName);
-		}
-		else if(CSTool.SPOTTER_STA_CONF.getID().equals(id)){
-			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-			if(spotterStaFolder != null)
-				folder = spotterStaFolder.getFolder(configFolderName);
-		}
-		else if(CSTool.SPOTTER_STA_RES.getID().equals(id)){
-			IFolder spotterStaFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-			if(spotterStaFolder != null)
-				folder = spotterStaFolder.getFolder(resultFolderName);
-		}
-		
-		//usage evolution
-		else if(CSTool.SCALE_DL.getID().equals(id)){
-			folder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-		}
-		else if(CSTool.USAGEEVOLUTION.getID().equals(id)){
-			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-			if(scaledlFolder != null)
-				folder = scaledlFolder.getFolder(usageEvFolderName);
-		}
-		else if(CSTool.OVERVIEW.getID().equals(id)){
-			IFolder scaledlFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_SCALEDL);
-			if(scaledlFolder != null)
-				folder = scaledlFolder.getFolder(overviewFolderName);
-		}
-		else{
-			throw new IllegalArgumentException("getToolchainFolder(project, id): ID is not valid: " + id);
-		}
-		
-		if(folder != null && !folder.exists()){
-			
-			final IFolder unexistingFolder = folder;
-			
-			WorkspaceJob job = new WorkspaceJob("Creating project folder") {
-				
-				@Override
-				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-					ExplorerProjectPaths.prepareFolder(unexistingFolder);
-					return Status.OK_STATUS;
-				}
-			};
-			job.setUser(false);
-			job.schedule();	
+		if(!folder.exists()){
+			try {
+				ExplorerProjectPaths.prepareFolder(folder);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return folder;
 	}
+	
+	public static IFolder getResourceProviderFolder(IProject project, String id){
+		
+		IConfigurationElement resourceElement = ToolchainExtensions.getInstance().getToolChildElement(id);
+		String resourceName = resourceElement.getAttribute("name");
+		
+		if(resourceName == null || resourceName.isEmpty()){
+			throw new IllegalArgumentException(
+					"Tool resource extension point name is empty! Tool resource extension ID: " + resourceElement.getAttribute("id")); 
+		}
+		
+		resourceName = ExplorerProjectPaths.getProjectProperty(project, id, resourceName);
+
+		IFolder toolFolder = getToolFolder(project, ((IConfigurationElement)resourceElement.getParent()).getAttribute("id"));
+		IFolder folder = toolFolder.getFolder(resourceName);
+		
+		if(!folder.exists()){
+			try {
+				ExplorerProjectPaths.prepareFolder(folder);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return folder;
+	}
+	
 }

@@ -33,36 +33,17 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 
 public class ExplorerProjectPaths {
 
-	private static final Logger logger = Logger
-			.getLogger(ExplorerProjectPaths.class.getName());
+	private static final Logger logger = Logger.getLogger(ExplorerProjectPaths.class.getName());
 
-	// TODO: use those paths when creating files
 	public static final String FILE_PROJECT_DASHBOARD = "project.cse";
-	//
-
-	// diagram and model used for notifications and project progress status
-	public static final String KEY_FOLDER_GENERATED = "generated-folder";
-	public static final String KEY_FOLDER_SCALEDL = "scaledl-folder";
-	public static final String KEY_FOLDER_IMPORT = "imported-folder";
-	public static final String KEY_FOLDER_USAGE_EVOLUTION = "scaledl-usageevolution-folder";
-
-	public static final String KEY_FOLDER_ANALYSER = "analyser-folder";
-	public static final String KEY_FOLDER_EXTRACTOR = "extractor-folder";
-	public static final String KEY_FOLDER_DYNAMIC_SPOTTER = "dynamicspotter-folder";
-	public static final String KEY_FOLDER_STATIC_SPOTTER = "staticspotter-folder";
-
-	public static final String KEY_FOLDER_INPUT = "input-folder";
-	public static final String KEY_FOLDER_CONFIGURATION = "configuration-folder";
-	public static final String KEY_FOLDER_RESULTS = "results-folder";
 	
-	public static final String KEY_FOLDER_OVERVIEW = "overview-folder";
-
-	//public static final String KEY_FILE_OVERVIEW_MODEL = "scaledl-overview-model";
-	//public static final String KEY_FILE_OVERVIEW_DIAGRAM = "scaledl-overview-diagram";
+	public static final String FOLDER_GENERATED_KEY = "eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths.generatedFolder";
+	public static final String FOLDER_GENERATED_DEFAULT = "Generated models";
 
 	/**
 	 * Retrieve all CloudScale projects from the Workspace
@@ -135,17 +116,25 @@ public class ExplorerProjectPaths {
 	 * @return Value of the specified key.
 	 */
 	public static synchronized String getProjectProperty(IProject project, String key, String defaultValue) {
-		Preferences preferences = getProjectProperties(project);
+		
+		final Preferences preferences = getProjectProperties(project);
 		String value = preferences.get(key, null);
 		if(value == null && defaultValue != null){
-			try {
-				preferences.put(key, defaultValue);
-				preferences.flush();
-				value = defaultValue;
-			} 
-			catch (BackingStoreException e) {
-				e.printStackTrace();
-			}
+			preferences.put(key, defaultValue);
+			
+			BatchExecutor.getInstance().addTask(preferences, "flush", new Runnable() {
+				@Override
+				public void run() {
+					try {
+						preferences.flush();
+					} 
+					catch (BackingStoreException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
+			value = defaultValue;
 		}
 		return value;
 	}
@@ -174,15 +163,22 @@ public class ExplorerProjectPaths {
 	 * 			Key to remove from the properties.
 	 */
 	public static synchronized void deleteProjectProperty(IProject project, String key) {
-		Preferences preferences = getProjectProperties(project);
+		
+		final Preferences preferences = getProjectProperties(project);
 		preferences.remove(key);
 		
-		try {
-			preferences.flush();
-		}
-		catch (BackingStoreException e) {
-			e.printStackTrace();
-		}
+		BatchExecutor.getInstance().addTask(preferences, "flush", new Runnable() {
+			@Override
+			public void run() {
+				try {
+					preferences.flush();
+				} 
+				catch (BackingStoreException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 
 	/**
@@ -197,13 +193,22 @@ public class ExplorerProjectPaths {
 	 * 			Value to be stored.
 	 */
 	public static synchronized void setProjectProperty(IProject project, String key, String value) {
-		Preferences preferences = getProjectProperties(project);
+		
+		final Preferences preferences = getProjectProperties(project);
 		preferences.put(key, value);
-		try {
-			preferences.flush();
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
-		}
+		
+		BatchExecutor.getInstance().addTask(preferences, "flush", new Runnable() {
+			@Override
+			public void run() {
+				try {
+					preferences.flush();
+				} 
+				catch (BackingStoreException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 	/**

@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.service.prefs.Preferences;
 
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -124,19 +125,22 @@ public class ExplorerDecorator extends LabelProvider implements
 	
 	private Image getFolderImage (IFolder f)
 	{
-		Properties prop = getProjectProperties(f.getProject());
+		Preferences prop = ExplorerProjectPaths.getProjectProperties(f.getProject());
+		return null;
+		
+		/*
+		//Properties prop = getProjectProperties(f.getProject());
 		if (prop == null) return null;
 		
-		if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_GENERATED)))
+		if (f.getName().equals(prop.get(ExplorerProjectPaths.FOLDER_GENERATED_KEY, null)))
 		{
 			return getIcon(GENERATED_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_IMPORT)))
-		{
-			return getIcon(IMPORTED_ICON);
-		}
-
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_SCALEDL)))
+		//else if (f.getName().equals(prop.get(ExplorerProjectPaths.FOLDER_GENERATED_KEY, null)))
+		//{
+		//	return getIcon(IMPORTED_ICON);
+		//}
+		else if (f.getName().equals(prop.get(CST)))
 		{
 			return getIcon(SCALEDL_ICON);
 		}
@@ -179,6 +183,7 @@ public class ExplorerDecorator extends LabelProvider implements
 		{
 			return getIcon(FOLDER_OPEN_ICON);
 		}
+		*/
 	}
 	
 	private Properties getProjectProperties (IProject p)

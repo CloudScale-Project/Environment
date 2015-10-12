@@ -2,7 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="eu.cloudscaleproject.env.common.notification.validator" name="Tool validator" schema="schema/eu.cloudscaleproject.env.common.notification.validator.exsd"/>
-   <extension-point id="eu.cloudscaleproject.env.common.notification.diagram" name="Validation diagram factory" schema="schema/eu.cloudscaleproject.env.common.notification.diagram.exsd"/>
    <extension
          id="eu.cloudscaleproject.env.common.fragment"
          name="Model fragment"

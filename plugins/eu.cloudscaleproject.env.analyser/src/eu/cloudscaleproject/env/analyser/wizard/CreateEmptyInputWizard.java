@@ -6,7 +6,6 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -49,9 +48,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		final InputAlternative alternative = (InputAlternative)provider.createNewResource(name, null);
 		
-		ModelUtils.executeCreateModels(alternative, selectedModels);
-		
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
+		ModelUtils.executeCreateModels(alternative, selectedModels);		
 		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;

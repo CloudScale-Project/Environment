@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.usageevolution.editors.composite;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -16,33 +15,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import tools.descartes.dlim.Sequence;
-import tools.descartes.dlim.generator.editor.views.PlotCanvas;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
+import tools.descartes.dlim.Sequence;
+import tools.descartes.dlim.generator.editor.views.PlotCanvas;
 
 public class UsageEvolutionComposite extends InputEditorView implements ISelectable, IRefreshable
 {
-
-	// private static final String PLOTVIEWID =
-	// "tools.descartes.dlim.generator.editor.views.PlotView";
-
-	private final IProject project;
+	
 	private final UsageEvolutionAlternative alternative;
 
 	private final PlotCanvas plotCanvas;
 	private final EMFEditableTreeviewComposite treeviewEditor;
 	
-	private PropertyChangeListener alternativeListener = new PropertyChangeListener()
-	{
+	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
+		
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
@@ -55,11 +47,9 @@ public class UsageEvolutionComposite extends InputEditorView implements ISelecta
 		}
 	};
 
-	public UsageEvolutionComposite(Composite parent, int style, final UsageEvolutionAlternative alt)
-	{
+	public UsageEvolutionComposite(Composite parent, int style, final UsageEvolutionAlternative alt){
+		
 		super(parent, style, alt);
-
-		this.project = alt.getProject();
 		this.alternative = alt;
 
 		getContainer().setLayout(new GridLayout(1, false));
@@ -97,8 +87,8 @@ public class UsageEvolutionComposite extends InputEditorView implements ISelecta
 		});
 	}
 	
-	private void updatePlotCanvas ()
-	{
+	private void updatePlotCanvas () {
+		
 		Resource modelResource = this.alternative.getModelResource(ToolchainUtils.KEY_FILE_LIMBO);
 	
 		if(modelResource == null){
@@ -114,16 +104,11 @@ public class UsageEvolutionComposite extends InputEditorView implements ISelecta
 	}
 
 	@Override
-	public void onSelect()
-	{
-		ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
-		ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), alternative);
+	public void onSelect() {
 	}
 
 	@Override
-	public void refresh()
-	{
+	public void refresh() {
 		updatePlotCanvas();
-		ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 	}
 }

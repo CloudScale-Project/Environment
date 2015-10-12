@@ -19,8 +19,6 @@ import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -181,9 +179,7 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 	
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative.getInputAlternative());
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), alternative);
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), alternative.getLastResult());
+		//ValidationDiagramHelper.showStatus(project, alternative);
 	}
 	
 	@Override

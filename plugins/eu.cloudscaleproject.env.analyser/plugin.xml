@@ -58,7 +58,7 @@
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
                icon="resources/icons/configuration_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-               name="Config"
+               name="Configuration"
                position="20">
          </resource>
          <resource

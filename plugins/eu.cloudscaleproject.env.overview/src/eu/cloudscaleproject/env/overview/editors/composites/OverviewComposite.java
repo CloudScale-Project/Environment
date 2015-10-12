@@ -1,16 +1,13 @@
 package eu.cloudscaleproject.env.overview.editors.composites;
 
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
@@ -22,17 +19,10 @@ import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
  */
 public class OverviewComposite extends InputEditorView implements ISelectable{
 
-	private final IProject project;
-	private final OverviewAlternative alternative;
-
 	private EMFEditableTreeviewComposite treeviewComposite;
-
 	
 	public OverviewComposite(Composite parent, int style, OverviewAlternative input) {
 		super(parent, style, input);
-		
-		this.project = input.getProject();
-		this.alternative = input;
 		
 		Composite mainContainer = new Composite(getContainer(), SWT.NONE);
 		mainContainer.setLayout(new GridLayout());
@@ -49,6 +39,5 @@ public class OverviewComposite extends InputEditorView implements ISelectable{
 	
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, CSTool.OVERVIEW.getID(), alternative);
 	}
 }

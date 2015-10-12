@@ -48,7 +48,7 @@ public class StatusManager {
 			}
 			if(evt.getSource() instanceof IValidationStatus){
 				
-				BatchExecutor.getInstance().addTask(evt.getSource(), new Runnable() {
+				BatchExecutor.getInstance().addTask(this, evt.getSource(), new Runnable() {
 					
 					@Override
 					public void run() {

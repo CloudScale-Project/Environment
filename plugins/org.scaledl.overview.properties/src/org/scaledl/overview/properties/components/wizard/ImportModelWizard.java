@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IFile;
@@ -13,7 +12,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -149,15 +147,13 @@ public class ImportModelWizard extends Wizard {
 	private IFolder getImportedFolder (IProject project) {
 		try
 		{
-			IFile file = project.getFile(ExplorerProjectPaths.FILE_PROJECT_DASHBOARD);
-			Properties p = new Properties();
-			p.load(file.getContents(true));
-			String genFolderName = p.getProperty(ExplorerProjectPaths.KEY_FOLDER_IMPORT);
-			IFolder folder = project.getFolder(genFolderName);
-			if (!folder.exists())
-				folder.create(true, true, new NullProgressMonitor());
-				
-			return folder;
+			String generatedFolderName = ExplorerProjectPaths.getProjectProperty(project, 
+					ExplorerProjectPaths.FOLDER_GENERATED_KEY, 
+					ExplorerProjectPaths.FOLDER_GENERATED_DEFAULT);
+
+			IFolder generatedFolder = project.getFolder(generatedFolderName);
+			ExplorerProjectPaths.prepareFolder(generatedFolder);
+			return generatedFolder;
 		}
 		catch (Exception e)
 		{

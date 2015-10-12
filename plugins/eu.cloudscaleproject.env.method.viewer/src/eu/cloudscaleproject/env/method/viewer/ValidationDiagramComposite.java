@@ -31,7 +31,7 @@ public class ValidationDiagramComposite extends DiagramComposite{
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ValidationDiagram.PROP_STATUS_CHANGED.equals(evt.getPropertyName())){
 				
-				BatchExecutor.getInstance().addTask(ValidationDiagramComposite.class.getName() + ".refresh", new Runnable() {
+				BatchExecutor.getInstance().addTask(this, "refresh", new Runnable() {
 					@Override
 					public void run() {
 						Display.getDefault().asyncExec(new Runnable() {
@@ -72,6 +72,10 @@ public class ValidationDiagramComposite extends DiagramComposite{
 			}
 		});
 		
+	}
+	
+	public ValidationDiagram getValidationDiagram(){
+		return this.diagram;
 	}
 	
 	//ZOOM Workaround!
@@ -133,12 +137,14 @@ public class ValidationDiagramComposite extends DiagramComposite{
 						
 						Thread.sleep(1000);
 						
-					} catch (InterruptedException e) {
+					} 
+					catch (InterruptedException e) {
+						return;
 					}
 					
 				}
 			}
-		});
+		}, "Validation diagram fit to view");
 		zoomThread.start();
 	}
 

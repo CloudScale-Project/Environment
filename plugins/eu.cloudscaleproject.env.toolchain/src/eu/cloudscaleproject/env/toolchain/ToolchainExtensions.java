@@ -46,6 +46,17 @@ public class ToolchainExtensions {
 		return new ArrayList<IConfigurationElement>(toolChildElements);
 	}
 	
+	public IConfigurationElement getToolChildElement(String id){
+		
+		for(IConfigurationElement el : toolChildElements){			
+			if(id.equals(el.getAttribute("id"))){
+				return el;
+			}
+		}
+		
+		return null;
+	}
+	
 	public List<IConfigurationElement> getToolChildElements(String toolID){
 		
 		List<IConfigurationElement> elements = new ArrayList<IConfigurationElement>();

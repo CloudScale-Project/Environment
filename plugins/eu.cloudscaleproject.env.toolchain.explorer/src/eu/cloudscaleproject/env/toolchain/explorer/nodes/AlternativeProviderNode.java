@@ -5,8 +5,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.children.AlternativeProviderNodeChildren;
@@ -38,17 +36,8 @@ public class AlternativeProviderNode extends ExplorerResourceNode{
 				monitor.beginTask("Initializing '"+ resourceProvider.getRootFolder().getName() +"'", IProgressMonitor.UNKNOWN);
 				
 				for(IEditorInputResource eir : resourceProvider.getResources()){
-					
 					if(!eir.isLoaded()){
 						eir.load(monitor);
-					}
-					
-					if(eir instanceof IValidationStatusProvider){
-						
-						//show only status of the first alternative
-						IValidationStatusProvider vp = (IValidationStatusProvider)eir;						
-						ValidationDiagramService.showStatusIfEmpty(resourceProvider.getProject(), vp);						
-						break;
 					}
 				}
 				

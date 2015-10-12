@@ -23,7 +23,6 @@ import eu.cloudscaleproject.env.spotter.CustomDynamicSpotterRunJob;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 
 public class ConfigAlternative extends AbstractConfigAlternative
@@ -49,9 +48,9 @@ public class ConfigAlternative extends AbstractConfigAlternative
 
 	public ConfigAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, null, CSTool.SPOTTER_DYN_CONF.getID(), ResourceRegistry.getInstance().getResourceProvider(project,
-				CSTool.SPOTTER_DYN_INPUT.getID()), ResourceRegistry.getInstance().getResourceProvider(project,
-				CSTool.SPOTTER_DYN_RES.getID()));
+		super(project, folder, null, CSTool.SPOTTER_DYN_CONF.getID(), 
+									 CSTool.SPOTTER_DYN_INPUT.getID(), 
+									 CSTool.SPOTTER_DYN_RES.getID());
 	}
 
 	public void registerSpotterEditor(final AbstractSpotterEditor editor)

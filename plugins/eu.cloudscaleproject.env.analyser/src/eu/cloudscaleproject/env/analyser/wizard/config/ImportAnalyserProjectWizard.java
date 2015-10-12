@@ -33,7 +33,6 @@ import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -51,9 +50,7 @@ import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPa
  *
  */
 public class ImportAnalyserProjectWizard extends Wizard{
-	
-	private final IProject project;
-	
+		
 	private final ResourceProvider inputResourceProvider;
 	private final ResourceProvider confResourceProvider;
 	private final ResourceProvider limboResourceProvider;
@@ -64,9 +61,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 	private final Map<Resource, EditorInputEMF> limboAlternatives  = new HashMap<Resource, EditorInputEMF>();
 	
 	public ImportAnalyserProjectWizard(IProject project) {
-		
-		this.project = project;
-		
+				
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
 		this.limboResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION);
@@ -457,13 +452,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		Display.getDefault().syncExec(new Runnable() {
 			
 			@Override
-			public void run() {
-				if(ca != null){
-					ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), ca);
-				}
-				if(!limboAlternatives.isEmpty()){
-					ValidationDiagramService.showStatus(project, CSTool.USAGEEVOLUTION.getID(), limboAlternatives.values().iterator().next());
-				}
+			public void run() {				
 				if(ia != null){
 					OpenAlternativeUtil.openAlternative(ia);
 				}

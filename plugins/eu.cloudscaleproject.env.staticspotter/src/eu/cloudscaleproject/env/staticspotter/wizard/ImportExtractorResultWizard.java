@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -80,8 +79,6 @@ public class ImportExtractorResultWizard extends Wizard
 		}
 
 		alternative.save();
-
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_INPUT.getID(), alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
 
 		return true;

@@ -22,11 +22,9 @@ import org.spotter.eclipse.ui.editors.MeasurementEditorInput;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 
 public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable{
@@ -166,8 +164,6 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_INPUT.getID(), inputAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_CONF.getID(), null);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_RES.getID(), null);
 	}
+	
 }

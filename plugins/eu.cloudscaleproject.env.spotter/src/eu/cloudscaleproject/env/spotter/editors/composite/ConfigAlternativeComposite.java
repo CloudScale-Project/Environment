@@ -32,7 +32,6 @@ import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
@@ -231,12 +230,8 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	@Override
 	public void onSelect() {
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_INPUT.getID(), confAlternative.getInputAlternative());
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_CONF.getID(), confAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_DYN_RES.getID(), confAlternative.getLastResult());
 	}
-
-
+	
 	private WritableList inputAlternatives = new WritableList();
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();

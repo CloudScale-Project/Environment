@@ -8,7 +8,10 @@ import org.eclipse.e4.core.services.translation.TranslationService;
 public class CloudscaleContext {
 	
 	//model named objects
-	public static final String ACTIVE_VALIDATION_DIAGRAM = "eu.cloudscaleproject.env.common.CloudscaleContext.validationDiagram";
+	
+	//TODO: find better solution
+	//HACK: the value of the ACTIVE_ALTERNATIVE is deliberately set to IEditorInputResource full class path, 
+	//		so it can be injected as a class object instead of 'named' object.  
 	public static final String ACTIVE_ALTERNATIVE = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource";
 	
 	private static IEclipseContext csContext = EclipseContextFactory.create("CloudscaleContext");

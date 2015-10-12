@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.result;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -8,12 +7,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
 
 /**
@@ -23,7 +19,6 @@ import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
  */
 public class ResultsComposite extends TitleEditorView implements IRefreshable, ISelectable{
 
-	private final IProject project;
 	private final ResultAlternative alternative;
 	
 	private CTabFolder tabFolder;
@@ -34,7 +29,6 @@ public class ResultsComposite extends TitleEditorView implements IRefreshable, I
 	public ResultsComposite(ResultAlternative alt, Composite parent, int style) {
 		super(parent, style, alt);
 		
-		this.project = alt.getProject();
 		this.alternative = alt;
 		
 		getContainer().setLayout(new FillLayout());
@@ -68,17 +62,6 @@ public class ResultsComposite extends TitleEditorView implements IRefreshable, I
 	
 	@Override
 	public void onSelect() {
-		
-		InputAlternative inputAlternative = null;
-		ConfAlternative confAlternative = alternative.getConfAlternative();
-		
-		if(confAlternative != null){
-			inputAlternative = confAlternative.getInputAlternative();
-		}
-		
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), inputAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), confAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), alternative);
 	}
 	
 	@Override

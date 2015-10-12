@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.swt.graphics.Image;
 
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
@@ -53,6 +54,8 @@ public class AlternativeNode extends ExplorerEditorNode{
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
 		
 		getContext().set(ILabelDecorator.class, DEFAULT_DECORATOR);
+		
+		getContext().set(IValidationStatusProvider.class, alternative);
 		getContext().set(IEditorInputResource.class, alternative);
 	}
 

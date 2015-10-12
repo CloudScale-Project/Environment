@@ -9,16 +9,16 @@ import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
 
-public class InputAlternative extends EditorInputEMF
+public class InputAlternative extends AbstractInputAlternative
 {
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
 		super(project, folder, new ModelType[]{ModelType.SOURCECODEDECORATOR, 
 											   ModelType.REPOSITORY, 
-											   ModelType.SYSTEM}, CSTool.SPOTTER_STA_INPUT.getID());
+											   ModelType.SYSTEM}, CSTool.SPOTTER_STA_INPUT.getID(), CSTool.SPOTTER_STA_CONF.getID());
 	}
 
 	public void addSubResourceModel(IResource res)

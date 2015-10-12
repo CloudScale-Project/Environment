@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.analyser.editors.input;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -15,8 +14,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
@@ -32,14 +29,14 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 	private final InputTreeViewComposite treeviewComposite;
 	private final UsageEvolutionComposite ueComposite;
 	
-	private final InputAlternative alternative;
+	//private final InputAlternative alternative;
 	
 	private CTabFolder tabFolder;
 
 	public InputComposite(InputAlternative input, Composite parent, int style) {
 		super(parent, style, input);
 
-		alternative = input;
+		//alternative = input;
 		
 		GridLayout layout = new GridLayout(1, true);
 		layout.marginWidth = 0;
@@ -110,10 +107,8 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 	
 	@Override
 	public void onSelect() {
-		IProject project = alternative.getProject();
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_CONF.getID(), null);
-		ValidationDiagramService.showStatus(project, CSTool.ANALYSER_RES.getID(), null);
+		//IProject project = alternative.getProject();
+		//ValidationDiagramHelper.showStatus(project, alternative);
 	}
 
 	@Override

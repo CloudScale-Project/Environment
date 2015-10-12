@@ -8,7 +8,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -35,11 +34,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 
@@ -116,7 +112,7 @@ public class ExplorerViewPart {
 				final IExplorerNode node = (IExplorerNode)evt.getSource();
 						
 				if(IExplorerNode.PROP_REFRESH.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {
@@ -127,7 +123,7 @@ public class ExplorerViewPart {
 					});
 				}
 				if(IExplorerNode.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {
@@ -138,7 +134,7 @@ public class ExplorerViewPart {
 					});
 				}
 				if(IExplorerNode.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, new Runnable() {
+					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {
@@ -167,19 +163,6 @@ public class ExplorerViewPart {
 				}
 				
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
-				
-				final ExplorerResourceNode projectNode = ExplorerUtils.getProjectNode(node);
-				if(projectNode != null){
-					
-					BusyIndicator.showWhile(Display.getDefault(), new Runnable() {
-						@Override
-						public void run() {
-							ValidationDiagramService.showDiagram((IProject)projectNode.getResource());
-						}
-					});
-					
-				}
-				
 				if(node != null){
 					node.onSelect();
 				}
@@ -227,7 +210,7 @@ public class ExplorerViewPart {
 		menuService.registerContextMenu(this.treeViewer.getControl(), POPUP_MENU_ELEMENT);
 		
 		this.partService.addPartListener(partServiceListener);
-		this.selectionService.addPostSelectionListener(selectionListener);
+		this.selectionService.addPostSelectionListener(part.getElementId(), selectionListener);
 	}
 	
 	@Inject
@@ -253,6 +236,33 @@ public class ExplorerViewPart {
 			
 		}
 	}
+	
+	/*
+	@Inject
+	@Optional
+	private void activeContext(@Active IEclipseContext context){
+		
+	}
+	
+	@Inject
+	@Optional
+	private void activeAlternative(MPart part, @Active IEditorInputResource alternative){
+		part.getContext().set(IEditorInputResource.class, alternative);
+	}
+	
+	@Inject
+	@Optional
+	private void activeValidationStatusProvider(MPart part, @Active IValidationStatusProvider vp){
+		part.getContext().set(IValidationStatusProvider.class, vp);
+
+	}
+	
+	@Inject
+	@Optional
+	private void activeProject(MPart part, @Active IProject project){
+		part.getContext().set(IProject.class, project);
+	}
+	*/
 	
 	@PreDestroy
 	public void preDestroy() {

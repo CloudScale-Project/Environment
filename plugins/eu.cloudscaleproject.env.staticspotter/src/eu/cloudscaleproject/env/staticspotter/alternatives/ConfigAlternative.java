@@ -15,7 +15,6 @@ import org.reclipse.structure.inference.DetectPatternsJob;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 
 public class ConfigAlternative extends AbstractConfigAlternative {
@@ -33,10 +32,10 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 
 	//TODO: use EditorInputEMF loader!
 	public ConfigAlternative(IProject project, IFolder folder) {
-		super (project, folder, null, CSTool.SPOTTER_STA_CONF.getID(),
-				ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT.getID()),
-				ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_RES.getID())
-				);
+		
+		super (project, folder, null, CSTool.SPOTTER_STA_CONF.getID(), 
+									  CSTool.SPOTTER_STA_INPUT.getID(), 
+									  CSTool.SPOTTER_STA_RES.getID());
 	}
 
 	@Override

@@ -5,14 +5,14 @@ import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
 
-public class InputAlternative extends EditorInputEMF
+public class InputAlternative extends AbstractInputAlternative
 {
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ModelType.GROUP_PCM_EXTENDED, CSTool.ANALYSER_INPUT.getID());
+		super(project, folder, ModelType.GROUP_PCM_EXTENDED, CSTool.ANALYSER_INPUT.getID(), CSTool.ANALYSER_CONF.getID());
 	}
 
 }

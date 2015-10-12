@@ -20,10 +20,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
 
@@ -93,20 +91,6 @@ public class GlobalInputAlternative extends EditorInput
 				
 				GlobalInputAlternative.getInstance().setJavaProjects(findJavaProjects());
 				getInstance().validate();
-
-				Display.getDefault().asyncExec(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						if (getInstance().getProject() != null)
-						{
-							ValidationDiagramService.showStatus(getInstance().getProject(), 
-																CSTool.EXTRACTOR_INPUT.getID(), 
-																GlobalInputAlternative.getInstance());
-						}
-					}
-				});
 			}
 		});
 	}

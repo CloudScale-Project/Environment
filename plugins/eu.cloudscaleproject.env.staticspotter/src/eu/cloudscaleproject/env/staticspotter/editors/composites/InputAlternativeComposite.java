@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -10,16 +9,12 @@ import org.eclipse.swt.widgets.Group;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
 public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable {
-
-	private InputAlternative inputAlternative;
 
 	/**
 	 * Create the composite.
@@ -31,8 +26,6 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 
 		getContainer().setLayout(new GridLayout());
 		
-		this.inputAlternative = inputAlternative;
-
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Source Code Decorator");
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -56,12 +49,6 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 	}
 
 	@Override
-	public void onSelect()
-	{
-		IProject project = inputAlternative.getProject();
-		
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_INPUT.getID(), this.inputAlternative);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_CONF.getID(), null);
-		ValidationDiagramService.showStatus(project, CSTool.SPOTTER_STA_RES.getID(), null);
+	public void onSelect() {
 	}
 }

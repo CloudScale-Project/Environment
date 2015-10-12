@@ -15,7 +15,6 @@ import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -127,7 +126,6 @@ public class ExternalImportInputWizard extends Wizard{
 					
 					@Override
 					public void run() {
-						ValidationDiagramService.showStatus(project, CSTool.ANALYSER_INPUT.getID(), alternative);
 						OpenAlternativeUtil.openAlternative(alternative);
 					}
 				});

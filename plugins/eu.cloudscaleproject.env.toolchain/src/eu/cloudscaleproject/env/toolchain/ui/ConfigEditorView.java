@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.ValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
@@ -191,12 +190,8 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					{
 						resultsComposite.setStatus(lastJob.getResult());
 						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
-
-						//TODO: If last results is null nothing will happen.
-						//		It should clear the status from the Workbench, but the ID is unknown...
-						ValidationDiagramService.showStatus(alternative.getProject(), alternative.getLastResult());
-
-					} else
+					} 
+					else
 					{
 						((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
 					}

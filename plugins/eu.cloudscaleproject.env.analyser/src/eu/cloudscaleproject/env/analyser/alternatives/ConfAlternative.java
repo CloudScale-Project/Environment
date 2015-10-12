@@ -124,11 +124,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 	public ConfAlternative(IProject project, IFolder folder, Type type)
 	{
 		super(project, folder, ModelType.GROUP_EXPERIMENTS, CSTool.ANALYSER_CONF.getID(),
-				ResourceRegistry.getInstance().getResourceProvider(project,
-						CSTool.ANALYSER_INPUT.getID()), 
-				ResourceRegistry.getInstance().getResourceProvider(project,
-						CSTool.ANALYSER_RES.getID())
-						);
+															CSTool.ANALYSER_INPUT.getID(), 
+															CSTool.ANALYSER_RES.getID());
 
 		this.type = type;
 	}

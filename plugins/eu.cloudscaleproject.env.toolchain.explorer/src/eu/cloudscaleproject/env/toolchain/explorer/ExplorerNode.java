@@ -215,7 +215,15 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	
 	@Override
 	public void onSelect() {
+		
+		//deactivate child
+		IEclipseContext activeChild = context.getActiveChild();
+		if(activeChild != null){
+			activeChild.deactivate();
+		}
+		
 		context.activateBranch();
+		
 	}
 	
 	@Override

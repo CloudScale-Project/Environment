@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramFactory;
 
 /**
  *
@@ -23,7 +22,6 @@ public class Extensions {
 	
 	private final ExtensionRetriever extensionRetriever = new ExtensionRetriever();
 	
-	private List<IValidationDiagramFactory> validationDiagramFactories = new ArrayList<>();
 	private List<IResourceValidator> resourceValidators = new ArrayList<>();
 	
 	public void retrieveExtensions(){
@@ -32,16 +30,6 @@ public class Extensions {
 		this.resourceValidators = extensionRetriever.retrieveExtensionObjects(
 						"eu.cloudscaleproject.env.common.notification.validator",
 						"class", IResourceValidator.class);
-		
-		//retrieve diagram factories
-		this.validationDiagramFactories = extensionRetriever.retrieveExtensionObjects(
-				"eu.cloudscaleproject.env.common.notification.diagram",
-				"class", IValidationDiagramFactory.class);
-		
-	}
-	
-	public List<IValidationDiagramFactory> getValiadtionDiagramFactories(){
-		return this.validationDiagramFactories;
 	}
 	
 	public List<IResourceValidator> getResourceValidators(){

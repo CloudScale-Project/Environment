@@ -50,18 +50,26 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 	}
 	
 	private IFolder createTransformOutputFolder(IProject project){
-		IFolder generatedFolder = ExplorerProjectPaths.getProjectFolder(project, ExplorerProjectPaths.KEY_FOLDER_GENERATED);
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		String date = df.format(new Date(System.currentTimeMillis()));
 		
-		IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM_"+ date);
 		try {
-			outputFolder.create(true, true, null);
-		} catch (CoreException e) {
+			String generatedFolderName = ExplorerProjectPaths.getProjectProperty(project, 
+					ExplorerProjectPaths.FOLDER_GENERATED_KEY, 
+					ExplorerProjectPaths.FOLDER_GENERATED_DEFAULT);
+	
+			IFolder generatedFolder = project.getFolder(generatedFolderName);
+			ExplorerProjectPaths.prepareFolder(generatedFolder);
+	
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+			String date = df.format(new Date(System.currentTimeMillis()));
+			
+			IFolder outputFolder = ExplorerProjectPaths.getNonexistingSubFolder(generatedFolder, "PCM_"+ date);
+			return outputFolder;
+		} 
+		catch (CoreException e) {
 			e.printStackTrace();
 		}
 		
-		return outputFolder;
+		return null;
 	}
 	
 	@Override

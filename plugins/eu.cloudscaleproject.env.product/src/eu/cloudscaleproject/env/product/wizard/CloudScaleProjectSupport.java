@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -81,21 +80,21 @@ public class CloudScaleProjectSupport
 		{
 			addProjectNature(p);
 			
-			IFolder extractorFolder = createFolder(p, DEFAULT_FOLDER_EXTRACTOR);
-			IFolder analyserFolder = createFolder(p, DEFAULT_FOLDER_ANALYSER);
-			IFolder dsFolder = createFolder(p, DEFAULT_FOLDER_DYNAMIC_SPOTTER);
-			IFolder ssFolder = createFolder(p, DEFAULT_FOLDER_STATIC_SPOTTER);
+			//IFolder extractorFolder = createFolder(p, DEFAULT_FOLDER_EXTRACTOR);
+			//IFolder analyserFolder = createFolder(p, DEFAULT_FOLDER_ANALYSER);
+			//IFolder dsFolder = createFolder(p, DEFAULT_FOLDER_DYNAMIC_SPOTTER);
+			//IFolder ssFolder = createFolder(p, DEFAULT_FOLDER_STATIC_SPOTTER);
 
-			createToolSubfolders(extractorFolder);
-			createToolSubfolders(analyserFolder);
-			createToolSubfolders(dsFolder);
-			createToolSubfolders(ssFolder);
+			//createToolSubfolders(extractorFolder);
+			//createToolSubfolders(analyserFolder);
+			//createToolSubfolders(dsFolder);
+			//createToolSubfolders(ssFolder);
 
-			createFolder(p, DEFAULT_FOLDER_SCALEDL);
-			createFolder(p, DEFAULT_FOLDER_GENERATED);
+			//createFolder(p, DEFAULT_FOLDER_SCALEDL);
+			//createFolder(p, DEFAULT_FOLDER_GENERATED);
 			
 			// Create Project file
-			createDefaultProperties(p);
+			//createDefaultProperties(p);
 
 			// projectFile.setHidden(true);
 
@@ -175,6 +174,7 @@ public class CloudScaleProjectSupport
 		}
 	}
 
+	/*
 	private static final String DEFAULT_FOLDER_GENERATED = "Generated models";
 	// private static final String DEFAULT_FOLDER_IMPORT = "Imported models";
 
@@ -241,4 +241,5 @@ public class CloudScaleProjectSupport
 				}
 		}
 	}
+	*/
 }

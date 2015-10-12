@@ -35,7 +35,6 @@ import org.reclipse.structure.inference.util.InferenceExtensionsHelper;
 import org.reclipse.structure.inference.util.InferenceExtensionsHelper.AnnotationEvaluatorItem;
 import org.reclipse.structure.specification.PSPatternSpecification;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
@@ -85,13 +84,7 @@ public class Util
 
 	public static IFolder getResultsFolder(IProject project)
 	{
-		IFolder staticSpotterFolder = ExplorerProjectPaths.getProjectFolder(
-				project, ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER);
-		String resultsFolderString = ExplorerProjectPaths
-				.getProjectProperty(project, ExplorerProjectPaths.KEY_FOLDER_RESULTS);
-		IFolder resultsFolder = staticSpotterFolder.getFolder(resultsFolderString);
-
-		return resultsFolder;
+		return ToolchainUtils.getResourceProviderFolder(project, CSTool.SPOTTER_STA_RES.getID());
 	}
 
 	//

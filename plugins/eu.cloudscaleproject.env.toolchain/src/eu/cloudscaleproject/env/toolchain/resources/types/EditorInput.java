@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
@@ -49,6 +50,11 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	public EditorInput(String name, String validatorID){
 		this.name = name;
 		this.validatorID = validatorID;
+	}
+	
+	@Override
+	public IProject getProject() {
+		return null;
 	}
 	
 	@Override
@@ -200,4 +206,5 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	public void removeStatusChangeListener(String propertyName, PropertyChangeListener listener) {
 		pcsStatus.removePropertyChangeListener(propertyName, listener);
 	}
+	
 }
