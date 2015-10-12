@@ -71,6 +71,7 @@ public class ToolchainAddon {
 							 @Active @Optional IEditorInputResource editorInputResource,
 							 @Active @Optional IProject project){
 		
+		ActiveResources currentActiveResources = CloudscaleContext.getGlobalContext().get(ActiveResources.class);
 		ActiveResources activeResources = new ActiveResources();
 		
 		//handle validation status provider
@@ -95,17 +96,15 @@ public class ToolchainAddon {
 		}
 		activeResources.setAlternative(editorInputResource);
 
-		//handle project
-		IProject currentProject = CloudscaleContext.getGlobalContext().get(IProject.class);
-		
+		//handle project		
 		if(project != null){
 			if(project.isAccessible()){
 				activeResources.setProject(project);
 			}
 		}
-		else{
-			if(currentProject != null && !currentProject.isAccessible()){
-				activeResources.setProject(project);
+		else if(currentActiveResources != null){
+			if(currentActiveResources.project != null && currentActiveResources.project.isAccessible()){
+				activeResources.setProject(currentActiveResources.project);
 			}
 		}
 		
