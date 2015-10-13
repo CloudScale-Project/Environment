@@ -14,15 +14,17 @@
               <tags>newtablook</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_I9w4QIsiEeKkW7h3XzrPnQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" containerData="7500" ref="_sS7Q8NS1EeGBn6dQ9VPexA"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.lowerLeft">
-              <children xsi:type="advanced:Placeholder" xmi:id="_3ssDgDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" containerData="7500" ref="_mc-PMDZ_EeOUZvbZvEH41A" closeable="true"/>
-            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_04DdkOpiEeSZ8fQe5BuMIQ" elementId="eu.cloudscaleproject.env.product.partstack.lowerLeft"/>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_GM8WcIsiEeKkW7h3XzrPnQ" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="60">
             <children xsi:type="basic:PartSashContainer" xmi:id="_eOgjgDaAEeOUZvbZvEH41A" elementId="eu.cloudscaleproject.env.product.partsashcontainer.0" containerData="70">
               <children xsi:type="advanced:Placeholder" xmi:id="_imeVUKLIEeOVJP61i6fIgw" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_dcRyAIDpEeKVEoXKPSzKEw"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.bottom" visible="false" containerData="30"/>
+            <children xsi:type="basic:PartStack" xmi:id="_pxBbcMbuEeOONvcKIucoUw" elementId="eu.cloudscaleproject.env.product.partstack.bottom" visible="false" containerData="30" selectedElement="_mPCdgHGgEeW_Qd4mweGYeQ">
+              <tags>Minimized</tags>
+              <children xsi:type="advanced:Placeholder" xmi:id="_mPCdgHGgEeW_Qd4mweGYeQ" elementId="" ref="_yHIs4HGgEeW_Qd4mweGYeQ"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_KUIcYHGhEeW_Qd4mweGYeQ" elementId="" ref="_C3nAcHGhEeW_Qd4mweGYeQ"/>
+            </children>
           </children>
         </children>
       </children>
@@ -47,7 +49,6 @@
       </menus>
       <toolbar xmi:id="_4UXAUdSmEeG-a6zBTyJ-wg" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_mc-PMDZ_EeOUZvbZvEH41A" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/prop_ps.png" closeable="true"/>
     <sharedElements xsi:type="basic:Part" xmi:id="__0KigMbuEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simucontroller.gui.DockStatusViewPart" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Simulation Dock Status" iconURI="platform:/plugin/de.uka.ipd.sdq.codegen.simucontroller/icons/screen_blue_small.gif" closeable="true">
       <tags>View</tags>
       <menus xmi:id="__0LJkMbuEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simucontroller.gui.DockStatusViewPart">
@@ -55,13 +56,21 @@
       </menus>
       <toolbar xmi:id="__0LJkcbuEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simucontroller.gui.DockStatusViewPart"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_lQGYgMbvEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simudatavisualization.ExperimentsView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Experiments View" iconURI="platform:/plugin/de.uka.ipd.sdq.sensorframework.visualisation/icons/app_simucim.gif" closeable="true">
+    <sharedElements xsi:type="basic:Part" xmi:id="_yHIs4HGgEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.console.ConsoleView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Console" iconURI="platform:/plugin/org.eclipse.ui.console/$nl$/icons/full/cview16/console_view.png" closeable="true">
       <tags>View</tags>
-      <tags>categoryTag:de.uka.ipd.sdq.codegen.simudatavisualization</tags>
-      <menus xmi:id="_lQGYgcbvEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simudatavisualization.ExperimentsView">
+      <tags>categoryTag:org.eclipse.ui</tags>
+      <menus xmi:id="_yHIs4XGgEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.console.ConsoleView">
         <tags>ViewMenu</tags>
       </menus>
-      <toolbar xmi:id="_lQGYgsbvEeOONvcKIucoUw" elementId="de.uka.ipd.sdq.codegen.simudatavisualization.ExperimentsView"/>
+      <toolbar xmi:id="_yHIs4nGgEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.console.ConsoleView"/>
+    </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_C3nAcHGhEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.views.PropertySheet" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Properties" iconURI="platform:/plugin/org.eclipse.ui.views/$nl$/icons/full/eview16/prop_ps.png" closeable="true">
+      <tags>View</tags>
+      <tags>categoryTag:org.eclipse.ui</tags>
+      <menus xmi:id="_C3nAcXGhEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.views.PropertySheet">
+        <tags>ViewMenu</tags>
+      </menus>
+      <toolbar xmi:id="_C3nAcnGhEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.views.PropertySheet"/>
     </sharedElements>
     <trimBars xmi:id="_2xkLEHteEeKIYfuE0pelcA" elementId="org.eclipse.ui.main.toolbar">
       <children xsi:type="menu:ToolBar" xmi:id="_QPA5AHtjEeKIYfuE0pelcA" elementId="org.eclipse.ui.workbench.file">
@@ -90,6 +99,9 @@
       </children>
     </trimBars>
     <trimBars xmi:id="_lSORED85EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.product.trimbar.bottom" side="Bottom"/>
+    <trimBars xmi:id="_9mz-wHGsEeW_Qd4mweGYeQ" elementId="eu.cloudscaleproject.env.product.trimbar.0" side="Right">
+      <children xsi:type="menu:ToolControl" xmi:id="__2uL4HGsEeW_Qd4mweGYeQ" elementId="eu.cloudscaleproject.env.product.partstack.bottom(eu.cloudscaleproject.env.product.perspective.main)" toBeRendered="false" accessibilityPhrase="" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.TrimStack"/>
+    </trimBars>
   </children>
   <handlers xmi:id="_m2_NoKLbEeOVJP61i6fIgw" elementId="eu.cloudscaleproject.env.product.handler.newProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewProjectHadler" command="_czYasKLbEeOVJP61i6fIgw"/>
   <handlers xmi:id="_ebA54C7sEeW1epuAoWJvmg" elementId="eu.cloudscaleproject.env.product.handler.newExampleProject" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.CreateNewExampleProjectHandler" command="_SyZ4AC7sEeW1epuAoWJvmg"/>
@@ -111,7 +123,6 @@
       <parameters xmi:id="_45l04FxnEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.parameter.1" name="PerspectiveId" value="eu.cloudscaleproject.env.product.perspective.intro"/>
     </children>
     <children xsi:type="menu:HandledMenuItem" xmi:id="_LYK_IIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.handledmenuitem.showView" label="Show view" command="_mVVJIIMWEeSFPKTtzK8Nkg"/>
-    <children xsi:type="menu:HandledMenuItem" xmi:id="_RDfb0IMZEeSuqtISG5JKZg" elementId="eu.cloudscaleproject.env.product.handledmenuitem.0" command="_nXdNIIMZEeSuqtISG5JKZg"/>
     <children xsi:type="menu:MenuSeparator" xmi:id="_zAUOAIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.menuseparator.0"/>
     <children xsi:type="menu:Menu" xmi:id="_1eGfEIMWEeSFPKTtzK8Nkg" elementId="eu.cloudscaleproject.env.product.menu.envrionment" label="Environment">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_juk9QHnoEeKfc49LSeS68A" elementId="eu.cloudscaleproject.env.product.menu.tools.contribution.cloudscalePerspective" label="Perspective" command="_AeeC8FxlEeWT--3X3lai2w">
@@ -139,7 +150,6 @@
   </menuContributions>
   <commands xmi:id="_mVVJIIMWEeSFPKTtzK8Nkg" elementId="org.eclipse.ui.views.showView" commandName="%command.showView.name" description="%command.showView.description"/>
   <commands xmi:id="_NLAHUIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.help.quickStartAction" commandName="%command.quickStart.name" description="%command.quickStart.description"/>
-  <commands xmi:id="_nXdNIIMZEeSuqtISG5JKZg" elementId="org.eclipse.ui.views.properties.NewPropertySheetCommand" commandName="%Views.PropertySheet"/>
   <commands xmi:id="_3fw-8D0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.import" commandName="%command.import.name" description="%command.import.description"/>
   <commands xmi:id="_3gKAgD0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.export" commandName="%command.export.name" description="%command.export.description"/>
   <commands xmi:id="_3gf-wD0dEeWij6XaP9iBUA" elementId="org.eclipse.ui.file.save" commandName="%command.save.name" description="%command.save.description"/>
@@ -155,6 +165,7 @@
   <commands xmi:id="_AeeC8FxlEeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.product.command.openperspective" commandName="openPerspective" description="Open perspective with the specified ID">
     <parameters xmi:id="_EZLlAFxlEeWT--3X3lai2w" elementId="PerspectiveId" name="PerspectiveId" optional="false"/>
   </commands>
+  <commands xmi:id="_-tqg0HGmEeW_Qd4mweGYeQ" elementId="org.eclipse.ui.views.properties.NewPropertySheetCommand" commandName="%Views.PropertySheet"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXh" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_XGB3wPZlEd-XstlTZ6nTXi" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
