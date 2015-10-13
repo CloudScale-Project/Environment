@@ -168,6 +168,8 @@ public class ResourceRegistry {
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
 				
+		if (project == null || id == null) return null;
+		
 		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
 		if(folder == null){
 			String msg = "ResourceProvider root folder can not be retrieved! ID: " + id;
