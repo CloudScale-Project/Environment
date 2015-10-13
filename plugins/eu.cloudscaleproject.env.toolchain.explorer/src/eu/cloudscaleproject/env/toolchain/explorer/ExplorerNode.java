@@ -236,6 +236,22 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	}
 	
 	@Override
+	public void refreshRecursive() {
+		doRefreshRecursive();
+		pcs.firePropertyChange(PROP_REFRESH_RECURSIVE, false, true);
+	}
+	
+	protected void doRefreshRecursive() {
+		for(IExplorerNodeChildren children : nodeChildren){
+			children.refresh();
+		}
+		
+		for(IExplorerNode node : getChildren()){
+			((ExplorerNode)node).doRefreshRecursive();
+		}		
+	}
+	
+	@Override
 	public void dispose(){
 		
 		for(IExplorerNodeChildren children : this.nodeChildren){
@@ -247,7 +263,14 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		if(icon != null && iconDisposeable){
 			icon.dispose();
 		}
-		this.context.dispose();
+		
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				ExplorerNode.this.context.dispose();
+			}
+		});
 		
 		if(parent != null){
 			ExplorerNode en = (ExplorerNode)parent;

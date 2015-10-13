@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFolder;
@@ -26,7 +28,7 @@ public abstract class AbstractInputAlternative extends EditorInputEMF implements
 	}
 	
 	@Override
-	public IConfigAlternative getConfigAlternative() {
+	public List<IConfigAlternative> getConfigAlternatives() {
 		
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(getProject(), confID);
 		
@@ -37,15 +39,17 @@ public abstract class AbstractInputAlternative extends EditorInputEMF implements
 			return null;
 		}
 		
+		List<IConfigAlternative> configAlternatives = new ArrayList<IConfigAlternative>();
+		
 		for(IEditorInputResource eir : rp.getResources()){
 			if(eir instanceof AbstractConfigAlternative){
 				AbstractConfigAlternative ca = (AbstractConfigAlternative)eir;
 				if(this.equals(ca.getInputAlternative())){
-					return ca;
+					configAlternatives.add(ca);
 				}
 			}
 		}
-		return null;
+		return configAlternatives;
 	}
 
 }

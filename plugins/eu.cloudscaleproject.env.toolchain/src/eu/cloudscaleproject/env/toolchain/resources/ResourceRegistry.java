@@ -167,8 +167,10 @@ public class ResourceRegistry {
 	 * @return ResourceProvider
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
-				
-		if (project == null || id == null) return null;
+		
+		if(project == null || id == null){
+			return null;
+		}
 		
 		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
 		if(folder == null){
@@ -206,6 +208,11 @@ public class ResourceRegistry {
 	 * @return ResourceProvider
 	 */
 	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
+		
+		if(project == null || tool == null){
+			return null;
+		}
+		
 		return getResourceProvider(project, tool.getID());
 	}
 	

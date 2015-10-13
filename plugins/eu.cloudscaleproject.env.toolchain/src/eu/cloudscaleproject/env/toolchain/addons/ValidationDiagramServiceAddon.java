@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.toolchain.addons;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PreDestroy;
@@ -85,10 +86,25 @@ public class ValidationDiagramServiceAddon {
 						IProject project = statusProvider.getProject();
 						IInputAlternative inputAlternative = (IInputAlternative)statusProvider;
 						
-						IConfigAlternative configAlternative = inputAlternative.getConfigAlternative();
+						IValidationStatusProvider activeAlternative = diagramService.getActiveStatusProvider(
+																					inputAlternative.getConfigAlternativeID());
+						List<IConfigAlternative> configAlternatives = inputAlternative.getConfigAlternatives();
 						
-						if(configAlternative != null){
-							diagramService.showStatus(project, configAlternative);
+						if(!configAlternatives.isEmpty()){
+							
+							//check if the new configuration alternative should be set
+							boolean hasValidConfigAlternative = false;
+							if(activeAlternative instanceof IConfigAlternative){
+								IConfigAlternative ca = (IConfigAlternative)activeAlternative;
+								if(inputAlternative.equals(ca.getInputAlternative())){
+									hasValidConfigAlternative = true;
+								}
+							}
+							
+							//show the new configuration alternative only if needed
+							if(!hasValidConfigAlternative){
+								diagramService.showStatus(project, configAlternatives.get(0));
+							}
 						}
 						else{
 							diagramService.clearStatus(project, inputAlternative.getConfigAlternativeID());

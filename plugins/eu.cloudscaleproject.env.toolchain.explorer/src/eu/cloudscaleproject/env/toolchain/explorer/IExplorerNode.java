@@ -20,6 +20,7 @@ public interface IExplorerNode extends IAdaptable{
 	public static final String PROP_ICON = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.icon";
 	
 	public static final String PROP_REFRESH = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.refresh";
+	public static final String PROP_REFRESH_RECURSIVE = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.refreshRecursive";
 
 	
 	public String getID();
@@ -41,6 +42,8 @@ public interface IExplorerNode extends IAdaptable{
 	public void onSelect();
 	
 	public void refresh();
+	public void refreshRecursive();
+
 	public void dispose();
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl);

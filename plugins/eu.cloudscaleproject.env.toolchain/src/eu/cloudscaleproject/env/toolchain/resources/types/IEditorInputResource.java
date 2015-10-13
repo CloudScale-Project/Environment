@@ -50,7 +50,10 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public void setDirty(boolean value);
 		
 	public String getProperty(String key);
+	public String[] getProperties(String key);
+
 	public void setProperty(String key, String value);
+	public void setProperties(String key, String[] values);
 
 	public void copyFrom(IResource file);
 }
