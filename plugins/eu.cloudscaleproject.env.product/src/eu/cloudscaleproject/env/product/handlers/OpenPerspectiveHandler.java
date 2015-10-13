@@ -1,7 +1,6 @@
 
 package eu.cloudscaleproject.env.product.handlers;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Named;
