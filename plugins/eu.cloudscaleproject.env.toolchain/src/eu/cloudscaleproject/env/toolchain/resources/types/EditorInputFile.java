@@ -77,10 +77,29 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
+	public String[] getProperties(String key){
+		synchronized (source) {
+			String prop = source.getProperty(key);
+			return prop.split(",");
+		}
+	}
+	
 	public String[] getKeys(){
 		synchronized (source) {
 			Set<Object> keys = source.keySet();
 			return keys.toArray(new String[keys.size()]);
+		}
+	}
+	
+	public void setProperties(String key, String[] values){
+		synchronized (source) {
+			StringBuilder value = new StringBuilder();
+			for(int i=0; i<values.length; i++){
+				value.append(values[i]);
+				if(i != values.length -1){
+					value.append(",");
+				}
+			}
 		}
 	}
 	

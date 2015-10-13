@@ -34,9 +34,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 
 		this.inputAlternativeID = inputID;
 		this.resultAlternativeID = resultID;
-		
-		ResourceRegistry.getInstance().getResourceProvider(project, inputID);
-		
+				
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
 		this.resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, resultID);
 	}
@@ -51,9 +49,9 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 		return resultAlternativeID;
 	}
 
-	public void setInputAlternative(IEditorInputResource input)
+	public void setInputAlternative(IInputAlternative input)
 	{
-		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, input.getResource());
+		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, input.getResource());		
 	}
 
 	@Override
@@ -61,7 +59,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	{
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
-		if (res != null)
+		if (inputResourceProvider != null && res != null)
 			return (IInputAlternative)inputResourceProvider.getResource(res);
 		else
 			return null;
@@ -72,7 +70,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	{
 		IResource res = getSubResource(IConfigAlternative.KEY_LAST_RESULT);
 
-		if (res != null)
+		if (resultsResourceProvider != null && res != null)
 			return resultsResourceProvider.getResource(res);
 		else
 			return null;
@@ -87,12 +85,14 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	public List<IEditorInputResource> getResults()
 	{
 		List<IEditorInputResource> configResults = new LinkedList<>();
-		List<IEditorInputResource> resources = resultsResourceProvider.getResources();
-		for (IEditorInputResource res : resources)
-		{
-			if (getName().equals(res.getProperty("CONFIG_NAME")))
+		if(resultsResourceProvider != null){
+			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
+			for (IEditorInputResource res : resources)
 			{
-				configResults.add(res);
+				if (getName().equals(res.getProperty("CONFIG_NAME")))
+				{
+					configResults.add(res);
+				}
 			}
 		}
 

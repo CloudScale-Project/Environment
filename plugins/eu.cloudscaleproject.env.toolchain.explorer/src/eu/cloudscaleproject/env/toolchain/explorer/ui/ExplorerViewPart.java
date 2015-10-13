@@ -112,7 +112,7 @@ public class ExplorerViewPart {
 				final IExplorerNode node = (IExplorerNode)evt.getSource();
 						
 				if(IExplorerNode.PROP_REFRESH.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
+					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {
@@ -123,7 +123,7 @@ public class ExplorerViewPart {
 					});
 				}
 				if(IExplorerNode.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
+					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {
@@ -134,7 +134,7 @@ public class ExplorerViewPart {
 					});
 				}
 				if(IExplorerNode.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
+					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
 						
 						@Override
 						public void run() {

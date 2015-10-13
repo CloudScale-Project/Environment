@@ -510,9 +510,21 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 	}
 	
+	public String[] getProperties(String key){
+		synchronized (propertyInputFile) {
+			return propertyInputFile.getProperties(key);
+		}
+	}
+	
 	public final void setProperty(String key, String value){
 		synchronized (propertyInputFile) {
 			propertyInputFile.setProperty(key, value);
+		}
+	}
+	
+	public final void setProperties(String key, String[] value){
+		synchronized (propertyInputFile) {
+			propertyInputFile.setProperties(key, value);
 		}
 	}
 	

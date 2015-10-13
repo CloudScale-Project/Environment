@@ -76,6 +76,18 @@ public class ExplorerLabelProvider implements IStyledLabelProvider{
 			}
 		}
 		
+		if(element instanceof IExplorerNode){
+			
+			IExplorerNode node = (IExplorerNode)element;
+			ILabelDecorator labelDecorator = node.getContext().get(ILabelDecorator.class);
+	
+			if(labelDecorator != null){
+				if(image != null){
+					image = labelDecorator.decorateImage(image, element);
+				}
+			}
+		}
+		
 		return image;
 	}
 
@@ -97,7 +109,8 @@ public class ExplorerLabelProvider implements IStyledLabelProvider{
 				currentText = new StyledString(text, DEFAULT_STYLER);
 			}
 			
-			ILabelDecorator labelDecorator = (ILabelDecorator)node.getAdapter(ILabelDecorator.class);
+			ILabelDecorator labelDecorator = node.getContext().get(ILabelDecorator.class);
+
 			if(labelDecorator != null){
 				
 				if(currentText == null){

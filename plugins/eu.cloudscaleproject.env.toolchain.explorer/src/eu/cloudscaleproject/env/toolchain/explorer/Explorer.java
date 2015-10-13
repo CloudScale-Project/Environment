@@ -37,4 +37,9 @@ public class Explorer {
 	public IExplorerNode getRoot(){
 		return rootNode;
 	}
+	
+	public void refreshAll(){
+		rootNode.refreshRecursive();
+	}
+
 }
