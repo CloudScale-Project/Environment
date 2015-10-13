@@ -35,8 +35,6 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 		this.inputAlternativeID = inputID;
 		this.resultAlternativeID = resultID;
 		
-		ResourceRegistry.getInstance().getResourceProvider(project, inputID);
-		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
 		this.resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, resultID);
 	}
