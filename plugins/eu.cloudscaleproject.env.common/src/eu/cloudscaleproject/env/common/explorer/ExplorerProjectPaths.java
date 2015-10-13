@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -222,9 +223,9 @@ public class ExplorerProjectPaths {
 		if (parent instanceof IFolder) {
 			prepareFolder((IFolder)parent);
 		}
-		if (!folder.exists()) {
-			folder.create(true, true, new NullProgressMonitor());
-		}
+		
+		// QUICK WORKAROUND: exists() and than create() does not work when importing porject
+		((Folder)folder).ensureExists(new NullProgressMonitor());
 	}
 
 	/**
