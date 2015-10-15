@@ -105,7 +105,7 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 			measuringPointsComposite.setLayoutData(gridData);
 
 			PropertyPageComposite pageSheet = new PropertyPageComposite(
-						composite, SWT.NONE, measuringPointsComposite.getPropertySheetPage());
+						composite, SWT.BORDER, measuringPointsComposite.getPropertySheetPage());
 			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			
 			tabItem.setControl(composite);			
@@ -144,7 +144,7 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 			advancedTreeview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 			PropertyPageComposite pageSheet = new PropertyPageComposite(
-					composite, SWT.NONE, advancedTreeview.getPropertySheetPage());
+					composite, SWT.BORDER, advancedTreeview.getPropertySheetPage());
 			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			
 			tabItem.setControl(composite);

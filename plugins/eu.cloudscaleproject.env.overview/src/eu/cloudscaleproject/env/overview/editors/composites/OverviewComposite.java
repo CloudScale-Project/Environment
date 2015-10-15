@@ -33,7 +33,7 @@ public class OverviewComposite extends InputEditorView implements ISelectable{
 		
 		//property sheet page
 		PropertyPageComposite pageSheet = new PropertyPageComposite(
-				mainContainer, SWT.NONE, treeviewComposite.getPropertySheetPage());
+				mainContainer, SWT.BORDER, treeviewComposite.getPropertySheetPage());
 		pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 	

@@ -67,7 +67,7 @@ public class UsageEvolutionComposite extends InputEditorView implements ISelecta
 		
 		//property sheet page
 		PropertyPageComposite pageSheet = new PropertyPageComposite(
-				getContainer(), SWT.NONE, treeviewEditor.getPropertySheetPage());
+				getContainer(), SWT.BORDER, treeviewEditor.getPropertySheetPage());
 		pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		//plot
