@@ -71,21 +71,19 @@ public class ResourceRegistry {
 	public ResourceRegistry() {
 		
 		//register factories from extension points
-		for(IConfigurationElement el : ToolchainExtensions.getInstance().getToolChildElements()){
-			if(el.getName().equals("resource")){
-				try {
-					String id = el.getAttribute("id");
-					String editorId = el.getAttribute("editor");
-					Object o = el.createExecutableExtension("class");
-					
-					ResourceExtensionItem rei = new ResourceExtensionItem(id, editorId, (IResourceProviderFactory)o);
-					resourceExtensionItems.put(id, rei);
-					
-					logger.info("Resource extension registered uder toolchainID: " + id);
+		for(IConfigurationElement el : ToolchainExtensions.getInstance().getResourceProviderFactoryElements()){
+			try {
+				String id = el.getAttribute("id");
+				String editorId = el.getAttribute("editor");
+				Object o = el.createExecutableExtension("class");
+				
+				ResourceExtensionItem rei = new ResourceExtensionItem(id, editorId, (IResourceProviderFactory)o);
+				resourceExtensionItems.put(id, rei);
+				
+				logger.info("Resource extension registered uder toolchainID: " + id);
 
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}		
 	}

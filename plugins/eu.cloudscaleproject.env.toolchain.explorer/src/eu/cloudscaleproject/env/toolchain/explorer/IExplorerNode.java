@@ -6,12 +6,14 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
 
+import eu.cloudscaleproject.env.common.interfaces.IContextProvider;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public interface IExplorerNode extends IAdaptable{
+public interface IExplorerNode extends IAdaptable, IContextProvider{
 	
 	public static final String PROP_CHILD_ADDED = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.childAdded";
 	public static final String PROP_CHILD_REMOVED = "eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode.childRemoved";
@@ -33,6 +35,9 @@ public interface IExplorerNode extends IAdaptable{
 	
 	public IEclipseContext getContext();
 	
+	public void addNodeChildren(final IExplorerNodeChildren children);
+	public void removeNodeChildren(final IExplorerNodeChildren children);
+
 	public IExplorerNode getParent();
 	public boolean hasChildren();
 	public IExplorerNode[] getChildren();

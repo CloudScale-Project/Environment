@@ -19,7 +19,6 @@ import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelStyle;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
@@ -56,7 +55,7 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 		}
 	};
 	
-	public AlternativeResourceNode(IEclipseContext context, EditorInputEMF alternative, IFile file) {
+	public AlternativeResourceNode(IEclipseContext context, IFile file) {
 		super(context, file.getName(), null, file, null);
 		
 		ModelType type = ModelType.getModelType(file.getFileExtension());

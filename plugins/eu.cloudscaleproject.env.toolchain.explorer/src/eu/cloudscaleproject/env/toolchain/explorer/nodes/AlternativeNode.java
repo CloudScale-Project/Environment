@@ -14,9 +14,9 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -82,12 +82,56 @@ public class AlternativeNode extends ExplorerEditorNode{
 	
 	private final IEditorInputResource alternative;
 	
-	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative) {
-		this(context, editorID, alternative, null);
-	}
-	
-	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, IExplorerNodeChildren children) {
+	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
+		/*
+		if(alternative instanceof IInputAlternative){
+			
+			IInputAlternative ia = (IInputAlternative)alternative;
+			List<IExplorerNode> subNodes = new ArrayList<IExplorerNode>();
+			
+			//add input node
+			if(alternative instanceof EditorInputEMF){
+				ExplorerNode inputNode = new ExplorerNode(
+						this.getContext(), ia.getID(), new AlternativeNodeChildren((EditorInputEMF) alternative, true));
+				
+				inputNode.setName("Input");
+				IConfigurationElement el = ToolchainExtensions.getInstance().getResourceProviderFactoryElement(ia.getID());
+				Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
+				inputNode.setIcon(icon, false);
+				
+				subNodes.add(inputNode);
+			}
+			
+			//add configuration node
+			{
+				String configID = ia.getConfigAlternativeID();
+				String configEditorID = ToolchainExtensions.getInstance().getResourceProviderFactoryElementEditorID(configID);
+				ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(ia.getProject(), configID);
+				
+				AlternativeProviderNode configNode = new AlternativeProviderNode(this.getContext(), configID, configEditorID, rp);
+				
+				configNode.setName("Configuration");
+				IConfigurationElement el = ToolchainExtensions.getInstance().getResourceProviderFactoryElement(configID);
+				Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
+				configNode.setIcon(icon, false);
+				
+				subNodes.add(configNode);
+			}
+			
+			addNodeChildren(new BasicNodeChildren(subNodes));
+				
+		}
+		else{
+			
+			IExplorerNodeChildren children = null;		
+			if(alternative instanceof EditorInputEMF){
+				children = new AlternativeNodeChildren((EditorInputEMF)alternative, true);
+				addNodeChildren(children);
+			}
+			
+		}
+		*/
 		
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);

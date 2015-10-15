@@ -40,36 +40,82 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
-            icon="resources/icons/analyser_16.png"
+      <Tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser"
-            name="Analyser"
-            position="10">
-         <resource
+            name="Analyser">
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
+               name="Input">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
+               name="Configurations">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
+               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
+               name="Result">
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
+            icon="resources/icons/analyser_16.png"
+            id="eu.cloudscaleproject.env.analyser.Node1"
+            name="Analyser">
+         <NodeDynamic
+               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
-               name="Input"
-               position="10">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
-               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
-               icon="resources/icons/configuration_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-               name="Configuration"
-               position="20">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"
-               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
-               icon="resources/icons/results_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
-               name="Results"
-               position="30">
-         </resource>
-      </tool>
+               name="Input alternatives">
+            <Node
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.analyser.inputNode"
+                  name="Input">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                     id="eu.cloudscaleproject.env.analyser.NodeDynamic1"
+                     name="Input alternative content">
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/configuration_16.png"
+                  id="eu.cloudscaleproject.env.analyser.configurationsNode"
+                  name="Configurations">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
+                     name="Configuration resources">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
+                        name="Configuration content">
+                  </NodeDynamic>
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/results_16.png"
+                  id="eu.cloudscaleproject.env.analyser.resultsNode"
+                  name="Results">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
+                     name="Result resources">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
+                        name="Result content">
+                  </NodeDynamic>
+               </NodeDynamic>
+            </Node>
+         </NodeDynamic>
+      </Node>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
@@ -165,6 +211,16 @@
                   forcePluginActivation="true"
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
                   value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.analyser.newInputModel">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput">
             </test>
          </with>
       </definition>
