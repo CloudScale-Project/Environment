@@ -6,6 +6,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
@@ -48,7 +49,7 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		AbstractConfigAlternative alternative = (AbstractConfigAlternative)configProvider.createNewResource(altName, null);
 		initAlternative(alternative);	
 		
-		alternative.setInputAlternative(this.inputResource);
+		alternative.setInputAlternative((IInputAlternative)this.inputResource);
 		
 		OpenAlternativeUtil.openAlternative(alternative);
 		

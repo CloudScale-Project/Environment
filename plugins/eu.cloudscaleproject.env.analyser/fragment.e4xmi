@@ -35,34 +35,34 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_lEiRAD9SEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.menuseparator.0"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_bxxgkEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newInputAlternative" label="New input alternative..." tooltip="Create new input alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Hg_ZsETbEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAltProviderNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Hg_ZsETbEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.toolNode"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_K7jJIEToEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.newConfigAlternative" label="New configuration alternative..." tooltip="Create new configuration alternative" command="_z4GAUEKREeW-jpWqcIfmeQ">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_K7jJIUToEeW-jpWqcIfmeQ" coreExpressionId="eu.cloudscaleproject.env.analyser.confAltProviderNode"/>
     </elements>
     <elements xsi:type="menu:MenuSeparator" xmi:id="_aWUPMEKREeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.menuseparator.2"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_T7pJUD9FEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.repository" label="Repository" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/Repository.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ymE2UD9FEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ymE2UD9FEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_w9IJQD9KEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="repository"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_JtX2ID9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.system" label="System" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/System.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_JtX2IT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_JtX2IT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_JtX2Ij9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="system"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_J4TTwD9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.allocation" label="Allocation" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/Allocation.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J4TTwT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J4TTwT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_J4TTwj9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="allocation"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_J_gH8D9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.resenv" label="Resource Environment" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/ResourceEnvironment.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J_gH8T9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_J_gH8T9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_J_gH8j9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="resourceenvironment"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_KGvYYD9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.usage" label="Usage" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/UsageModel.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_KGvYYT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_KGvYYT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_KGvYYj9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="usagemodel"/>
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_ey9IwD9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.handledmenuitem.usageevolution" label="Usage Evolution" iconURI="platform:/plugin/org.scaledl.usageevolution.edit/icons/full/obj16/UsageEvolution.gif" tooltip="Create new repository model" command="_1cDkID0EEeWpPejK7esD1g">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ey9IwT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.inputAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ey9IwT9TEeWsDNl2NuiWtA" coreExpressionId="eu.cloudscaleproject.env.analyser.newInputModel"/>
       <parameters xmi:id="_ey9Iwj9TEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.parameter.0" name="eu.cloudscaleproject.env.analyser.commandparameter.fileextension" value="usageevolution"/>
     </elements>
   </fragments>

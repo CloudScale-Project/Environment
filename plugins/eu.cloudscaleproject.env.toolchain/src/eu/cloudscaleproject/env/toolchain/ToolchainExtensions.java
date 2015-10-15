@@ -26,11 +26,22 @@ public class ToolchainExtensions {
 		return instance;
 	}
 	
+	public static final String TOOL_EXTENSION_NAME = "Tool";
+	
+	public static final String NODE_EXTENSION_NAME = "Node";
+	public static final String NODE_DYNAMIC_EXTENSION_NAME = "NodeDynamic";
+	
 	private List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
-	private List<IConfigurationElement> toolChildElements = new ArrayList<IConfigurationElement>();
-		
+	private List<IConfigurationElement> resourceProviderFactoryElements = new ArrayList<IConfigurationElement>();
+	
+	private List<IConfigurationElement> nodes = new ArrayList<IConfigurationElement>();
+
 	public List<IConfigurationElement> getToolElements(){
 		return new ArrayList<IConfigurationElement>(toolElements);
+	}
+	
+	public List<IConfigurationElement> getNodeElements(){
+		return new ArrayList<IConfigurationElement>(nodes);
 	}
 	
 	public IConfigurationElement getToolElement(String id){
@@ -42,13 +53,13 @@ public class ToolchainExtensions {
 		return null;
 	}
 
-	public List<IConfigurationElement> getToolChildElements(){
-		return new ArrayList<IConfigurationElement>(toolChildElements);
+	public List<IConfigurationElement> getResourceProviderFactoryElements(){
+		return new ArrayList<IConfigurationElement>(resourceProviderFactoryElements);
 	}
 	
-	public IConfigurationElement getToolChildElement(String id){
+	public IConfigurationElement getResourceProviderFactoryElement(String id){
 		
-		for(IConfigurationElement el : toolChildElements){			
+		for(IConfigurationElement el : resourceProviderFactoryElements){			
 			if(id.equals(el.getAttribute("id"))){
 				return el;
 			}
@@ -57,22 +68,11 @@ public class ToolchainExtensions {
 		return null;
 	}
 	
-	public String getToolChildElementEditorID(String id){
-		
-		for(IConfigurationElement el : toolChildElements){			
-			if(id.equals(el.getAttribute("id"))){
-				return el.getAttribute("editor");
-			}
-		}
-		
-		return null;
-	}
-	
-	public List<IConfigurationElement> getToolChildElements(String toolID){
+	public List<IConfigurationElement> getResourceProviderFactoryElements(String toolID){
 		
 		List<IConfigurationElement> elements = new ArrayList<IConfigurationElement>();
 		
-		for(IConfigurationElement el : toolChildElements){
+		for(IConfigurationElement el : resourceProviderFactoryElements){
 			IConfigurationElement parent = (IConfigurationElement)el.getParent();
 			
 			String id = parent.getAttribute("id");
@@ -86,7 +86,6 @@ public class ToolchainExtensions {
 	
 	public void retrieveExtensions(){
 		
-		
 		//retrieve tool extensions
 		{
 			IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -94,19 +93,23 @@ public class ToolchainExtensions {
 					
 			for(IExtension extension : point.getExtensions()){
 				for(IConfigurationElement el : extension.getConfigurationElements()){
-					if(el.getName().equals("tool")){
+					if(el.getName().equals(TOOL_EXTENSION_NAME)){
 						
 						toolElements.add(el);
 						
 						for(IConfigurationElement child : el.getChildren()){
-							toolChildElements.add(child);
+							resourceProviderFactoryElements.add(child);
 						}
 											
+					}
+					if(el.getName().equals(NODE_EXTENSION_NAME)){
+						nodes.add(el);
 					}
 				}
 			}
 			
-			Collections.sort(toolChildElements, comparator);
+			Collections.sort(nodes, comparator);
+			Collections.sort(resourceProviderFactoryElements, comparator);
 			Collections.sort(toolElements, comparator);
 		}
 	}

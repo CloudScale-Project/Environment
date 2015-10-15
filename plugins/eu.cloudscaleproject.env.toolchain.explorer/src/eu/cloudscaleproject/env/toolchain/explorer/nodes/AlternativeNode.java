@@ -14,9 +14,9 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
-import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -82,16 +82,12 @@ public class AlternativeNode extends ExplorerEditorNode{
 	
 	private final IEditorInputResource alternative;
 	
-	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative) {
-		this(context, editorID, alternative, null);
-	}
-	
-	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, IExplorerNodeChildren children) {
+	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
 		
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
-		
+				
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
 		

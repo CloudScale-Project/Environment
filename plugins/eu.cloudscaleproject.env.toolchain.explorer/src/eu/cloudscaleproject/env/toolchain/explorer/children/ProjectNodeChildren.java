@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -14,11 +13,10 @@ import org.eclipse.swt.graphics.Image;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
-import eu.cloudscaleproject.env.toolchain.explorer.nodes.ToolNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementNode;
 
 /**
  *
@@ -27,6 +25,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.nodes.ToolNode;
  */
 public class ProjectNodeChildren extends ExplorerNodeChildren{
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ProjectNodeChildren.class.getName());
 	
 	private final IProject project;
@@ -71,14 +70,14 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 	@Override
 	public List<? extends Object> getKeys() {
 		
-		List<IConfigurationElement> toolElements = ToolchainExtensions.getInstance().getToolElements();
+		List<IConfigurationElement> nodeElements = ToolchainExtensions.getInstance().getNodeElements();
 		
 		//filter element with the same ID
-		for(IConfigurationElement el1 : new ArrayList<IConfigurationElement>(toolElements)){
+		for(IConfigurationElement el1 : new ArrayList<IConfigurationElement>(nodeElements)){
 			
 			int count = 0;
 			
-			for(IConfigurationElement el2 : new ArrayList<IConfigurationElement>(toolElements)){
+			for(IConfigurationElement el2 : new ArrayList<IConfigurationElement>(nodeElements)){
 				String id1 = el1.getAttribute("id");
 				String id2 = el2.getAttribute("id");
 
@@ -87,13 +86,13 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 				}
 				
 				if(count > 1){
-					toolElements.remove(el1);
+					nodeElements.remove(el1);
 					break;
 				}
 			}
 		}
 		
-		return toolElements;
+		return nodeElements;
 	}
 
 	@Override
@@ -105,13 +104,8 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		String name = tool.getAttribute("name");
 		Image icon = ExplorerResources.getImage(tool, "icon", 16, 16);
 		
-		IFolder folder = ToolchainUtils.getToolFolder(project, id);
-		if(folder == null || !folder.exists()){
-			logger.severe("Tool folder can not be resolved! Project: " + project.getName()+ ", Tool ID: " + id);
-			return null;
-		}
-		
-		ToolNode node = new ToolNode(getNode().getContext(), id, folder);		
+		ConfigurationElementNodeChildren children = new ConfigurationElementNodeChildren(tool);
+		ConfigurationElementNode node = new ConfigurationElementNode(getNode().getContext(), id, children);		
 		node.setIcon(icon, false);
 		node.setName(name);
 		

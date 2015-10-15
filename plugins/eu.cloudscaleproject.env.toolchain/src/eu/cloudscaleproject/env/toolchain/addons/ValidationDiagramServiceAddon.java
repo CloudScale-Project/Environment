@@ -13,9 +13,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.di.extensions.EventTopic;
-import org.eclipse.e4.ui.workbench.UIEvents;
-import org.osgi.service.event.Event;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
@@ -172,12 +169,6 @@ public class ValidationDiagramServiceAddon {
 			}
 		}
 	};
-
-	@Inject
-	@Optional
-	public void applicationStarted(@EventTopic(UIEvents.UILifeCycle.APP_STARTUP_COMPLETE) Event event) {
-		
-	}
 	
 	@Inject
 	@Optional

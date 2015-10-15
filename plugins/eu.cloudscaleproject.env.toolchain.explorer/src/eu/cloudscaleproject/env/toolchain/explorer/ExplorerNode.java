@@ -13,6 +13,8 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
@@ -63,6 +65,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		
 		if(context != null){
 			this.context.setParent(context);
+			CloudscaleContext.inject(this, this.context);
 		}
 		
 		
@@ -78,7 +81,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		}
 	}
 	
-	private void addNodeChildren(final IExplorerNodeChildren children){
+	public void addNodeChildren(final IExplorerNodeChildren children){
 		
 		if(children == null){
 			return;
@@ -87,6 +90,17 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		this.nodeChildren.add(children);
 		children.addPropertyChangeListener(factoryListener);
 		children.initialize(this);
+	}
+	
+	public void removeNodeChildren(final IExplorerNodeChildren children){
+		
+		if(children == null){
+			return;
+		}
+		
+		children.removePropertyChangeListener(factoryListener);
+		this.nodeChildren.remove(children);
+		children.dispose();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

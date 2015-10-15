@@ -42,29 +42,11 @@
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.toolchain.explorer.isToolNode">
-         <with
-               variable="org.eclipse.ui.selection">
-            <instanceof
-                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.ToolNode">
-            </instanceof>
-         </with>
-      </definition>
-      <definition
             id="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeNode">
          <with
                variable="org.eclipse.ui.selection">
             <instanceof
                   value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode">
-            </instanceof>
-         </with>
-      </definition>
-      <definition
-            id="eu.cloudscaleproject.env.toolchain.explorer.isAlternativeProviderNode">
-         <with
-               variable="org.eclipse.ui.selection">
-            <instanceof
-                  value="eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeProviderNode">
             </instanceof>
          </with>
       </definition>

@@ -120,7 +120,11 @@ public class ToolchainUtils {
 	
 	public static IFolder getResourceProviderFolder(IProject project, String id){
 		
-		IConfigurationElement resourceElement = ToolchainExtensions.getInstance().getToolChildElement(id);
+		IConfigurationElement resourceElement = ToolchainExtensions.getInstance().getResourceProviderFactoryElement(id);
+		if(resourceElement == null){
+			return null;
+		}
+		
 		String resourceName = resourceElement.getAttribute("name");
 		
 		if(resourceName == null || resourceName.isEmpty()){

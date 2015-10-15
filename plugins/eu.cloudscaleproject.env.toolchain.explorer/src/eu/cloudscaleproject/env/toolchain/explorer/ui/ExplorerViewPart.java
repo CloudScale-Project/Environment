@@ -8,6 +8,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -34,10 +35,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
  *
@@ -51,8 +55,6 @@ public class ExplorerViewPart {
 	private Composite composite;
 	private TreeViewer treeViewer;
 	
-	@Inject
-	private MPart part;
 	@Inject
 	private EMenuService menuService;
 	@Inject
@@ -99,7 +101,11 @@ public class ExplorerViewPart {
 	};
 	
 	@PostConstruct
-	public void postConstruct(Composite parent) {
+	public void postConstruct(final MPart part, Composite parent) {
+		
+		part.getContext().declareModifiable(IEditorInputResource.class);
+		part.getContext().declareModifiable(IValidationStatusProvider.class);
+		part.getContext().declareModifiable(IProject.class);
 		
 		Explorer explorer = Explorer.getInstance();
 		IExplorerNode rootNode = explorer.getRoot();
@@ -165,6 +171,11 @@ public class ExplorerViewPart {
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
 				if(node != null){
 					node.onSelect();
+					
+					part.getContext().set(IEditorInputResource.class, node.getContext().get(IEditorInputResource.class));
+					part.getContext().set(ResourceProvider.class, node.getContext().get(ResourceProvider.class));
+					part.getContext().set(IValidationStatusProvider.class, node.getContext().get(IValidationStatusProvider.class));
+					part.getContext().set(IProject.class, node.getContext().get(IProject.class));
 				}
 				
 				selectionService.setSelection(selection.size() == 1 ? node : selection.toArray());
