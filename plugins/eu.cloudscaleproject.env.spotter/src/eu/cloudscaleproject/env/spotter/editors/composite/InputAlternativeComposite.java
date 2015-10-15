@@ -24,7 +24,6 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.spotter.editors.SpotterTabItemExtension;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 
 public class InputAlternativeComposite extends InputEditorView implements IRefreshable, ISelectable{
@@ -143,8 +142,8 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 			InstrumentationEditorInput inEditorInput = new InstrumentationEditorInput(file);
 			MeasurementEditorInput measurementEditorInput = new MeasurementEditorInput(file);
 
-			insEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), inEditorInput);
-			meaEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), measurementEditorInput);
+			insEditor.init(new DummyEditorSite(), inEditorInput);
+			meaEditor.init(new DummyEditorSite(), measurementEditorInput);
 
 			insEditor.createPartControl(insComposite);
 			meaEditor.createPartControl(meaComposite);

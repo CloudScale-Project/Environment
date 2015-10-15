@@ -197,7 +197,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			{
 			IFile file = confAlternative.getResource().getFile("spotter.conf");
 			SpotterConfigEditorInput editorPartInput = new SpotterConfigEditorInput(file);
-			confEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			confEditor.init(new DummyEditorSite(), editorPartInput);
 			confEditor.createPartControl(confComposite);
 			confComposite.layout();
 			}
@@ -205,7 +205,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			{
 			IFile file = confAlternative.getResource().getFile("mEnv.xml");
 			WorkloadEditorInput editorPartInput = new WorkloadEditorInput(file);
-			workEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			workEditor.init(new DummyEditorSite(), editorPartInput);
 			workEditor.createPartControl(workComposite);
 			workComposite.layout();
 			}
@@ -213,7 +213,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			{
 			IFile file = confAlternative.getResource().getFile("hierarchy.xml");
 			HierarchyEditorInput editorPartInput = new HierarchyEditorInput(file);
-			hierEditor.init(SpotterTabItemExtension.editorPart.getEditorSite(), editorPartInput);
+			hierEditor.init(new DummyEditorSite(), editorPartInput);
 			hierEditor.createPartControl(hierComposite);
 			hierComposite.layout();
 			}
