@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.extractor.editors.composites;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -31,20 +30,21 @@ public class SingleResultComposite extends TitleEditorView implements IPropertyS
 		
 		this.resultPersistenceFolder = rif;
 
-		getContainer().setLayout(new GridLayout(3, false));
+		getContainer().setLayout(new GridLayout(1, false));
 		
 		//
 		// Treeview
 		//
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Extracted internal architecture model");
-		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
-		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		containerEditor.setLayout(new GridLayout(1, false));
+		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		this.treeViewComposite = new EMFEditableTreeviewComposite(resultPersistenceFolder, containerEditor, SWT.NONE);
+		this.treeViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		PropertyPageComposite propertyComposite = new PropertyPageComposite(getContainer(), style, this.treeViewComposite.getPropertySheetPage());
-		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(containerEditor, SWT.BORDER, this.treeViewComposite.getPropertySheetPage());
+		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 	
 	
