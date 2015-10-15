@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.extractor.editors.composites;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.extractor.alternatives.GlobalInputAlternative;
+import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -39,7 +39,7 @@ public class InputSidebarComposite extends SidebarEditorComposite {
 			@Override
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
-				return new InputAlternativeComposite(parent, style, (GlobalInputAlternative)resource);
+				return new InputAlternativeComposite(parent, style, (InputAlternative)resource);
 			}
 		});
 		

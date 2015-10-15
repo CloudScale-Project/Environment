@@ -25,7 +25,6 @@ import org.eclipse.modisco.infra.discovery.core.IDiscoveryManager;
 import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
 import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
 import org.eclipse.modisco.infra.discovery.launch.ParameterValue;
-import org.eclipse.modisco.infra.discovery.ui.Activator;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SaveSoMoXModelsJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SimpleModelAnalyzerJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SoMoXBlackboard;
@@ -40,7 +39,9 @@ import de.uka.ipd.sdq.pcm.gmf.composite.edit.parts.ComposedProvidingRequiringEnt
 import de.uka.ipd.sdq.pcm.gmf.composite.part.PalladioComponentModelComposedStructureDiagramEditorPlugin;
 import de.uka.ipd.sdq.pcm.gmf.repository.edit.parts.RepositoryEditPart;
 import de.uka.ipd.sdq.pcm.gmf.repository.part.PalladioComponentModelRepositoryDiagramEditorPlugin;
+import eu.cloudscaleproject.env.extractor.Activator;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
+import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -51,15 +52,15 @@ public class ExtractorRunJob
 {
 	public static final String SOMOX_BASE_NAME = "internal_architecture_model";
 	private IProject project;
-	private ConfingAlternative configFolder;
-	private IProject projectToExtract;
+	private ConfingAlternative configAlternative;
 	private ResultAlternative resultAlternative;
+	private InputAlternative inputAlternative;
 
-	public ExtractorRunJob(ConfingAlternative configInputFolder)
+	public ExtractorRunJob(ConfingAlternative configAlternative)
 	{
-		this.configFolder = configInputFolder;
-		this.project = configInputFolder.getProject();
-		this.projectToExtract = configInputFolder.getExtractedProject();
+		this.configAlternative = configAlternative;
+		this.inputAlternative = (InputAlternative)configAlternative.getInputAlternative();
+		this.project = configAlternative.getProject();
 	}
 	
 	public IStatus run(IProgressMonitor monitor) throws CoreException
@@ -89,23 +90,23 @@ public class ExtractorRunJob
 	private SimpleDateFormat sdf_name = new SimpleDateFormat("hh:mm:ss");
 	private ResultAlternative createResultPersistenceFolder() throws CoreException
 	{
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(this.configFolder.getProject(),
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(this.configAlternative.getProject(),
 				CSTool.EXTRACTOR_RES);
 
-		String name = configFolder.getName() + " [" + sdf_name.format(new Date()) + "]";
+		String name = configAlternative.getName() + " [" + sdf_name.format(new Date()) + "]";
 		return (ResultAlternative) resourceProvider.createNewResource(name, null);
 	}
 
 
 	private void runModisco(IProgressMonitor monitor) throws CoreException
 	{
-		LaunchConfiguration modiscoConfiguration = configFolder.getModiscoConfiguration();
+		LaunchConfiguration modiscoConfiguration = inputAlternative.getModiscoConfiguration();
 		AbstractModelDiscoverer<?> discoverer = (AbstractModelDiscoverer<?>) IDiscoveryManager.INSTANCE.createDiscovererImpl(modiscoConfiguration.getDiscoverer().getId()); 
 		
         IFolder modiscoFolder = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_MODISCO);
-        IFile java2kdmFile = modiscoFolder.getFile(projectToExtract.getName()+"_java2kdm.xmi");
-        IFile javaFile = modiscoFolder.getFile(projectToExtract.getName()+"_java.xmi");
-        IFile kdmFile = modiscoFolder.getFile(projectToExtract.getName()+"_kdm.xmi");
+        IFile java2kdmFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_java2kdm.xmi");
+        IFile javaFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_java.xmi");
+        IFile kdmFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_kdm.xmi");
 
         
 		final URI resourceURI = URI.createPlatformResourceURI(java2kdmFile.getFullPath().toString(), true);
@@ -123,7 +124,7 @@ public class ExtractorRunJob
 
 		try
 		{
-			IDiscoveryManager.INSTANCE.discoverElement(discoverer, projectToExtract, parameters, monitor);
+			IDiscoveryManager.INSTANCE.discoverElement(discoverer, inputAlternative.getExtractedProject(), parameters, monitor);
 
 			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM, java2kdmFile);
 			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA, javaFile);
@@ -138,7 +139,7 @@ public class ExtractorRunJob
 
 	private void runSomox(IProgressMonitor monitor) throws CoreException
 	{
-		SoMoXConfiguration somoxConfiguration = configFolder.getSomoxConfiguration();
+		SoMoXConfiguration somoxConfiguration = configAlternative.getSomoxConfiguration();
 
 		IFile file = (IFile)resultAlternative.getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
 		somoxConfiguration.getFileLocations().setAnalyserInputFile(file.getFullPath().toString());

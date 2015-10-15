@@ -16,11 +16,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
+import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 
 public class ModiscoConfigurationComposite extends Composite
 {
-	private ConfingAlternative alternative;
+	private InputAlternative alternative;
 	@SuppressWarnings("unused")
 	private ParametersTableComposite parametersTable;
 
@@ -30,7 +30,7 @@ public class ModiscoConfigurationComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public ModiscoConfigurationComposite(Composite parent, int style, ConfingAlternative alternative)
+	public ModiscoConfigurationComposite(Composite parent, int style, InputAlternative alternative)
 	{
 		super(parent, style);
 

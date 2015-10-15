@@ -24,6 +24,9 @@
     <elements xsi:type="menu:HandledToolItem" xmi:id="_E00ssTdZEeWRRJlfUN4Dxg" elementId="eu.cloudscaleproject.env.extractor.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/icons/ic-extractor-24.png" tooltip="Open Extractor Perspective" command="_aPymADGwEeO3JJACK76kDw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qPtKgEgHEeWZc5LD3U6YSw" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_AG1woHJfEeWtjNB-s1zfSw" elementId="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor" label="Extractor input" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/icons/input_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.editors.InputEditor">
+      <handlers xmi:id="_XTLpgHJhEeWtjNB-s1zfSw" elementId="eu.cloudscaleproject.env.extractor.handler.2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_3lrD0GEmEeWayeVD4LyD5g"/>
+    </elements>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_ruF0EEgHEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor" label="Extractor config" iconURI="platform:/plugin/eu.cloudscaleproject.env.extractor/resources/icons/configuration_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.editors.ConfigEditor">
       <handlers xmi:id="_1_7OAGEmEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.extractor.handler.1" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_3lrD0GEmEeWayeVD4LyD5g"/>
     </elements>
@@ -33,6 +36,9 @@
     <elements xsi:type="menu:MenuSeparator" xmi:id="_hP1lIF4DEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.extractor.menuseparator.0"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_iqpWQF4DEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.extractor.handledmenuitem.newConfigurationAlternative" label="New configuration alternative..." tooltip="Create new extractor configuration alternative" command="_xiNncF4DEeWKs5YPUow6lg">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_xF5QIF4JEeWKs5YPUow6lg" coreExpressionId="eu.cloudscaleproject.env.extractor.confAlternativeNode"/>
+    </elements>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Z6AzwHJfEeWtjNB-s1zfSw" elementId="eu.cloudscaleproject.env.extractor.handledmenuitem.newInputAlternative" label="New input alternative..." tooltip="Create new extractor input alternative" command="_xiNncF4DEeWKs5YPUow6lg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_YipQ0HJiEeWtjNB-s1zfSw" coreExpressionId="eu.cloudscaleproject.env.extractor.inputAlternativeNode"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

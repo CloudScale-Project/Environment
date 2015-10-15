@@ -6,6 +6,9 @@ import org.somox.sourcecodedecorator.impl.SourceCodeDecoratorPackageImpl;
 
 public class Activator extends AbstractUIPlugin {
 
+	// The plug-in ID
+	public static final String PLUGIN_ID = "eu.cloudscaleproject.env.extractor"; //$NON-NLS-1$
+
 	private static BundleContext context;
 
 	// The shared instance

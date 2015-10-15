@@ -35,6 +35,14 @@
             name="Extractor"
             position="20">
          <resource
+               class="eu.cloudscaleproject.env.extractor.alternatives.InputResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
+               icon="resources/icons/input_16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
+               name="Input"
+               position="10">
+         </resource>
+         <resource
                class="eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory"
                editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
                icon="resources/icons/configuration_16.png"
@@ -61,6 +69,16 @@
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
                   value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.extractor.inputAlternativeNode">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput">
             </test>
          </with>
       </definition>
