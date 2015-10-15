@@ -15,7 +15,7 @@ import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
+import eu.cloudscaleproject.env.toolchain.wizard.CreateConfigAlternativeWizard;
 
 public class CreateAlternativeHandler {
 	
@@ -26,6 +26,10 @@ public class CreateAlternativeHandler {
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
 		IProject project = rp.getProject();
 
+		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT);
+		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_CONF);
+
+
 		if(rp != null){
 			CSTool tool = CSTool.getTool(id);
 			
@@ -35,7 +39,7 @@ public class CreateAlternativeHandler {
 				wizardDialog.open();
 			}
 			else if(CSTool.SPOTTER_STA_CONF.equals(tool)){
-				CreateAlternativeWizard createlternativeWizard = new CreateAlternativeWizard(rp.getProject(), rp);
+				CreateConfigAlternativeWizard createlternativeWizard = new CreateConfigAlternativeWizard(project, confResourceProvider, null, inputResourceProvider);
 				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
 				wizardDialog.open();
 			}

@@ -2,8 +2,11 @@ package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import java.util.Collection;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
@@ -27,11 +30,18 @@ public class SingleResultComposite extends TitleEditorView implements IRefreshab
 	 */
 	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
 		super(parent, style, rif);
-		setLayout(new GridLayout(1, false));
+
+		getContainer().setLayout(new GridLayout(1, false));
 		
 		this.resultFolder = rif;
 		
-		this.annotationComposite = new AnnotationComposite(getContainer());
+		Group containerEditor = new Group(getContainer(), SWT.NONE);
+		containerEditor.setText("Results");
+		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		containerEditor.setLayout(new GridLayout(1, false));
+
+		this.annotationComposite = new AnnotationComposite(containerEditor);
+		this.annotationComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		init();
 	}

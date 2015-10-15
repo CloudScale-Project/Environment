@@ -46,7 +46,7 @@ public class AnnotationComposite extends Composite {
 	private AnnotationsTreeLabelProvider labelProvider;
 
 	public AnnotationComposite(Composite parent) {
-		super(parent, SWT.NONE);
+		super(parent, SWT.BORDER);
 
 		showLongNames = false;
 		annotations = new HashMap<PSPatternSpecification, Set<ASGAnnotation>>();

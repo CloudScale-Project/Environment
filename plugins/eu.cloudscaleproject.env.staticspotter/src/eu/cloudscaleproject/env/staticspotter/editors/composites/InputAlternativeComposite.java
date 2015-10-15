@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -29,11 +28,12 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Source Code Decorator");
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		containerEditor.setLayout(new FillLayout(SWT.HORIZONTAL));
+		containerEditor.setLayout(new GridLayout(1, false));
 
 		EMFEditableTreeviewComposite treeViewComposite = new EMFEditableTreeviewComposite(inputAlternative, containerEditor, SWT.NONE);
+		treeViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		PropertyPageComposite propertyComposite = new PropertyPageComposite(getContainer(), SWT.NONE, treeViewComposite.getPropertySheetPage());
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(containerEditor, SWT.BORDER, treeViewComposite.getPropertySheetPage());
 		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 	
