@@ -40,7 +40,7 @@ public class CreateAlternativeHandler {
 				wizardDialog.open();
 			}
 			else if(CSTool.EXTRACTOR_CONF.equals(tool)){
-				CreateConfigAlternativeWizard createlternativeWizard = new CreateConfigAlternativeWizard(project, confResourceProvider, null, inputResourceProvider);
+				CreateConfigAlternativeWizard createlternativeWizard = new CreateConfigAlternativeWizard(project, confResourceProvider, inputResourceProvider);
 				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
 				wizardDialog.open();
 			}

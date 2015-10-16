@@ -19,24 +19,34 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	private AlternativeNamePage nameSelectionPage;
 	private AlternativeSelectionPage inputSelectionPage;
 	private IEditorInputResource inputResource;
+	
+	public CreateConfigAlternativeWizard(IProject project, ResourceProvider configProvider, IEditorInputResource inputResource){
+		this.project = project;
+		this.configProvider = configProvider;
+		
+		this.nameSelectionPage = new AlternativeNamePage(configProvider);		
+		this.inputResource = inputResource;
+		
+		setWindowTitle("Create alternative");
+	}
 
-	public CreateConfigAlternativeWizard(IProject project, ResourceProvider configProvider, IEditorInputResource inputResource, ResourceProvider inputProvider) {
+	public CreateConfigAlternativeWizard(IProject project, ResourceProvider configProvider, ResourceProvider inputProvider) {
 		
 		this.project = project;
 		this.configProvider = configProvider;
 		
 		this.nameSelectionPage = new AlternativeNamePage(configProvider);
 		if (inputProvider != null) this.inputSelectionPage = new AlternativeSelectionPage(inputProvider);
-		
-		this.inputResource = inputResource;
-		
+				
 		setWindowTitle("Create alternative");
 	}
 	
 	@Override
 	public void addPages() {
 		addPage(nameSelectionPage);
-		addPage(inputSelectionPage);
+		if(inputSelectionPage != null){
+			addPage(inputSelectionPage);
+		}
 	}
 
 	@Override
