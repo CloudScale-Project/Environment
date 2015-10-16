@@ -41,6 +41,7 @@
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
       <Node
+            icon="resources/icons/scaledl_models_16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
             name="ScaleDL models"
             position="50">

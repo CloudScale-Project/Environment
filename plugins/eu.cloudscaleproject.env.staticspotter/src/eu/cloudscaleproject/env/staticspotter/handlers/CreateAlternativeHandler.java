@@ -1,61 +1,65 @@
  
 package eu.cloudscaleproject.env.staticspotter.handlers;
 
-import javax.inject.Named;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateConfigAlternativeWizard;
 
 public class CreateAlternativeHandler {
 	
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable) {
-		
-		ResourceProvider rp = (ResourceProvider)adaptable.getAdapter(ResourceProvider.class);
+	public void execute(ResourceProvider rp, @Optional IEditorInputResource eir) {
+				
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
 		IProject project = rp.getProject();
 
-		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT);
-		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_CONF);
-
-
-		if(rp != null){
-			CSTool tool = CSTool.getTool(id);
-			
-			if(CSTool.SPOTTER_STA_INPUT.equals(tool)){
-				InputSelectionWizard createInputAltWizard = new InputSelectionWizard(project);
-				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
-				wizardDialog.open();
-			}
-			else if(CSTool.SPOTTER_STA_CONF.equals(tool)){
-				CreateConfigAlternativeWizard createlternativeWizard = new CreateConfigAlternativeWizard(project, confResourceProvider, inputResourceProvider);
-				WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
-				wizardDialog.open();
-			}
-		}
+		CSTool tool = CSTool.getTool(id);
 		
+		if(CSTool.SPOTTER_STA_INPUT.equals(tool)){
+			InputSelectionWizard createInputAltWizard = new InputSelectionWizard(project);
+			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
+			wizardDialog.open();
+		}
+		else if(CSTool.SPOTTER_STA_CONF.equals(tool)){
+			CreateConfigAlternativeWizard createlternativeWizard;
+			
+			if(eir instanceof InputAlternative){
+				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (InputAlternative)eir);			
+			}
+			else{
+				ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT);
+				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, inputResourceProvider);
+			}
+			
+			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
+			wizardDialog.open();
+		}
+	
 	}
 	
 	@CanExecute
-	public boolean canExecute(@Named(IServiceConstants.ACTIVE_SELECTION) IAdaptable adaptable){
+	public boolean canExecute(@Optional ResourceProvider rp){
 		
-		if(adaptable == null){
+		if(rp == null){
 			return false;
 		}
 		
-		ResourceProvider rp = (ResourceProvider)adaptable.getAdapter(ResourceProvider.class);
-		if(rp != null){
+		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		if(CSTool.SPOTTER_STA_INPUT.getID().equals(id)){
+			return true;
+		}
+		if(CSTool.SPOTTER_STA_CONF.getID().equals(id)){
 			return true;
 		}
 		

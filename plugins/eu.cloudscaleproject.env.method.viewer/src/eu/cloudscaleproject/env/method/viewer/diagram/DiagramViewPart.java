@@ -21,12 +21,9 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
@@ -83,13 +80,16 @@ public class DiagramViewPart{
 		
 		this.composite = new Composite(parent, SWT.NONE);
 		this.composite.setLayout(stackLayout);
-				
+		
+		this.noDiagramComposite = createDiagramComposite(new ValidationDiagram(null));
+		/*
 		this.noDiagramComposite = new Composite(composite, SWT.NONE);
 		this.noDiagramComposite.setLayout(new GridLayout());
 		
 		Label label = new Label(noDiagramComposite, SWT.CENTER | SWT.WRAP);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 		label.setText("Please create select the Cloudscale project node or editor to display the Workflow diagram");
+		*/
 		
 		stackLayout.topControl = noDiagramComposite;
 		
@@ -120,7 +120,7 @@ public class DiagramViewPart{
 	
 	private void showDiagram(final ValidationDiagram diagram){
 				
-		if(composite == null){
+		if(composite == null || composite.isDisposed()){
 			return;
 		}
 		

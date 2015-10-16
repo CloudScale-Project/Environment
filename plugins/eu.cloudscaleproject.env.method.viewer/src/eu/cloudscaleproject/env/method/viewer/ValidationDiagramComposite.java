@@ -89,7 +89,7 @@ public class ValidationDiagramComposite extends DiagramComposite{
 		//set zoom
 		final ZoomManager zoomManager = (ZoomManager) getAdapter(ZoomManager.class);
 		zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_NEVER);
-		
+
 		getGraphicalViewer().getControl().addControlListener(new ControlListener() {
 			
 			@Override
@@ -130,6 +130,7 @@ public class ValidationDiagramComposite extends DiagramComposite{
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
 								if(!ValidationDiagramComposite.this.isDisposed()){
+									zoomManager.setZoomAnimationStyle(ZoomManager.ANIMATE_NEVER);
 									zoomManager.setZoomAsText(ZoomManager.FIT_ALL);
 								}
 							}
