@@ -24,28 +24,42 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
+      <Tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="ScaleDL models"
-            position="50">
-         <resource
+            name="ScaleDL models">
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.overview.OverviewAlternativeProviderFactory"
                editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
-               icon="resources/icons/overview_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
                name="Overview">
-         </resource>
-      </tool>
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
+            name="ScaleDL models">
+         <Node
+               icon="resources/icons/overview_16.png"
+               id="eu.cloudscaleproject.env.overview.nodeOverview"
+               name="Overview"
+               position="10">
+            <NodeDynamic
+                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                  editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
+                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
+                  name="Overview alternatives">
+            </NodeDynamic>
+         </Node>
+      </Node>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="eu.cloudscaleproject.env.overview.overviewAlternativeNode">
+            id="eu.cloudscaleproject.env.overview.overviewAlternativeNodeProvider">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview">
+                  value="eu.cloudscaleproject.env.overview.nodeOverview">
             </test>
          </with>
       </definition>

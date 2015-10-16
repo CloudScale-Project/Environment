@@ -7,7 +7,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="__89AMGEYEeWayeVD4LyD5g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:DirectMenuItem" xmi:id="_D6biYGEZEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.usageevolution.directmenuitem.newUsageEvolutionAlternative" label="New Usage evolution alternative..." tooltip="Create new Usage evolution alternative" contributionURI="bundleclass://eu.cloudscaleproject.env.usageevolution/eu.cloudscaleproject.env.usageevolution.handlers.CreateAlternativeHandler">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_KBNTYGEZEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.usageevolution.usageEvolutionAlternativeNode"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_KBNTYGEZEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.usageevolution.usageEvolutionAlternativeNodeProvider"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

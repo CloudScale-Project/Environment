@@ -29,27 +29,41 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
+      <Tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="ScaleDL models"
-            position="50">
-         <resource
+            name="ScaleDL models">
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternativeFactory"
                editor="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"
                name="Usage Evolution">
-         </resource>
-      </tool>
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
+            name="ScaleDL models">
+         <Node
+               id="eu.cloudscaleproject.env.usageevolution.nodeUsageEvolution"
+               name="Usage Evolution"
+               position="20">
+            <NodeDynamic
+                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                  editor="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution"
+                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"
+                  name="Usage evolution alternatives">
+            </NodeDynamic>
+         </Node>
+      </Node>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="eu.cloudscaleproject.env.usageevolution.usageEvolutionAlternativeNode">
+            id="eu.cloudscaleproject.env.usageevolution.usageEvolutionAlternativeNodeProvider">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution">
+                  value="eu.cloudscaleproject.env.usageevolution.nodeUsageEvolution">
             </test>
          </with>
       </definition>

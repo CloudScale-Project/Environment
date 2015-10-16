@@ -58,17 +58,28 @@
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
             name="Dynamic Spotter"
             position="40">
+         <NodeResource
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
+               icon="resources/icons/input_16.png"
+               id="eu.cloudscaleproject.env.spotter.nodeServerConnection"
+               name="Server connection">
+         </NodeResource>
          <NodeDynamic
                class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
                name="Input alternatives">
-            <NodeResource
-                  editor="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
+            <Node
                   icon="resources/icons/input_16.png"
-                  id="eu.cloudscaleproject.env.spotter.nodeServerConnection"
-                  name="Server connection">
-            </NodeResource>
+                  id="eu.cloudscaleproject.env.spotter.nodeInput"
+                  name="Input">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
+                     name="Input alternatives">
+               </NodeDynamic>
+            </Node>
             <Node
                   icon="resources/icons/configuration_16.png"
                   id="eu.cloudscaleproject.env.spotter.nodeConfigurations"
