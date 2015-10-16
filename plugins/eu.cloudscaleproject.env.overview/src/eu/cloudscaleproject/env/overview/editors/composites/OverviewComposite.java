@@ -8,7 +8,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.AbstractEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
@@ -17,15 +19,17 @@ import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class OverviewComposite extends InputEditorView implements ISelectable{
+public class OverviewComposite extends AbstractEditorView implements ISelectable{
 
 	private EMFEditableTreeviewComposite treeviewComposite;
 	
 	public OverviewComposite(Composite parent, int style, OverviewAlternative input) {
 		super(parent, style, input);
 		
+		new TitleWidget(getHeader(), style, input);
 		Composite mainContainer = new Composite(getContainer(), SWT.NONE);
 		mainContainer.setLayout(new GridLayout());
+		new ValidationWidget(getFooter(), style, input);
 		
 		//tree view
 		this.treeviewComposite = new EMFEditableTreeviewComposite(input, mainContainer, SWT.NONE);

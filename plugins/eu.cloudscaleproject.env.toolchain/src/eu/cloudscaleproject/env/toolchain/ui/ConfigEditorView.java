@@ -10,9 +10,12 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -24,8 +27,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
+import eu.cloudscaleproject.env.common.IconSetResources;
+import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
+import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowAlternativeDialog;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
@@ -59,13 +67,39 @@ public abstract class ConfigEditorView extends AbstractEditorView
 	 * @param parent
 	 * @param style
 	 */
-	public ConfigEditorView(Composite parent, int style, IConfigAlternative alternative)
+	public ConfigEditorView(Composite parent, int style, final IConfigAlternative alternative)
 	{
 		super(parent, style, alternative);
 
 		this.alternative = alternative;
 
-		new TitleWidget(getHeader(), SWT.NONE, alternative);
+		new TitleWidget(getHeader(), SWT.NONE, alternative){
+			@Override
+			protected void initButtons() {
+				CLabel lblUp = createContextButton("Input", IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
+				CLabel lblResults = createContextButton("Results", IconSetResources.getImage("stats_3", COLOR.BLUE, SIZE.SIZE_24));
+				createSeparator();
+
+				lblResults.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseUp(MouseEvent e) {
+						new ShowAlternativeDialog(alternative.getResults()).open();
+					}
+				});
+				
+				lblUp.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseUp(MouseEvent e) {
+
+						ResourceRegistry.getInstance().openResourceEditor(alternative.getInputAlternative());
+						// TODO Auto-generated method stub
+						super.mouseUp(e);
+					}
+				});
+
+				super.initButtons();
+			}
+		};
 
 		if (alternative == null)
 			return; // For WindowBuilder

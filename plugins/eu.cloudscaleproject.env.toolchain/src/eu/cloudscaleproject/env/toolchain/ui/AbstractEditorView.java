@@ -29,7 +29,7 @@ public class AbstractEditorView extends Composite
 		header = new Composite(this, SWT.NONE);
 		header.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridData gd_header = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_header.heightHint = 32;
+		gd_header.heightHint = 40;
 		header.setLayoutData(gd_header);
 		
 		container = new Composite(this, SWT.NONE);

@@ -18,14 +18,16 @@ import org.eclipse.swt.widgets.Label;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.AbstractEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
+import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 import eu.cloudscaleproject.env.usageevolution.UsageEvolutionAlternative;
 import tools.descartes.dlim.Sequence;
 import tools.descartes.dlim.generator.editor.views.PlotCanvas;
 
-public class UsageEvolutionComposite extends InputEditorView implements ISelectable, IRefreshable
+public class UsageEvolutionComposite extends AbstractEditorView implements ISelectable, IRefreshable
 {
 	
 	private final UsageEvolutionAlternative alternative;
@@ -52,7 +54,9 @@ public class UsageEvolutionComposite extends InputEditorView implements ISelecta
 		super(parent, style, alt);
 		this.alternative = alt;
 
+		new TitleWidget(getHeader(), style, alt);
 		getContainer().setLayout(new GridLayout(1, false));
+		new ValidationWidget(getFooter(), style, alt);
 
 		Label lblTitle = new Label(getContainer(), SWT.NONE);
 		lblTitle.setText("Usage evolution arrival rate editor:");
