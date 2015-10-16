@@ -100,6 +100,10 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 				keys.add(new Key(el, el));
 			}
 			
+			if(ToolchainExtensions.NODE_RESOURCE_EXTENSION_NAME.equals(el.getName())){
+				keys.add(new Key(el, el));
+			}
+			
 			if(ToolchainExtensions.NODE_DYNAMIC_EXTENSION_NAME.equals(el.getName())){
 				try {
 					IExplorerContentRetriever contentRetriever = contentRetrievers.get(el);
