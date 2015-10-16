@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.statushandlers.StatusManager;
 
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
@@ -79,13 +79,13 @@ public class ResultWiget extends Composite
 		{
 			lblText.setText("Success. ");
 			lblMore.setText("(result...)");
-			lblIcon.setImage(CommonResources.THUMB_UP);
+			lblIcon.setImage(IconSetResources.getImage(IconSetResources.THUMB_UP));
 
 		} else
 		{
 			lblText.setText("Problem occured.");
 			lblMore.setText("(error...)");
-			lblIcon.setImage(CommonResources.ERROR);
+			lblIcon.setImage(IconSetResources.getImage(IconSetResources.ERROR));
 		}
 
 		layout();

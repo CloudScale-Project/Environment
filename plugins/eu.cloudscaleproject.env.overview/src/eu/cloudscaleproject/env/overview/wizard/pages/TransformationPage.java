@@ -33,7 +33,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Text;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.system.System;
 import org.scaledl.overview.Overview;
 import org.scaledl.overview.application.ApplicationFactory;
 import org.scaledl.overview.application.Operation;
@@ -49,10 +52,8 @@ import org.scaledl.overview.parametertype.ParametertypeFactory;
 import org.scaledl.overview.parametertype.PrimitiveParameter;
 import org.scaledl.overview.parametertype.TypeEnum;
 import org.scaledl.overview.util.OverviewUtil;
-import org.palladiosimulator.pcm.repository.Repository;
-import org.palladiosimulator.pcm.system.System;
 
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
@@ -62,8 +63,6 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
-
-import org.eclipse.swt.widgets.ProgressBar;
 
 public class TransformationPage extends WizardPage implements IWizardPageControll
 {
@@ -311,7 +310,7 @@ public class TransformationPage extends WizardPage implements IWizardPageControl
 
 			lblResultIcon = new Label(transformResultComposite, SWT.NONE);
 			lblResultIcon.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
-			lblResultIcon.setImage(CommonResources.THUMB_UP);
+			lblResultIcon.setImage(IconSetResources.getImage(IconSetResources.THUMB_UP));
 
 			lblResultText = new Label(transformResultComposite, SWT.NONE);
 			lblResultText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
@@ -414,11 +413,11 @@ public class TransformationPage extends WizardPage implements IWizardPageControl
 						if (transformationJob.getResult().isOK())
 						{
 							lblResultText.setText("Successfully transformed to Overview.");
-							lblResultIcon.setImage(CommonResources.THUMB_UP);
+							lblResultIcon.setImage(IconSetResources.getImage(IconSetResources.THUMB_UP));
 						} else
 						{
 							lblResultText.setText("Failed to transform to Overview.");
-							lblResultIcon.setImage(CommonResources.ERROR);
+							lblResultIcon.setImage(IconSetResources.getImage(IconSetResources.ERROR));
 						}
 					}
 				}

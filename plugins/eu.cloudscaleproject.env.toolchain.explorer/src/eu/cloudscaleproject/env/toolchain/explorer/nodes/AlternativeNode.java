@@ -9,7 +9,8 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.IconSetResources;
+import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -63,7 +64,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 			}
 			if(eir != null){
 				if(!eir.getSelfStatus().isDone()){
-					ExplorerImageDescriptor id = new ExplorerImageDescriptor(image, CommonResources.ERROR_8);
+					ExplorerImageDescriptor id = new ExplorerImageDescriptor(image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
 					Image combined = id.createImage();
 					return combined;
 				}

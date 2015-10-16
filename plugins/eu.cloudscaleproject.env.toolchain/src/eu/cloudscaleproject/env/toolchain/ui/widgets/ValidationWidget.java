@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
@@ -119,12 +119,12 @@ public class ValidationWidget extends Composite
 		int warningCount = ValidationStatusHelper.countValidationWarnings(alternative, IValidationStatus.SEVERITY_WARNING); 
 		int count = errorCount + warningCount;
 		
-		Image image = CommonResources.OK;
+		Image image = IconSetResources.getImage(IconSetResources.OK);
 		String msg = "Alternative is valid.";
 		lblMore.setVisible(false);
 		
 		if(errorCount > 0){
-			image = CommonResources.ERROR;
+			image = IconSetResources.getImage(IconSetResources.ERROR);
 			msg = "Alternative is not valid.";
 			lblMore.setVisible(true);
 			
@@ -134,7 +134,7 @@ public class ValidationWidget extends Composite
 			}
 		}
 		else if(warningCount > 0){
-			image = CommonResources.WARNING;
+			image = IconSetResources.getImage(IconSetResources.WARNING);
 			msg = String.format("Alternative is not valid! Is contains %s warning(s)", 
 					new int[]{warningCount});
 			lblMore.setVisible(true);
@@ -148,7 +148,7 @@ public class ValidationWidget extends Composite
 		{
 			// BUG WORKAROUND
 			lblText.setText(String.format("Alternative is not valid.")); 
-			lblIcon.setImage(CommonResources.WARNING);
+			lblIcon.setImage(IconSetResources.getImage(IconSetResources.WARNING));
 		}
 		else{
 			lblText.setText(msg); 

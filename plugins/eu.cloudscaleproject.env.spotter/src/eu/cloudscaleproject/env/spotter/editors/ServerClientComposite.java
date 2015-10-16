@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.CommonResources;
+import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
@@ -223,7 +223,7 @@ public class ServerClientComposite extends Composite
 							clientController.getClient().getHost(), 
 							clientController.getClient().getPort()));
 			
-			lblStatusIcon.setImage(CommonResources.OK);
+			lblStatusIcon.setImage(IconSetResources.getImage(IconSetResources.OK));
 
 			btnConnectClient.setText("Disconnect");
 
@@ -234,7 +234,7 @@ public class ServerClientComposite extends Composite
 			setEnabledRecursive(serverComposite, true);
 			lblStatus.setText("Client is not connected. Please configure server properties.");
 			btnConnectClient.setText("Connect");
-			lblStatusIcon.setImage(CommonResources.WARNING);
+			lblStatusIcon.setImage(IconSetResources.getImage(IconSetResources.WARNING));
 		}
 	}
 
