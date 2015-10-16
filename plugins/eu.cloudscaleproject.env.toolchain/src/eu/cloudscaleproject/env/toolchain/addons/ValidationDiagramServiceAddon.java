@@ -10,6 +10,9 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -19,6 +22,8 @@ import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
@@ -149,6 +154,7 @@ public class ValidationDiagramServiceAddon {
 					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
 					IProject project = (IProject)evt.getNewValue();
 					
+					ResourceRegistry.getInstance().collectResourceProviders(project);
 					
 					//bind all global status providers
 					for(IValidationStatusProvider sp : StatusManager.getInstance().getStatusProviders(null)){
@@ -160,6 +166,8 @@ public class ValidationDiagramServiceAddon {
 						if(!alreadyShownSet.contains(sp.getID())){
 							diagramService.showStatus(project, sp);
 							alreadyShownSet.add(sp.getID());
+							
+							ValidationDiagramServiceAddon.validate(sp);
 						}
 					}
 				}
@@ -169,6 +177,33 @@ public class ValidationDiagramServiceAddon {
 			}
 		}
 	};
+	
+	private static void validate(IValidationStatusProvider sp){
+		
+		if(sp instanceof IEditorInputResource){
+			final IEditorInputResource eir = (IEditorInputResource)sp;
+			
+			if(!eir.isLoaded()){
+				EditorInputJob loadJob = new EditorInputJob("Loading '"+ eir.getName() +"'") {
+					
+					@Override
+					public IStatus execute(IProgressMonitor monitor) {
+						monitor.beginTask("Loading '"+ eir.getName() +"'", IProgressMonitor.UNKNOWN);
+						if(!eir.isLoaded()){
+							eir.load(monitor);
+						}
+						monitor.done();
+						
+						return Status.OK_STATUS;
+					}
+				};
+				loadJob.setUser(false);
+				loadJob.schedule();
+			}
+			
+		}
+		
+	}
 	
 	@Inject
 	@Optional
@@ -189,6 +224,7 @@ public class ValidationDiagramServiceAddon {
 		IValidationStatusProvider statusProvider = activeResources.getActiveStatusProvider();
 		
 		if(statusProvider != null){
+			ValidationDiagramServiceAddon.validate(statusProvider);
 			diagramService.showStatus(statusProvider.getProject(), statusProvider);
 		}
 		
