@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
  org.eclipse.core.databinding.beans,
- org.spotter.eclipse.ui;bundle-version="1.0.1"
+ org.spotter.eclipse.ui;bundle-version="1.0.1",
+ org.eclipse.core.expressions;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,

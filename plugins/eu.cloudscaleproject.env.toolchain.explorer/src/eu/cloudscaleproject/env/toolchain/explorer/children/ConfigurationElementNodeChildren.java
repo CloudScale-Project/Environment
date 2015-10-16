@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
@@ -18,6 +21,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeResourceNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementNode;
 import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -120,7 +124,24 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		
 		if(value instanceof IConfigurationElement){
 			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
-			node = new ConfigurationElementNode(getNode().getContext(), el.getAttribute("id"), children);
+			
+			String id = el.getAttribute("id");
+			String editorID = el.getAttribute("editor");
+			String resourcePath = el.getAttribute("resource");
+			
+			if(editorID == null || editorID.isEmpty()){
+				node = new ConfigurationElementNode(getNode().getContext(), id, children);
+			}
+			else{
+				IResource resource = null;
+				if(resourcePath != null && !resourcePath.isEmpty()){
+					IProject project = getNode().getContext().get(IProject.class);
+					if(project != null){
+						resource = project.getFile(Path.fromPortableString(resourcePath));
+					}
+				}
+				node = new ConfigurationElementEditorNode(getNode().getContext(), id, editorID, resource, children);
+			}
 			
 			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
 			node.setIcon(icon, false);

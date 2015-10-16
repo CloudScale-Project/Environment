@@ -30,54 +30,87 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
-            icon="resources/icons/ic-spotter-small.png"
+      <Tool
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
-            name="Static Spotter"
-            position="30">
-         <resource
+            name="Static Spotter">
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.staticspotter.alternatives.providers.InputResourceProviderFactory"
                editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor"
-               icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"
                name="Input">
-         </resource>
-         <resource
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.staticspotter.alternatives.providers.ConfigResourceProviderFactory"
                editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor"
-               icon="resources/icons/configuration_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"
                name="Configuration">
-         </resource>
-         <resource
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
                class="eu.cloudscaleproject.env.staticspotter.alternatives.providers.ResultResourceProviderFactory"
                editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor"
-               icon="resources/icons/results_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"
                name="Results">
-         </resource>
-      </tool>
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
+            icon="resources/icons/ic-spotter-small.png"
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
+            name="Static Spotter">
+         <NodeDynamic
+               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+               editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"
+               name="Input alternatives">
+            <Node
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.staticspotter.nodeInput"
+                  name="Input">
+            </Node>
+            <Node
+                  icon="resources/icons/configuration_16.png"
+                  id="eu.cloudscaleproject.env.staticspotter.nodeConfigurations"
+                  name="Configurations">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"
+                     name="Configuration alternatives">
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/results_16.png"
+                  id="eu.cloudscaleproject.env.staticspotter.nodeResults"
+                  name="Results">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"
+                     name="Result alternatives">
+               </NodeDynamic>
+            </Node>
+         </NodeDynamic>
+      </Node>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="eu.cloudscaleproject.env.staticspotter.inputAlternativeNode">
+            id="eu.cloudscaleproject.env.staticspotter.inputAlternativeNodeProvider">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   forcePluginActivation="true"
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput">
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta">
             </test>
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.staticspotter.configAlternativeNode">
+            id="eu.cloudscaleproject.env.staticspotter.configAlternativeNodeProvider">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf">
+                  value="eu.cloudscaleproject.env.staticspotter.nodeConfigurations">
             </test>
          </with>
       </definition>

@@ -31,41 +31,91 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
+      <Tool
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
+            name="Dynamic Spotter">
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
+               name="Input">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"
+               name="Configuration">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"
+               name="Results">
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
             icon="resources/icons/spotter_16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
             name="Dynamic Spotter"
             position="40">
-         <resource
-               class="eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory"
+         <NodeDynamic
+               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
-               icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
-               name="Input"
-               position="10">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory"
-               editor="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor"
-               icon="resources/icons/configuration_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"
-               name="Configuration"
-               position="20">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory"
-               editor="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor"
-               icon="resources/icons/results_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"
-               name="Results"
-               position="30">
-         </resource>
-         <view
-               id="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
-               name="Server configuration"
-               position="5">
-         </view>
-      </tool>
+               name="Input alternatives">
+            <NodeResource
+                  editor="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.spotter.nodeServerConnection"
+                  name="Server connection">
+            </NodeResource>
+            <Node
+                  icon="resources/icons/configuration_16.png"
+                  id="eu.cloudscaleproject.env.spotter.nodeConfigurations"
+                  name="Configurations">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"
+                     name="Configuration alternatives">
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/results_16.png"
+                  id="eu.cloudscaleproject.env.spotter.nodeResults"
+                  name="Results">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes"
+                     name="Result alternatives">
+               </NodeDynamic>
+            </Node>
+         </NodeDynamic>
+      </Node>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.cloudscaleproject.env.spotter.inputAlternativeNodeProvider">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn">
+            </test>
+         </with>
+      </definition>
+      <definition
+            id="eu.cloudscaleproject.env.spotter.configAlternativeNodeProvider">
+         <with
+               variable="org.eclipse.ui.selection">
+            <test
+                  property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
+                  value="eu.cloudscaleproject.env.spotter.nodeConfigurations">
+            </test>
+         </with>
+      </definition>
    </extension>
 
 </plugin>
