@@ -29,56 +29,93 @@
    </extension>
    <extension
          point="eu.cloudscaleproject.env.toolchain.tool">
-      <tool
+      <Tool
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
+            name="Extractor">
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.extractor.alternatives.InputResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
+               name="Input">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
+               name="Configuration">
+         </ResourceProviderFactory>
+         <ResourceProviderFactory
+               class="eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory"
+               editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
+               name="Results">
+         </ResourceProviderFactory>
+      </Tool>
+      <Node
             icon="resources/icons/extractor_16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
             name="Extractor"
             position="20">
-         <resource
-               class="eu.cloudscaleproject.env.extractor.alternatives.InputResourceProviderFactory"
+         <NodeDynamic
+               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
-               name="Input"
-               position="10">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory"
-               editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
-               icon="resources/icons/configuration_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
-               name="Configuration"
-               position="10">
-         </resource>
-         <resource
-               class="eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory"
-               editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
-               icon="resources/icons/results_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
-               name="Results"
-               position="20">
-         </resource>
-      </tool>
+               name="Input alternatives">
+            <Node
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.extractor.nodeInput"
+                  name="Input">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                     id="eu.cloudscaleproject.env.extractor.nodeInputalternativeContent"
+                     name="Input alternative content">
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/configuration_16.png"
+                  id="eu.cloudscaleproject.env.extractor.nodeConfiguration"
+                  name="Configurations">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
+                     name="Configuration alternatives">
+               </NodeDynamic>
+            </Node>
+            <Node
+                  icon="resources/icons/results_16.png"
+                  id="eu.cloudscaleproject.env.extractor.nodeResults"
+                  name="Results">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
+                     name="Result alternatives">
+               </NodeDynamic>
+            </Node>
+         </NodeDynamic>
+      </Node>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="eu.cloudscaleproject.env.extractor.confAlternativeNode">
+            id="eu.cloudscaleproject.env.extractor.confAlternativeProviderNode">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf">
+                  value="eu.cloudscaleproject.env.extractor.nodeConfiguration">
             </test>
          </with>
       </definition>
       <definition
-            id="eu.cloudscaleproject.env.extractor.inputAlternativeNode">
+            id="eu.cloudscaleproject.env.extractor.inputAlternativeProviderNode">
          <with
                variable="org.eclipse.ui.selection">
             <test
                   property="eu.cloudscaleproject.env.toolchain.explorer.node.id"
-                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput">
+                  value="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor">
             </test>
          </with>
       </definition>
