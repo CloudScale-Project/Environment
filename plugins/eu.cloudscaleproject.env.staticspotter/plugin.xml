@@ -55,7 +55,8 @@
       <Node
             icon="resources/icons/ic-spotter-small.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
-            name="Static Spotter">
+            name="Static Spotter"
+            position="30">
          <NodeDynamic
                class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor"

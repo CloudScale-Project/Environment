@@ -29,12 +29,15 @@ public class ToolchainExtensions {
 	public static final String TOOL_EXTENSION_NAME = "Tool";
 	
 	public static final String NODE_EXTENSION_NAME = "Node";
+	public static final String NODE_PROXY_EXTENSION_NAME = "NodeProxy";
+	public static final String NODE_RESOURCE_EXTENSION_NAME = "NodeResource";
 	public static final String NODE_DYNAMIC_EXTENSION_NAME = "NodeDynamic";
 	
 	private List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
 	private List<IConfigurationElement> resourceProviderFactoryElements = new ArrayList<IConfigurationElement>();
 	
 	private List<IConfigurationElement> nodes = new ArrayList<IConfigurationElement>();
+	private List<IConfigurationElement> proxyNodes = new ArrayList<IConfigurationElement>();
 
 	public List<IConfigurationElement> getToolElements(){
 		return new ArrayList<IConfigurationElement>(toolElements);
@@ -42,6 +45,36 @@ public class ToolchainExtensions {
 	
 	public List<IConfigurationElement> getNodeElements(){
 		return new ArrayList<IConfigurationElement>(nodes);
+	}
+	
+	public List<IConfigurationElement> findProxyNodes(IConfigurationElement element){
+		
+		List<IConfigurationElement> out = new ArrayList<IConfigurationElement>();
+		
+		for(IConfigurationElement el : proxyNodes){
+			if(element.getAttribute("id").equals(el.getAttribute("id"))){
+				out.add(el);
+			}
+		}
+		return out;
+	}
+	
+	public IConfigurationElement findNodeElement(String id){
+		return doFindNodeElement(nodes.toArray(new IConfigurationElement[nodes.size()]), id);		
+	}
+	
+	private IConfigurationElement doFindNodeElement(IConfigurationElement[] elements, String id){
+		for(IConfigurationElement element : elements){
+			if(id.equals(element.getAttribute("id"))){
+				return element;
+			}
+			
+			IConfigurationElement el = doFindNodeElement(element.getChildren(), id);
+			if(el != null){
+				return el;
+			}
+		}
+		return null;
 	}
 	
 	public IConfigurationElement getToolElement(String id){
@@ -104,6 +137,9 @@ public class ToolchainExtensions {
 					}
 					if(el.getName().equals(NODE_EXTENSION_NAME)){
 						nodes.add(el);
+					}
+					if(el.getName().equals(NODE_PROXY_EXTENSION_NAME)){
+						proxyNodes.add(el);
 					}
 				}
 			}

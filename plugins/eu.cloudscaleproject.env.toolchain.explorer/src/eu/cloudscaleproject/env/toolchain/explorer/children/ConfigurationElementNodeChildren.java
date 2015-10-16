@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.toolchain.explorer.children;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,12 +84,22 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 	protected List<Object> getKeys() {
 		
 		List<Object> keys = new ArrayList<Object>();
+
+		List<IConfigurationElement> proxyElements = ToolchainExtensions.getInstance().findProxyNodes(element);
 		
-		for(IConfigurationElement el : element.getChildren()){
+		List<IConfigurationElement> children = new ArrayList<IConfigurationElement>();
+		Collections.addAll(children, element.getChildren());
+		
+		for(IConfigurationElement proxy : proxyElements){
+			Collections.addAll(children, proxy.getChildren());
+		}
+		
+		for(IConfigurationElement el : children){
 			
 			if(ToolchainExtensions.NODE_EXTENSION_NAME.equals(el.getName())){
 				keys.add(new Key(el, el));
 			}
+			
 			if(ToolchainExtensions.NODE_DYNAMIC_EXTENSION_NAME.equals(el.getName())){
 				try {
 					IExplorerContentRetriever contentRetriever = contentRetrievers.get(el);

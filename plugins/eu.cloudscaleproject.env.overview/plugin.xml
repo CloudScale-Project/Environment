@@ -34,9 +34,9 @@
                name="Overview">
          </ResourceProviderFactory>
       </Tool>
-      <Node
+      <NodeProxy
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="ScaleDL models">
+            name="Proxy to ScaleDL node">
          <Node
                icon="resources/icons/overview_16.png"
                id="eu.cloudscaleproject.env.overview.nodeOverview"
@@ -49,7 +49,7 @@
                   name="Overview alternatives">
             </NodeDynamic>
          </Node>
-      </Node>
+      </NodeProxy>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">

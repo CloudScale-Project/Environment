@@ -38,4 +38,12 @@
             restorable="true">
       </e4view>
    </extension>
+   <extension
+         point="eu.cloudscaleproject.env.toolchain.tool">
+      <Node
+            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
+            name="ScaleDL models"
+            position="50">
+      </Node>
+   </extension>
 </plugin>
