@@ -54,6 +54,19 @@ public class EditorInputFolder extends EditorInputResource{
 		//preload
 		this.propertyInputFile = new EditorInputFile(project, file);
 		
+		//fetch subresources
+		synchronized (propertyInputFile) {
+			synchronized (subResourcesLock) {
+				subResources.clear();
+				for(String key : propertyInputFile.getKeys()){
+					List<IResource> resources = getSubResourcesFromWorkspace(key);
+					if(!resources.isEmpty()){
+						subResources.put(key, resources);
+					}
+				}
+			}
+		}
+		
 		//init validation listener
 		if(validationID != null){
 			initializeValidationListener();

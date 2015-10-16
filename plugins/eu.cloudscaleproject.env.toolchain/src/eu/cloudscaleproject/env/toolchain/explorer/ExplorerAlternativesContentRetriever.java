@@ -35,14 +35,19 @@ public class ExplorerAlternativesContentRetriever implements IExplorerContentRet
 		alternative = context.get(IEditorInputResource.class);
 		if(alternative != null){
 			alternative.addPropertyChangeListener(alternativeListener);
-			
-			EditorInputJob job = new EditorInputJob("Loading alternative ["+ this.alternative.getName() +"]...") {
+			loadAlternative(alternative);
+		}
+	}
+	
+	private void loadAlternative(final IEditorInputResource eir){
+		if(!eir.isLoaded()){
+			EditorInputJob job = new EditorInputJob("Loading alternative ["+ eir.getName() +"]...") {
 				
 				@Override
 				public IStatus execute(IProgressMonitor monitor) {
-					monitor.beginTask("Loading alternative ["+ alternative.getName() +"]", IProgressMonitor.UNKNOWN);
-					if(!ExplorerAlternativesContentRetriever.this.alternative.isLoaded()){
-						ExplorerAlternativesContentRetriever.this.alternative.load(monitor);
+					monitor.beginTask("Loading alternative ["+ eir.getName() +"]", IProgressMonitor.UNKNOWN);
+					if(!eir.isLoaded()){
+						eir.load(monitor);
 					}
 					monitor.done();
 					return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resource done.");

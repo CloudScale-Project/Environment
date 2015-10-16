@@ -56,23 +56,53 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 				IConfigAlternative ca = (IConfigAlternative)eir;
 				if(ca.getInputAlternative() == parentEir){
 					out.add(eir);
-					continue;
 				}
+				continue;
 			}
 			
 			if(eir instanceof IResultAlternative){
 				IResultAlternative ra = (IResultAlternative)eir;
 				if(ra.getInputAlternative() == parentEir || ra.getConfigAlternative() == parentEir){
 					out.add(eir);
-					continue;
 				}
+				continue;
 			}
 			
 			out.add(eir);
 		}
 		
+		/*
+		for(Object o : out){
+			if(o instanceof IEditorInputResource){
+				IEditorInputResource eir = (IEditorInputResource)o;
+				loadAlternative(eir);
+			}
+		}
+		*/
+		
 		return out;
 	}
+	
+	/*
+	private void loadAlternative(final IEditorInputResource eir){
+		if(!eir.isLoaded()){
+			EditorInputJob job = new EditorInputJob("Loading alternative ["+ eir.getName() +"]...") {
+				
+				@Override
+				public IStatus execute(IProgressMonitor monitor) {
+					monitor.beginTask("Loading alternative ["+ eir.getName() +"]", IProgressMonitor.UNKNOWN);
+					if(!eir.isLoaded()){
+						eir.load(monitor);
+					}
+					monitor.done();
+					return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resource done.");
+				}
+			};
+			job.setUser(false);
+			job.schedule();
+		}
+	}
+	*/
 
 	@Override
 	public void dispose() {
