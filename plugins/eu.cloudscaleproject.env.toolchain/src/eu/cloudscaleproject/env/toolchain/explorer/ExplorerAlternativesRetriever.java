@@ -39,6 +39,8 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 		
 		rp = ResourceRegistry.getInstance().getResourceProvider(project, nodeID);
 		rp.addListener(resourceProviderListener);
+		
+		this.context.set(ResourceProvider.class, rp);
 	}
 	
 	@Override
