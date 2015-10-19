@@ -7,14 +7,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
-import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
 
-public class SingleResultComposite extends TitleEditorView implements IPropertySheetPageProvider, IRefreshable{
+public class ResultAlternativeComposite extends ResultEditorView implements IPropertySheetPageProvider{
 
 
 	private ResultAlternative resultPersistenceFolder;
@@ -25,7 +24,7 @@ public class SingleResultComposite extends TitleEditorView implements IPropertyS
 	 * @param parent
 	 * @param style
 	 */
-	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
+	public ResultAlternativeComposite(Composite parent, int style, ResultAlternative rif) {
 		super(parent, style, rif);
 		
 		this.resultPersistenceFolder = rif;
@@ -48,10 +47,6 @@ public class SingleResultComposite extends TitleEditorView implements IPropertyS
 	}
 	
 	
-	@Override
-	public void refresh() {
-	}
-
 	@Override
 	public IPropertySheetPage getPropertySheetPage()
 	{

@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.extractor.editors.composites.SingleResultComposite;
+import eu.cloudscaleproject.env.extractor.editors.composites.ResultAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 
 /**
@@ -23,7 +23,7 @@ public class ResultsEditor extends AlternativeEditor{
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
 		
 		setAlternative(alternative);
-		setControl(new SingleResultComposite(parent, SWT.NONE, alternative));
+		setControl(new ResultAlternativeComposite(parent, SWT.NONE, alternative));
 		
 		part.setLabel("Extractor result ["+ alternative.getName() +"]");
 	}

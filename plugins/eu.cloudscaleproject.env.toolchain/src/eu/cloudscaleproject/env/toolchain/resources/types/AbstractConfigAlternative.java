@@ -17,18 +17,15 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
-public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative
-{
+public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative {
 	private final String inputAlternativeID;
 	private final String resultAlternativeID;
-	
-	protected ResourceProvider resultsResourceProvider;
+
 	protected ResourceProvider inputResourceProvider;
 	private IStatus lastRunStatus;
 
-	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, 
-			String configID, String inputID, String resultID)
-	{
+	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, String configID,
+			String inputID, String resultID) {
 
 		super(project, folder, modelTypes, configID);
 
@@ -36,39 +33,43 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 		this.resultAlternativeID = resultID;
 
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
-		this.resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, resultID);
 	}
-	
+
 	@Override
 	public String getInputAlternativeID() {
 		return inputAlternativeID;
 	}
-	
+
 	@Override
 	public String getResultAlternativeID() {
 		return resultAlternativeID;
 	}
 
-	public void setInputAlternative(IInputAlternative input)
-	{
-		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, input.getResource());		
+	protected ResourceProvider getResultResourceProvider() {
+		ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
+				resultAlternativeID);
+		return resultsResourceProvider;
+	}
+
+	public void setInputAlternative(IInputAlternative input) {
+		setSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE, input.getResource());
 	}
 
 	@Override
-	public IInputAlternative getInputAlternative()
-	{
+	public IInputAlternative getInputAlternative() {
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
 		if (inputResourceProvider != null && res != null)
-			return (IInputAlternative)inputResourceProvider.getResource(res);
+			return (IInputAlternative) inputResourceProvider.getResource(res);
 		else
 			return null;
 	}
 
 	@Override
-	public IEditorInputResource getLastResult()
-	{
+	public IEditorInputResource getLastResult() {
 		IResource res = getSubResource(IConfigAlternative.KEY_LAST_RESULT);
+		ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
+				resultAlternativeID);
 
 		if (resultsResourceProvider != null && res != null)
 			return resultsResourceProvider.getResource(res);
@@ -76,22 +77,21 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 			return null;
 	}
 
-	private void setLastResult(IEditorInputResource res)
-	{
+	private void setLastResult(IEditorInputResource res) {
 		setSubResource(IConfigAlternative.KEY_LAST_RESULT, res.getResource());
 	}
 
 	@Override
-	public List<IEditorInputResource> getResults()
-	{
+	public List<IEditorInputResource> getResults() {
 		List<IEditorInputResource> configResults = new LinkedList<>();
-		if(resultsResourceProvider != null){
-			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
-			for (IEditorInputResource res : resources)
-			{
-				if (getName().equals(res.getProperty("CONFIG_NAME")))
-				{
-					configResults.add(res);
+		List<IEditorInputResource> resources = getResultResourceProvider().getResources();
+		for (IEditorInputResource res : resources) {
+			if (res instanceof IResultAlternative) {
+				IResultAlternative ira = (IResultAlternative) res;
+				if (ira.getConfigAlternative() == null) continue;
+
+				if (ira.getConfigAlternative().getName().equals(getName())) {
+					configResults.add(ira);
 				}
 			}
 		}
@@ -100,30 +100,26 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	}
 
 	@Override
-	public final IStatus run(IProgressMonitor monitor)
-	{
+	public final IStatus run(IProgressMonitor monitor) {
 		save();
-		
-		try
-		{
-			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
-			{
+
+		try {
+			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
-				public void run(IProgressMonitor monitor) throws CoreException
-				{
+				public void run(IProgressMonitor monitor) throws CoreException {
 					lastRunStatus = doRun(monitor);
 				}
 			}, monitor);
-		} catch (CoreException e)
-		{
+		} catch (CoreException e) {
 			e.printStackTrace();
 			lastRunStatus = e.getStatus();
 		}
 
-		if (lastRunStatus == null || lastRunStatus.isOK())
-		{
+		if (lastRunStatus == null || lastRunStatus.isOK()) {
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 
+			ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
+					resultAlternativeID);
 			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
 			IEditorInputResource lastResult = resources.get(resources.size() - 1);
 			setLastResult(lastResult);

@@ -40,7 +40,7 @@ public class ResultSidebarComposite extends SidebarEditorComposite {
 			public Composite createComposite(Composite parent, int style,
 					IEditorInputResource resource) {
 
-				return new SingleResultComposite(parent, style, (ResultAlternative)resource);
+				return new ResultAlternativeComposite(parent, style, (ResultAlternative)resource);
 			}
 		});
 

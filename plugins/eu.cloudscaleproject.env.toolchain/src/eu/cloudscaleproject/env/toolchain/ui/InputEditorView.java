@@ -16,7 +16,8 @@ import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
-import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowAlternativeDialog;
+import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowConfigAlternativesDialog;
+import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowResultAlternativesDialog;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
 
@@ -40,7 +41,7 @@ public class InputEditorView extends AbstractEditorView
 				lblConfigurations.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseUp(MouseEvent e) {
-						new ShowAlternativeDialog(input.getConfigAlternatives()).open();
+						new ShowConfigAlternativesDialog(input.getConfigAlternatives()).open();
 					}
 				});
 
@@ -52,7 +53,7 @@ public class InputEditorView extends AbstractEditorView
 						{
 							l.addAll(ca.getResults());
 						}
-						new ShowAlternativeDialog(l).open();
+						new ShowResultAlternativesDialog(l).open();
 					}
 				});
 

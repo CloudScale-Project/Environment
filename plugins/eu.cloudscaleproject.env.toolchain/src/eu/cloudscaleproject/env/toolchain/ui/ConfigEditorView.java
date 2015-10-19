@@ -33,7 +33,7 @@ import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
-import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowAlternativeDialog;
+import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowResultAlternativesDialog;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ValidationWidget;
@@ -83,7 +83,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 				lblResults.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseUp(MouseEvent e) {
-						new ShowAlternativeDialog(alternative.getResults()).open();
+						new ShowResultAlternativesDialog(alternative.getResults()).open();
 					}
 				});
 				

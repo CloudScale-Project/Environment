@@ -1,10 +1,10 @@
 package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -75,7 +75,7 @@ public class AlternativeSelectionPage extends WizardPage{
 		DataBindingContext bindingContext = new DataBindingContext();
 		//
 		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-		IObservableMap observeMap = BeansObservables.observeMap(listContentProvider.getKnownElements(), IEditorInputResource.class, "name");
+		IObservableMap observeMap = Properties.observeEach(listContentProvider.getKnownElements(), PojoProperties.values(new String[] { "name" }))[0];
 		listViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
 		listViewer.setContentProvider(listContentProvider);
 		//

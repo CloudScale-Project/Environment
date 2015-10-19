@@ -68,6 +68,7 @@ public class ExtractorRunJob
 		try
 		{
 			this.resultAlternative = createResultPersistenceFolder();
+			this.resultAlternative.setConfigAlternative(configAlternative);
 			runModisco(monitor);
 			runSomox(monitor);
 			initializeDiagrams();

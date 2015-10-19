@@ -127,7 +127,7 @@ public class ConfigAlternative extends AbstractConfigAlternative
 
 				confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
 				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
-				confProp.setProperty("org.spotter.resultDir", resultsResourceProvider.getRootFolder().getLocation().toString());
+				confProp.setProperty("org.spotter.resultDir", getResultResourceProvider().getRootFolder().getLocation().toString());
 
 				confProp.setProperty("org.spotter.workload.maxusers", "10");
 				confProp.setProperty("org.spotter.workload.experiment.duration", "180");

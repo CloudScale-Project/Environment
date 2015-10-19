@@ -10,7 +10,6 @@ import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
 import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
 
@@ -21,11 +20,11 @@ public class ResultEditorView extends AbstractEditorView
 	 * @param parent
 	 * @param style
 	 */
-	public ResultEditorView(Composite parent, int style, final IEditorInputResource input)
+	public ResultEditorView(Composite parent, int style, final IResultAlternative result)
 	{
-		super(parent, style, input);
+		super(parent, style, result);
 		
-		new TitleWidget(getHeader(), SWT.NONE, input){
+		new TitleWidget(getHeader(), SWT.NONE, result){
 			@Override
 			protected void initButtons() {
 				CLabel lblUp = createContextButton("Input", IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
@@ -35,19 +34,20 @@ public class ResultEditorView extends AbstractEditorView
 				lblUp.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseUp(MouseEvent e) {
-						ResourceRegistry.getInstance().openResourceEditor(((IResultAlternative)input).getInputAlternative());
+						ResourceRegistry.getInstance().openResourceEditor(((IResultAlternative)result).getInputAlternative());
 					}
 				});
 				lblConfiguration.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseUp(MouseEvent e) {
-						ResourceRegistry.getInstance().openResourceEditor(((IResultAlternative)input).getConfigAlternative());
+						ResourceRegistry.getInstance().openResourceEditor(((IResultAlternative)result).getConfigAlternative());
 					}
 				});
 				super.initButtons();
 			}
 		};
 		
+		getFooter().dispose();
 		//new ValidationWidget(getFooter(), style, input);
 	}
 }

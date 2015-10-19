@@ -107,8 +107,8 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 		IStatus status = detectPaternJob.run(m);
 		if (status.isOK())
 		{
-			// Collect results
-			Util.saveAnnotations(this, detectPaternJob);
+			// Collect results & create result alternative
+			Util.persistResults(this, detectPaternJob);
 		}
 
 		return status;

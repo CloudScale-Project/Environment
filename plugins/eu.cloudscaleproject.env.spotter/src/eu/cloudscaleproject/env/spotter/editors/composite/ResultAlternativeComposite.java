@@ -71,9 +71,9 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
 import eu.cloudscaleproject.env.spotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
-import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
 
-public class ResultAlternativeComposite extends TitleEditorView implements IRefreshable
+public class ResultAlternativeComposite extends ResultEditorView implements IRefreshable
 {
 
 	//private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);

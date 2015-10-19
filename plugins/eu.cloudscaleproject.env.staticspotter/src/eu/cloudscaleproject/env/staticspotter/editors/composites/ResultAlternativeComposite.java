@@ -13,11 +13,11 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.annotations.AnnotationComposite;
 import eu.cloudscaleproject.env.staticspotter.util.Util;
-import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
 
 
 
-public class SingleResultComposite extends TitleEditorView implements IRefreshable{
+public class ResultAlternativeComposite extends ResultEditorView implements IRefreshable{
 
 	private ResultAlternative resultFolder;
 	private Collection<ASGAnnotation> annotations;
@@ -28,7 +28,7 @@ public class SingleResultComposite extends TitleEditorView implements IRefreshab
 	 * @param parent
 	 * @param style
 	 */
-	public SingleResultComposite(Composite parent, int style, ResultAlternative rif) {
+	public ResultAlternativeComposite(Composite parent, int style, ResultAlternative rif) {
 		super(parent, style, rif);
 
 		getContainer().setLayout(new GridLayout(1, false));

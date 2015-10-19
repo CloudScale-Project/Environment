@@ -90,13 +90,13 @@ public class Util
 	//
 	// Saving annotations
 	//
-	public static void saveAnnotations(EditorInputFolder configFolder, DetectPatternsJob job)
+	public static void persistResults(ConfigAlternative configAlternative, DetectPatternsJob job)
 	{
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().
-				getResourceProvider(configFolder.getProject(), CSTool.SPOTTER_STA_RES);
+				getResourceProvider(configAlternative.getProject(), CSTool.SPOTTER_STA_RES);
 
 		ResultAlternative rif = (ResultAlternative)resultResProvider
-				.createNewResource(configFolder.getName() + " " + sdf.format(new Date()), "");
+				.createNewResource(configAlternative.getName() + " " + sdf.format(new Date()), "");
 
 		//IFolder resultFolder = createResultFolder(configFolder.getProject(), configFolder.getName());
 		//ResultPersistenceFolder rif = new ResultPersistenceFolder(configFolder.getProject(), resultFolder);
@@ -138,13 +138,14 @@ public class Util
 		{
 			res.save(Collections.emptyMap());
 			rif.setSubResource(ResultAlternative.KEY_PSA, file);
+			rif.setConfigAlternative(configAlternative);
+
 			rif.save();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 	private static List<ASGAnnotation> getAnnotations(DetectPatternsJob job)

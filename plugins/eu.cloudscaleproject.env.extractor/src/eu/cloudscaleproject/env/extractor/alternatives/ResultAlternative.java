@@ -7,9 +7,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractResultAlternative;
 
-public class ResultAlternative extends EditorInputEMF {
+public class ResultAlternative extends AbstractResultAlternative {
 	
 	public static final String KEY_FOLDER_SOMOX = "folder_somox";
 	public static final String KEY_FOLDER_MODISCO = "folder_modisco";
@@ -24,7 +24,7 @@ public class ResultAlternative extends EditorInputEMF {
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
 	public ResultAlternative(IProject project, IFolder folder){
-		super(project, folder, ModelType.GROUP_PCM, CSTool.EXTRACTOR_RES.getID());
+		super(project, folder, ModelType.GROUP_PCM, CSTool.EXTRACTOR_RES.getID(), CSTool.EXTRACTOR_CONF.getID());
 	}
 	
 	@Override
