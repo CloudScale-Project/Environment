@@ -3,13 +3,13 @@
     xmlns:specification="http://www.reclipse.org/ns/specification" id="_3n5RYPVhEeOgbJdIqiztvw" name="New Catalog" metamodel="org.reclipse.kdm2pcm.sourcecodedecorator">
   <patternSpecifications id="_8u6OgPVhEeOgbJdIqiztvw" name="AcquireReleasePair">
     <connections xsi:type="specification:PSLink" id="_VF19IPViEeOgbJdIqiztvw" name="link1"
-        source="#_-WpBUPVhEeOgbJdIqiztvw" target="#_LWXAEPViEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
+        source="#_-WpBUPVhEeOgbJdIqiztvw" target="#_LWXAEPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
     <connections xsi:type="specification:PSLink" id="_V51l4PViEeOgbJdIqiztvw" name="link2"
-        source="#_-WpBUPVhEeOgbJdIqiztvw" target="#_LrRgIPViEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
+        source="#_-WpBUPVhEeOgbJdIqiztvw" target="#_LrRgIPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ResourceDemandingBehaviour/steps_Behaviour"/>
     <connections xsi:type="specification:PSLink" id="_nlJKAPViEeOgbJdIqiztvw" name="link3"
-        source="#_LrRgIPViEeOgbJdIqiztvw" target="#_jVVhsPViEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction/passiveResource_ReleaseAction"/>
+        source="#_LrRgIPViEeOgbJdIqiztvw" target="#_jVVhsPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ReleaseAction/passiveResource_ReleaseAction"/>
     <connections xsi:type="specification:PSLink" id="_oHb-wPViEeOgbJdIqiztvw" name="link4"
-        source="#_LWXAEPViEeOgbJdIqiztvw" target="#_jVVhsPViEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction/passiveresource_AcquireAction"/>
+        source="#_LWXAEPViEeOgbJdIqiztvw" target="#_jVVhsPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/AcquireAction/passiveresource_AcquireAction"/>
     <connections xsi:type="specification:PSLink" id="_t4ohUPViEeOgbJdIqiztvw" name="annotatedElement"
         source="#_8u6OgfVhEeOgbJdIqiztvw" target="#_LrRgIPViEeOgbJdIqiztvw" qualifier="release"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
@@ -20,24 +20,24 @@
         source="#_R8FLUPVsEeOhXMVyYRdIxA" target="#_bXgj8PVsEeOhXMVyYRdIxA" qualifier="primitiveComponent"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
     <connections xsi:type="specification:PSLink" id="_Ao5W0PVtEeOhXMVyYRdIxA" name="link8"
-        source="#_bXgj8PVsEeOhXMVyYRdIxA" target="#_-WpBUPVhEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent/serviceEffectSpecifications__BasicComponent"/>
+        source="#_bXgj8PVsEeOhXMVyYRdIxA" target="#_-WpBUPVhEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent/serviceEffectSpecifications__BasicComponent"/>
     <nodes xsi:type="specification:PSAnnotation" id="_8u6OgfVhEeOgbJdIqiztvw" outgoing="#_t4ohUPViEeOgbJdIqiztvw #_ufK84PViEeOgbJdIqiztvw"
         type="#_8u6OgPVhEeOgbJdIqiztvw"/>
     <nodes xsi:type="specification:PSObject" id="_-WpBUPVhEeOgbJdIqiztvw" name="behaviour"
         outgoing="#_VF19IPViEeOgbJdIqiztvw #_V51l4PViEeOgbJdIqiztvw" incoming="#_Ao5W0PVtEeOhXMVyYRdIxA"
-        instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ResourceDemandingSEFF"/>
+        instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ResourceDemandingSEFF"/>
     <nodes xsi:type="specification:PSObject" id="_LWXAEPViEeOgbJdIqiztvw" name="acquireAction"
         outgoing="#_oHb-wPViEeOgbJdIqiztvw" incoming="#_VF19IPViEeOgbJdIqiztvw #_ufK84PViEeOgbJdIqiztvw"
-        instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/AcquireAction"/>
+        instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/AcquireAction"/>
     <nodes xsi:type="specification:PSObject" id="_LrRgIPViEeOgbJdIqiztvw" name="releaseAction"
         outgoing="#_nlJKAPViEeOgbJdIqiztvw" incoming="#_V51l4PViEeOgbJdIqiztvw #_t4ohUPViEeOgbJdIqiztvw"
-        instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/ReleaseAction"/>
+        instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ReleaseAction"/>
     <nodes xsi:type="specification:PSObject" id="_jVVhsPViEeOgbJdIqiztvw" name="passiveResource"
-        incoming="#_nlJKAPViEeOgbJdIqiztvw #_oHb-wPViEeOgbJdIqiztvw" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/PassiveResource"/>
+        incoming="#_nlJKAPViEeOgbJdIqiztvw #_oHb-wPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/PassiveResource"/>
     <nodes xsi:type="specification:PSAnnotation" id="_R8FLUPVsEeOhXMVyYRdIxA" name="annoPrimitiveComponent"
         outgoing="#_iBGuIPVsEeOhXMVyYRdIxA" type="#_7E0R8PVmEeO8apkjJxxSYA"/>
     <nodes xsi:type="specification:PSObject" id="_bXgj8PVsEeOhXMVyYRdIxA" name="primitiveComponent"
-        outgoing="#_Ao5W0PVtEeOhXMVyYRdIxA" incoming="#_iBGuIPVsEeOhXMVyYRdIxA" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+        outgoing="#_Ao5W0PVtEeOhXMVyYRdIxA" incoming="#_iBGuIPVsEeOhXMVyYRdIxA" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
   </patternSpecifications>
   <patternSpecifications id="_7E0R8PVmEeO8apkjJxxSYA" name="FindPrimitiveComponents">
     <connections xsi:type="specification:PSLink" id="_BdcOoPVsEeOhXMVyYRdIxA" name="annotatedElement"
@@ -50,7 +50,7 @@
     <nodes xsi:type="specification:PSObject" id="_Dg1cAPVnEeO8apkjJxxSYA" name="componentImplementingClassesLink"
         outgoing="#_EKcAYPVsEeOhXMVyYRdIxA" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//ComponentImplementingClassesLink"/>
     <nodes xsi:type="specification:PSObject" id="_WLDqAPVoEeO8apkjJxxSYA" name="primitiveComponent"
-        incoming="#_BdcOoPVsEeOhXMVyYRdIxA #_EKcAYPVsEeOhXMVyYRdIxA" instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//repository/BasicComponent"/>
+        incoming="#_BdcOoPVsEeOhXMVyYRdIxA #_EKcAYPVsEeOhXMVyYRdIxA" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
   </patternSpecifications>
   <patternSpecifications id="_yArXoPbJEeOeYJP9coicjQ" name="Pool">
     <nodes xsi:type="specification:PSAnnotation" id="_yBX7MPbJEeOeYJP9coicjQ" type="#_yArXoPbJEeOeYJP9coicjQ"/>
@@ -95,6 +95,6 @@
   <patternSpecifications id="_PFOU0PbeEeOeYJP9coicjQ" name="FindClasses">
     <nodes xsi:type="specification:PSAnnotation" id="_PFOU0fbeEeOeYJP9coicjQ" type="#_PFOU0PbeEeOeYJP9coicjQ"/>
     <nodes xsi:type="specification:PSObject" id="_P-e4EPbeEeOeYJP9coicjQ" name="obj1"
-        instanceOf="http://sdq.ipd.uka.de/PalladioComponentModel/5.0#//seff/CallAction"/>
+        instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/CallAction"/>
   </patternSpecifications>
 </specification:PSCatalog>
