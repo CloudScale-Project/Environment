@@ -66,6 +66,11 @@
                   icon="resources/icons/input_16.png"
                   id="eu.cloudscaleproject.env.staticspotter.nodeInput"
                   name="Input">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                     id="eu.cloudscaleproject.env.staticspotter.NodeDynamic1"
+                     name="Input alternative content">
+               </NodeDynamic>
             </Node>
             <Node
                   icon="resources/icons/configuration_16.png"
