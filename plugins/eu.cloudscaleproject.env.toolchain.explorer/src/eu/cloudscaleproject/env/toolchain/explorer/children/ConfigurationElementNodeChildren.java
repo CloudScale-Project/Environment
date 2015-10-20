@@ -34,7 +34,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(IExplorerContentRetriever.PROP_CHILDREN_CHANGED.equals(evt.getPropertyName())){
-				refresh();
+				refreshNow();
 			}
 		}
 	};

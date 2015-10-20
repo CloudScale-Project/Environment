@@ -43,6 +43,8 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 	
 	public ExplorerEditorNode(IEclipseContext context, String id, String editorID, IResource resource, IExplorerNodeChildren childFactory) {
 		super(context, id, resource, childFactory);
+		
+		getContext().set(IExplorerConstants.NODE_DATA, resource);
 		getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
 	}
 	

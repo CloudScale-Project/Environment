@@ -12,6 +12,11 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.spotter.editors.composite.ConfSidebarComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.InputSidebarComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.IntroComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.ResultsSidebarComposite;
+import eu.cloudscaleproject.env.spotter.editors.composite.ServerClientComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorExtension;
 import eu.cloudscaleproject.env.toolchain.editors.ProjectEditor;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInput;
@@ -86,13 +91,13 @@ public class SpotterTabItemExtension implements ProjectEditorExtension{
 					return new ServerClientComposite(project, parent, SWT.NONE);
 				}
 				else if(inputInput.equals(input)){
-					return new InputComposite(project, parent, SWT.NONE);
+					return new InputSidebarComposite(project, parent, SWT.NONE);
 				}
 				else if(runInput.equals(input)){
-					return new ConfComposite(project, parent, SWT.NONE);
+					return new ConfSidebarComposite(project, parent, SWT.NONE);
 				}
 				else if(resultsInput.equals(input)){
-					return new ResultsComposite(project, parent, SWT.NONE);
+					return new ResultsSidebarComposite(project, parent, SWT.NONE);
 				}
 				
 				return null;

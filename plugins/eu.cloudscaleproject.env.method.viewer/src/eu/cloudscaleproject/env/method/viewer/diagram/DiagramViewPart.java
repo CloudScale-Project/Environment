@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.method.viewer.ValidationDiagram;
 import eu.cloudscaleproject.env.method.viewer.ValidationDiagramComposite;
 import eu.cloudscaleproject.env.method.viewer.ValidationDiagramService;

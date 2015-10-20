@@ -41,5 +41,50 @@ public class Explorer {
 	public void refreshAll(){
 		rootNode.refreshRecursive();
 	}
+	
+	public<T> T findTreeContextData(IExplorerNode node, Class<T> clazz){
+		return doFindTreeContextData(node, clazz);
+	}
+	
+	private<T> T doFindTreeContextData(IExplorerNode node, Class<T> clazz){
+		
+		if(node == null){
+			return null;
+		}
+		
+		T data = node.getContext().getLocal(clazz);
+		if(data != null){
+			return data;
+		}
+		
+		return doFindTreeContextData(node.getParent(), clazz);
+	}
+	
+	public void setSelection(IExplorerNode node){
+		if(node != null){
+			node.getContext().modify(IExplorerNode.class, node);
+		}
+	}
+	
+	public IExplorerNode findNode(Object data){
+		return doFindNode(rootNode, data);
+	}
+	
+	private IExplorerNode doFindNode(IExplorerNode node, Object data){
+		
+		Object nodeData = node.getContext().getLocal(IExplorerConstants.NODE_DATA);
+		if(nodeData == data){
+			return node;
+		}
+		
+		for(IExplorerNode child : node.getChildren()){
+			IExplorerNode foundNode = doFindNode(child, data);
+			if(foundNode != null){
+				return foundNode;
+			}
+		}
+		
+		return null;
+	}
 
 }

@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.cloudscaleproject.env.spotter.editors.ServerClientComposite.ISpotterServer;
+import eu.cloudscaleproject.env.spotter.editors.composite.ServerClientComposite.ISpotterServer;
 
 public class ExternalServerComposite extends Composite implements ISpotterServer
 {

@@ -97,7 +97,11 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		});
 	}
 	
-	public synchronized void doRefresh(){
+	public void refreshNow(){
+		doRefresh();
+	}
+	
+	private synchronized void doRefresh(){
 		
 		if(!initialized){
 			return;

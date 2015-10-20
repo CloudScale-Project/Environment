@@ -3,8 +3,10 @@ package eu.cloudscaleproject.env.toolchain.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 
@@ -36,7 +38,10 @@ public class CreateAlternativeWizard extends Wizard{
 		String altName = nameSelectionPage.getName();
 
 		IEditorInputResource alternative = (IEditorInputResource)provider.createNewResource(altName, null);
-		initAlternative(alternative);	
+		initAlternative(alternative);
+		
+		IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+		explorerService.setSelection(alternative);
 		OpenAlternativeUtil.openAlternative(alternative);
 		
 		return true;

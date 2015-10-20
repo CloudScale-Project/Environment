@@ -38,7 +38,6 @@ public abstract class ResourceProvider
 	public static final String PROP_RESOURCE_REMOVED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.remove";
 	public static final String PROP_RESOURCE_MODIFIED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.modified";
 
-	public static final String TAG_SELECTED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.selected";
 	public static final String PROP_TYPE = "resourceType";
 
 	private final IFolder rootFolder;

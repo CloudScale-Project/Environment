@@ -34,7 +34,7 @@ import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.Activator;
 import eu.cloudscaleproject.env.spotter.BuiltinServerController;
-import eu.cloudscaleproject.env.spotter.editors.ServerClientComposite.ISpotterServer;
+import eu.cloudscaleproject.env.spotter.editors.composite.ServerClientComposite.ISpotterServer;
 
 public class BuiltinServerComposite extends Composite implements ISpotterServer
 {

@@ -60,6 +60,7 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		initAlternative(alternative);	
 		
 		alternative.setInputAlternative((IInputAlternative)this.inputResource);
+		alternative.save();
 		
 		OpenAlternativeUtil.openAlternative(alternative);
 		

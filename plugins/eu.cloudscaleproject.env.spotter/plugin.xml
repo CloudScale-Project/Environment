@@ -70,17 +70,6 @@
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
                name="Input alternatives">
             <Node
-                  icon="resources/icons/input_16.png"
-                  id="eu.cloudscaleproject.env.spotter.nodeInput"
-                  name="Input">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
-                     name="Input alternatives">
-               </NodeDynamic>
-            </Node>
-            <Node
                   icon="resources/icons/configuration_16.png"
                   id="eu.cloudscaleproject.env.spotter.nodeConfigurations"
                   name="Configurations">

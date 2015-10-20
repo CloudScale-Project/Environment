@@ -66,6 +66,7 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 			setName(file.getName());
 		}
 		
+		getContext().set(IExplorerConstants.NODE_DATA, file);
 		getContext().set(IFile.class, file);
 		getContext().set(IStyledLabelProvider.class, DEFAULT_LABEL_STYLE);
 	}

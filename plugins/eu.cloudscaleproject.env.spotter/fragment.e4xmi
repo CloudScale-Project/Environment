@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_g1zG8K4CEeOG6cOE6pIkzA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_g1zG8K4CEeOG6cOE6pIkzA">
+  <imports xsi:type="commands:Command" xmi:id="_XE6P8HZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.toolchain.command.createalternative"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4Kp1AC3cEeSzOMcB8sHwVA" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_F-Q3YEPtEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.command.perspective" commandName="Open Dynamic Spotter perspective"/>
   </fragments>
@@ -21,5 +22,14 @@
     <elements xsi:type="basic:PartDescriptor" xmi:id="_RdftwEgKEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor" label="Static Spotter config" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.ConfigEditor"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_chowoEgKEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.resultEditor" label="Static Spotter result" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.ResultEditor"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_X9awAEg1EeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor" label="Server configuration" closeable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.editors.ServerEditor"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tjCC0HZyEeWJPoFXxZxn-Q" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
+    <elements xsi:type="menu:MenuSeparator" xmi:id="_ehtjQHZzEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.menuseparator.0"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xHPwcHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.createInputAlternative" label="New Dynamic spotter input alternative..." command="_XE6P8HZyEeWJPoFXxZxn-Q">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OYAUwHZzEeWJPoFXxZxn-Q" coreExpressionId="eu.cloudscaleproject.env.spotter.inputAlternativeNodeProvider"/>
+    </elements>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xlFjAHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.eucloudscaleprojectenvtoolchainexplorerpopupmenunew" label="New Dynamic spotter configuration alternative..." command="_XE6P8HZyEeWJPoFXxZxn-Q">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_QgiHgHZzEeWJPoFXxZxn-Q" coreExpressionId="eu.cloudscaleproject.env.spotter.configAlternativeNodeProvider"/>
+    </elements>
   </fragments>
 </fragment:ModelFragments>

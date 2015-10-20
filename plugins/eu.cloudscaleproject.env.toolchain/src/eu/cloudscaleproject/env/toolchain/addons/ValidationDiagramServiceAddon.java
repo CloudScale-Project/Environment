@@ -19,7 +19,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;

@@ -16,6 +16,8 @@ public interface IExplorerNodeChildren {
 	public List<IExplorerNode> getChildren();
 	
 	public void refresh();
+	public void refreshNow();
+
 	public void dispose();
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener);

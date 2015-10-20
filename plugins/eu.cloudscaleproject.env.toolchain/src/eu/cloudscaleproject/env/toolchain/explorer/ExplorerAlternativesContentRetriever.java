@@ -22,8 +22,10 @@ public class ExplorerAlternativesContentRetriever implements IExplorerContentRet
 	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
 		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
-			pcs.firePropertyChange(PROP_CHILDREN_CHANGED, null, this);
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(EditorInputEMF.PROP_SUB_RESOURCE_CHANGED.equals(evt.getPropertyName())){
+				pcs.firePropertyChange(PROP_CHILDREN_CHANGED, null, this);
+			}
 		}
 	};
 	

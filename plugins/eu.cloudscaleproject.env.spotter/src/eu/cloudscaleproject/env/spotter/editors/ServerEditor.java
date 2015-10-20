@@ -8,6 +8,8 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.cloudscaleproject.env.spotter.editors.composite.ServerClientComposite;
+
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>

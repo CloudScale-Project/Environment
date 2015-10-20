@@ -71,38 +71,8 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 			out.add(eir);
 		}
 		
-		/*
-		for(Object o : out){
-			if(o instanceof IEditorInputResource){
-				IEditorInputResource eir = (IEditorInputResource)o;
-				loadAlternative(eir);
-			}
-		}
-		*/
-		
 		return out;
 	}
-	
-	/*
-	private void loadAlternative(final IEditorInputResource eir){
-		if(!eir.isLoaded()){
-			EditorInputJob job = new EditorInputJob("Loading alternative ["+ eir.getName() +"]...") {
-				
-				@Override
-				public IStatus execute(IProgressMonitor monitor) {
-					monitor.beginTask("Loading alternative ["+ eir.getName() +"]", IProgressMonitor.UNKNOWN);
-					if(!eir.isLoaded()){
-						eir.load(monitor);
-					}
-					monitor.done();
-					return new Status(IStatus.OK, Activator.PLUGIN_ID, "Loading resource done.");
-				}
-			};
-			job.setUser(false);
-			job.schedule();
-		}
-	}
-	*/
 
 	@Override
 	public void dispose() {

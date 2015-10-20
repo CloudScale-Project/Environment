@@ -9,7 +9,7 @@ import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 
 public class ValidationDiagramService implements IValidationDiagramService{
 	

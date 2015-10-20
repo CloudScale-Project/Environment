@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.children.ProjectNodeChildren;
 
 /**
@@ -16,6 +17,7 @@ public class ProjectNode extends ExplorerResourceNode{
 	public ProjectNode(IEclipseContext context, IProject project) {
 		super(context, project.getName(), project, new ProjectNodeChildren(project, false));
 		
+		getContext().set(IExplorerConstants.NODE_DATA, project);
 		getContext().set(IProject.class, project);
 	}
 

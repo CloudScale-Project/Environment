@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;

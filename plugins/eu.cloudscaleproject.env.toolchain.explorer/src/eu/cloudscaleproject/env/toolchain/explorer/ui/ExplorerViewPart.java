@@ -9,12 +9,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -34,7 +33,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
@@ -106,8 +104,9 @@ public class ExplorerViewPart {
 		part.getContext().declareModifiable(IEditorInputResource.class);
 		part.getContext().declareModifiable(IValidationStatusProvider.class);
 		part.getContext().declareModifiable(IProject.class);
+		part.getContext().declareModifiable(IExplorerNode.class);
 		
-		Explorer explorer = Explorer.getInstance();
+		final Explorer explorer = Explorer.getInstance();
 		IExplorerNode rootNode = explorer.getRoot();
 		rootNode.getContext().setParent(part.getContext());
 		
@@ -118,37 +117,13 @@ public class ExplorerViewPart {
 				final IExplorerNode node = (IExplorerNode)evt.getSource();
 						
 				if(IExplorerNode.PROP_REFRESH.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
-						
-						@Override
-						public void run() {
-							if(!treeViewer.getTree().isDisposed()){
-								treeViewer.refresh(node);
-							}
-						}
-					});
+					refresh(node);
 				}
 				if(IExplorerNode.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
-						
-						@Override
-						public void run() {
-							if(!treeViewer.getTree().isDisposed()){
-								treeViewer.refresh(node);
-							}
-						}
-					});
+					refresh(node);
 				}
 				if(IExplorerNode.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
-					BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
-						
-						@Override
-						public void run() {
-							if(!treeViewer.getTree().isDisposed()){
-								treeViewer.refresh(node);
-							}
-						}
-					});
+					refresh(node);
 				}
 				
 			}
@@ -172,10 +147,10 @@ public class ExplorerViewPart {
 				if(node != null){
 					node.onSelect();
 					
-					part.getContext().set(IEditorInputResource.class, node.getContext().get(IEditorInputResource.class));
-					part.getContext().set(ResourceProvider.class, node.getContext().get(ResourceProvider.class));
-					part.getContext().set(IValidationStatusProvider.class, node.getContext().get(IValidationStatusProvider.class));
-					part.getContext().set(IProject.class, node.getContext().get(IProject.class));
+					part.getContext().set(IEditorInputResource.class, explorer.findTreeContextData(node, IEditorInputResource.class));
+					part.getContext().set(ResourceProvider.class, explorer.findTreeContextData(node, ResourceProvider.class));
+					part.getContext().set(IValidationStatusProvider.class, explorer.findTreeContextData(node, IValidationStatusProvider.class));
+					part.getContext().set(IProject.class, explorer.findTreeContextData(node, IProject.class));
 				}
 				
 				selectionService.setSelection(selection.size() == 1 ? node : selection.toArray());
@@ -224,56 +199,58 @@ public class ExplorerViewPart {
 		this.selectionService.addPostSelectionListener(part.getElementId(), selectionListener);
 	}
 	
+	private void refresh(final IExplorerNode node){
+		/*
+		BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
+			
+			@Override
+			public void run() {
+				if(!treeViewer.getTree().isDisposed()){
+					treeViewer.refresh(node);
+				}
+			}
+		});
+		*/
+		
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(treeViewer != null && !treeViewer.getTree().isDisposed() && !treeViewer.isBusy()){
+					treeViewer.refresh(node);
+				}
+			}
+		});
+	}
+	
 	@Inject
 	@Optional
 	private void linkWithEditor(MApplication application, 
 								EModelService modelService, 
-								@Named(IExplorerConstants.LINK_WITH_EDITOR) Boolean enable){
+								@Named(IExplorerConstants.LINK_WITH_EDITOR) Boolean enable,
+								@Active MPart part){
 		
 		this.linkWithEditor = enable;
 		if(enable){
-			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
-			MStackElement element = stack.getSelectedElement();
-			
-			if(element instanceof MPart){
-				MPart part = (MPart)element;
-				ExplorerEditorNode node = part.getContext().get(ExplorerEditorNode.class);
-				if(node != null){
-					if(treeViewer != null && !treeViewer.getTree().isDisposed()){
-						treeViewer.setSelection(new StructuredSelection(node), true);
-					}
+			ExplorerEditorNode node = part.getContext().get(ExplorerEditorNode.class);
+			if(node != null){
+				if(treeViewer != null && !treeViewer.getTree().isDisposed()){
+					treeViewer.setSelection(new StructuredSelection(node), true);
 				}
 			}
-			
 		}
 	}
 	
-	/*
 	@Inject
 	@Optional
-	private void activeContext(@Active IEclipseContext context){
+	private void selectNode(IExplorerNode node){
+		if(treeViewer == null || treeViewer.getTree().isDisposed()){
+			return;
+		}
 		
+		treeViewer.setSelection(new StructuredSelection(node), true);
+		treeViewer.expandToLevel(node, 2);
 	}
-	
-	@Inject
-	@Optional
-	private void activeAlternative(MPart part, @Active IEditorInputResource alternative){
-		part.getContext().set(IEditorInputResource.class, alternative);
-	}
-	
-	@Inject
-	@Optional
-	private void activeValidationStatusProvider(MPart part, @Active IValidationStatusProvider vp){
-		part.getContext().set(IValidationStatusProvider.class, vp);
-
-	}
-	
-	@Inject
-	@Optional
-	private void activeProject(MPart part, @Active IProject project){
-		part.getContext().set(IProject.class, project);
-	}
-	*/
 	
 	@PreDestroy
 	public void preDestroy() {

@@ -1,8 +1,5 @@
 package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -17,6 +14,7 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
@@ -72,7 +70,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 			return image;
 		}
 	}; 
-	
+	/*
 	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
 		@Override
@@ -80,27 +78,29 @@ public class AlternativeNode extends ExplorerEditorNode{
 			AlternativeNode.this.refresh();
 		}
 	};
+	*/
 	
-	private final IEditorInputResource alternative;
+	//private final IEditorInputResource alternative;
 	
 	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
 		
-		this.alternative = alternative;
-		this.alternative.addPropertyChangeListener(alternativeListener);
+		//this.alternative = alternative;
+		//this.alternative.addPropertyChangeListener(alternativeListener);
 				
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
 		
 		getContext().set(ILabelDecorator.class, DEFAULT_DECORATOR);
 		
+		getContext().set(IExplorerConstants.NODE_DATA, alternative);
 		getContext().set(IValidationStatusProvider.class, alternative);
 		getContext().set(IEditorInputResource.class, alternative);
 	}
 
 	@Override
 	public void dispose() {
-		this.alternative.removePropertyChangeListener(alternativeListener);
+		//this.alternative.removePropertyChangeListener(alternativeListener);
 		super.dispose();
 	}
 }

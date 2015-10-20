@@ -11,7 +11,7 @@ import org.eclipse.e4.core.di.extensions.EventTopic;
 import org.eclipse.e4.ui.workbench.UIEvents;
 import org.osgi.service.event.Event;
 
-import eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.method.viewer.ValidationDiagramService;
 
 public class ValidationDiagramServiceAddon {
