@@ -56,11 +56,6 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 		layout.marginHeight = 0;
 		getContainer().setLayout(layout);
 
-		//editComposite = new SelectInputAltComposite(project, input, getContainer(), SWT.NONE);
-		//GridData iac_gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		//editComposite.setLayoutData(iac_gd);
-		//editComposite.pack();
-
 		tabFolder = new CTabFolder(getContainer(), SWT.BORDER);
 		GridData tabFolder_gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		tabFolder.setLayoutData(tabFolder_gd);

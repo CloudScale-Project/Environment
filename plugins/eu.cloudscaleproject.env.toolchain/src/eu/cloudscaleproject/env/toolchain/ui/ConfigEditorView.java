@@ -21,6 +21,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -129,6 +130,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		lblInputTitle.setText("Input:");
 
 		lblInputValue = new Label(grpDetails, SWT.NONE);
+		lblInputValue.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
 		CLabel lblResultsTitle = new CLabel(grpDetails, SWT.NONE);
 		lblResultsTitle.setText("  #Results:");
@@ -144,9 +146,29 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		lblLastResultTitle.setText("  Last result:");
 
 		lblLastResultValue = new CLabel(grpDetails, SWT.NONE);
+		lblLastResultValue.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
 		this.configContainer = new Composite(mainContainer, SWT.NONE);
 		configContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		lblInputValue.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseUp(MouseEvent e)
+			{
+				ResourceRegistry.getInstance().openResourceEditor(alternative.getInputAlternative());
+			}
+		});
+		
+		lblLastResultValue.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mouseUp(MouseEvent e)
+			{
+				if (alternative.getLastResult() != null)
+					ResourceRegistry.getInstance().openResourceEditor(alternative.getLastResult());
+			}
+		});
 
 		updateMetaData();
 	}
