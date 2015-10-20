@@ -176,6 +176,9 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 	
 	@Override
 	public synchronized void dispose() {
+		
+		super.dispose();
+		
 		for(IExplorerContentRetriever cr : contentRetrievers.values()){
 			cr.dispose();
 		}

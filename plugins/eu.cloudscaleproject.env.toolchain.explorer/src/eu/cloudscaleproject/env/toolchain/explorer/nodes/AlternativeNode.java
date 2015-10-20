@@ -70,23 +70,9 @@ public class AlternativeNode extends ExplorerEditorNode{
 			return image;
 		}
 	}; 
-	/*
-	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {
-		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			AlternativeNode.this.refresh();
-		}
-	};
-	*/
-	
-	//private final IEditorInputResource alternative;
 	
 	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
-		
-		//this.alternative = alternative;
-		//this.alternative.addPropertyChangeListener(alternativeListener);
 				
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
@@ -98,9 +84,4 @@ public class AlternativeNode extends ExplorerEditorNode{
 		getContext().set(IEditorInputResource.class, alternative);
 	}
 
-	@Override
-	public void dispose() {
-		//this.alternative.removePropertyChangeListener(alternativeListener);
-		super.dispose();
-	}
 }

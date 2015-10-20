@@ -81,7 +81,6 @@ public abstract class ResourceProvider
 					{
 						removeResource(r);
 						r.delete();
-						firePropertyChange(PROP_RESOURCE_DELETED, r, null);
 					}
 				}
 				
@@ -92,7 +91,7 @@ public abstract class ResourceProvider
 					if (r == null){
 						return;
 					}
-					
+										
 					// do not trigger re-load, if the property change is 
 					// triggered from create/save/delete operations 
 					if(r.isJobInProgress() || r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
@@ -103,13 +102,11 @@ public abstract class ResourceProvider
 						
 						@Override
 						public void run() {
-							r.load();								
-							firePropertyChange(PROP_RESOURCE_MODIFIED, null, r);
+							r.load();
 						}
 					});
 					
 				}
-				
 			}
 			
 		}
@@ -365,6 +362,21 @@ public abstract class ResourceProvider
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				removeResource(eir);
+			}
+		});
+		
+		eir.addPropertyChangeListener(IEditorInputResource.PROP_SAVED, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				firePropertyChange(PROP_RESOURCE_MODIFIED, null, eir);
+			}
+		});
+		eir.addPropertyChangeListener(IEditorInputResource.PROP_LOADED, new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				firePropertyChange(PROP_RESOURCE_MODIFIED, null, eir);
 			}
 		});
 		
