@@ -68,7 +68,7 @@ public class DiagramViewPart{
 				ValidationDiagramComposite vdc = (ValidationDiagramComposite)control;
 				ValidationDiagram diagram = vdc.getValidationDiagram();
 				IProject project = diagram.getProject();
-				if(!project.isAccessible()){
+				if(project == null || !project.isAccessible()){
 					showDiagram(null);
 				}
 			}
