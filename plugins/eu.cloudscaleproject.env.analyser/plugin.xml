@@ -47,13 +47,15 @@
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.InputAlternativeFactory"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
-               name="Input">
+               name="Input"
+               wizard="eu.cloudscaleproject.env.analyser.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ConfAlternativeFactory"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-               name="Configurations">
+               name="Configurations"
+               wizard="eu.cloudscaleproject.env.analyser.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.analyser.alternatives.factory.ResultAlternativeFactory"

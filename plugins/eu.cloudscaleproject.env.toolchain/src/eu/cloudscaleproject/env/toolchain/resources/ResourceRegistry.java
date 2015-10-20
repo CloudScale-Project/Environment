@@ -18,11 +18,13 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 
 public class ResourceRegistry {
 	
@@ -235,7 +237,7 @@ public class ResourceRegistry {
 	}
 	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){
-		
+
 		if(eir == null){
 			logger.severe("Can not open editor! Specified editor resource is NULL!");
 			return;
@@ -248,6 +250,9 @@ public class ResourceRegistry {
 				staticContext.set(IEditorInputResource.class, eir);
 				CommandExecutor.getInstance().execute("eu.cloudscaleproject.env.toolchain.openAlternative", staticContext);
 				staticContext.dispose();
+
+				IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+				explorerService.setSelection(eir);
 			}
 		});
 	}

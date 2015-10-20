@@ -27,11 +27,6 @@ public class ShowConfigAlternativesDialog extends ShowAlternativeDialog {
 		return "No configuration available for this alternative.\nCreate one...";
 	}
 
-	protected void createPressed() {
-		// TODO: call action
-		throw new IllegalStateException("TODO: implementation");
-	}
-
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		// TODO Auto-generated method stub
@@ -46,7 +41,8 @@ public class ShowConfigAlternativesDialog extends ShowAlternativeDialog {
 
 	protected void buttonPressed(int buttonId) {
 		if (CREATE_ID == buttonId) {
-			createPressed();
+			setReturnCode(CREATE_ID);
+			close();
 		} else {
 			super.buttonPressed(buttonId);
 		}

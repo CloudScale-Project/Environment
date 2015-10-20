@@ -36,13 +36,15 @@
                class="eu.cloudscaleproject.env.extractor.alternatives.InputResourceProviderFactory"
                editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
-               name="Input">
+               name="Input"
+               wizard="eu.cloudscaleproject.env.extractor.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.extractor.alternatives.ConfigResourceProviderFactory"
                editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
-               name="Configuration">
+               name="Configuration"
+               wizard="eu.cloudscaleproject.env.extractor.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.extractor.alternatives.ResultResourceProviderFactory"

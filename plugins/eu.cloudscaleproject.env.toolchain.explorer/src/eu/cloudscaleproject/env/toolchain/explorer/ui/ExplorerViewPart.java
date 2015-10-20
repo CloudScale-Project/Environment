@@ -248,8 +248,8 @@ public class ExplorerViewPart {
 			return;
 		}
 		
+		treeViewer.expandToLevel(node, TreeViewer.ALL_LEVELS);
 		treeViewer.setSelection(new StructuredSelection(node), true);
-		treeViewer.expandToLevel(node, 2);
 	}
 	
 	@PreDestroy

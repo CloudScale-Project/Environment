@@ -40,6 +40,9 @@ public abstract class AbstractResultAlternative extends EditorInputEMF implement
 	@Override
 	public IInputAlternative getInputAlternative()
 	{
-		return getConfigAlternative().getInputAlternative();
+		if (getConfigAlternative() != null)
+			return getConfigAlternative().getInputAlternative();
+		return 
+				null;
 	}
 }

@@ -117,6 +117,19 @@ public class ToolchainExtensions {
 		return elements;
 	}
 	
+	public IConfigurationElement findResourceProviderFactoryElement (String id)
+	{
+		for (IConfigurationElement e : resourceProviderFactoryElements)
+		{
+			if (id.equals(e.getAttribute("id")))
+			{
+				return e;
+			}
+		}
+		
+		return null;
+	}
+	
 	public void retrieveExtensions(){
 		
 		//retrieve tool extensions
