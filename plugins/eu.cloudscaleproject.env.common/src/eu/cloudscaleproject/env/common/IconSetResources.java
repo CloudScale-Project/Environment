@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.common;
 
 import java.util.HashMap;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -47,6 +48,7 @@ public class IconSetResources
 
 	public static Image getImage (IconDescriptor descriptor)
 	{
+		if (descriptor == null) return null;
 		return getImage(descriptor.name, descriptor.color, descriptor.size);
 	}
 
@@ -58,8 +60,15 @@ public class IconSetResources
 		
 		if (!cache.containsKey(imgFilePath))
 		{
-			Image img = AbstractUIPlugin.imageDescriptorFromPlugin(plugin, imgFilePath).createImage();
-			cache.put(imgFilePath, img);
+			ImageDescriptor id = AbstractUIPlugin.imageDescriptorFromPlugin(plugin, imgFilePath);
+			if (id != null)
+			{
+				Image img = id.createImage();
+				cache.put(imgFilePath, img);
+			}
+			else{
+				return null;
+			}
 		}
 		
 		return cache.get(imgFilePath);

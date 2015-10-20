@@ -27,22 +27,19 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	public ConfigAlternativeComposite(Composite parent, int style, ConfingAlternative cif)
 	{
 		super(parent, style, cif);
-		((GridData) getContainer().getLayoutData()).horizontalIndent = 1;
+		//((GridData) getContainer().getLayoutData()).horizontalIndent = 1;
 
 		this.configAlternative = cif;
 
 		// this.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
 		// 1));
-		GridLayout gridLayout = new GridLayout(3, false);
-		gridLayout.horizontalSpacing = 15;
+		GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
 		getContainer().setLayout(gridLayout);
 
-		Composite containerConfiguration = new Composite(getContainer(), SWT.NONE);
-		containerConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-		containerConfiguration.setLayout(new GridLayout(1, false));
-
-		CTabFolder tabFolder = new CTabFolder(containerConfiguration, SWT.BORDER);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		CTabFolder tabFolder = new CTabFolder(getContainer(), SWT.BORDER);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		tabFolder.setTabHeight(32);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 

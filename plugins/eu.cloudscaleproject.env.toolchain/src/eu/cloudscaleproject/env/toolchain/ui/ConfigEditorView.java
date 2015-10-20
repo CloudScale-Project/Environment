@@ -2,7 +2,10 @@ package eu.cloudscaleproject.env.toolchain.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,6 +28,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import eu.cloudscaleproject.env.common.IconSetResources;
@@ -33,6 +38,7 @@ import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.ui.dialogs.ShowResultAlternativesDialog;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.ResultWiget;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
@@ -49,17 +55,39 @@ public abstract class ConfigEditorView extends AbstractEditorView
 	private Composite progressComposite;
 	private AlternativeRunJob lastJob;
 
+	private Composite configContainer;
+	private CLabel lblLastResultValue;
+	private CLabel lblResultsValue;
+	private CLabel lblLastChangeValue;
+	private Label lblInputValue;
+
 	private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener()
 	{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			if (evt.getNewValue() == alternative && !isRunning())
-			{
+			if (evt.getNewValue() == alternative && !isRunning()) {
 				updateControls();
 			}
 		}
 	};
+
+	private final PropertyChangeListener inputAlternativeListener = new PropertyChangeListener()
+	{
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+			Display.getDefault().asyncExec(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					if (!isDisposed()) updateMetaData();
+				}
+			});
+		}
+	};
+
 
 	/**
 	 * Create the composite.
@@ -73,23 +101,119 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		this.alternative = alternative;
 
-		new TitleWidget(getHeader(), SWT.NONE, alternative){
+		initTitleWidget();
+		initContainer();
+
+		if (alternative == null)
+			return; // For WindowBuilder
+
+		initFooterContent();
+		initListeners();
+	}
+
+	private void initContainer()
+	{
+		Composite mainContainer = super.getContainer();
+		GridLayout layout = new GridLayout(1, false);
+		layout.verticalSpacing = 10;
+		mainContainer.setLayout(layout);
+
+		Group grpDetails = new Group(mainContainer, SWT.NONE);
+		grpDetails.setLayout(new GridLayout(4, false));
+		GridData gd_grpDetails = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpDetails.heightHint = 60;
+		grpDetails.setLayoutData(gd_grpDetails);
+		grpDetails.setText("Details");
+
+		CLabel lblInputTitle = new CLabel(grpDetails, SWT.NONE);
+		lblInputTitle.setText("Input:");
+
+		lblInputValue = new Label(grpDetails, SWT.NONE);
+
+		CLabel lblResultsTitle = new CLabel(grpDetails, SWT.NONE);
+		lblResultsTitle.setText("  #Results:");
+
+		lblResultsValue = new CLabel(grpDetails, SWT.NONE);
+
+		CLabel lblLastChangeTitle = new CLabel(grpDetails, SWT.NONE);
+		lblLastChangeTitle.setText("Last change:");
+
+		lblLastChangeValue = new CLabel(grpDetails, SWT.NONE);
+
+		CLabel lblLastResultTitle = new CLabel(grpDetails, SWT.NONE);
+		lblLastResultTitle.setText("  Last result:");
+
+		lblLastResultValue = new CLabel(grpDetails, SWT.NONE);
+
+		this.configContainer = new Composite(mainContainer, SWT.NONE);
+		configContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		updateMetaData();
+	}
+
+	private void updateMetaData()
+	{
+		lblInputValue.setText(this.alternative.getInputAlternative().getName());
+
+		lblLastChangeValue.setText(getModifiedString(this.alternative.getInputAlternative()));
+
+		List<IEditorInputResource> results = this.alternative.getResults();
+
+		if (results != null && !results.isEmpty()) {
+			lblResultsValue.setText("" + results.size());
+			lblLastResultValue.setText(getModifiedString(alternative.getLastResult()));
+		} else {
+			lblResultsValue.setText("0");
+			lblLastResultValue.setText("n/a");
+		}
+
+	}
+	
+	private SimpleDateFormat sdf_name = new SimpleDateFormat("d/MM, hh:mm:ss");
+	private String getModifiedString (IEditorInputResource eir)
+	{
+		try {
+			String time = eir.getProperty("modified");
+			Date date = new Date(Long.parseLong(time));
+			return sdf_name.format(date);
+		} catch (Exception e) {
+			return "n/a";
+		}
+	}
+
+	@Override
+	protected Composite getContainer()
+	{
+		return this.configContainer;
+	}
+
+	private void initTitleWidget()
+	{
+		new TitleWidget(getHeader(), SWT.NONE, alternative)
+		{
 			@Override
-			protected void initButtons() {
-				CLabel lblUp = createContextButton("Input", IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
-				CLabel lblResults = createContextButton("Results", IconSetResources.getImage("stats_3", COLOR.BLUE, SIZE.SIZE_24));
+			protected void initButtons()
+			{
+				CLabel lblUp = createContextButton("Input",
+						IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
+				CLabel lblResults = createContextButton("Results",
+						IconSetResources.getImage("stats_3", COLOR.BLUE, SIZE.SIZE_24));
 				createSeparator();
 
-				lblResults.addMouseListener(new MouseAdapter() {
+				lblResults.addMouseListener(new MouseAdapter()
+				{
 					@Override
-					public void mouseUp(MouseEvent e) {
+					public void mouseUp(MouseEvent e)
+					{
 						new ShowResultAlternativesDialog(alternative.getResults()).open();
 					}
 				});
-				
-				lblUp.addMouseListener(new MouseAdapter() {
+
+				lblUp.addMouseListener(new MouseAdapter()
+				{
 					@Override
-					public void mouseUp(MouseEvent e) {
+					public void mouseUp(MouseEvent e)
+					{
 
 						ResourceRegistry.getInstance().openResourceEditor(alternative.getInputAlternative());
 						// TODO Auto-generated method stub
@@ -100,12 +224,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 				super.initButtons();
 			}
 		};
-
-		if (alternative == null)
-			return; // For WindowBuilder
-
-		initFooterContent();
-		initListeners();
 	}
 
 	private void initFooterContent()
@@ -136,11 +254,9 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if (isRunning())
-				{
+				if (isRunning()) {
 					stop();
-				} else
-				{
+				} else {
 					run();
 				}
 
@@ -162,11 +278,16 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void widgetDisposed(DisposeEvent e)
 			{
-				StatusManager.getInstance().removePropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED, propertyChangeListener);
+				StatusManager.getInstance().removePropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED,
+						propertyChangeListener);
+				alternative.getInputAlternative().removePropertyChangeListener(IEditorInputResource.PROP_SAVED, inputAlternativeListener);
 			}
 		});
+		
+		this.alternative.getInputAlternative().addPropertyChangeListener(IEditorInputResource.PROP_SAVED, inputAlternativeListener);
 
-		StatusManager.getInstance().addPropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED, propertyChangeListener);
+		StatusManager.getInstance().addPropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED,
+				propertyChangeListener);
 	}
 
 	private void run()
@@ -207,32 +328,29 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void run()
 			{
-				if (stackedContainer == null || stackedContainer.isDisposed())
-				{
+				if (stackedContainer == null || stackedContainer.isDisposed()) {
 					return;
 				}
 
-				if (isRunning())
-				{
+				if (isRunning()) {
 					btnRun.setText("Stop");
 					((StackLayout) stackedContainer.getLayout()).topControl = progressComposite;
 					stackedContainer.layout();
-				} else
-				{
-					// WORKAROUND : if before 3s after job is finished, than show result
-					if (lastJob != null && System.currentTimeMillis() < 3000+lastJob.getEndTimestamp())
-					{
+				} else {
+					// WORKAROUND : if before 3s after job is finished, than
+					// show result
+					if (lastJob != null && System.currentTimeMillis() < 3000 + lastJob.getEndTimestamp()) {
 						resultsComposite.setStatus(lastJob.getResult());
 						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
-					} 
-					else
-					{
+					} else {
 						((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
 					}
 
 					btnRun.setText("Run");
 					stackedContainer.layout();
 					stackedContainer.redraw();
+					
+					updateMetaData();
 
 				}
 			}
@@ -249,23 +367,17 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			@Override
 			public void run()
 			{
-				if (ctrl instanceof Composite)
-				{
+				if (ctrl instanceof Composite) {
 					Composite comp = (Composite) ctrl;
 					for (Control c : comp.getChildren())
 						setEnabledRecursive(c, enabled);
-				} else
-				{
-					if (enabled == ctrl.getEnabled())
-					{
+				} else {
+					if (enabled == ctrl.getEnabled()) {
 						mapOriginalEnableSettings.put(ctrl, enabled);
-					} else
-					{
-						if (mapOriginalEnableSettings.containsKey(ctrl))
-						{
+					} else {
+						if (mapOriginalEnableSettings.containsKey(ctrl)) {
 							ctrl.setEnabled(mapOriginalEnableSettings.get(ctrl));
-						} else
-						{
+						} else {
 							ctrl.setEnabled(enabled);
 						}
 					}
@@ -274,7 +386,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		});
 	}
-
 
 	private class AlternativeRunJob extends Job
 	{
@@ -292,13 +403,11 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		@Override
 		protected IStatus run(IProgressMonitor monitor)
 		{
-			try
-			{
+			try {
 				startTimestamp = System.currentTimeMillis();
 				internalMonitor = new RunProgressMonitor();
 				return alternative.run(internalMonitor);
-			} finally
-			{
+			} finally {
 				endTimestamp = System.currentTimeMillis();
 			}
 		}
@@ -309,10 +418,10 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			internalMonitor.setCanceled(true);
 			super.canceling();
 		}
-		
-		public boolean isRunning ()
+
+		public boolean isRunning()
 		{
-			return startTimestamp>0 && endTimestamp==0;
+			return startTimestamp > 0 && endTimestamp == 0;
 		}
 
 		@SuppressWarnings("unused")

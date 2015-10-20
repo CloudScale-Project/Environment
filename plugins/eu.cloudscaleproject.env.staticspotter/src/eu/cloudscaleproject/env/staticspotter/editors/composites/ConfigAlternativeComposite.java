@@ -41,7 +41,10 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 		this.configAlternative = configAlternative;
 
-		getContainer().setLayout(new GridLayout(3, false));
+		GridLayout gridLayout = new GridLayout(3, false);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
+		getContainer().setLayout(gridLayout);
 
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Catalog and Engine models");
