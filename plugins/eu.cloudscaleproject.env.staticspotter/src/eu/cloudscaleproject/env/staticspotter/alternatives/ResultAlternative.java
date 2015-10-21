@@ -14,7 +14,7 @@ public class ResultAlternative extends AbstractResultAlternative {
 
 	public ResultAlternative(IProject project, IFolder folder) {
 		// TODO Auto-generated constructor stub
-		super (project, folder, ModelType.GROUP_NONE, CSTool.SPOTTER_STA_RES.getID(), CSTool.SPOTTER_STA_CONF.getID());
+		super (project, folder, ModelType.GROUP_NONE, CSTool.SPOTTER_STA_RES.getID());
 	}
 	
 }

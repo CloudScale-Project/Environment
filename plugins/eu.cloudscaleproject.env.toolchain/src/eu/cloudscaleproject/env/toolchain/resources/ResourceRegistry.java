@@ -215,24 +215,35 @@ public class ResourceRegistry {
 		
 		return getResourceProvider(project, tool.getID());
 	}
-	
+
 	public IEditorInputResource getResource(String resourcePath){
 		IPath path = Path.fromPortableString(resourcePath);
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		return getResource(resource);
+	}
+	
+	public IEditorInputResource getResource(IResource resource){
+
 		if(resource == null){
-			logger.warning("IResource for the specified path does not exist! Path: " + resourcePath);
+			logger.warning("IResource is null!");
+			return null;
+		}
+
+		if(!resource.exists()){
+			logger.warning("IResource does not exist! Path: " + resource.getFullPath());
 			return null;
 		}
 		
 		List<ResourceProvider> providers = ResourceRegistry.getInstance().getResourceProviders(resource.getProject());
 		for(ResourceProvider rp : providers){
 			
-			if(!rp.getRootFolder().getFullPath().isPrefixOf(path)){
+			if(!rp.getRootFolder().getFullPath().isPrefixOf(resource.getFullPath())){
 				continue;
 			}
 			return rp.getResource(resource);
 		}
-		logger.warning("IEditorInputResource for the specified path can not be retrieved! Path: " + resourcePath);
+
+		logger.warning("IEditorInputResource for the specified path can not be retrieved! Path: " + resource.getFullPath());
 		return null;
 	}
 	
