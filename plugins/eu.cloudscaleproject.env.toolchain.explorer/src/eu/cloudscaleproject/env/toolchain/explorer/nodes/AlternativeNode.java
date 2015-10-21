@@ -35,7 +35,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {		
 	
 		@Override		
-			public void propertyChange(PropertyChangeEvent evt) {		
+			public void propertyChange(PropertyChangeEvent evt) {
 				AlternativeNode.this.refresh();
 			}		
 	};		
@@ -100,7 +100,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
 		
 		this.alternative = alternative;
-		this.alternative.addPropertyChangeListener(alternativeListener);
+		this.alternative.addStatusChangeListener(alternativeListener);
 		
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
@@ -114,7 +114,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 	
 	@Override		
 	public void dispose() {		
-		this.alternative.removePropertyChangeListener(alternativeListener);		
+		this.alternative.removeStatusChangeListener(alternativeListener);		
 		super.dispose();		
 	}
 
