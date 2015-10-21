@@ -11,6 +11,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 
 /**
@@ -81,6 +82,7 @@ public class DeleteExplorerNodeHandler {
 					@Override
 					public void run() {
 						
+						Explorer.getInstance().setSelection(node.getParent());
 						node.dispose();
 						
 						WorkspaceJob job = new WorkspaceJob("Deleting resource") {
@@ -90,6 +92,7 @@ public class DeleteExplorerNodeHandler {
 								
 								monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
 								node.getResource().delete(IProject.FORCE, null);
+								
 								return Status.OK_STATUS;
 							}
 						};
