@@ -10,7 +10,7 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
  */
 public class ExplorerResourceNode extends ExplorerNode{
 
-	public final IResource resource;
+	private final IResource resource;
 		
 	public ExplorerResourceNode(IEclipseContext context, String id, IResource resource, IExplorerNodeChildren childFactory) {
 		super(context, id, childFactory);

@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.toolchain.explorer.nodes;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -26,7 +29,17 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  *
  */
 public class AlternativeNode extends ExplorerEditorNode{
+		
+	private final IEditorInputResource alternative;
 
+	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {		
+	
+		@Override		
+			public void propertyChange(PropertyChangeEvent evt) {		
+				AlternativeNode.this.refresh();
+			}		
+	};		
+	
 	private static final AbstractLabelDecorator DEFAULT_DECORATOR = new AbstractLabelDecorator() {
 		
 		@Override
@@ -61,10 +74,22 @@ public class AlternativeNode extends ExplorerEditorNode{
 				eir = ((IExplorerNode) element).getContext().getLocal(IEditorInputResource.class);
 			}
 			if(eir != null){
-				if(!eir.getSelfStatus().isDone()){
-					ExplorerImageDescriptor id = new ExplorerImageDescriptor(image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
-					Image combined = id.createImage();
-					return combined;
+				if(eir.isLoaded()){
+					if(!eir.getSelfStatus().isDone()){
+						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
+								image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
+						Image combined = id.createImage();
+						return combined;
+					}
+				}
+				else{
+					//get status from persisted properties
+					if(IEditorInputResource.VALUE_STATUS_DONE.equals(eir.getPersistedStatus())){
+						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
+								image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
+						Image combined = id.createImage();
+						return combined;
+					}
 				}
 			}
 			return image;
@@ -73,7 +98,10 @@ public class AlternativeNode extends ExplorerEditorNode{
 	
 	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
-				
+		
+		this.alternative = alternative;
+		this.alternative.addPropertyChangeListener(alternativeListener);
+		
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
 		
@@ -82,6 +110,12 @@ public class AlternativeNode extends ExplorerEditorNode{
 		getContext().set(IExplorerConstants.NODE_DATA, alternative);
 		getContext().set(IValidationStatusProvider.class, alternative);
 		getContext().set(IEditorInputResource.class, alternative);
+	}
+	
+	@Override		
+	public void dispose() {		
+		this.alternative.removePropertyChangeListener(alternativeListener);		
+		super.dispose();		
 	}
 
 }

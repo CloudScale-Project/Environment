@@ -406,6 +406,15 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
+		if(this.selfStatus != null){
+			if(this.selfStatus.isDone()){
+				propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_DONE);
+			}
+			else{
+				propertyInputFile.doRemoveProperty(KEY_STATUS);
+			}
+		}
+		
 		propertyInputFile.handleSave(monitor);
 		doSave(monitor);
 		setDirty(false);
@@ -515,6 +524,11 @@ public class EditorInputFolder extends EditorInputResource{
 		synchronized (propertyInputFile) {
 			propertyInputFile.setName(name);
 		}
+	}
+	
+	@Override
+	public String getPersistedStatus() {
+		return getProperty(KEY_STATUS);
 	}
 	
 	public String getProperty(String key){

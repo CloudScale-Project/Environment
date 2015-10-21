@@ -23,7 +23,7 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	private final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
 	private final Object statusLock = new Object();
 	
-	private IValidationStatus selfStatus = null;
+	protected IValidationStatus selfStatus = null;
 	protected final String validatorID;
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);

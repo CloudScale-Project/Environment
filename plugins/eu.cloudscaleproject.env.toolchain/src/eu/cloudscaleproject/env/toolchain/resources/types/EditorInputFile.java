@@ -80,7 +80,12 @@ public class EditorInputFile extends EditorInputResource{
 	public String[] getProperties(String key){
 		synchronized (source) {
 			String prop = source.getProperty(key);
-			return prop.split(",");
+			if(prop != null){
+				return prop.split(",");
+			}
+			else{
+				return new String[]{};
+			}
 		}
 	}
 	
@@ -91,41 +96,108 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
+	/**
+	 * Set property values under specified key, trigger the dirty state and notify listeners.
+	 * Properties are persisted, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the properties. 
+	 * @param values Array of strings to store.
+	 */
 	public void setProperties(String key, String[] values){
+		String[] old = null;
 		synchronized (source) {
-			StringBuilder value = new StringBuilder();
-			for(int i=0; i<values.length; i++){
-				value.append(values[i]);
-				if(i != values.length -1){
-					value.append(",");
-				}
-			}
+			old = getProperties(key);
+			doSetProperties(key, values);
 		}
+		setDirty(true);
+		firePropertyChange(key, old, values);
 	}
 	
+	/**
+	 * Set property values under specified key, without notifying listeners and triggering the dirty state.
+	 * Properties are persisted, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the properties. 
+	 * @param values Array of strings to store.
+	 */
+	protected void doSetProperties(String key, String[] values){
+		
+		if(values == null){
+			doSetProperty(key, null);
+		}
+		
+		StringBuilder value = new StringBuilder();
+		for(int i=0; i<values.length; i++){
+			value.append(values[i]);
+			if(i != values.length -1){
+				value.append(",");
+			}
+		}
+		
+		doSetProperty(key, value.toString());
+	}
+	
+	/**
+	 * Set property value under specified key, trigger the dirty state and notify listeners.
+	 * Property is persisted, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the property. 
+	 * @param value String value to store.
+	 */
 	public void setProperty(String key, String value){
 		String old = null;
 		synchronized (source) {
 			old = getProperty(key);
-			if (value == null) 
-			{
-				source.remove(key);
-			}
-			else
-			{
-				source.setProperty(key, value);
-			}
+			doSetProperty(key, value);
 		}
-		
 		setDirty(true);
 		firePropertyChange(key, old, value);
 	}
 	
+	/**
+	 * Set property value under specified key, without notifying listeners and triggering the dirty state.
+	 * Property is persisted, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the properties.
+	 * @param values String value to store.
+	 */
+	protected void doSetProperty(String key, String value){
+		synchronized (source) {
+			if(value == null){
+				source.remove(key);
+			}
+			else{
+				source.setProperty(key, value);
+			}
+		}
+	}
+	
+	/**
+	 * Remove properties stored under specified key, trigger the dirty state and notify listeners.
+	 * Properties are removed from the file system, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the properties.
+	 */
 	public void removeProperty(String key){
-		String old = source.getProperty(key);
-		source.remove(key);
+		String old = null;
+		synchronized (source) {
+			old = source.getProperty(key);
+			doRemoveProperty(key);
+		}
 		setDirty(true);
 		firePropertyChange(key, old, null);
+	}
+	
+	/**
+	 * Remove properties stored under specified key, without notifying listeners and triggering the dirty state.
+	 * Properties are removed from the file system, when the resource is saved.
+	 * 
+	 * @param key Key that identifies the properties.
+	 */
+	protected void doRemoveProperty(String key){
+		synchronized (source) {
+			source.remove(key);
+		}
 	}
 	
 	@Override
@@ -147,6 +219,11 @@ public class EditorInputFile extends EditorInputResource{
 	}
 	
 	@Override
+	public String getPersistedStatus() {
+		return getProperty(KEY_STATUS);
+	}
+	
+	@Override
 	protected void handleCreate(IProgressMonitor monitor) {
 		
 		if (!file.exists()) {
@@ -163,6 +240,15 @@ public class EditorInputFile extends EditorInputResource{
 	
 	@Override
 	protected void handleSave(IProgressMonitor monitor) {
+		
+		if(this.selfStatus != null){
+			if(this.selfStatus.isDone()){
+				doSetProperty(KEY_STATUS, VALUE_STATUS_DONE);
+			}
+			else{
+				doRemoveProperty(KEY_STATUS);
+			}
+		}
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {
