@@ -84,7 +84,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 				}
 				else{
 					//get status from persisted properties
-					if(!IEditorInputResource.VALUE_STATUS_DONE.equals(eir.getPersistedStatus())){
+					if(IEditorInputResource.VALUE_STATUS_ERROR.equals(eir.getPersistedStatus())){
 						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
 								image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
 						Image combined = id.createImage();

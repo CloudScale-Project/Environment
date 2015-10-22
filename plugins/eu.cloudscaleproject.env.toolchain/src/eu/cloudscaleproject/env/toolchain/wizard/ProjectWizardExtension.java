@@ -1,37 +1,38 @@
 package eu.cloudscaleproject.env.toolchain.wizard;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 
 public class ProjectWizardExtension implements NewProjectExtension{
 
 	@Override
-	public void finalize(IProject p) {
+	public void finalize(final IProject project) {
 		
 		//create tool folders
-		ResourceRegistry.getInstance().collectResourceProviders(p);
+		ResourceRegistry.getInstance().collectResourceProviders(project);
 		
-		/*
-		 * Show dashboard when new project is created
-		 */
-		/*
-		IFile projectFile = p.getFile(ExplorerProjectPaths.FILE_PROJECT_DASHBOARD);
-		IEditorInput editorInput = new FileEditorInput(projectFile);
-	    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-	 
-	    try {
-	        ProjectEditor editor = (ProjectEditor)IDE.openEditor(page, editorInput, "eu.cloudscaleproject.env.toolchain.tooleditor");
-	        editor.getSite().getPage().activate(editor);
-	    } 
-	    catch ( PartInitException e ) {
-	        //Put your exception handler here if you wish to
-	    }
-	    catch ( IllegalArgumentException e ) {
-	        //Put your exception handler here if you wish to
-	    }
-	    */
+		//select and expand node in explorer
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				//delay for 500ms, so the node is created
+				Display.getDefault().timerExec(500, new Runnable() {
+					
+					@Override
+					public void run() {
+						IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+						explorerService.setSelection(project);
+					}
+				});
+			}
+		});
+		
 	}
 
 }

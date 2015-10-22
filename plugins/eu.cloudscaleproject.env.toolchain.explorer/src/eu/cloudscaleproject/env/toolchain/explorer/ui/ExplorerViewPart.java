@@ -200,18 +200,6 @@ public class ExplorerViewPart {
 	}
 	
 	private void refresh(final IExplorerNode node){
-		/*
-		BatchExecutor.getInstance().addUITask(node, "refresh", new Runnable() {
-			
-			@Override
-			public void run() {
-				if(!treeViewer.getTree().isDisposed()){
-					treeViewer.refresh(node);
-				}
-			}
-		});
-		*/
-		
 		Display.getDefault().syncExec(new Runnable() {
 			
 			@Override
@@ -248,7 +236,7 @@ public class ExplorerViewPart {
 			return;
 		}
 		
-		treeViewer.expandToLevel(node, TreeViewer.ALL_LEVELS);
+		treeViewer.expandToLevel(node, 1);
 		treeViewer.setSelection(new StructuredSelection(node), true);
 	}
 	

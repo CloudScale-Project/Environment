@@ -102,6 +102,11 @@ public class ResourceRegistry {
 		resourceProviderIds.remove(rp);
 	}
 	
+	private synchronized boolean hasProvider(IProject project, String id){
+		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
+		return resourceProviders.containsKey(folder);
+	}
+	
 	private synchronized ResourceProvider createProvider(IProject project, String id){
 		
 		ResourceProvider resourceProvider = null;
@@ -111,7 +116,7 @@ public class ResourceRegistry {
 		if(resourceExtension != null){
 			resourceProvider = resourceExtension.factory.create(folder);
 		}
-				
+						
 		return resourceProvider;
 	}
 	
@@ -119,7 +124,7 @@ public class ResourceRegistry {
 		for(Entry<String, ResourceExtensionItem> entry : resourceExtensionItems.entrySet()){
 			String id = entry.getKey();
 			
-			if(resourceProviderIds.values().contains(id)){
+			if(hasProvider(project, id)){
 				continue;
 			}
 			

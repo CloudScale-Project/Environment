@@ -350,11 +350,7 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 			String emptyText = null;
 
 			final RawMeasurements rawMeasurements = measurement.getMeasurementRanges().get(0).getRawMeasurements();
-			if (rawMeasurements != null 
-					&& !rawMeasurements.getDataSeries().isEmpty()
-					&& rawMeasurements.cdoResource() != null
-					&& rawMeasurements.cdoResource().isExisting())
-			{
+			if (rawMeasurements != null && !rawMeasurements.getDataSeries().isEmpty()){
 				
 				IDataSource edp2Source = new Edp2DataTupleDataSource(rawMeasurements);
 				int dataStreamSize = edp2Source.getDataStream().size();
@@ -384,11 +380,13 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 					chartComposite.layout(true);
 					chartComposite.forceRedraw();
-				} else
+				} 
+				else
 				{
 					emptyText = "Empty datasource.";
 				}
-			} else
+			} 
+			else
 			{
 				emptyText = "Measruements missing.";
 			}

@@ -408,10 +408,10 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		if(this.selfStatus != null){
 			if(this.selfStatus.isDone()){
-				propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_DONE);
+				propertyInputFile.doRemoveProperty(KEY_STATUS);
 			}
 			else{
-				propertyInputFile.doRemoveProperty(KEY_STATUS);
+				propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
 			}
 		}
 		

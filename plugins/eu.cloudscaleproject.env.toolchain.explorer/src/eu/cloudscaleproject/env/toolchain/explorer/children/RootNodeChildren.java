@@ -47,7 +47,7 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 			}
 			
 			if(refresh){
-				refresh();
+				refreshNow();
 			}
 		}
 		

@@ -243,10 +243,10 @@ public class EditorInputFile extends EditorInputResource{
 		
 		if(this.selfStatus != null){
 			if(this.selfStatus.isDone()){
-				doSetProperty(KEY_STATUS, VALUE_STATUS_DONE);
+				doRemoveProperty(KEY_STATUS);
 			}
 			else{
-				doRemoveProperty(KEY_STATUS);
+				doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
 			}
 		}
 		

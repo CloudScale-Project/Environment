@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.command.CommandStack;
@@ -36,10 +35,10 @@ import eu.cloudscaleproject.env.method.common.method.Warning;
  */
 public class ValidationDiagram{
 	
-	private static final Logger logger = Logger.getLogger(ValidationDiagram.class.getName());
+	//private static final Logger logger = Logger.getLogger(ValidationDiagram.class.getName());
 	
 	public static final String PROP_STATUS_CHANGED = "eu.cloudscaleproject.env.method.viewer.ValidationDiagram.statusChanged";
-	
+
 	private final Resource resource;
 	
 	private IProject project;
@@ -185,11 +184,10 @@ public class ValidationDiagram{
 		}
 		
 		this.editingDomain = diagramTypeProvider.getDiagramBehavior().getEditingDomain(); 
-		
-		
 		for(IValidationStatus status : new ArrayList<IValidationStatus>(statusBindings.values())){
 			bindStatus(status);
 		}
+		
 	}
 
 	public Resource getResource(){
@@ -317,7 +315,6 @@ public class ValidationDiagram{
 	public synchronized IValidationStatus getActiveStatus(String id){
 		StatusNode node = nodes.get(id);
 		if(node == null){
-			logger.warning("Node with ID:'" + id + "' does not exist!");
 			return null;
 		}
 		return (IValidationStatus)node.getSource();

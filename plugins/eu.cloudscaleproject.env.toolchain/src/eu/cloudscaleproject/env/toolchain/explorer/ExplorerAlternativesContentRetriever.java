@@ -6,12 +6,14 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 
 import eu.cloudscaleproject.env.toolchain.Activator;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
@@ -66,7 +68,12 @@ public class ExplorerAlternativesContentRetriever implements IExplorerContentRet
 		List<Object> out = new ArrayList<Object>();
 		if(alternative instanceof EditorInputEMF){
 			EditorInputEMF eie = (EditorInputEMF)alternative;
-			out.addAll(eie.getSubResources());
+			for(IResource res : eie.getSubResources()){
+				ModelType mt = ModelType.getModelType(res.getFileExtension());
+				if(mt != null){
+					out.add(res);
+				}
+			}
 		}
 		return out;
 	}
