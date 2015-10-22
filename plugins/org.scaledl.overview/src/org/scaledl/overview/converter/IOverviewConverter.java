@@ -12,6 +12,7 @@ public interface IOverviewConverter {
 	public final static String KEY_PCM_SYSTEM = "PCM_SYSTEM";
 	public final static String KEY_PCM_REPOSITORY = "PCM_REPOSITORY";
 	public final static String KEY_PCM_INTERFACE = "PCM_INTERFACE";
+	public final static String KEY_PCM_OPERATION = "PCM_OPERATION";
 
 	public boolean addExternalModel(Entity object, List<EObject> external,
 			IOverviewConverterCallback callback);

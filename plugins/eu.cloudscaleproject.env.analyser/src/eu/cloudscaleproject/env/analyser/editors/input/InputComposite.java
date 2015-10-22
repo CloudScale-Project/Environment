@@ -14,6 +14,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.ui.SplitComposite;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
@@ -53,15 +54,22 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Model editor");
 			
-			Composite composite = new Composite(tabFolder, SWT.NONE);
-			composite.setLayout(new GridLayout(1, false));
+			SplitComposite composite = new SplitComposite(tabFolder, SWT.NONE);
 			
-			treeviewComposite = new InputTreeViewComposite(input, composite, SWT.NONE);
-			treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-			PropertyPageComposite pageSheet = new PropertyPageComposite(
-					composite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
-			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			//top
+			{
+				treeviewComposite = new InputTreeViewComposite(input, composite, SWT.NONE);
+				//treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+				composite.setTopControl(treeviewComposite);
+			}
+			
+			//bottom
+			{
+				PropertyPageComposite pageSheet = new PropertyPageComposite(
+						composite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
+				//pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+				composite.setBottomControl(pageSheet);
+			}
 			
 			tabItem.setControl(composite);			
 			tabFolder.setSelection(tabItem);

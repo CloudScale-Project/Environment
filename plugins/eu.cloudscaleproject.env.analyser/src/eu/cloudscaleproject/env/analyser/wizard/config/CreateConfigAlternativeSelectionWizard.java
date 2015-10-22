@@ -10,6 +10,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
@@ -25,6 +26,8 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 	@Inject 
 	private ExtensionRetriever extensionRetriever;
 	private WizardSelectionPage newInputSelectionPage;
+	
+	private InputAlternative inputAlternative;
 		
 	public CreateConfigAlternativeSelectionWizard(IProject project) {
 		
@@ -50,6 +53,10 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 		
 	}
 	
+	public void setInputAlternative(InputAlternative ia){
+		inputAlternative = ia;
+	}
+	
 	@Override
 	public void addPages() {
 		addPage(newInputSelectionPage);
@@ -67,7 +74,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 		return false;
 	}
 
-	private static class CreateNormalAltNode extends WizardNode
+	private class CreateNormalAltNode extends WizardNode
 	{
 		private final IProject project;
 		
@@ -79,7 +86,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.NORMAL);
+			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.NORMAL, inputAlternative);
 		}
 
 		@Override
@@ -94,7 +101,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 	}
 	
-	private static class CreateCapacityAltNode extends WizardNode
+	private class CreateCapacityAltNode extends WizardNode
 	{
 		private final IProject project;
 		
@@ -106,7 +113,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.CAPACITY);
+			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.CAPACITY, inputAlternative);
 		}
 
 		@Override
@@ -121,7 +128,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 	}
 	
-	private static class CreateScalabilityAltNode extends WizardNode
+	private class CreateScalabilityAltNode extends WizardNode
 	{
 		private final IProject project;
 		
@@ -133,7 +140,7 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.SCALABILITY);
+			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.SCALABILITY, inputAlternative);
 		}
 
 		@Override

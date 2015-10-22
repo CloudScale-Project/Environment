@@ -67,6 +67,7 @@ public class OverviewConverter implements IOverviewConverter{
 		context.setConfigProperty("CSMID", ENTITY_ID_PREFIX);
 		context.setConfigProperty("PCM_SYSTEM_KEY", IOverviewConverter.KEY_PCM_SYSTEM);
 		context.setConfigProperty("PCM_INTERFACE_KEY", IOverviewConverter.KEY_PCM_INTERFACE);
+		context.setConfigProperty("PCM_OPERATION_KEY", IOverviewConverter.KEY_PCM_OPERATION);
 		
 		//IProject project = ExplorerProjectPaths.getProjectFromEmfResource(csmResource);
 		

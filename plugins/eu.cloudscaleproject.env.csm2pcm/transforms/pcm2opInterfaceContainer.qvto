@@ -14,6 +14,7 @@ configuration property CSMID : String;
 configuration property PCM_REPOSITORY_KEY : String;
 configuration property PCM_SYSTEM_KEY : String;
 configuration property PCM_INTERFACE_KEY : String;
+configuration property PCM_OPERATION_KEY : String;
 
 main() {
 	log("Transformation pcm2csmModule started!");
@@ -49,26 +50,17 @@ main() {
 
 	csmRoot.architecture.unresolvedOperationInterfaces += softwareService.requiredInterfaces;
 	
-	/*
-	if(repositoryRoot != null) then{
-		softwareService.aeMap += object CSMMODEL::core::AEEntry{
-			key := PCM_REPOSITORY_KEY;
-			value := repositoryRoot.oclAsType(ECORE::EObject);
-		};
-	}endif;
-	
-	softwareService.aeMap += object CSMMODEL::core::AEEntry{
-		key := PCM_SYSTEM_KEY;
-		value := systemRoot.oclAsType(ECORE::EObject);
-	};
-	*/
-	
 	log("Transformation pcm2csmModule done!");
 }
 
 mapping pcm::repository::OperationSignature::operationSignature2operation() : OVERVIEW::application::Operation{
 	
 	name := self.entityName;
+	
+	aeMap += object OVERVIEW::core::AEEntry{
+		key := PCM_OPERATION_KEY;
+		value := self.oclAsType(ECORE::EObject);
+	};
 	
 	self.parameters__OperationSignature.dataType__Parameter[REPOSITORY::PrimitiveDataType]->forEach(dataType){
 		var primitiveType = dataType.getOverviewModelEquivalent(overviewInstance.rootObjects()![Overview].dataTypes);

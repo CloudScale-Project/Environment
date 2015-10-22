@@ -4,8 +4,7 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
@@ -13,6 +12,7 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.ui.SplitComposite;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -40,23 +40,19 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		CloudscaleContext.inject(this);
 
 		this.configAlternative = configAlternative;
-
-		GridLayout gridLayout = new GridLayout(3, false);
-		gridLayout.marginWidth = 0;
-		gridLayout.marginHeight = 0;
-		getContainer().setLayout(gridLayout);
+		getContainer().setLayout(new FillLayout());
 
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Catalog and Engine models");
-		containerEditor.setLayout(new GridLayout(1,false));
-		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		containerEditor.setLayout(new FillLayout());
 
-		this.treeViewComposite = new EMFEditableTreeviewComposite(this.configAlternative, containerEditor, SWT.NONE);
-		this.treeViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		SplitComposite splitComposite = new SplitComposite(containerEditor, SWT.NONE);
 		
-		PropertyPageComposite propertyComposite = new PropertyPageComposite(containerEditor, SWT.BORDER, this.treeViewComposite.getPropertySheetPage());
-		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		this.treeViewComposite = new EMFEditableTreeviewComposite(this.configAlternative, splitComposite, SWT.NONE);
+		splitComposite.setTopControl(treeViewComposite);
 		
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(splitComposite, SWT.BORDER, this.treeViewComposite.getPropertySheetPage());
+		splitComposite.setBottomControl(propertyComposite);
 	}
 
 	@Override
@@ -64,7 +60,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	{
 	}
 	
-
 	@Override
 	public void onSelect() {
 	}

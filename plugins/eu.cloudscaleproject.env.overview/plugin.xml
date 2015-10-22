@@ -47,6 +47,11 @@
                   editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
                   id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
                   name="Overview alternatives">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                     id="eu.cloudscaleproject.env.overview.nodeContent"
+                     name="Overview alternative content">
+               </NodeDynamic>
             </NodeDynamic>
          </Node>
       </NodeProxy>

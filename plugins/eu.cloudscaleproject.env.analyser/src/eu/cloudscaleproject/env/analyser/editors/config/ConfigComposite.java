@@ -2,7 +2,6 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CTabFolder;
@@ -19,6 +18,7 @@ import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.ui.SplitComposite;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -31,7 +31,6 @@ import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
  */
 public class ConfigComposite extends ConfigEditorView implements IRefreshable, ISelectable{
 
-	private SelectInputAltComposite editComposite;
 	private Composite configComposite;
 	
 	private EMFEditableTreeviewComposite measuringPointsComposite;
@@ -40,7 +39,6 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 
 	private EMFEditableTreeviewComposite advancedTreeview;
 
-	private final IProject project;
 	private final ConfAlternative alternative;
 
 	private CTabFolder tabFolder;
@@ -48,7 +46,6 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 	public ConfigComposite(final ConfAlternative input, Composite parent, int style){
 		super(parent, style, input);
 
-		this.project = input.getProject();
 		this.alternative = input;
 
 		GridLayout layout = new GridLayout(1, true);
@@ -90,20 +87,18 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 			List<MeasuringPointRepository> mpReps = alternative.getMeasuringPointRepositories();
 			MeasuringPointRepository mpRep = mpReps.isEmpty() ? null : mpReps.get(0);
 			
-			Composite composite = new Composite(tabFolder, SWT.NONE);
-			composite.setLayout(new GridLayout(1, false));
+			SplitComposite splitComposite = new SplitComposite(tabFolder, SWT.NONE);
 			
-			measuringPointsComposite = new EMFEditableTreeviewComposite(input, mpRep, null, composite, style);
-			GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-			gridData.minimumHeight = 260;
-			gridData.heightHint = 300;
-			measuringPointsComposite.setLayoutData(gridData);
-
+			//top
+			measuringPointsComposite = new EMFEditableTreeviewComposite(input, mpRep, null, splitComposite, style);
+			splitComposite.setTopControl(measuringPointsComposite);
+			
+			//bottom
 			PropertyPageComposite pageSheet = new PropertyPageComposite(
-						composite, SWT.BORDER, measuringPointsComposite.getPropertySheetPage());
-			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+						splitComposite, SWT.BORDER, measuringPointsComposite.getPropertySheetPage());
+			splitComposite.setBottomControl(pageSheet);
 			
-			tabItem.setControl(composite);			
+			tabItem.setControl(splitComposite);			
 		}
 
 		// measurements settings
@@ -132,17 +127,18 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Advanced editor");
 			
-			Composite composite = new Composite(tabFolder, SWT.NONE);
-			composite.setLayout(new GridLayout(1, false));
+			SplitComposite splitComposite = new SplitComposite(tabFolder, SWT.NONE);
 			
-			advancedTreeview = new EMFEditableTreeviewComposite(input, composite, SWT.NONE);
-			advancedTreeview.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			//top
+			advancedTreeview = new EMFEditableTreeviewComposite(input, splitComposite, SWT.NONE);
+			splitComposite.setTopControl(advancedTreeview);
 
+			//bottom
 			PropertyPageComposite pageSheet = new PropertyPageComposite(
-					composite, SWT.BORDER, advancedTreeview.getPropertySheetPage());
-			pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+					splitComposite, SWT.BORDER, advancedTreeview.getPropertySheetPage());
+			splitComposite.setBottomControl(pageSheet);
 			
-			tabItem.setControl(composite);
+			tabItem.setControl(splitComposite);
 		}
 
 		tabFolder.addSelectionListener(new SelectionAdapter()

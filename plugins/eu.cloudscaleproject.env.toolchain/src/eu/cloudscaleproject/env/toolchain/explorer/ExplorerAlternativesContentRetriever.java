@@ -31,7 +31,7 @@ public class ExplorerAlternativesContentRetriever implements IExplorerContentRet
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
-	private IEditorInputResource alternative;
+	protected IEditorInputResource alternative;
 	
 	public void initialize(String nodeID, IEclipseContext context){
 		alternative = context.get(IEditorInputResource.class);
@@ -61,7 +61,7 @@ public class ExplorerAlternativesContentRetriever implements IExplorerContentRet
 	}
 	
 	@Override
-	public List<Object> getNodeChildren() {
+	public List<Object> getChildren() {
 				
 		List<Object> out = new ArrayList<Object>();
 		if(alternative instanceof EditorInputEMF){

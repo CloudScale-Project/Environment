@@ -13,10 +13,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Group;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.ui.SplitComposite;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.ui.AbstractEditorView;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
@@ -55,27 +56,27 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 		this.alternative = alt;
 
 		new TitleWidget(getHeader(), style, alt);
-		getContainer().setLayout(new GridLayout(1, false));
 		new ValidationWidget(getFooter(), style, alt);
 
-		Label lblTitle = new Label(getContainer(), SWT.NONE);
-		lblTitle.setText("Usage evolution arrival rate editor:");
-		lblTitle.setLayoutData(new GridData());
+		Group containerEditor = new Group(getContainer(), SWT.NONE);
+		containerEditor.setText("Usage evolution arrival rate editor");
+		containerEditor.setLayout(new GridLayout());
 
+		SplitComposite splitComposite = new SplitComposite(containerEditor, SWT.NONE);
+		splitComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
 		//tree view
-		treeviewEditor = new EMFEditableTreeviewComposite(alt, getContainer(), SWT.NONE);
-		GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd_tree.heightHint = 120;
-		gd_tree.minimumHeight = 120;
-		treeviewEditor.setLayoutData(gd_tree);
+		treeviewEditor = new EMFEditableTreeviewComposite(alt, splitComposite, SWT.NONE);
+		splitComposite.setTopControl(treeviewEditor);
 		
 		//property sheet page
 		PropertyPageComposite pageSheet = new PropertyPageComposite(
-				getContainer(), SWT.BORDER, treeviewEditor.getPropertySheetPage());
-		pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
+				splitComposite, SWT.BORDER, treeviewEditor.getPropertySheetPage());
+		splitComposite.setBottomControl(pageSheet);
+		
 		//plot
-		plotCanvas = new PlotCanvas(getContainer(), SWT.NONE, true);
+		plotCanvas = new PlotCanvas(containerEditor, SWT.NONE, true);
+		plotCanvas.setSize(100, 150);
 		plotCanvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		updatePlotCanvas();
 		

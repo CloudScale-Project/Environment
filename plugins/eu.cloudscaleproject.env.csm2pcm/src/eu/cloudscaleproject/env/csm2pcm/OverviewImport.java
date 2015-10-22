@@ -89,6 +89,7 @@ public class OverviewImport{
                 context.setConfigProperty("PCM_REPOSITORY_KEY", IOverviewConverter.KEY_PCM_REPOSITORY);
                 context.setConfigProperty("PCM_SYSTEM_KEY", IOverviewConverter.KEY_PCM_SYSTEM);
                 context.setConfigProperty("PCM_INTERFACE_KEY", IOverviewConverter.KEY_PCM_INTERFACE);
+                context.setConfigProperty("PCM_OPERATION_KEY", IOverviewConverter.KEY_PCM_OPERATION);
 
 				//clear interfaces
 				OverviewArchitectureUtil.deleteInterfaces(opInterfaceContainer.getProvidedInterfaces());

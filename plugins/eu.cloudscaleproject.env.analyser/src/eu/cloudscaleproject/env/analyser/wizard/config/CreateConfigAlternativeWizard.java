@@ -28,8 +28,12 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	private final AlternativeNamePage selectNamePage;
 	private final AlternativeSelectionPage alternativeSelectionPage;
 	
-	public CreateConfigAlternativeWizard(IProject project, ConfAlternative.Type type) {
+	private final InputAlternative inputAlternative;
+	
+	public CreateConfigAlternativeWizard(IProject project, ConfAlternative.Type type, InputAlternative ia) {
 		this.type = type;
+		
+		this.inputAlternative = ia;
 		
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
 		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
@@ -44,7 +48,10 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	public void addPages() {
 		
 		addPage(this.selectNamePage);
-		addPage(alternativeSelectionPage);
+		
+		if(inputAlternative == null){
+			addPage(alternativeSelectionPage);
+		}
 		
 		super.addPages();
 	}
@@ -54,10 +61,16 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		
 		ConfAlternative ca = (ConfAlternative)this.confResourceProvider.createNewResource(this.selectNamePage.getName(), type.name());
 		
-		if(alternativeSelectionPage.getSelection() != null){
-			ca.setInputAlternative((InputAlternative)alternativeSelectionPage.getSelection());
-			ca.save();
-		}		
+		if(inputAlternative != null){
+			ca.setInputAlternative(inputAlternative);
+		}
+		else{
+			if(alternativeSelectionPage.getSelection() != null){
+				ca.setInputAlternative((InputAlternative)alternativeSelectionPage.getSelection());
+			}
+		}
+		ca.save();
+		
 		OpenAlternativeUtil.openAlternative(ca);
 		
 		return true;
@@ -67,10 +80,14 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	public boolean canFinish()
 	{
 		if (getContainer().getCurrentPage() == selectNamePage){
-			return true;
+			if(inputAlternative != null){
+				return true;
+			}
 		}
 		if (getContainer().getCurrentPage() == alternativeSelectionPage){
-			return true;
+			if(alternativeSelectionPage.getSelection() != null){
+				return true;
+			}
 		}
 		return false;
 	}

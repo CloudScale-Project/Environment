@@ -44,7 +44,7 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 	}
 	
 	@Override
-	public List<Object> getNodeChildren() {
+	public List<Object> getChildren() {
 		
 		IEditorInputResource parentEir = context.get(IEditorInputResource.class);
 		

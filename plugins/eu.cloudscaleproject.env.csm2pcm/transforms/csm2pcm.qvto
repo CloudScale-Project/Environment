@@ -728,6 +728,13 @@ mapping OVERVIEW::application::Operation::operation2entryLevelSystemCall(in opIn
 	operationSignature__EntryLevelSystemCall := self.resolveoneIn(
 													OVERVIEW::application::Operation::operation2operationSignature,
 													OperationSignature);
+	
+	// If the operation signature can not be retrieved from operation2oprationSignature map.
+	// This happens if the operation signature is referenced from the external PCM model.
+	if(operationSignature__EntryLevelSystemCall.oclIsUndefined()) then{
+		operationSignature__EntryLevelSystemCall := self.aeMap->any(key = PCM_OPERATION_KEY).value.oclAsType(REPOSITORY::OperationSignature);
+	}endif;
+	
 	priority := 0;
 	
 	id := CSMID + self.id +'_operation2entryLevelSystemCall';

@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.staticspotter.editors.composites;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -8,6 +9,7 @@ import org.eclipse.swt.widgets.Group;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
+import eu.cloudscaleproject.env.common.ui.SplitComposite;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.InputEditorView;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -28,13 +30,17 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 		Group containerEditor = new Group(getContainer(), SWT.NONE);
 		containerEditor.setText("Source Code Decorator");
 		containerEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		containerEditor.setLayout(new GridLayout(1, false));
+		containerEditor.setLayout(new FillLayout());
 
-		EMFEditableTreeviewComposite treeViewComposite = new EMFEditableTreeviewComposite(inputAlternative, containerEditor, SWT.NONE);
-		treeViewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		PropertyPageComposite propertyComposite = new PropertyPageComposite(containerEditor, SWT.BORDER, treeViewComposite.getPropertySheetPage());
-		propertyComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		SplitComposite splitComposite = new SplitComposite(containerEditor, SWT.NONE);
+		
+		//top
+		EMFEditableTreeviewComposite treeViewComposite = new EMFEditableTreeviewComposite(inputAlternative, splitComposite, SWT.NONE);
+		splitComposite.setTopControl(treeViewComposite);
+		
+		//bottom
+		PropertyPageComposite propertyComposite = new PropertyPageComposite(splitComposite, SWT.BORDER, treeViewComposite.getPropertySheetPage());
+		splitComposite.setBottomControl(propertyComposite);
 	}
 	
 	private void load ()

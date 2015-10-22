@@ -115,7 +115,7 @@ mapping REPOSITORY::DataType::dataTypeComposite2parameter() : OVERVIEW::paramete
 	_extends := par.parentType_CompositeDataType.late resolveoneIn(REPOSITORY::DataType::dataTypeComposite2parameter,
 																   OVERVIEW::parametertype::CompositeParameter);
 	parameters := par.innerDeclaration_CompositeDataType
-						.datatype_InnerDeclaration->late resolveoneIn(REPOSITORY::DataType::dataType2parameter,
+						.datatype_InnerDeclaration->late resolveIn(REPOSITORY::DataType::dataType2parameter,
 							 										  OVERVIEW::parametertype::Parameter);
 }
 

@@ -36,6 +36,6 @@ public class OverviewAlternative extends EditorInputEMF{
 		Util.createDiagram(diagramURI, modelURI);
 		
 		setSubResource(ToolchainUtils.KEY_FILE_OVERVIEW, modelFile);
-		setSubResource(ToolchainUtils.KEY_FILE_OVERVIEW_DIAGRAM, diagramFile);
 	}
+	
 }

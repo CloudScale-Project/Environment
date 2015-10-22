@@ -94,6 +94,11 @@
                      editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
                      id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
                      name="Result alternatives">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        id="eu.cloudscaleproject.env.extractor.resultNodeContent"
+                        name="Result alternative content">
+                  </NodeDynamic>
                </NodeDynamic>
             </Node>
          </NodeDynamic>

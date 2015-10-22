@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
@@ -101,7 +102,7 @@ public class InputValidator implements IResourceValidator {
 		}		
 	}
 	
-	public boolean validateModel(IValidationStatus status, Resource resource) throws ValidationException{		
+	public boolean validateModel(final IValidationStatus status, final Resource resource) throws ValidationException{		
 		
 		status.clearWarnings();
 		status.checkError(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
@@ -111,8 +112,32 @@ public class InputValidator implements IResourceValidator {
 			return false;
 		}
 		
-		EObject eObject = resource.getContents().get(0);
-		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
+		final EObject eObject = resource.getContents().get(0);
+		//Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
+		
+		Display.getDefault().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
+				boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
+				
+				String message = String.format("Model validation failed : %s [%s]", 
+						eObject.eClass().getName(),
+						resource.getURI().lastSegment());
+
+				try {
+					status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
+				} catch (ValidationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				status.setIsValid(modelValid);
+			}
+		});
+		
+		/*
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 		
 		String message = String.format("Model validation failed : %s [%s]", 
@@ -122,8 +147,9 @@ public class InputValidator implements IResourceValidator {
 		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
 		
 		status.setIsValid(modelValid);
+		*/
 		
-		return modelValid;
+		return status.isValid();
 	}
 
 	@Override
