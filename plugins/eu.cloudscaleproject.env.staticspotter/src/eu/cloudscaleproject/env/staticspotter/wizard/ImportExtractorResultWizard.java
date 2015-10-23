@@ -12,6 +12,8 @@ import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
@@ -80,6 +82,11 @@ public class ImportExtractorResultWizard extends Wizard
 
 		alternative.save();
 		OpenAlternativeUtil.openAlternative(alternative);
+
+		ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_CONF);
+		AbstractConfigAlternative confAlternative = (AbstractConfigAlternative)configResourceProvider.createNewResource("Basic configuration", null);
+		confAlternative.setInputAlternative((AbstractInputAlternative)alternative);
+		confAlternative.save();
 
 		return true;
 	}
