@@ -56,14 +56,12 @@ public class EditorInputFolder extends EditorInputResource{
 		this.propertyInputFile = new EditorInputFile(project, file);
 		
 		//fetch subresources
-		synchronized (propertyInputFile) {
-			synchronized (subResourcesLock) {
-				subResources.clear();
-				for(String key : propertyInputFile.getKeys()){
-					List<IResource> resources = getSubResourcesFromWorkspace(key);
-					if(!resources.isEmpty()){
-						subResources.put(key, resources);
-					}
+		synchronized (subResourcesLock) {
+			subResources.clear();
+			for(String key : propertyInputFile.getKeys()){
+				List<IResource> resources = getSubResourcesFromWorkspace(key);
+				if(!resources.isEmpty()){
+					subResources.put(key, resources);
 				}
 			}
 		}
@@ -429,14 +427,12 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		propertyInputFile.handleLoad(monitor);
 		
-		synchronized (propertyInputFile) {
-			synchronized (subResourcesLock) {
-				subResources.clear();
-				for(String key : propertyInputFile.getKeys()){
-					List<IResource> resources = getSubResourcesFromWorkspace(key);
-					if(!resources.isEmpty()){
-						subResources.put(key, resources);
-					}
+		synchronized (subResourcesLock) {
+			subResources.clear();
+			for(String key : propertyInputFile.getKeys()){
+				List<IResource> resources = getSubResourcesFromWorkspace(key);
+				if(!resources.isEmpty()){
+					subResources.put(key, resources);
 				}
 			}
 		}
@@ -454,12 +450,10 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		doDelete(monitor);
 		
-		synchronized (propertyInputFile) {
 			synchronized (subResourcesLock) {
 				propertyInputFile.handleDelete(monitor);
 				subResources.clear();
 			}
-		}
 		
 		if (folder.exists()) {
 			try {
@@ -508,22 +502,18 @@ public class EditorInputFolder extends EditorInputResource{
 
 	@Override
 	public String getName(){
-		synchronized (propertyInputFile) {
-			String name = getProperty(EditorInputFile.KEY_NAME);
-			if (name == null)
-			{
-				return getResource().getName();
-			}
-
-			return name;
+		String name = getProperty(EditorInputFile.KEY_NAME);
+		if (name == null)
+		{
+			return getResource().getName();
 		}
+
+		return name;
 	}
 	
 	@Override
 	public final void setName(String name){
-		synchronized (propertyInputFile) {
-			propertyInputFile.setName(name);
-		}
+		propertyInputFile.setName(name);
 	}
 	
 	@Override
@@ -532,27 +522,19 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	public String getProperty(String key){
-		synchronized (propertyInputFile) {
-			return propertyInputFile.getProperty(key);
-		}
+		return propertyInputFile.getProperty(key);
 	}
 	
 	public String[] getProperties(String key){
-		synchronized (propertyInputFile) {
-			return propertyInputFile.getProperties(key);
-		}
+		return propertyInputFile.getProperties(key);
 	}
 	
 	public final void setProperty(String key, String value){
-		synchronized (propertyInputFile) {
-			propertyInputFile.setProperty(key, value);
-		}
+		propertyInputFile.setProperty(key, value);
 	}
 	
 	public final void setProperties(String key, String[] value){
-		synchronized (propertyInputFile) {
-			propertyInputFile.setProperties(key, value);
-		}
+		propertyInputFile.setProperties(key, value);
 	}
 	
 	@Override
