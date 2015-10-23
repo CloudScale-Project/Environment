@@ -1,9 +1,15 @@
 package eu.cloudscaleproject.env.overview.wizard;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangingEvent;
@@ -16,6 +22,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.scaledl.overview.Overview;
 
+import eu.cloudscaleproject.env.common.BasicCallback;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.overview.wizard.pages.DeploymentWizardPage;
 import eu.cloudscaleproject.env.overview.wizard.pages.ExposedInterfacesWizardPage;
@@ -181,13 +189,14 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			Overview overviewToMerge = data.getOverviewModel();
 			Resource overviewRes = alternative.getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
 			Overview overview = (Overview) overviewRes.getContents().get(0);
-			
+						
 			// Merge/move all temporary overview
 			OverviewHelper.mergeOverviewModel(overviewToMerge, overview);
 			// Deploy service
 			data.getPlatformRuntimeService().getSoftwareServices().add(data.getSoftwareService());
 
 			overviewRes.save(null);
+			copyExternalResource(alternative.getResource(), overview, data);
 			
 			OpenAlternativeUtil.openAlternative(alternative);
 
@@ -198,6 +207,47 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		}
 		
 		return true;
+	}
+	
+	private void copyExternalResource(IFolder alternativeFolder, final Overview overview, final WizardData data){
+		//copy external models into the overview folder
+		IFolder externalFolder = alternativeFolder.getFolder(Path.fromOSString("external"));
+		final IFolder pcmFolder = ExplorerProjectPaths.getNonexistingSubFolder(externalFolder, data.getSoftwareService().getName());
+		
+		try {
+			ExplorerProjectPaths.prepareFolder(pcmFolder);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		//collect resources
+		List<Resource> resources = new ArrayList<Resource>();
+		
+		resources.add(data.getRepositoryModel().eResource());
+		resources.add(data.getSystemModel().eResource());
+		resources.add(overview.eResource());
+		
+		//copy resources
+		BasicCallback<Resource> callback = new BasicCallback<Resource>() {
+
+			@Override
+			public void handle(Resource resource) {
+				if(resource == overview.eResource()){
+					return;
+				}
+				else{
+					String[] segments = resource.getURI().segments();
+					String segment = segments[segments.length - 1];
+					IFile file = pcmFolder.getFile(new Path(segment));
+
+					URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+					resource.setURI(uri);
+				}
+			}
+			
+		};
+		
+		ExplorerProjectPaths.copyEMFResources(resources.toArray(new Resource[resources.size()]), callback, null);	
 	}
 	
 	@Override

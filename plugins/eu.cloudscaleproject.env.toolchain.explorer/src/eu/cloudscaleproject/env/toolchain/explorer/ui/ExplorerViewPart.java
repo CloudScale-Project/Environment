@@ -48,7 +48,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class ExplorerViewPart {
 	
-	private static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.explorer.popupmenu";
+	public static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.explorer.popupmenu";
 	
 	private Composite composite;
 	private TreeViewer treeViewer;

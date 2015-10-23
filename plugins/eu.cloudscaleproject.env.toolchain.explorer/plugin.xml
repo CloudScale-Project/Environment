@@ -10,6 +10,11 @@
       <fragment
             uri="fragment.e4xmi">
       </fragment>
+      <processor
+            apply="always"
+            beforefragment="false"
+            class="eu.cloudscaleproject.env.toolchain.explorer.processors.PopupMenuProcessor">
+      </processor>
    </extension>
    
    <extension

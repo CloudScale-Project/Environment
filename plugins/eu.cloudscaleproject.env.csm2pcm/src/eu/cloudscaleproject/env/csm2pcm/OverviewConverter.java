@@ -1,13 +1,9 @@
 package eu.cloudscaleproject.env.csm2pcm;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
@@ -18,7 +14,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.m2m.qvt.oml.BasicModelExtent;
 import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
 import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
@@ -33,7 +28,6 @@ import org.scaledl.overview.converter.IOverviewConverterCallback;
 import org.scaledl.overview.core.Entity;
 
 import eu.cloudscaleproject.env.analyser.PCMResourceSet;
-import eu.cloudscaleproject.env.csm2pcm.PalladioUtil.ModelID;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class OverviewConverter implements IOverviewConverter{
@@ -108,10 +102,6 @@ public class OverviewConverter implements IOverviewConverter{
 		ModelExtent outputAllocation = new BasicModelExtent();
 		ModelExtent outputUsage = new BasicModelExtent();
 		
-		
-		// run the transformation assigned to the executor with the given 
-		// input and output and execution context -> ChangeTheWorld(in, out)
-		// Remark: variable arguments count is supported
 		ExecutionDiagnostic result = executor.execute(context, 
 													  inputCsm, inputResTypes, inputDataTypes,
 													  outputResource, outputRepository, outputSystem, outputAllocation, outputUsage);
@@ -172,6 +162,7 @@ public class OverviewConverter implements IOverviewConverter{
 		}
 		
 		// Create diagrams
+		/*
 		new Job("Imported models : Create diagrams") {
 			
 			@Override
@@ -199,6 +190,7 @@ public class OverviewConverter implements IOverviewConverter{
 				return Status.OK_STATUS;
 			}
 		}.schedule();
+		*/
 		
 		return OverviewImport.addPcmToOpInterfaceContainer((OperationInterfaceContainer)entity, external, callback);
 	}
