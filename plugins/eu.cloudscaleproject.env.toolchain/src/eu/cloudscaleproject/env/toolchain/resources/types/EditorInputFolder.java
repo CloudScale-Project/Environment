@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -441,8 +442,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		doLoad(monitor);
-		setDirty(false);
-		updateStatusList();		
+		updateStatusList();
 	}
 	
 	protected void doLoad(IProgressMonitor monitor){
@@ -593,6 +593,16 @@ public class EditorInputFolder extends EditorInputResource{
 	// Validation
 	//
 	private void updateStatusList(){
+		BatchExecutor.getInstance().addTask(this, "updateStatusList", new Runnable() {
+			
+			@Override
+			public void run() {
+				doUpdateStatusList();
+			}
+		});
+	}
+	
+	private void doUpdateStatusList(){
 		HashSet<IValidationStatus> oldList = new HashSet<IValidationStatus>(Arrays.asList(getSubStatuses()));
 		HashSet<IValidationStatus> newList = new HashSet<IValidationStatus>();
 		

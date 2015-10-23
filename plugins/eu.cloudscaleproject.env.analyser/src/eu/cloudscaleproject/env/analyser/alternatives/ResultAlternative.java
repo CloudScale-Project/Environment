@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -14,28 +13,20 @@ import org.palladiosimulator.edp2.models.Repository.Repository;
 import org.palladiosimulator.edp2.repository.local.LocalDirectoryRepositoryHelper;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
+import eu.cloudscaleproject.env.toolchain.ModelType;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractResultAlternative;
 
-public class ResultAlternative extends EditorInputFolder{
+public class ResultAlternative extends AbstractResultAlternative{
 
 	private final ConfAlternative.Type type;
 	
 	public ResultAlternative(IProject project, IFolder folder, ConfAlternative.Type type) {
-		super(project, folder, CSTool.ANALYSER_RES.getID());
+		super(project, folder, ModelType.GROUP_ALL, CSTool.ANALYSER_RES.getID());
 		this.type = type;		
 	}
 	
 	public ConfAlternative.Type getTypeEnum(){
 		return type;
-	}
-	
-	public ConfAlternative getConfAlternative(){
-		IResource res = getSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE);
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
-		return (ConfAlternative) rp.getResource(res);
 	}
 	
 	public LocalDirectoryRepository getEDP2Model(){

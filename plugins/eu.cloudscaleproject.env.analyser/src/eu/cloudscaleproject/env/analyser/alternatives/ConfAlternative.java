@@ -583,31 +583,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 		return out;
 	}
 
-	/*
-	public List<UsageEvolution> getUsageEvolutions()
-	{
-		List<UsageEvolution> out = new ArrayList<UsageEvolution>();
-
-		for (IResource file : getSubResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION))
-		{
-			if (file instanceof IFile)
-			{
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
-				for (EObject eobj : res.getContents())
-				{
-					if (eobj instanceof UsageEvolution)
-					{
-						UsageEvolution root = (UsageEvolution) eobj;
-						out.add(root);
-					}
-				}
-			}
-		}
-
-		return out;
-	}
-	*/
-
 	// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Helper methods for creating and returning base models
 
@@ -918,19 +893,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 			}
 		}
 
-		// create usage evolution
-		{
-			/*
-			UsageEvolution ue = retrieveUsageEvolution();
-			if (!ue.getUsages().isEmpty())
-			{
-				getActiveInitialModel().setUsageEvolution(ue);
-			} else
-			{
-				getActiveInitialModel().setUsageEvolution(null);
-			}
-			*/
-		}
 	}
 
 	private void initializeNormal(Experiment exp)
@@ -973,6 +935,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 			ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 			slo.setName("Usage response time SLO");
 			sloRep.getServicelevelobjectives().add(slo);
+			
+			getActiveInitialModel().setServiceLevelObjectives(sloRep);
 		}
 	}
 
@@ -1012,6 +976,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 			ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 			slo.setName("Usage response time SLO");
 			sloRep.getServicelevelobjectives().add(slo);
+			
+			getActiveInitialModel().setServiceLevelObjectives(sloRep);
 		}
 	}
 
@@ -1296,7 +1262,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		String name = getName() + " [" + sdf_name.format(new Date()) + "]";
 		ResultAlternative resultAlternative = (ResultAlternative) resultResProvider.createNewResource(name, type.name());
-		resultAlternative.setSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE, getResource());
+		resultAlternative.setConfigAlternative(this);
 		resultAlternative.save();
 
 		// create data source - a.k.a where the result will be saved

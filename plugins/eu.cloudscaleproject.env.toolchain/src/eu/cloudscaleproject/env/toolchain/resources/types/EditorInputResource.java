@@ -15,8 +15,10 @@ import eu.cloudscaleproject.env.common.notification.StatusManager;
 public abstract class EditorInputResource extends EditorInput implements IEditorInputResource{
 	
 	private static final Logger logger = Logger.getLogger(EditorInputResource.class.getName());
-	private PropertyChangeListener listener;
 	
+	private PropertyChangeListener propertyListener;
+	private PropertyChangeListener statusListener;
+
 	protected final Object saveLoadLock = new Object();
 	protected final IResource resource;
 	
@@ -52,9 +54,9 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	protected void initializeValidationListener()
 	{
-		if (listener == null)
+		if (propertyListener == null)
 		{
-			listener = new PropertyChangeListener() {
+			propertyListener = new PropertyChangeListener() {
 				
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -77,12 +79,37 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 						return;
 					}
 					
-					if (EditorInputResource.this.getID() != null)
+					if (EditorInputResource.this.getID() != null){
 						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+					}
 				}
 			};
 			
-			this.addPropertyChangeListener(listener);
+			this.addPropertyChangeListener(propertyListener);
+		}
+		
+		if (statusListener == null)
+		{
+			statusListener = new PropertyChangeListener() {
+				
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					
+					if (EditorInputResource.this.getID() == null){
+						return;
+					}
+					
+					if(PROP_STATUS_ADDED.equals(evt.getPropertyName())){
+						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+					}
+					if(PROP_STATUS_REMOVED.equals(evt.getPropertyName())){
+						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+					}
+					
+				}
+			};
+			
+			this.addStatusChangeListener(statusListener);
 		}
 	}
 	
@@ -263,14 +290,14 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 				loadInProgress = true;
 				logger.info("Loading resource: " + resource.getFullPath());
 				handleLoad(monitor);
-				setDirty(false);
 				isLoaded = true;
 			}
 			finally{
 				loadInProgress = false;
 			}
 		}
-		
+
+		setDirty(false);
 		validate(monitor);
 		
 		firePropertyChange(PROP_LOADED, false, true);

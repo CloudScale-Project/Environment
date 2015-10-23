@@ -27,6 +27,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 public class ValidationDiagramServiceAddon {
 	
@@ -51,6 +52,22 @@ public class ValidationDiagramServiceAddon {
 					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
 					IValidationStatusProvider statusProvider = (IValidationStatusProvider)evt.getNewValue();
 					
+					if(statusProvider instanceof IResultAlternative){
+						IProject project = statusProvider.getProject();
+						
+						IResultAlternative ra = (IResultAlternative)statusProvider;
+						IConfigAlternative ca = ra.getConfigAlternative();
+						
+						if(ca != null){
+							ValidationDiagramServiceAddon.validate(ca);
+							diagramService.showStatus(project, ca);
+						}
+						else{
+							//TODO: clear status
+							//diagramService.clearStatus(project, ra.getInputAlternativeID());
+						}
+					}
+					
 					if(statusProvider instanceof IConfigAlternative){
 						IConfigAlternative confAlternative = (IConfigAlternative)statusProvider;
 						
@@ -60,12 +77,10 @@ public class ValidationDiagramServiceAddon {
 	
 						if(inputAlt != null && !inputAlt.isLoaded()){
 							inputAlt.load();
-							inputAlt.validate();
 						}
 						
 						if(resultAlt != null && !resultAlt.isLoaded()){
 							resultAlt.load();
-							resultAlt.validate();
 						}
 						
 						if(inputAlt != null){
@@ -105,7 +120,9 @@ public class ValidationDiagramServiceAddon {
 							
 							//show the new configuration alternative only if needed
 							if(!hasValidConfigAlternative){
-								diagramService.showStatus(project, configAlternatives.get(0));
+								IValidationStatusProvider sp = configAlternatives.get(0);
+								ValidationDiagramServiceAddon.validate(sp);
+								diagramService.showStatus(project, sp);
 							}
 						}
 						else{
@@ -158,6 +175,7 @@ public class ValidationDiagramServiceAddon {
 					
 					//bind all global status providers
 					for(IValidationStatusProvider sp : StatusManager.getInstance().getStatusProviders(null)){
+						ValidationDiagramServiceAddon.validate(sp);
 						diagramService.showStatus(project, sp);
 					}
 					

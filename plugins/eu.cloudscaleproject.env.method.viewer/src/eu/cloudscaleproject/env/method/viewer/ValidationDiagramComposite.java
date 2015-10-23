@@ -31,19 +31,15 @@ public class ValidationDiagramComposite extends DiagramComposite{
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ValidationDiagram.PROP_STATUS_CHANGED.equals(evt.getPropertyName())){
 				
-				BatchExecutor.getInstance().addTask(this, "refresh", new Runnable() {
+				BatchExecutor.getInstance().addUITask(this, "refresh", new Runnable() {
 					@Override
 					public void run() {
-						Display.getDefault().asyncExec(new Runnable() {
+						
+						if(getDiagramTypeProvider() != null 
+								&& getDiagramTypeProvider().getDiagramBehavior() != null){
+							getDiagramTypeProvider().getDiagramBehavior().refreshContent();
+						}
 							
-							@Override
-							public void run() {
-								if(getDiagramTypeProvider() != null 
-										&& getDiagramTypeProvider().getDiagramBehavior() != null){
-									getDiagramTypeProvider().getDiagramBehavior().refreshContent();
-								}
-							}
-						});
 					}
 				});
 				

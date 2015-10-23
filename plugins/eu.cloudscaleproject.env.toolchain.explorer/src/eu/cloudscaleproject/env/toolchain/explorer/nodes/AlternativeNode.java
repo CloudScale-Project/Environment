@@ -9,6 +9,7 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.swt.graphics.Image;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -32,12 +33,19 @@ public class AlternativeNode extends ExplorerEditorNode{
 		
 	private final IEditorInputResource alternative;
 
-	private final PropertyChangeListener alternativeListener = new PropertyChangeListener() {		
+	private final PropertyChangeListener alternativeStatusListener = new PropertyChangeListener() {		
 	
 		@Override		
-			public void propertyChange(PropertyChangeEvent evt) {
-				AlternativeNode.this.refresh();
-			}		
+		public void propertyChange(PropertyChangeEvent evt) {
+			BatchExecutor.getInstance().addTask(this, "refresh", new Runnable() {
+				
+				@Override
+				public void run() {
+					AlternativeNode.this.refresh();
+				}
+			});
+		}
+		
 	};		
 	
 	private static final AbstractLabelDecorator DEFAULT_DECORATOR = new AbstractLabelDecorator() {
@@ -100,7 +108,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 		super(context, alternative.getID(), editorID, alternative.getResource(), children);
 		
 		this.alternative = alternative;
-		this.alternative.addStatusChangeListener(alternativeListener);
+		this.alternative.addStatusChangeListener(alternativeStatusListener);
 		
 		setName(alternative.getName());
 		setIcon(ExplorerResources.ALTERNATIVE_16, false);
@@ -114,7 +122,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 	
 	@Override		
 	public void dispose() {		
-		this.alternative.removeStatusChangeListener(alternativeListener);		
+		this.alternative.removeStatusChangeListener(alternativeStatusListener);		
 		super.dispose();		
 	}
 
