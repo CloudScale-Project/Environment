@@ -23,6 +23,7 @@ public class ModiscoConfigurationComposite extends Composite
 	private InputAlternative alternative;
 	@SuppressWarnings("unused")
 	private ParametersTableComposite parametersTable;
+	private boolean initialized = false;
 
 	/**
 	 * Create the composite.
@@ -56,6 +57,8 @@ public class ModiscoConfigurationComposite extends Composite
 		}
 
 		this.parametersTable = new ParametersTableComposite(this, SWT.NONE, displayParameters, true);
+		
+		initialized = true;
 	}
 	
 	private class CustomDiscovererUpdate implements DiscovererUpdate
@@ -86,6 +89,8 @@ public class ModiscoConfigurationComposite extends Composite
 		@Override
 		public void update()
 		{
+			if (!initialized) return;
+			
 			this.parameterDisplay.getValue();
 			this.parameterDisplay.getParameterDescription();
 			

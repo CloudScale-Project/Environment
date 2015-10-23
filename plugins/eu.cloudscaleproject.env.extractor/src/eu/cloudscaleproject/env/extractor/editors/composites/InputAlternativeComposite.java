@@ -60,6 +60,7 @@ public class InputAlternativeComposite extends InputEditorView {
 		}
 
 		initDataBindings();
+		
 	}
 	
 	private void initProjectSelection(Composite container)
