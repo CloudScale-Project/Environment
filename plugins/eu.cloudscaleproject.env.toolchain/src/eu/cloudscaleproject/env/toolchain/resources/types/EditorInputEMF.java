@@ -72,7 +72,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		String key = type != null ? type.getToolchainFileID() : null;
 		
 		if(key == null){
-			logger.warning("Model with extension: " + res.getFileExtension() + "is not registred in the ModelType enum!");
+			logger.warning("Model with extension: " + res.getFileExtension() + " is not registred in the ModelType enum!");
 			return;
 		}
 		

@@ -26,7 +26,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public class EditorInputFolder extends EditorInputResource{
 
-	private static final String MULTIPATH_SEPARATOR = "<:>";
+	private static final String MULTIPATH_SEPARATOR = ",";
 	
 	protected final IProject project;
 	

@@ -196,7 +196,8 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			data.getPlatformRuntimeService().getSoftwareServices().add(data.getSoftwareService());
 
 			overviewRes.save(null);
-			copyExternalResource(alternative.getResource(), overview, data);
+			copyExternalResource(alternative, data);
+			alternative.save();
 			
 			OpenAlternativeUtil.openAlternative(alternative);
 
@@ -209,9 +210,14 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 		return true;
 	}
 	
-	private void copyExternalResource(IFolder alternativeFolder, final Overview overview, final WizardData data){
+	private void copyExternalResource(final OverviewAlternative alternative, final WizardData data){
+		
+		//get alternative overview model
+		Resource overviewRes = alternative.getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
+		final Overview overview = (Overview) overviewRes.getContents().get(0);
+		
 		//copy external models into the overview folder
-		IFolder externalFolder = alternativeFolder.getFolder(Path.fromOSString("external"));
+		IFolder externalFolder = alternative.getResource().getFolder(Path.fromOSString("external"));
 		final IFolder pcmFolder = ExplorerProjectPaths.getNonexistingSubFolder(externalFolder, data.getSoftwareService().getName());
 		
 		try {
@@ -232,7 +238,9 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 			@Override
 			public void handle(Resource resource) {
+				
 				if(resource == overview.eResource()){
+					//do not copy overview resource
 					return;
 				}
 				else{
@@ -247,7 +255,13 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			
 		};
 		
-		ExplorerProjectPaths.copyEMFResources(resources.toArray(new Resource[resources.size()]), callback, null);	
+		ExplorerProjectPaths.copyEMFResources(resources.toArray(new Resource[resources.size()]), callback, null);
+		
+		//register external resources
+		alternative.addSubResource(ToolchainUtils.KEY_OVERVIEW_EXTERNAL_MODELS, 
+				ExplorerProjectPaths.getFileFromEmfResource(data.getRepositoryModel().eResource()));
+		alternative.addSubResource(ToolchainUtils.KEY_OVERVIEW_EXTERNAL_MODELS, 
+				ExplorerProjectPaths.getFileFromEmfResource(data.getSystemModel().eResource()));
 	}
 	
 	@Override

@@ -1,37 +1,23 @@
  
 package eu.cloudscaleproject.env.csm2pcm.handlers;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.logging.Logger;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.scaledl.overview.converter.ConverterService;
 
-import eu.cloudscaleproject.env.common.BasicCallback;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.csm2pcm.OverviewConverterNew;
+import eu.cloudscaleproject.env.overview.OverviewAlternative;
 
 public class TransformHandler {
 	
-	private static final Logger logger = Logger.getLogger(TransformHandler.class.getName());
+	//private static final Logger logger = Logger.getLogger(TransformHandler.class.getName());
 	
 	@Execute
-	public void execute(IFile file) {
-		execute(file, null);
+	public void execute(OverviewAlternative overviewAlt, InputAlternative inputAlt) {
+		OverviewConverterNew.getInstance().transform(overviewAlt, inputAlt);
 	}
 	
+	//OLD Staff
+	/*
 	public void execute(IFile file, BasicCallback<IFolder> callback) {
 		
 		try{
@@ -112,5 +98,6 @@ public class TransformHandler {
 			return Status.OK_STATUS;
 		}
 	}
+	*/
 		
 }

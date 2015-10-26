@@ -37,6 +37,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
+@Deprecated
 public class TransformWizardPage extends WizardPage{
 	
 	private static final String DEFAULT_TITLE = "Overview model transformation";
@@ -142,6 +143,7 @@ public class TransformWizardPage extends WizardPage{
 				TransformHandler runHandler = new TransformHandler();
 				IFile file = (IFile)overviewAlternative.getSubResource(ToolchainUtils.KEY_FILE_OVERVIEW);
 				
+				/*
 				runHandler.execute(file, outputFolder, new BasicCallback<IFolder>() {
 					
 					@Override
@@ -165,6 +167,7 @@ public class TransformWizardPage extends WizardPage{
 						});
 					}
 				});
+				*/
 			}
 		});
 		

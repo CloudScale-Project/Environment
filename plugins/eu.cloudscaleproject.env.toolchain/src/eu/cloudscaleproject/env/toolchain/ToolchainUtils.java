@@ -32,6 +32,8 @@ public class ToolchainUtils {
 
 	public static final String KEY_FOLDER_USAGEEVOLUTION_ALT = "path_usageevolution_alt";
 	
+	public static final String KEY_OVERVIEW_EXTERNAL_MODELS = "path_overview_external_models";
+	
 	// file resources
 	public static final String KEY_FILE_OVERVIEW		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_overview";
 	public static final String KEY_FILE_OVERVIEW_DIAGRAM		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_overview_diagram";
