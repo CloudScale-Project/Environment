@@ -29,7 +29,6 @@ import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.palladiosimulator.pcm.usagemodel.UsageScenario;
 import org.scaledl.usageevolution.Usage;
 
-import tools.descartes.dlim.Sequence;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
@@ -41,6 +40,7 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import tools.descartes.dlim.Sequence;
 
 public class UsageComposite extends Composite implements IRefreshable{
 	

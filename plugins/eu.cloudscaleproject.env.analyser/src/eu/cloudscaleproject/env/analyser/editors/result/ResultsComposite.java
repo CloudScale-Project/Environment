@@ -10,14 +10,14 @@ import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
-import eu.cloudscaleproject.env.toolchain.ui.TitleEditorView;
+import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ResultsComposite extends TitleEditorView implements IRefreshable, ISelectable{
+public class ResultsComposite extends ResultEditorView implements IRefreshable, ISelectable{
 
 	private final ResultAlternative alternative;
 	
