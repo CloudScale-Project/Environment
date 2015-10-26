@@ -128,6 +128,7 @@ public class TitleWidget extends GradientComposite
 			String name = dialog.getText();
 			alternative.setName(name);
 			updateTitle();
+			this.layout();
 		}
 	}
 	

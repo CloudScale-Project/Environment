@@ -12,6 +12,8 @@ import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateConfigAlternativeWizard;
@@ -27,7 +29,16 @@ public class CreateAlternativeHandler {
 		CSTool tool = CSTool.getTool(id);
 		
 		if(CSTool.EXTRACTOR_INPUT.equals(tool)){
-			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(project, rp);
+			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(project, rp){
+				@Override
+				protected void initAlternative(IEditorInputResource inputAlternative)
+				{
+					ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_CONF);
+					AbstractConfigAlternative alternative = (AbstractConfigAlternative)configResourceProvider.createNewResource("Basic configuration", null);
+					alternative.setInputAlternative((AbstractInputAlternative)inputAlternative);
+					alternative.save();
+				}
+			};
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}

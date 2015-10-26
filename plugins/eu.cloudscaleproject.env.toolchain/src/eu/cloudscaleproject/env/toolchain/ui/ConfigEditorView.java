@@ -89,6 +89,8 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		}
 	};
 
+	private Group metaContainer;
+
 
 	/**
 	 * Create the composite.
@@ -119,33 +121,33 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		layout.verticalSpacing = 10;
 		mainContainer.setLayout(layout);
 
-		Group grpDetails = new Group(mainContainer, SWT.NONE);
-		grpDetails.setLayout(new GridLayout(4, false));
+		metaContainer = new Group(mainContainer, SWT.NONE);
+		metaContainer.setLayout(new GridLayout(4, false));
 		GridData gd_grpDetails = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		gd_grpDetails.heightHint = 60;
-		grpDetails.setLayoutData(gd_grpDetails);
-		grpDetails.setText("Details");
+		metaContainer.setLayoutData(gd_grpDetails);
+		metaContainer.setText("Details");
 
-		CLabel lblInputTitle = new CLabel(grpDetails, SWT.NONE);
+		CLabel lblInputTitle = new CLabel(metaContainer, SWT.NONE);
 		lblInputTitle.setText("Input:");
 
-		lblInputValue = new Label(grpDetails, SWT.NONE);
+		lblInputValue = new Label(metaContainer, SWT.NONE);
 		lblInputValue.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
-		CLabel lblResultsTitle = new CLabel(grpDetails, SWT.NONE);
+		CLabel lblResultsTitle = new CLabel(metaContainer, SWT.NONE);
 		lblResultsTitle.setText("  #Results:");
 
-		lblResultsValue = new CLabel(grpDetails, SWT.NONE);
+		lblResultsValue = new CLabel(metaContainer, SWT.NONE);
 
-		CLabel lblLastChangeTitle = new CLabel(grpDetails, SWT.NONE);
+		CLabel lblLastChangeTitle = new CLabel(metaContainer, SWT.NONE);
 		lblLastChangeTitle.setText("Last change:");
 
-		lblLastChangeValue = new CLabel(grpDetails, SWT.NONE);
+		lblLastChangeValue = new CLabel(metaContainer, SWT.NONE);
 
-		CLabel lblLastResultTitle = new CLabel(grpDetails, SWT.NONE);
+		CLabel lblLastResultTitle = new CLabel(metaContainer, SWT.NONE);
 		lblLastResultTitle.setText("  Last result:");
 
-		lblLastResultValue = new CLabel(grpDetails, SWT.NONE);
+		lblLastResultValue = new CLabel(metaContainer, SWT.NONE);
 		lblLastResultValue.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 
 		this.configContainer = new Composite(mainContainer, SWT.NONE);
@@ -189,6 +191,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			lblLastResultValue.setText("n/a");
 		}
 
+		metaContainer.layout();
 	}
 	
 	private SimpleDateFormat sdf_name = new SimpleDateFormat("d/MM, hh:mm:ss");
