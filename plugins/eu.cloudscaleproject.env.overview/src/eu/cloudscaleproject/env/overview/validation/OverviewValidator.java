@@ -10,7 +10,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 /**
@@ -26,7 +26,7 @@ public class OverviewValidator implements IResourceValidator {
 
 	@Override
 	public String getID() {
-		return CSTool.OVERVIEW.getID();
+		return CSToolResource.OVERVIEW.getID();
 	}
 
 	@Override

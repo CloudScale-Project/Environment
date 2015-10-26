@@ -3,7 +3,7 @@ package eu.cloudscaleproject.env.csm2pcm.wizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 
@@ -16,7 +16,7 @@ public class TransformIntoExistingAlternativeWizard extends Wizard{
 
 	public TransformIntoExistingAlternativeWizard(IProject project) {
 		//this.project = project;
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT));
 	}
 	
 	@Override

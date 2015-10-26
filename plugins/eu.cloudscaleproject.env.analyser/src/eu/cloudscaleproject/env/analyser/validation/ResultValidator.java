@@ -6,13 +6,13 @@ import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 
 public class ResultValidator implements IResourceValidator {
 
 	@Override
 	public String getID() {
-		return CSTool.ANALYSER_RES.getID();
+		return CSToolResource.ANALYSER_RES.getID();
 	}
 
 	@Override

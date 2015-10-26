@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
@@ -55,7 +55,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 			
 			if(element instanceof AlternativeNode){
 				AlternativeNode node = (AlternativeNode)element;
-				CSTool tool = CSTool.getTool(node.getID());
+				CSToolResource tool = CSToolResource.getTool(node.getID());
 				return text + " [ "+tool.getName()+" ]";
 			}
 			if(element instanceof AlternativeResourceNode){

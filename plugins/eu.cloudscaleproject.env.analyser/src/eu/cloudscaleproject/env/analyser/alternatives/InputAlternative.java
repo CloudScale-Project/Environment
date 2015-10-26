@@ -12,7 +12,7 @@ public class InputAlternative extends AbstractInputAlternative
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, ModelType.GROUP_PCM_EXTENDED, CSTool.ANALYSER_INPUT.getID(), CSTool.ANALYSER_CONF.getID());
+		super(project, folder, ModelType.GROUP_PCM_EXTENDED, CSTool.ANALYSER);
 	}
 
 }

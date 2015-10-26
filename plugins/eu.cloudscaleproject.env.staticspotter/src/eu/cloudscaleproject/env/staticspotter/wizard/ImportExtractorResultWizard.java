@@ -8,7 +8,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -32,11 +32,11 @@ public class ImportExtractorResultWizard extends Wizard
 
 		this.project = project;
 
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
 		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,
-				CSTool.EXTRACTOR_RES));
+				CSToolResource.EXTRACTOR_RES));
 		alternativeSelectionPage.setDescription("Please select extractor result to be imported into Static Spotter");
 
 	}
@@ -55,7 +55,7 @@ public class ImportExtractorResultWizard extends Wizard
 		String altName = nameSelectionPage.getName();
 
 		// Prepare Input Alternative
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT);
 		InputAlternative alternative = (InputAlternative) provider.createNewResource(altName, null);
 
 		// Copy all models from Extractor Result
@@ -83,7 +83,7 @@ public class ImportExtractorResultWizard extends Wizard
 		alternative.save();
 		OpenAlternativeUtil.openAlternative(alternative);
 
-		ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_CONF);
+		ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_CONF);
 		AbstractConfigAlternative confAlternative = (AbstractConfigAlternative)configResourceProvider.createNewResource("Basic configuration", null);
 		confAlternative.setInputAlternative((AbstractInputAlternative)alternative);
 		confAlternative.save();

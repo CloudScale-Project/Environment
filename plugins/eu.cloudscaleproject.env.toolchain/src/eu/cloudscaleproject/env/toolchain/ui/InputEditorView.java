@@ -80,8 +80,8 @@ public class InputEditorView extends AbstractEditorView
 	
 	private void createConfigAlternative()
 	{
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), alternative.getConfigAlternativeID());
-		IConfigurationElement e = ToolchainExtensions.getInstance().findResourceProviderFactoryElement(alternative.getConfigAlternativeID());
+		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(), alternative.getTool().getConfig().getID());
+		IConfigurationElement e = ToolchainExtensions.getInstance().findResourceProviderFactoryElement(alternative.getTool().getConfig().getID());
 
 		String wizardCmd = e.getAttribute("wizard");
 		if (wizardCmd == null)

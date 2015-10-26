@@ -14,7 +14,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.dialogs.ResourceSelectionDialog;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -33,7 +33,7 @@ public class SelectAlternativeMethodHandler
 			return;
 		}
 
-		CSTool tool = CSTool.getTool(diagramService.getSelectedNodeID());
+		CSToolResource tool = CSToolResource.getTool(diagramService.getSelectedNodeID());
 
 		if(tool == null){
 			Logger.getLogger(SelectAlternativeMethodHandler.class.getName()).log(Level.WARNING, 

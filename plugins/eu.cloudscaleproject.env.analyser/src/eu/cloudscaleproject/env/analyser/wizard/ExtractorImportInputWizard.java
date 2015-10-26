@@ -8,7 +8,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -31,10 +31,10 @@ public class ExtractorImportInputWizard extends Wizard
 		
 		setWindowTitle("Analyser - Extractor result import");
 
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
-		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,CSTool.EXTRACTOR_RES));
+		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,CSToolResource.EXTRACTOR_RES));
 		alternativeSelectionPage.setDescription("Please select extractor result to be imported into Analyser");
 	}
 
@@ -51,7 +51,7 @@ public class ExtractorImportInputWizard extends Wizard
 		String altName = nameSelectionPage.getName();
 
 		// Prepare Input Alternative
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		InputAlternative alternative = (InputAlternative) provider.createNewResource(altName, null);
 
 		// Copy all models from Extractor Result

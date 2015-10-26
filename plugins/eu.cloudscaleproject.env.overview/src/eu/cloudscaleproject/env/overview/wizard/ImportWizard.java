@@ -32,7 +32,7 @@ import eu.cloudscaleproject.env.overview.wizard.pages.TransformationPage;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.OverviewHelper;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -70,7 +70,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 	@Override
 	public void addPages() {
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 		if (merge)
 		{
 			selectionPage = new CustomAlternativeSelectionPage(data, provider);
@@ -182,7 +182,7 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			}
 			else
 			{
-				ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
+				ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 				alternative = (OverviewAlternative) provider.createNewResource(namePage.getName(), null);
 			}
 

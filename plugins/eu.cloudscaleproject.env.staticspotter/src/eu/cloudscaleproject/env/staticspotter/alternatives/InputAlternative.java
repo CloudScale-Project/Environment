@@ -16,9 +16,9 @@ public class InputAlternative extends AbstractInputAlternative
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, new ModelType[]{ModelType.SOURCECODEDECORATOR, 
-											   ModelType.REPOSITORY, 
-											   ModelType.SYSTEM}, CSTool.SPOTTER_STA_INPUT.getID(), CSTool.SPOTTER_STA_CONF.getID());
+		super(project, folder, 
+				new ModelType[]{ModelType.SOURCECODEDECORATOR, ModelType.REPOSITORY, ModelType.SYSTEM}, 
+				CSTool.SPOTTER_STA);
 	}
 
 	public void addSubResourceModel(IResource res)

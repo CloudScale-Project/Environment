@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
@@ -26,14 +26,14 @@ public class CreateAlternativeHandler {
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
 		IProject project = rp.getProject();
 
-		CSTool tool = CSTool.getTool(id);
+		CSToolResource tool = CSToolResource.getTool(id);
 		
-		if(CSTool.EXTRACTOR_INPUT.equals(tool)){
+		if(CSToolResource.EXTRACTOR_INPUT.equals(tool)){
 			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(project, rp){
 				@Override
 				protected void initAlternative(IEditorInputResource inputAlternative)
 				{
-					ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_CONF);
+					ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.EXTRACTOR_CONF);
 					AbstractConfigAlternative alternative = (AbstractConfigAlternative)configResourceProvider.createNewResource("Basic configuration", null);
 					alternative.setInputAlternative((AbstractInputAlternative)inputAlternative);
 					alternative.save();
@@ -42,14 +42,14 @@ public class CreateAlternativeHandler {
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}
-		else if(CSTool.EXTRACTOR_CONF.equals(tool)){
+		else if(CSToolResource.EXTRACTOR_CONF.equals(tool)){
 			CreateConfigAlternativeWizard createlternativeWizard;
 			
 			if(eir instanceof InputAlternative){
 				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (InputAlternative)eir);			
 			}
 			else{
-				ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.EXTRACTOR_INPUT);
+				ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.EXTRACTOR_INPUT);
 				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, inputResourceProvider);
 			}
 			
@@ -67,10 +67,10 @@ public class CreateAlternativeHandler {
 		}
 		
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
-		if(CSTool.EXTRACTOR_INPUT.getID().equals(id)){
+		if(CSToolResource.EXTRACTOR_INPUT.getID().equals(id)){
 			return true;
 		}
-		if(CSTool.EXTRACTOR_CONF.getID().equals(id)){
+		if(CSToolResource.EXTRACTOR_CONF.getID().equals(id)){
 			return true;
 		}
 		

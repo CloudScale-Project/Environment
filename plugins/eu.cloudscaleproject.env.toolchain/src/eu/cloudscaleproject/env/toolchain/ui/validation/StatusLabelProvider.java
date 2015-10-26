@@ -10,7 +10,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 
 public class StatusLabelProvider implements ILabelProvider{
 	
@@ -60,7 +60,7 @@ public class StatusLabelProvider implements ILabelProvider{
 	public String getText(Object element) {
 		if(element instanceof IValidationStatusProvider){
 			IValidationStatusProvider sp = (IValidationStatusProvider)element;
-			String tool = CSTool.getToolName(sp.getID());
+			String tool = CSToolResource.getToolName(sp.getID());
 			if(tool == null){
 				tool = "Unknown";
 			}

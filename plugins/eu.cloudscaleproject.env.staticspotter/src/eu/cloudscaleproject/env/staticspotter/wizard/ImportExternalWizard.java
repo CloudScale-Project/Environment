@@ -7,7 +7,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -26,7 +26,7 @@ public class ImportExternalWizard extends Wizard{
 		
 		this.project = project;
 		
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT));
 		importModelSelectionPage = new ExternalModelsSelectionPage(null, ModelType.GROUP_SOURCEDECORATOR);
 	}
 	
@@ -41,7 +41,7 @@ public class ImportExternalWizard extends Wizard{
 		
 		String altName = nameSelectionPage.getName();
 
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_STA_INPUT);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT);
 
 		InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		

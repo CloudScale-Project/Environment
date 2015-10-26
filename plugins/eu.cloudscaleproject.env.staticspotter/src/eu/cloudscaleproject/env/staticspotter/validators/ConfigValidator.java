@@ -7,7 +7,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 
 public class ConfigValidator implements IResourceValidator {
 
@@ -18,7 +18,7 @@ public class ConfigValidator implements IResourceValidator {
 	
 	@Override
 	public String getID() {
-		return CSTool.SPOTTER_STA_CONF.getID();
+		return CSToolResource.SPOTTER_STA_CONF.getID();
 	}
 	
 	@Override

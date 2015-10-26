@@ -21,7 +21,7 @@ public class ResultAlternative extends AbstractResultAlternative{
 	private final ConfAlternative.Type type;
 	
 	public ResultAlternative(IProject project, IFolder folder, ConfAlternative.Type type) {
-		super(project, folder, ModelType.GROUP_ALL, CSTool.ANALYSER_RES.getID());
+		super(project, folder, ModelType.GROUP_ALL, CSTool.ANALYSER);
 		this.type = type;		
 	}
 	

@@ -20,7 +20,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
@@ -87,14 +87,14 @@ public class ValidationDiagramServiceAddon {
 							diagramService.showStatus(project, inputAlt);
 						}
 						else{
-							diagramService.clearStatus(project, confAlternative.getInputAlternativeID());
+							diagramService.clearStatus(project, confAlternative.getTool().getInput().getID());
 						}
 						
 						if(resultAlt != null){
 							diagramService.showStatus(project, resultAlt);
 						}
 						else{
-							diagramService.clearStatus(project, confAlternative.getResultAlternativeID());
+							diagramService.clearStatus(project, confAlternative.getTool().getResult().getID());
 						}
 						
 					}
@@ -104,7 +104,7 @@ public class ValidationDiagramServiceAddon {
 						IInputAlternative inputAlternative = (IInputAlternative)statusProvider;
 						
 						IValidationStatusProvider activeAlternative = diagramService.getActiveStatusProvider(
-																					inputAlternative.getConfigAlternativeID());
+																					inputAlternative.getTool().getConfig().getID());
 						List<IConfigAlternative> configAlternatives = inputAlternative.getConfigAlternatives();
 						
 						if(!configAlternatives.isEmpty()){
@@ -126,7 +126,7 @@ public class ValidationDiagramServiceAddon {
 							}
 						}
 						else{
-							diagramService.clearStatus(project, inputAlternative.getConfigAlternativeID());
+							diagramService.clearStatus(project, inputAlternative.getTool().getId());
 						}
 					}
 				}
@@ -151,17 +151,17 @@ public class ValidationDiagramServiceAddon {
 					}
 					*/
 					
-					if(CSTool.ANALYSER_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.ANALYSER_RES.getID());
+					if(CSToolResource.ANALYSER_CONF.getID().equals(statusProviderID)){
+						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.ANALYSER_RES.getID());
 					}
-					if(CSTool.EXTRACTOR_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.EXTRACTOR_RES.getID());
+					if(CSToolResource.EXTRACTOR_CONF.getID().equals(statusProviderID)){
+						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.EXTRACTOR_RES.getID());
 					}
-					if(CSTool.SPOTTER_STA_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.SPOTTER_STA_RES.getID());
+					if(CSToolResource.SPOTTER_STA_CONF.getID().equals(statusProviderID)){
+						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.SPOTTER_STA_RES.getID());
 					}
-					if(CSTool.SPOTTER_DYN_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.SPOTTER_DYN_RES.getID());
+					if(CSToolResource.SPOTTER_DYN_CONF.getID().equals(statusProviderID)){
+						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.SPOTTER_DYN_RES.getID());
 					}
 				}
 				

@@ -6,7 +6,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative.Type;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
@@ -35,8 +35,8 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		
 		this.inputAlternative = ia;
 		
-		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
-		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
+		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
+		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_CONF);
 		
 		this.selectNamePage = new AlternativeNamePage(confResourceProvider);
 		this.alternativeSelectionPage = new AlternativeSelectionPage("Input alternative selection", 

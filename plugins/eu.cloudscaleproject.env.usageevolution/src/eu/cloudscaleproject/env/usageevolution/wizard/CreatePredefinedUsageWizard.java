@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.resource.Resource;
 
 import tools.descartes.dlim.Sequence;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -17,7 +17,7 @@ public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
 	private TemplateSelectionPage presetSelectionPage = null;
 
 	public CreatePredefinedUsageWizard(IProject project) {
-		super(project, ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION));
+		super(project, ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.USAGEEVOLUTION));
 		
 		this.project = project;
 		

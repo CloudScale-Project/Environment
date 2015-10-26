@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -26,7 +26,7 @@ public class ResourceSelectionDialog extends Dialog{
 	
 	private IEditorInputResource selectedResource = null;
 
-	public ResourceSelectionDialog(Shell shell, String title, String message, IProject project, CSTool tool) {
+	public ResourceSelectionDialog(Shell shell, String title, String message, IProject project, CSToolResource tool) {
 		super(shell);
 		
 		shell.setText(title);

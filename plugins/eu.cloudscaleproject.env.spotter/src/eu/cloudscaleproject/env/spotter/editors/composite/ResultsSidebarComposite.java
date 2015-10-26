@@ -5,7 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.spotter.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
@@ -23,7 +23,7 @@ public class ResultsSidebarComposite extends SidebarEditorComposite{
 	public ResultsSidebarComposite(final IProject project, Composite parent, int style) {
 		super(parent, style);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_DYN_RES));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_DYN_RES));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

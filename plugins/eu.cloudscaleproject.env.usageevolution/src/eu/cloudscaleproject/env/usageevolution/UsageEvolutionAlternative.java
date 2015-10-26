@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 import tools.descartes.dlim.Sequence;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
@@ -18,7 +18,7 @@ public class UsageEvolutionAlternative extends EditorInputEMF
 
 	public UsageEvolutionAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, new ModelType[]{ModelType.LIMBO}, CSTool.USAGEEVOLUTION.getID());
+		super(project, folder, new ModelType[]{ModelType.LIMBO}, CSToolResource.USAGEEVOLUTION.getID());
 	}
 
 	@Override

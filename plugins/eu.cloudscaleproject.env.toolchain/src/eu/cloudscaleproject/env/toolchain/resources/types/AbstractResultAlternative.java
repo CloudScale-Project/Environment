@@ -4,16 +4,27 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public abstract class AbstractResultAlternative extends EditorInputEMF implements IResultAlternative
 {
-	public AbstractResultAlternative(IProject project, IFolder folder, ModelType[] modelTypes, String resultID)
+	private final CSTool tool;
+
+	public AbstractResultAlternative(IProject project, IFolder folder, ModelType[] modelTypes, CSTool tool)
 	{
 
-		super(project, folder, modelTypes, resultID);
+		super(project, folder, modelTypes, tool.getResult().getID());
+		
+		this.tool = tool;
+	}
+	
+	@Override
+	public CSTool getTool()
+	{
+		return tool;
 	}
 	
 	@Override

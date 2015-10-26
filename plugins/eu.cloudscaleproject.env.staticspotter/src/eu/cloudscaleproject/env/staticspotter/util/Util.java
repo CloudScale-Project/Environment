@@ -38,7 +38,7 @@ import org.reclipse.structure.specification.PSPatternSpecification;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -84,7 +84,7 @@ public class Util
 
 	public static IFolder getResultsFolder(IProject project)
 	{
-		return ToolchainUtils.getResourceProviderFolder(project, CSTool.SPOTTER_STA_RES.getID());
+		return ToolchainUtils.getResourceProviderFolder(project, CSToolResource.SPOTTER_STA_RES.getID());
 	}
 
 	//
@@ -93,7 +93,7 @@ public class Util
 	public static void persistResults(ConfigAlternative configAlternative, DetectPatternsJob job)
 	{
 		ResourceProvider resultResProvider = ResourceRegistry.getInstance().
-				getResourceProvider(configAlternative.getProject(), CSTool.SPOTTER_STA_RES);
+				getResourceProvider(configAlternative.getProject(), CSToolResource.SPOTTER_STA_RES);
 
 		ResultAlternative rif = (ResultAlternative)resultResProvider
 				.createNewResource(configAlternative.getName() + " " + sdf.format(new Date()), "");

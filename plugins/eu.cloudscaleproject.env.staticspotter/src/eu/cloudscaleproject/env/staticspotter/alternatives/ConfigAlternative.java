@@ -33,9 +33,7 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	//TODO: use EditorInputEMF loader!
 	public ConfigAlternative(IProject project, IFolder folder) {
 		
-		super (project, folder, null, CSTool.SPOTTER_STA_CONF.getID(), 
-									  CSTool.SPOTTER_STA_INPUT.getID(), 
-									  CSTool.SPOTTER_STA_RES.getID());
+		super (project, folder, null, CSTool.SPOTTER_STA);
 	}
 
 	@Override

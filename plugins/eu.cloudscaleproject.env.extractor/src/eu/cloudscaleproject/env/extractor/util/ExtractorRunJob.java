@@ -43,7 +43,7 @@ import eu.cloudscaleproject.env.extractor.Activator;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.extractor.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -92,7 +92,7 @@ public class ExtractorRunJob
 	private ResultAlternative createResultPersistenceFolder() throws CoreException
 	{
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(this.configAlternative.getProject(),
-				CSTool.EXTRACTOR_RES);
+				CSToolResource.EXTRACTOR_RES);
 
 		String name = configAlternative.getName() + " [" + sdf_name.format(new Date()) + "]";
 		return (ResultAlternative) resourceProvider.createNewResource(name, null);

@@ -15,7 +15,7 @@ import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ImportAlternativeOptionsPage;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -64,7 +64,7 @@ public class ExternalImportInputWizard extends Wizard{
 		
 		setWindowTitle("Analyser - External project import");
 		
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT));
 
 		importModelSelectionPage = new ExternalModelsSelectionPage(null,ModelType.GROUP_PCM_EXTENDED, modelCheckStateListener);
 		
@@ -86,7 +86,7 @@ public class ExternalImportInputWizard extends Wizard{
 		final Resource[] selectedDiagramResources = importModelSelectionPage.getSelectedDiagramResources();
 		final boolean copyIntoProject = optionsPage.getCopyIntoProjectParam();
 		
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		final InputAlternative alternative = (InputAlternative)provider.createNewResource(altName, null);
 		
 		EditorInputJob job = new EditorInputJob("Creating empty models.", alternative) {

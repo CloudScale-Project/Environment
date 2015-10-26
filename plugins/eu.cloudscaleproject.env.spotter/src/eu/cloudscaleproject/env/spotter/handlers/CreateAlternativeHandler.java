@@ -8,7 +8,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
@@ -25,14 +25,14 @@ public class CreateAlternativeHandler {
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
 		IProject project = rp.getProject();
 
-		CSTool tool = CSTool.getTool(id);
+		CSToolResource tool = CSToolResource.getTool(id);
 		
-		if(CSTool.SPOTTER_DYN_INPUT.equals(tool)){
+		if(CSToolResource.SPOTTER_DYN_INPUT.equals(tool)){
 			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(project, rp){
 				@Override
 				protected void initAlternative(IEditorInputResource inputAlternative)
 				{
-					ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.SPOTTER_DYN_CONF);
+					ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_DYN_CONF);
 					AbstractConfigAlternative alternative = (AbstractConfigAlternative)configResourceProvider.createNewResource("Basic configuration", null);
 					alternative.setInputAlternative((AbstractInputAlternative)inputAlternative);
 					alternative.save();
@@ -41,7 +41,7 @@ public class CreateAlternativeHandler {
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}
-		else if(CSTool.SPOTTER_DYN_CONF.equals(tool)){
+		else if(CSToolResource.SPOTTER_DYN_CONF.equals(tool)){
 			CreateConfigAlternativeWizard createAlternativeWizard;
 			createAlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (IEditorInputResource)eir);
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createAlternativeWizard);
@@ -58,10 +58,10 @@ public class CreateAlternativeHandler {
 		}
 		
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
-		if(CSTool.SPOTTER_DYN_INPUT.getID().equals(id)){
+		if(CSToolResource.SPOTTER_DYN_INPUT.getID().equals(id)){
 			return true;
 		}
-		if(CSTool.SPOTTER_DYN_CONF.getID().equals(id)){
+		if(CSToolResource.SPOTTER_DYN_CONF.getID().equals(id)){
 			return true;
 		}
 		

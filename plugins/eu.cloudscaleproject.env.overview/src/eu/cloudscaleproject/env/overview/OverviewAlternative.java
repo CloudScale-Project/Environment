@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.scaledl.overview.diagram.Util;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
@@ -23,7 +23,7 @@ public class OverviewAlternative extends EditorInputEMF{
 	private static final String OVERVIEW_MODEL_DIAGRAM_FILENAME = "overview.sdlo_diagram";
 		
 	public OverviewAlternative(IProject project, IFolder folder) {
-		super(project, folder, new ModelType[]{ModelType.OVERVIEW}, CSTool.OVERVIEW.getID());
+		super(project, folder, new ModelType[]{ModelType.OVERVIEW}, CSToolResource.OVERVIEW.getID());
 	}
 	
 	@Override

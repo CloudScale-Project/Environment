@@ -57,7 +57,7 @@ import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.overview.wizard.util.IWizardPageControll;
 import eu.cloudscaleproject.env.overview.wizard.util.WizardData;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -175,7 +175,7 @@ public class TransformationPage extends WizardPage implements IWizardPageControl
 		resultsList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
-				.getResourceProvider(this.data.getProject(), CSTool.EXTRACTOR_RES);
+				.getResourceProvider(this.data.getProject(), CSToolResource.EXTRACTOR_RES);
 
 		final List<IEditorInputResource> results = resourceProvider.getResources();
 		for (IEditorInputResource rpf : results)

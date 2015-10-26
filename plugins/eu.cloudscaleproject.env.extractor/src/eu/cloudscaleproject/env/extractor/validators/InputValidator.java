@@ -13,7 +13,7 @@ import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 
 public class InputValidator implements IResourceValidator {
 	
@@ -23,7 +23,7 @@ public class InputValidator implements IResourceValidator {
 
 	@Override
 	public String getID() {
-		return CSTool.EXTRACTOR_INPUT.getID();
+		return CSToolResource.EXTRACTOR_INPUT.getID();
 	}
 	
 

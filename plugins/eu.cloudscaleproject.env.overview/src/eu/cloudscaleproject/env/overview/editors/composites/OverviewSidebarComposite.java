@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.overview.wizard.OverviewSelectionWizard;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -28,7 +28,7 @@ public class OverviewSidebarComposite extends SidebarEditorComposite {
 		
 		this.project = project;
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

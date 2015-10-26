@@ -81,6 +81,7 @@ import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -123,9 +124,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	public ConfAlternative(IProject project, IFolder folder, Type type)
 	{
-		super(project, folder, ModelType.GROUP_EXPERIMENTS, CSTool.ANALYSER_CONF.getID(),
-															CSTool.ANALYSER_INPUT.getID(), 
-															CSTool.ANALYSER_RES.getID());
+		super(project, folder, ModelType.GROUP_EXPERIMENTS, CSTool.ANALYSER);
 
 		this.type = type;
 	}
@@ -167,7 +166,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	public InputAlternative getInputAlternative()
 	{
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		return (InputAlternative) rp.getResource(res);
 	}
 
@@ -1218,7 +1217,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	@Override
 	protected void doDelete(IProgressMonitor monitor)
 	{
-		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES);
+		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_RES);
 		IEditorInputResource resultAlternative = resultResProvider.getResource(this.getResource().getName());
 
 		if (resultAlternative != null)
@@ -1256,7 +1255,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 	public void configureResults()
 	{
 		Experiment exp = getActiveExperiment();
-		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES);
+		ResourceProvider resultResProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_RES);
 		// IEditorInputResource resultAlternative =
 		// resultResProvider.getResource(this.getResource().getName());
 

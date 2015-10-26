@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.csm2pcm.handlers.TransformHandler;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -63,7 +63,7 @@ public class TransformWizardPage extends WizardPage{
 		super("Overview model transformation");
 
 		this.outputFolder = outputFolder;
-		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
+		this.resourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 		
 		setTitle(DEFAULT_TITLE);
 		setDescription(DEFAULT_DESCRIPTION);

@@ -35,7 +35,7 @@ public class InputAlternative extends AbstractInputAlternative
 
 	public InputAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, new ModelType[] {}, CSTool.EXTRACTOR_INPUT.getID(), CSTool.EXTRACTOR_CONF.getID());
+		super(project, folder, new ModelType[] {}, CSTool.EXTRACTOR);
 	}
 
 	public String getExtractedProjectName()

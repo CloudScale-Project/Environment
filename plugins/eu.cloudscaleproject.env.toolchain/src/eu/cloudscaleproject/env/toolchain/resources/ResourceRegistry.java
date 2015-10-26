@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -212,7 +212,7 @@ public class ResourceRegistry {
 	 * @param tool
 	 * @return ResourceProvider
 	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, CSTool tool){
+	public synchronized ResourceProvider getResourceProvider(IProject project, CSToolResource tool){
 		
 		if(project == null || tool == null){
 			return null;

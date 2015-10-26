@@ -11,7 +11,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.csm2pcm.Activator;
 import eu.cloudscaleproject.env.csm2pcm.OverviewConverterNew;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
@@ -34,9 +34,9 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		this.project = project;
 		
 		//folder = createTransformOutputFolder(project);
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER.getInput().getId()));
 		
-		ResourceProvider overviewResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW);
+		ResourceProvider overviewResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 		
 		overviewSelectionPage = new AlternativeSelectionPage("Overview alternative selection", 
 				"Please select Overview alternative to transform into the Analyser input alternative PCM models.", overviewResourceProvider);
@@ -86,7 +86,7 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		
 		String name = nameSelectionPage.getName();
 
-		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		final InputAlternative newInputAlternative = (InputAlternative)rp.createNewResource(name, null);
 		
 		final OverviewAlternative overviewAlternaitve = (OverviewAlternative)overviewSelectionPage.getSelection();

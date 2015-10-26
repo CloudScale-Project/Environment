@@ -8,7 +8,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.usageevolution.wizard.CreateUsageEvolutionWizard;
@@ -33,7 +33,7 @@ public class CreateAlternativeHandler {
 		}
 		
 		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
-		if(CSTool.USAGEEVOLUTION.getID().equals(id)){
+		if(CSToolResource.USAGEEVOLUTION.getID().equals(id)){
 			return true;
 		}
 		

@@ -8,7 +8,7 @@ import org.eclipse.core.resources.IProject;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -22,7 +22,7 @@ public class ResourceUtils {
 	
 	public static InputAlternative getGeneratedResourceInput(IProject project){
 		ResourceProvider resourceProvider = ResourceRegistry.getInstance()
-												.getResourceProvider(project, CSTool.ANALYSER_INPUT);
+												.getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		IEditorInputResource editorInput = resourceProvider.getResource(ANALYSER_INPUT_GENERATED_RES_NAME);
 		
 		if(editorInput == null){
@@ -81,7 +81,7 @@ public class ResourceUtils {
 	public static List<ConfAlternative> getConfAlternatives(IProject project, InputAlternative inputAlt){
 		
 		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, CSTool.ANALYSER_CONF);
+				getResourceProvider(project, CSToolResource.ANALYSER_CONF);
 		
 		List<ConfAlternative> out = new ArrayList<ConfAlternative>();
 		
@@ -92,7 +92,7 @@ public class ResourceUtils {
 					continue;
 				}
 				IEditorInputResource inputResource = ResourceRegistry.getInstance()
-					.getResourceProvider(project, CSTool.ANALYSER_INPUT).getResource(inputAltFolder);
+					.getResourceProvider(project, CSToolResource.ANALYSER_INPUT).getResource(inputAltFolder);
 				if(inputResource == inputAlt){
 					out.add((ConfAlternative)res);
 				}

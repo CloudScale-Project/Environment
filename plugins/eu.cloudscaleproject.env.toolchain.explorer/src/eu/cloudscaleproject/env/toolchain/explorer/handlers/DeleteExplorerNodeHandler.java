@@ -13,6 +13,11 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 /**
  *
@@ -78,27 +83,39 @@ public class DeleteExplorerNodeHandler {
 				monitor.beginTask("Deleting resource...", IProgressMonitor.UNKNOWN);
 				
 				Display.getDefault().syncExec(new Runnable() {
-					
 					@Override
 					public void run() {
-						
 						Explorer.getInstance().setSelection(node.getParent());
 						node.dispose();
-						
-						WorkspaceJob job = new WorkspaceJob("Deleting resource") {
-							
-							@Override
-							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-								
-								monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
-								node.getResource().delete(IProject.FORCE, null);
-								
-								return Status.OK_STATUS;
-							}
-						};
-						job.schedule();
 					}
 				});
+				
+				
+				
+				IEditorInputResource eir = ResourceRegistry.getInstance().getResource(node.getResource());
+				
+				if (eir instanceof IInputAlternative)
+				{
+					IInputAlternative ia = (IInputAlternative) eir;
+
+					for (IResultAlternative ra : ia.getResultAlternatives())
+					{
+						ra.delete();
+					}
+
+					for (IConfigAlternative ca : ia.getConfigAlternatives())
+					{
+						
+						ca.delete();
+					}
+					
+					ia.delete();
+				}
+				else
+				{
+					monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
+					node.getResource().delete(IProject.FORCE, null);
+				}
 				
 				monitor.done();
 				

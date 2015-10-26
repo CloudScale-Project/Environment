@@ -8,7 +8,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
@@ -118,7 +118,7 @@ public class OverviewSelectionWizard extends Wizard{
 		@Override
 		public IWizard createWizard() {
 			return new CreateAlternativeWizard (project, 
-					ResourceRegistry.getInstance().getResourceProvider(project, CSTool.OVERVIEW));
+					ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW));
 		}
 
 		@Override

@@ -48,9 +48,7 @@ public class ConfigAlternative extends AbstractConfigAlternative
 
 	public ConfigAlternative(IProject project, IFolder folder)
 	{
-		super(project, folder, null, CSTool.SPOTTER_DYN_CONF.getID(), 
-									 CSTool.SPOTTER_DYN_INPUT.getID(), 
-									 CSTool.SPOTTER_DYN_RES.getID());
+		super(project, folder, null, CSTool.SPOTTER_DYN);
 	}
 
 	public void registerSpotterEditor(final AbstractSpotterEditor editor)

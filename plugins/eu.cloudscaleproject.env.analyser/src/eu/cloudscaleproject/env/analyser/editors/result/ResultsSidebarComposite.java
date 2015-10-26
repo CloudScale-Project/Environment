@@ -7,7 +7,7 @@ import org.eclipse.ui.IEditorPart;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.util.SidebarContentProvider;
@@ -22,7 +22,7 @@ public class ResultsSidebarComposite extends SidebarEditorComposite{
 		super(parent, style);
 		this.project = ExplorerProjectPaths.getProject(editor);
 		
-		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_RES));
+		setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_RES));
 		setContentProvider(new SidebarContentProvider() {
 			
 			@Override

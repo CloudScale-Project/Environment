@@ -33,7 +33,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -62,9 +62,9 @@ public class ImportAnalyserProjectWizard extends Wizard{
 	
 	public ImportAnalyserProjectWizard(IProject project) {
 				
-		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
-		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_CONF);
-		this.limboResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.USAGEEVOLUTION);
+		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
+		this.confResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_CONF);
+		this.limboResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.USAGEEVOLUTION);
 		
 		//TODO: here only configuration resource provider is used
 		//		In this wizard we are creating input wizard with the same name! Could this be a problem?

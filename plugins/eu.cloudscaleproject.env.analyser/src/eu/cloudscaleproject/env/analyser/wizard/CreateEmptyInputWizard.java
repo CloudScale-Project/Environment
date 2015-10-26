@@ -6,7 +6,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.cloudscaleproject.env.analyser.ModelUtils;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.pages.ModelSelectionPage;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -26,7 +26,7 @@ public class CreateEmptyInputWizard extends Wizard{
 	public CreateEmptyInputWizard(IProject project) {
 		this.project = project;
 				
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT));
 		
 		modelSelectionPage = new ModelSelectionPage("Select PCM models", new CustomAdapterFactory(), types);
 		modelSelectionPage.selectAll();
@@ -45,7 +45,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		String name = nameSelectionPage.getName();
 		final ModelType[] selectedModels = modelSelectionPage.getSelectedModelTypes();
 		
-		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER_INPUT);
+		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		final InputAlternative alternative = (InputAlternative)provider.createNewResource(name, null);
 		
 		ModelUtils.executeCreateModels(alternative, selectedModels);		

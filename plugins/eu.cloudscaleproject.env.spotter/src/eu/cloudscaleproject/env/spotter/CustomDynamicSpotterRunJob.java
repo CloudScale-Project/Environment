@@ -40,7 +40,7 @@ import org.spotter.shared.status.SpotterProgress;
 
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.spotter.alternatives.ResultAlternative;
-import eu.cloudscaleproject.env.toolchain.CSTool;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
@@ -310,7 +310,7 @@ public class CustomDynamicSpotterRunJob extends Job
 	{
 		// Prepare result folder
 		ResourceProvider resultResourceProvider = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(),
-				CSTool.SPOTTER_DYN_RES);
+				CSToolResource.SPOTTER_DYN_RES);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
 		ResultAlternative resultAlternative = (ResultAlternative) resultResourceProvider.createNewResource(alternative.getName() 

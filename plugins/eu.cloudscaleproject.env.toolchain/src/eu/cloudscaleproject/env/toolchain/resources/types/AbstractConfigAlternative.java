@@ -12,42 +12,30 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 public abstract class AbstractConfigAlternative extends EditorInputEMF implements IConfigAlternative {
-	private final String inputAlternativeID;
-	private final String resultAlternativeID;
-
-	protected ResourceProvider inputResourceProvider;
 	private IStatus lastRunStatus;
+	private CSTool tool;
 
-	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, String configID,
-			String inputID, String resultID) {
+	public AbstractConfigAlternative(IProject project, IFolder folder, ModelType[] modelTypes, CSTool tool) {
 
-		super(project, folder, modelTypes, configID);
+		super(project, folder, modelTypes, tool.getConfig().getID());
 
-		this.inputAlternativeID = inputID;
-		this.resultAlternativeID = resultID;
-
-		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
+		this.tool = tool;
 	}
-
-	@Override
-	public String getInputAlternativeID() {
-		return inputAlternativeID;
-	}
-
-	@Override
-	public String getResultAlternativeID() {
-		return resultAlternativeID;
+	
+	public CSTool getTool()
+	{
+		return tool;
 	}
 
 	protected ResourceProvider getResultResourceProvider() {
-		ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
-				resultAlternativeID);
+		ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, tool.getResult().getID());
 		return resultsResourceProvider;
 	}
 
@@ -59,6 +47,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	public IInputAlternative getInputAlternative() {
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
+		ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, this.tool.getInput().getID());
 		if (inputResourceProvider != null && res != null)
 			return (IInputAlternative) inputResourceProvider.getResource(res);
 		else
@@ -69,7 +58,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 	public IEditorInputResource getLastResult() {
 		IResource res = getSubResource(IConfigAlternative.KEY_LAST_RESULT);
 		ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
-				resultAlternativeID);
+				tool.getResult().getID());
 
 		if (resultsResourceProvider != null && res != null)
 			return resultsResourceProvider.getResource(res);
@@ -119,7 +108,7 @@ public abstract class AbstractConfigAlternative extends EditorInputEMF implement
 			setProperty(IConfigAlternative.KEY_TIMESTAMP_LAST_SUCC_RUN, "" + System.currentTimeMillis());
 
 			ResourceProvider resultsResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project,
-					resultAlternativeID);
+					tool.getResult().getID());
 			List<IEditorInputResource> resources = resultsResourceProvider.getResources();
 			IEditorInputResource lastResult = resources.get(resources.size() - 1);
 			setLastResult(lastResult);

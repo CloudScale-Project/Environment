@@ -24,7 +24,7 @@ public class ResultAlternative extends AbstractResultAlternative {
 	private static final String RESULT_FOLDER_MODISCO = "modisco/";
 
 	public ResultAlternative(IProject project, IFolder folder){
-		super(project, folder, ModelType.GROUP_PCM, CSTool.EXTRACTOR_RES.getID());
+		super(project, folder, ModelType.GROUP_PCM, CSTool.EXTRACTOR);
 	}
 	
 	@Override
