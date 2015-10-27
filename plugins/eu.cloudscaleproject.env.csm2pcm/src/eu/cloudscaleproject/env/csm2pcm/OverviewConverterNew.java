@@ -1,6 +1,9 @@
 package eu.cloudscaleproject.env.csm2pcm;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -143,10 +146,9 @@ public class OverviewConverterNew{
 				
 				List<IResource> externalResources = overviewAlternative.getSubResources(ToolchainUtils.KEY_OVERVIEW_EXTERNAL_MODELS);
 				
-				final List<Resource> externalEmfResources = new ArrayList<Resource>();
 				for(IResource externalModel : externalResources){
-					Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, (IFile)externalModel);
-					externalEmfResources.add(emfResource);
+					//Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, (IFile)externalModel);
+					//externalEmfResources.add(emfResource);
 				}
 				
 				//resource set should now contain only Overview external and transformed PCM models
@@ -154,6 +156,25 @@ public class OverviewConverterNew{
 				for(Resource res : resSet.getResources()){
 					logger.info(res.toString());
 				}
+				
+				HashSet<Resource> oldRes = new HashSet<Resource>(resSet.getResources());
+
+				for (Resource res : oldRes)
+				{
+					try {
+						res.unload();
+						res.load(null);
+						EcoreUtil.resolveAll(res);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				HashSet<Resource> newRes = new HashSet<Resource>(resSet.getResources());
+				newRes.removeAll(oldRes);
+
+				final List<Resource> externalEmfResources = new ArrayList<Resource>();
+				externalEmfResources.addAll(newRes);
 				
 				ExplorerProjectPaths.copyEMFResources(
 						resSet.getResources().toArray(new Resource[resSet.getResources().size()]), 
