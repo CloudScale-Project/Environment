@@ -104,7 +104,7 @@ public class ExtractorRunJob
 		LaunchConfiguration modiscoConfiguration = inputAlternative.getModiscoConfiguration();
 		AbstractModelDiscoverer<?> discoverer = (AbstractModelDiscoverer<?>) IDiscoveryManager.INSTANCE.createDiscovererImpl(modiscoConfiguration.getDiscoverer().getId()); 
 		
-        IFolder modiscoFolder = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_MODISCO);
+        IFolder modiscoFolder = (IFolder) resultAlternative.getSubResource(ToolchainUtils.KEY_FOLDER_MODISCO);
         IFile java2kdmFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_java2kdm.xmi");
         IFile javaFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_java.xmi");
         IFile kdmFile = modiscoFolder.getFile(inputAlternative.getExtractedProjectName()+"_kdm.xmi");
@@ -127,9 +127,9 @@ public class ExtractorRunJob
 		{
 			IDiscoveryManager.INSTANCE.discoverElement(discoverer, inputAlternative.getExtractedProject(), parameters, monitor);
 
-			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM, java2kdmFile);
-			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA, javaFile);
-			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_MODISCO_KDM, kdmFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_MODISCO_JAVA2KDM, java2kdmFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_MODISCO_JAVA, javaFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_MODISCO_KDM, kdmFile);
 
 		} catch (DiscoveryException e)
 		{
@@ -142,11 +142,11 @@ public class ExtractorRunJob
 	{
 		SoMoXConfiguration somoxConfiguration = configAlternative.getSomoxConfiguration();
 
-		IFile file = (IFile)resultAlternative.getSubResource(ResultAlternative.KEY_FILE_MODISCO_JAVA2KDM);
+		IFile file = (IFile)resultAlternative.getSubResource(ToolchainUtils.KEY_FILE_MODISCO_JAVA2KDM);
 		somoxConfiguration.getFileLocations().setAnalyserInputFile(file.getFullPath().toString());
 
 		somoxConfiguration.getFileLocations().setProjectName(this.project.getName());
-		IFolder res = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
+		IFolder res = (IFolder) resultAlternative.getSubResource(ToolchainUtils.KEY_FOLDER_SOMOX);
 		somoxConfiguration.getFileLocations().setOutputFolder("/"+res.getProjectRelativePath().toString());
 
 		_somoxNameResemblanceBugWorkaround();
@@ -169,7 +169,7 @@ public class ExtractorRunJob
 			saveJob.setBlackboard(blackboard);
 			saveJob.execute(monitor);
 
-			IFolder somoxFolder = (IFolder) resultAlternative.getSubResource(ResultAlternative.KEY_FOLDER_SOMOX);
+			IFolder somoxFolder = (IFolder) resultAlternative.getSubResource(ToolchainUtils.KEY_FOLDER_SOMOX);
 			IFile repositoryModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".repository");
 			IFile systemModelFile = somoxFolder.getFile(SOMOX_BASE_NAME+".system");
 			IFile sourceDecoratorFile = somoxFolder.getFile(SOMOX_BASE_NAME+".sourcecodedecorator");
@@ -225,8 +225,8 @@ public class ExtractorRunJob
 			systemDiagramResource.getContents().add(systemDiagram);
 			systemDiagramResource.save(null);
 
-			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_REPOSITORY_DIAGRAM, repositoryDiagramFile);
-			resultAlternative.setSubResource(ResultAlternative.KEY_FILE_SYSTEM_DIAGRAM, systemDiagramFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY_DIAGRAM, repositoryDiagramFile);
+			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM_DIAGRAM, systemDiagramFile);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

@@ -41,7 +41,7 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 		@Override
 		public void propertyChange(PropertyChangeEvent evt)
 		{
-			Display.getDefault().syncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					updatePlotCanvas();

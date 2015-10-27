@@ -228,7 +228,7 @@ public class ExtractorComposite extends Composite {
 					});
 					
 					
-					Display.getDefault().syncExec(new Runnable() {
+					Display.getDefault().asyncExec(new Runnable() {
 						
 						@Override
 						public void run() {

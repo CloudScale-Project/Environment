@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
+import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -82,16 +83,18 @@ public class DeleteExplorerNodeHandler {
 				
 				monitor.beginTask("Deleting resource...", IProgressMonitor.UNKNOWN);
 				
-				Display.getDefault().syncExec(new Runnable() {
+				
+				final IExplorerNode parent = node.getParent();
+				
+				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						Explorer.getInstance().setSelection(node.getParent());
-						node.dispose();
+						Explorer.getInstance().setSelection(parent);
 					}
 				});
 				
-				
-				
+				node.dispose();
+
 				IEditorInputResource eir = ResourceRegistry.getInstance().getResource(node.getResource());
 				
 				if (eir instanceof IInputAlternative)

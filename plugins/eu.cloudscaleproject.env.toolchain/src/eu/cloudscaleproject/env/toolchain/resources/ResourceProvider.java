@@ -422,13 +422,6 @@ public abstract class ResourceProvider
 
 	private void firePropertyChange(final String prop, final Object oldValue, final Object newValue)
 	{
-		Display.getDefault().syncExec(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				pcs.firePropertyChange(prop, oldValue, newValue);
-			}
-		});
+		pcs.firePropertyChange(prop, oldValue, newValue);
 	}
 }

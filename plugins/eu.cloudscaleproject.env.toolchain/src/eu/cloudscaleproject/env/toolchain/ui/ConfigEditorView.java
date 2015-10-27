@@ -325,7 +325,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			public void done(IJobChangeEvent event)
 			{
 				updateControls();
-				setEnabledRecursive(getContainer(), true);
 			}
 		});
 
@@ -333,7 +332,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		lastJob = job;
 
 		updateControls();
-		setEnabledRecursive(getContainer(), false);
 	}
 
 	private void stop()
@@ -376,39 +374,9 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					stackedContainer.redraw();
 					
 					updateMetaData();
-
+					ConfigEditorView.this.forceFocus();
 				}
 			}
-		});
-	}
-
-	private HashMap<Control, Boolean> mapOriginalEnableSettings = new HashMap<>();
-
-	private void setEnabledRecursive(final Control ctrl, final boolean enabled)
-	{
-		Display.getDefault().syncExec(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-				if (ctrl instanceof Composite) {
-					Composite comp = (Composite) ctrl;
-					for (Control c : comp.getChildren())
-						setEnabledRecursive(c, enabled);
-				} else {
-					if (enabled == ctrl.getEnabled()) {
-						mapOriginalEnableSettings.put(ctrl, enabled);
-					} else {
-						if (mapOriginalEnableSettings.containsKey(ctrl)) {
-							ctrl.setEnabled(mapOriginalEnableSettings.get(ctrl));
-						} else {
-							ctrl.setEnabled(enabled);
-						}
-					}
-				}
-			}
-
 		});
 	}
 
@@ -468,15 +436,6 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		@Override
 		public void worked(final int work)
 		{
-			Display.getDefault().syncExec(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					// not acctually used
-					// progressBarDeterminate.setSelection(work);
-				}
-			});
 		}
 
 		@Override

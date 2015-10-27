@@ -53,6 +53,17 @@ public class ToolchainUtils {
 	public static final String KEY_FILE_MESURPOINTS 	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_pcmmeasuringpoint";
 	public static final String KEY_FILE_SLO 			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_slo";
 	public static final String KEY_FILE_VARIATION 			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_variation";
+	
+	// Extractor result
+	public static final String KEY_FOLDER_SOMOX = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.folder_somox";
+	public static final String KEY_FOLDER_MODISCO = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.folder_modisco";
+	public static final String KEY_FILE_MODISCO_JAVA2KDM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_modisco_java2kdm";
+	public static final String KEY_FILE_MODISCO_JAVA = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_modisco_java";
+	public static final String KEY_FILE_MODISCO_KDM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_modisco_kdm";
+
+	public static final String KEY_FILE_SYSTEM_DIAGRAM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_system_diagram";
+	public static final String KEY_FILE_REPOSITORY_DIAGRAM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_repositroy_diagram";
+
 
 	// Usage evolution
 	public static final String KEY_FILE_USAGEEVOLUTION	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usageevolution";

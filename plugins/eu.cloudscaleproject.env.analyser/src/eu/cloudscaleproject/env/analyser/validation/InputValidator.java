@@ -114,29 +114,23 @@ public class InputValidator implements IResourceValidator {
 		
 		final EObject eObject = resource.getContents().get(0);
 		//Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
-		
-		Display.getDefault().syncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
-				boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
-				
-				String message = String.format("Model validation failed : %s [%s]", 
-						eObject.eClass().getName(),
-						resource.getURI().lastSegment());
 
-				try {
-					status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
-				} catch (ValidationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				status.setIsValid(modelValid);
-			}
-		});
+		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
+		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 		
+		String message = String.format("Model validation failed : %s [%s]", 
+				eObject.eClass().getName(),
+				resource.getURI().lastSegment());
+
+		try {
+			status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
+		} catch (ValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		status.setIsValid(modelValid);
+
 		/*
 		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
 		

@@ -449,18 +449,13 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		}
 
 		monitor.subTask("Updating GUI...");
-		Display.getDefault().syncExec(new Runnable() {
-			
-			@Override
-			public void run() {				
-				if(ia != null){
-					OpenAlternativeUtil.openAlternative(ia);
-				}
-				if(ca != null){
-					OpenAlternativeUtil.openAlternative(ca);
-				}
-			}
-		});
+
+		if(ca != null){
+			ResourceRegistry.getInstance().openResourceEditor(ca);
+		}
+		else if(ia != null){
+			ResourceRegistry.getInstance().openResourceEditor(ia);
+		}
 		
 		if(monitor.isCanceled()){
 			return false;

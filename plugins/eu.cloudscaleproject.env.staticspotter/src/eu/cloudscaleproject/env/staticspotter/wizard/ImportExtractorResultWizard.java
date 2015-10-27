@@ -1,15 +1,12 @@
 package eu.cloudscaleproject.env.staticspotter.wizard;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
-import eu.cloudscaleproject.env.toolchain.ModelType;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
@@ -48,6 +45,10 @@ public class ImportExtractorResultWizard extends Wizard
 		addPage(alternativeSelectionPage);
 	}
 
+	public static final String KEY_FOLDER_SOMOX = "folder_somox";
+	public static final String KEY_FOLDER_MODISCO = "folder_modisco";
+	public static final String KEY_FILE_MODISCO_JAVA2KDM = "file_modisco_java2kdm";
+
 	@Override
 	public boolean performFinish()
 	{
@@ -60,24 +61,32 @@ public class ImportExtractorResultWizard extends Wizard
 
 		// Copy all models from Extractor Result
 		EditorInputEMF selection = (EditorInputEMF) alternativeSelectionPage.getSelection();
-		ResourceSetImpl rs = new ResourceSetImpl();
+		
+		
+		try {
 
-		for (ModelType type : ModelType.GROUP_SOURCEDECORATOR)
-		{
-			for (IFile file : ExplorerProjectPaths.findResources(selection.getResource(), type.getFileExtension()))
-			{
-				ExplorerProjectPaths.getEmfResource(rs, file);
-			}
-		}
+			String modiscoFolder = selection.getProperty(ToolchainUtils.KEY_FOLDER_MODISCO);
+			String somoxFolder = selection.getProperty(ToolchainUtils.KEY_FOLDER_SOMOX);
 
-		Resource[] resources = rs.getResources().toArray(new Resource[0]);
+			IFolder modisco = selection.getResource().getFolder(modiscoFolder);
+			IFolder somox = selection.getResource().getFolder(somoxFolder);
 
-		ExplorerProjectPaths.copyEMFResources(alternative.getResource(), resources, null);
+			modisco.copy(alternative.getResource().getFullPath().append(modiscoFolder), true, null);
+			somox.copy(alternative.getResource().getFullPath().append(somoxFolder), true, null);
+			
+			alternative.setProperty(ToolchainUtils.KEY_FOLDER_MODISCO, modiscoFolder);
+			alternative.setProperty(ToolchainUtils.KEY_FOLDER_SOMOX, somoxFolder);
 
-		for (Resource resource : resources)
-		{
-			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			alternative.addSubResourceModel(f);
+			alternative.setProperty(ToolchainUtils.KEY_FILE_MODISCO_JAVA2KDM, selection.getProperty(ToolchainUtils.KEY_FILE_MODISCO_JAVA2KDM));
+			alternative.setProperty(ToolchainUtils.KEY_FILE_MODISCO_JAVA, selection.getProperty(ToolchainUtils.KEY_FILE_MODISCO_JAVA));
+			alternative.setProperty(ToolchainUtils.KEY_FILE_MODISCO_KDM, selection.getProperty(ToolchainUtils.KEY_FILE_MODISCO_KDM));
+
+			alternative.setProperty(ToolchainUtils.KEY_FILE_REPOSITORY, selection.getProperty(ToolchainUtils.KEY_FILE_REPOSITORY));
+			alternative.setProperty(ToolchainUtils.KEY_FILE_SYSTEM, selection.getProperty(ToolchainUtils.KEY_FILE_SYSTEM));
+			alternative.setProperty(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, selection.getProperty(ToolchainUtils.KEY_FILE_SOURCEDECORATOR));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 
 		alternative.save();

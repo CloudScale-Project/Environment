@@ -17,7 +17,7 @@ public class ProjectWizardExtension implements NewProjectExtension{
 		ResourceRegistry.getInstance().collectResourceProviders(project);
 		
 		//select and expand node in explorer
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {

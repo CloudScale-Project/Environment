@@ -66,7 +66,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		
 		@Override
 		public void resourceChanged(IResourceDelta delta) {
-			Display.getDefault().syncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				
 				@Override
 				public void run() {

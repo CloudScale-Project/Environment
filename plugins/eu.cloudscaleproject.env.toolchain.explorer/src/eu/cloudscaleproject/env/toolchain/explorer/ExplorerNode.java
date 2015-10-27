@@ -278,7 +278,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 			icon.dispose();
 		}
 		
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {

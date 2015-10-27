@@ -211,6 +211,8 @@ public class AlternativeEditor {
 				((ISelectable)control).onSelect();
 			}
 		}
+		
+		parentComposite.forceFocus();
 	}
 	
 	@Persist

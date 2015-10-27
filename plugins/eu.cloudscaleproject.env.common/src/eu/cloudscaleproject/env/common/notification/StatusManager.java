@@ -245,7 +245,8 @@ public class StatusManager {
 			return;
 		}
 		
-		doValidate(project, statusProvider);
+		//doValidate(project, statusProvider);
+		validateAsync(project, statusProvider);
 	}
 	
 	public void validateAsync(final IProject project, final IValidationStatusProvider statusProvider){

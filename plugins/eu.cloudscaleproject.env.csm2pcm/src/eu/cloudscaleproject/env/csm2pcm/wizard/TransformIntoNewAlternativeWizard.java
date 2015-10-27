@@ -119,14 +119,8 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 				OverviewConverterNew.getInstance().transform(overviewAlternaitve, newInputAlternative);
 				
 				newInputAlternative.save(monitor);
-				
-				Display.getDefault().syncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						OpenAlternativeUtil.openAlternative(newInputAlternative);
-					}
-				});
+
+				ResourceRegistry.getInstance().openResourceEditor(newInputAlternative);
 				
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "New alternative has been created.");
 			}

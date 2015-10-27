@@ -122,13 +122,9 @@ public class ExternalImportInputWizard extends Wizard{
 				monitor.worked(1);
 				
 				monitor.subTask("Updating UI...");
-				Display.getDefault().syncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						OpenAlternativeUtil.openAlternative(alternative);
-					}
-				});
+
+				OpenAlternativeUtil.openAlternative(alternative);
+
 				monitor.worked(1);
 				monitor.done();
 				

@@ -10,7 +10,7 @@ public enum CSTool {
 	
 	EXTRACTOR("Extractor", 
 			"eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor",
-			CSToolResource.EXTRACTOR_INPUT, CSToolResource.EXTRACTOR_CONF, CSToolResource.EXTRACTOR_INPUT),
+			CSToolResource.EXTRACTOR_INPUT, CSToolResource.EXTRACTOR_CONF, CSToolResource.EXTRACTOR_RES),
 	ANALYSER("Analyser", 
 			"eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyser",
 			CSToolResource.ANALYSER_INPUT, CSToolResource.ANALYSER_CONF, CSToolResource.ANALYSER_RES),

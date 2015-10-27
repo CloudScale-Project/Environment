@@ -23,8 +23,8 @@ public class InputSelectionWizard extends Wizard{
 		
 		List<WizardNode> nodes = new ArrayList<>();
 		
-		nodes.add(new CreateExternalNode(project));
 		nodes.add(new CreateImportExtractorNode(project));
+		nodes.add(new CreateExternalNode(project));
 		
 		newInputSelectionPage = new WizardSelectionPage("Import options",
 														"Select one of the possible options.", nodes);
