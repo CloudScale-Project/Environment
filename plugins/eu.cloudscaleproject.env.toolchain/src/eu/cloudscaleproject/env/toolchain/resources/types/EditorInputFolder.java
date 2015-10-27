@@ -512,7 +512,11 @@ public class EditorInputFolder extends EditorInputResource{
 	
 	@Override
 	public final void setName(String name){
-		setProperty(PROP_NAME, name);
+		String old = getProperty(KEY_NAME);
+		propertyInputFile.setProperty(KEY_NAME, name);
+
+		setDirty(true);
+		firePropertyChange(PROP_NAME, old, name);
 	}
 	
 	@Override
