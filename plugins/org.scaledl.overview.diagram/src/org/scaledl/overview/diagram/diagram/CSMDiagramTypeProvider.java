@@ -38,13 +38,13 @@ public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
 		if(rp != null){
 			final IEditorInputResource resource = rp.getResource(altFolder);
 			
-			StatusManager.getInstance().validateAsync(project, resource);
+			StatusManager.getInstance().validate(project, resource);
 			
 			getDiagramBehavior().getEditingDomain().getCommandStack().addCommandStackListener(new CommandStackListener() {
 				
 				@Override
 				public void commandStackChanged(EventObject event) {
-					StatusManager.getInstance().validateAsync(project, resource);
+					StatusManager.getInstance().validate(project, resource);
 				}
 			});
 		}

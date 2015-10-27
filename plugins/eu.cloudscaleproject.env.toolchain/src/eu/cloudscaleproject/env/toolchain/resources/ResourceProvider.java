@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;

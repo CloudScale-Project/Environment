@@ -244,17 +244,6 @@ public class StatusManager {
 			logger.severe("Status provider is NULL! Can not validate!");
 			return;
 		}
-		
-		//doValidate(project, statusProvider);
-		validateAsync(project, statusProvider);
-	}
-	
-	public void validateAsync(final IProject project, final IValidationStatusProvider statusProvider){
-		
-		if(statusProvider == null){
-			logger.severe("Status provider is NULL! Can not validate!");
-			return;
-		}
 
 		synchronized (validationTasks) {
 			for (ValidationRunnable r : validationTasks)
@@ -266,7 +255,6 @@ public class StatusManager {
 			validationTasks.add(r);
 			validationTasks.notify();
 		}
-		
 	}
 
 	private class ValidationRunnable implements Runnable
@@ -333,21 +321,4 @@ public class StatusManager {
 		}
 	}
 	
-	public synchronized void validateAllAsync(IProject project){
-		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
-			try{
-				// if global validator
-				if(entry.getValue() == null){
-					validateAsync(null, entry.getKey());
-				}
-				// else
-				else if(project != null && project.equals(entry.getValue())){
-					validateAsync(project, entry.getKey());
-				}
-			}
-			catch(NullPointerException e){
-				//skip
-			}
-		}
-	}
 }

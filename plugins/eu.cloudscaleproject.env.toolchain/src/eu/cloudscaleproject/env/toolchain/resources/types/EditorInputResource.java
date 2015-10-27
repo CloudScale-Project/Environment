@@ -80,7 +80,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 					}
 					
 					if (EditorInputResource.this.getID() != null){
-						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+						StatusManager.getInstance().validate(getProject(), EditorInputResource.this);
 					}
 				}
 			};
@@ -100,10 +100,10 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 					}
 					
 					if(PROP_STATUS_ADDED.equals(evt.getPropertyName())){
-						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+						StatusManager.getInstance().validate(getProject(), EditorInputResource.this);
 					}
 					if(PROP_STATUS_REMOVED.equals(evt.getPropertyName())){
-						StatusManager.getInstance().validateAsync(getProject(), EditorInputResource.this);
+						StatusManager.getInstance().validate(getProject(), EditorInputResource.this);
 					}
 					
 				}

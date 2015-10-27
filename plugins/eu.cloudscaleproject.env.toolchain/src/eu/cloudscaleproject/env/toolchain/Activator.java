@@ -5,6 +5,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -41,6 +42,9 @@ public class Activator extends AbstractUIPlugin {
 		
 		//retrieve extensions
 		ToolchainExtensions.getInstance().retrieveExtensions();
+		
+		//initialize project resources
+		ResourceRegistry.getInstance().initialize();
 	}
 	
 	/*

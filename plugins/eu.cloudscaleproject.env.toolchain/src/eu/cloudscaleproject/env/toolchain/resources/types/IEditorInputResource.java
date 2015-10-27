@@ -14,7 +14,7 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	
 	public final String KEY_STATUS = "status";
 	public final String VALUE_STATUS_ERROR = "error";
-	
+		
 	public static final String PROP_SAVED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propSaved";
 	public static final String PROP_LOADED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propLoaded";
 	public static final String PROP_DELETED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propDeleted";

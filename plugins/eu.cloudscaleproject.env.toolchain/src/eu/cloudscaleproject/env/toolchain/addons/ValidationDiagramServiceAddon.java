@@ -22,7 +22,6 @@ import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -31,6 +30,7 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 public class ValidationDiagramServiceAddon {
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ValidationDiagramServiceAddon.class.getName());
 	
 	private static final PropertyChangeListener diagramServiceListener = new PropertyChangeListener() {
@@ -170,9 +170,7 @@ public class ValidationDiagramServiceAddon {
 					//make initial statuses visible
 					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
 					IProject project = (IProject)evt.getNewValue();
-					
-					ResourceRegistry.getInstance().collectResourceProviders(project);
-					
+										
 					//bind all global status providers
 					for(IValidationStatusProvider sp : StatusManager.getInstance().getStatusProviders(null)){
 						ValidationDiagramServiceAddon.validate(sp);
@@ -235,7 +233,6 @@ public class ValidationDiagramServiceAddon {
 							 @Active @Optional IActiveResources activeResources){
 		
 		if(diagramService == null){
-			logger.warning("IValidationDiagramService can not be found! Status diagram will not be updated!");
 			return;
 		}
 		

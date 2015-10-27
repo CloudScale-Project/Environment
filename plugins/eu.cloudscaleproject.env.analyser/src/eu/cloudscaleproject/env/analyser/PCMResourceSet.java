@@ -55,21 +55,6 @@ public class PCMResourceSet extends ResourceSetImpl{
 		this.rootFolder = rootFolder;
 		this.rootFolderModels = rootFolder.getFolder("models");
 		
-		//create folders if they don't exist jet
-		/*
-		try{
-			if(!rootFolder.exists()){
-				rootFolder.create(true, true, null);
-			}
-			if(!rootFolderModels.exists()){
-				rootFolderModels.create(true, true, null);
-			}
-		}
-		catch(CoreException e){
-			e.printStackTrace();
-		}
-		*/
-		
 		for(ModelType mt : ModelType.values()){
 			this.modelFiles[mt.ordinal()] = this.rootFolderModels.getFile("pcm." + mt.getFileExtension());
 		}

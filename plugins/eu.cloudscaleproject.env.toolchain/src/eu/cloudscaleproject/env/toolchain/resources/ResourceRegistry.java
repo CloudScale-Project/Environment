@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.resources;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -18,8 +21,11 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
+import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -35,18 +41,39 @@ public class ResourceRegistry {
 		if(instance == null){
 			instance = new ResourceRegistry();
 		}
+		return instance;
+	}
+	
+	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
 		
-		//dispose unused resource providers
-		List<IFolder> folders = new ArrayList<IFolder>(instance.resourceProviders.keySet());
-		for(IFolder folder : folders){
-			if(!folder.exists()){
-				ResourceProvider rp = instance.resourceProviders.get(folder);
-				instance.removeProvider(rp);
+		@Override
+		public void resourceChanged(IResourceDelta delta) {
+						
+			for (IResourceDelta rootDelta : delta.getAffectedChildren())
+			{
+				IResource resource = rootDelta.getResource();
+				
+				if(rootDelta.getKind() == IResourceDelta.ADDED){
+					if(resource instanceof IProject){
+						
+						IProject project = (IProject)resource;
+						if(isCloudScaleProject(project)){
+							addResourceProviders(project);
+						}
+						
+					}
+				}
+				if(rootDelta.getKind() == IResourceDelta.REMOVED){
+					
+				}
 			}
 		}
 		
-		return instance;
-	}
+		@Override
+		public IResource[] getResources() {
+			return new IResource[]{ResourcesPlugin.getWorkspace().getRoot()};
+		}
+	};
 	
 	public static class ResourceExtensionItem{
 		
@@ -87,13 +114,49 @@ public class ResourceRegistry {
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
-		}		
+		}
+		
 	}
 	
-	private synchronized void addProvider(String id, ResourceProvider rp){
+	public void initialize(){		
+		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
+			try {
+				if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
+					addResourceProviders(project);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		ExplorerChangeNotifier.getInstance().addListener(ecl);
+	}
+	
+	private boolean isCloudScaleProject(IProject project){
+		try {
+			if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
+				return true;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private synchronized void addProvider(String id, final ResourceProvider rp){
 		IFolder folder = rp.getRootFolder();
 		resourceProviders.put(folder, rp);
 		resourceProviderIds.put(rp, id);
+		
+		rp.addListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if(ResourceProvider.PROP_DISPOSED.equals(evt.getPropertyName())){
+					removeProvider(rp);
+				}
+			}
+		});
 	}
 	
 	private synchronized void removeProvider(ResourceProvider rp){
@@ -120,7 +183,7 @@ public class ResourceRegistry {
 		return resourceProvider;
 	}
 	
-	public synchronized void collectResourceProviders(IProject project){
+	private synchronized void addResourceProviders(IProject project){
 		for(Entry<String, ResourceExtensionItem> entry : resourceExtensionItems.entrySet()){
 			String id = entry.getKey();
 			
@@ -128,11 +191,15 @@ public class ResourceRegistry {
 				continue;
 			}
 			
-			ResourceProvider rp = createProvider(project, id);
+			final ResourceProvider rp = createProvider(project, id);
 			if(rp != null){
 				addProvider(id, rp);
 			}
 		}
+	}
+	
+	public synchronized void removeResourceProviders(IProject project){
+		
 	}
 	
 	public List<ResourceExtensionItem> getResourceExtensionItems(){
@@ -143,10 +210,7 @@ public class ResourceRegistry {
 		return resourceExtensionItems.get(id);
 	}
 	
-	public synchronized List<ResourceProvider> getResourceProviders(IProject project){
-		
-		collectResourceProviders(project);
-		
+	public synchronized List<ResourceProvider> getResourceProviders(IProject project){	
 		List<ResourceProvider> out = new ArrayList<ResourceProvider>();
 		
 		for(Entry<IFolder, ResourceProvider> entry : resourceProviders.entrySet()){
@@ -159,7 +223,6 @@ public class ResourceRegistry {
 	}
 	
 	public synchronized String getResourceProviderID(ResourceProvider rp){
-		collectResourceProviders(rp.getProject());
 		return resourceProviderIds.get(rp);
 	}
 	

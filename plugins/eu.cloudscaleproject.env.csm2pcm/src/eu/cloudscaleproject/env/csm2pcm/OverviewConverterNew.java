@@ -3,13 +3,10 @@ package eu.cloudscaleproject.env.csm2pcm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -48,9 +45,7 @@ public class OverviewConverterNew{
 		}
 		return instance;
 	}
-	
-	private static final Logger logger = Logger.getLogger(OverviewConverterNew.class.getName());
-	
+		
 	private static final String ENTITY_ID_PREFIX = PalladioModel.DEFAULT_MODEL_ID;
 	private static final String CSM2PCM_QVTO = "transforms/csm2pcm.qvto";
 	
@@ -144,19 +139,6 @@ public class OverviewConverterNew{
 					e.printStackTrace();
 				}
 				
-				List<IResource> externalResources = overviewAlternative.getSubResources(ToolchainUtils.KEY_OVERVIEW_EXTERNAL_MODELS);
-				
-				for(IResource externalModel : externalResources){
-					//Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, (IFile)externalModel);
-					//externalEmfResources.add(emfResource);
-				}
-				
-				//resource set should now contain only Overview external and transformed PCM models
-				logger.info("Models contained in the resource set after transformation: ");
-				for(Resource res : resSet.getResources()){
-					logger.info(res.toString());
-				}
-				
 				HashSet<Resource> oldRes = new HashSet<Resource>(resSet.getResources());
 
 				for (Resource res : oldRes)
@@ -201,18 +183,23 @@ public class OverviewConverterNew{
 				}, null);
 			}
 			
-			//register new input alternative models
-			for (Resource resource : resSet.getResources())
-			{
-				ModelType mt = ModelType.getModelType(resource);
-				if(mt != null){
-					IFile file = ExplorerProjectPaths.getFileFromEmfResource(resource);
-					if(file != null && analyserAlternative.getResource().getFullPath().isPrefixOf(file.getFullPath())){
-						analyserAlternative.addSubResourceModel(file);
-					}
-				}
+			//register generated models
+			IFile repository = resSet.getModelFile(ModelType.REPOSITORY);
+			IFile system = resSet.getModelFile(ModelType.SYSTEM);
+			IFile resource = resSet.getModelFile(ModelType.RESOURCE);
+			IFile allocation = resSet.getModelFile(ModelType.ALLOCATION);
+			IFile usage = resSet.getModelFile(ModelType.USAGE);
 
-			}
+			if(repository != null)
+				analyserAlternative.addSubResourceModel(repository);
+			if(system != null)
+				analyserAlternative.addSubResourceModel(system);
+			if(resource != null)
+				analyserAlternative.addSubResourceModel(resource);
+			if(allocation != null)
+				analyserAlternative.addSubResourceModel(allocation);
+			if(usage != null)
+				analyserAlternative.addSubResourceModel(usage);
 		
 		}
 

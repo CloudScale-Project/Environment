@@ -5,17 +5,13 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.wizard.NewProjectExtension;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 
 public class ProjectWizardExtension implements NewProjectExtension{
 
 	@Override
 	public void finalize(final IProject project) {
-		
-		//create tool folders
-		ResourceRegistry.getInstance().collectResourceProviders(project);
-		
+				
 		//select and expand node in explorer
 		Display.getDefault().asyncExec(new Runnable() {
 			
