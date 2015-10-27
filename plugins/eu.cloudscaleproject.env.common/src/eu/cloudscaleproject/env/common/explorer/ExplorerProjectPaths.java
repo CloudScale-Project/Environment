@@ -740,7 +740,9 @@ public class ExplorerProjectPaths {
 		{
 			try
 			{
-				resource.save(null);
+				if(resource.getURI().isPlatform()){
+					resource.save(null);
+				}
 			} catch (IOException e)
 			{
 				e.printStackTrace();

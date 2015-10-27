@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.csm2pcm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -44,6 +45,8 @@ public class OverviewConverterNew{
 		}
 		return instance;
 	}
+	
+	private static final Logger logger = Logger.getLogger(OverviewConverterNew.class.getName());
 	
 	private static final String ENTITY_ID_PREFIX = PalladioModel.DEFAULT_MODEL_ID;
 	private static final String CSM2PCM_QVTO = "transforms/csm2pcm.qvto";
@@ -109,8 +112,12 @@ public class OverviewConverterNew{
 		if(result.getSeverity() == Diagnostic.OK) {
 			
 			OverviewPackage.eINSTANCE.eClass();
-			
+
+			//unload all resources so we start with a clean resource set
 			resSet.clearAll(ModelTypes);
+			for(Resource res : resSet.getResources()){
+				res.unload();
+			}
 						
 			resSet.setRootObject(ModelType.RESOURCE, 
 					outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0));
@@ -123,7 +130,7 @@ public class OverviewConverterNew{
 			resSet.setRootObject(ModelType.USAGE, 
 					outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0));
 			
-			resSet.saveAll(ModelTypes);
+			resSet.saveAll(ModelTypes);			
 		
 			//copy Overview external PCM models into AnalyserAlternative
 			{
@@ -142,8 +149,14 @@ public class OverviewConverterNew{
 					externalEmfResources.add(emfResource);
 				}
 				
+				//resource set should now contain only Overview external and transformed PCM models
+				logger.info("Models contained in the resource set after transformation: ");
+				for(Resource res : resSet.getResources()){
+					logger.info(res.toString());
+				}
+				
 				ExplorerProjectPaths.copyEMFResources(
-						externalEmfResources.toArray(new Resource[externalEmfResources.size()]), 
+						resSet.getResources().toArray(new Resource[resSet.getResources().size()]), 
 						new BasicCallback<Resource>() {
 					
 					@Override
