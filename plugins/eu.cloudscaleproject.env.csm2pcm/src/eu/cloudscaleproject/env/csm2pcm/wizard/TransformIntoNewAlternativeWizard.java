@@ -11,6 +11,7 @@ import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.csm2pcm.Activator;
 import eu.cloudscaleproject.env.csm2pcm.OverviewConverterNew;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
+import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -34,7 +35,7 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		this.project = project;
 		
 		//folder = createTransformOutputFolder(project);
-		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER.getInput().getId()));
+		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSTool.ANALYSER.getInput().getID()));
 		
 		ResourceProvider overviewResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 		
