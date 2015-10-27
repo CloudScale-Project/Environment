@@ -63,13 +63,13 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 				composite.setTopControl(treeviewComposite);
 			}
 			
-/*			//bottom
+			//bottom
 			{
 				PropertyPageComposite pageSheet = new PropertyPageComposite(
 						composite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
 				//pageSheet.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 				composite.setBottomControl(pageSheet);
-			}*/
+			}
 			
 			tabItem.setControl(composite);			
 			tabFolder.setSelection(tabItem);
