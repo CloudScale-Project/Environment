@@ -1,6 +1,5 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -513,7 +512,7 @@ public class EditorInputFolder extends EditorInputResource{
 	
 	@Override
 	public final void setName(String name){
-		propertyInputFile.setName(name);
+		setProperty(PROP_NAME, name);
 	}
 	
 	@Override
@@ -530,11 +529,19 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	public final void setProperty(String key, String value){
+		String old = getProperty(key);
 		propertyInputFile.setProperty(key, value);
+
+		setDirty(true);
+		firePropertyChange(key, old, value);
 	}
 	
 	public final void setProperties(String key, String[] value){
+		String[] old = getProperties(key);
 		propertyInputFile.setProperties(key, value);
+
+		setDirty(true);
+		firePropertyChange(key, old, value);
 	}
 	
 	@Override
@@ -548,29 +555,6 @@ public class EditorInputFolder extends EditorInputResource{
 		super.setJobInProgress(enable);
 	}
 
-	////////////////////////////////////////////////////////////////////
-	// Properties wiring 
-	//
-	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		propertyInputFile.addPropertyChangeListener(propertyName, listener);
-		super.addPropertyChangeListener(propertyName, listener);
-	}
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		propertyInputFile.addPropertyChangeListener(listener);
-		super.addPropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		propertyInputFile.removePropertyChangeListener(listener);
-		super.removePropertyChangeListener(listener);
-	}
-	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		propertyInputFile.removePropertyChangeListener(propertyName, listener);
-		super.removePropertyChangeListener(propertyName, listener);
-	}
-	
 	////////////////////////////////////////////////////////////////////
 	// Validation
 	//
