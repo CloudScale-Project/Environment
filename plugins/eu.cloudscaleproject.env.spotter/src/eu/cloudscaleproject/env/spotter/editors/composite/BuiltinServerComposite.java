@@ -25,22 +25,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 
 import eu.cloudscaleproject.env.common.ColorResources;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.Activator;
 import eu.cloudscaleproject.env.spotter.BuiltinServerController;
+import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.spotter.editors.composite.ServerClientComposite.ISpotterServer;
 
 public class BuiltinServerComposite extends Composite implements ISpotterServer
 {
 
 	private IProject project;
-	private Text txtPort;
 	private StyledText txtServerLog;
 	private Button btnConnect;
 	private Composite composite;
@@ -59,15 +56,6 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 
 		this.project = project;
 		setLayout(new GridLayout(2, false));
-
-		Label lblInternalServerport = new Label(this, SWT.NONE);
-		lblInternalServerport.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblInternalServerport.setText("Server port");
-
-		txtPort = new Text(this, SWT.BORDER);
-		GridData gd_text = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text.widthHint = 100;
-		txtPort.setLayoutData(gd_text);
 		
 		composite = new Composite(this, SWT.NONE);
 		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
@@ -76,6 +64,9 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		composite.setLayout(new GridLayout(2, false));
 		
 				btnConnect = new Button(composite, SWT.NONE);
+				GridData gd_btnConnect = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gd_btnConnect.heightHint = 42;
+				btnConnect.setLayoutData(gd_btnConnect);
 				
 				lblStatus = new Label(composite, SWT.NONE);
 				lblStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -90,7 +81,9 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 				});
 		
 		lblServerLog = new Label(this, SWT.NONE);
-		lblServerLog.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		GridData gd_lblServerLog = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_lblServerLog.verticalIndent = 10;
+		lblServerLog.setLayoutData(gd_lblServerLog);
 		lblServerLog.setFont(SWTResourceManager.getFont("Sans", 12, SWT.NORMAL));
 		lblServerLog.setText("--- Server Log ---");
 		
@@ -117,12 +110,12 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 	}
 	public String getPort()
 	{
-		return txtPort.getText();
+		return ""+BuiltinServerController.getInstance(project).getServerPort();
 		
 	}
 	public String getServerUrl ()
 	{
-		return "localhost:"+txtPort.getText();
+		return "localhost:"+BuiltinServerController.getInstance(project).getServerPort();
 	}
 
 	private void initLog()
@@ -194,30 +187,10 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 				doc.removeDocumentListener(documentListener);
 			}
 		});
-		
-		
-		txtPort.addListener(SWT.Verify, new Listener() {
-			   public void handleEvent(Event e) {
-			        String currentText = ((Text)e.widget).getText();
-			        String port =  currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
-			        try{  
-			            int portNum = Integer.valueOf(port);  
-			            if(portNum <0 || portNum > 65535){  
-			                e.doit = false;  
-			            }  
-			        }  
-			        catch(NumberFormatException ex){  
-			            if(!port.equals(""))
-			                e.doit = false;  
-			        }  
-			   }
-			});
 	}
 
 	private void toggleServerState()
 	{
-		final int port = Integer.parseInt(txtPort.getText());
-
 		Job job = new Job("Start/Stop Spotter server")
 		{
 
@@ -227,7 +200,7 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 				try
 				{
 					if (!BuiltinServerController.getInstance(project).isServerRunning())
-						BuiltinServerController.getInstance(project).startServer(port);
+						BuiltinServerController.getInstance(project).startServer(Util.findFreePort());
 					else
 						BuiltinServerController.getInstance(project).stopServer();
 				}
@@ -256,7 +229,7 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		job.schedule();
 	}
 
-	private void updateState()
+	public void updateState()
 	{
 		BuiltinServerController bsc = BuiltinServerController.getInstance(this.project);
 		boolean running = bsc.isServerRunning();
@@ -266,11 +239,8 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		
 		
 		String statusText = running ? 
-				"<Server is up and running>" : 
+				"<Server is running on localhost:"+bsc.getServerPort()+">" : 
 				"<Server is not running>";
 		lblStatus.setText(statusText);
-
-		txtPort.setEnabled(!running);
-		txtPort.setText(""+bsc.getServerPort());
 	}
 }

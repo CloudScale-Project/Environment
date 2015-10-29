@@ -1,27 +1,24 @@
 package eu.cloudscaleproject.env.spotter.editors.composite;
 
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeanProperties;
-import org.eclipse.core.databinding.beans.PojoProperties;
-import org.eclipse.core.databinding.observable.list.WritableList;
-import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.property.Properties;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
-import org.eclipse.jface.databinding.viewers.ViewerProperties;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
 import org.spotter.eclipse.ui.editors.HierarchyEditor;
@@ -34,10 +31,8 @@ import org.spotter.eclipse.ui.editors.WorkloadEditorInput;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
+import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
-import eu.cloudscaleproject.env.toolchain.CSToolResource;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.ui.ConfigEditorView;
 
 public class ConfigAlternativeComposite extends ConfigEditorView implements IRefreshable, ISelectable{
@@ -46,11 +41,26 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 
 	private final ConfigAlternative confAlternative;
 		
-	private final ComboViewer comboViewer;
-		
 	private Composite confComposite;
 	private Composite workComposite;
 	private Composite hierComposite;
+
+	PropertyChangeListener connecionListener = new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				if (ConfigAlternativeComposite.this.isDisposed()) return;
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						refresh();
+					}
+				});
+			}
+		};
 	
 	private SpotterConfigEditor confEditor = new SpotterConfigEditor(){
 		public String getContentDescription() {return "";};
@@ -64,9 +74,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		public String getContentDescription() {return "";};
 		protected void setContentDescription(String description) {};
 	};
-	private Combo combo;
-	private DataBindingContext m_bindingContext;
-
 	private Composite warningComposite;
 
 	private Composite mainComposite;
@@ -83,24 +90,27 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		warningComposite = new Composite(getContainer(), SWT.BORDER);
 		warningComposite.setLayout(new GridLayout(1, false));
 		Label lblEmpty = new Label(warningComposite, SWT.CENTER);
-		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true, 1, 1));
 		lblEmpty.setText("Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
+
+		Button btnStartServer = new Button(warningComposite, SWT.NONE);
+		GridData gd_btnStartServer = new GridData(SWT.CENTER, SWT.TOP, true, true, 1, 1);
+		gd_btnStartServer.verticalIndent = 20;
+		gd_btnStartServer.heightHint = 42;
+		btnStartServer.setLayoutData(gd_btnStartServer);
+		btnStartServer.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Util.startBuiltinServerAndConnectAsync(ConfigAlternativeComposite.this.project);
+			}
+		});
+		
+		SpotterClientController.getController(project).addPropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
+
+		btnStartServer.setText("Start server");
 		
 		mainComposite = new Composite(getContainer(), SWT.NONE);
 		mainComposite.setLayout(new GridLayout(2, false));
-		
-		Label lblSelectInput = new Label(mainComposite, SWT.NONE);
-		lblSelectInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSelectInput.setText("Input:");
-		
-		comboViewer = new ComboViewer(mainComposite, SWT.NONE);
-		combo = comboViewer.getCombo();
-		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_combo.widthHint = 170;
-		combo.setLayoutData(gd_combo);
-
-		new Label(mainComposite, SWT.NONE);
-		new Label(mainComposite, SWT.NONE);
 		
 		//composite with tab folder
 		Composite composite = new Composite(mainComposite, SWT.NONE);
@@ -109,8 +119,19 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 		
 		initConfigurationComposites(composite);
 		updateEditors();
-		
-		m_bindingContext = initDataBindings();
+
+		this.addDisposeListener(new DisposeListener()
+		{
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+				editorInput.unRegisterSpotterEditor(confEditor);
+				editorInput.unRegisterSpotterEditor(workEditor);
+				editorInput.unRegisterSpotterEditor(hierEditor);
+				SpotterClientController.getController(ConfigAlternativeComposite.this.project).
+					removePropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
+			}
+		});
 	}
 	
 	private void initConfigurationComposites (Composite container)
@@ -122,21 +143,27 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Configuration");
 			
-			confComposite = new Composite(tabFolder, SWT.NONE);
-			confComposite.setLayout(new FillLayout());
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new GridLayout(1, true));
 			
-			tabItem.setControl(confComposite);
+			confComposite = new Composite(c, SWT.NONE);
+			confComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			
+			tabItem.setControl(c);
 			tabFolder.setSelection(tabItem);
 		} 		
 		//spotter workload editor tab
 		{
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Workload");
+
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new GridLayout(1, true));
 			
-			workComposite = new Composite(tabFolder, SWT.NONE);
-			workComposite.setLayout(new FillLayout());
+			workComposite = new Composite(c, SWT.NONE);
+			workComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			
-			tabItem.setControl(workComposite);
+			tabItem.setControl(c);
 		}		
 
 		//spotter hierarchy editor tab
@@ -144,10 +171,13 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 			tabItem.setText("Hierarchy");
 			
-			hierComposite = new Composite(tabFolder, SWT.NONE);
-			hierComposite.setLayout(new FillLayout());
+			Composite c = new Composite(tabFolder, SWT.NONE);
+			c.setLayout(new GridLayout(1, true));
 			
-			tabItem.setControl(hierComposite);
+			hierComposite = new Composite(c, SWT.NONE);
+			hierComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			
+			tabItem.setControl(c);
 		}		
 		
 	}
@@ -155,15 +185,6 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	@Override
 	public void refresh() {
 
-		ResourceProvider resourceProvider = ResourceRegistry.getInstance().getResourceProvider(confAlternative.getProject(),
-				CSToolResource.SPOTTER_DYN_INPUT);
-
-		this.inputAlternatives.clear();
-		this.inputAlternatives.addAll(resourceProvider.getResources());
-		comboViewer.refresh(true);
-
-		m_bindingContext.updateTargets();
-		
 		updateEditors();
 	}
 	
@@ -230,23 +251,4 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	@Override
 	public void onSelect() {
 	}
-	
-	private WritableList inputAlternatives = new WritableList();
-	protected DataBindingContext initDataBindings() {
-		DataBindingContext bindingContext = new DataBindingContext();
-		//
-		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-		IObservableMap observeMap = Properties.observeEach(listContentProvider.getKnownElements(), PojoProperties.values(new String[]{"name"}))[0];
-		comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-		comboViewer.setContentProvider(listContentProvider);
-		//
-		comboViewer.setInput(inputAlternatives);
-		//
-		IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
-		IObservableValue extractorResultConfigPersistenceFolderObserveValue = BeanProperties.value("inputAlternative").observe(confAlternative);
-		bindingContext.bindValue(observeSingleSelectionComboViewer, extractorResultConfigPersistenceFolderObserveValue, null, null);
-		//
-		return bindingContext;
-	}
-
 }

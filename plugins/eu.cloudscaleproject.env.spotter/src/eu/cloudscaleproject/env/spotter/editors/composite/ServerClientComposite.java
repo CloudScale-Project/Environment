@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.spotter.editors.composite;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,6 +28,7 @@ import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
+import eu.cloudscaleproject.env.spotter.Util;
 
 public class ServerClientComposite extends Composite
 {
@@ -145,6 +149,24 @@ public class ServerClientComposite extends Composite
 		
 		updateClient();
 		updateServerComposite();
+		
+		SpotterClientController.getController(project).addPropertyChangeListener(SpotterClientController.PROP_CONNECTION, new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				if (ServerClientComposite.this.isDisposed()) return;
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						builtinServerComposite.updateState();
+						updateClient();
+					}
+				});
+			}
+		});
 	}
 	
 	private void toggleClientConnection ()
@@ -156,6 +178,9 @@ public class ServerClientComposite extends Composite
 		final String port = topControl == grpBuiltinServer ? 
 				builtinServerComposite.getPort() : externalServerComposite.getPort();
 
+		final boolean isBuiltInServer = topControl == grpBuiltinServer ;
+		
+		
 		
 		Job job = new Job("Spotter client connection to server")
 		{
@@ -174,12 +199,23 @@ public class ServerClientComposite extends Composite
 				}
 				else
 				{
-					boolean isConnected =clientController.connect(hostname, port);
+					if (isBuiltInServer)
+					{
+						Job j = Util.startBuiltinServerAndConnectAsync(project);
+						try {
+							j.join();
+						} catch (InterruptedException e) { }
+					}
+					else
+					{
+						clientController.connect(hostname, port);
+					}
+
+					boolean isConnected = clientController.isConnected();
+
 					status = isConnected ? 
 							Status.OK_STATUS : 
 							Status.OK_STATUS;
-							
-								//new Status(Status.ERROR, Activator.PLUGIN_ID, "Unable to connect client");
 				}
 					
 				Display.getDefault().asyncExec(new Runnable()
@@ -190,6 +226,7 @@ public class ServerClientComposite extends Composite
 						updateClient();
 					}
 				});
+
 				
 				return status;
 			}

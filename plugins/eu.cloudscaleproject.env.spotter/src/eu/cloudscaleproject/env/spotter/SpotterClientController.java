@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.spotter;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
@@ -46,18 +48,46 @@ public class SpotterClientController
 		return isConnected;
 	}
 	
-	public boolean connect (String hostname, String port)
+	public boolean connect (String hostname, String port, boolean showErrorDialog)
 	{
         getClient().updateUrl(hostname, port);
 
-        this.isConnected = getClient().testConnection(true);
+        boolean old = isConnected;
+        this.isConnected = getClient().testConnection(showErrorDialog);
+        
+        this.pcs.firePropertyChange(PROP_CONNECTION, old, isConnected);
         
         return this.isConnected;
+	}
+
+	public boolean connect (String hostname, String port)
+	{
+		return connect(hostname, port, true);
 	}
 
 	public void disconnect ()
 	{
 		getClient().updateUrl("", "");
 		this.isConnected = false;
+        this.pcs.firePropertyChange(PROP_CONNECTION, !isConnected, isConnected);
 	}
+
+	PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	public static final String PROP_CONNECTION = "prop.connection";
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+	public void addPropertyChangeListener(String prop, PropertyChangeListener listener) {
+        this.pcs.addPropertyChangeListener(prop, listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(String prop, PropertyChangeListener listener) {
+        this.pcs.removePropertyChangeListener(prop, listener);
+    }
 }

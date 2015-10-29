@@ -183,8 +183,8 @@ public class BuiltinServerController
 	public void startServer() throws IOException
 	{
 		startServer (8080);
-		
 	}
+
 	public void startServer(int port) throws IOException
 	{
 		logger.info("Starting DynamicSpotter server (port="+port+")...");

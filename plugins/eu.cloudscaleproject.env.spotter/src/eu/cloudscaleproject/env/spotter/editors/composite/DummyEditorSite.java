@@ -69,7 +69,7 @@ public class DummyEditorSite implements IEditorSite{
 
 	@Override
 	public Shell getShell() {
-		return Display.getDefault().getActiveShell();
+		return Display.getDefault().getShells()[0];
 	}
 
 	@Override
