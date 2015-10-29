@@ -25,25 +25,33 @@ public class SidebarEditor extends AbstractSidebarEditor
 	{
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt)
+		public void propertyChange(final PropertyChangeEvent evt)
 		{
+			Display.getDefault().asyncExec(new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					if (contentProvider == null)
+					{
+						return;
+					}
 
-			if (contentProvider == null)
-			{
-				return;
-			}
+					if (ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName()))
+					{
+						IEditorInputResource res = (IEditorInputResource) evt.getNewValue();
+						String section = contentProvider.getSection(res);
+						SidebarEditor.this.addSidebarEditor(res, section);
+					}
+					if (ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName()))
+					{
+						IEditorInputResource res = (IEditorInputResource) evt.getOldValue();
+						SidebarEditor.this.removeSidebarEditor(res);
+					}
+				}
+			});
 
-			if (ResourceProvider.PROP_RESOURCE_ADDED.equals(evt.getPropertyName()))
-			{
-				IEditorInputResource res = (IEditorInputResource) evt.getNewValue();
-				String section = contentProvider.getSection(res);
-				SidebarEditor.this.addSidebarEditor(res, section);
-			}
-			if (ResourceProvider.PROP_RESOURCE_REMOVED.equals(evt.getPropertyName()))
-			{
-				IEditorInputResource res = (IEditorInputResource) evt.getOldValue();
-				SidebarEditor.this.removeSidebarEditor(res);
-			}
 		}
 	};
 
