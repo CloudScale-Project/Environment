@@ -65,7 +65,7 @@ public class BuiltinServerComposite extends Composite implements ISpotterServer
 		
 				btnConnect = new Button(composite, SWT.NONE);
 				GridData gd_btnConnect = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-				gd_btnConnect.heightHint = 42;
+				gd_btnConnect.heightHint = 36;
 				btnConnect.setLayoutData(gd_btnConnect);
 				
 				lblStatus = new Label(composite, SWT.NONE);
