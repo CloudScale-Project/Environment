@@ -51,14 +51,8 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			public void propertyChange(PropertyChangeEvent evt)
 			{
 				if (ConfigAlternativeComposite.this.isDisposed()) return;
-				Display.getDefault().asyncExec(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						refresh();
-					}
-				});
+
+				Display.getDefault().asyncExec(new Runnable() { @Override public void run() { refresh(); } });
 			}
 		};
 	
@@ -184,7 +178,7 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 	
 	@Override
 	public void refresh() {
-
+		confAlternative.validate();
 		updateEditors();
 	}
 	

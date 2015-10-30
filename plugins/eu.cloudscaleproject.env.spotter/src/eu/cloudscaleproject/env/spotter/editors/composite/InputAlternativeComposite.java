@@ -47,14 +47,7 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 			public void propertyChange(PropertyChangeEvent evt)
 			{
 				if (InputAlternativeComposite.this.isDisposed()) return;
-				Display.getDefault().asyncExec(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						refresh();
-					}
-				});
+				Display.getDefault().asyncExec(new Runnable() { @Override public void run() { refresh(); } });
 			}
 		};
 	
@@ -156,6 +149,7 @@ public class InputAlternativeComposite extends InputEditorView implements IRefre
 	
 	@Override
 	public void refresh() {
+		inputAlternative.validate();
 		updateEditors();
 	}
 

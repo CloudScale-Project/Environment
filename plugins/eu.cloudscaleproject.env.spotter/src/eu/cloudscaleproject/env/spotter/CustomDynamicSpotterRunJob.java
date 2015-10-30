@@ -309,17 +309,18 @@ public class CustomDynamicSpotterRunJob extends Job
 	private void onFinishedJob()
 	{
 		// Prepare result folder
-		ResourceProvider resultResourceProvider = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(),
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(alternative.getProject(),
 				CSToolResource.SPOTTER_DYN_RES);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("[hh:mm:ss]");
-		ResultAlternative resultAlternative = (ResultAlternative) resultResourceProvider.createNewResource(alternative.getName() 
-				+ sdf.format(new Date(timestamp)), "");
-
-		System.out.println(resultAlternative.getName());
+		ResultAlternative resultAlternative = (ResultAlternative) rp.createNewResource(alternative.getName()+sdf.format(new Date(timestamp)), "");
+		
+		resultAlternative.setConfigAlternative(alternative);
 
 		// Fetch Spotter results
 		Util.fetchResults(resultAlternative, jobId);
+		
+		resultAlternative.save();
 	}
 
 }
