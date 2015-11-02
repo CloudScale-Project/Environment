@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.spotter;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -8,9 +9,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
 import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
 import org.spotter.eclipse.ui.util.SpotterUtils;
+import org.spotter.shared.environment.model.XMConfiguration;
 import org.spotter.shared.environment.model.XMeasurementEnvObject;
 import org.spotter.shared.environment.model.XMeasurementEnvironment;
 
@@ -38,27 +41,6 @@ public class ResourceUtils {
 		}
 	}
 	
-	/*
-	public static List<EditorInputFolder> getConfAlternatives(IProject project, EditorInputFolder inputAlt){
-		
-		ResourceProvider confResourceProvider = ResourceRegistry.getInstance().
-				getResourceProvider(project, ToolchainUtils.SPOTTER_DYN_CONF_ID);
-		
-		List<EditorInputFolder> out = new ArrayList<EditorInputFolder>();
-		
-		for(IEditorInputResource res : confResourceProvider.getResources()){
-			if(res instanceof EditorInputFolder){
-				String iaResName = ((EditorInputFolder)res).getProperty(KEY_PARENT_EDITOR_RESOURCE);
-				if(iaResName != null && !iaResName.isEmpty() && inputAlt.getResource().getName().equals(iaResName)){
-					out.add((EditorInputFolder)res);
-				}
-			}
-		}
-		
-		return out;
-	}
-	*/
-	
 	public static void bindEditorInputs(EditorInputFolder inputAlternative, EditorInputFolder runAlternative){
 		
 		IFile inputEnvFile = ((IFolder)inputAlternative.getResource()).getFile("mEnv.xml");
@@ -85,6 +67,10 @@ public class ResourceUtils {
 					new LinkedList<XMeasurementEnvObject>(inputEnv.getInstrumentationController()) : new LinkedList<XMeasurementEnvObject>());
 			confEnv.setMeasurementController(inputEnv.getMeasurementController() != null ? 
 					new LinkedList<XMeasurementEnvObject>(inputEnv.getMeasurementController()) : new LinkedList<XMeasurementEnvObject>());
+
+			// WORKAROUND: DS needs full path (not relative to project) to workloadload script
+			// Used in Examples
+			fixWorkloadScriptPath(confEnv, runAlternative); 
 			
 			try {
 				SpotterUtils.writeElementToFile(confEnvFile, confEnv);
@@ -95,6 +81,19 @@ public class ResourceUtils {
 		} catch (UICoreException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void fixWorkloadScriptPath (XMeasurementEnvironment conf, EditorInputFolder confAlternative){
+		
+			List<XMConfiguration> config = conf.getWorkloadAdapter().get(0).getConfig();
+			
+			for (XMConfiguration c : config)
+			{
+				if (c.getKey().equals("org.spotter.workload.simple.userScriptPath"))
+				{
+					c.setValue(c.getValue().replace("${workspace.path}", Platform.getLocation().toString()));
+				}
+			}
 	}
 	
 	public static void registerResourceFactories(){

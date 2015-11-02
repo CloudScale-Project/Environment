@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.spotter.editors.composite;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
@@ -32,6 +35,8 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Cursor;
@@ -43,6 +48,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -69,6 +75,7 @@ import org.spotter.shared.result.model.SpotterResult;
 
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.spotter.SpotterClientController;
+import eu.cloudscaleproject.env.spotter.Util;
 import eu.cloudscaleproject.env.spotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
@@ -76,20 +83,10 @@ import eu.cloudscaleproject.env.toolchain.ui.ResultEditorView;
 public class ResultAlternativeComposite extends ResultEditorView implements IRefreshable
 {
 
-	//private static final Logger LOGGER = LoggerFactory.getLogger(ResultsView.class);
-
-	// private static final String RESULTS_VIEW_TITLE = "Results";
 	private static final String DLG_RESOURCE_TITLE = "Resource '%s' (%s)";
 
-	// private static final String RESULTS_CONTENT_DESC_TEMPLATE =
-	// "DynamicSpotter Run '%s' of project '%s'";
-	// private static final String RESULTS_EMPTY_CONTENT_DESC =
-	// "None selected.";
 	private static final String EMPTY_RESULTS = "No results selected.";
-	//private static final String ERR_MSG_PARSE_ERROR = "An error occured while parsing the file '%s'.";
-	//private static final String ERR_MSG_RES_REFRESH = "Error occured while refreshing resource!";
 	private static final String ERR_MSG_MISSING_REPORT = "Either file is missing or report is not set.";
-	//private static final String ERR_MSG_MISSING_SER_FILE = "Could not find the spotter serialization file.";
 
 	private static final String LABEL_NONE_SELECTED = "<none selected>";
 	private static final String LABEL_DETECTED = "Detected";
@@ -126,6 +123,20 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 	private ListViewer listViewer;
 
+	private Composite warningComposite;
+
+	private CTabFolder mainTabFolder;
+
+	PropertyChangeListener connecionListener = new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				if (ResultAlternativeComposite.this.isDisposed()) return;
+				Display.getDefault().asyncExec(new Runnable() { @Override public void run() { refresh(); } });
+			}
+		};
+
 	public ResultAlternativeComposite(Composite parent, int style, ResultAlternative resultAlternative)
 	{
 		super(parent, style, resultAlternative);
@@ -135,15 +146,42 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 		this.resourceShells = new HashMap<>();
 		this.extensionItemFactory = new ImmutableExtensionItemFactory(resultAlternative.getName());
 
-		CTabFolder folder = new CTabFolder(getContainer(), SWT.BORDER);
-		folder.setTabHeight(32);
+		getContainer().setLayout(new StackLayout());
+		
+		warningComposite = new Composite(getContainer(), SWT.BORDER);
+		warningComposite.setLayout(new GridLayout(1, false));
+		Label lblEmpty = new Label(warningComposite, SWT.CENTER);
+		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true, 1, 1));
+		lblEmpty.setText("Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
+		
+		Button btnStartServer = new Button(warningComposite, SWT.NONE);
+		GridData gd_btnStartServer = new GridData(SWT.CENTER, SWT.TOP, true, true, 1, 1);
+		gd_btnStartServer.verticalIndent = 20;
+		gd_btnStartServer.heightHint = 42;
+		btnStartServer.setLayoutData(gd_btnStartServer);
+		btnStartServer.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Util.startBuiltinServerAndConnectAsync(ResultAlternativeComposite.this.resultAlternative.getProject());
+			}
+		});
+		
+		SpotterClientController.getController(resultAlternative.getProject()).addPropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
 
-		createHierarchyTab(folder);
-		createReportTab(folder);
-		updateTabs();
+		btnStartServer.setText("Start server");
+		
+		//mainComposite = new Composite(getContainer(), SWT.NONE);
+		//mainComposite.setLayout(new GridLayout(1, false));
+
+		mainTabFolder = new CTabFolder(getContainer(), SWT.BORDER);
+		mainTabFolder.setTabHeight(32);
+
+		createHierarchyTab(mainTabFolder);
+		createReportTab(mainTabFolder);
+		refresh();
 
 		// Selections
-		folder.setSelection(0);
+		mainTabFolder.setSelection(0);
 
 		updateCanvasImage();
 
@@ -158,6 +196,9 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 				{
 					shell.close();
 				}
+
+				SpotterClientController.getController(ResultAlternativeComposite.this.resultAlternative.getProject()).
+					removePropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
 			}
 		});
 	}
@@ -165,7 +206,17 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 	@Override
 	public void refresh()
 	{
-		updateTabs();
+		if (SpotterClientController.getController(resultAlternative.getProject()).isConnected()) 
+		{
+			((StackLayout)getContainer().getLayout()).topControl = mainTabFolder;
+			getContainer().layout();
+			updateTabs();
+		}
+		else
+		{
+			((StackLayout)getContainer().getLayout()).topControl = warningComposite;
+			getContainer().layout();
+		}
 	}
 
 	private void createHierarchyTab(CTabFolder folder)

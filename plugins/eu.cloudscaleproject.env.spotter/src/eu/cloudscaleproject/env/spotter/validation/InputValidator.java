@@ -39,7 +39,7 @@ public class InputValidator implements IResourceValidator {
 			// check connection
 			SpotterClientController controller = SpotterClientController.getController(project);
 			
-			status.checkError(ERROR, controller.isConnected(), true, 
+			status.check(ERROR, controller.isConnected(), false, IValidationStatus.SEVERITY_INFO,
 					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Spotter client not initialized - check Server configuration!"));
 			
 			// check input files

@@ -37,15 +37,14 @@ public class ConfValidator implements IResourceValidator {
 			EditorInputFolder editorInput = (EditorInputFolder)selectedRes;
 
 			SpotterClientController controller = SpotterClientController.getController(project);
-			status.checkError(ERROR_CONF, controller.isConnected(), true, 
-					MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(),"Spotter client not initialized - check Server configuration!"));
+			status.check(ERROR_CONF, controller.isConnected(), false, IValidationStatus.SEVERITY_INFO, MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Spotter client not initialized - check Server configuration!"));
 			
 			boolean jobCreationFailed = false;
 			try {
 				JobDescription job = Util.createJobDescription(editorInput);
 				
 				status.checkError(ERROR_CONF,
-						!job.getDynamicSpotterConfig().isEmpty(), true, 
+						!job.getDynamicSpotterConfig().isEmpty(), false, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration file is empty!"));
 				
 				status.checkError(ERROR_CONF,

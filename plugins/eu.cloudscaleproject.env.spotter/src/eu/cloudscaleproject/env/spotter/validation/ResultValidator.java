@@ -19,7 +19,7 @@ public class ResultValidator implements IResourceValidator{
 	public void validate(IProject project, IValidationStatusProvider statusProvider)
 	{
 		IValidationStatus status = statusProvider.getSelfStatus();
-		status.setIsValid(true);
+		status.setIsValid(true); // Always true
 	}
 
 }
