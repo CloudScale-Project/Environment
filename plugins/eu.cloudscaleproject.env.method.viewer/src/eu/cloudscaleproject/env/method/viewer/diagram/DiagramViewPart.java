@@ -119,10 +119,6 @@ public class DiagramViewPart{
 	}
 	
 	private void showDiagram(final ValidationDiagram diagram){
-				
-		if(composite == null || composite.isDisposed()){
-			return;
-		}
 		
 		if(diagram == null){
 			
@@ -132,6 +128,11 @@ public class DiagramViewPart{
 				
 				@Override
 				public void run() {
+					
+					if(composite == null || composite.isDisposed()){
+						return;
+					}
+					
 					stackLayout.topControl = noDiagramComposite;
 					DiagramViewPart.this.composite.layout();
 					DiagramViewPart.this.composite.redraw();
@@ -147,6 +148,11 @@ public class DiagramViewPart{
 			
 			@Override
 			public void run() {
+				
+				if(composite == null || composite.isDisposed()){
+					return;
+				}
+				
 				ValidationDiagramComposite composite = composites.get(diagram);
 				if(composite == null){
 					composite = createDiagramComposite((ValidationDiagram)diagram);

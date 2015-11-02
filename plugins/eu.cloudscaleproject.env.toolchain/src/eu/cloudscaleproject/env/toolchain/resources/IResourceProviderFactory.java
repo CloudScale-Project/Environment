@@ -4,6 +4,6 @@ import org.eclipse.core.resources.IFolder;
 
 public interface IResourceProviderFactory {
 	
-	public ResourceProvider create(IFolder folder);
+	public ResourceProvider create(String id, IFolder folder);
 	
 }

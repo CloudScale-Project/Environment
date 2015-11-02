@@ -1,23 +1,20 @@
 package eu.cloudscaleproject.env.toolchain.explorer.children;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNature;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 
-import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.CommonResources;
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ProjectNode;
+import eu.cloudscaleproject.env.toolchain.resources.ProjectResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 
 /**
  *
@@ -26,134 +23,45 @@ import eu.cloudscaleproject.env.toolchain.explorer.nodes.ProjectNode;
  */
 public class RootNodeChildren extends ExplorerNodeChildren{
 	
-	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
+	private final List<ProjectResourceRegistry> projectResourceRegistries = new ArrayList<ProjectResourceRegistry>();
+	
+	private final PropertyChangeListener resourceRegistryListener = new PropertyChangeListener() {
 		
 		@Override
-		public void resourceChanged(IResourceDelta delta) {
+		public void propertyChange(PropertyChangeEvent evt) {
 			
-			boolean refresh = false;
-			
-			for (IResourceDelta projectDelta : delta.getAffectedChildren())
-			{
-				if(projectDelta.getKind() == IResourceDelta.ADDED){
-					refresh = true;
-				}
-				if(projectDelta.getKind() == IResourceDelta.REMOVED){
-					refresh = true;
-				}
-				if(projectDelta.getKind() == IResourceDelta.CHANGED){
-					refresh = true;
-				}
+			if(ResourceRegistry.PROJECT_RESOURCE_REGISTRY_ADDED.equals(evt.getPropertyName())){
+				projectResourceRegistries.add((ProjectResourceRegistry)evt.getNewValue());
+			}
+			if(ResourceRegistry.PROJECT_RESOURCE_REGISTRY_REMOVED.equals(evt.getPropertyName())){
+				projectResourceRegistries.remove((ProjectResourceRegistry)evt.getOldValue());
 			}
 			
-			if(refresh){
-				refreshNow();
-			}
-		}
-		
-		@Override
-		public IResource[] getResources() {
-			return new IResource[]{ResourcesPlugin.getWorkspace().getRoot()};
+			refreshNow();
 		}
 	};
 	
-	private static class ProjectKey{
-		
-		private final IProject project;
-		private final IProjectNature nature;
-		
-		public ProjectKey(IProject project, IProjectNature nature) {
-			this.project = project;
-			this.nature = nature;
-		}
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((nature == null) ? 0 : nature.hashCode());
-			result = prime * result + ((project == null) ? 0 : project.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			ProjectKey other = (ProjectKey) obj;
-			if (nature == null) {
-				if (other.nature != null)
-					return false;
-			} else if (!nature.equals(other.nature))
-				return false;
-			if (project == null) {
-				if (other.project != null)
-					return false;
-			} else if (!project.equals(other.project))
-				return false;
-			return true;
-		}
-		
-	}
-	
 	public RootNodeChildren(boolean lazy) {
 		super(lazy);
-		ExplorerChangeNotifier.getInstance().addListener(ecl);
+		projectResourceRegistries.addAll(ResourceRegistry.getInstance().getProjectResourceRegistries());
+		ResourceRegistry.getInstance().addPropertyChangeListener(resourceRegistryListener);
 	}
 
 	@Override
 	public List<? extends Object> getKeys() {
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		
-		List<ProjectKey> csProjects = new ArrayList<ProjectKey>();
-		List<ProjectKey> importedProjects = new ArrayList<ProjectKey>();
-		
-		for(IProject project : projects){
-			try {
-				
-				if(project.isAccessible()){
-					if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
-						IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
-						csProjects.add(new ProjectKey(project, pn));
-					}
-					else{
-						importedProjects.add(new ProjectKey(project, null));
-					}
-				}
-				
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		csProjects.addAll(importedProjects);
-		return csProjects;
+		return projectResourceRegistries;
 	}
 	
 	@Override
 	public IExplorerNode getChild(Object key) {
-			
-		IProject project = ((ProjectKey)key).project;
 		
-		boolean isCloudscale = false;
-		try{
-			IProjectNature pn = project.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
-			if(pn != null){
-				isCloudscale = true;
-			}
-		}
-		catch (CoreException e) {
-			//ignore
-		}
+		ProjectResourceRegistry resourceRegistry = (ProjectResourceRegistry)key;
+		IProject project = resourceRegistry.getProject();
 		
 		IExplorerNode node;
 		
-		if(isCloudscale){
-			node = new ProjectNode(getNode().getContext(), project);
+		if(ExplorerProjectPaths.isCloudScaleProject(project)){
+			node = new ProjectNode(getNode().getContext(), resourceRegistry);
 			node.setName(project.getName());
 			node.setIcon(CommonResources.PROJECT_16, false);
 		}
@@ -168,7 +76,7 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 	
 	@Override
 	public void dispose() {
-		ExplorerChangeNotifier.getInstance().removeListener(ecl);
+		ResourceRegistry.getInstance().removePropertyChangeListener(resourceRegistryListener);
 		super.dispose();
 	}
 	

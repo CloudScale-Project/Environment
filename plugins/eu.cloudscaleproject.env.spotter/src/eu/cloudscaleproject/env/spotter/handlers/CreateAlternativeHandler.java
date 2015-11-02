@@ -22,7 +22,7 @@ public class CreateAlternativeHandler {
 	@Execute
 	public void execute(ResourceProvider rp, @Optional IEditorInputResource eir) {
 				
-		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		String id = rp.getID();
 		IProject project = rp.getProject();
 
 		CSToolResource tool = CSToolResource.getTool(id);
@@ -57,7 +57,7 @@ public class CreateAlternativeHandler {
 			return false;
 		}
 		
-		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		String id = rp.getID();
 		if(CSToolResource.SPOTTER_DYN_INPUT.getID().equals(id)){
 			return true;
 		}

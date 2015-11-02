@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 
 import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
+import eu.cloudscaleproject.env.toolchain.resources.ProjectResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
@@ -17,30 +18,87 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
+
+	private final PropertyChangeListener resourceRegistryListener = new PropertyChangeListener() {
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			
+			if(ProjectResourceRegistry.PROP_RESOURCE_PROVIDER_ADDED.equals(evt.getPropertyName())){
+				ResourceProvider rp = (ResourceProvider)evt.getNewValue();
+				if(rp.getID().equals(resourceProviderID)){
+					registerResourceProvider(rp);
+				}
+				
+			}
+			if(ProjectResourceRegistry.PROP_RESOURCE_PROVIDER_REMOVED.equals(evt.getPropertyName())){
+				ResourceProvider rp = (ResourceProvider)evt.getOldValue();
+				if(rp.getID().equals(resourceProviderID)){
+					unregisterResourceProvider(resourceProvider);
+				}
+			}
+			
+			pcs.firePropertyChange(PROP_CHILDREN_CHANGED, null, this);
+		}
+	};
 	
 	private final PropertyChangeListener resourceProviderListener = new PropertyChangeListener() {
 		
 		@Override
-		public void propertyChange(PropertyChangeEvent arg0) {
+		public void propertyChange(PropertyChangeEvent evt) {
 			pcs.firePropertyChange(PROP_CHILDREN_CHANGED, null, this);
 		}
 	};
 
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
+	private IProject project;
+	private String resourceProviderID;
+	
 	private IEclipseContext context;
-	private ResourceProvider rp;
+	
+	private ProjectResourceRegistry projectResourceRegistry;
+	private ResourceProvider resourceProvider;
 	
 	public void initialize(String nodeID, IEclipseContext context){
 		
-		IProject project = context.get(IProject.class);
+		this.project = context.get(IProject.class);
+		this.resourceProviderID = nodeID;
 		
 		this.context = context;
 		
-		rp = ResourceRegistry.getInstance().getResourceProvider(project, nodeID);
-		rp.addListener(resourceProviderListener);
+		this.projectResourceRegistry = ResourceRegistry.getInstance().getProjectResourceRegistry(project);
+		this.projectResourceRegistry.addPropertyChangeListener(resourceRegistryListener);
 		
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, nodeID);
+		if(rp != null){
+			registerResourceProvider(rp);
+		}
+		
+	}
+	
+	private void registerResourceProvider(ResourceProvider rp){
+		
+		if(rp == null){
+			return;
+		}
+		
+		this.resourceProvider = rp;
+		
+		rp.addListener(resourceProviderListener);
 		this.context.set(ResourceProvider.class, rp);
+	}
+	
+	private void unregisterResourceProvider(ResourceProvider rp){
+
+		if(rp == null){
+			return;
+		}
+		
+		this.resourceProvider = null;
+
+		rp.removeListener(resourceProviderListener);
+		this.context.set(ResourceProvider.class, null);
 	}
 	
 	@Override
@@ -50,7 +108,7 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 		
 		List<Object> out = new ArrayList<Object>();		
 			
-		for(IEditorInputResource eir : rp.getResources()){
+		for(IEditorInputResource eir : resourceProvider.getResources()){
 			
 			if(eir instanceof IConfigAlternative){
 				IConfigAlternative ca = (IConfigAlternative)eir;
@@ -76,7 +134,8 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 
 	@Override
 	public void dispose() {
-		rp.removeListener(resourceProviderListener);
+		this.projectResourceRegistry.removePropertyChangeListener(resourceRegistryListener);
+		unregisterResourceProvider(resourceProvider);
 	}
 	
 	@Override

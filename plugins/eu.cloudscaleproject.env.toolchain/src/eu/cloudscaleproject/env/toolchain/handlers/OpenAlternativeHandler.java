@@ -20,6 +20,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.toolchain.resources.ResourceExtensions;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -111,8 +112,7 @@ public class OpenAlternativeHandler {
 		for(ResourceProvider rp : resourceProviders){
 			if(rp.getResources().contains(eir)){
 				
-				String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
-				String editorPartID = ResourceRegistry.getInstance().getResourceExtensionItem(id).editorId;
+				String editorPartID = ResourceExtensions.getInstance().getResourceExtension(rp.getID()).getEditorID();
 				
 				if(editorPartID != null && !editorPartID.isEmpty()){
 					return editorPartID;

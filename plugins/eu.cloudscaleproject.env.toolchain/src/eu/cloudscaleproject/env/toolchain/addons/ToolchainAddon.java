@@ -76,7 +76,9 @@ public class ToolchainAddon {
 			}
 		}
 		
-		context.set(IActiveResources.class, activeResources);
+		if(!activeResources.equals(currentActiveResources)){
+			context.set(IActiveResources.class, activeResources);
+		}
 	}
 
 }

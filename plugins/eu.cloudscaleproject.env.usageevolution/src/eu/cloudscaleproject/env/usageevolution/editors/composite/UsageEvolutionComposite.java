@@ -114,6 +114,10 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 
 	@Override
 	public void refresh() {
+		if(isDisposed()){
+			return;
+		}
 		updatePlotCanvas();
+
 	}
 }

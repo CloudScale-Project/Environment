@@ -1,40 +1,39 @@
 package eu.cloudscaleproject.env.toolchain.resources;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.common.CloudScaleConstants;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.CommandExecutor;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
-import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 
 public class ResourceRegistry {
 	
 	private static final Logger logger = Logger.getLogger(ResourceRegistry.class.getName());
+	
+	public static final String PROJECT_RESOURCE_REGISTRY_ADDED = "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.projectResourceRegistryAdded";
+	public static final String PROJECT_RESOURCE_REGISTRY_REMOVED = "eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry.projectResourceRegistryRemoved";
+	
+	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	private static ResourceRegistry instance = null;
 	public static ResourceRegistry getInstance(){
@@ -57,14 +56,31 @@ public class ResourceRegistry {
 					if(resource instanceof IProject){
 						
 						IProject project = (IProject)resource;
-						if(isCloudScaleProject(project)){
-							addResourceProviders(project);
+						if(ExplorerProjectPaths.isCloudScaleProject(project)){
+							addProjectResourceRegistry(project);
 						}
 						
 					}
 				}
 				if(rootDelta.getKind() == IResourceDelta.REMOVED){
-					
+					if(resource instanceof IProject){
+						
+						IProject project = (IProject)resource;
+						removeProjectResourceRegistry(project);
+					}
+				}
+
+				if(rootDelta.getKind() == IResourceDelta.CHANGED){
+					if(resource instanceof IProject){
+						
+						IProject project = (IProject)resource;
+						if(ExplorerProjectPaths.isCloudScaleProject(project)){
+							if(!projectResourceRegistryMap.containsKey(project)){
+								addProjectResourceRegistry(project);
+							}
+						}
+						
+					}
 				}
 			}
 		}
@@ -75,155 +91,54 @@ public class ResourceRegistry {
 		}
 	};
 	
-	public static class ResourceExtensionItem{
-		
-		public final String id;
-		public final String editorId;
-		public final IResourceProviderFactory factory;
-		
-		public ResourceExtensionItem(String id, String editorId, IResourceProviderFactory factory) {
-			this.id = id;
-			this.editorId = editorId;
-			this.factory = factory;
-		}
-		
-	}
-	
-	private HashMap<String, ResourceExtensionItem> resourceExtensionItems 
-											= new HashMap<String, ResourceExtensionItem>();
-	
-	private HashMap<IFolder, ResourceProvider> resourceProviders 
-											= new HashMap<IFolder, ResourceProvider>();
-	private HashMap<ResourceProvider, String> resourceProviderIds
-											= new HashMap<ResourceProvider, String>();
+	private ConcurrentHashMap<IProject, ProjectResourceRegistry> projectResourceRegistryMap 
+															= new ConcurrentHashMap<IProject, ProjectResourceRegistry>();
 	
 	public ResourceRegistry() {
 		
-		//register factories from extension points
-		for(IConfigurationElement el : ToolchainExtensions.getInstance().getResourceProviderFactoryElements()){
-			try {
-				String id = el.getAttribute("id");
-				String editorId = el.getAttribute("editor");
-				Object o = el.createExecutableExtension("class");
-				
-				ResourceExtensionItem rei = new ResourceExtensionItem(id, editorId, (IResourceProviderFactory)o);
-				resourceExtensionItems.put(id, rei);
-				
-				logger.info("Resource extension registered uder toolchainID: " + id);
-
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		
 	}
 	
-	public void initialize(){		
+	public void initialize(){
+		
 		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-			try {
-				if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
-					addResourceProviders(project);
-				}
-			} catch (CoreException e) {
-				e.printStackTrace();
+			if(ExplorerProjectPaths.isCloudScaleProject(project)){
+				addProjectResourceRegistry(project);
 			}
+			
 		}
 		
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 	}
 	
-	private boolean isCloudScaleProject(IProject project){
-		try {
-			if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
-				return true;
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	private synchronized void addProvider(String id, final ResourceProvider rp){
-		IFolder folder = rp.getRootFolder();
-		resourceProviders.put(folder, rp);
-		resourceProviderIds.put(rp, id);
+	private void addProjectResourceRegistry(IProject project){
 		
-		rp.addListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if(ResourceProvider.PROP_DISPOSED.equals(evt.getPropertyName())){
-					removeProvider(rp);
-				}
-			}
-		});
-	}
-	
-	private synchronized void removeProvider(ResourceProvider rp){
-		IFolder folder = rp.getRootFolder();
-		resourceProviders.remove(folder);
-		resourceProviderIds.remove(rp);
-	}
-	
-	private synchronized boolean hasProvider(IProject project, String id){
-		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
-		return resourceProviders.containsKey(folder);
-	}
-	
-	private synchronized ResourceProvider createProvider(IProject project, String id){
+		ProjectResourceRegistry prr = new ProjectResourceRegistry(project);
+		ProjectResourceRegistry prrOld = projectResourceRegistryMap.get(project);
 		
-		ResourceProvider resourceProvider = null;
-		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
+		projectResourceRegistryMap.put(project, prr);
 		
-		ResourceExtensionItem resourceExtension = resourceExtensionItems.get(id);
-		if(resourceExtension != null){
-			resourceProvider = resourceExtension.factory.create(folder);
-		}
-						
-		return resourceProvider;
+		pcs.firePropertyChange(PROJECT_RESOURCE_REGISTRY_ADDED, prrOld, prr);
 	}
 	
-	private synchronized void addResourceProviders(IProject project){
-		for(Entry<String, ResourceExtensionItem> entry : resourceExtensionItems.entrySet()){
-			String id = entry.getKey();
-			
-			if(hasProvider(project, id)){
-				continue;
-			}
-			
-			final ResourceProvider rp = createProvider(project, id);
-			if(rp != null){
-				addProvider(id, rp);
-			}
-		}
-	}
-	
-	public synchronized void removeResourceProviders(IProject project){
+	private void removeProjectResourceRegistry(IProject project){
 		
+		ProjectResourceRegistry prrOld = projectResourceRegistryMap.get(project);
+		projectResourceRegistryMap.remove(project);
+		pcs.firePropertyChange(PROJECT_RESOURCE_REGISTRY_REMOVED, prrOld, null);
 	}
 	
-	public List<ResourceExtensionItem> getResourceExtensionItems(){
-		return new ArrayList<ResourceExtensionItem>(resourceExtensionItems.values());
+	public List<ProjectResourceRegistry> getProjectResourceRegistries(){
+		return new ArrayList<ProjectResourceRegistry>(projectResourceRegistryMap.values());
 	}
 	
-	public ResourceExtensionItem getResourceExtensionItem(String id){
-		return resourceExtensionItems.get(id);
+	public ProjectResourceRegistry getProjectResourceRegistry(IProject project){
+		return projectResourceRegistryMap.get(project);
 	}
 	
-	public synchronized List<ResourceProvider> getResourceProviders(IProject project){	
-		List<ResourceProvider> out = new ArrayList<ResourceProvider>();
+	public List<ResourceProvider> getResourceProviders(IProject project){
 		
-		for(Entry<IFolder, ResourceProvider> entry : resourceProviders.entrySet()){
-			if(project.equals(entry.getKey().getProject())){
-				out.add(entry.getValue());
-			}
-		}
-		
-		return out;
-	}
-	
-	public synchronized String getResourceProviderID(ResourceProvider rp){
-		return resourceProviderIds.get(rp);
+		ProjectResourceRegistry prr = projectResourceRegistryMap.get(project);
+		return prr.getResourceProviders();
 	}
 	
 	/**
@@ -234,37 +149,14 @@ public class ResourceRegistry {
 	 * @param toolchainID String that should be specified in 'ToolchainUtils' class.
 	 * @return ResourceProvider
 	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, String id){
+	public ResourceProvider getResourceProvider(IProject project, String id){
 		
-		if(project == null || id == null){
+		ProjectResourceRegistry prr = projectResourceRegistryMap.get(project);
+		if(prr == null){
 			return null;
 		}
 		
-		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, id);
-		if(folder == null){
-			String msg = "ResourceProvider root folder can not be retrieved! ID: " + id;
-			logger.severe(msg);
-			throw new IllegalArgumentException(msg);
-		}
-
-		ResourceProvider resourceProvider = resourceProviders.get(folder);
-		
-		if(resourceProvider == null){
-			resourceProvider = createProvider(project, id);
-			
-			if(resourceProvider == null){
-				String msg = "ResourceProviderFactory returned NULL! ID: " + id;
-				logger.severe(msg);
-				throw new IllegalArgumentException(msg);
-			}
-			
-			addProvider(id, resourceProvider);
-		}
-		
-		//resource factory should not return null resource
-		//note: this method can return null resource provider, if the resource factory is not registered for the specified ID!
-		assert(resourceProvider != null);
-		return resourceProvider;		
+		return prr.getResourceProvider(id);
 	}
 	
 	/**
@@ -275,19 +167,31 @@ public class ResourceRegistry {
 	 * @param tool
 	 * @return ResourceProvider
 	 */
-	public synchronized ResourceProvider getResourceProvider(IProject project, CSToolResource tool){
+	public ResourceProvider getResourceProvider(IProject project, CSToolResource tool){
 		
-		if(project == null || tool == null){
+		ProjectResourceRegistry prr = projectResourceRegistryMap.get(project);
+		if(prr == null){
 			return null;
 		}
 		
-		return getResourceProvider(project, tool.getID());
+		return prr.getResourceProvider(tool);
 	}
 
 	public IEditorInputResource getResource(String resourcePath){
 		IPath path = Path.fromPortableString(resourcePath);
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-		return getResource(resource);
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
+		IProject project = resource.getProject();
+		
+		if(project == null){
+			logger.severe("Resource does not have project! Path: " + resourcePath);
+		}
+		
+		ProjectResourceRegistry prr = projectResourceRegistryMap.get(resource.getProject());
+		if(prr == null){
+			return null;
+		}
+		
+		return prr.getResource(resource);		
 	}
 	
 	public IEditorInputResource getResource(IResource resource){
@@ -302,17 +206,12 @@ public class ResourceRegistry {
 			return null;
 		}
 		
-		List<ResourceProvider> providers = ResourceRegistry.getInstance().getResourceProviders(resource.getProject());
-		for(ResourceProvider rp : providers){
-			
-			if(!rp.getRootFolder().getFullPath().isPrefixOf(resource.getFullPath())){
-				continue;
-			}
-			return rp.getResource(resource);
+		ProjectResourceRegistry prr = projectResourceRegistryMap.get(resource.getProject());
+		if(prr == null){
+			return null;
 		}
-
-		logger.warning("IEditorInputResource for the specified path can not be retrieved! Path: " + resource.getFullPath());
-		return null;
+		
+		return prr.getResource(resource);
 	}
 	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){
@@ -334,6 +233,22 @@ public class ResourceRegistry {
 				explorerService.setSelection(eir);
 			}
 		});
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.addPropertyChangeListener(pcl);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener pcl) {
+		pcs.removePropertyChangeListener(pcl);
+	}
+
+	public void addPropertyChangeListener(String prop, PropertyChangeListener pcl) {
+		pcs.addPropertyChangeListener(prop, pcl);
+	}
+
+	public void removePropertyChangeListener(String prop, PropertyChangeListener pcl) {
+		pcs.removePropertyChangeListener(prop, pcl);
 	}
 	
 }

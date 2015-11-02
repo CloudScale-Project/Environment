@@ -12,17 +12,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusListener;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.notification.ValidationStatus;
 
-public class EditorInput implements IEditorInput, IValidationStatusProvider{
+public class EditorInput implements IEditorInput{
 	
 	//status variables
 	private final  HashSet<IValidationStatus> statusSet = new HashSet<IValidationStatus>();
 	private final Object statusLock = new Object();
-		
+	
+	private boolean isValidated = false;
 	protected IValidationStatus selfStatus = null;
 	protected final String validatorID;
 	
@@ -151,6 +152,16 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 	}
 	
 	@Override
+	public boolean isValidated() {
+		return isValidated;
+	}
+	
+	@Override
+	public void setValidated(boolean validated) {
+		firePropertyChange(PROP_VALIDATED, this.isValidated, this.isValidated = validated);
+	}
+	
+	@Override
 	public void validate() {
 		validate(null);
 	}
@@ -165,6 +176,38 @@ public class EditorInput implements IEditorInput, IValidationStatusProvider{
 		if(validatorID != null){
 			StatusManager.getInstance().validate(null, this);
 		}
+	}
+	
+	///////////////////////////////////////////////////////////////////
+	// Validation status helpers
+	
+	public boolean hasStatusEntry(int severity){
+		
+		//check self status
+		{
+			IValidationStatus status = getSelfStatus();
+			if(status != null && status.hasWarnings()){
+				for(Warning w : status.getWarnings()){
+					if(w.severity == severity){
+						return true;
+					}
+				}
+			}
+		}
+		
+		//check sub statuses
+		{
+			IValidationStatus[] subStatuses = getSubStatuses();
+			for(IValidationStatus status : subStatuses){
+				for(Warning w : status.getWarnings()){
+					if(w.severity == severity){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	protected void firePropertyChange(String name, Object oldValue, Object newValue){

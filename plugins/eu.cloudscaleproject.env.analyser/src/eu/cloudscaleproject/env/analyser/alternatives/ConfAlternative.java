@@ -167,7 +167,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 	{
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
-		return (InputAlternative) rp.getResource(res);
+		if(rp != null){
+			return (InputAlternative)rp.getResource(res);
+		}
+		return null;
 	}
 
 	public boolean setInputAlternative(InputAlternative inputAlt)
@@ -1121,10 +1124,8 @@ public class ConfAlternative extends AbstractConfigAlternative
 	// Standard alternative load/save/delete methods
 
 	@Override
-	public void doCreate(IProgressMonitor monitor)
-	{
-		workOn(monitor, "Creating Analyser configuration alternative.");
-		
+	public void doCreateModels()
+	{		
 		Experiment exp = null;
 		
 		//create experiment
@@ -1168,9 +1169,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 			expRep.getExperiments().add(exp);
 		}
 		
-		work(monitor);
-		workOn(monitor, "Initializing Analyser configuration alternative.");
-		
 		initializeCommon(exp);
 
 		if (Type.NORMAL.equals(type))
@@ -1184,12 +1182,6 @@ public class ConfAlternative extends AbstractConfigAlternative
 			initializeScalability(exp);
 		}
 		
-		work(monitor);
-	}
-	
-	@Override
-	public int getCreateWork() {
-		return super.getCreateWork() + 2;
 	}
 
 	@Override

@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.usageevolution.wizard.CreateUsageEvolutionWizard;
 
 public class CreateAlternativeHandler {
@@ -32,7 +31,7 @@ public class CreateAlternativeHandler {
 			return false;
 		}
 		
-		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		String id = rp.getID();
 		if(CSToolResource.USAGEEVOLUTION.getID().equals(id)){
 			return true;
 		}

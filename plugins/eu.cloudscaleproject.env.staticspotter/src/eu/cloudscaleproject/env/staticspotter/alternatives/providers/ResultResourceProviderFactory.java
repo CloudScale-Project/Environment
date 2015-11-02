@@ -15,8 +15,8 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory {
 		
 		static final CustomAdapterFactory adapterFactory = new CustomAdapterFactory();
 
-		public ResultResourceProvider(IFolder folder, String defaultResName) {
-			super(folder, defaultResName);
+		public ResultResourceProvider(String id, IFolder folder, String defaultResName) {
+			super(id, folder, defaultResName);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -44,8 +44,8 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory {
 	}
 
 	@Override
-	public ResourceProvider create(final IFolder folder) {
-		return new ResultResourceProvider(folder, "Alternative");
+	public ResourceProvider create(String id, final IFolder folder) {
+		return new ResultResourceProvider(id, folder, "Alternative");
 	}
 
 }

@@ -65,7 +65,7 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 
 			if (ConfAlternative.Type.NORMAL.equals(alternative.getTypeEnum()))
 			{
-				configComposite = new ConfigBasicComposite(input, tabFolder, SWT.NONE);
+				configComposite = new ConfigBasicCompositeNew(input, tabFolder, SWT.NONE);
 				tabItem.setControl(configComposite);
 			} else if (ConfAlternative.Type.CAPACITY.equals(alternative.getTypeEnum()))
 			{

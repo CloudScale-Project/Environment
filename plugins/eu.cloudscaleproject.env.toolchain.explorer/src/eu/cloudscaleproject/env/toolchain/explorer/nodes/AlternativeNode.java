@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -82,10 +83,16 @@ public class AlternativeNode extends ExplorerEditorNode{
 				eir = ((IExplorerNode) element).getContext().getLocal(IEditorInputResource.class);
 			}
 			if(eir != null){
-				if(eir.isLoaded()){
-					if(!eir.getSelfStatus().isDone()){
+				if(eir.isLoaded() && eir.isValidated()){
+					if(eir.hasStatusEntry(IValidationStatus.SEVERITY_ERROR)){
 						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
 								image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
+						Image combined = id.createImage();
+						return combined;
+					}
+					else if(eir.hasStatusEntry(IValidationStatus.SEVERITY_WARNING)){
+						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
+								image, IconSetResources.getImage(IconSetResources.WARNING.withSize(SIZE.SIZE_8)));
 						Image combined = id.createImage();
 						return combined;
 					}
@@ -95,6 +102,12 @@ public class AlternativeNode extends ExplorerEditorNode{
 					if(IEditorInputResource.VALUE_STATUS_ERROR.equals(eir.getPersistedStatus())){
 						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
 								image, IconSetResources.getImage(IconSetResources.ERROR.withSize(SIZE.SIZE_8)));
+						Image combined = id.createImage();
+						return combined;
+					}
+					else if(IEditorInputResource.VALUE_STATUS_WARNING.equals(eir.getPersistedStatus())){
+						ExplorerImageDescriptor id = new ExplorerImageDescriptor(
+								image, IconSetResources.getImage(IconSetResources.WARNING.withSize(SIZE.SIZE_8)));
 						Image combined = id.createImage();
 						return combined;
 					}

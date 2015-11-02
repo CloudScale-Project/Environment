@@ -17,9 +17,9 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 public class InputAlternativeFactory implements IResourceProviderFactory{
 
 	@Override
-	public ResourceProvider create(IFolder folder) {
+	public ResourceProvider create(String id, IFolder folder) {
 		
-		ResourceProvider resourceProvider = new ResourceProvider(folder, "Alternative") {
+		ResourceProvider resourceProvider = new ResourceProvider(id, folder, "Alternative") {
 			
 			@Override
 			public boolean validateResource(IResource res) {

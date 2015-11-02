@@ -51,10 +51,13 @@ public class EditorInputFolder extends EditorInputResource{
 
 		IFile file = folder.getFile(PROP_FILENAME);
 		
-		//preload
-		this.propertyInputFile = new EditorInputFile(project, file);
+		//pre-load properties
+		this.propertyInputFile = new EditorInputFile(project, file){
+			//do not save internal properties status
+			protected void handleSaveStatus() {};
+		};
 		
-		//fetch subresources
+		//fetch sub-resources
 		synchronized (subResourcesLock) {
 			subResources.clear();
 			for(String key : propertyInputFile.getKeys()){
@@ -65,7 +68,7 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		//init validation listener
+		//initialize validation listener
 		if(validationID != null){
 			initializeValidationListener();
 		}
@@ -394,6 +397,19 @@ public class EditorInputFolder extends EditorInputResource{
 		//override
 	}
 	
+	protected void handleSaveStatus(){
+		
+		if(hasStatusEntry(IValidationStatus.SEVERITY_ERROR)){
+			propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
+		}
+		else if(hasStatusEntry(IValidationStatus.SEVERITY_WARNING)){
+			propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_WARNING);
+		}
+		else{
+			propertyInputFile.doRemoveProperty(KEY_STATUS);
+		}
+	}
+	
 	protected final void handleSave(IProgressMonitor monitor) {
 
 		if(!folder.exists()){
@@ -404,17 +420,10 @@ public class EditorInputFolder extends EditorInputResource{
 			}
 		}
 		
-		if(this.selfStatus != null){
-			if(this.selfStatus.isDone()){
-				propertyInputFile.doRemoveProperty(KEY_STATUS);
-			}
-			else{
-				propertyInputFile.doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
-			}
-		}
-		
+		handleSaveStatus();
 		propertyInputFile.handleSave(monitor);
 		doSave(monitor);
+		
 		setDirty(false);
 	}
 	

@@ -2,7 +2,9 @@ package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.beans.PropertyChangeListener;
 
-public interface IEditorInput{
+import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+
+public interface IEditorInput extends IValidationStatusProvider{
 	
 	public static final String PROP_NAME = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput.name";
 			

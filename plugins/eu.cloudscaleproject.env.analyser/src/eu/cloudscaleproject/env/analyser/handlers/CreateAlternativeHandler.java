@@ -13,7 +13,6 @@ import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
 import eu.cloudscaleproject.env.analyser.wizard.config.CreateConfigAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class CreateAlternativeHandler {
@@ -21,7 +20,7 @@ public class CreateAlternativeHandler {
 	@Execute
 	public void execute(ResourceProvider rp, @Optional IEditorInputResource eir) {
 		
-		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		String id = rp.getID();
 		
 		IProject project = rp.getProject();
 		CSToolResource tool = CSToolResource.getTool(id);
@@ -52,7 +51,7 @@ public class CreateAlternativeHandler {
 			return false;
 		}
 		
-		String id = ResourceRegistry.getInstance().getResourceProviderID(rp);
+		String id = rp.getID();
 		if(CSToolResource.ANALYSER_INPUT.getID().equals(id)){
 			return true;
 		}

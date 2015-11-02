@@ -13,15 +13,17 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.transaction.RecordingCommand;
+import org.eclipse.emf.transaction.TransactionalCommandStack;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.impl.TransactionalEditingDomainImpl;
 
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
@@ -35,8 +37,8 @@ public class EditorInputEMF extends EditorInputFolder{
 
 	public static final String PROP_COMMAND_STACK_CHANGED = EditorInputEMF.class.getName() + ".commandStackChanged";
 	
-	protected final BasicCommandStack commandStack;
-	protected final AdapterFactoryEditingDomain editingDomain;
+	protected final CommandStack commandStack;
+	protected final TransactionalEditingDomain editingDomain;
 	
 	protected final ResourceSet resSet;
 	protected final ModelType[] modelTypes;
@@ -46,12 +48,9 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		this.modelTypes = modelTypes != null ? modelTypes : new ModelType[]{};
 		
-		commandStack = new BasicCommandStack(){
-			@Override
-			public void execute(Command command) {
-				super.execute(command);
-			}
-		};
+		editingDomain = new TransactionalEditingDomainImpl(factory);
+		
+		commandStack = (TransactionalCommandStack)editingDomain.getCommandStack();
 		commandStack.addCommandStackListener(new CommandStackListener() {
 			
 			@Override
@@ -61,7 +60,6 @@ public class EditorInputEMF extends EditorInputFolder{
 			}
 		});
 		
-		editingDomain = new AdapterFactoryEditingDomain(factory, commandStack);
 		resSet = editingDomain.getResourceSet();
 	}
 	
@@ -247,6 +245,64 @@ public class EditorInputEMF extends EditorInputFolder{
 		return resources;
 	}
 	
+	public void executeModelChange(final Runnable runnable){
+		commandStack.execute(new RecordingCommand(editingDomain) {
+
+			@Override
+			protected void doExecute() {
+				runnable.run();
+			}
+			
+			@Override
+			public boolean canUndo() {
+				return false;
+			}
+			
+		});
+	}
+	
+	public void executeRecordingModelChange(final Runnable runnable){
+		commandStack.execute(new RecordingCommand(editingDomain) {
+
+			@Override
+			protected void doExecute() {
+				runnable.run();
+			}
+			
+		});
+	}
+	
+	@Override
+	protected void doCreate(final IProgressMonitor monitor) {
+		
+		workOn(monitor, "Creating Analyser configuration alternative.");
+		
+		commandStack.execute(new RecordingCommand(editingDomain) {
+
+			@Override
+			protected void doExecute() {
+				doCreateModels();
+			}
+			
+			@Override
+			public boolean canUndo() {
+				return false;
+			}
+			
+		});
+		
+		work(monitor);
+	}
+	
+	protected void doCreateModels(){
+		
+	}
+	
+	@Override
+	public int getCreateWork() {
+		return super.getCreateWork() + 1;
+	}
+	
 	@Override
 	protected void doSave(IProgressMonitor monitor) {
 		
@@ -286,7 +342,7 @@ public class EditorInputEMF extends EditorInputFolder{
 			e.printStackTrace();
 		}
 		
-		commandStack.saveIsDone();
+		commandStack.flush();
 	}
 	
 	@Override

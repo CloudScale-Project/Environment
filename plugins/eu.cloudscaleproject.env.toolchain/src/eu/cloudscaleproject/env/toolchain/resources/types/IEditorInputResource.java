@@ -4,16 +4,17 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
-import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 
-public interface IEditorInputResource extends IEditorInput, IProjectProvider, IValidationStatusProvider{
+public interface IEditorInputResource extends IEditorInput, IProjectProvider{
 
 	public final String KEY_NAME = "name";
 	public final String KEY_TIMESTAMP_CREATED = "created";
 	public final String KEY_TIMESTAMP_MODIFIED = "modified";
 	
 	public final String KEY_STATUS = "status";
+	
 	public final String VALUE_STATUS_ERROR = "error";
+	public final String VALUE_STATUS_WARNING = "warning";
 		
 	public static final String PROP_SAVED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propSaved";
 	public static final String PROP_LOADED = "eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource.propLoaded";
@@ -26,6 +27,8 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider, IV
 	public IResource getResource();
 	
 	public String getType();
+	
+	public boolean hasStatusEntry(int severity);
 	
 	public boolean isDisposed();
 	public void dispose();

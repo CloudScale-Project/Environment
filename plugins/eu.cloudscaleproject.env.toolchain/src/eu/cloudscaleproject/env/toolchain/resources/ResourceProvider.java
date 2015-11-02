@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -26,8 +27,10 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFile;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public abstract class ResourceProvider
-{
+public abstract class ResourceProvider {
+	
+	private static final Logger logger = Logger.getLogger(ResourceProvider.class.getName());
+	
 	public static final String PROP_DISPOSED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.disposed";
 	
 	public static final String PROP_RESOURCE_CREATED = "eu.cloudscaleproject.env.toolchain.resources.ResourceProvider.create";
@@ -39,9 +42,11 @@ public abstract class ResourceProvider
 
 	public static final String PROP_TYPE = "resourceType";
 
+	private final String id;
 	private final IFolder rootFolder;
 	private final String defaultResName;
 	
+	private boolean isDisposed = false;
 	private final Object resourcesLock = new Object();
 		
 	private final LinkedHashMap<IResource, IEditorInputResource> resources = new LinkedHashMap<IResource, IEditorInputResource>();
@@ -117,16 +122,22 @@ public abstract class ResourceProvider
 		}
 	};
 
-	public ResourceProvider(IFolder folder, String defaultResName)
+	public ResourceProvider(String id, IFolder folder, String defaultResName)
 	{
+		this.id = id;
 		this.rootFolder = folder;
 		this.defaultResName = defaultResName;
 
 		initialize();
 	}
 	
+	public String getID(){
+		return this.id;
+	}
+	
 	private final void initialize()
 	{
+		isDisposed = false;
 		ExplorerChangeNotifier.getInstance().addListener(ecl);
 
 		//if the root folder does not exist jet
@@ -154,16 +165,23 @@ public abstract class ResourceProvider
 
 	private void dispose()
 	{		
-		ExplorerChangeNotifier.getInstance().removeListener(ecl);
 		
+		List<IEditorInputResource> resourcesList;
 		synchronized (resourcesLock) {
-			for(IEditorInputResource eir : resources.values()){
-				if (eir instanceof IValidationStatusProvider)
-				{
-					StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
-				}
+			isDisposed = true;
+			ExplorerChangeNotifier.getInstance().removeListener(ecl);
+			resourcesList = new ArrayList<IEditorInputResource>(resources.values());
+		}
+		
+		for(IEditorInputResource eir : resourcesList){
+			if (eir instanceof IValidationStatusProvider)
+			{
+				StatusManager.getInstance().removeStatusProvider((IValidationStatusProvider) eir);
 			}
-			resources.clear();
+		}
+
+		for(IEditorInputResource eir : resourcesList){
+			eir.delete();
 		}
 		
 		firePropertyChange(PROP_DISPOSED, this, null);
@@ -283,6 +301,11 @@ public abstract class ResourceProvider
 
 	public IEditorInputResource createNewResource(String resourceName, String name, String type, boolean empty)
 	{
+		if(isDisposed){
+			logger.info("Can not create resource! Resource provider is disposed!");
+			return null;
+		}
+		
 		checkRootFolder();
 
 		IResource res = createResource(resourceName);
@@ -305,7 +328,6 @@ public abstract class ResourceProvider
 		}
 			
 		addResource(eir);
-		
 		
 		firePropertyChange(PROP_RESOURCE_CREATED, null, eir);
 		return eir;
@@ -338,8 +360,13 @@ public abstract class ResourceProvider
 		addResource(eir);
 	}
 	
-	private void addResource(final IEditorInputResource eir)
-	{
+	private void addResource(final IEditorInputResource eir) {
+
+		if(isDisposed){
+			logger.info("Can not create resource! Resource provider is disposed!");
+			return;
+		}
+
 		synchronized (resourcesLock) {
 			if(resources.containsKey(eir.getResource())){
 				return;

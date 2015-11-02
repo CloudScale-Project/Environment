@@ -12,9 +12,9 @@ public class InputResourceProviderFactory implements IResourceProviderFactory
 
 	public static class InputResourceProvider extends ResourceProvider
 	{
-		public InputResourceProvider(IFolder folder, String defaultResName)
+		public InputResourceProvider(String id, IFolder folder, String defaultResName)
 		{
-			super(folder, defaultResName);
+			super(id, folder, defaultResName);
 			// TODO Auto-generated constructor stub
 		}
 
@@ -44,9 +44,9 @@ public class InputResourceProviderFactory implements IResourceProviderFactory
 	}
 
 	@Override
-	public ResourceProvider create(final IFolder folder)
+	public ResourceProvider create(String id, final IFolder folder)
 	{
-		return new InputResourceProvider(folder, "Alternative");
+		return new InputResourceProvider(id, folder, "Alternative");
 	}
 
 }

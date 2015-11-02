@@ -9,7 +9,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -55,17 +54,28 @@ public class ExplorerProjectPaths {
 
 		List<IProject> filtered = new ArrayList<IProject>();
 		for(IProject p : projects){
-			try {
-				IProjectNature pn = p.getNature(CloudScaleConstants.PROJECT_NATURE_ID);
-				if(pn != null){
-					filtered.add(p);
-				}
-			} catch (CoreException e) {
-				e.printStackTrace();
+			if(isCloudScaleProject(p)){
+				filtered.add(p);
 			}
 		}
 		
 		return filtered.toArray(new IProject[filtered.size()]);
+	}
+	
+	public static boolean isCloudScaleProject(IProject project){
+		
+		if(!project.isAccessible()){
+			return false;
+		}
+		
+		try {
+			if(project.isNatureEnabled(CloudScaleConstants.PROJECT_NATURE_ID)){
+				return true;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	/**
@@ -227,7 +237,8 @@ public class ExplorerProjectPaths {
 		if (!folder.exists()) {
 			try{
 				folder.create(true, true, new NullProgressMonitor());
-			}catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				logger.warning(e.getMessage());
 			}

@@ -26,6 +26,8 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	
 	private String name = "Unknown";
 	
+	protected boolean isDisposed = false;
+	
 	private boolean iconDisposeable = false;
 	private Image icon = null;
 	
@@ -41,10 +43,10 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if(ExplorerNodeChildren.PROP_CHILD_ADDED.equals(evt.getPropertyName())){
-				ExplorerNode.this.addChild((IExplorerNode)evt.getNewValue());
+				ExplorerNode.this.addChild((ExplorerNode)evt.getNewValue());
 			}
 			if(ExplorerNodeChildren.PROP_CHILD_REMOVED.equals(evt.getPropertyName())){
-				ExplorerNode.this.removeChild((IExplorerNode)evt.getOldValue());
+				ExplorerNode.this.removeChild((ExplorerNode)evt.getOldValue());
 			}
 		}
 	};
@@ -183,7 +185,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		return out.toArray(new IExplorerNode[out.size()]);
 	}
 
-	private void addChild(final IExplorerNode node) {
+	private void addChild(final ExplorerNode node) {
 		
 		Display.getDefault().syncExec(new Runnable() {
 			
@@ -195,18 +197,23 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		pcs.firePropertyChange(PROP_CHILD_ADDED, null, node);
 	}
 	
-	private void doAddChild(IExplorerNode node) {
+	private void doAddChild(ExplorerNode node) {
+		
 		if(node == null){
 			return;
 		}
 		
-		((ExplorerNode)node).parent = this;		
+		if(node.isDisposed){
+			return;
+		}
+		
+		node.parent = this;		
 		ContextInjectionFactory.inject(node, this.getContext());
 		
 		node.addPropertyChangeListener(childListener);		
 	}
 
-	private void removeChild(final IExplorerNode node) {
+	private void removeChild(final ExplorerNode node) {
 		
 		Display.getDefault().syncExec(new Runnable() {
 			
@@ -218,13 +225,13 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		pcs.firePropertyChange(PROP_CHILD_REMOVED, node, null);
 	}
 	
-	private void doRemoveChild(IExplorerNode node) {
+	private void doRemoveChild(ExplorerNode node) {
 		if(node == null){
 			return;
 		}
 		node.removePropertyChangeListener(childListener);
 		node.getContext().setParent(null);
-		((ExplorerNode)node).parent = null;
+		node.parent = null;
 	}
 	
 	@Override
@@ -274,22 +281,27 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		}
 		this.nodeChildren.clear();
 		
-		if(icon != null && iconDisposeable){
-			icon.dispose();
-		}
-		
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {
+				
+				if(icon != null && iconDisposeable){
+					icon.dispose();
+				}
+				
 				ExplorerNode.this.context.dispose();
+				
+				if(parent != null){
+					ExplorerNode en = (ExplorerNode)parent;
+					en.removeChild(ExplorerNode.this);
+				}
+				
+				isDisposed = true;
+
 			}
 		});
 		
-		if(parent != null){
-			ExplorerNode en = (ExplorerNode)parent;
-			en.removeChild(this);
-		}
 	}
 	
 	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue){

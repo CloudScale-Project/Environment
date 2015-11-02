@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public class EditorInputFile extends EditorInputResource{
@@ -238,17 +239,22 @@ public class EditorInputFile extends EditorInputResource{
 		}
 	}
 	
+	protected void handleSaveStatus(){
+		if(hasStatusEntry(IValidationStatus.SEVERITY_ERROR)){
+			doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
+		}
+		else if(hasStatusEntry(IValidationStatus.SEVERITY_WARNING)){
+			doSetProperty(KEY_STATUS, VALUE_STATUS_WARNING);
+		}
+		else{
+			doRemoveProperty(KEY_STATUS);
+		}
+	}
+	
 	@Override
 	protected void handleSave(IProgressMonitor monitor) {
 		
-		if(this.selfStatus != null){
-			if(this.selfStatus.isDone()){
-				doRemoveProperty(KEY_STATUS);
-			}
-			else{
-				doSetProperty(KEY_STATUS, VALUE_STATUS_ERROR);
-			}
-		}
+		handleSaveStatus();
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {

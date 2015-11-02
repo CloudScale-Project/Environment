@@ -12,8 +12,8 @@ public class ConfigResourceProviderFactory implements IResourceProviderFactory {
 	
 	public static class ConfigResourceProvider extends ResourceProvider {
 		
-		public ConfigResourceProvider(IFolder folder, String defaultResName) {
-			super(folder, defaultResName);
+		public ConfigResourceProvider(String id, IFolder folder, String defaultResName) {
+			super(id, folder, defaultResName);
 		}
 
 		@Override
@@ -40,8 +40,8 @@ public class ConfigResourceProviderFactory implements IResourceProviderFactory {
 	}
 
 	@Override
-	public ResourceProvider create(final IFolder folder) {
-		return new ConfigResourceProvider(folder, "Alternative");
+	public ResourceProvider create(String id, final IFolder folder) {
+		return new ConfigResourceProvider(id, folder, "Alternative");
 	}
 
 }

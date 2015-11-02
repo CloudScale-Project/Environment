@@ -1,9 +1,15 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
+import java.beans.IndexedPropertyChangeEvent;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.list.ListDiff;
@@ -32,8 +38,22 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	private final boolean lazyLoad;
-	protected boolean initialized = false;
-
+	
+	protected boolean isInitialized = false;
+	protected boolean isDisposed = false;
+	
+	//prevents multiple threads to access refresh method simultaneously
+	//do not use it in other methods!
+	private final ReentrantLock refreshLock = new ReentrantLock();
+	//private final Object refreshLock = new Object();
+	
+	//lock used for locking nodes array
+	private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
+	
+	//Property change events stack
+	private final Object eventsLock = new Object();
+	private Stack<PropertyChangeEvent> events = new Stack<PropertyChangeEvent>();
+		
 	public ExplorerNodeChildren(boolean lazyLoad) {
 		this.lazyLoad = lazyLoad;
 	}
@@ -44,23 +64,36 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	public void initialize(IExplorerNode node){
 		this.node = node;
+		isDisposed = false;
+
 		if(!lazyLoad){
 			doInitialize();
 		}
 	}
 	
 	private void doInitialize(){
-		initialized = true;
-		
-		keys.clear();
-		nodes.clear();
+		isInitialized = true;
+		isDisposed = false;
+
+		try{
+			lock.writeLock().lock();
+			keys.clear();
+			nodes.clear();
+		}
+		finally{
+			lock.writeLock().unlock();
+		}
 		
 		doRefresh();
 	}
 	
 	public boolean hasChildren(){
 		
-		if(!initialized){
+		if(isDisposed){
+			return false;
+		}
+		
+		if(!isInitialized){
 			doInitialize();
 		}
 		
@@ -74,20 +107,37 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 	
 	public List<IExplorerNode> getChildren(){
 		
-		if(!initialized){
+		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
+		
+		if(isDisposed){
+			return out;
+		}
+		
+		if(!isInitialized){
 			doInitialize();
 		}
 		
-		List<IExplorerNode> out = new ArrayList<IExplorerNode>();
-		for(IExplorerNode node : nodes){
-			if(node != null){
-				out.add(node);
+		try{
+			lock.readLock().lock();
+			for(IExplorerNode node : nodes){
+				if(node != null){
+					out.add(node);
+				}
 			}
 		}
+		finally{
+			lock.readLock().unlock();
+		}
+		
 		return out;
 	}
 	
 	public void refresh(){
+		
+		if(isDisposed){
+			return;
+		}
+		
 		BatchExecutor.getInstance().addTask(this, "refresh",  new Runnable() {
 			
 			@Override
@@ -101,72 +151,136 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 		doRefresh();
 	}
 	
-	private synchronized void doRefresh(){
+	private void doRefresh(){
 		
-		if(!initialized){
+		if(isDisposed){
 			return;
 		}
 		
-		//try to resolve null nodes
-		for(int i=0; i<nodes.size(); i++){
-			IExplorerNode node = nodes.get(i);
-			if(node == null){
-				node = getChild(keys.get(i));
-				if(node != null){
-					nodes.set(i, node);
-					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, i, null, node);
+		if(isInitialized){
+			
+			//Forces threads to execute the following code sequentially
+			//If the lock can not be acquired, delayed refresh is triggered 
+			if(refreshLock.tryLock()){
+				try{
+					
+					final List<IExplorerNode> nodesCopy;
+					try{
+						lock.writeLock().lock();
+						nodesCopy = new ArrayList<IExplorerNode>(nodes);
+					}
+					finally{
+						lock.writeLock().unlock();
+					}
+						
+					//try to resolve null nodes
+					for(int i=0; i<nodesCopy.size(); i++){
+						IExplorerNode node = nodesCopy.get(i);
+						if(node == null){
+							node = getChild(keys.get(i));
+							if(node != null){
+								nodesCopy.set(i, node);
+								addIndexedPropertyChange(PROP_CHILD_ADDED, i, null, node);
+							}
+						}
+					}
+					
+					//create nodes for the new keys
+					List<? extends Object> currentKeys = getKeys();
+					if(currentKeys == null){
+						return;
+					}
+					
+					ListDiff diff = Diffs.computeListDiff(keys, currentKeys);
+					
+					diff.accept(new ListDiffVisitor() {
+						
+						@Override
+						public void handleAdd(int index, Object element) {
+							
+							IExplorerNode node = getChild(element);
+							nodesCopy.add(index, node);
+							keys.add(index, element);
+							
+							if(node != null){
+								addIndexedPropertyChange(PROP_CHILD_ADDED, index, null, node);
+							}
+						}
+						
+						@Override
+						public void handleRemove(int index, Object element) {
+							
+							IExplorerNode node = nodesCopy.get(index);
+							nodesCopy.remove(index);
+							keys.remove(index);
+							
+							if(node != null){
+								node.dispose();
+								addIndexedPropertyChange(PROP_CHILD_REMOVED, index, node, null);
+							}
+						}
+						
+					});
+					
+				
+					try{
+						lock.writeLock().lock();
+						nodes.clear();
+						nodes.addAll(nodesCopy);
+					}
+					finally{
+						lock.writeLock().unlock();
+					}
+					
+					flushPropertyChange();
+				
+				}
+				finally{
+					refreshLock.unlock();
 				}
 			}
+			else{
+				//refresh lock can not be acquired
+				//in this case trigger batched refresh request
+				refresh();
+			}
+		
 		}
-		
-		//create nodes for the new keys
-		List<? extends Object> currentKeys = getKeys();
-		if(currentKeys == null){
-			return;
-		}
-		
-		ListDiff diff = Diffs.computeListDiff(keys, currentKeys);
-		
-		diff.accept(new ListDiffVisitor() {
-			
-			@Override
-			public void handleAdd(int index, Object element) {
-				
-				IExplorerNode node = getChild(element);
-				nodes.add(index, node);
-				keys.add(index, element);
-				
-				if(node != null){
-					pcs.fireIndexedPropertyChange(PROP_CHILD_ADDED, index, null, node);
-				}
-			}
-			
-			@Override
-			public void handleRemove(int index, Object element) {
-				
-				IExplorerNode node = nodes.get(index);
-				nodes.remove(index);
-				keys.remove(index);
-				
-				if(node != null){
-					node.dispose();
-					pcs.fireIndexedPropertyChange(PROP_CHILD_REMOVED, index, node, null);
-				}
-			}
-			
-		});
 		
 	}
 	
-	public synchronized void dispose(){
-		for(IExplorerNode node : nodes){
-			if(node != null){
-				node.dispose();
+	public void dispose(){
+		
+		try{
+			refreshLock.lock();
+
+			try{
+				lock.readLock().lock();
+				for(IExplorerNode node : nodes){
+					if(node != null){
+						node.dispose();
+					}
+				}
 			}
+			finally{
+				lock.readLock().unlock();
+			}
+			
+			try{
+				lock.writeLock().lock();
+				keys.clear();
+				nodes.clear();
+			}
+			finally{
+				lock.writeLock().unlock();
+			}
+			
+			isDisposed = true;
+		}
+		finally{
+			refreshLock.unlock();
 		}
 		
-		keys.clear();
-		nodes.clear();
 	}
 
 	protected abstract List<? extends Object> getKeys();
@@ -174,6 +288,37 @@ public abstract class ExplorerNodeChildren implements IExplorerNodeChildren{
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl){
 		pcs.addPropertyChangeListener(pcl);
+	}
+	
+	private void addIndexedPropertyChange(String name, int index, Object oldValue, Object newValue){
+		synchronized (eventsLock) {
+			IndexedPropertyChangeEvent evt = new IndexedPropertyChangeEvent(this, name, oldValue, newValue, index);
+			events.push(evt);
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void addPropertyChange(String name, int index, Object oldValue, Object newValue){
+		synchronized (eventsLock) {
+			PropertyChangeEvent evt = new PropertyChangeEvent(this, name, oldValue, newValue);
+			events.push(evt);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void flushPropertyChange(){
+		
+		Stack<PropertyChangeEvent> currentStack;
+		
+		synchronized (eventsLock) {
+			currentStack = (Stack<PropertyChangeEvent>)events.clone();
+			events.clear();
+		}
+			
+		while (!currentStack.isEmpty()) {
+			PropertyChangeEvent evt = currentStack.pop();
+			pcs.firePropertyChange(evt);
+		}
 	}
 	
 	public void removePropertyChangeListener(PropertyChangeListener pcl){

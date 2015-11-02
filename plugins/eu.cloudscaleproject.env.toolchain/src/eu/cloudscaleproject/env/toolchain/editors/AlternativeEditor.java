@@ -224,7 +224,7 @@ public class AlternativeEditor {
 	
 	@PersistState
 	public void persistState(){
-		if(this.alternative != null){
+		if(this.alternative != null && part != null && part.getPersistedState() != null){
 			part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
 		}
 	}

@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -118,17 +117,7 @@ public class ToolchainUtils {
 
 		toolName = ExplorerProjectPaths.getProjectProperty(project, id, toolName);
 		
-		IFolder folder = project.getFolder(toolName);
-		
-		if(!folder.exists()){
-			try {
-				ExplorerProjectPaths.prepareFolder(folder);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return folder;
+		return project.getFolder(toolName);		
 	}
 	
 	public static IFolder getResourceProviderFolder(IProject project, String id){
@@ -149,14 +138,6 @@ public class ToolchainUtils {
 
 		IFolder toolFolder = getToolFolder(project, ((IConfigurationElement)resourceElement.getParent()).getAttribute("id"));
 		IFolder folder = toolFolder.getFolder(resourceName);
-		
-		if(!folder.exists()){
-			try {
-				ExplorerProjectPaths.prepareFolder(folder);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		return folder;
 	}

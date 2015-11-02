@@ -175,10 +175,11 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void updateMetaData()
 	{
-		lblInputValue.setText(this.alternative.getInputAlternative().getName());
-
-		lblLastChangeValue.setText(getModifiedString(this.alternative.getInputAlternative()));
-
+		if(alternative.getInputAlternative() != null){
+			lblInputValue.setText(this.alternative.getInputAlternative().getName());
+			lblLastChangeValue.setText(getModifiedString(this.alternative.getInputAlternative()));
+		}
+		
 		List<IEditorInputResource> results = this.alternative.getResults();
 
 		if (results != null && !results.isEmpty()) {
@@ -303,12 +304,14 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			{
 				StatusManager.getInstance().removePropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED,
 						propertyChangeListener);
-				alternative.getInputAlternative().removePropertyChangeListener(IEditorInputResource.PROP_SAVED, inputAlternativeListener);
+				if(alternative.getInputAlternative() != null){
+					alternative.getInputAlternative().removePropertyChangeListener(IEditorInputResource.PROP_SAVED, inputAlternativeListener);
+				}
 			}
 		});
 		
 		this.alternative.getInputAlternative().addPropertyChangeListener(IEditorInputResource.PROP_SAVED, inputAlternativeListener);
-
+		
 		StatusManager.getInstance().addPropertyChangeListener(StatusManager.PROP_VALIDATION_COMPLETED,
 				propertyChangeListener);
 	}

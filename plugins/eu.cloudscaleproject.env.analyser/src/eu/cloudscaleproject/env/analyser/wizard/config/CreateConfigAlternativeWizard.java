@@ -59,16 +59,23 @@ public class CreateConfigAlternativeWizard extends Wizard{
 	@Override
 	public boolean performFinish() {
 		
-		ConfAlternative ca = (ConfAlternative)this.confResourceProvider.createNewResource(this.selectNamePage.getName(), type.name());
+		final ConfAlternative ca = (ConfAlternative)this.confResourceProvider.createNewResource(this.selectNamePage.getName(), type.name());
 		
-		if(inputAlternative != null){
-			ca.setInputAlternative(inputAlternative);
-		}
-		else{
-			if(alternativeSelectionPage.getSelection() != null){
-				ca.setInputAlternative((InputAlternative)alternativeSelectionPage.getSelection());
+		ca.executeModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(inputAlternative != null){
+					ca.setInputAlternative(inputAlternative);
+				}
+				else{
+					if(alternativeSelectionPage.getSelection() != null){
+						ca.setInputAlternative((InputAlternative)alternativeSelectionPage.getSelection());
+					}
+				}
 			}
-		}
+		});
+		
 		ca.save();
 		
 		OpenAlternativeUtil.openAlternative(ca);

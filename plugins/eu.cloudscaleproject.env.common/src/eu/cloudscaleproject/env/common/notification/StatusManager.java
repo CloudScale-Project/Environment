@@ -284,6 +284,7 @@ public class StatusManager {
 					//limit only one validation at a time
 					synchronized (validationLock) {
 						v.validate(project, statusProvider);
+						statusProvider.setValidated(true);
 					}
 					
 				}

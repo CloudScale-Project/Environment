@@ -17,6 +17,7 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -35,6 +36,7 @@ import org.reclipse.structure.inference.util.InferenceExtensionsHelper;
 import org.reclipse.structure.inference.util.InferenceExtensionsHelper.AnnotationEvaluatorItem;
 import org.reclipse.structure.specification.PSPatternSpecification;
 
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ConfigAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
@@ -84,7 +86,16 @@ public class Util
 
 	public static IFolder getResultsFolder(IProject project)
 	{
-		return ToolchainUtils.getResourceProviderFolder(project, CSToolResource.SPOTTER_STA_RES.getID());
+		IFolder folder = ToolchainUtils.getResourceProviderFolder(project, CSToolResource.SPOTTER_STA_RES.getID());
+		if(!folder.exists()){
+			try {
+				ExplorerProjectPaths.prepareFolder(folder);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return folder;
 	}
 
 	//
