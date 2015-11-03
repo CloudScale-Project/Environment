@@ -23,21 +23,21 @@ import org.palladiosimulator.experimentautomation.experiments.ValueProvider;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 
-public class ConfigCapacity extends ConfigBasicComposite{
+public class ConfigCapacityComposite extends ConfigBasicComposite{
 	
 	private Text textMinValue;
 	private Text textMaxValue;
 	
 	private DataBindingContext bindingContext = null;
 	
-	public ConfigCapacity(ConfAlternative input, Composite parent, int style) {
+	public ConfigCapacityComposite(ConfAlternative input, Composite parent, int style) {
 		super(input, parent, style);
 	}
 	
 	@Override
 	protected void initExtensions(Composite parent) {
 		GridLayout gl_parent = new GridLayout(1, true);
-		gl_parent.marginWidth = 0;
+		gl_parent.marginLeft = 10;
 		parent.setLayout(gl_parent);
 		
 		Label lblDescription = new Label(parent, SWT.NONE);

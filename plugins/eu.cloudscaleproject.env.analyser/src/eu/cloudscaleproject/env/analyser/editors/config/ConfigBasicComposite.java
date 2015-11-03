@@ -1,464 +1,249 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.uml2.common.edit.command.ChangeCommand;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
+import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage.Literals;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
-import org.palladiosimulator.experimentautomation.experiments.Experiment;
-import org.palladiosimulator.experimentautomation.experiments.InitialModel;
-import org.palladiosimulator.pcm.core.entity.NamedElement;
-import org.palladiosimulator.pcm.usagemodel.UsageModel;
-import org.palladiosimulator.pcm.usagemodel.UsageScenario;
-import org.scaledl.usageevolution.UsageEvolution;
 
-import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
-import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.analyser.converters.IntToString;
+import eu.cloudscaleproject.env.analyser.converters.StringToInt;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
-import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 
 public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
-	private static final Logger logger = Logger.getLogger(ConfigBasicComposite.class.getName());
+	@SuppressWarnings("unused")
+	private DataBindingContext m_bindingContext;
+	
+	private Text stTextValue;
+	private Text mcTextValue;
+	
+	private SimTimeStopCondition stStopCondition;
+	private MeasurementCountStopCondition mcStopCondition;
+	
+	private Button btnSimulationTimeStop;
+	private Button btnMeasurementCountStop;
 	
 	protected final ConfAlternative alternative;
-		
+
 	private final Composite extensionComposite;
 	
-	private ComboViewer usageList;
-	private Button btnCheckSimTime;
-	private Button btnCheckMeasureCount;	
-	private Text textSimTime;
-	private Text textMeasureCount;
-	
-	private SimTimeStopCondition simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-	private MeasurementCountStopCondition measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-		
-	private boolean disableListeners = false;
-	
-	public ConfigBasicComposite(ConfAlternative input, Composite parent, int style) {
+	public ConfigBasicComposite(final ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = input;
-				
+		
+		//retrieve stop conditions
+		for(StopCondition sc : alternative.getActiveExperiment().getStopConditions()){
+			if(sc instanceof SimTimeStopCondition){
+				stStopCondition = (SimTimeStopCondition)sc;
+			}
+			else if(sc instanceof MeasurementCountStopCondition){
+				mcStopCondition = (MeasurementCountStopCondition)sc;
+			}
+		}
+		
+		// create stop conditions if they do not exist
+		if(stStopCondition == null){
+			stStopCondition = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
+			stStopCondition.setSimulationTime(-1);
+
+			input.executeModelChange(new Runnable(){
+				@Override
+				public void run() {
+					input.getActiveExperiment().getStopConditions().add(stStopCondition);
+				}
+			});
+		}
+		if(mcStopCondition == null){
+			mcStopCondition = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
+			mcStopCondition.setMeasurementCount(-1);
+
+			input.executeModelChange(new Runnable(){
+				@Override
+				public void run() {
+					input.getActiveExperiment().getStopConditions().add(mcStopCondition);
+				}
+			});
+		}
+
 		setLayout(new GridLayout(1, false));
+
 		
-		Label lblConfiguration = new Label(this, SWT.NONE);
-		lblConfiguration.setText("Configuration:");
+		Composite basicConfigComposite = new Composite(this, SWT.NONE);
+		GridLayout gl_basicConfigComposite = new GridLayout(2, false);
+		gl_basicConfigComposite.marginLeft = 10;
+		gl_basicConfigComposite.marginHeight = 10;
+		basicConfigComposite.setLayout(gl_basicConfigComposite);
+		basicConfigComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+			Label lblDescription = new Label(basicConfigComposite, SWT.NONE);
+			lblDescription.setText("Basic measurements settings:");
+			lblDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+			
+			Composite settingsComposite = new Composite(basicConfigComposite, SWT.NONE);
+			GridLayout gl_settingsComposite = new GridLayout(2, false);
+			gl_settingsComposite.marginLeft = 10;
+			settingsComposite.setLayout(gl_settingsComposite);
+			settingsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			
+				btnSimulationTimeStop = new Button(settingsComposite, SWT.CHECK);
+				btnSimulationTimeStop.setText("Simulation time stop condition");
+				
+				stTextValue = new Text(settingsComposite, SWT.BORDER);
+				GridData gd_stTextValue = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gd_stTextValue.widthHint = 60;
+				stTextValue.setLayoutData(gd_stTextValue);
+				
+				btnMeasurementCountStop = new Button(settingsComposite, SWT.CHECK);
+				btnMeasurementCountStop.setText("Measurement count stop condition");
+				
+				mcTextValue = new Text(settingsComposite, SWT.BORDER);
+				GridData gd_mcTextValue = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gd_mcTextValue.widthHint = 60;
+				mcTextValue.setLayoutData(gd_mcTextValue);
 		
-		Composite compositeConf = new Composite(this, SWT.NONE);
-		compositeConf.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		GridLayout gl_compositeConf = new GridLayout(2, false);
-		gl_compositeConf.marginLeft = 10;
-		compositeConf.setLayout(gl_compositeConf);
-		
-		//usage list drop-down
-		initUsageUI(compositeConf);
-		
-		// simulation time UI
-		initSimTimeUI(compositeConf);
-		
-		// measure count UI
-		initMeaCountUI(compositeConf);
-		
+		m_bindingContext = initDataBindings();
+
 		extensionComposite = new Composite(this, SWT.NONE);
-		extensionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridLayout gl_extensionComposite = new GridLayout(2, false);
+		gl_extensionComposite.marginLeft = 10;
+		gl_extensionComposite.marginHeight = 10;
+		extensionComposite.setLayout(gl_extensionComposite);
+		extensionComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		initExtensions(extensionComposite);
 		
 		refresh();
 	}
-
+	
 	protected void initExtensions(Composite parent){
 		//override in subclasses
 	}
 
+	@Override
 	public void refresh() {
-		
-		Experiment exp = alternative.getActiveExperiment();
-		
-		if(exp == null){
-			logger.warning("Active experiment is NULL! Skipping refresh().");
-			return;
-		}
-		
-		boolean needToSave = false;
-		
-		for(StopCondition sc : exp.getStopConditions()){
-			if(sc instanceof SimTimeStopCondition){
-				simTime = (SimTimeStopCondition)sc;
-			}
-			else if(sc instanceof MeasurementCountStopCondition){
-				measureCount = (MeasurementCountStopCondition)sc;
-			}
-		}
-		
-		if(simTime == null){
-			simTime = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-			simTime.setSimulationTime(-1);
-			exp.getStopConditions().add(simTime);
-			needToSave = true;
-		}
-		
-		if(measureCount == null){
-			measureCount = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-			measureCount.setMeasurementCount(-1);
-			exp.getStopConditions().add(measureCount);
-			needToSave = true;
-		}
-		
-		if(needToSave){
-			EditorInputJob job = new EditorInputJob("Alternative save") {
-				@Override
-				public IStatus execute(IProgressMonitor monitor) {
-					alternative.save();
-					return new Status(IStatus.OK, Activator.PLUGIN_ID, "Alternative saved");
-				}
-			};
-			job.setUser(false);
-			job.schedule();
-		}
-		
-		updateUsageUI();
-		updateSimTimeUI();
-		updateMeasureCountUI();
 	}
 	
-	private void initUsageUI(Composite composite){
-		
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Select usage: ");
-		
-		usageList = new ComboViewer(composite);
-		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
-		gd.widthHint = 180;
-		usageList.getCombo().setLayoutData(gd);
-		usageList.setContentProvider(new ArrayContentProvider());
-		usageList.setLabelProvider(new LabelProvider(){
-			@Override
-			public String getText(Object element) {
-				if(element instanceof NamedElement){
-					return ((NamedElement)element).getEntityName();
-				}
-				return element.toString();
-			}
-		});
-		
-		usageList.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				
-				if(disableListeners){
-					return;
-				}
-				
-				StructuredSelection ss = (StructuredSelection)event.getSelection();
-				final Object element = ss.getFirstElement();
-				final EditingDomain ed = alternative.getEditingDomain();
-				
-				CommandStack cs = ed.getCommandStack();
-				
-				cs.execute(new ChangeCommand(ed, new Runnable() {
-					
-					public void run() {
-						
-						InitialModel im = alternative.getActiveInitialModel();
-						if(im == null){
-							return;
-						}
-						
-						if(element instanceof UsageEvolution){
-							UsageEvolution ue = (UsageEvolution)element;
-							
-							if(!ue.getUsages().isEmpty()){
-								UsageScenario us = ue.getUsages().get(0).getScenario();
-								if(us != null && us.eContainer() != null){
-									im.setUsageModel((UsageModel)us.eContainer());
-								}
-							}
-							
-							im.setUsageEvolution(ue);
-						}
-						if(element instanceof UsageModel){
-							UsageModel um = (UsageModel)element;
-							im.setUsageEvolution(null);
-							im.setUsageModel(um);
-						}
-					}
-					
-				}));
-				
-			}
-		});
-	}
-	
-	private void initSimTimeUI(Composite composite){
-		
-		//check box
-		btnCheckSimTime = new Button(composite, SWT.CHECK);
-		btnCheckSimTime.setText("Simulation time stop condition:");
-		btnCheckSimTime.setSelection(true);
-		btnCheckSimTime.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				if(disableListeners){
-					return;
-				}
-				
-				if(btnCheckSimTime.getSelection()){
-					textSimTime.setEnabled(true);
-					textSimTime.setText("10");
-				}
-				else{
-					textSimTime.setEnabled(false);
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
 
-					alternative.getEditingDomain().getCommandStack().execute(new ChangeCommand(alternative.getEditingDomain(), 
-							new Runnable() {
-						@Override
-						public void run() {
-							if(simTime.getSimulationTime() != -1){
-								simTime.setSimulationTime(-1);
-							}
-						}
-					}));
-				}
-			}
-		});
-		
-		//text
-		textSimTime  = new Text(composite, SWT.BORDER);
-		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
-		gd.widthHint = 80;
-		textSimTime.setLayoutData(gd);
-		final ControlDecoration warningDecorationNoJavaProjects = new ControlDecoration(textSimTime, SWT.LEFT | SWT.TOP);
-		warningDecorationNoJavaProjects.setDescriptionText("Not a number");
-		warningDecorationNoJavaProjects.setImage(FieldDecorationRegistry.getDefault()
-                .getFieldDecoration(FieldDecorationRegistry.DEC_ERROR	)
-                .getImage());
-		warningDecorationNoJavaProjects.hide();
-		
-		textSimTime.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				
-				if(disableListeners){
-					return;
-				}
-				
-				try {
-					disableListeners = true;
-					if(simTime != null){
-						try{
-							String s = textSimTime.getText();
-							int i = Integer.parseInt(s);
-							simTime.setSimulationTime(i);
-							warningDecorationNoJavaProjects.hide();
-						}
-						catch(NumberFormatException exc){
-							warningDecorationNoJavaProjects.show();
-						}
-					}
-				}
-				finally{
-					disableListeners = false;
-				}
-				
-			}
-		});
-	}
-	
-	private void initMeaCountUI(Composite composite){
-		
-		//check box
-		btnCheckMeasureCount = new Button(composite, SWT.CHECK);
-		btnCheckMeasureCount.setText("Measurement count stop condition:");
-		btnCheckMeasureCount.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				if(disableListeners){
-					return;
-				}
-				
-				if(btnCheckMeasureCount.getSelection()){
-					textMeasureCount.setEnabled(true);
-					textMeasureCount.setText("100");
-				}
-				else{
-					textMeasureCount.setEnabled(false);
+		if(stStopCondition != null){
 
-					alternative.getEditingDomain().getCommandStack().execute(new ChangeCommand(alternative.getEditingDomain(), 
-							new Runnable() {
-						@Override
-						public void run() {
-							if(measureCount.getMeasurementCount() != -1){
-								measureCount.setMeasurementCount(-1);
-							}
-						}
-					}));
-				}
-			}
-		});
-		
-		//text
-		textMeasureCount = new Text(composite, SWT.BORDER);
-		GridData gd = new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1);
-		gd.widthHint = 80;
-		textMeasureCount.setLayoutData(gd);
-		final ControlDecoration warningDecorationNoJavaProjects = new ControlDecoration(textMeasureCount, SWT.RIGHT | SWT.TOP);
-		warningDecorationNoJavaProjects.setDescriptionText("Not a number");
-		warningDecorationNoJavaProjects.setImage(FieldDecorationRegistry.getDefault()
-                .getFieldDecoration(FieldDecorationRegistry.DEC_ERROR	)
-                .getImage());
-		warningDecorationNoJavaProjects.hide();
-		
-		textMeasureCount.addModifyListener(new ModifyListener() {
+			btnSimulationTimeStop.setEnabled(true);
+			stTextValue.setEnabled(true);
+
+			IObservableValue stStopConditionObserveValue = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																	stStopCondition, Literals.SIM_TIME_STOP_CONDITION__SIMULATION_TIME);
+
+			//text
+			IObservableValue observeText = WidgetProperties.text(new int[]{SWT.Modify, SWT.FocusOut}).observe(stTextValue);
+			UpdateValueStrategy stringToInt = new UpdateValueStrategy();
+			stringToInt.setConverter(new StringToInt());
+			UpdateValueStrategy intToString = new UpdateValueStrategy();
+			intToString.setConverter(new IntToString());
+			bindingContext.bindValue(observeText, stStopConditionObserveValue, stringToInt, intToString);
+
+			//button
+			IObservableValue observeBtnSelection = WidgetProperties.selection().observe(btnSimulationTimeStop);
+			UpdateValueStrategy boolToInt = new UpdateValueStrategy();
+			boolToInt.setConverter(new BoolToInt());
+			UpdateValueStrategy intToBool = new UpdateValueStrategy();
+			intToBool.setConverter(new IntToBool());
+			bindingContext.bindValue(observeBtnSelection, stStopConditionObserveValue, boolToInt, intToBool);
+
+			//text
+			IObservableValue observeTextEnabled = WidgetProperties.enabled().observe(stTextValue);
+			bindingContext.bindValue(observeTextEnabled, stStopConditionObserveValue, boolToInt, intToBool);
 			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				
-				if(disableListeners){
-					return;
-				}
-				
-				try {
-					disableListeners = true;
-					if(measureCount != null){
-						try{
-							String s = textMeasureCount.getText();
-							int i = Integer.parseInt(s);
-							measureCount.setMeasurementCount(i);
-							warningDecorationNoJavaProjects.hide();
-						}
-						catch(NumberFormatException exc){
-							warningDecorationNoJavaProjects.show();					
-						}
-					}
-				}
-				finally{
-					disableListeners = false;
-				}
-			}
-		});
-	}
-	
-	private void updateUsageUI(){
-		
-		if(usageList.getCombo().isDisposed()){
-			return;
-		}
-		
-		InputAlternative ia = alternative.getInputAlternative();
-		if(ia == null){
-			return;
-		}
-		
-		List<EObject> usages = ia.getModelRoot(alternative.getResourceSet(), ToolchainUtils.KEY_FILE_USAGE);
-				
-		if(alternative.getTypeEnum() == ConfAlternative.Type.NORMAL){
-			List<EObject> usageEvolutions = ia.getModelRoot(alternative.getResourceSet(), ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-			usages.addAll(usageEvolutions);
-		}
-		
-		try{
-			disableListeners = true;
-			usageList.setInput(usages);
-			
-			if(alternative.getActiveUsageEvolutionModel() != null){
-				usageList.setSelection(new StructuredSelection(alternative.getActiveUsageEvolutionModel()));
-			}
-			else if(alternative.getActiveUsageModel() != null){
-				usageList.setSelection(new StructuredSelection(alternative.getActiveUsageModel()));
-			}
-		}
-		finally{
-			disableListeners = false;
-		}
-	}
-	
-	private void updateSimTimeUI(){
-		
-		if(btnCheckSimTime.isDisposed()){
-			return;
-		}
-		if(textSimTime.isDisposed()){
-			return;
-		}
-		
-		if(simTime.getSimulationTime() == -1){
-			btnCheckSimTime.setSelection(false);
-			textSimTime.setEnabled(false);
 		}
 		else{
-			btnCheckSimTime.setSelection(true);
-			textSimTime.setEnabled(true);
-			
-			try{
-				disableListeners = true;
-				textSimTime.setText(String.valueOf(simTime.getSimulationTime()));
-			}
-			finally{
-				disableListeners = false;
-			}
-		}
-	}
-	
-	private void updateMeasureCountUI(){
-		
-		if(btnCheckMeasureCount.isDisposed()){
-			return;
-		}
-		if(textMeasureCount.isDisposed()){
-			return;
+			btnSimulationTimeStop.setEnabled(false);
+			stTextValue.setEnabled(false);
 		}
 		
-		if(measureCount.getMeasurementCount() == -1){
-			btnCheckMeasureCount.setSelection(false);
-			textMeasureCount.setEnabled(false);
+		if(mcStopCondition != null){
+
+			btnMeasurementCountStop.setEnabled(true);
+			mcTextValue.setEnabled(true);
+
+			IObservableValue mcStopConditionObserve = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																	mcStopCondition, Literals.MEASUREMENT_COUNT_STOP_CONDITION__MEASUREMENT_COUNT);
+
+			//text
+			IObservableValue observeText = WidgetProperties.text(new int[]{SWT.Modify, SWT.FocusOut}).observe(mcTextValue);
+			UpdateValueStrategy stringToInt = new UpdateValueStrategy();
+			stringToInt.setConverter(new StringToInt());
+			UpdateValueStrategy intToString = new UpdateValueStrategy();
+			intToString.setConverter(new IntToString());
+			bindingContext.bindValue(observeText, mcStopConditionObserve, stringToInt, intToString);
+
+			//button
+			IObservableValue observeBtnSelection = WidgetProperties.selection().observe(btnMeasurementCountStop);
+			UpdateValueStrategy boolToInt = new UpdateValueStrategy();
+			boolToInt.setConverter(new BoolToInt());
+			UpdateValueStrategy intToBool = new UpdateValueStrategy();
+			intToBool.setConverter(new IntToBool());
+			bindingContext.bindValue(observeBtnSelection, mcStopConditionObserve, boolToInt, intToBool);
+
+			//text
+			IObservableValue observeTextEnabled = WidgetProperties.enabled().observe(mcTextValue);
+			bindingContext.bindValue(observeTextEnabled, mcStopConditionObserve, boolToInt, intToBool);
 		}
 		else{
-			btnCheckMeasureCount.setSelection(true);
-			textMeasureCount.setEnabled(true);
-			
-			try{
-				disableListeners = true;
-				textMeasureCount.setText(String.valueOf(measureCount.getMeasurementCount()));
+			btnMeasurementCountStop.setEnabled(false);
+			mcTextValue.setEnabled(false);
+		}
+
+		return bindingContext;
+	}
+	
+	private static class BoolToInt extends Converter{
+
+		public BoolToInt() {
+			super(Boolean.class, Integer.class);
+		}
+
+		@Override
+		public Object convert(Object fromObject) {
+			boolean enabled = (Boolean)fromObject;
+			if(enabled){
+				return 10;
 			}
-			finally{
-				disableListeners = false;
+			else{
+				return -1;
 			}
 		}
+		
+	}
+	
+	private static class IntToBool extends Converter{
+
+		public IntToBool() {
+			super(Integer.class, Boolean.class);
+		}
+
+		@Override
+		public Object convert(Object fromObject) {
+			Integer i = (Integer)fromObject;
+			if(i.intValue() >= 0){
+				return Boolean.TRUE;
+			}
+			return Boolean.FALSE;
+		}
+		
 	}
 }

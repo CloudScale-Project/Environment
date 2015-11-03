@@ -10,6 +10,10 @@ public class IntToString extends Converter{
 	
 	@Override
 	public Object convert(Object fromObject) {
+		Integer i = (Integer)fromObject;
+		if(i.intValue() < 0){
+			return "";
+		}
 		return ((Integer)fromObject).toString();
 	}
 
