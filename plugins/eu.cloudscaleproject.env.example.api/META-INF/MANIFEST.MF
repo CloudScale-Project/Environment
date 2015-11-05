@@ -13,6 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  eu.cloudscaleproject.env.product,
  org.eclipse.jface,
- eu.cloudscaleproject.env.common
+ eu.cloudscaleproject.env.common,
+ org.eclipse.e4.core.contexts,
+ eu.cloudscaleproject.env.toolchain
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

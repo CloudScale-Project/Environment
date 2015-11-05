@@ -2,6 +2,7 @@
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_0U33UBAaEeWFOOChkLgU4A">
   <imports xsi:type="commands:Command" xmi:id="_H6Gk4BNlEeWu1oCxvgJv_A" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective"/>
   <imports xsi:type="commands:Command" xmi:id="_tLxN0GCDEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.toolchain.command.createalternative"/>
+  <imports xsi:type="commands:Command" xmi:id="_eAmzEIFwEeWdDrhvqLZUaw" elementId="org.eclipse.ui.file.save"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M_i0sBNlEeWu1oCxvgJv_A" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_M_i0shNlEeWu1oCxvgJv_A" elementId="eu.cludscale.environment.overview.openImportWizard" commandName="Open import wizard" description="Open import wizard"/>
     <elements xsi:type="commands:Command" xmi:id="_mS8NUDE6EeWJqMEyqBbxQA" elementId="eu.cludscaleproject.env.overview.openOverviewEditor" commandName="Open Overview Editor" description="Open Overview Editor"/>
@@ -11,7 +12,9 @@
     <elements xsi:type="commands:Handler" xmi:id="_gbcOcDE6EeWJqMEyqBbxQA" elementId="eu.cloudscaleproject.env.overview.handler.openOverviewEditor" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.handlers.OpenOverviewEditorHandler" command="_mS8NUDE6EeWJqMEyqBbxQA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0W1qMGB_EeWayeVD4LyD5g" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_3fh5cGB_EeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor" label="Overview alternative" iconURI="platform:/plugin/eu.cloudscaleproject.env.overview/resources/icons/overview_16.png" tooltip="Overview alternative editor" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.editors.OverviewEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_3fh5cGB_EeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor" label="Overview alternative" iconURI="platform:/plugin/eu.cloudscaleproject.env.overview/resources/icons/overview_16.png" tooltip="Overview alternative editor" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.editors.OverviewEditor">
+      <handlers xmi:id="_fRvq0IFwEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.overview.handler.0" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_eAmzEIFwEeWdDrhvqLZUaw"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Uuv6wGCCEeWayeVD4LyD5g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_w6rlAGCCEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.handledmenuitem.newOverviewAlternative" label="New Overview alternative..." tooltip="Create new Overview alternative" command="_tLxN0GCDEeWayeVD4LyD5g">

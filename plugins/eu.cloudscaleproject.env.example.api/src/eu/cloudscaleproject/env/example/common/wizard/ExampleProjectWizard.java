@@ -22,13 +22,14 @@ import org.eclipse.ui.dialogs.IOverwriteQuery;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.eclipse.ui.wizards.datatransfer.ZipFileStructureProvider;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
-import eu.cloudscaleproject.env.common.explorer.ExplorerUtils;
 import eu.cloudscaleproject.env.example.common.Example;
 import eu.cloudscaleproject.env.example.common.Example.Resource;
 import eu.cloudscaleproject.env.example.common.Example.Resource.Type;
 import eu.cloudscaleproject.env.example.common.ExampleService;
 import eu.cloudscaleproject.env.product.wizard.CloudScaleProjectSupport;
+import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 
 public class ExampleProjectWizard extends Wizard implements INewWizard, IExecutableExtension
 {
@@ -66,7 +67,6 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 			@Override
 			public IStatus run(IProgressMonitor monitor)
 			{
-				IFile cseProjectFile = null;
 				for (Resource resource : selectedResources)
 				{
 					try
@@ -76,8 +76,9 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 						IFile propertyFile = ExplorerProjectPaths.getDashboardFile(project);
 						if (propertyFile != null && propertyFile.exists()) // TODO: check nature
 						{
-							cseProjectFile = propertyFile;
+							selectExampleProject(project);
 						}
+						
 
 					} catch (Exception e)
 					{
@@ -86,20 +87,6 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 
 				}
 
-				// Has CSE Project been imported
-				if (cseProjectFile != null)
-				{
-					final IFile finalProjectFile = cseProjectFile;
-					Display.getDefault().asyncExec(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							ExplorerUtils.selectAndReveal(finalProjectFile);
-							ExplorerUtils.openFile(finalProjectFile);
-						}
-					});
-				}
 
 				return Status.OK_STATUS;
 			}
@@ -107,13 +94,28 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 		
 		job.schedule();
 
-		// IProject project = CloudScaleProjectSupport.createBaseProject(name,
-		// location);
-		// createExampleProject(project, example.getResoruces().get(0));
-
-		// BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
-
 		return true;
+	}
+	
+	private static void selectExampleProject (final IProject project)
+	{
+				//select and expand node in explorer
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						//delay for 500ms, so the node is created
+						Display.getDefault().timerExec(500, new Runnable() {
+							
+							@Override
+							public void run() {
+								IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+								explorerService.setSelection(project);
+							}
+						});
+					}
+				});
+		
 	}
 
 	public static IProject createExampleProject(IProject project, Example.Resource resource)

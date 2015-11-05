@@ -35,6 +35,7 @@ import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.toolchain.IDirtyAdapter;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
@@ -61,7 +62,7 @@ public class AlternativeEditor {
 	private IEditorInputResource alternative;
 	
 	private Composite composite;
-	private Composite loadingComposite;
+	//private Composite loadingComposite;
 	private StackLayout stackLayout;
 	
 	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
@@ -131,7 +132,7 @@ public class AlternativeEditor {
 			parentComposite.setLayout(stackLayout);
 		}
 		
-		if(this.loadingComposite == null){
+/*		if(this.loadingComposite == null){
 			loadingComposite = new Composite(parentComposite, SWT.NONE);
 			GridLayout gl = new GridLayout();
 			loadingComposite.setLayout(gl);
@@ -143,7 +144,7 @@ public class AlternativeEditor {
 		this.stackLayout.topControl = loadingComposite;
 		this.parentComposite.layout();
 		this.parentComposite.redraw();
-
+*/
 		if(this.composite != null){
 			this.composite.dispose();
 		}
@@ -176,6 +177,7 @@ public class AlternativeEditor {
 		part.getContext().set(IProject.class, alternative.getProject());
 		part.getContext().set(IEditorInputResource.class, alternative);
 		part.getContext().set(IValidationStatusProvider.class, alternative);
+		part.getContext().set(MDirtyable.class, dirtyable);
 
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
@@ -212,7 +214,7 @@ public class AlternativeEditor {
 			}
 		}
 		
-		parentComposite.forceFocus();
+	//	parentComposite.forceFocus();
 	}
 	
 	@Persist

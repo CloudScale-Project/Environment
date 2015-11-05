@@ -25,6 +25,6 @@ public class InputEditor extends AlternativeEditor{
 		setAlternative(alternative);
 		setControl(new InputAlternativeComposite(parent, SWT.NONE, alternative));
 		
-		part.setLabel("Extractor config ["+ alternative.getName() +"]");
+		part.setLabel("Extractor input ["+ alternative.getName() +"]");
 	}
 }

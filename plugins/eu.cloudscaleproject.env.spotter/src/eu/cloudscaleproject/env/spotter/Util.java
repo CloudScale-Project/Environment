@@ -54,7 +54,7 @@ public class Util
 		IFile spotterFile = confEditorInput.getResource().getFile(FileManager.SPOTTER_CONFIG_FILENAME);
 		Properties dynamicSpotterConfig = SpotterProjectSupport.getSpotterConfig(spotterFile);
 		jobDescription.setDynamicSpotterConfig(dynamicSpotterConfig);
-
+		
 		MeasurementEnvironmentFactory envFactory = MeasurementEnvironmentFactory.getInstance();
 		String envFile = confEditorInput.getResource().getFile(FileManager.ENVIRONMENT_FILENAME).getLocation().toString();
 		XMeasurementEnvironment measurementEnvironment = envFactory.parseXMLFile(envFile);

@@ -3,6 +3,7 @@
   <imports xsi:type="commands:Command" xmi:id="_cB6fwHubEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.analyser.openAnalyserPerspective"/>
   <imports xsi:type="commands:Command" xmi:id="_P7ECAIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.control.start"/>
   <imports xsi:type="commands:Command" xmi:id="_oVRuIIGWEeSoC_STLYPGdw" elementId="org.reclipse.structure.inference.ui.OpenMatchingViews"/>
+  <imports xsi:type="commands:Command" xmi:id="_rNdEUIFvEeWdDrhvqLZUaw" elementId="org.eclipse.ui.file.save"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EsKJkC3kEeSFlZh2WowR_Q" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_O0RpEC3kEeSFlZh2WowR_Q" elementId="eu.cloudscaleproject.env.staticspotter.command.openinputwizard" commandName="Open Input Wizard">
       <parameters xmi:id="_9h_9IPpAEeSCruVdiXVtbg" elementId="eu.cloudscaleproject.env.staticspotter.commandparameter.action" name="action"/>
@@ -23,8 +24,12 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_eF1VAEgPEeWZc5LD3U6YSw" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_i9r0wEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor" label="Static Spotter input" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/input_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.InputEditor"/>
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_jVIEYEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor" label="Static Spotter config" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/configuration_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.ConfigEditor"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_i9r0wEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor" label="Static Spotter input" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/input_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.InputEditor">
+      <handlers xmi:id="_wdASYIFvEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.staticspotter.handler.1" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_rNdEUIFvEeWdDrhvqLZUaw"/>
+    </elements>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_jVIEYEgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor" label="Static Spotter config" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/configuration_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.ConfigEditor">
+      <handlers xmi:id="_zS-Z8IFvEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.staticspotter.handler.2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_rNdEUIFvEeWdDrhvqLZUaw"/>
+    </elements>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_jrA00EgPEeWZc5LD3U6YSw" elementId="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor" label="Static Spotter result" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/results_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.editors.ResultEditor"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_w2bOYGBGEeWayeVD4LyD5g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
