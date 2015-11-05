@@ -174,6 +174,11 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	}
 	
 	@Override
+	public long getModificationStamp(){
+		return modificationStamp;
+	}
+	
+	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
@@ -248,10 +253,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	}
 	
 	public final void load(IProgressMonitor monitor) {
-		
-		if(modificationStamp == resource.getModificationStamp()){
-			return;
-		}
 		
 		workOn(monitor, "Loading resource " + getName());
 		

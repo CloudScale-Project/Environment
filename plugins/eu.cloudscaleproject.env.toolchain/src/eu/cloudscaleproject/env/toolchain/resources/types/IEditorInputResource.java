@@ -54,6 +54,7 @@ public interface IEditorInputResource extends IEditorInput, IProjectProvider{
 	
 	public boolean isDirty();
 	public void setDirty(boolean value);
+	public long getModificationStamp();
 		
 	public String getProperty(String key);
 	public String[] getProperties(String key);

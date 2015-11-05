@@ -37,7 +37,5 @@ public class ResultAlternative extends AbstractResultAlternative {
 		
 		setSubResource(ToolchainUtils.KEY_FOLDER_MODISCO, modiscoFolder);
 		setSubResource(ToolchainUtils.KEY_FOLDER_SOMOX, somoxFolder);
-		
-		save(monitor);
 	}
 }

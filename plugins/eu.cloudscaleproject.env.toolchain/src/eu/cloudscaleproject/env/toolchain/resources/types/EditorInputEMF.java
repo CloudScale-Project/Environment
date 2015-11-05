@@ -485,7 +485,9 @@ public class EditorInputEMF extends EditorInputFolder{
 							return;
 						}
 						
-						for(EObject eo : res.getContents()){
+						// TODO:
+						// Concurrent modification exception can occur here - despite using transactions...
+						for(EObject eo : new ArrayList<EObject>(res.getContents())){
 
 							Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
 							out.add(diagnostic);

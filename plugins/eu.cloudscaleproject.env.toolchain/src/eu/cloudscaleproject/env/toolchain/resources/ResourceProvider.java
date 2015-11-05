@@ -71,7 +71,7 @@ public abstract class ResourceProvider {
 			
 			for (IResourceDelta alternativeDelta : delta.getAffectedChildren())
 			{
-				IResource resource = alternativeDelta.getResource();
+				final IResource resource = alternativeDelta.getResource();
 				
 				if (alternativeDelta.getKind() == IResourceDelta.ADDED)
 				{
@@ -90,15 +90,18 @@ public abstract class ResourceProvider {
 				
 				if (alternativeDelta.getKind() == IResourceDelta.CHANGED)
 				{
-					final IEditorInputResource r = resources.get(resource);
+					final IEditorInputResource alternative = resources.get(resource);
 					
-					if (r == null){
+					if (alternative == null){
 						return;
 					}
 										
 					// do not trigger re-load, if the property change is 
 					// triggered from create/save/delete operations 
-					if(r.isJobInProgress() || r.isCreateInProgress() || r.isDeleteInProgress() || r.isSaveInProgress()){
+					if(alternative.isJobInProgress() 
+							|| alternative.isCreateInProgress() 
+							|| alternative.isDeleteInProgress() 
+							|| alternative.isSaveInProgress()){
 						return;
 					}
 					
@@ -106,7 +109,12 @@ public abstract class ResourceProvider {
 						
 						@Override
 						public void run() {
-							r.load();
+
+							if(alternative.getModificationStamp() == resource.getModificationStamp()){
+								return;
+							}
+
+							alternative.load();
 						}
 					});
 					
