@@ -149,7 +149,7 @@ public class StatusManager {
 		return out;
 	}
 	
-	public synchronized List<IValidationStatusProvider> getStatusProvider(IProject project, String id){
+	public synchronized List<IValidationStatusProvider> getStatusProviders(IProject project, String id){
 		List<IValidationStatusProvider> out = new ArrayList<IValidationStatusProvider>();
 		for(Entry<IValidationStatusProvider, IProject> entry : statusProviders.entrySet()){
 			try{

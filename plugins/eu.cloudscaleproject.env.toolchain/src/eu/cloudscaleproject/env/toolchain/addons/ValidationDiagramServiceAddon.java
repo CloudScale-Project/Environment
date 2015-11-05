@@ -221,6 +221,8 @@ public class ValidationDiagramServiceAddon {
 		
 	}
 	
+	private IActiveResources lastActiveResources = null;
+	
 	@Inject
 	@Optional
 	public void postConstruct(IEclipseContext context, IValidationDiagramService diagramService) {
@@ -236,6 +238,13 @@ public class ValidationDiagramServiceAddon {
 			return;
 		}
 		
+		// TODO: find better solution
+		// This is needed in case, when the status provider is removed and the active context is changed.
+		// IActiveResources in that case contains deleted and already removed (from the diagram) status provider.
+		if(lastActiveResources == activeResources){
+			return;
+		}
+
 		IValidationStatusProvider statusProvider = activeResources.getActiveStatusProvider();
 		
 		if(statusProvider != null){
@@ -245,6 +254,8 @@ public class ValidationDiagramServiceAddon {
 		
 		IProject project = activeResources.getActiveProject();
 		diagramService.showDiagram(project);
+		
+		lastActiveResources = activeResources;
 	}
 	
 	@PreDestroy
