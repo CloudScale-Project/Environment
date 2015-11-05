@@ -254,8 +254,8 @@ public abstract class ConfigEditorView extends AbstractEditorView
 	{
 		Composite composite = new Composite(getFooter(), SWT.NONE);
 		GridLayout gl = new GridLayout(2, false);
-		gl.marginWidth = 0;
-		gl.marginHeight = 0;
+		gl.marginWidth = 2;
+		gl.marginHeight = 2;
 		composite.setLayout(gl);
 
 		stackedContainer = new Composite(composite, SWT.NONE);
@@ -357,7 +357,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 				}
 
 				if (isRunning()) {
-					btnRun.setText("Stop");
+					btnRun.setEnabled(false);
 					((StackLayout) stackedContainer.getLayout()).topControl = progressComposite;
 					stackedContainer.layout();
 				} else {
@@ -370,7 +370,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 						((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
 					}
 
-					btnRun.setText("Run");
+					btnRun.setEnabled(true);
 					stackedContainer.layout();
 					stackedContainer.redraw();
 					
