@@ -82,15 +82,6 @@ public class DiagramViewPart{
 		this.composite.setLayout(stackLayout);
 		
 		this.noDiagramComposite = createDiagramComposite(new ValidationDiagram(null));
-		/*
-		this.noDiagramComposite = new Composite(composite, SWT.NONE);
-		this.noDiagramComposite.setLayout(new GridLayout());
-		
-		Label label = new Label(noDiagramComposite, SWT.CENTER | SWT.WRAP);
-		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		label.setText("Please create select the Cloudscale project node or editor to display the Workflow diagram");
-		*/
-		
 		stackLayout.topControl = noDiagramComposite;
 		
 		ValidationDiagramService diagramService = CloudscaleContext.getGlobalContext().get(ValidationDiagramService.class);
@@ -195,6 +186,7 @@ public class DiagramViewPart{
 		diagramComposite.setInput(editorInput);
 		
 		diagram.initialize(diagramComposite.getDiagramTypeProvider());
+		diagramComposite.getDiagramBehavior().refresh();
 		
 		composite.layout();
 		composite.redraw();
