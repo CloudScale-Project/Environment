@@ -107,6 +107,7 @@ public class SomoxConfigurationComposite extends Composite
 		GridData gd_scale = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_scale.widthHint = 120;
 		scale.setLayoutData(gd_scale);
+		scale.setMinimum(1);
 		
 		bindingContext.bindValue(
 				WidgetProperties.text().observe(lblValue), 

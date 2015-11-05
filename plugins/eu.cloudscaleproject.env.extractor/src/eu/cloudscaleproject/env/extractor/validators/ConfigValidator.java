@@ -38,7 +38,7 @@ public class ConfigValidator implements IResourceValidator {
 	}
 	
 	
-	private boolean validateSomoxConfigs(ConfingAlternative ca)
+	private void validateSomoxConfigs(ConfingAlternative ca)
 	{
 		IValidationStatus selfStatus = ca.getSelfStatus();
 		
@@ -47,14 +47,19 @@ public class ConfigValidator implements IResourceValidator {
 		if (somoxConfiguration == null)
 		{
 			selfStatus.addWarning("", IValidationStatus.SEVERITY_ERROR, "Somox configuration is missing");
-			return false;
+			return;
 		}
-		
-		// TODO: Validate Somox configurations
-		
-		return true;
-		
-	}
-		
 
+        if (!(somoxConfiguration.getClusteringConfig().getClusteringMergeThresholdDecrement() > 0 &&
+                somoxConfiguration.getClusteringConfig().getClusteringComposeThresholdDecrement() > 0)) {
+			selfStatus.addWarning("zeros", IValidationStatus.SEVERITY_ERROR, "The merge and compose threshold increment/decrement have to be positive numbers");
+        }
+        if (!(somoxConfiguration.getClusteringConfig().getMinComposeClusteringThreshold() < somoxConfiguration.getClusteringConfig().getMaxComposeClusteringThreshold())) {
+			selfStatus.addWarning("clustering-minmax", IValidationStatus.SEVERITY_ERROR, "The minimum clustering threshold must be lower than maximum clustering threshold");
+        }
+        if (!(somoxConfiguration.getClusteringConfig().getMinMergeClusteringThreshold() < somoxConfiguration.getClusteringConfig().getMaxMergeClusteringThreshold())) {
+			selfStatus.addWarning("merge-minmax", IValidationStatus.SEVERITY_ERROR, "The minimum merge threshold must be lower than maximum merge threshold");
+        }
+	}
+	
 }
