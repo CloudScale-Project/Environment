@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -19,7 +20,9 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -40,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ProjectEditorSelectionService;
@@ -114,7 +118,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		});
 
 		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
-		
+
 		this.treeViewer.setContentProvider(contentProvider);
 		this.treeViewer.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
 				new AdapterFactoryLabelProvider.StyledLabelProvider(alternative.getAdapterFactory(), this.treeViewer)));
@@ -164,6 +168,16 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				alternative.removePropertyChangeListener(editorInputListener);
+			}
+		});
+		
+		final ESelectionService selectionService = CloudscaleContext.getGlobalContext().get(ESelectionService.class);
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent e)
+			{
+				selectionService.setSelection(e.getSelection());
 			}
 		});
 	}
