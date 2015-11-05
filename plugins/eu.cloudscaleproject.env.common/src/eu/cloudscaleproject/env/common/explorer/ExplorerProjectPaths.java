@@ -844,14 +844,24 @@ public class ExplorerProjectPaths {
 
 	public static IFile getFileFromEmfResource(
 			org.eclipse.emf.ecore.resource.Resource resource) {
-
+		
 		return getFileFromEmfURI(resource.getURI());
 	}
 
 	private static IFile getFileFromEmfURI(URI uri) {
 
-		String platformPath = uri.toString();
-		if (platformPath != null) {
+		String platformPath = null;
+		if (uri.isPlatform())
+		{
+			platformPath = uri.toPlatformString(false);
+		}
+		else 
+		{
+			platformPath = uri.toString();
+		}
+
+		if (platformPath != null) 
+		{
 			Path path = new Path(platformPath);
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		}
