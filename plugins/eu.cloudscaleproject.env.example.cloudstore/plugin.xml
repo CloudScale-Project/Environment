@@ -15,6 +15,12 @@
                type="environment">
          </resource>
          <resource
+               bundle="resources/examples/cloudstore/CloudStore-project.zip"
+               name="Source"
+               readme="resources/examples/cloudstore/README-CloudStore-project.html"
+               type="source">
+         </resource>
+         <resource
                bundle="resources/examples/cloudstore/CloudStore-extractor.zip"
                dependency="Source"
                name="Extractor"
@@ -40,12 +46,6 @@
                readme="resources/examples/cloudstore/README-CloudStore-dynamicspotter.html"
                type="dynamicspotter">
          </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-project.zip"
-               name="Source"
-               readme="resources/examples/cloudstore/README-CloudStore-project.html"
-               type="source">
-         </resource>
       </example>
    </extension>
    <extension
@@ -60,6 +60,12 @@
                name="Environment"
                readme="resources/examples/minimal/README-Minimal-environment.html"
                type="environment">
+         </resource>
+         <resource
+               bundle="resources/examples/minimal/Minimal-project.zip"
+               name="Source"
+               readme="resources/examples/minimal/README-Minimal-project.html"
+               type="source">
          </resource>
          <resource
                bundle="resources/examples/minimal/Minimal-extractor.zip"
@@ -86,12 +92,6 @@
                name="Dynamic Spotter"
                readme="resources/examples/minimal/README-Minimal-dynamicspotter.html"
                type="dynamicspotter">
-         </resource>
-         <resource
-               bundle="resources/examples/minimal/Minimal-project.zip"
-               name="Source"
-               readme="resources/examples/minimal/README-Minimal-project.html"
-               type="source">
          </resource>
       </example>
    </extension>

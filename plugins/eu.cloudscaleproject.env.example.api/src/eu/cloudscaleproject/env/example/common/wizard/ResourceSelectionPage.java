@@ -125,11 +125,6 @@ public class ResourceSelectionPage extends WizardPage
 				updateSelection();
 			}
 		});
-
-		//select all examples
-		for(TableItem item : table.getItems()){
-			item.setChecked(true);
-		}
 		
 		tableViewer.getTable().select(0);
 		updateSelection();
@@ -137,7 +132,7 @@ public class ResourceSelectionPage extends WizardPage
 		checkResourceProjects();
 		checkComplete();
 	}
-
+	
 	private void checkResourceProjects()
 	{
 		for (int i = 0; i < table.getItemCount(); ++i)
@@ -145,14 +140,21 @@ public class ResourceSelectionPage extends WizardPage
 			Resource resource = example.getResoruces().get(i);
 			TableItem item = table.getItem(i);
 
+
 			IProject project = ExampleService.getInstance().getProject(resource);
 			if (project != null)
 			{
 				item.setGrayed(true);
 				item.setChecked(true);
+			} else
+			{
+				switch (resource.getType()){
+					case ENVIRONMENT: 
+					case SOURCE: item.setChecked(true);
+					default: break;
+				}
 			}
 		}
-
 	}
 
 	private void updateSelection()
