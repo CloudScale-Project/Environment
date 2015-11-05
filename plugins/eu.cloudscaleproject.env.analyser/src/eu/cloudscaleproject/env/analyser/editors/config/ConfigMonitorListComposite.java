@@ -81,26 +81,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					MonitorRepository monitorRep = alternative.initActiveMonitorRepository();
-					
-					
-					Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
-					
-					MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
-					monitor.getMeasurementSpecifications().add(spec);
-					monitor.setEntityName(dialog.getText());
-					
-					monitorRep.getMonitors().add(monitor);
-					
-					alternative.setDirty(true);
-					calcMonitorGroups();
-					
-					//show it
-					Control control = stackLayout.topControl;
-					if(control instanceof ListComposite){
-						ListComposite lc = (ListComposite)control;
-						lc.showChild(getMonitorGroup(monitor));
-					}
+					createMonitorGroup(dialog.getText());
 				}
 			}
 		});
@@ -117,6 +98,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 
 				@Override
 				protected Composite createComposite(ExpandableComposite parent, Object source) {
+
 					MonitorGroup group = (MonitorGroup)source;
 					
 					String name = group.getMonitors().get(0).getEntityName();
@@ -135,13 +117,7 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 				public void postDeleteChild(Object o) {
 					
 					super.postDeleteChild(o);
-					
-					if(o instanceof MonitorGroup){
-						MonitorGroup mg = (MonitorGroup)o;
-						for(Monitor m : mg.getMonitors()){
-							EcoreUtil.delete(m);
-						}
-					}
+					deleteMonitorGroup((MonitorGroup)o);
 				}
 				
 			};
@@ -149,6 +125,49 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 		
 		stackLayout.topControl = groupsComposite;
 		stackedComposite.layout();
+	}
+	
+	private void createMonitorGroup(final String name){
+		
+		alternative.executeRecordingModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+
+				MonitorRepository monitorRep = alternative.initActiveMonitorRepository();
+				Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
+				
+				MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
+				monitor.getMeasurementSpecifications().add(spec);
+				monitor.setEntityName(name);
+				
+				monitorRep.getMonitors().add(monitor);
+				
+				alternative.setDirty(true);
+				calcMonitorGroups();
+				
+				//show it
+				Control control = stackLayout.topControl;
+				if(control instanceof ListComposite){
+					ListComposite lc = (ListComposite)control;
+					lc.showChild(getMonitorGroup(monitor));
+				}
+				
+			}
+		});
+	}
+	
+	private void deleteMonitorGroup(final MonitorGroup mg){
+		
+		alternative.executeRecordingModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+				for(Monitor m : mg.getMonitors()){
+					EcoreUtil.delete(m);
+				}
+			}
+		});
 	}
 	
 	private MonitorGroup getMonitorGroup(Monitor monitor){

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -16,16 +18,19 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.transaction.RecordingCommand;
+import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.emf.transaction.TransactionalCommandStack;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.impl.TransactionalEditingDomainImpl;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
 
@@ -74,7 +79,8 @@ public class EditorInputEMF extends EditorInputFolder{
 			return;
 		}
 		
-		ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
+
+		loadModelResource((IFile)res);
 		addSubResource(key, res);
 	}
 	
@@ -94,11 +100,55 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		synchronized (resSet) {
-			Resource resource = ExplorerProjectPaths.getEmfResource(resSet, (IFile) res);
-			resSet.getResources().remove(resource);
+			Resource resource = getModelResource((IFile)res);
+			if(resource != null){
+				resource.unload();
+			}
 		}
 		
 		removeSubResource(key, res);
+	}
+	
+	private Resource loadModelResource(IFile file){
+		Resource resource = null;
+		if(ModelType.getModelType(file.getFileExtension()) != null){
+			//resource = editingDomain.loadResource(file.getLocationURI().toString());
+			resource = editingDomain.loadResource(file.getFullPath().toString());
+		}
+		
+		if(resource == null){
+			logger.severe("Can not load model resource! File: '" + file.getLocation().toString() + "' extension can not recognized!");
+		}
+		
+		return resource;
+	}
+	
+	public Resource getModelResource(IFile file){
+		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		return editingDomain.getResourceSet().getResource(uri, false);
+	}
+	
+	public Resource getModelResource(String key){
+		IResource res = getSubResource(key);
+		if(res instanceof IFile){
+			return getModelResource((IFile)res);
+		}
+		
+		return null;
+	}
+	
+	public List<Resource> getModelResources(String key){
+		
+		List<Resource> out = new ArrayList<Resource>();
+		List<IResource> resources = getSubResources(key);
+		
+		for(IResource res : resources){
+			if(res instanceof IFile){
+				out.add(getModelResource((IFile)res));
+			}
+		}
+		
+		return out;
 	}
 	
 	public ResourceSet getResourceSet(){
@@ -111,7 +161,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		for(IResource res : loadedSubResources){
 			if(res instanceof IFile){
-				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				Resource emfRes = getModelResource((IFile)res);
 				loadedEMFResources.add(emfRes);
 			}
 		}
@@ -130,7 +180,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		for(IResource res : loadedSubResources){
 			if(res instanceof IFile){
-				Resource emfRes = ExplorerProjectPaths.getEmfResource(resSet, (IFile)res);
+				Resource emfRes = getModelResource((IFile)res);
 				loadedEMFResources.add(emfRes);
 			}
 		}
@@ -152,14 +202,15 @@ public class EditorInputEMF extends EditorInputFolder{
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
 	}
 	
-	public EditingDomain getEditingDomain(){
+	public TransactionalEditingDomain getEditingDomain(){
 		return editingDomain;
 	}
 	
 	public AdapterFactory getAdapterFactory(){
 		return factory;
 	}
-	
+
+	/*
 	public Resource getModelResource(String key){
 		return getModelResource(resSet, key);
 	}
@@ -187,6 +238,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		return out;
 	}
+	*/
 	
 	public EObject getModelRootSingle(String key){
 		return getModelRootSingle(resSet, key);
@@ -212,19 +264,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		for(IResource res : resources){
 			if(res instanceof IFile){
 				IFile file = (IFile)res;
-				Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, file);
-				
-				/*
-				if(emfResource.isLoaded()){
-					try {
-						emfResource.unload();
-						emfResource.load(null);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				*/
+				Resource emfResource = getModelResource(file);
 				
 				if(emfResource.isLoaded() && !emfResource.getContents().isEmpty()){
 					out.add(emfResource.getContents().get(0));
@@ -239,7 +279,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		List<Resource> resources = new ArrayList<Resource>();
 		for(IResource res : resource.getSubResources(key)){
 			if(res instanceof IFile){
-				resources.add(ExplorerProjectPaths.getEmfResource(resSet, (IFile)res));
+				resources.add(loadModelResource((IFile)res));
 			}
 		}
 		return resources;
@@ -313,7 +353,8 @@ public class EditorInputEMF extends EditorInputFolder{
 			if(r instanceof IFile){
 				try {
 					//do not save auto-loaded resources
-					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile)r, false); 
+					IFile file = (IFile)r;
+					Resource res = getModelResource(file); 
 					
 					if(res != null && !res.getContents().isEmpty()){
 						if(monitor != null){
@@ -355,29 +396,88 @@ public class EditorInputEMF extends EditorInputFolder{
 			res.unload();
 		}
 		
-		resSet.getResources().clear();
-		
+		//TODO: Test the new loading and saving approach
+		editingDomain.getResourceSet().getResources().clear();
+
 		workOn(monitor, "Loading resources");
 		
 		//load registered models
 		for (ModelType type : modelTypes)
 		{
-			for (IResource f : getSubResources(type.getToolchainFileID()))
+			for (IResource resource : getSubResources(type.getToolchainFileID()))
 			{
-				if(f == null || !f.exists()){
-					logger.warning("Registered resource does not exist: " + f.getFullPath().toString());
+				if(resource == null || !resource.exists()){
+					logger.warning("Registered resource does not exist: " + resource.getFullPath().toString());
 					continue;
 				}
+
+				if(resource instanceof IFile){
+					IFile file = (IFile)resource;
 				
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) f);
-				try {
-					res.load(null);
-					work(monitor);
-				} catch (IOException e) {
-					e.printStackTrace();
+					if(ModelType.getModelType(file.getFileExtension()) != null){
+						loadModelResource(file);
+					}
 				}
 			}
 		}
+	}
+	
+	public Map<IFile, List<Diagnostic>> validateModels(){
+
+		Map<IFile, List<Diagnostic>> out = new HashMap<IFile, List<Diagnostic>>();
+
+		for(IResource resource : getSubResources()){
+			
+			if(!(resource instanceof IFile)){
+				continue;
+			}
+			
+			if(ModelType.getModelType(resource.getFileExtension()) == null){
+				//resource is not a EMF model
+				continue;
+			}
+
+			final IFile file = (IFile)resource;
+			
+			if(!resource.exists()){
+				logger.warning("Registered subresource does not exist! File: " + resource.getFullPath().toString());
+				continue;
+			}
+			
+			try {
+				List<Diagnostic> diagnostics = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<List<Diagnostic>>() {
+
+					@Override
+					public void run() {
+						
+						List<Diagnostic> out = new ArrayList<Diagnostic>();
+
+						Resource res = getModelResource(file);
+						if(res == null){
+							logger.warning("Model resource is not contained in the resource set! File: " + file.getLocation().toString());
+							setResult(out);
+							return;
+						}
+						
+						for(EObject eo : res.getContents()){
+
+							Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
+							out.add(diagnostic);
+							
+						}
+						
+						setResult(out);
+					}
+				});
+				
+				out.put(file, diagnostics);
+			} 
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return out;
 	}
 	
 	@Override
@@ -406,7 +506,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		for (IResource r : getLoadedSubResources()) {
 			if (r instanceof IFile) {
 				
-				Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) r, false);
+				Resource res = getModelResource((IFile) r);
 				if (res != null && !res.getContents().isEmpty()) {
 					work++;
 				}
@@ -416,20 +516,9 @@ public class EditorInputEMF extends EditorInputFolder{
 		return work;
 	}
 	
-	/*
-	@Override
-	public boolean isDirty() {
-		return super.isDirty() || ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
-	}
-	*/
-	
 	@Override
 	public void dispose() {
-		
-		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
-			res.unload();
-		}
-		
+		editingDomain.dispose();
 		super.dispose();
 	}
 }

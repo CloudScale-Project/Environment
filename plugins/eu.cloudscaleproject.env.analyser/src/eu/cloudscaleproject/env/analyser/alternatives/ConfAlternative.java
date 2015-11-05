@@ -679,18 +679,16 @@ public class ConfAlternative extends AbstractConfigAlternative
 		
 		boolean needToSave = false;
 		
-		synchronized (getSaveLoadLock()) {
-			if(getActiveMonitorRepository() == null){
-				mr = retrieveMonitorRepository();
-				Experiment experiment = getActiveExperiment();
-				if(experiment != null && experiment.getInitialModel() != null){
-					experiment.getInitialModel().setMonitorRepository(mr);
-				}
-				needToSave = true;
+		if(getActiveMonitorRepository() == null){
+			mr = retrieveMonitorRepository();
+			Experiment experiment = getActiveExperiment();
+			if(experiment != null && experiment.getInitialModel() != null){
+				experiment.getInitialModel().setMonitorRepository(mr);
 			}
-			else{
-				mr = getActiveMonitorRepository();
-			}
+			needToSave = true;
+		}
+		else{
+			mr = getActiveMonitorRepository();
 		}
 		
 		if(needToSave){
@@ -721,18 +719,16 @@ public class ConfAlternative extends AbstractConfigAlternative
 		
 		boolean needToSave = false;
 		
-		synchronized (getSaveLoadLock()) {
-			if(getActiveSLORepository() == null){
-				sloRep = retrieveSLORepository();
-				Experiment experiment = getActiveExperiment();
-				if(experiment != null && experiment.getInitialModel() != null){
-					experiment.getInitialModel().setServiceLevelObjectives(sloRep);
-				}
-				needToSave = true;
+		if(getActiveSLORepository() == null){
+			sloRep = retrieveSLORepository();
+			Experiment experiment = getActiveExperiment();
+			if(experiment != null && experiment.getInitialModel() != null){
+				experiment.getInitialModel().setServiceLevelObjectives(sloRep);
 			}
-			else{
-				sloRep = getActiveSLORepository();
-			}
+			needToSave = true;
+		}
+		else{
+			sloRep = getActiveSLORepository();
 		}
 		
 		if(needToSave){

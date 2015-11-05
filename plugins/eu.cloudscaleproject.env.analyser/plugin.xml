@@ -25,7 +25,7 @@
             class="eu.cloudscaleproject.env.analyser.validation.InputValidator">
       </client>
       <client
-            class="eu.cloudscaleproject.env.analyser.validation.ConfValidator">
+            class="eu.cloudscaleproject.env.analyser.validation.ConfigValidator">
       </client>
       <client
             class="eu.cloudscaleproject.env.analyser.validation.ResultValidator">

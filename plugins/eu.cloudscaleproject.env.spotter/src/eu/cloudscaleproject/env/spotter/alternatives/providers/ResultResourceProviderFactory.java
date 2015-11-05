@@ -17,11 +17,11 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory {
 
 		public ResultResourceProvider(String id, IFolder folder, String defaultResName) {
 			super(id, folder, defaultResName);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
 		public boolean validateResource(IResource res) {
+
 			if (res instanceof IFolder) {
 				return true;
 			}
@@ -30,10 +30,8 @@ public class ResultResourceProviderFactory implements IResourceProviderFactory {
 
 		@Override
 		public IEditorInputResource createEditorInputResource(IResource res, String type) {
-			// TODO Auto-generated method stub
-			ResultAlternative rif = new ResultAlternative(getProject(),
-					(IFolder) res);
-			rif.load();
+
+			ResultAlternative rif = new ResultAlternative(getProject(), (IFolder) res);
 			return rif;
 		}
 

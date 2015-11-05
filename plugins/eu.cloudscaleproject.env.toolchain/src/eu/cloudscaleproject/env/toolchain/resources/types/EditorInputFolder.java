@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.ResourceValidationStatus;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -97,11 +96,8 @@ public class EditorInputFolder extends EditorInputResource{
 	}
 	
 	public boolean isResourceInternal(IResource res){
-		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
-		if(relative.equals(res.getFullPath())){
-			return false;
-		}
-		return true;
+		
+		return getResource().getFullPath().isPrefixOf(res.getFullPath());
 	}
 	
 	private IPath getRelativePath(IResource res){
@@ -391,6 +387,7 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		propertyInputFile.handleCreate(monitor);
 		doCreate(monitor);
+		updateStatusList();
 	}
 	
 	protected void doCreate(IProgressMonitor monitor) {
@@ -572,6 +569,7 @@ public class EditorInputFolder extends EditorInputResource{
 	// Validation
 	//
 	private void updateStatusList(){
+		/*
 		BatchExecutor.getInstance().addTask(this, "updateStatusList", new Runnable() {
 			
 			@Override
@@ -579,6 +577,9 @@ public class EditorInputFolder extends EditorInputResource{
 				doUpdateStatusList();
 			}
 		});
+		*/
+
+		doUpdateStatusList();
 	}
 	
 	private void doUpdateStatusList(){

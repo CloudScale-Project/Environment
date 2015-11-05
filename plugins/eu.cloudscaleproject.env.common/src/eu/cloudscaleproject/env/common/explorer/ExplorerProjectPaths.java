@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -475,29 +477,46 @@ public class ExplorerProjectPaths {
 	 * @param file IFile used to retrieve URI of the desired Resource.
 	 * @return EMF Resource contained inside specified ResourceSet.
 	 */
+
 	public static Resource getEmfResource(ResourceSet resSet, IFile file){
 		return getEmfResource(resSet, file, true);
 	}
+	
 	public static Resource getEmfResource(ResourceSet resSet, IFile file, boolean load){
+		
 		if(file == null){
 			throw new NullPointerException("getEmfResource(): Specified file is null!");
 		}
+		
 		URI uri = URI.createPlatformResourceURI(file.getFullPath()
 				.toString(), true);
+
+		TransactionalEditingDomain ed = TransactionUtil.getEditingDomain(resSet);
 		
-		Resource res = null;
-		synchronized (resSet) {
-			res = resSet.getResource(uri, false);
+		Resource res = resSet.getResource(uri, false);
+
+		if(ed != null){
+			if(res == null && load){
+				res = ed.createResource(file.getFullPath().toString());
+			}
+		}
+		else{
 			if(res == null && load){
 				res = resSet.createResource(uri);
 			}
 		}
 		
 		if(res != null && file.exists()){
-			try {
-				res.load(null);
-			} catch (IOException e) {
-				e.printStackTrace();
+			
+			if(ed != null){
+				ed.loadResource(file.getFullPath().toString());
+			}
+			else{
+				try {
+					res.load(null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return res;
@@ -826,19 +845,12 @@ public class ExplorerProjectPaths {
 	public static IFile getFileFromEmfResource(
 			org.eclipse.emf.ecore.resource.Resource resource) {
 
-		URI uri = resource.getURI();
-		String platformString = uri.toPlatformString(true);
-		if (platformString != null) {
-			Path path = new Path(platformString);
-			return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		}
-
-		return null;
+		return getFileFromEmfURI(resource.getURI());
 	}
 
 	public static IFile getFileFromEmfURI(URI uri) {
 
-		String platformString = uri.toPlatformString(true);
+		String platformString = uri.toString();
 		if (platformString != null) {
 			Path path = new Path(platformString);
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(path);

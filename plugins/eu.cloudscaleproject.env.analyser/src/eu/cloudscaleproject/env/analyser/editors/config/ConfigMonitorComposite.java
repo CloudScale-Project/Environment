@@ -47,7 +47,10 @@ public class ConfigMonitorComposite extends Composite implements IRefreshable{
 		this.editingDomain = alt.getEditingDomain();
 		this.monitorWrapper = monitorWrapper;
 		
-		setLayout(new GridLayout(2, false));
+		GridLayout gl = new GridLayout(2, false);
+		gl.marginWidth = 5;
+		gl.marginHeight = 5;
+		setLayout(gl);
 		
 		Label lblFolder = new Label(this, SWT.NONE);
 		lblFolder.setText("Measuring specifications:");

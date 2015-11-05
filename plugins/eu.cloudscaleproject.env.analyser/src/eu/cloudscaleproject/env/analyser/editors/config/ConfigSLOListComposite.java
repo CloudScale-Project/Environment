@@ -66,21 +66,7 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					ServiceLevelObjectiveRepository sloRep = alternative.initActiveSLORepository();
-					ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
-					
-					slo.setName(dialog.getText());
-					sloRep.getServicelevelobjectives().add(slo);
-					
-					refresh();
-					alternative.setDirty(true);
-					
-					//show it
-					Control control = stackLayout.topControl;
-					if(control instanceof ListComposite){
-						ListComposite lc = (ListComposite)control;
-						lc.showChild(slo);
-					}
+					createSLO(dialog.getText());
 				}
 			}
 		});
@@ -119,7 +105,34 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 		stackLayout.topControl = listComposite;
 		stackedComposite.layout();
 	}
+	
+	private void createSLO(final String name){
+		
+		alternative.executeRecordingModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
 
+				ServiceLevelObjectiveRepository sloRep = alternative.initActiveSLORepository();
+				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
+				
+				slo.setName(name);
+				sloRep.getServicelevelobjectives().add(slo);
+				
+				refresh();
+				alternative.setDirty(true);
+				
+				//show it
+				Control control = stackLayout.topControl;
+				if(control instanceof ListComposite){
+					ListComposite lc = (ListComposite)control;
+					lc.showChild(slo);
+				}
+				
+			}
+		});
+	}
+	
 	@Override
 	public void refresh() {
 		IEMFEditListProperty slosProp = EMFEditProperties.list(alternative.getEditingDomain(), 

@@ -1,16 +1,15 @@
 package eu.cloudscaleproject.env.analyser.validation;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
@@ -29,10 +28,10 @@ import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
-public class ConfValidator implements IResourceValidator {
+public class ConfigValidator implements IResourceValidator {
 	
-	private static final String ERR_MODEL_ERROR = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.modelerror";
-	private static final String ERR_MODEL_EMPTY = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.modelempty";
+	private static final Logger logger = Logger.getLogger(ConfigValidator.class.getName());
+	
 	private static final String ERR_INPUT_NOT_SET = "eu.cloudscaleproject.env.analyser.validation.ConfValidator.inputnotset";
 
 	@Override
@@ -40,12 +39,7 @@ public class ConfValidator implements IResourceValidator {
 		return CSToolResource.ANALYSER_CONF.getID();
 	}
 	
-	public boolean validateModels(IProject project, ConfAlternative ca) throws CoreException, ValidationException{
-		
-		boolean exp = true;
-		boolean mp = true;
-		boolean pms = true;
-		boolean slo = true;
+	public void validateModels(IProject project, ConfAlternative ca) throws CoreException, ValidationException{
 		
 		boolean needsSlo = false;
 		if(ConfAlternative.Type.CAPACITY.equals(ca.getTypeEnum()) || ConfAlternative.Type.SCALABILITY.equals(ca.getTypeEnum())){
@@ -64,91 +58,53 @@ public class ConfValidator implements IResourceValidator {
 		if(needsSlo){
 			ca.getSelfStatus().checkError("SLO missing", !sloFiles.isEmpty(), false, "SLO model is missing!");
 		}
-		
-		if(expFiles.isEmpty()){exp = false;}
-		if(mpFiles.isEmpty()){mp = false;}
-		if(monitorFiles.isEmpty()){pms = false;}
-		if(needsSlo && sloFiles.isEmpty()){slo = false;}
 
-		for(IResource file : expFiles){
-			exp &= validateModel(ca, (IFile)file);
-		}
-		for(IResource file : mpFiles){
-			mp &= validateModel(ca, (IFile)file);
-		}
-		for(IResource file : monitorFiles){
-			pms &= validateModel(ca, (IFile)file);
-		}
-		for(IResource file : sloFiles){
-			pms &= validateModel(ca, (IFile)file);
-		}
-
-		return mp && pms && slo && exp;
-	}
-	
-	public boolean validateModel(ConfAlternative alt, IFile file) throws CoreException, ValidationException{
+		boolean areModelsValid = true;
 		
-		IValidationStatus status  = alt.getStatus(file);
-		
-		if(file == null || !file.exists()){
+		Map<IFile, List<Diagnostic>> diagnostics = ca.validateModels();
+		for(Entry<IFile, List<Diagnostic>> entry : diagnostics.entrySet()){
+			
+			IValidationStatus status = ca.getStatus(entry.getKey());
+			
+			if(status == null){
+				logger.warning("IValidationStatus for the resource does not exist! Resource: " + entry.getKey().toString());
+				continue;
+			}
+			
 			status.clearWarnings();
-			status.setIsValid(false);
-			return false;
-		}
-		else{
-			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-			Resource emfRes = alt.getResourceSet().getResource(uri, true);
 			
-			boolean valid = false;
-			
-			// sometimes the model validation throws exception
-			// Measuring point name -> null pointer exception is thrown
-			//TODO: Fix this workaround
-			try{
-				valid = validateModel(status, emfRes);
-			}
-			catch (Exception e) {
+			for(Diagnostic d : entry.getValue()){
 				
-				if(e instanceof ValidationException){
-					throw e;
+				if(d.getSeverity() == Diagnostic.OK){
+					status.setIsValid(true);
 				}
-				
-				valid = true;
-				status.clearWarnings();
-				status.setIsValid(true);
+				if(d.getSeverity() == Diagnostic.WARNING){
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_WARNING, d.getMessage());
+					status.setIsValid(false);
+					areModelsValid &= false;
+				}
+				if(d.getSeverity() == Diagnostic.ERROR){
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage());
+					status.setIsValid(false);
+					areModelsValid &= false;
+				}
+				if(d.getSeverity() == Diagnostic.INFO){
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_INFO, d.getMessage());
+					status.setIsValid(false);
+					areModelsValid &= true;
+				}
+				if(d.getSeverity() == Diagnostic.CANCEL){
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage());
+					status.setIsValid(false);
+					areModelsValid &= false;
+				}
 			}
-			return valid;
-		}		
-	}
-	
-	public boolean validateModel(IValidationStatus status, Resource resource) throws ValidationException{		
-		// validate model
-		
-		if(status == null){
-			return true;
 		}
 		
-		status.checkError(ERR_MODEL_EMPTY, !resource.getContents().isEmpty(), false, "Model is empty");
+		ca.getSelfStatus().check("Models are not valid", areModelsValid, false, 
+				IValidationStatus.SEVERITY_ERROR, "Alternative models are not valid!");
+		ca.getSelfStatus().setIsValid(areModelsValid);
 		
-		if(resource.getContents().isEmpty()){
-			status.setIsValid(false);
-			return false;
-		}
-
-		EObject eObject = resource.getContents().get(0);
-		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eObject);
-		boolean modelValid = diagnostic.getSeverity() == Diagnostic.OK;
-		
-		String message = String.format("Model validation failed : %s", 
-				eObject.eClass().getName());
-
-		status.checkError(ERR_MODEL_ERROR, modelValid, false, message);
-		
-		if(modelValid){
-			status.setIsValid(true);
-		}
-		
-		return modelValid;
 	}
 	
 	private boolean validateExperiment(ConfAlternative alt) throws ValidationException{
@@ -268,7 +224,7 @@ public class ConfValidator implements IResourceValidator {
 	@Override
 	public void validate(IProject project, IValidationStatusProvider statusProvider) {
 		
-		ConfAlternative alternative = (ConfAlternative)statusProvider;
+		final ConfAlternative alternative = (ConfAlternative)statusProvider;
 		IValidationStatus status = statusProvider.getSelfStatus();
 		
 		InputAlternative inputAlternative = alternative.getInputAlternative();
@@ -276,10 +232,12 @@ public class ConfValidator implements IResourceValidator {
 		try {
 			status.checkError(ERR_INPUT_NOT_SET, inputAlternative != null, true, "Input alternative is not set!");
 			inputAlternative.validate();
+			
+			validateModels(project, alternative);
 
-			boolean valid = validateModels(alternative.getProject(), alternative);
-
-			//additional custom constrains 
+			//additional custom model validation checks 
+			boolean valid = alternative.getSelfStatus().isValid();
+			
 			if(valid){
 				try{valid &= validateExperiment(alternative);}
 				catch(ValidationException e){ valid = false;};
@@ -289,11 +247,12 @@ public class ConfValidator implements IResourceValidator {
 				catch(ValidationException e){ valid = false;};
 				try{valid &= validateUsageEvolution(alternative);}
 				catch(ValidationException e){ valid = false;};
+
+				alternative.getSelfStatus().setIsValid(valid);
 			}
-			
+
 			//TODO: check usage evolution
 			
-			status.setIsValid(valid);
 		} 
 		catch (CoreException e) {
 			e.printStackTrace();
