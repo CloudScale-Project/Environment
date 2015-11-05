@@ -67,20 +67,7 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 				dialog.open();
 				
 				if(dialog.getReturnCode() == IDialogConstants.OK_ID){
-					
-					Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
-					usage.setEntityName(dialog.getText());
-					
-					if(usageEvolution == null){
-						ModelUtils.createModels(alternative, null, ModelType.USAGE_EVOLUTION);
-						usageEvolution = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
-						initBinding();
-					}
-					usageEvolution.getUsages().add(usage);
-					alternative.setDirty(true);
-					
-					//show it
-					usageListComposite.showChild(usage);
+					createUsage(dialog.getText());
 				}
 			}
 		});
@@ -112,6 +99,37 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 		//usage list binding
 		initBinding();
 		layout();
+	}
+	
+	private void createUsage(final String name){
+		
+		alternative.executeRecordingModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+				Usage usage = UsageevolutionFactory.eINSTANCE.createUsage();
+				usage.setEntityName(name);
+				
+				if(usageEvolution == null){
+					ModelUtils.createModels(alternative, null, ModelType.USAGE_EVOLUTION);
+					usageEvolution = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							initBinding();
+						}
+					});
+				}
+				usageEvolution.getUsages().add(usage);
+				alternative.setDirty(true);
+				
+				//show it
+				usageListComposite.showChild(usage);
+			}
+		});
+		
 	}
 	
 	private void initBinding(){

@@ -94,6 +94,10 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 	
 	private void updatePlotCanvas () {
 		
+		if(isDisposed()){
+			return;
+		}
+		
 		Resource modelResource = this.alternative.getModelResource(ToolchainUtils.KEY_FILE_LIMBO);
 	
 		if(modelResource == null){
@@ -114,10 +118,6 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 
 	@Override
 	public void refresh() {
-		if(isDisposed()){
-			return;
-		}
 		updatePlotCanvas();
-
 	}
 }

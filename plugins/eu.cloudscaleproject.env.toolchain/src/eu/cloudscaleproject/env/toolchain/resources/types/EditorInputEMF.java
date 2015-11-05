@@ -99,32 +99,58 @@ public class EditorInputEMF extends EditorInputFolder{
 			return;
 		}
 		
-		synchronized (resSet) {
-			Resource resource = getModelResource((IFile)res);
-			if(resource != null){
-				resource.unload();
-			}
-		}
-		
+		unloadModelResource((IFile)res);
 		removeSubResource(key, res);
 	}
 	
-	private Resource loadModelResource(IFile file){
-		Resource resource = null;
-		if(ModelType.getModelType(file.getFileExtension()) != null){
-			//resource = editingDomain.loadResource(file.getLocationURI().toString());
-			resource = editingDomain.loadResource(file.getFullPath().toString());
+	private Resource loadModelResource(final IFile file){
+
+		try {
+			Resource resource = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+
+				@Override
+				public void run() {
+					Resource resource = null;
+					if(ModelType.getModelType(file.getFileExtension()) != null){
+						resource = editingDomain.loadResource(file.getFullPath().toString());
+					}
+					
+					if(resource == null){
+						logger.severe("Can not load model resource! File: '" + file.getLocation().toString() + "' extension can not recognized!");
+					}
+					
+					setResult(resource);
+				}
+			});
+			
+			return resource;
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
 		}
-		
-		if(resource == null){
-			logger.severe("Can not load model resource! File: '" + file.getLocation().toString() + "' extension can not recognized!");
+	}
+	
+	private void unloadModelResource(final IFile file){
+
+		try {
+			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+
+				@Override
+				public void run() {
+					Resource resource = getModelResource(file);
+					if(resource != null){
+						resource.unload();
+					}
+				}
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		
-		return resource;
 	}
 	
 	public Resource getModelResource(IFile file){
-		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), false);
 		return editingDomain.getResourceSet().getResource(uri, false);
 	}
 	

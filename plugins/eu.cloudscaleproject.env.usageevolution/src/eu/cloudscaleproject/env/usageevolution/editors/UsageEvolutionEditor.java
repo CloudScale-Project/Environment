@@ -20,7 +20,7 @@ public class UsageEvolutionEditor extends AlternativeEditor{
 		setAlternative(alternative);
 		setControl(new UsageEvolutionComposite(parent, SWT.NONE, alternative));
 		
-		part.setLabel("Usage evilution ["+ alternative.getName() +"]");
+		part.setLabel("Usage evolution ["+ alternative.getName() +"]");
 	}
 	
 }

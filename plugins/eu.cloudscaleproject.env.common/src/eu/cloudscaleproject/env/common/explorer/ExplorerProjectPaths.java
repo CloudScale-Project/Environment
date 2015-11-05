@@ -488,28 +488,28 @@ public class ExplorerProjectPaths {
 			throw new NullPointerException("getEmfResource(): Specified file is null!");
 		}
 		
-		URI uri = URI.createPlatformResourceURI(file.getFullPath()
-				.toString(), true);
-
 		TransactionalEditingDomain ed = TransactionUtil.getEditingDomain(resSet);
 		
-		Resource res = resSet.getResource(uri, false);
+		String workspacePath = file.getFullPath().toString();
+		
+		URI platformUri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		Resource res = resSet.getResource(platformUri, false);
 
 		if(ed != null){
 			if(res == null && load){
-				res = ed.createResource(file.getFullPath().toString());
+				res = ed.createResource(workspacePath);
 			}
 		}
 		else{
 			if(res == null && load){
-				res = resSet.createResource(uri);
+				res = resSet.createResource(URI.createURI(workspacePath));
 			}
 		}
 		
 		if(res != null && file.exists()){
 			
 			if(ed != null){
-				ed.loadResource(file.getFullPath().toString());
+				ed.loadResource(workspacePath);
 			}
 			else{
 				try {
@@ -848,11 +848,11 @@ public class ExplorerProjectPaths {
 		return getFileFromEmfURI(resource.getURI());
 	}
 
-	public static IFile getFileFromEmfURI(URI uri) {
+	private static IFile getFileFromEmfURI(URI uri) {
 
-		String platformString = uri.toString();
-		if (platformString != null) {
-			Path path = new Path(platformString);
+		String platformPath = uri.toString();
+		if (platformPath != null) {
+			Path path = new Path(platformPath);
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 		}
 

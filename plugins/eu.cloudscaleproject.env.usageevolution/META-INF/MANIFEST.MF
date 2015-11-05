@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.eclipse.core.expressions;bundle-version="3.4.600",
  javax.inject,
- org.eclipse.e4.ui.services
+ org.eclipse.e4.ui.services,
+ org.eclipse.emf.transaction
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: javax.inject
 Bundle-ActivationPolicy: lazy
