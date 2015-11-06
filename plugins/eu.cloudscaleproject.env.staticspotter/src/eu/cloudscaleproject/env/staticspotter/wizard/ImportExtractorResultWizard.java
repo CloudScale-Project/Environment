@@ -90,6 +90,7 @@ public class ImportExtractorResultWizard extends Wizard
 		}
 
 		alternative.save();
+		alternative.load();
 		OpenAlternativeUtil.openAlternative(alternative);
 
 		ResourceProvider configResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_CONF);
