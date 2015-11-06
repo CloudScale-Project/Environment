@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.overview.wizard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -184,21 +185,33 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 			{
 				ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 				alternative = (OverviewAlternative) provider.createNewResource(namePage.getName(), null);
+				alternative.load();
 			}
 
-			Overview overviewToMerge = data.getOverviewModel();
-			Resource overviewRes = alternative.getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
-			Overview overview = (Overview) overviewRes.getContents().get(0);
 						
 			// Merge/move all temporary overview
-			OverviewHelper.mergeOverviewModel(overviewToMerge, overview);
-			// Deploy service
-			data.getPlatformRuntimeService().getSoftwareServices().add(data.getSoftwareService());
-
-			overviewRes.save(null);
-			copyExternalResource(alternative, data);
-			alternative.save();
 			
+			final OverviewAlternative fAlternative = alternative;
+			
+			alternative.executeModelChange(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					Overview overviewToMerge = data.getOverviewModel();
+					Resource overviewRes = fAlternative.getModelResource(ToolchainUtils.KEY_FILE_OVERVIEW);
+					Overview overview = (Overview) overviewRes.getContents().get(0);
+			
+					OverviewHelper.mergeOverviewModel(overviewToMerge, overview);
+					data.getPlatformRuntimeService().getSoftwareServices().add(data.getSoftwareService());
+
+					try { overviewRes.save(null); } catch (IOException e) { throw new RuntimeException(e); }
+
+					copyExternalResource(fAlternative, data);
+					fAlternative.save();
+				}
+			});
+
 			OpenAlternativeUtil.openAlternative(alternative);
 
 		} catch (Exception e) {
