@@ -14,10 +14,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gmf.runtime.diagram.core.services.ViewService;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.modisco.infra.discovery.core.AbstractModelDiscoverer;
@@ -25,6 +28,7 @@ import org.eclipse.modisco.infra.discovery.core.IDiscoveryManager;
 import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
 import org.eclipse.modisco.infra.discovery.launch.LaunchConfiguration;
 import org.eclipse.modisco.infra.discovery.launch.ParameterValue;
+import org.palladiosimulator.pcm.core.entity.Entity;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SaveSoMoXModelsJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SimpleModelAnalyzerJob;
 import org.somox.analyzer.simplemodelanalyzer.jobs.SoMoXBlackboard;
@@ -177,6 +181,21 @@ public class ExtractorRunJob
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_REPOSITORY, repositoryModelFile);
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SYSTEM, systemModelFile);
 			resultAlternative.setSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, sourceDecoratorFile);
+			
+			resultAlternative.load();
+			
+			resultAlternative.executeModelChange(new Runnable()
+			{
+				
+				@Override
+				public void run()
+				{
+					Resource repository = resultAlternative.getModelResource(ToolchainUtils.KEY_FILE_REPOSITORY);
+					Resource system = resultAlternative.getModelResource(ToolchainUtils.KEY_FILE_SYSTEM);
+					_deleteDummyComponentsWorkaround(repository);
+					_deleteDummyComponentsWorkaround(system);
+				}
+			});
 
 		} catch (Exception e)
 		{
@@ -185,7 +204,7 @@ public class ExtractorRunJob
 		}
 
 	}
-
+	
 	private void initializeDiagrams()
 	{
 		IFile repositoryFile = (IFile)resultAlternative.getSubResource(ToolchainUtils.KEY_FILE_REPOSITORY);
@@ -236,6 +255,23 @@ public class ExtractorRunJob
 		repositoryDiagramResource.unload();
 		systemRes.unload();
 		systemDiagramResource.unload();
+	}
+
+	private void _deleteDummyComponentsWorkaround (Resource r)
+	{
+		TreeIterator<EObject> allContents = r.getAllContents();
+		while(allContents.hasNext())
+		{
+			EObject next = allContents.next();
+			if (next instanceof Entity)
+			{
+				String entityName = ((Entity)next).getEntityName();
+				if (entityName.matches("SoMoX.*Dummy.*"))
+				{
+					EcoreUtil.delete(next);
+				}
+			}
+		}
 	}
 
 	private void _somoxNameResemblanceBugWorkaround()
