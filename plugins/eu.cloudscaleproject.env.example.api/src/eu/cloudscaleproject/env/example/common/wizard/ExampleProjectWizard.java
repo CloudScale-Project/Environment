@@ -5,6 +5,7 @@ import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -12,7 +13,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
@@ -61,12 +61,11 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 	{
 
 		final List<Resource> selectedResources = _pageOne.getSelectedResources();
-		Job job = new Job("Create Example projects")
+		
+		WorkspaceJob job = new WorkspaceJob("Creating Example projects")
 		{
-
 			@Override
-			public IStatus run(IProgressMonitor monitor)
-			{
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				for (Resource resource : selectedResources)
 				{
 					try
@@ -92,6 +91,7 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 			}
 		};
 		
+		job.setUser(true);
 		job.schedule();
 
 		return true;

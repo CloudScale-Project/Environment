@@ -45,16 +45,55 @@ public class DiagramViewPart{
 	private Composite composite = null;
 	private StackLayout stackLayout = new StackLayout();
 	
-	private HashMap<ValidationDiagram, ValidationDiagramComposite> composites = new HashMap<>();
+	private HashMap<IProject, ValidationDiagramComposite> composites = new HashMap<IProject, ValidationDiagramComposite>();
 	
 	private final PropertyChangeListener diagramServiceListener = new PropertyChangeListener() {
 		
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
+		public void propertyChange(final PropertyChangeEvent evt) {
+			if(ValidationDiagramService.PROP_CREATE_DIAGRAM.equals(evt.getPropertyName())){
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						
+						ValidationDiagramService diagramService = (ValidationDiagramService)evt.getSource();
+						IProject project = (IProject)evt.getNewValue();
+						
+						ValidationDiagram diagram = diagramService.getDiagram(project);
+						ValidationDiagramComposite composite = createDiagramComposite((ValidationDiagram)diagram);
+						composites.put(project, composite);
+					}
+				});
+				
+			}
+
+			if(ValidationDiagramService.PROP_DELETE_DIAGRAM.equals(evt.getPropertyName())){
+
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						ValidationDiagramComposite composite = composites.get(evt.getOldValue());
+						composites.remove(composite);
+						composite.dispose();
+					}
+				});
+				
+			}
+
 			if(ValidationDiagramService.PROP_SHOW_DIAGRAM.equals(evt.getPropertyName())){
-				if(!pinDiagram){
-					showDiagram((ValidationDiagram)evt.getNewValue());
-				}
+
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(!pinDiagram){
+							showDiagram((ValidationDiagram)evt.getNewValue());
+						}
+					}
+				});
 			}
 		}
 	};
@@ -86,6 +125,10 @@ public class DiagramViewPart{
 		
 		ValidationDiagramService diagramService = CloudscaleContext.getGlobalContext().get(ValidationDiagramService.class);
 		diagramService.addPropertyChangeListener(diagramServiceListener);
+		for(ValidationDiagram diagram : diagramService.getDiagrams()){
+			ValidationDiagramComposite composite = createDiagramComposite((ValidationDiagram)diagram);
+			composites.put(diagram.getProject(), composite);
+		}
 		
 		showDiagram(diagramService.getActiveDiagram());
 
@@ -135,28 +178,12 @@ public class DiagramViewPart{
 		
 		this.part.getContext().set(IProject.class, diagram.getProject());
 		
-		Display.getDefault().asyncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(composite == null || composite.isDisposed()){
-					return;
-				}
-				
-				ValidationDiagramComposite composite = composites.get(diagram);
-				if(composite == null){
-					composite = createDiagramComposite((ValidationDiagram)diagram);
-					composites.put(diagram, composite);
-				}
-				
-				if(!composite.isDisposed()){
-					stackLayout.topControl = composite;
-					DiagramViewPart.this.composite.layout();
-					DiagramViewPart.this.composite.redraw();
-				}		
-			}
-		});
+		ValidationDiagramComposite composite = composites.get(diagram.getProject());
+		if(composite != null && !composite.isDisposed()){
+			stackLayout.topControl = composite;
+			DiagramViewPart.this.composite.layout();
+			DiagramViewPart.this.composite.redraw();
+		}
 		
 	}
 	
@@ -188,9 +215,6 @@ public class DiagramViewPart{
 		diagram.initialize(diagramComposite.getDiagramTypeProvider());
 		diagramComposite.getDiagramBehavior().refresh();
 		
-		composite.layout();
-		composite.redraw();
-				
 		return diagramComposite;
 	}
 }

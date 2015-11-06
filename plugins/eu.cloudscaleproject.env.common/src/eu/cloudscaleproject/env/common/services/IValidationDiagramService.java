@@ -11,7 +11,8 @@ public interface IValidationDiagramService {
 	
 	public static final String PROP_SELECTED_ID = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.selectedID";
 	
-	public static final String PROP_INIT_DIAGRAM = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.createDiagram";	
+	public static final String PROP_CREATE_DIAGRAM = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.addDiagram";	
+	public static final String PROP_DELETE_DIAGRAM = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.deleteDiagram";	
 	public static final String PROP_SHOW_DIAGRAM = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.showDiagram";	
 	
 	public static final String PROP_SHOW_STATUS = "eu.cloudscaleproject.env.common.notification.diagram.IValidationDiagramService.showStatus";
@@ -24,6 +25,8 @@ public interface IValidationDiagramService {
 	public String getSelectedNodeID();
 	public String getSelectedSectionID();
 		
+	public void createDiagram(IProject project);
+	public void deleteDiagram(IProject project);
 	public void showDiagram(IProject project);
 	
 	public void showStatus(IProject project, IValidationStatusProvider statusProvider);

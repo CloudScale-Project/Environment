@@ -2,7 +2,9 @@ package eu.cloudscaleproject.env.method.viewer;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
@@ -24,42 +26,48 @@ public class ValidationDiagramService implements IValidationDiagramService{
 	
 	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
-	public ValidationDiagram getDiagram(IProject project){
+	@Override
+	public void createDiagram(IProject project) {
 		
-		if(project == null){
-			return null;
+		if(diagrams.get(project) != null){
+			throw new RuntimeException("Validation diagram already exist");
 		}
 		
-		try{
-			ValidationDiagram diagram = diagrams.get(project);
-			if(diagram == null){
-				diagram = new ValidationDiagram(null);
-				diagram.setProject(project);
-				diagrams.put(project, diagram);
-				
-				pcs.firePropertyChange(PROP_INIT_DIAGRAM, null, project);
-			}
-
-			return diagram;
+		ValidationDiagram diagram = new ValidationDiagram(null);
+		diagram.setProject(project);
+		diagrams.put(project, diagram);
+		pcs.firePropertyChange(PROP_CREATE_DIAGRAM, null, project);
+	}
+	
+	@Override
+	public void deleteDiagram(IProject project) {
+		ValidationDiagram diagram = diagrams.get(project);
+		if(diagram != null){
+			diagram.dispose();
+			diagrams.remove(project);
+			pcs.firePropertyChange(PROP_DELETE_DIAGRAM, project, null);
 		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		return null;
 	}
 	
 	@Override
 	public void showDiagram(IProject project){
 
-		ValidationDiagram diagram = getDiagram(project);
+		ValidationDiagram diagram = diagrams.get(project);
 		pcs.firePropertyChange(PROP_SHOW_DIAGRAM, activeDiagram, activeDiagram = diagram);	
+	}
+	
+	public List<ValidationDiagram> getDiagrams(){
+		return new ArrayList<ValidationDiagram>(diagrams.values());
+	}
+	
+	public ValidationDiagram getDiagram(IProject project){
+		return diagrams.get(project);
 	}
 	
 	@Override
 	public void showStatus(IProject project, IValidationStatusProvider statusProvider){
 						
-		ValidationDiagram diagramProvider = getDiagram(project);
+		ValidationDiagram diagramProvider = diagrams.get(project);
 		
 		if(statusProvider == null){
 			logger.severe("Specified IValidationStatusProvider is NULL. Status will not be shown!");
@@ -100,7 +108,7 @@ public class ValidationDiagramService implements IValidationDiagramService{
 			return;
 		}
 		
-		ValidationDiagram diagramProvider = getDiagram(project);
+		ValidationDiagram diagramProvider = diagrams.get(project);
 		if(diagramProvider != null){
 			if(diagramProvider.getActiveStatusProvider(id) == null){
 				diagramProvider.bindStatusProvider(id, statusProvider);
@@ -122,7 +130,7 @@ public class ValidationDiagramService implements IValidationDiagramService{
 			return;
 		}
 		
-		ValidationDiagram diagramProvider = getDiagram(project);
+		ValidationDiagram diagramProvider = diagrams.get(project);
 		if(diagramProvider != null){
 			IValidationStatusProvider currentStatus = diagramProvider.getActiveStatusProvider(id);
 			if(currentStatus != null){

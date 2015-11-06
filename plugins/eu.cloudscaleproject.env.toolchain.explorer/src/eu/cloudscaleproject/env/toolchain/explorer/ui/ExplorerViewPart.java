@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.toolchain.explorer.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -47,6 +48,9 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  *
  */
 public class ExplorerViewPart {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = Logger.getLogger(ExplorerViewPart.class.getName());
 	
 	public static final String POPUP_MENU_ELEMENT = "eu.cloudscaleproject.env.toolchain.explorer.popupmenu";
 	
@@ -145,12 +149,18 @@ public class ExplorerViewPart {
 				
 				IExplorerNode node = (IExplorerNode)selection.getFirstElement();
 				if(node != null){
+
+					//logger.info("Node selected: " + node.getName());
+					
 					node.onSelect();
 					
+					//logger.info("Part context update: " + node.getName());
 					part.getContext().set(IEditorInputResource.class, explorer.findTreeContextData(node, IEditorInputResource.class));
 					part.getContext().set(ResourceProvider.class, explorer.findTreeContextData(node, ResourceProvider.class));
 					part.getContext().set(IValidationStatusProvider.class, explorer.findTreeContextData(node, IValidationStatusProvider.class));
 					part.getContext().set(IProject.class, explorer.findTreeContextData(node, IProject.class));
+					//logger.info("Part context process waiting: " + node.getName());
+					part.getContext().processWaiting();
 				}
 				
 				selectionService.setSelection(selection.size() == 1 ? node : selection.toArray());
@@ -197,6 +207,12 @@ public class ExplorerViewPart {
 		
 		this.partService.addPartListener(partServiceListener);
 		this.selectionService.addPostSelectionListener(part.getElementId(), selectionListener);
+		
+		//select the first element
+		if(Explorer.getInstance().getRoot().hasChildren()){
+			IExplorerNode node = Explorer.getInstance().getRoot().getChildren()[0];
+			this.treeViewer.setSelection(new StructuredSelection(node));
+		}
 	}
 	
 	private void refresh(final IExplorerNode node){

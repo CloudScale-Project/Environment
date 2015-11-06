@@ -20,7 +20,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -52,6 +54,12 @@ public class ProjectResourceRegistry {
 			if(rp != null){
 				addResourceProvider(rp);
 			}
+		}
+		
+		//create validation diagram
+		IValidationDiagramService diagramService = CloudscaleContext.getGlobalContext().get(IValidationDiagramService.class);
+		if(diagramService != null){
+			diagramService.createDiagram(project);
 		}
 	}
 	
@@ -191,6 +199,12 @@ public class ProjectResourceRegistry {
 	}
 
 	public void dispose(){
+
+		//delete validation diagram
+		IValidationDiagramService diagramService = CloudscaleContext.getGlobalContext().get(IValidationDiagramService.class);
+		if(diagramService != null){
+			diagramService.deleteDiagram(project);
+		}
 		
 		for(ResourceProvider rp : new LinkedList<ResourceProvider>(resourceProviderIds.values())){
 			removeResourceProvider(rp);

@@ -21,9 +21,13 @@ public class StatusLabelProvider implements ILabelProvider{
 	public StatusLabelProvider() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 
-		infoImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_LCL_LINKTO_HELP).createImage();
-		warningImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING).createImage();
-		errorImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR).createImage();
+		//infoImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_LCL_LINKTO_HELP).createImage();
+		//warningImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING).createImage();
+		//errorImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR).createImage();
+
+		infoImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK).createImage();
+		warningImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_WARN_TSK).createImage();
+		errorImage = workbench.getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK).createImage();
 	}
 	
 	@Override
@@ -42,6 +46,7 @@ public class StatusLabelProvider implements ILabelProvider{
 
 	@Override
 	public Image getImage(Object element) {
+		
 		if(element instanceof WarningNode){
 			Warning w = ((WarningNode)element).getWarning();			
 			switch(w.severity){
@@ -53,6 +58,11 @@ public class StatusLabelProvider implements ILabelProvider{
 					return errorImage;
 			}
 		}
+		
+		if(element instanceof String){
+			return infoImage; 
+		}
+		
 		return null;
 	}
 
@@ -75,7 +85,7 @@ public class StatusLabelProvider implements ILabelProvider{
 			Warning w = ((WarningNode)element).getWarning();
 			return w.message;
 		}
-		return "";
+		return element.toString();
 	}
 
 	@Override

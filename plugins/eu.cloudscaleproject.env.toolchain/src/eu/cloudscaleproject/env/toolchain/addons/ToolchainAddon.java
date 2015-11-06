@@ -1,5 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.addons;
 
+import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -7,6 +9,7 @@ import javax.inject.Named;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.GroupUpdates;
 import org.eclipse.e4.core.di.annotations.Optional;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -24,18 +27,23 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  */
 public class ToolchainAddon {
 	
+	private static final Logger logger = Logger.getLogger(ToolchainAddon.class.getName());
+	
 	@PostConstruct
 	public void postConstruct(IEclipseContext context){
 		//put dummy object at initialization
-		context.set(IActiveResources.class, new ActiveResources());
+		
+		context.declareModifiable(IActiveResources.class);
+		context.modify(IActiveResources.class, new ActiveResources());
 	}
 	
-	@Inject
+	@Inject @GroupUpdates
 	public void updateStatus(IEclipseContext context,
 							 @Active @Optional @Named(CloudscaleContext.ACTIVE_ALTERNATIVE) IValidationStatusProvider alternative,
 							 @Active @Optional IValidationStatusProvider statusProvider,
 							 @Active @Optional IEditorInputResource editorInputResource,
 							 @Active @Optional IProject project){
+		
 		
 		IActiveResources currentActiveResources = CloudscaleContext.getGlobalContext().get(IActiveResources.class);
 		ActiveResources activeResources = new ActiveResources();
@@ -77,7 +85,8 @@ public class ToolchainAddon {
 		}
 		
 		if(!activeResources.equals(currentActiveResources)){
-			context.set(IActiveResources.class, activeResources);
+			logger.info("Updating active resources!");
+			context.modify(IActiveResources.class, activeResources);
 		}
 	}
 

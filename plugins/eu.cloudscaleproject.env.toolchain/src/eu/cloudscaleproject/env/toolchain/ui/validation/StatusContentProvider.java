@@ -55,7 +55,7 @@ public class StatusContentProvider implements ITreeContentProvider{
 	@Override
 	public Object[] getElements(Object inputElement) {
 		
-		List<IValidationStatusProvider> providers = new ArrayList<>();
+		List<Object> providers = new ArrayList<>();
 		
 		//add providers with warnings only
 		if(inputElement instanceof List){
@@ -68,6 +68,13 @@ public class StatusContentProvider implements ITreeContentProvider{
 					}
 				}
 			}
+		}
+		
+		if(providers.isEmpty()){
+			
+			providers.add("Current Explorer selection does not contain any warnings.");
+			providers.add("Selecting project node in the Explorer, reveals all issues regarding this project.");
+			providers.add("Selecting alternative node in the Explorer, reveals all issues regarding this alternative.");
 		}
 		
 		return providers.toArray();

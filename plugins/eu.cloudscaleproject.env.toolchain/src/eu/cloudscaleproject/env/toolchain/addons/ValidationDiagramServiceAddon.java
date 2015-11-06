@@ -13,7 +13,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 
@@ -22,6 +21,8 @@ import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
+import eu.cloudscaleproject.env.toolchain.resources.ProjectResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -136,21 +137,6 @@ public class ValidationDiagramServiceAddon {
 					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
 					String statusProviderID = (String)evt.getNewValue();
 					
-					/*
-					if(CSTool.ANALYSER_INPUT.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.ANALYSER_CONF.getID());
-					}
-					if(CSTool.EXTRACTOR_INPUT.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.EXTRACTOR_CONF.getID());
-					}
-					if(CSTool.SPOTTER_STA_INPUT.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.SPOTTER_STA_CONF.getID());
-					}
-					if(CSTool.SPOTTER_DYN_INPUT.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSTool.SPOTTER_DYN_CONF.getID());
-					}
-					*/
-					
 					if(CSToolResource.ANALYSER_CONF.getID().equals(statusProviderID)){
 						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.ANALYSER_RES.getID());
 					}
@@ -165,7 +151,7 @@ public class ValidationDiagramServiceAddon {
 					}
 				}
 				
-				if(IValidationDiagramService.PROP_INIT_DIAGRAM.equals(evt.getPropertyName())){
+				if(IValidationDiagramService.PROP_CREATE_DIAGRAM.equals(evt.getPropertyName())){
 					
 					//make initial statuses visible
 					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
@@ -220,31 +206,45 @@ public class ValidationDiagramServiceAddon {
 		}
 		
 	}
-	
-	private IActiveResources lastActiveResources = null;
-	
+
 	@Inject
 	@Optional
 	public void postConstruct(IEclipseContext context, IValidationDiagramService diagramService) {
 		
+		// On initialization create diagrams and bind initial statuses... 
+		
+		for(ProjectResourceRegistry prr : ResourceRegistry.getInstance().getProjectResourceRegistries()){
+			IProject project = prr.getProject();
+			diagramService.createDiagram(project);
+
+			//bind all global status providers
+			for(IValidationStatusProvider sp : StatusManager.getInstance().getStatusProviders(null)){
+				ValidationDiagramServiceAddon.validate(sp);
+				diagramService.showStatus(project, sp);
+			}
+			
+			HashSet<String> alreadyShownSet = new HashSet<String>(); 
+			for(IValidationStatusProvider sp :StatusManager.getInstance().getStatusProviders(project)){
+				if(!alreadyShownSet.contains(sp.getID())){
+					diagramService.showStatus(project, sp);
+					alreadyShownSet.add(sp.getID());
+					
+					ValidationDiagramServiceAddon.validate(sp);
+				}
+			}
+		}
+
 		diagramService.addPropertyChangeListener(diagramServiceListener);
 	}
 	
 	@Inject
-	public void updateStatus(@Optional IValidationDiagramService diagramService,
-							 @Active @Optional IActiveResources activeResources){
+	@Optional
+	public void updateStatus(IValidationDiagramService diagramService, IActiveResources activeResources){
 		
 		if(diagramService == null){
 			return;
 		}
 		
-		// TODO: find better solution
-		// This is needed in case, when the status provider is removed and the active context is changed.
-		// IActiveResources in that case contains deleted and already removed (from the diagram) status provider.
-		if(lastActiveResources == activeResources){
-			return;
-		}
-
 		IValidationStatusProvider statusProvider = activeResources.getActiveStatusProvider();
 		
 		if(statusProvider != null){
@@ -254,8 +254,6 @@ public class ValidationDiagramServiceAddon {
 		
 		IProject project = activeResources.getActiveProject();
 		diagramService.showDiagram(project);
-		
-		lastActiveResources = activeResources;
 	}
 	
 	@PreDestroy

@@ -123,6 +123,9 @@ public class ResourceRegistry {
 	private void removeProjectResourceRegistry(IProject project){
 		
 		ProjectResourceRegistry prrOld = projectResourceRegistryMap.get(project);
+		if(prrOld != null){
+			prrOld.dispose();
+		}
 		projectResourceRegistryMap.remove(project);
 		pcs.firePropertyChange(PROJECT_RESOURCE_REGISTRY_REMOVED, prrOld, null);
 	}
