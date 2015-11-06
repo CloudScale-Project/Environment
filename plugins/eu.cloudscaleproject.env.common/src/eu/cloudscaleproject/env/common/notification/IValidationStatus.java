@@ -45,6 +45,14 @@ public interface IValidationStatus{
 			return severity;
 		}
 		
+		public boolean handleWarning(){
+			if(handler != null){
+				handler.handle(null);
+				return true;
+			}
+			return false;
+		}
+		
 		public int getEclipseSeverity(){
 			switch(severity){
 				case SEVERITY_INFO:

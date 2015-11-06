@@ -10,6 +10,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.monitorrepository.MeasurementSpecification;
 import org.palladiosimulator.monitorrepository.Monitor;
@@ -21,6 +25,7 @@ import org.scaledl.usageevolution.UsageEvolution;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
+import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.notification.IResourceValidator;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
@@ -64,7 +69,8 @@ public class ConfigValidator implements IResourceValidator {
 		Map<IFile, List<Diagnostic>> diagnostics = ca.validateModels();
 		for(Entry<IFile, List<Diagnostic>> entry : diagnostics.entrySet()){
 			
-			IValidationStatus status = ca.getStatus(entry.getKey());
+			final IFile file = entry.getKey();
+			IValidationStatus status = ca.getStatus(file);
 			
 			if(status == null){
 				logger.warning("IValidationStatus for the resource does not exist! Resource: " + entry.getKey().toString());
@@ -72,6 +78,19 @@ public class ConfigValidator implements IResourceValidator {
 			}
 			
 			status.clearWarnings();
+
+			BasicCallback<Object> handle = new BasicCallback<Object>() {
+
+				@Override
+				public void handle(Object object) {
+					try {
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						IDE.openEditor(page, file);
+					} catch (PartInitException e) {
+						e.printStackTrace();
+					}
+				}
+			};
 			
 			for(Diagnostic d : entry.getValue()){
 				
@@ -79,22 +98,22 @@ public class ConfigValidator implements IResourceValidator {
 					status.setIsValid(true);
 				}
 				if(d.getSeverity() == Diagnostic.WARNING){
-					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_WARNING, d.getMessage());
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_WARNING, d.getMessage(), handle);
 					status.setIsValid(false);
 					areModelsValid &= false;
 				}
 				if(d.getSeverity() == Diagnostic.ERROR){
-					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage());
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage(), handle);
 					status.setIsValid(false);
 					areModelsValid &= false;
 				}
 				if(d.getSeverity() == Diagnostic.INFO){
-					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_INFO, d.getMessage());
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_INFO, d.getMessage(), handle);
 					status.setIsValid(false);
 					areModelsValid &= true;
 				}
 				if(d.getSeverity() == Diagnostic.CANCEL){
-					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage());
+					status.addWarning(d.getSource(), IValidationStatus.SEVERITY_ERROR, d.getMessage(), handle);
 					status.setIsValid(false);
 					areModelsValid &= false;
 				}

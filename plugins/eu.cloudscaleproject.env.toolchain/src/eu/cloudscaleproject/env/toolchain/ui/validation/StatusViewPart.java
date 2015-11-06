@@ -25,6 +25,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
+import eu.cloudscaleproject.env.common.notification.IValidationStatus.Warning;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
@@ -96,6 +97,13 @@ public class StatusViewPart {
 			public void doubleClick(DoubleClickEvent event) {
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 				Object object = selection.getFirstElement();
+				
+				if(object instanceof WarningNode){
+					Warning warning = ((WarningNode)object).getWarning();
+					if(warning.handleWarning()){
+						return;
+					}
+				}
 				
 				IValidationStatusProvider statusProvider = null;
 				
