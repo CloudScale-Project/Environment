@@ -23,8 +23,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -488,35 +486,18 @@ public class ExplorerProjectPaths {
 			throw new NullPointerException("getEmfResource(): Specified file is null!");
 		}
 		
-		TransactionalEditingDomain ed = TransactionUtil.getEditingDomain(resSet);
-		
-		String workspacePath = file.getFullPath().toString();
-		
 		URI platformUri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		Resource res = resSet.getResource(platformUri, false);
 
-		if(ed != null){
-			if(res == null && load){
-				res = ed.createResource(workspacePath);
-			}
-		}
-		else{
-			if(res == null && load){
-				res = resSet.createResource(URI.createURI(workspacePath));
-			}
+		if(res == null && load){
+			res = resSet.createResource(platformUri);
 		}
 		
 		if(res != null && file.exists()){
-			
-			if(ed != null){
-				ed.loadResource(workspacePath);
-			}
-			else{
-				try {
-					res.load(null);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			try {
+				res.load(null);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return res;
@@ -853,7 +834,7 @@ public class ExplorerProjectPaths {
 		String platformPath = null;
 		if (uri.isPlatform())
 		{
-			platformPath = uri.toPlatformString(false);
+			platformPath = uri.toPlatformString(true);
 		}
 		else 
 		{

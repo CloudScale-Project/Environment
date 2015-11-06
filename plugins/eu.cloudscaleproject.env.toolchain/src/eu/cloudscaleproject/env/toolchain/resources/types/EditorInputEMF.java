@@ -104,6 +104,8 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	private Resource loadModelResource(final IFile file){
+		
+		if (getModelResource(file) != null) throw new IllegalStateException();
 
 		try {
 			Resource resource = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
@@ -112,7 +114,15 @@ public class EditorInputEMF extends EditorInputFolder{
 				public void run() {
 					Resource resource = null;
 					if(ModelType.getModelType(file.getFileExtension()) != null){
-						resource = editingDomain.loadResource(file.getFullPath().toString());
+						//resource = editingDomain.loadResource(file.getFullPath().toString());
+						URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+						resource = editingDomain.getResourceSet().createResource(uri);
+						try {
+							resource.load(null);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					
 					if(resource == null){
@@ -150,7 +160,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public Resource getModelResource(IFile file){
-		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), false);
+		URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		return editingDomain.getResourceSet().getResource(uri, false);
 	}
 	
