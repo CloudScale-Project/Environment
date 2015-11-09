@@ -45,6 +45,8 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iAP6MIbbEeWtgv-_M2130A" featurename="bindingTables" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:BindingTable" xmi:id="_jxuw0IbZEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.toolchain.explorer.bindingtable.0" bindingContext="_na9PYIbbEeWtgv-_M2130A">
       <bindings xmi:id="_PwO78IbaEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.toolchain.explorer.keybinding.delete" keySequence="DEL" command="_TDjX0EHDEeW-jpWqcIfmeQ"/>
+      <bindings xmi:id="_A2QIkIbdEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.toolchain.explorer.keybinding.open" keySequence="F3" command="_xJ1O8ED_EeWsDNl2NuiWtA"/>
+      <bindings xmi:id="_IzIfkIbdEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.toolchain.explorer.keybinding.refresh" keySequence="F5" command="_V4398FyEEeWT--3X3lai2w"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
