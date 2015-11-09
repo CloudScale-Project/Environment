@@ -1219,10 +1219,14 @@ public class ConfAlternative extends AbstractConfigAlternative
 	@Override
 	protected IStatus doRun(IProgressMonitor monitor) throws CoreException
 	{
-		this.getInputAlternative().save();
-
-		this.configureResults();
-		this.save();
+		executeModelChange(new Runnable() {
+			@Override
+			public void run() {
+				getInputAlternative().save();
+				configureResults();
+				save();
+			}
+		});
 
 		ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType lct = mgr
