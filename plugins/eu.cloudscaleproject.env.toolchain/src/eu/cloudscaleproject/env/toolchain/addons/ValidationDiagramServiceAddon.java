@@ -219,7 +219,7 @@ public class ValidationDiagramServiceAddon {
 
 			//bind all global status providers
 			for(IValidationStatusProvider sp : StatusManager.getInstance().getStatusProviders(null)){
-				ValidationDiagramServiceAddon.validate(sp);
+				validate(sp);
 				diagramService.showStatus(project, sp);
 			}
 			
@@ -229,7 +229,7 @@ public class ValidationDiagramServiceAddon {
 					diagramService.showStatus(project, sp);
 					alreadyShownSet.add(sp.getID());
 					
-					ValidationDiagramServiceAddon.validate(sp);
+					validate(sp);
 				}
 			}
 		}
@@ -248,7 +248,7 @@ public class ValidationDiagramServiceAddon {
 		IValidationStatusProvider statusProvider = activeResources.getActiveStatusProvider();
 		
 		if(statusProvider != null){
-			ValidationDiagramServiceAddon.validate(statusProvider);
+			validate(statusProvider);
 			diagramService.showStatus(statusProvider.getProject(), statusProvider);
 		}
 		
