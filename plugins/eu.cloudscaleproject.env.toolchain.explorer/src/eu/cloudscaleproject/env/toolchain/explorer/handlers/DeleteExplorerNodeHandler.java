@@ -1,5 +1,8 @@
 package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -9,6 +12,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
@@ -30,20 +34,41 @@ public class DeleteExplorerNodeHandler {
 	@Execute
 	public void execute(ESelectionService selectionService) {
 		
+		
 		Object selection = selectionService.getSelection();
 		
 		if(selection instanceof Object[]){
+			
+			List<ExplorerResourceNode> nodes = new ArrayList<ExplorerResourceNode>();
+
 			for(Object o : (Object[])selection){
-				
 				if(o instanceof ExplorerResourceNode){
-					final ExplorerResourceNode node = (ExplorerResourceNode)o;					
+					ExplorerResourceNode node = (ExplorerResourceNode)o;
+					if(node.canDelete()){
+						nodes.add(node);
+					}
+				}
+			}
+			
+			boolean delete = MessageDialog.openConfirm(Display.getDefault().getActiveShell(), 
+					"Delete", "Are you sure you want to delete "+ nodes.size() + " nodes?");
+			
+			if(delete){
+				for(ExplorerResourceNode node : nodes){
 					deleteNode(node);
 				}
 			}
 		}
 		else if(selection instanceof ExplorerResourceNode){
+
 			final ExplorerResourceNode node = (ExplorerResourceNode)selection;
-			deleteNode(node);
+
+			boolean delete = MessageDialog.openConfirm(Display.getDefault().getActiveShell(), 
+					"Delete", "Are you sure you want to delete '" + node.getName() + "' ?");
+			
+			if(delete){
+				deleteNode(node);
+			}
 		}
 		
 	}
