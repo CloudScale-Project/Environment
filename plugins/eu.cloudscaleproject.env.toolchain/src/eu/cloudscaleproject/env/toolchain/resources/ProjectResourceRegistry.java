@@ -162,7 +162,7 @@ public class ProjectResourceRegistry {
 		return getResourceProvider(tool.getID());
 	}
 
-	public IEditorInputResource getResource(String resourcePath){
+	public IEditorInputResource findResource(String resourcePath){
 		IPath path = Path.fromPortableString(resourcePath);
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 		
@@ -170,10 +170,10 @@ public class ProjectResourceRegistry {
 			return null;
 		}
 		
-		return getResource(resource);
+		return findResource(resource);
 	}
 	
-	public IEditorInputResource getResource(IResource resource){
+	public IEditorInputResource findResource(IResource resource){
 
 		if(resource == null){
 			logger.warning("IResource is null!");
@@ -188,10 +188,13 @@ public class ProjectResourceRegistry {
 		List<ResourceProvider> providers = getResourceProviders();
 		for(ResourceProvider rp : providers){
 			
-			if(!rp.getRootFolder().getFullPath().isPrefixOf(resource.getFullPath())){
-				continue;
+			if(rp.getRootFolder().getFullPath().isPrefixOf(resource.getFullPath())){
+				for(IEditorInputResource eir : rp.getResources()){
+					if(eir.getResource().getFullPath().isPrefixOf(resource.getFullPath())){
+						return eir;
+					}
+				}
 			}
-			return rp.getResource(resource);
 		}
 
 		logger.warning("IEditorInputResource for the specified path can not be retrieved! Path: " + resource.getFullPath());

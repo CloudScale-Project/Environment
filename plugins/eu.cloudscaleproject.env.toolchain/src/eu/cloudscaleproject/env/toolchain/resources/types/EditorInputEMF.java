@@ -68,6 +68,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		resSet = editingDomain.getResourceSet();
 	}
 	
+	@Deprecated
+	/**
+	 * Deprecated: Use addSubResource(IResource) method.
+	 * 
+	 * @param res
+	 */
 	public void addSubResourceModel(IResource res) {
 		
 		String ext = res.getFileExtension();
@@ -84,6 +90,17 @@ public class EditorInputEMF extends EditorInputFolder{
 		addSubResource(key, res);
 	}
 	
+	@Override
+	public void addSubResource(IResource res) {
+		addSubResourceModel(res);
+	}
+	
+	@Deprecated
+	/**
+	 * Deprecated: Use removeSubResource(IResource) method.
+	 * 
+	 * @param res
+	 */
 	public void removeSubResourceModel(IResource res) {
 		String ext = res.getFileExtension();
 		String key = null;
@@ -103,9 +120,35 @@ public class EditorInputEMF extends EditorInputFolder{
 		removeSubResource(key, res);
 	}
 	
+	@Override
+	public void removeSubResource(IResource res) {
+		removeSubResourceModel(res);
+	}
+	
+	@Override
+	public void deleteSubResource(IResource resource) {
+		
+		String ext = resource.getFileExtension();
+		ModelType type = ModelType.getModelType(ext);
+		String key = type != null ? type.getToolchainFileID() : null;
+		
+		if(key == null){
+			logger.warning("Model with extension: " + resource.getFileExtension() + " is not registred in the ModelType enum!");
+			return;
+		}
+
+		deleteSubResource(key, resource);
+	}
+	
 	private Resource loadModelResource(final IFile file){
 		
-		if (getModelResource(file) != null) throw new IllegalStateException();
+		logger.info("Loading model resource: " + file.getFullPath().toString());
+		
+		//unload resource if it already exist in the resource set
+		final Resource current = getModelResource(file); 
+		if(current != null){
+			unloadModelResource(file);
+		}
 
 		try {
 			Resource resource = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
@@ -143,6 +186,8 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	private void unloadModelResource(final IFile file){
 
+		logger.info("Unloading model resource: " + file.getFullPath().toString());
+
 		try {
 			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
 
@@ -151,10 +196,12 @@ public class EditorInputEMF extends EditorInputFolder{
 					Resource resource = getModelResource(file);
 					if(resource != null){
 						resource.unload();
+						resSet.getResources().remove(resource);
 					}
 				}
 			});
-		} catch (InterruptedException e) {
+		} 
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -246,36 +293,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		return factory;
 	}
 
-	/*
-	public Resource getModelResource(String key){
-		return getModelResource(resSet, key);
-	}
-	
-	public Resource getModelResource(ResourceSet resSet, String key){
-		List<Resource> resources = getModelResources(resSet, key);
-		assert(resources.size() <= 1);
-		return resources.size() == 0 ? null : resources.get(0);
-	}
-	
-	public List<Resource> getModelResources(String key) {
-		return getModelResources(resSet, key);
-	}
-	
-	public List<Resource> getModelResources(ResourceSet resSet, String key) {
-		List<Resource> out = new ArrayList<>();
-		List<IResource> resources = getSubResources(key);
-		
-		for(IResource res : resources){
-			if(res instanceof IFile){
-				IFile file = (IFile)res;
-				Resource emfResource = ExplorerProjectPaths.getEmfResource(resSet, file);
-				out.add(emfResource);
-			}
-		}
-		return out;
-	}
-	*/
-	
 	public EObject getModelRootSingle(String key){
 		return getModelRootSingle(resSet, key);
 	}

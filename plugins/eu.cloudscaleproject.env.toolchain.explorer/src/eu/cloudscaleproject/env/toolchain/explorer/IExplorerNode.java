@@ -43,8 +43,10 @@ public interface IExplorerNode extends IAdaptable, IContextProvider{
 	public IExplorerNode[] getChildren();
 	
 	public void setData(Object data);
+	public void setDefaultAction(String commandID);
 	
 	public void onSelect();
+	public void onDefaultAction();
 	
 	public void refresh();
 	public void refreshRecursive();

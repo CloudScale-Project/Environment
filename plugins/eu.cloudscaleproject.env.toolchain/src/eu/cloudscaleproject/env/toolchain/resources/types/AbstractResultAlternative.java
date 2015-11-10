@@ -33,7 +33,7 @@ public abstract class AbstractResultAlternative extends EditorInputEMF implement
 		IResource res = getSubResource(ToolchainUtils.KEY_INPUT_ALTERNATIVE);
 
 		if (res == null) return null;
-		return (IInputAlternative)ResourceRegistry.getInstance().getResource(res);
+		return (IInputAlternative)ResourceRegistry.getInstance().findResource(res);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class AbstractResultAlternative extends EditorInputEMF implement
 		IResource res = getSubResource(ToolchainUtils.KEY_CONFIG_ALTERNATIVE);
 
 		if (res == null) return null;
-		return (IConfigAlternative)ResourceRegistry.getInstance().getResource(res);
+		return (IConfigAlternative)ResourceRegistry.getInstance().findResource(res);
 	}
 	
 	public void setConfigAlternative(IConfigAlternative config)

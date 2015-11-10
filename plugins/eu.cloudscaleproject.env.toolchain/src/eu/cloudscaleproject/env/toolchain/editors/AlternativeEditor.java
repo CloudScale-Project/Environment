@@ -108,7 +108,7 @@ public class AlternativeEditor {
 	@Inject
 	public void setInput(IEclipseContext context, @Named("input") String resourcePath){
 		
-		IEditorInputResource eir = ResourceRegistry.getInstance().getResource(resourcePath);
+		IEditorInputResource eir = ResourceRegistry.getInstance().findResource(resourcePath);
 		if(eir != null){
 			context.set(IResource.class, eir.getResource());
 			context.set(eir.getClass().getName(), eir);

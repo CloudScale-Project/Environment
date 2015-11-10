@@ -109,11 +109,6 @@ public abstract class ResourceProvider {
 						
 						@Override
 						public void run() {
-
-							if(alternative.getModificationStamp() == resource.getModificationStamp()){
-								return;
-							}
-
 							alternative.load();
 						}
 					});

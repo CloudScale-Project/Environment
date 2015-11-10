@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.CommandExecutor;
 
 /**
  *
@@ -25,6 +26,7 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	private final String id;
 	
 	private String name = "Unknown";
+	protected String defaultAction = null;
 	
 	protected boolean isDisposed = false;
 	
@@ -141,6 +143,11 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		this.context.set(IExplorerConstants.NODE_DATA, data);
 	}
 	
+	@Override
+	public void setDefaultAction(String commandID) {
+		this.defaultAction = commandID;
+	}
+	
 	public void setIcon(Image icon, boolean disposeable){
 		
 		if(icon != null && iconDisposeable){
@@ -245,6 +252,13 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		
 		context.activateBranch();
 		
+	}
+	
+	@Override
+	public void onDefaultAction() {
+		if(defaultAction != null){
+			CommandExecutor.getInstance().execute(defaultAction);
+		}
 	}
 	
 	@Override

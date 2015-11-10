@@ -143,6 +143,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 			String id = el.getAttribute("id");
 			String editorID = el.getAttribute("editor");
 			String resourcePath = el.getAttribute("resource");
+			String defaultAction = el.getAttribute("action");
 			
 			if(editorID == null || editorID.isEmpty()){
 				node = new ConfigurationElementNode(getNode().getContext(), id, children);
@@ -157,6 +158,8 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 				}
 				node = new ConfigurationElementEditorNode(getNode().getContext(), id, editorID, resource, children);
 			}
+			
+			node.setDefaultAction(defaultAction);
 			
 			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
 			node.setIcon(icon, false);

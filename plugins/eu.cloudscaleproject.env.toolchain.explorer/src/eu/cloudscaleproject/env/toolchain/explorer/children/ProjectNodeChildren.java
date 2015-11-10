@@ -39,12 +39,14 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		
 		String id = tool.getAttribute("id");
 		String name = tool.getAttribute("name");
+		String defaultAction = tool.getAttribute("action");
 		Image icon = ExplorerResources.getImage(tool, "icon", 16, 16);
 		
 		ConfigurationElementNodeChildren children = new ConfigurationElementNodeChildren(tool);
 		ConfigurationElementNode node = new ConfigurationElementNode(getNode().getContext(), id, children);		
 		node.setIcon(icon, false);
 		node.setName(name);
+		node.setDefaultAction(defaultAction);
 		
 		return node;
 	}

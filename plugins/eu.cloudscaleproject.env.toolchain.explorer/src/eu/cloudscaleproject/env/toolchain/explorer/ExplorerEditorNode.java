@@ -49,25 +49,33 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 	}
 	
 	public void openEditor(){
+		onDefaultAction();
+	}
+	
+	@Override
+	public void onDefaultAction() {
 		
 		final String editorID = (String)getContext().getLocal(IExplorerConstants.NODE_EDITOR_ID);
 		
-		if(editorID == null && getResource() instanceof IFile){
-			//open editor the old way
-			try {
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				IDE.openEditor(page, (IFile)getResource());
-			} catch (PartInitException e) {
-				e.printStackTrace();
+		if(editorID == null){
+			
+			logger.warning("Editor id has not been found. IExplorerNode: " + getName());
+			
+			if(defaultAction != null){
+				super.onDefaultAction();
+			}
+			else if(getResource() instanceof IFile){
+				//open editor the old way
+				try {
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					IDE.openEditor(page, (IFile)getResource());
+				} catch (PartInitException e) {
+					e.printStackTrace();
+				}
 			}
 			return;
 		}
 		
-		if(editorID == null){
-			logger.warning("Editor id has not been found. IExplorerNode: " + getName());
-			return;
-		}
-
 		//TODO: find the solution for missing context objects
 		boolean done = commandExecutor.execute("eu.cloudscaleproject.env.toolchain.openAlternative", getContext());
 		

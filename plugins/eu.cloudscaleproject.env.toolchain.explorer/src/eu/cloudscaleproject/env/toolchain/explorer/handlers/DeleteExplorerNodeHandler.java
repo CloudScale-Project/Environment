@@ -19,6 +19,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputFolder;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
@@ -120,29 +121,38 @@ public class DeleteExplorerNodeHandler {
 				
 				node.dispose();
 
-				IEditorInputResource eir = ResourceRegistry.getInstance().getResource(node.getResource());
+				IEditorInputResource eir = ResourceRegistry.getInstance().findResource(node.getResource());
 				
-				if (eir instanceof IInputAlternative)
-				{
-					IInputAlternative ia = (IInputAlternative) eir;
-
-					for (IResultAlternative ra : ia.getResultAlternatives())
-					{
-						ra.delete();
+				if(eir.getResource() != node.getResource()){
+					//deleting sub resource
+					if(eir instanceof EditorInputFolder){
+						EditorInputFolder eif = (EditorInputFolder)eir;
+						eif.deleteSubResource(node.getResource());
 					}
-
-					for (IConfigAlternative ca : ia.getConfigAlternatives())
-					{
-						
-						ca.delete();
-					}
-					
-					ia.delete();
 				}
-				else
-				{
-					monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
-					node.getResource().delete(IProject.FORCE, null);
+				else{
+					if (eir instanceof IInputAlternative)
+					{
+						IInputAlternative ia = (IInputAlternative) eir;
+
+						for (IResultAlternative ra : ia.getResultAlternatives())
+						{
+							ra.delete();
+						}
+
+						for (IConfigAlternative ca : ia.getConfigAlternatives())
+						{
+							
+							ca.delete();
+						}
+						
+						ia.delete();
+					}
+					else
+					{
+						monitor.beginTask("Deleting resource '"+ node.getResource().getName() +"'", IProgressMonitor.UNKNOWN);
+						node.getResource().delete(IProject.FORCE, null);
+					}
 				}
 				
 				monitor.done();

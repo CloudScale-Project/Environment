@@ -65,6 +65,7 @@
          </ResourceProviderFactory>
       </Tool>
       <Node
+            action="eu.cloudscaleproject.env.analyser.command.createalternative"
             icon="resources/icons/analyser_16.png"
             id="eu.cloudscaleproject.env.analyser.toolNode"
             name="Analyser">
@@ -75,6 +76,7 @@
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
                name="Input alternatives">
             <Node
+                  action="eu.cloudscaleproject.env.analyser.command.createalternative"
                   icon="resources/icons/input_16.png"
                   id="eu.cloudscaleproject.env.analyser.inputNode"
                   name="Input">
@@ -85,6 +87,7 @@
                </NodeDynamic>
             </Node>
             <Node
+                  action="eu.cloudscaleproject.env.analyser.command.createalternative"
                   icon="resources/icons/configuration_16.png"
                   id="eu.cloudscaleproject.env.analyser.configurationsNode"
                   name="Configurations">

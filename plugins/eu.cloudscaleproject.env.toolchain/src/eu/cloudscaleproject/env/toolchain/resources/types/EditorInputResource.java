@@ -33,8 +33,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	private boolean jobInProgress = false;
 	
-	private long modificationStamp = -1;
-	
 	protected abstract void handleCreate(IProgressMonitor monitor);
 	protected abstract void handleSave(IProgressMonitor monitor);
 	protected abstract void handleLoad(IProgressMonitor monitor);
@@ -174,11 +172,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	}
 	
 	@Override
-	public long getModificationStamp(){
-		return modificationStamp;
-	}
-	
-	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}
@@ -239,7 +232,6 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 				setDirty(false);
 			}
 			finally{
-				modificationStamp = resource.getModificationStamp();
 				saveInProgress = false;
 			}
 		}

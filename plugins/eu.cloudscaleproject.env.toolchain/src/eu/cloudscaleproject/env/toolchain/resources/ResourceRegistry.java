@@ -180,7 +180,7 @@ public class ResourceRegistry {
 		return prr.getResourceProvider(tool);
 	}
 
-	public IEditorInputResource getResource(String resourcePath){
+	public IEditorInputResource findResource(String resourcePath){
 		IPath path = Path.fromPortableString(resourcePath);
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
 		IProject project = resource.getProject();
@@ -194,10 +194,10 @@ public class ResourceRegistry {
 			return null;
 		}
 		
-		return prr.getResource(resource);		
+		return prr.findResource(resource);		
 	}
 	
-	public IEditorInputResource getResource(IResource resource){
+	public IEditorInputResource findResource(IResource resource){
 
 		if(resource == null){
 			logger.warning("IResource is null!");
@@ -214,7 +214,7 @@ public class ResourceRegistry {
 			return null;
 		}
 		
-		return prr.getResource(resource);
+		return prr.findResource(resource);
 	}
 	
 	public synchronized void openResourceEditor(final IEditorInputResource eir){

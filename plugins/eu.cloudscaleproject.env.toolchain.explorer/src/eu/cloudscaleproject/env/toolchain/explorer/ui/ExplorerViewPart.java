@@ -194,6 +194,9 @@ public class ExplorerViewPart {
 					boolean expanded = treeViewer.getExpandedState(node);
 					treeViewer.setExpandedState(node, !expanded);
 				}
+				else{
+					node.onDefaultAction();
+				}
 			}
 		});
 		

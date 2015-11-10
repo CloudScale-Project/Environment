@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.set.SetDiff;
@@ -24,6 +25,9 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 
 public class EditorInputFolder extends EditorInputResource{
 
+	private static final Logger logger = Logger.getLogger(EditorInputFolder.class.getName());
+	
+	private static final String DEFAULT_KEY = "sub_resources";
 	private static final String MULTIPATH_SEPARATOR = ",";
 	
 	protected final IProject project;
@@ -95,97 +99,198 @@ public class EditorInputFolder extends EditorInputResource{
 		return getProperty(ResourceProvider.PROP_TYPE);
 	}
 	
-	public boolean isResourceInternal(IResource res){
-		
-		return getResource().getFullPath().isPrefixOf(res.getFullPath());
-	}
+	///////////////////////////////////////////////////////////////////
+	// Sub resource add methods
 	
-	private IPath getRelativePath(IResource res){
-		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
-		if(relative.equals(res.getFullPath())){
-			throw new IllegalArgumentException("Resource path can not be made relative to EditorInputFolder! Path: " 
-												+ res.getFullPath().toString());
-		}
-		return relative;
+	public void addSubResource(IResource res){
+		addSubResource(DEFAULT_KEY, res);
 	}
 	
 	public void addSubResource(String key, IResource res){
 		
-		String path = "";
-
 		synchronized (subResourcesLock) {
-			String oldPath = propertyInputFile.getProperty(key);
-			
-			if(isResourceInternal(res)){
-				path = getInternalResourcePath(res);
-			}
-			else{
-				path = getExternalResourcePath(res);
-			}
-			
-			if(oldPath != null){
-				String oldPathTrimed = oldPath.trim();
-				if(!oldPathTrimed.isEmpty()){
-					path = oldPathTrimed + MULTIPATH_SEPARATOR + path;
-				}
-			}
-			
-			List<IResource> resources = subResources.get(key);
-			if(resources == null){
-				resources = new ArrayList<IResource>();
-				subResources.put(key, resources);
-			}
-			resources.add(res);
-			propertyInputFile.setProperty(key, path);
+			doAddSubResource(key, res);
 		}
 		
 		setDirty(true);
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		updateStatusList();
+	}
+	
+	protected void doAddSubResource(String key, IResource res){
+
+		String path = "";
+		String oldPath = propertyInputFile.getProperty(key);
+		
+		if(isResourceInternal(res)){
+			path = getInternalResourcePath(res);
+		}
+		else{
+			path = getExternalResourcePath(res);
+		}
+		
+		if(oldPath != null){
+			String oldPathTrimed = oldPath.trim();
+			if(!oldPathTrimed.isEmpty()){
+				path = oldPathTrimed + MULTIPATH_SEPARATOR + path;
+			}
+		}
+		
+		List<IResource> resources = subResources.get(key);
+		if(resources == null){
+			resources = new ArrayList<IResource>();
+			subResources.put(key, resources);
+		}
+		resources.add(res);
+		propertyInputFile.setProperty(key, path);
+	}
+
+	///////////////////////////////////////////////////////////////////
+	// Sub resource remove methods
+	
+	public void removeSubResource(IResource res){
+		removeSubResource(DEFAULT_KEY, res);
 	}
 	
 	public void removeSubResource(String key, IResource res){
 				
 		synchronized (subResourcesLock) {
-			List<IResource> resources = getSubResources(key);
-			IResource toRemove = null;
-			
-			for(IResource r : resources){
-				if(r.equals(res)){
-					toRemove = r;
-				}
-			}
-			
-			if(toRemove != null){
-				resources.remove(toRemove);
-			}
-			
-			doSetSubResources(key, resources);		
+			doRemoveSubResource(key, res);
 		}
 		
 		setDirty(true);
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
 		
 		updateStatusList();
+	}
+	
+	protected void doRemoveSubResource(String key, IResource res){
+
+		List<IResource> resources = getSubResourcesFromWorkspace(key);
+		IResource resource = null;
+		
+		for(IResource r : resources){
+			if(r.equals(res)){
+				resource = r;
+			}
+		}
+		
+		if(resource != null){
+			subResources.remove(resource);
+			resources.remove(resource);
+		}
+		
+		doSetSubResources(key, resources);		
+	}
+	
+	public void removeSubResources(){
+		removeSubResources(DEFAULT_KEY);
 	}
 	
 	public void removeSubResources(String key){
 		
 		synchronized (subResourcesLock) {
-			List<IResource> resources = getSubResources(key);
-			resources.clear();
-			doSetSubResources(key, resources);
+			doRemoveSubResources(key);
 		}
 		
 		setDirty(true);
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
-		
 		updateStatusList();
 	}
 	
+	public void doRemoveSubResources(String key){
+		List<IResource> resources = getSubResources(key);
+		resources.clear();
+		doSetSubResources(key, resources);
+	}
+
+	///////////////////////////////////////////////////////////////////
+	// Sub resource delete methods
+	
+	public void deleteSubResource(IResource resource){
+		deleteSubResource(DEFAULT_KEY, resource);
+	}
+	
+	public void deleteSubResource(String key, IResource resource){
+		
+		boolean isInternal = isResourceInternal(resource);
+		if(!isInternal){
+			logger.warning("Resource '" + resource.getFullPath() + "' is not internal! It won't be deleted!");
+			removeSubResource(key, resource);
+			return;
+		}
+		
+		synchronized (subResourcesLock) {
+			try{
+				deleteInProgress = true;
+				doDeleteSubResource(key, resource);
+			}
+			finally{
+				deleteInProgress = false;
+			}
+		}
+
+		setDirty(true);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		updateStatusList();
+	}
+	
+	protected void doDeleteSubResource(String key, IResource resource){
+		
+		doRemoveSubResource(key, resource);
+
+		try {
+			resource.delete(true, null);
+		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteSubResources(){
+		deleteSubResources(DEFAULT_KEY);
+	}
+	
+	public void deleteSubResources(String key){
+		
+		synchronized (subResourcesLock) {
+			try{
+				deleteInProgress = true;
+				doDeleteSubResources(key);
+			}
+			finally{
+				deleteInProgress = false;
+			}
+		}
+
+		setDirty(true);
+		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, null, key);
+		updateStatusList();
+	}
+	
+	protected void doDeleteSubResources(String key){
+
+		List<IResource> resources = getSubResourcesFromWorkspace(key);
+		for(IResource resource : resources){
+			
+			boolean isInternal = isResourceInternal(resource);
+			if(!isInternal){
+				logger.warning("Resource '" + resource.getFullPath() + "' is not internal! It won't be deleted!");
+				removeSubResource(key, resource);
+				continue;
+			}
+			doDeleteSubResource(key, resource);
+		}
+	}
+
+	///////////////////////////////////////////////////////////////////
+	// Sub resource set methods
+	
 	public void setSubResource(String key, IResource res){
 		
-		doSetSubResource(key, res);
+		synchronized (subResourcesLock) {
+			doSetSubResource(key, res);
+		}
 		
 		setDirty(true);
 		
@@ -262,6 +367,9 @@ public class EditorInputFolder extends EditorInputResource{
 			propertyInputFile.setProperty(key, value);
 		}
 	}
+
+	///////////////////////////////////////////////////////////////////
+	// Sub resource helpers
 	
 	private String getInternalResourcePath(IResource file)
 	{
@@ -285,6 +393,23 @@ public class EditorInputFolder extends EditorInputResource{
 		return path.toPortableString();
 	}
 
+	public boolean isResourceInternal(IResource res){
+		
+		return getResource().getFullPath().isPrefixOf(res.getFullPath());
+	}
+	
+	private IPath getRelativePath(IResource res){
+		IPath relative = res.getFullPath().makeRelativeTo(getResource().getFullPath());
+		if(relative.equals(res.getFullPath())){
+			throw new IllegalArgumentException("Resource path can not be made relative to EditorInputFolder! Path: " 
+												+ res.getFullPath().toString());
+		}
+		return relative;
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	// Public methods for retrieving loaded resources 
+	
 	public IResource getSubResource(String key)
 	{
 		synchronized (subResourcesLock) {
@@ -325,6 +450,8 @@ public class EditorInputFolder extends EditorInputResource{
 		
 		return resources;
 	}
+	
+	//////////////////////////////////////////////////////////////////////
 
 	private List<IResource> getSubResourcesFromWorkspace(String key)
 	{
