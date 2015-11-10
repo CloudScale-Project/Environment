@@ -43,6 +43,7 @@
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
             name="Proxy to ScaleDL node">
          <Node
+               icon="resources/icons/ic-usage-evolution.png"
                id="eu.cloudscaleproject.env.usageevolution.nodeUsageEvolution"
                name="Usage Evolution"
                position="20">

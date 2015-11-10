@@ -38,7 +38,7 @@
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
             name="Proxy to ScaleDL node">
          <Node
-               icon="resources/icons/overview_16.png"
+               icon="resources/icons/ic-overview.png"
                id="eu.cloudscaleproject.env.overview.nodeOverview"
                name="Overview"
                position="10">

@@ -23,7 +23,9 @@ public class ExplorerResources {
 	public static Image PROJECT_16;
 	public static Image DELETE_16;
 	public static Image LINK_TO_EDITOR_16;
-	public static Image ALTERNATIVE_16;
+	public static Image ALTERNATIVE_INPUT_16;
+	public static Image ALTERNATIVE_CONFIG_16;
+	public static Image ALTERNATIVE_RESULT_16;
 	
 	public static Image getImage(IConfigurationElement element, String attribute, int width, int height)
 	{
@@ -54,7 +56,9 @@ public class ExplorerResources {
 		PROJECT_16 = loadImage("icons/project_16.png");
 		DELETE_16 = loadImage("icons/delete_16.png");
 		LINK_TO_EDITOR_16 = loadImage("icons/link_to_editor_16.gif");
-		ALTERNATIVE_16 = loadImage("icons/alternative_16.png");
+		ALTERNATIVE_INPUT_16 = loadImage("icons/ic-input-alternative-16.png");
+		ALTERNATIVE_CONFIG_16 = loadImage("icons/ic-configuration-alternative-16.png");
+		ALTERNATIVE_RESULT_16 = loadImage("icons/ic-result-alternative-16.png");
 	}
 	
 	private static HashMap<Key, Image> images = new HashMap<Key, Image>();

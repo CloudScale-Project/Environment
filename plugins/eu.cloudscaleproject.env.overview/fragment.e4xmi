@@ -12,7 +12,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_gbcOcDE6EeWJqMEyqBbxQA" elementId="eu.cloudscaleproject.env.overview.handler.openOverviewEditor" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.handlers.OpenOverviewEditorHandler" command="_mS8NUDE6EeWJqMEyqBbxQA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0W1qMGB_EeWayeVD4LyD5g" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_3fh5cGB_EeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor" label="Overview alternative" iconURI="platform:/plugin/eu.cloudscaleproject.env.overview/resources/icons/overview_16.png" tooltip="Overview alternative editor" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.editors.OverviewEditor">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_3fh5cGB_EeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor" label="Overview alternative" iconURI="platform:/plugin/eu.cloudscaleproject.env.overview/resources/icons/ic-overview.png" tooltip="Overview alternative editor" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.editors.OverviewEditor">
       <handlers xmi:id="_fRvq0IFwEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.overview.handler.0" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_eAmzEIFwEeWdDrhvqLZUaw"/>
     </elements>
   </fragments>

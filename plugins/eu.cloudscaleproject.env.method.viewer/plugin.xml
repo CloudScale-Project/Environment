@@ -89,7 +89,7 @@
       <e4view
             category="eu.cloudscaleproject.env.product.views.category.cloudscale"
             class="eu.cloudscaleproject.env.method.viewer.diagram.DiagramViewPart"
-            icon="icons/diagram_16.png"
+            icon="icons/ic-workflow.png"
             id="eu.cloudscaleproject.env.method.viewer.Workflow"
             name="Workflow diagram"
             restorable="true">

@@ -81,7 +81,7 @@
                </NodeDynamic>
             </Node>
             <Node
-                  icon="resources/icons/results_16.png"
+                  icon="resources/icons/ic-results-16.png"
                   id="eu.cloudscaleproject.env.spotter.nodeResults"
                   name="Results">
                <NodeDynamic

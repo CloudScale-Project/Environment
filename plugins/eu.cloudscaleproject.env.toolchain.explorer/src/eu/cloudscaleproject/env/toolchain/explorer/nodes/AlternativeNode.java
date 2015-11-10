@@ -23,7 +23,9 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerConstants;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 /**
  *
@@ -122,15 +124,31 @@ public class AlternativeNode extends ExplorerEditorNode{
 		
 		this.alternative = alternative;
 		this.alternative.addStatusChangeListener(alternativeStatusListener);
-		
+
 		setName(alternative.getName());
-		setIcon(ExplorerResources.ALTERNATIVE_16, false);
 		
+		initIcon(alternative);
 		getContext().set(ILabelDecorator.class, DEFAULT_DECORATOR);
 		
 		getContext().set(IExplorerConstants.NODE_DATA, alternative);
 		getContext().set(IValidationStatusProvider.class, alternative);
 		getContext().set(IEditorInputResource.class, alternative);
+	}
+	
+	private void initIcon (IEditorInputResource alternative)
+	{
+		if (alternative instanceof IConfigAlternative)
+		{
+			setIcon(ExplorerResources.ALTERNATIVE_CONFIG_16, false);
+		}
+		else if (alternative instanceof IResultAlternative)
+		{
+			setIcon(ExplorerResources.ALTERNATIVE_RESULT_16, false);
+		}
+		else
+		{
+			setIcon(ExplorerResources.ALTERNATIVE_INPUT_16, false);
+		}
 	}
 	
 	@Override		
