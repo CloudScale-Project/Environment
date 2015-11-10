@@ -43,15 +43,17 @@
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
             name="Proxy to ScaleDL node">
          <Node
+               action="eu.cloudscaleproject.env.usageevolution.command.createalternative"
                icon="resources/icons/ic-usage-evolution.png"
                id="eu.cloudscaleproject.env.usageevolution.nodeUsageEvolution"
                name="Usage Evolution"
                position="20">
             <NodeDynamic
+                  action="eu.cloudscaleproject.env.usageevolution.command.createalternative"
                   class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                   editor="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution"
                   id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.usageevolution"
-                  name="Usage evolution alternatives">
+                  name="Usage evolution alternative">
             </NodeDynamic>
          </Node>
       </NodeProxy>

@@ -54,16 +54,18 @@
          </ResourceProviderFactory>
       </Tool>
       <Node
+            action="eu.cloudscaleproject.env.extractor.command.createalternative"
             icon="resources/icons/ic-extractor-16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
             name="Extractor"
             position="20">
          <NodeDynamic
+               action="eu.cloudscaleproject.env.extractor.command.createalternative"
                class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
-               name="Input alternatives">
+               name="Input alternative">
             <Node
                   icon="resources/icons/input_16.png"
                   id="eu.cloudscaleproject.env.extractor.nodeInput"
@@ -75,14 +77,16 @@
                </NodeDynamic>
             </Node>
             <Node
+                  action="eu.cloudscaleproject.env.extractor.command.createalternative"
                   icon="resources/icons/configuration_16.png"
                   id="eu.cloudscaleproject.env.extractor.nodeConfiguration"
                   name="Configurations">
                <NodeDynamic
+                     action="eu.cloudscaleproject.env.extractor.command.createalternative"
                      class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                      editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
                      id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
-                     name="Configuration alternatives">
+                     name="Configuration alternative">
                </NodeDynamic>
             </Node>
             <Node

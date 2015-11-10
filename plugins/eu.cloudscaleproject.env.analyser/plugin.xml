@@ -70,20 +70,22 @@
             id="eu.cloudscaleproject.env.analyser.toolNode"
             name="Analyser">
          <NodeDynamic
+               action="eu.cloudscaleproject.env.analyser.command.createalternative"
                class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
                icon="resources/icons/input_16.png"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
-               name="Input alternatives">
+               name="Input alternative">
             <Node
                   action="eu.cloudscaleproject.env.analyser.command.createalternative"
                   icon="resources/icons/input_16.png"
                   id="eu.cloudscaleproject.env.analyser.inputNode"
                   name="Input">
                <NodeDynamic
+                     action="eu.cloudscaleproject.env.analyser.command.createpcmmodelwizard"
                      class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
                      id="eu.cloudscaleproject.env.analyser.NodeDynamic1"
-                     name="Input alternative content">
+                     name="Input alternative model">
                </NodeDynamic>
             </Node>
             <Node
@@ -92,10 +94,11 @@
                   id="eu.cloudscaleproject.env.analyser.configurationsNode"
                   name="Configurations">
                <NodeDynamic
+                     action="eu.cloudscaleproject.env.analyser.command.createalternative"
                      class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                      editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
                      id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-                     name="Configuration resources">
+                     name="Configuration alternative">
                   <NodeDynamic
                         class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
                         id="eu.cloudscaleproject.env.analyser.NodeDynamic4"

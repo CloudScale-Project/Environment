@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -28,6 +29,8 @@ import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
+	
+	private static final String CREATE_NEW_KEY_VALUE = "DynamicNode:createNew";
 	
 	private final PropertyChangeListener contentRetrieverListener = new PropertyChangeListener() {
 		
@@ -115,9 +118,20 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 					}
 					
 					if(contentRetriever != null){
-						for(Object content : contentRetriever.getChildren()){
-							keys.add(new Key(el, content));
+						
+						List<Object> contentList = contentRetriever.getChildren();
+						if(contentList.isEmpty()){
+							String action = el.getAttribute("action");
+							if(action != null && !action.isEmpty()){
+								keys.add(new Key(el, CREATE_NEW_KEY_VALUE));
+							}
 						}
+						else{
+							for(Object content : contentRetriever.getChildren()){
+								keys.add(new Key(el, content));
+							}
+						}
+						
 					}
 					
 				} catch (CoreException e) {
@@ -141,6 +155,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
 			
 			String id = el.getAttribute("id");
+			String name = el.getAttribute("name");
 			String editorID = el.getAttribute("editor");
 			String resourcePath = el.getAttribute("resource");
 			String defaultAction = el.getAttribute("action");
@@ -159,12 +174,11 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 				node = new ConfigurationElementEditorNode(getNode().getContext(), id, editorID, resource, children);
 			}
 			
+			node.setName(name);
 			node.setDefaultAction(defaultAction);
 			
 			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
 			node.setIcon(icon, false);
-			
-			node.setName(el.getAttribute("name"));
 		}
 		if(value instanceof IEditorInputResource){
 			ExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
@@ -172,6 +186,15 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		}
 		if(value instanceof IFile){
 			node = new AlternativeResourceNode(getNode().getContext(), (IFile)value);
+		}
+		
+		if(value == CREATE_NEW_KEY_VALUE){
+			String name = el.getAttribute("name");
+			String defaultAction = el.getAttribute("action");
+
+			node = new ExplorerNode(getNode().getContext(), CREATE_NEW_KEY_VALUE, null);
+			node.setName("Create new " + name.toLowerCase() + "...");
+			node.setDefaultAction(defaultAction);
 		}
 		
 		return node;
