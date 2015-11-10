@@ -14,7 +14,6 @@ import eu.cloudscaleproject.env.common.IconSetResources;
 import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
-import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
@@ -25,6 +24,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 
 /**
@@ -58,8 +58,23 @@ public class AlternativeNode extends ExplorerEditorNode{
 			
 			if(element instanceof AlternativeNode){
 				AlternativeNode node = (AlternativeNode)element;
-				CSToolResource tool = CSToolResource.getTool(node.getID());
-				return text + " [ "+tool.getName()+" ]";
+				IEditorInputResource alternative = node.getAlternative();
+				if (alternative instanceof IInputAlternative)
+				{
+					return text + "  [ Alternative ]";
+					
+				}
+				else if (alternative instanceof IConfigAlternative)
+				{
+					return text + "  [ Configuration ]";
+				}
+				else if (alternative instanceof IResultAlternative)
+				{
+					return text + "  [ Result ]";
+				}
+				else {
+					return text;
+				}
 			}
 			if(element instanceof AlternativeResourceNode){
 				AlternativeResourceNode node = (AlternativeResourceNode)element;
@@ -133,6 +148,11 @@ public class AlternativeNode extends ExplorerEditorNode{
 		getContext().set(IExplorerConstants.NODE_DATA, alternative);
 		getContext().set(IValidationStatusProvider.class, alternative);
 		getContext().set(IEditorInputResource.class, alternative);
+	}
+	
+	private IEditorInputResource getAlternative()
+	{
+		return alternative;
 	}
 	
 	private void initIcon (IEditorInputResource alternative)
