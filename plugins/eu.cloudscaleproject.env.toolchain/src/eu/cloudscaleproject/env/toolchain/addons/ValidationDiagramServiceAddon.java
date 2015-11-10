@@ -19,7 +19,6 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.common.services.IValidationDiagramService;
-import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
 import eu.cloudscaleproject.env.toolchain.resources.ProjectResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -58,14 +57,22 @@ public class ValidationDiagramServiceAddon {
 						
 						IResultAlternative ra = (IResultAlternative)statusProvider;
 						IConfigAlternative ca = ra.getConfigAlternative();
+						IInputAlternative ia = ra.getInputAlternative();
 						
 						if(ca != null){
 							ValidationDiagramServiceAddon.validate(ca);
 							diagramService.showStatus(project, ca);
+							
 						}
 						else{
-							//TODO: clear status
-							//diagramService.clearStatus(project, ra.getInputAlternativeID());
+							diagramService.clearStatus(project, ra.getTool().getConfig().getID());
+						}
+
+						if(ia != null){
+							diagramService.showStatus(project, ia);
+						}
+						else{
+							diagramService.clearStatus(project, ra.getTool().getInput().getID());
 						}
 					}
 					
@@ -73,18 +80,12 @@ public class ValidationDiagramServiceAddon {
 						IConfigAlternative confAlternative = (IConfigAlternative)statusProvider;
 						
 						IProject project = statusProvider.getProject();
+						
 						IInputAlternative inputAlt = confAlternative.getInputAlternative();
 						IEditorInputResource resultAlt = confAlternative.getLastResult();
-	
-						if(inputAlt != null && !inputAlt.isLoaded()){
-							inputAlt.load();
-						}
-						
-						if(resultAlt != null && !resultAlt.isLoaded()){
-							resultAlt.load();
-						}
 						
 						if(inputAlt != null){
+							validate(inputAlt);
 							diagramService.showStatus(project, inputAlt);
 						}
 						else{
@@ -92,6 +93,7 @@ public class ValidationDiagramServiceAddon {
 						}
 						
 						if(resultAlt != null){
+							validate(resultAlt);
 							diagramService.showStatus(project, resultAlt);
 						}
 						else{
@@ -104,16 +106,22 @@ public class ValidationDiagramServiceAddon {
 						IProject project = statusProvider.getProject();
 						IInputAlternative inputAlternative = (IInputAlternative)statusProvider;
 						
-						IValidationStatusProvider activeAlternative = diagramService.getActiveStatusProvider(
+						IValidationStatusProvider activeConfigAlternative = diagramService.getActiveStatusProvider(
 																					inputAlternative.getTool().getConfig().getID());
+
+						IValidationStatusProvider activeResultAlternative = diagramService.getActiveStatusProvider(
+																					inputAlternative.getTool().getResult().getID());
+
 						List<IConfigAlternative> configAlternatives = inputAlternative.getConfigAlternatives();
+						List<IResultAlternative> resultAlternatives = inputAlternative.getResultAlternatives();
 						
+						//handle configuration alternative status
 						if(!configAlternatives.isEmpty()){
 							
 							//check if the new configuration alternative should be set
 							boolean hasValidConfigAlternative = false;
-							if(activeAlternative instanceof IConfigAlternative){
-								IConfigAlternative ca = (IConfigAlternative)activeAlternative;
+							if(activeConfigAlternative instanceof IConfigAlternative){
+								IConfigAlternative ca = (IConfigAlternative)activeConfigAlternative;
 								if(inputAlternative.equals(ca.getInputAlternative())){
 									hasValidConfigAlternative = true;
 								}
@@ -127,27 +135,31 @@ public class ValidationDiagramServiceAddon {
 							}
 						}
 						else{
-							diagramService.clearStatus(project, inputAlternative.getTool().getId());
+							diagramService.clearStatus(project, inputAlternative.getTool().getConfig().getID());
 						}
-					}
-				}
-				
-				if(IValidationDiagramService.PROP_CLEAR_STATUS.equals(evt.getPropertyName())){
-					
-					IValidationDiagramService diagramService = (IValidationDiagramService)evt.getSource();
-					String statusProviderID = (String)evt.getNewValue();
-					
-					if(CSToolResource.ANALYSER_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.ANALYSER_RES.getID());
-					}
-					if(CSToolResource.EXTRACTOR_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.EXTRACTOR_RES.getID());
-					}
-					if(CSToolResource.SPOTTER_STA_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.SPOTTER_STA_RES.getID());
-					}
-					if(CSToolResource.SPOTTER_DYN_CONF.getID().equals(statusProviderID)){
-						diagramService.clearStatus(diagramService.getActiveProject(), CSToolResource.SPOTTER_DYN_RES.getID());
+
+						//handle result alternative status
+						if(!resultAlternatives.isEmpty()){
+							
+							//check if the new configuration alternative should be set
+							boolean hasValidResultAlternative = false;
+							if(activeResultAlternative instanceof IResultAlternative){
+								IResultAlternative ra = (IResultAlternative)activeResultAlternative;
+								if(inputAlternative.equals(ra.getInputAlternative())){
+									hasValidResultAlternative = true;
+								}
+							}
+							
+							//show the new configuration alternative only if needed
+							if(!hasValidResultAlternative){
+								IValidationStatusProvider sp = resultAlternatives.get(0);
+								ValidationDiagramServiceAddon.validate(sp);
+								diagramService.showStatus(project, sp);
+							}
+						}
+						else{
+							diagramService.clearStatus(project, inputAlternative.getTool().getResult().getID());
+						}
 					}
 				}
 				
