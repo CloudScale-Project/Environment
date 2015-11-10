@@ -8,7 +8,6 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
@@ -38,7 +37,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.wizard.ImportModelWizard;
 import eu.cloudscaleproject.env.analyser.wizard.NewModelWizard;
-import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
@@ -147,6 +145,10 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			public void widgetSelected(SelectionEvent e) {
 				IFile file = treeviewComposite.getSelectedModelFile();
 				if(file != null){
+					alternative.deleteSubResource(file);
+					alternative.save();
+					
+					/* Old implementation
 					input.removeSubResourceModel(file);
 					if(input.isResourceInternal(file)){
 						try {
@@ -167,6 +169,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 						}
 					}
 					input.save();
+					*/
 				}
 				
 				refreshButtonStates();

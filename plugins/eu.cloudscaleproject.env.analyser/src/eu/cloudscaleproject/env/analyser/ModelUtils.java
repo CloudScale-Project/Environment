@@ -62,7 +62,7 @@ public class ModelUtils {
 				
 				ModelUtils.createModels(modelResSet, diagramResSet, alternative.getResource(), types, monitor);
 				for(Resource res : modelResSet.getResources()){
-					alternative.addSubResourceModel(ExplorerProjectPaths.getFileFromEmfResource(res));
+					alternative.addSubResource(ExplorerProjectPaths.getFileFromEmfResource(res));
 				}
 				
 				monitor.subTask("Saving alternative");
@@ -94,7 +94,7 @@ public class ModelUtils {
 				for (Resource resource : resources)
 				{
 					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-					alternative.addSubResourceModel(f);
+					alternative.addSubResource(f);
 				}
 				
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Copying models done.");
@@ -113,7 +113,7 @@ public class ModelUtils {
 		createModels(modelResSet, diagramResSet, alternative.getResource(), types, monitor);
 		
 		for(Resource res : modelResSet.getResources()){
-			alternative.addSubResourceModel(ExplorerProjectPaths.getFileFromEmfResource(res));
+			alternative.addSubResource(ExplorerProjectPaths.getFileFromEmfResource(res));
 		}
 		alternative.save(monitor);
 	}

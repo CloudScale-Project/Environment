@@ -68,12 +68,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		resSet = editingDomain.getResourceSet();
 	}
 	
-	@Deprecated
 	/**
 	 * Deprecated: Use addSubResource(IResource) method.
 	 * 
 	 * @param res
 	 */
+	@Deprecated
 	public void addSubResourceModel(IResource res) {
 		
 		String ext = res.getFileExtension();
@@ -95,15 +95,17 @@ public class EditorInputEMF extends EditorInputFolder{
 		addSubResourceModel(res);
 	}
 	
-	@Deprecated
 	/**
 	 * Deprecated: Use removeSubResource(IResource) method.
 	 * 
 	 * @param res
 	 */
+	@Deprecated
 	public void removeSubResourceModel(IResource res) {
 		String ext = res.getFileExtension();
 		String key = null;
+
+		unloadModelResource((IFile)res);
 
 		for (ModelType type : ModelType.GROUP_ALL)
 		{
@@ -116,7 +118,6 @@ public class EditorInputEMF extends EditorInputFolder{
 			return;
 		}
 		
-		unloadModelResource((IFile)res);
 		removeSubResource(key, res);
 	}
 	
@@ -134,6 +135,9 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		if(key == null){
 			logger.warning("Model with extension: " + resource.getFileExtension() + " is not registred in the ModelType enum!");
+			if(resource instanceof IFile){
+				unloadModelResource((IFile)resource);
+			}
 			return;
 		}
 
