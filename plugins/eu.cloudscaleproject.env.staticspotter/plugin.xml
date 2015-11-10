@@ -55,7 +55,7 @@
          </ResourceProviderFactory>
       </Tool>
       <Node
-            icon="resources/icons/ic-spotter-small.png"
+            icon="resources/icons/ic-spotter-static-16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
             name="Static Spotter"
             position="30">

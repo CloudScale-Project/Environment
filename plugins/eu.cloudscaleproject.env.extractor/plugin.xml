@@ -54,7 +54,7 @@
          </ResourceProviderFactory>
       </Tool>
       <Node
-            icon="resources/icons/extractor_16.png"
+            icon="resources/icons/ic-extractor-16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
             name="Extractor"
             position="20">

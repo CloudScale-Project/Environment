@@ -30,8 +30,8 @@
       </children>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1XyOIC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:5">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_Uz4ooC3EEeSb4vEDETI_1g" elementId="eu.cloudscaleproject.env.analyser.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/analyser_24.png" tooltip="Open Analyser Perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1XyOIC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:7">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_Uz4ooC3EEeSb4vEDETI_1g" elementId="eu.cloudscaleproject.env.analyser.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/ic-analyser-24.png" tooltip="Open Analyser Perspective" command="_oyCqUHtOEeSNHIyeGGCx9A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_l21_QD0DEeWpPejK7esD1g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_lEiRAD9SEeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.menuseparator.0"/>
@@ -78,7 +78,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mLu_IED-EeWsDNl2NuiWtA" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_n1cCYEJzEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserIntro" label="Analyser intro" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/analyser_16.png" closeable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.views.IntroView"/>
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_n1cCYEJzEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserIntro" label="Analyser intro" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/ic-analyser-16.png" closeable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.views.IntroView"/>
     <elements xsi:type="basic:PartDescriptor" xmi:id="_yXNdgED-EeWsDNl2NuiWtA" elementId="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput" label="Analyser input" iconURI="platform:/plugin/eu.cloudscaleproject.env.analyser/resources/icons/input_16.png" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.analyser/eu.cloudscaleproject.env.analyser.editors.InputEditor">
       <handlers xmi:id="_a12ZMIFuEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.analyser.handler.2" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_N82RAIFvEeWdDrhvqLZUaw"/>
     </elements>

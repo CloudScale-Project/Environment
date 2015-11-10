@@ -54,7 +54,7 @@
          </ResourceProviderFactory>
       </Tool>
       <Node
-            icon="resources/icons/spotter_16.png"
+            icon="resources/icons/ic-spotter-dynamic-16.png"
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDyn"
             name="Dynamic Spotter"
             position="40">

@@ -41,4 +41,7 @@
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_de0OkGBIEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.staticspotter.configAlternativeNodeProvider"/>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_GA748IeGEeWdDrhvqLZUaw" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:9">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_LUJfAIeGEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.staticspotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.staticspotter/resources/icons/ic-spotter-static-24.png" tooltip="Open Static Spotter Perspective" command="_cB6fwHubEeSCzZgOtBwvkA"/>
+  </fragments>
 </fragment:ModelFragments>

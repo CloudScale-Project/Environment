@@ -10,8 +10,8 @@
     <elements xsi:type="commands:Handler" xmi:id="_NT1WwEPtEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.handler.perspective" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.handlers.DynamicSpotterPerspectiveHandler" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
     <elements xsi:type="commands:Handler" xmi:id="_HGGVsHmaEeWT8Z-w_k8Mvw" elementId="eu.cloudscaleproject.env.spotter.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter/eu.cloudscaleproject.env.spotter.handlers.CreateAlternativeHandler" command="_E1-GIHmaEeWT8Z-w_k8Mvw"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kZ5JoC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:6">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_U0QSsC3dEeSzOMcB8sHwVA" elementId="eu.cloudscaleproject.env.spotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.spotter/resources/icons/ic-spotter-24.png" tooltip="Open Dynamic Spotter Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kZ5JoC3DEeSb4vEDETI_1g" featurename="children" parentElementId="org.eclipse.ui.workbench.file" positionInList="index:10">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_U0QSsC3dEeSzOMcB8sHwVA" elementId="eu.cloudscaleproject.env.spotter.handledtoolitem.0" iconURI="platform:/plugin/eu.cloudscaleproject.env.spotter/resources/icons/ic-spotter-dynamic-24.png" tooltip="Open Dynamic Spotter Perspective" command="_F-Q3YEPtEeSK3KV4OioXdg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DshzYEPvEeSK3KV4OioXdg" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_4VzLsEPuEeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.spotter.menucontribution.perspective" parentId="cloudscale.environment.product.menu.tools">

@@ -66,7 +66,7 @@
       </Tool>
       <Node
             action="eu.cloudscaleproject.env.analyser.command.createalternative"
-            icon="resources/icons/analyser_16.png"
+            icon="resources/icons/ic-analyser-16.png"
             id="eu.cloudscaleproject.env.analyser.toolNode"
             name="Analyser">
          <NodeDynamic
