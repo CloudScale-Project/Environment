@@ -32,10 +32,10 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tjCC0HZyEeWJPoFXxZxn-Q" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_ehtjQHZzEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.menuseparator.0"/>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xHPwcHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.createInputAlternative" label="New Dynamic spotter input alternative..." command="_E1-GIHmaEeWT8Z-w_k8Mvw">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xHPwcHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.createInputAlternative" label="Dynamic Spotter alternative" command="_E1-GIHmaEeWT8Z-w_k8Mvw">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OYAUwHZzEeWJPoFXxZxn-Q" coreExpressionId="eu.cloudscaleproject.env.spotter.inputAlternativeNodeProvider"/>
     </elements>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xlFjAHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.eucloudscaleprojectenvtoolchainexplorerpopupmenunew" label="New Dynamic spotter configuration alternative..." command="_E1-GIHmaEeWT8Z-w_k8Mvw">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xlFjAHZyEeWJPoFXxZxn-Q" elementId="eu.cloudscaleproject.env.spotter.handledmenuitem.eucloudscaleprojectenvtoolchainexplorerpopupmenunew" label="Dynamic Spotter configuration" command="_E1-GIHmaEeWT8Z-w_k8Mvw">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_QgiHgHZzEeWJPoFXxZxn-Q" coreExpressionId="eu.cloudscaleproject.env.spotter.configAlternativeNodeProvider"/>
     </elements>
   </fragments>

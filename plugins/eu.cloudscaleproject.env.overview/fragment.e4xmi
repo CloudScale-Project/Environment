@@ -17,7 +17,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Uuv6wGCCEeWayeVD4LyD5g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_w6rlAGCCEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.handledmenuitem.newOverviewAlternative" label="New Overview alternative..." tooltip="Create new Overview alternative" command="_tLxN0GCDEeWayeVD4LyD5g">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_w6rlAGCCEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.handledmenuitem.newOverviewAlternative" label="Overview alternative" tooltip="Create new Overview alternative" command="_tLxN0GCDEeWayeVD4LyD5g">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ul5CcGCDEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.overview.overviewAlternativeNodeProvider"/>
     </elements>
   </fragments>

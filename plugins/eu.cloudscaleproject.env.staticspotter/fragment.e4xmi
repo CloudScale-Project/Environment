@@ -34,10 +34,10 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_w2bOYGBGEeWayeVD4LyD5g" featurename="children" parentElementId="eu.cloudscaleproject.env.toolchain.explorer.popupmenu.new">
     <elements xsi:type="menu:MenuSeparator" xmi:id="__G4cQGBGEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.staticspotter.menuseparator.0"/>
-    <elements xsi:type="menu:DirectMenuItem" xmi:id="_zG9toGBGEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.staticspotter.directmenuitem.createInputAlternative" label="Create input alternative..." tooltip="Create new Static spotter input alternative" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.CreateAlternativeHandler">
+    <elements xsi:type="menu:DirectMenuItem" xmi:id="_zG9toGBGEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.staticspotter.directmenuitem.createInputAlternative" label="Static Spotter alternative" tooltip="Create new Static spotter input alternative" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.CreateAlternativeHandler">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_dH48UGBIEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.staticspotter.inputAlternativeNodeProvider"/>
     </elements>
-    <elements xsi:type="menu:DirectMenuItem" xmi:id="_AI2PkGBHEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.staticspotter.directmenuitem.createConfigurationAlternative" label="Create configuration alternative..." tooltip="Create new Static spotter configuration alternative" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.CreateAlternativeHandler">
+    <elements xsi:type="menu:DirectMenuItem" xmi:id="_AI2PkGBHEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.staticspotter.directmenuitem.createConfigurationAlternative" label="Static Spotter configuration" tooltip="Create new Static spotter configuration alternative" contributionURI="bundleclass://eu.cloudscaleproject.env.staticspotter/eu.cloudscaleproject.env.staticspotter.handlers.CreateAlternativeHandler">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_de0OkGBIEeWayeVD4LyD5g" coreExpressionId="eu.cloudscaleproject.env.staticspotter.configAlternativeNodeProvider"/>
     </elements>
   </fragments>
