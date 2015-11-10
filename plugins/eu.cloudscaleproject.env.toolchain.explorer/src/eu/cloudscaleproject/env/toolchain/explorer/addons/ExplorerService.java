@@ -11,11 +11,18 @@ public class ExplorerService implements IExplorerService{
 		IExplorerNode node = Explorer.getInstance().findNode(data);
 		Explorer.getInstance().setSelection(node);		
 	}
-
-
+	
 	@Override
-	public void setSelection(String id, int index) {
-		// TODO Auto-generated method stub
+	public Object getSelection()
+	{
+		throw new IllegalStateException();
+	}
+	
+	@Override
+	public boolean isAvailable(Object data)
+	{
+		IExplorerNode node = Explorer.getInstance().findNode(data);
+		return node != null;
 	}
 
 }

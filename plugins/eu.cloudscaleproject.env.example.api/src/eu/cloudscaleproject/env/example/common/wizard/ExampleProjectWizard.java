@@ -66,6 +66,9 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 		{
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+
+				IProject cseProject = null;
+
 				for (Resource resource : selectedResources)
 				{
 					try
@@ -75,7 +78,7 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 						IFile propertyFile = ExplorerProjectPaths.getDashboardFile(project);
 						if (propertyFile != null && propertyFile.exists()) // TODO: check nature
 						{
-							selectExampleProject(project);
+							cseProject = project;
 						}
 						
 
@@ -86,6 +89,10 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 
 				}
 
+				if (cseProject != null)
+				{
+					selectExampleProject(cseProject);
+				}
 
 				return Status.OK_STATUS;
 			}
@@ -99,23 +106,23 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 	
 	private static void selectExampleProject (final IProject project)
 	{
-				//select and expand node in explorer
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						//delay for 500ms, so the node is created
-						Display.getDefault().timerExec(500, new Runnable() {
-							
-							@Override
-							public void run() {
-								IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
-								explorerService.setSelection(project);
-							}
-						});
-					}
-				});
-		
+		IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+		int counter = 0;
+		while (!explorerService.isAvailable(project))
+		{
+			try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace(); }
+			if (++counter>25) break; // Break after 5s
+		}
+
+		//select and expand node in explorer
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+				explorerService.setSelection(project);
+			}
+		});
 	}
 
 	public static IProject createExampleProject(IProject project, Example.Resource resource)
