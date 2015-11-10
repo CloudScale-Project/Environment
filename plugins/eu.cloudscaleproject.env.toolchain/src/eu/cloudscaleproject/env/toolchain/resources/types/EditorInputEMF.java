@@ -141,6 +141,10 @@ public class EditorInputEMF extends EditorInputFolder{
 			return;
 		}
 
+		if(resource instanceof IFile){
+			unloadModelResource((IFile)resource);
+		}
+		
 		deleteSubResource(key, resource);
 	}
 	
