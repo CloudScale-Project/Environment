@@ -74,6 +74,7 @@
                      id="eu.cloudscaleproject.env.extractor.nodeInput"
                      name="Input">
                   <NodeDynamic
+                        action="eu.cloudscaleproject.env.extractor.command.showjavaproject"
                         class="eu.cloudscaleproject.env.extractor.ExplorerProjectProvider"
                         empty="eu.cloudscaleproject.env.extractor.importjavaproject"
                         id="eu.cloudscaleproject.env.extractor.nodeInputalternativeContent"

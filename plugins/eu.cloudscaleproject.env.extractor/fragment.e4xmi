@@ -8,10 +8,12 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_OuRY4DHXEeO3JJACK76kDw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_aPymADGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspective" commandName="Open archimetrix perspective" description="Open archimetrix perspective"/>
     <elements xsi:type="commands:Command" xmi:id="_xiNncF4DEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.extractor.command.createalternative" commandName="createAlternative" description="Create extractor alternative"/>
+    <elements xsi:type="commands:Command" xmi:id="_VnpAAIiiEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.extractor.command.showjavaproject" commandName="Show Java project"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PRJccDHXEeO3JJACK76kDw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_lT1iQDGwEeO3JJACK76kDw" elementId="eu.cludscale.environment.extractor.openPerspectiveHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.OpenExtractorHandler" command="_aPymADGwEeO3JJACK76kDw"/>
     <elements xsi:type="commands:Handler" xmi:id="_zYLCgF4OEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.extractor.handler.0" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.CreateAlternativeHandler" command="_xiNncF4DEeWKs5YPUow6lg"/>
+    <elements xsi:type="commands:Handler" xmi:id="_YHRrMIiiEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.extractor.handler.3" contributionURI="bundleclass://eu.cloudscaleproject.env.extractor/eu.cloudscaleproject.env.extractor.handlers.ShowJavaProjectHandler" command="_VnpAAIiiEeWtgv-_M2130A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Pm0KcDHXEeO3JJACK76kDw" featurename="menuContributions" parentElementId="eu.cloudscaleproject.env.product.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_LwkNoHuaEeSCzZgOtBwvkA" elementId="eu.cloudscaleproject.env.extractor.menucontribution.0" parentId="cloudscale.environment.product.menu.tools">
