@@ -6,9 +6,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.cloudscaleproject.env.common.IconSetResources;
-import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
-import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
 import eu.cloudscaleproject.env.toolchain.ui.widgets.TitleWidget;
@@ -27,7 +24,8 @@ public class ResultEditorView extends AbstractEditorView
 		new TitleWidget(getHeader(), SWT.NONE, result){
 			@Override
 			protected void initButtons() {
-				CLabel lblUp = createContextButton("Input", IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
+				CLabel lblUp = createContextButton("Input", 
+						loadImage("resources/icons/ic-input-white-24.png"));
 				CLabel lblConfiguration = createContextButton("Configuration", 
 						loadImage("resources/icons/ic-configurations-white-24.png"));
 				createSeparator();

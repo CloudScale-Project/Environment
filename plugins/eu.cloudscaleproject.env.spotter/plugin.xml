@@ -61,7 +61,7 @@
             position="40">
          <NodeResource
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
-               icon="resources/icons/input_16.png"
+               icon="resources/icons/ic-input-16.png"
                id="eu.cloudscaleproject.env.spotter.nodeServerConnection"
                name="Server connection">
          </NodeResource>

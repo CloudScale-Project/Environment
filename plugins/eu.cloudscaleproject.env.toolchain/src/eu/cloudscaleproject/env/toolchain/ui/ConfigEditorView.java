@@ -216,7 +216,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			protected void initButtons()
 			{
 				CLabel lblUp = createContextButton("Input",
-						loadImage("resources/icons/ic-configurations-white-24.png"));
+						loadImage("resources/icons/ic-input-white-24.png"));
 				CLabel lblResults = createContextButton("Results",
 						loadImage("resources/icons/ic-results-white-24.png"));
 				createSeparator();

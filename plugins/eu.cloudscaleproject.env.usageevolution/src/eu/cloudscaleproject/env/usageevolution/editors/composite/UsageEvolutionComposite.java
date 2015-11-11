@@ -55,7 +55,15 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 		super(parent, style, alt);
 		this.alternative = alt;
 
-		new TitleWidget(getHeader(), style, alt);
+		new TitleWidget(getHeader(), style, alt){
+			@Override
+			protected void initButtons()
+			{
+				// TODO Auto-generated method stub
+				createSeparator();
+				super.initButtons();
+			}
+		};
 		new ValidationWidget(getFooter(), style, alt);
 
 		Group containerEditor = new Group(getContainer(), SWT.NONE);

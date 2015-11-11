@@ -115,6 +115,7 @@ public class TitleWidget extends Composite
 	protected CLabel createContextButton (String text, Image icon)
 	{
 		CLabel lbl = new CLabel(buttonsContainer, SWT.NONE);
+		lbl.setLayoutData(new RowData(SWT.DEFAULT, 28));
 		lbl.setRightMargin(10);
 		lbl.setLeftMargin(8);
 		lbl.setText(text);
@@ -191,6 +192,8 @@ public class TitleWidget extends Composite
 
 		for (CLabel lbl : contextButtonsMap.keySet())
 		{
+			if (lbl.getImage() == null) continue;
+
 			if (visible)
 			{
 				lbl.setText(contextButtonsMap.get(lbl));

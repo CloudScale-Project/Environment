@@ -26,6 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.palladiosimulator.pcm,
  eu.cloudscaleproject.env.common,
  org.eclipse.core.expressions;bundle-version="3.4.600",
- javax.inject
+ javax.inject,
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

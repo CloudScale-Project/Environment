@@ -78,7 +78,7 @@
                name="Input alternative">
             <Node
                   action="eu.cloudscaleproject.env.analyser.command.createalternative"
-                  icon="resources/icons/input_16.png"
+                  icon="resources/icons/ic-input-16.png"
                   id="eu.cloudscaleproject.env.analyser.inputNode"
                   name="Input">
                <NodeDynamic
