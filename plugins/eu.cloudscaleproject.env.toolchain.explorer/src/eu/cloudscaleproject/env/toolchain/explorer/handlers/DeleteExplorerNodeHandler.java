@@ -1,6 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -15,6 +16,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -102,6 +104,7 @@ public class DeleteExplorerNodeHandler {
 	}
 	
 	private void deleteNode(final ExplorerResourceNode node){
+		
 		WorkspaceJob job = new WorkspaceJob("Deleting resource...") {
 			
 			@Override
@@ -109,20 +112,57 @@ public class DeleteExplorerNodeHandler {
 				
 				monitor.beginTask("Deleting resource...", IProgressMonitor.UNKNOWN);
 				
-				
-				final IExplorerNode parent = node.getParent();
-				
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						Explorer.getInstance().setSelection(parent);
-					}
-				});
-				
+				final IExplorerNode nodeSibling = getNodeSibling(node);
 				node.dispose();
 
+				BatchExecutor.getInstance().addUITask(DeleteExplorerNodeHandler.this, "updateSelection", new Runnable() {
+					
+					@Override
+					public void run() {
+						if(nodeSibling != null && !nodeSibling.isDisposed()){
+							Explorer.getInstance().setSelection(nodeSibling);
+						}
+					}
+				});
+
 				IEditorInputResource eir = ResourceRegistry.getInstance().findResource(node.getResource());
+
+				if(eir != null){
+					
+					if(eir.getResource() != node.getResource()){
+
+						//deleting sub resource
+						if(eir instanceof EditorInputFolder){
+							EditorInputFolder eif = (EditorInputFolder)eir;
+							eif.deleteSubResource(node.getResource());
+						}
+						else{
+							node.getResource().delete(IProject.FORCE, null);
+						}
+						
+					}
+					else{
+						if(eir instanceof IInputAlternative){
+						
+							IInputAlternative ia = (IInputAlternative) eir;
+
+							for (IResultAlternative ra : ia.getResultAlternatives()) {
+								ra.delete();
+							}
+
+							for (IConfigAlternative ca : ia.getConfigAlternatives()) {
+								ca.delete();
+							}
+						}
+						
+						eir.delete();
+					}
+				}
+				else{
+					node.getResource().delete(IProject.FORCE, null);
+				}
 				
+				/*
 				if(eir.getResource() != node.getResource()){
 					//deleting sub resource
 					if(eir instanceof EditorInputFolder){
@@ -154,6 +194,7 @@ public class DeleteExplorerNodeHandler {
 						node.getResource().delete(IProject.FORCE, null);
 					}
 				}
+				*/
 				
 				monitor.done();
 				
@@ -162,6 +203,33 @@ public class DeleteExplorerNodeHandler {
 		};
 		job.setUser(true);
 		job.schedule();
+	}
+	
+	private IExplorerNode getNodeSibling(IExplorerNode node){
+		
+		IExplorerNode parent = node.getParent();
+		if(parent == null){
+			return null;
+		}
+		
+		IExplorerNode nodeToSelect = parent;
+		
+		if(parent != null){
+			
+			List<IExplorerNode> nodes = Arrays.asList(parent.getChildren());
+			if(nodes.size() > 1){
+				//find sibling
+				int indexToSelect = 1;
+				int index = nodes.indexOf(node);
+				if(index > 0){
+					indexToSelect = index-1;
+				}
+				
+				nodeToSelect = nodes.get(indexToSelect);
+			}
+		}
+		
+		return nodeToSelect;
 	}
 	
 }

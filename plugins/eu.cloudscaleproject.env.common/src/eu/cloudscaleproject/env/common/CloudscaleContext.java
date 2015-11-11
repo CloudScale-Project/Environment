@@ -53,7 +53,7 @@ public class CloudscaleContext {
 	}
 	
 	public static void inject(Object object, IEclipseContext context){
-		ContextInjectionFactory.inject(object, getActiveContext());
+		ContextInjectionFactory.inject(object, context);
 	}
 	
 	public static <T> T createInstance(Class<T> clazz){

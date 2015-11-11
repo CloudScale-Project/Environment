@@ -40,6 +40,8 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
+	private final Object disposeLock = new Object();
+	
 	private final PropertyChangeListener factoryListener = new PropertyChangeListener() {
 		
 		@Override
@@ -245,6 +247,10 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 	public void onSelect() {
 		
 		//deactivate child
+		if(isDisposed){
+			return;
+		}
+		
 		IEclipseContext activeChild = context.getActiveChild();
 		if(activeChild != null){
 			activeChild.deactivate();
@@ -286,8 +292,19 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 		}		
 	}
 	
+	public boolean isDisposed(){
+		return isDisposed;
+	}
+	
 	@Override
 	public void dispose(){
+		
+		synchronized (disposeLock) {
+			if(isDisposed){
+				return;
+			}
+			isDisposed = true;
+		}
 		
 		for(IExplorerNodeChildren children : this.nodeChildren){
 			children.removePropertyChangeListener(factoryListener);
@@ -310,12 +327,10 @@ public class ExplorerNode extends PlatformObject implements IExplorerNode{
 					ExplorerNode en = (ExplorerNode)parent;
 					en.removeChild(ExplorerNode.this);
 				}
-				
-				isDisposed = true;
 
 			}
 		});
-		
+
 	}
 	
 	protected void firePropertyChange(String propertyName, Object oldValue, Object newValue){

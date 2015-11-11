@@ -51,6 +51,7 @@ public interface IExplorerNode extends IAdaptable, IContextProvider{
 	public void refresh();
 	public void refreshRecursive();
 
+	public boolean isDisposed();
 	public void dispose();
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl);
