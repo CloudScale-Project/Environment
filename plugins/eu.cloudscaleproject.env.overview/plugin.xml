@@ -38,13 +38,13 @@
             id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
             name="Proxy to ScaleDL node">
          <Node
-               action="eu.cloudscaleproject.env.toolchain.command.createalternative"
+               action="eu.cloudscaleproject.env.overview.command.createalternative"
                icon="resources/icons/ic-overview.png"
                id="eu.cloudscaleproject.env.overview.nodeOverview"
                name="Overview"
                position="10">
             <NodeDynamic
-                  action="eu.cloudscaleproject.env.toolchain.command.createalternative"
+                  action="eu.cloudscaleproject.env.overview.command.createalternative"
                   class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
                   editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
                   id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"

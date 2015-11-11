@@ -22,8 +22,8 @@ public class ImportSelectionWizard extends Wizard{
 		
 		List<WizardNode> nodes = new ArrayList<>();
 		
-		nodes.add(new OverviewSelectionWizard.CreateImportNewNode(project));
-		nodes.add(new OverviewSelectionWizard.CreateImportExistingNode(project));
+		nodes.add(new CreateAlternativeSelectionWizard.CreateImportNewNode(project));
+		nodes.add(new CreateAlternativeSelectionWizard.CreateImportExistingNode(project));
 		
 		newInputSelectionPage = new WizardSelectionPage("Import options",
 														"Select one of the possible options.", nodes);

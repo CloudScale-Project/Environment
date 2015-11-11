@@ -14,11 +14,11 @@ import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class OverviewSelectionWizard extends Wizard{
+public class CreateAlternativeSelectionWizard extends Wizard{
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public OverviewSelectionWizard(IProject project) {
+	public CreateAlternativeSelectionWizard(IProject project) {
 		
 		CloudscaleContext.inject(this);
 		
@@ -27,7 +27,10 @@ public class OverviewSelectionWizard extends Wizard{
 		List<WizardNode> nodes = new ArrayList<>();
 		
 		nodes.add(new CreateNewNode(project));
-		nodes.add(new CreateTemplateNode());
+
+		//TODO:
+		//nodes.add(new CreateTemplateNode());
+		
 		nodes.add(new CreateImportNewNode(project));
 		nodes.add(new CreateImportExistingNode(project));
 		

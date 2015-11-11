@@ -6,10 +6,12 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M_i0sBNlEeWu1oCxvgJv_A" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_M_i0shNlEeWu1oCxvgJv_A" elementId="eu.cludscale.environment.overview.openImportWizard" commandName="Open import wizard" description="Open import wizard"/>
     <elements xsi:type="commands:Command" xmi:id="_mS8NUDE6EeWJqMEyqBbxQA" elementId="eu.cludscaleproject.env.overview.openOverviewEditor" commandName="Open Overview Editor" description="Open Overview Editor"/>
+    <elements xsi:type="commands:Command" xmi:id="_O1bsMIh9EeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.overview.command.createalternative" commandName="Create overview wizard"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_PjbGsBNlEeWu1oCxvgJv_A" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Handler" xmi:id="_PjbGshNlEeWu1oCxvgJv_A" elementId="eu.cludscale.environment.overview.openImportWizardHandler" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.handlers.OpenImportWizardHandler" command="_M_i0shNlEeWu1oCxvgJv_A"/>
     <elements xsi:type="commands:Handler" xmi:id="_gbcOcDE6EeWJqMEyqBbxQA" elementId="eu.cloudscaleproject.env.overview.handler.openOverviewEditor" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.handlers.OpenOverviewEditorHandler" command="_mS8NUDE6EeWJqMEyqBbxQA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_UPEqYIh9EeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.overview.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.handlers.CreateAlternativeHandler" command="_O1bsMIh9EeWtgv-_M2130A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0W1qMGB_EeWayeVD4LyD5g" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="basic:PartDescriptor" xmi:id="_3fh5cGB_EeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor" label="Overview alternative" iconURI="platform:/plugin/eu.cloudscaleproject.env.overview/resources/icons/ic-overview.png" tooltip="Overview alternative editor" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.overview/eu.cloudscaleproject.env.overview.editors.OverviewEditor">

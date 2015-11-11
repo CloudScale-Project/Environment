@@ -5,7 +5,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
-import eu.cloudscaleproject.env.overview.wizard.OverviewSelectionWizard;
+import eu.cloudscaleproject.env.overview.wizard.CreateAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -54,7 +54,7 @@ public class OverviewSidebarComposite extends SidebarEditorComposite {
 	
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		OverviewSelectionWizard overviewWizard = new OverviewSelectionWizard(project);
+		CreateAlternativeSelectionWizard overviewWizard = new CreateAlternativeSelectionWizard(project);
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), overviewWizard);
 		wizardDialog.open();
 	}
