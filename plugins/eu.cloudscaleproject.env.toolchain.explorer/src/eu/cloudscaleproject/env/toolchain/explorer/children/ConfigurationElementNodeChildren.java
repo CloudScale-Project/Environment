@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
@@ -20,6 +21,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementEditorNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementNode;
+import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementResourceNode;
 import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
@@ -178,7 +180,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 				node = new AlternativeResourceNode(getNode().getContext(), (IFile)value);
 			}
 			if(value instanceof IProject){
-				node = new ConfigurationElementNode(getNode().getContext(), el, children); 
+				node = new ConfigurationElementResourceNode(getNode().getContext(), el, (IResource)value, children); 
 				node.setName(((IProject)value).getName());
 			}
 

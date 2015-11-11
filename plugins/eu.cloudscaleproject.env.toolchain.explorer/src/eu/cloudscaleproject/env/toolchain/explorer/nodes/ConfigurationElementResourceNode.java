@@ -7,23 +7,18 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.graphics.Image;
 
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerEditorNode;
+import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResourceNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 
-public class ConfigurationElementEditorNode extends ExplorerEditorNode{
+public class ConfigurationElementResourceNode extends ExplorerResourceNode{
 
-	public ConfigurationElementEditorNode(IEclipseContext context, IConfigurationElement el, IExplorerNodeChildren children) {
-		this(context, el, el.getAttribute("editor"), children);
-	}
-
-	public ConfigurationElementEditorNode(IEclipseContext context, IConfigurationElement el, String editorID, IExplorerNodeChildren children) {
-		
-		super(context, el.getAttribute("id"), editorID, children);
-		
+	public ConfigurationElementResourceNode(IEclipseContext context, IConfigurationElement el, IExplorerNodeChildren children) {
+		super(context, el.getAttribute("id"), children);
+			
 		String name = el.getAttribute("name");
-		String resourcePath = el.getAttribute("resource");
 		String defaultAction = el.getAttribute("action");
+		String resourcePath = el.getAttribute("resource");
 
 		IResource resource = null;
 		if(resourcePath != null && !resourcePath.isEmpty()){
@@ -32,14 +27,29 @@ public class ConfigurationElementEditorNode extends ExplorerEditorNode{
 				resource = project.getFile(Path.fromPortableString(resourcePath));
 			}
 		}
-		setResource(resource);
 		
+		setResource(resource);
+
 		setName(name);
 		setDefaultAction(defaultAction);
 		
 		Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
 		setIcon(icon, false);
+	}
 
+	public ConfigurationElementResourceNode(IEclipseContext context, IConfigurationElement el, IResource resource, IExplorerNodeChildren children) {
+		super(context, el.getAttribute("id"), children);
+			
+		String name = el.getAttribute("name");
+		String defaultAction = el.getAttribute("action");
+
+		setResource(resource);
+
+		setName(name);
+		setDefaultAction(defaultAction);
+		
+		Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
+		setIcon(icon, false);
 	}
 
 }

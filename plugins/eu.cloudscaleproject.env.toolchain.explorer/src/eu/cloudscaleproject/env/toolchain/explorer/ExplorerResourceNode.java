@@ -19,9 +19,11 @@ public class ExplorerResourceNode extends ExplorerNode{
 	public void setResource(IResource resource){
 		this.resource = resource;
 		if(resource != null){
+			this.getContext().set(IResource.class, resource);
 			this.getContext().set(IExplorerConstants.NODE_RESOURCE, resource);
 		}
 		else{
+			this.getContext().remove(IResource.class);
 			this.getContext().remove(IExplorerConstants.NODE_RESOURCE);
 		}
 	}
