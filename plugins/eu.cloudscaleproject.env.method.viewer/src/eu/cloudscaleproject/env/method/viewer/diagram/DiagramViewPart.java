@@ -131,18 +131,12 @@ public class DiagramViewPart{
 			return;
 		}
 		
-		System.out.println(diagram == null ? "null" : diagram.getProject());
-		System.out.flush();
-		
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {
 				if(diagram == null){
 
-		System.out.println("Async: null");
-		System.out.flush();
-					
 					part.getContext().set(IProject.class, null);
 					
 					stackLayout.topControl = noDiagramComposite;
@@ -150,9 +144,6 @@ public class DiagramViewPart{
 					DiagramViewPart.this.composite.redraw();
 				}
 				else{
-
-		System.out.println("Async: project");
-		System.out.flush();
 
 					part.getContext().set(IProject.class, diagram.getProject());
 					
