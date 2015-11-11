@@ -27,6 +27,8 @@ public class ToolchainExtensions {
 	}
 	
 	public static final String TOOL_EXTENSION_NAME = "Tool";
+	public static final String EXPLORER_EXTENSION_NAME = "Explorer";
+	public static final String NODES_EXTENSION_NAME = "Nodes";
 	
 	public static final String NODE_EXTENSION_NAME = "Node";
 	public static final String NODE_PROXY_EXTENSION_NAME = "NodeProxy";
@@ -36,22 +38,23 @@ public class ToolchainExtensions {
 	private List<IConfigurationElement> toolElements = new ArrayList<IConfigurationElement>();
 	private List<IConfigurationElement> resourceProviderFactoryElements = new ArrayList<IConfigurationElement>();
 	
-	private List<IConfigurationElement> nodes = new ArrayList<IConfigurationElement>();
-	private List<IConfigurationElement> proxyNodes = new ArrayList<IConfigurationElement>();
+	private List<IConfigurationElement> explorerNodes = new ArrayList<IConfigurationElement>();
+	private List<IConfigurationElement> explorerProxyNodes = new ArrayList<IConfigurationElement>();
+	private List<IConfigurationElement> otherNodes = new ArrayList<IConfigurationElement>();
 
 	public List<IConfigurationElement> getToolElements(){
 		return new ArrayList<IConfigurationElement>(toolElements);
 	}
 	
-	public List<IConfigurationElement> getNodeElements(){
-		return new ArrayList<IConfigurationElement>(nodes);
+	public List<IConfigurationElement> getExplorerElements(){
+		return new ArrayList<IConfigurationElement>(explorerNodes);
 	}
 	
-	public List<IConfigurationElement> findProxyNodes(IConfigurationElement element){
+	public List<IConfigurationElement> findExplorerProxyNodes(IConfigurationElement element){
 		
 		List<IConfigurationElement> out = new ArrayList<IConfigurationElement>();
 		
-		for(IConfigurationElement el : proxyNodes){
+		for(IConfigurationElement el : explorerProxyNodes){
 			if(element.getAttribute("id").equals(el.getAttribute("id"))){
 				out.add(el);
 			}
@@ -60,6 +63,11 @@ public class ToolchainExtensions {
 	}
 	
 	public IConfigurationElement findNodeElement(String id){
+		
+		List<IConfigurationElement> nodes = new ArrayList<IConfigurationElement>();
+		nodes.addAll(otherNodes);
+		nodes.addAll(explorerNodes);
+		
 		return doFindNodeElement(nodes.toArray(new IConfigurationElement[nodes.size()]), id);		
 	}
 	
@@ -138,7 +146,9 @@ public class ToolchainExtensions {
 			IExtensionPoint point = registry.getExtensionPoint("eu.cloudscaleproject.env.toolchain.tool");
 					
 			for(IExtension extension : point.getExtensions()){
+				
 				for(IConfigurationElement el : extension.getConfigurationElements()){
+					
 					if(el.getName().equals(TOOL_EXTENSION_NAME)){
 						
 						toolElements.add(el);
@@ -148,16 +158,33 @@ public class ToolchainExtensions {
 						}
 											
 					}
-					if(el.getName().equals(NODE_EXTENSION_NAME)){
-						nodes.add(el);
+					if(el.getName().equals(EXPLORER_EXTENSION_NAME)){
+
+						for(IConfigurationElement child : el.getChildren()){
+							
+							if(child.getName().equals(NODE_EXTENSION_NAME)){
+								explorerNodes.add(child);
+							}
+							if(child.getName().equals(NODE_PROXY_EXTENSION_NAME)){
+								explorerProxyNodes.add(child);
+							}
+							
+						}
+						
 					}
-					if(el.getName().equals(NODE_PROXY_EXTENSION_NAME)){
-						proxyNodes.add(el);
+					if(el.getName().equals(NODES_EXTENSION_NAME)){
+						
+						for(IConfigurationElement child : el.getChildren()){
+							otherNodes.add(child);
+						}
+
 					}
+					
 				}
 			}
 			
-			Collections.sort(nodes, comparator);
+			Collections.sort(explorerNodes, comparator);
+			Collections.sort(otherNodes, comparator);
 			Collections.sort(resourceProviderFactoryElements, comparator);
 			Collections.sort(toolElements, comparator);
 		}

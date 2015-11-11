@@ -29,7 +29,7 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 
 	@Override
 	public List<? extends Object> getKeys() {
-		return ToolchainExtensions.getInstance().getNodeElements();
+		return ToolchainExtensions.getInstance().getExplorerElements();
 	}
 
 	@Override

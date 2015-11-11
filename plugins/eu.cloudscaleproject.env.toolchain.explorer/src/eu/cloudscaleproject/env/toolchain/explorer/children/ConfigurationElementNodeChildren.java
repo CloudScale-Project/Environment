@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
@@ -29,8 +28,6 @@ import eu.cloudscaleproject.env.toolchain.resources.IExplorerContentRetriever;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
-	
-	private static final String CREATE_NEW_KEY_VALUE = "DynamicNode:createNew";
 	
 	private final PropertyChangeListener contentRetrieverListener = new PropertyChangeListener() {
 		
@@ -88,7 +85,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		
 		List<Object> keys = new ArrayList<Object>();
 
-		List<IConfigurationElement> proxyElements = ToolchainExtensions.getInstance().findProxyNodes(element);
+		List<IConfigurationElement> proxyElements = ToolchainExtensions.getInstance().findExplorerProxyNodes(element);
 		
 		List<IConfigurationElement> children = new ArrayList<IConfigurationElement>();
 		Collections.addAll(children, element.getChildren());
@@ -100,11 +97,11 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		for(IConfigurationElement el : children){
 			
 			if(ToolchainExtensions.NODE_EXTENSION_NAME.equals(el.getName())){
-				keys.add(new Key(el, el));
+				keys.add(new Key(el, null));
 			}
 			
 			if(ToolchainExtensions.NODE_RESOURCE_EXTENSION_NAME.equals(el.getName())){
-				keys.add(new Key(el, el));
+				keys.add(new Key(el, null));
 			}
 			
 			if(ToolchainExtensions.NODE_DYNAMIC_EXTENSION_NAME.equals(el.getName())){
@@ -121,10 +118,12 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 						
 						List<Object> contentList = contentRetriever.getChildren();
 						if(contentList.isEmpty()){
-							String action = el.getAttribute("action");
-							if(action != null && !action.isEmpty()){
-								keys.add(new Key(el, CREATE_NEW_KEY_VALUE));
+							
+							String emptyNodeID = el.getAttribute("empty");
+							if(emptyNodeID != null && !emptyNodeID.isEmpty()){
+								keys.add(new Key(el, null));
 							}
+							
 						}
 						else{
 							for(Object content : contentRetriever.getChildren()){
@@ -151,7 +150,24 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		
 		IExplorerNode node = null;
 		
-		if(value instanceof IConfigurationElement){
+		if(ToolchainExtensions.NODE_EXTENSION_NAME.equals(el.getName())){
+			
+			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
+			
+			String id = el.getAttribute("id");
+			String name = el.getAttribute("name");
+			String defaultAction = el.getAttribute("action");
+
+			node = new ConfigurationElementNode(getNode().getContext(), id, children);
+			node.setName(name);
+			node.setDefaultAction(defaultAction);
+			
+			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
+			node.setIcon(icon, false);
+		}
+		
+		if(ToolchainExtensions.NODE_RESOURCE_EXTENSION_NAME.equals(el.getName())){
+
 			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
 			
 			String id = el.getAttribute("id");
@@ -179,22 +195,26 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 			
 			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
 			node.setIcon(icon, false);
-		}
-		if(value instanceof IEditorInputResource){
-			ExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
-			node = new AlternativeNode(getNode().getContext(), el.getAttribute("editor"), (IEditorInputResource)value, children);
-		}
-		if(value instanceof IFile){
-			node = new AlternativeResourceNode(getNode().getContext(), (IFile)value);
+			
 		}
 		
-		if(value == CREATE_NEW_KEY_VALUE){
-			String defaultAction = el.getAttribute("action");
+		if(ToolchainExtensions.NODE_DYNAMIC_EXTENSION_NAME.equals(el.getName())){
+			
+			if(value == null){
+				String empty = el.getAttribute("empty");
+				IConfigurationElement emptyElement = ToolchainExtensions.getInstance().findNodeElement(empty);
+				if(emptyElement != null){
+					node = getChild(new Key(emptyElement, null));
+				}
+			}
+			if(value instanceof IEditorInputResource){
+				ExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
+				node = new AlternativeNode(getNode().getContext(), el.getAttribute("editor"), (IEditorInputResource)value, children);
+			}
+			if(value instanceof IFile){
+				node = new AlternativeResourceNode(getNode().getContext(), (IFile)value);
+			}
 
-			node = new ExplorerNode(getNode().getContext(), CREATE_NEW_KEY_VALUE, null);
-			node.setName("Create new alternative ...");
-			node.setIcon(ExplorerResources.ALTERNATIVE_CREATE_16, false);
-			node.setDefaultAction(defaultAction);
 		}
 		
 		return node;

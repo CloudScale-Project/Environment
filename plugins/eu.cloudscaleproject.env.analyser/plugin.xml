@@ -64,66 +64,93 @@
                name="Result">
          </ResourceProviderFactory>
       </Tool>
-      <Node
-            action="eu.cloudscaleproject.env.analyser.command.createalternative"
-            icon="resources/icons/ic-analyser-16.png"
-            id="eu.cloudscaleproject.env.analyser.toolNode"
-            name="Analyser">
-         <NodeDynamic
+      <Explorer
+            id="eu.cloudscaleproject.env.analyser.explorer"
+            name="Explorer">
+         <Node
                action="eu.cloudscaleproject.env.analyser.command.createalternative"
-               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-               editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
-               icon="resources/icons/input_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
-               name="Input alternative">
-            <Node
-                  action="eu.cloudscaleproject.env.analyser.command.createalternative"
-                  icon="resources/icons/ic-input-16.png"
-                  id="eu.cloudscaleproject.env.analyser.inputNode"
-                  name="Input">
-               <NodeDynamic
+               icon="resources/icons/ic-analyser-16.png"
+               id="eu.cloudscaleproject.env.analyser.toolNode"
+               name="Analyser">
+            <NodeDynamic
+                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                  editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserInput"
+                  empty="eu.cloudscaleproject.env.analyser.createalternative"
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput"
+                  name="Input alternative">
+               <Node
                      action="eu.cloudscaleproject.env.analyser.command.createpcmmodelwizard"
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                     id="eu.cloudscaleproject.env.analyser.NodeDynamic1"
-                     name="Input alternative model">
-               </NodeDynamic>
-            </Node>
-            <Node
-                  action="eu.cloudscaleproject.env.analyser.command.createalternative"
-                  icon="resources/icons/configuration_16.png"
-                  id="eu.cloudscaleproject.env.analyser.configurationsNode"
-                  name="Configurations">
-               <NodeDynamic
+                     icon="resources/icons/ic-input-16.png"
+                     id="eu.cloudscaleproject.env.analyser.inputNode"
+                     name="Input">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        empty="eu.cloudscaleproject.env.analyser.newmodel"
+                        id="eu.cloudscaleproject.env.analyser.NodeDynamic1"
+                        name="Input alternative model">
+                  </NodeDynamic>
+               </Node>
+               <Node
                      action="eu.cloudscaleproject.env.analyser.command.createalternative"
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
-                     name="Configuration alternative">
+                     icon="resources/icons/configuration_16.png"
+                     id="eu.cloudscaleproject.env.analyser.configurationsNode"
+                     name="Configurations">
                   <NodeDynamic
-                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                        id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
-                        name="Configuration content">
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserConfig"
+                        empty="eu.cloudscaleproject.env.analyser.createconfiguration"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf"
+                        name="Configuration alternative">
+                     <NodeDynamic
+                           class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                           id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
+                           name="Configuration content">
+                     </NodeDynamic>
                   </NodeDynamic>
-               </NodeDynamic>
-            </Node>
-            <Node
-                  icon="resources/icons/ic-results-16.png"
-                  id="eu.cloudscaleproject.env.analyser.resultsNode"
-                  name="Results">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
-                     name="Result resources">
+               </Node>
+               <Node
+                     icon="resources/icons/ic-results-16.png"
+                     id="eu.cloudscaleproject.env.analyser.resultsNode"
+                     name="Results">
                   <NodeDynamic
-                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                        id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
-                        name="Result content">
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.analyser.partdescriptor.analyserResults"
+                        empty="eu.cloudscaleproject.env.analyser.noresults"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserRes"
+                        name="Result resources">
+                     <NodeDynamic
+                           class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                           id="eu.cloudscaleproject.env.analyser.NodeDynamic4"
+                           name="Result content">
+                     </NodeDynamic>
                   </NodeDynamic>
-               </NodeDynamic>
-            </Node>
-         </NodeDynamic>
-      </Node>
+               </Node>
+            </NodeDynamic>
+         </Node>
+      </Explorer>
+      <Nodes
+            id="eu.cloudscaleproject.env.analyser.nodes"
+            name="Nodes">
+         <Node
+               action="eu.cloudscaleproject.env.analyser.command.createalternative"
+               id="eu.cloudscaleproject.env.analyser.createalternative"
+               name="Create new alternative...">
+         </Node>
+         <Node
+               id="eu.cloudscaleproject.env.analyser.createconfiguration"
+               name="Create new configuration...">
+         </Node>
+         <Node
+               action="eu.cloudscaleproject.env.analyser.command.createpcmmodelwizard"
+               id="eu.cloudscaleproject.env.analyser.newmodel"
+               name="Create new model...">
+         </Node>
+         <Node
+               id="eu.cloudscaleproject.env.analyser.noresults"
+               name="No results">
+         </Node>
+      </Nodes>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">

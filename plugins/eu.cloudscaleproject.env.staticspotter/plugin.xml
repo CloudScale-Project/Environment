@@ -54,54 +54,77 @@
                name="Results">
          </ResourceProviderFactory>
       </Tool>
-      <Node
-            action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
-            icon="resources/icons/ic-spotter-static-16.png"
-            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
-            name="Static Spotter"
-            position="30">
-         <NodeDynamic
+      <Explorer
+            id="eu.cloudscaleproject.env.staticspotter.Explorer"
+            name="Explorer">
+         <Node
                action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
-               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-               editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"
-               name="Input alternative">
-            <Node
-                  icon="resources/icons/ic-input-16.png"
-                  id="eu.cloudscaleproject.env.staticspotter.nodeInput"
-                  name="Input">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                     id="eu.cloudscaleproject.env.staticspotter.NodeDynamic1"
-                     name="Input alternative content">
-               </NodeDynamic>
-            </Node>
-            <Node
-                  action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
-                  icon="resources/icons/configuration_16.png"
-                  id="eu.cloudscaleproject.env.staticspotter.nodeConfigurations"
-                  name="Configurations">
-               <NodeDynamic
+               icon="resources/icons/ic-spotter-static-16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterSta"
+               name="Static Spotter"
+               position="30">
+            <NodeDynamic
+                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                  editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.inputEditor"
+                  empty="eu.cloudscaleproject.env.staticspotter.createalternative"
+                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput"
+                  name="Input alternative">
+               <Node
+                     icon="resources/icons/ic-input-16.png"
+                     id="eu.cloudscaleproject.env.staticspotter.nodeInput"
+                     name="Input">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        id="eu.cloudscaleproject.env.staticspotter.NodeDynamic1"
+                        name="Input alternative content">
+                  </NodeDynamic>
+               </Node>
+               <Node
                      action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"
-                     name="Configuration alternative">
-               </NodeDynamic>
-            </Node>
-            <Node
-                  icon="resources/icons/ic-results-16.png"
-                  id="eu.cloudscaleproject.env.staticspotter.nodeResults"
-                  name="Results">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"
-                     name="Result alternatives">
-               </NodeDynamic>
-            </Node>
-         </NodeDynamic>
-      </Node>
+                     icon="resources/icons/configuration_16.png"
+                     id="eu.cloudscaleproject.env.staticspotter.nodeConfigurations"
+                     name="Configurations">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.configEditor"
+                        empty="eu.cloudscaleproject.env.staticspotter.createconfiguration"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf"
+                        name="Configuration alternative">
+                  </NodeDynamic>
+               </Node>
+               <Node
+                     icon="resources/icons/ic-results-16.png"
+                     id="eu.cloudscaleproject.env.staticspotter.nodeResults"
+                     name="Results">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.staticspotter.partdescriptor.resultEditor"
+                        empty="eu.cloudscaleproject.env.staticspotter.noresults"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes"
+                        name="Result alternatives">
+                  </NodeDynamic>
+               </Node>
+            </NodeDynamic>
+         </Node>
+      </Explorer>
+      <Nodes
+            id="eu.cloudscaleproject.env.staticspotter.nodes"
+            name="Nodes">
+         <Node
+               action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
+               id="eu.cloudscaleproject.env.staticspotter.createalternative"
+               name="Create alternative...">
+         </Node>
+         <Node
+               action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
+               id="eu.cloudscaleproject.env.staticspotter.createconfiguration"
+               name="Create configuration...">
+         </Node>
+         <Node
+               id="eu.cloudscaleproject.env.staticspotter.noresults"
+               name="No results">
+         </Node>
+      </Nodes>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">

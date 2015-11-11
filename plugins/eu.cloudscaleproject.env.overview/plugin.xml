@@ -34,29 +34,42 @@
                name="Overview">
          </ResourceProviderFactory>
       </Tool>
-      <NodeProxy
-            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
-            name="Proxy to ScaleDL node">
+      <Explorer
+            id="eu.cloudscaleproject.env.overview.explorer"
+            name="Explorer">
+         <NodeProxy
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.scaleDl"
+               name="Proxy to ScaleDL node">
+            <Node
+                  action="eu.cloudscaleproject.env.overview.command.createalternative"
+                  icon="resources/icons/ic-overview.png"
+                  id="eu.cloudscaleproject.env.overview.nodeOverview"
+                  name="Overview"
+                  position="10">
+               <NodeDynamic
+                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                     editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
+                     empty="eu.cloudscaleproject.env.overview.createalternative"
+                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
+                     name="Overview alternative">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        id="eu.cloudscaleproject.env.overview.nodeContent"
+                        name="Overview alternative content">
+                  </NodeDynamic>
+               </NodeDynamic>
+            </Node>
+         </NodeProxy>
+      </Explorer>
+      <Nodes
+            id="eu.cloudscaleproject.env.overview.nodes"
+            name="Nodes">
          <Node
                action="eu.cloudscaleproject.env.overview.command.createalternative"
-               icon="resources/icons/ic-overview.png"
-               id="eu.cloudscaleproject.env.overview.nodeOverview"
-               name="Overview"
-               position="10">
-            <NodeDynamic
-                  action="eu.cloudscaleproject.env.overview.command.createalternative"
-                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                  editor="eu.cloudscaleproject.env.overview.partdescriptor.overviewEditor"
-                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"
-                  name="Overview alternative">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                     id="eu.cloudscaleproject.env.overview.nodeContent"
-                     name="Overview alternative content">
-               </NodeDynamic>
-            </NodeDynamic>
+               id="eu.cloudscaleproject.env.overview.createalternative"
+               name="Create alternative...">
          </Node>
-      </NodeProxy>
+      </Nodes>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">

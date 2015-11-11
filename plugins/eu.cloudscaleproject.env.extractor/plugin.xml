@@ -53,60 +53,89 @@
                name="Results">
          </ResourceProviderFactory>
       </Tool>
-      <Node
-            action="eu.cloudscaleproject.env.extractor.command.createalternative"
-            icon="resources/icons/ic-extractor-16.png"
-            id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
-            name="Extractor"
-            position="20">
-         <NodeDynamic
+      <Explorer
+            id="eu.cloudscaleproject.env.extractor.Explorer"
+            name="Explorer">
+         <Node
                action="eu.cloudscaleproject.env.extractor.command.createalternative"
-               class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-               editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
-               icon="resources/icons/input_16.png"
-               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
-               name="Input alternative">
-            <Node
-                  icon="resources/icons/ic-input-16.png"
-                  id="eu.cloudscaleproject.env.extractor.nodeInput"
-                  name="Input">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                     id="eu.cloudscaleproject.env.extractor.nodeInputalternativeContent"
-                     name="Input alternative content">
-               </NodeDynamic>
-            </Node>
-            <Node
-                  action="eu.cloudscaleproject.env.extractor.command.createalternative"
-                  icon="resources/icons/configuration_16.png"
-                  id="eu.cloudscaleproject.env.extractor.nodeConfiguration"
-                  name="Configurations">
-               <NodeDynamic
-                     action="eu.cloudscaleproject.env.extractor.command.createalternative"
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
-                     name="Configuration alternative">
-               </NodeDynamic>
-            </Node>
-            <Node
-                  icon="resources/icons/ic-results-16.png"
-                  id="eu.cloudscaleproject.env.extractor.nodeResults"
-                  name="Results">
-               <NodeDynamic
-                     class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
-                     editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
-                     id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
-                     name="Result alternatives">
+               icon="resources/icons/ic-extractor-16.png"
+               id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractor"
+               name="Extractor"
+               position="20">
+            <NodeDynamic
+                  class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                  editor="eu.cloudscaleproject.env.extractor.partdescriptor.inputEditor"
+                  empty="eu.cloudscaleproject.env.extractor.createalternative"
+                  icon="resources/icons/input_16.png"
+                  id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput"
+                  name="Input alternative">
+               <Node
+                     icon="resources/icons/ic-input-16.png"
+                     id="eu.cloudscaleproject.env.extractor.nodeInput"
+                     name="Input">
                   <NodeDynamic
                         class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
-                        id="eu.cloudscaleproject.env.extractor.resultNodeContent"
-                        name="Result alternative content">
+                        empty="eu.cloudscaleproject.env.extractor.importjavaproject"
+                        id="eu.cloudscaleproject.env.extractor.nodeInputalternativeContent"
+                        name="Input alternative content">
                   </NodeDynamic>
-               </NodeDynamic>
-            </Node>
-         </NodeDynamic>
-      </Node>
+               </Node>
+               <Node
+                     action="eu.cloudscaleproject.env.extractor.command.createalternative"
+                     icon="resources/icons/configuration_16.png"
+                     id="eu.cloudscaleproject.env.extractor.nodeConfiguration"
+                     name="Configurations">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.extractor.partdescriptor.configEditor"
+                        empty="eu.cloudscaleproject.env.extractor.createconfiguration"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf"
+                        name="Configuration alternative">
+                  </NodeDynamic>
+               </Node>
+               <Node
+                     icon="resources/icons/ic-results-16.png"
+                     id="eu.cloudscaleproject.env.extractor.nodeResults"
+                     name="Results">
+                  <NodeDynamic
+                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesRetriever"
+                        editor="eu.cloudscaleproject.env.extractor.partdescriptor.resultEditor"
+                        empty="eu.cloudscaleproject.env.extractor.noresults"
+                        id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes"
+                        name="Result alternatives">
+                     <NodeDynamic
+                           class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                           id="eu.cloudscaleproject.env.extractor.resultNodeContent"
+                           name="Result alternative content">
+                     </NodeDynamic>
+                  </NodeDynamic>
+               </Node>
+            </NodeDynamic>
+         </Node>
+      </Explorer>
+      <Nodes
+            id="eu.cloudscaleproject.env.extractor.nodes"
+            name="Nodes">
+         <Node
+               action="eu.cloudscaleproject.env.extractor.command.createalternative"
+               id="eu.cloudscaleproject.env.extractor.createalternative"
+               name="Create new alternative...">
+         </Node>
+         <Node
+               action="eu.cloudscaleproject.env.extractor.command.createalternative"
+               id="eu.cloudscaleproject.env.extractor.createconfiguration"
+               name="Create new configuration...">
+         </Node>
+         <Node
+               action="org.eclipse.ui.file.import"
+               id="eu.cloudscaleproject.env.extractor.importjavaproject"
+               name="Import java project...">
+         </Node>
+         <Node
+               id="eu.cloudscaleproject.env.extractor.noresults"
+               name="No results">
+         </Node>
+      </Nodes>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
