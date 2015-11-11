@@ -189,11 +189,11 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		}
 		
 		if(value == CREATE_NEW_KEY_VALUE){
-			String name = el.getAttribute("name");
 			String defaultAction = el.getAttribute("action");
 
 			node = new ExplorerNode(getNode().getContext(), CREATE_NEW_KEY_VALUE, null);
-			node.setName("Create new " + name.toLowerCase() + "...");
+			node.setName("Create new alternative ...");
+			node.setIcon(ExplorerResources.ALTERNATIVE_CREATE_16, false);
 			node.setDefaultAction(defaultAction);
 		}
 		
