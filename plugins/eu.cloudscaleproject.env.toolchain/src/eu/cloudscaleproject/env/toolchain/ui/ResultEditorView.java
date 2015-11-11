@@ -28,7 +28,8 @@ public class ResultEditorView extends AbstractEditorView
 			@Override
 			protected void initButtons() {
 				CLabel lblUp = createContextButton("Input", IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
-				CLabel lblConfiguration = createContextButton("Configuration", IconSetResources.getImage("gear", COLOR.BLUE, SIZE.SIZE_24));
+				CLabel lblConfiguration = createContextButton("Configuration", 
+						loadImage("resources/icons/ic-configurations-white-24.png"));
 				createSeparator();
 
 				lblUp.addMouseListener(new MouseAdapter() {

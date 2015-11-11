@@ -31,9 +31,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import eu.cloudscaleproject.env.common.IconSetResources;
-import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
-import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.notification.StatusManager;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
@@ -219,9 +216,9 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			protected void initButtons()
 			{
 				CLabel lblUp = createContextButton("Input",
-						IconSetResources.getImage("go_out", COLOR.BLUE, SIZE.SIZE_24));
+						loadImage("resources/icons/ic-configurations-white-24.png"));
 				CLabel lblResults = createContextButton("Results",
-						IconSetResources.getImage("stats_3", COLOR.BLUE, SIZE.SIZE_24));
+						loadImage("resources/icons/ic-results-white-24.png"));
 				createSeparator();
 
 				lblResults.addMouseListener(new MouseAdapter()

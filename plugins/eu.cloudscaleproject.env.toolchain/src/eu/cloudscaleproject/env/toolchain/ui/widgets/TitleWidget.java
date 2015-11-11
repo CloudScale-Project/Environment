@@ -1,9 +1,13 @@
 package eu.cloudscaleproject.env.toolchain.ui.widgets;
 
+import java.util.HashMap;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Cursor;
@@ -15,23 +19,24 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import eu.cloudscaleproject.env.common.ColorResources;
-import eu.cloudscaleproject.env.common.IconSetResources;
-import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
-import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.common.dialogs.TextInputDialog;
-import eu.cloudscaleproject.env.common.ui.GradientComposite;
 import eu.cloudscaleproject.env.common.ui.resources.SWTResourceManager;
+import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class TitleWidget extends GradientComposite
+public class TitleWidget extends Composite
 {
 
-	private Label lblTitle;
+	private CLabel lblTitle;
 	private IEditorInput alternative;
 	private Composite buttonsContainer;
+	
+	private HashMap<CLabel, String> contextButtonsMap = new HashMap<>();
+	private boolean contextButtonsVisible = true;
 
 	/**
 	 * Create the composite.
@@ -46,18 +51,17 @@ public class TitleWidget extends GradientComposite
 		this.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		this.setLayout(new GridLayout(3, false));
 		
-		this.setGradientDirection(false);
-		this.setGradientColorStart(ColorResources.COLOR_CS_BLUE);
-		this.setGradientColorEnd(ColorResources.COLOR_CS_BLUE_LIGHT);
-
-		lblTitle = new Label(this, SWT.NONE);
+		this.setBackground(ColorResources.COLOR_CS_BLUE_LIGHT);
+		lblTitle = new CLabel(this, SWT.NONE);
 		lblTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblTitle.setFont(SWTResourceManager.getFont("Sans", 14, SWT.NORMAL));
 		lblTitle.setForeground(ColorResources.COLOR_CS_BLUE_DARK);
+		lblTitle.setLeftMargin(4);
+		lblTitle.setRightMargin(0);
 		
 		Label lblIconEdit = new Label(this, SWT.NONE);
 		lblIconEdit.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, true, 1, 1));
-		lblIconEdit.setImage(IconSetResources.getImage("write", COLOR.BLUE, SIZE.SIZE_16));
+		lblIconEdit.setImage(loadImage("resources/icons/write-blue-24.png"));
 		lblIconEdit.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 		
 		buttonsContainer = new Composite(this, SWT.NONE);
@@ -81,6 +85,17 @@ public class TitleWidget extends GradientComposite
 				showTitleDialog();
 			}
 		});
+		
+		this.addControlListener(new ControlAdapter(){
+			@Override
+			public void controlResized(ControlEvent e)
+			{
+				if (TitleWidget.this.getSize().x < 600)
+					setContextButtonsTextVisible(false);
+				else
+					setContextButtonsTextVisible(true);
+			}
+		});
 
 		updateTitle();
 		initButtons();
@@ -88,7 +103,7 @@ public class TitleWidget extends GradientComposite
 	
 	protected void initButtons ()
 	{
-		CLabel lblDelete = createContextButton("", IconSetResources.getImage("trash", COLOR.BLUE, SIZE.SIZE_24));
+		CLabel lblDelete = createContextButton("", loadImage("resources/icons/trash-white-24.png"));
 		lblDelete.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -100,10 +115,15 @@ public class TitleWidget extends GradientComposite
 	protected CLabel createContextButton (String text, Image icon)
 	{
 		CLabel lbl = new CLabel(buttonsContainer, SWT.NONE);
+		lbl.setRightMargin(10);
+		lbl.setLeftMargin(8);
 		lbl.setText(text);
 		lbl.setImage(icon);
-		lbl.setBackground(ColorResources.COLOR_WHITE);
+		lbl.setBackground(ColorResources.COLOR_CS_BLUE);
+		lbl.setForeground(ColorResources.COLOR_WHITE);
 		lbl.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
+		
+		contextButtonsMap.put(lbl, text);
 		
 		return lbl;
 	}
@@ -165,11 +185,37 @@ public class TitleWidget extends GradientComposite
 		return lblTitle.getText();
 	}
 	
+	private void setContextButtonsTextVisible (boolean visible)
+	{
+		if (this.contextButtonsVisible == visible) return;
+
+		for (CLabel lbl : contextButtonsMap.keySet())
+		{
+			if (visible)
+			{
+				lbl.setText(contextButtonsMap.get(lbl));
+			}
+			else
+			{
+				lbl.setText("");
+			}
+		}
+		
+		this.contextButtonsVisible = visible;
+		
+		layout();
+	}
+	
 
 	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
+	}
+
+	protected static Image loadImage(String filepath)
+	{
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, filepath).createImage();
 	}
 
 }

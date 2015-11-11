@@ -14,9 +14,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.common.CommandExecutor;
-import eu.cloudscaleproject.env.common.IconSetResources;
-import eu.cloudscaleproject.env.common.IconSetResources.COLOR;
-import eu.cloudscaleproject.env.common.IconSetResources.SIZE;
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -46,8 +43,10 @@ public class InputEditorView extends AbstractEditorView
 		new TitleWidget(getHeader(), SWT.NONE, input){
 			@Override
 			protected void initButtons() {
-				CLabel lblConfigurations = createContextButton("Configurations", IconSetResources.getImage("gear", COLOR.BLUE, SIZE.SIZE_24));
-				CLabel lblResults = createContextButton("Results", IconSetResources.getImage("stats_3", COLOR.BLUE, SIZE.SIZE_24));
+				CLabel lblConfigurations = createContextButton("Configurations", 
+						loadImage("resources/icons/ic-configurations-white-24.png"));
+				CLabel lblResults = createContextButton("Results", 
+						loadImage("resources/icons/ic-results-white-24.png"));
 				
 				lblConfigurations.addMouseListener(new MouseAdapter() {
 					@Override
