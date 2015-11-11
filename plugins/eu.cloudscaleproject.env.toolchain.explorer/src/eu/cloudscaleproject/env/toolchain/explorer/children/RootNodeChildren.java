@@ -58,7 +58,7 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 		ProjectResourceRegistry resourceRegistry = (ProjectResourceRegistry)key;
 		IProject project = resourceRegistry.getProject();
 		
-		IExplorerNode node;
+		ExplorerResourceNode node;
 		
 		if(ExplorerProjectPaths.isCloudScaleProject(project)){
 			node = new ProjectNode(getNode().getContext(), resourceRegistry);
@@ -66,7 +66,8 @@ public class RootNodeChildren extends ExplorerNodeChildren{
 			node.setIcon(CommonResources.PROJECT_16, false);
 		}
 		else{
-			node = new ExplorerResourceNode(getNode().getContext(), project.getName(), project, null);
+			node = new ExplorerResourceNode(getNode().getContext(), project.getName(), null);
+			node.setResource(project);
 			node.setName(project.getName());
 			node.setIcon(CommonResources.OPERATION, false);
 		}

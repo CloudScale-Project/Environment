@@ -9,15 +9,11 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNodeChildren;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.AlternativeNode;
@@ -151,51 +147,15 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 		IExplorerNode node = null;
 		
 		if(ToolchainExtensions.NODE_EXTENSION_NAME.equals(el.getName())){
-			
-			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
-			
-			String id = el.getAttribute("id");
-			String name = el.getAttribute("name");
-			String defaultAction = el.getAttribute("action");
 
-			node = new ConfigurationElementNode(getNode().getContext(), id, children);
-			node.setName(name);
-			node.setDefaultAction(defaultAction);
-			
-			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
-			node.setIcon(icon, false);
+			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
+			node = new ConfigurationElementNode(getNode().getContext(), el, children);
 		}
 		
 		if(ToolchainExtensions.NODE_RESOURCE_EXTENSION_NAME.equals(el.getName())){
 
 			IExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
-			
-			String id = el.getAttribute("id");
-			String name = el.getAttribute("name");
-			String editorID = el.getAttribute("editor");
-			String resourcePath = el.getAttribute("resource");
-			String defaultAction = el.getAttribute("action");
-			
-			if(editorID == null || editorID.isEmpty()){
-				node = new ConfigurationElementNode(getNode().getContext(), id, children);
-			}
-			else{
-				IResource resource = null;
-				if(resourcePath != null && !resourcePath.isEmpty()){
-					IProject project = getNode().getContext().get(IProject.class);
-					if(project != null){
-						resource = project.getFile(Path.fromPortableString(resourcePath));
-					}
-				}
-				node = new ConfigurationElementEditorNode(getNode().getContext(), id, editorID, resource, children);
-			}
-			
-			node.setName(name);
-			node.setDefaultAction(defaultAction);
-			
-			Image icon = ExplorerResources.getImage(el, "icon", 16, 16);
-			node.setIcon(icon, false);
-			
+			node = new ConfigurationElementEditorNode(getNode().getContext(), el, children);
 		}
 		
 		if(ToolchainExtensions.NODE_DYNAMIC_EXTENSION_NAME.equals(el.getName())){
@@ -204,15 +164,22 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 				String empty = el.getAttribute("empty");
 				IConfigurationElement emptyElement = ToolchainExtensions.getInstance().findNodeElement(empty);
 				if(emptyElement != null){
-					node = getChild(new Key(emptyElement, null));
+					ExplorerNodeChildren children = new ConfigurationElementNodeChildren(emptyElement);
+					node = getChild(new Key(emptyElement, children));
 				}
 			}
+			
+			ExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
+			
 			if(value instanceof IEditorInputResource){
-				ExplorerNodeChildren children = new ConfigurationElementNodeChildren(el);
 				node = new AlternativeNode(getNode().getContext(), el.getAttribute("editor"), (IEditorInputResource)value, children);
 			}
 			if(value instanceof IFile){
 				node = new AlternativeResourceNode(getNode().getContext(), (IFile)value);
+			}
+			if(value instanceof IProject){
+				node = new ConfigurationElementNode(getNode().getContext(), el, children); 
+				node.setName(((IProject)value).getName());
 			}
 
 		}

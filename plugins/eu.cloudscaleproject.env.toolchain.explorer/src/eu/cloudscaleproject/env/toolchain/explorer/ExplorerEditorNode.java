@@ -41,11 +41,22 @@ public class ExplorerEditorNode extends ExplorerResourceNode{
 	@Inject
 	private CommandExecutor commandExecutor;
 	
-	public ExplorerEditorNode(IEclipseContext context, String id, String editorID, IResource resource, IExplorerNodeChildren childFactory) {
-		super(context, id, resource, childFactory);
+	public ExplorerEditorNode(IEclipseContext context, String id, String editorID, IExplorerNodeChildren childFactory) {
+		super(context, id, childFactory);
 		
-		getContext().set(IExplorerConstants.NODE_DATA, resource);
 		getContext().set(IExplorerConstants.NODE_EDITOR_ID, editorID);
+	}
+	
+	@Override
+	public void setResource(IResource resource) {
+		super.setResource(resource);
+		
+		if(resource != null){
+			getContext().set(IExplorerConstants.NODE_DATA, resource);
+		}
+		else{
+			getContext().remove(IExplorerConstants.NODE_DATA);
+		}
 	}
 	
 	public void openEditor(){

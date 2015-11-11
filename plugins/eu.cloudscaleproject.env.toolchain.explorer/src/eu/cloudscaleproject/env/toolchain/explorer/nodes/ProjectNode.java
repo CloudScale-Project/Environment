@@ -17,9 +17,9 @@ public class ProjectNode extends ExplorerResourceNode{
 
 	public ProjectNode(IEclipseContext context, ProjectResourceRegistry projectResourceRegistry) {
 		super(context, projectResourceRegistry.getProject().getName(), 
-					   projectResourceRegistry.getProject(), 
 					   new ProjectNodeChildren(projectResourceRegistry, false));
 		
+		setResource(projectResourceRegistry.getProject());
 		getContext().set(IExplorerConstants.NODE_DATA, projectResourceRegistry.getProject());
 		getContext().set(IProject.class, projectResourceRegistry.getProject());
 	}

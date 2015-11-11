@@ -74,10 +74,10 @@
                      id="eu.cloudscaleproject.env.extractor.nodeInput"
                      name="Input">
                   <NodeDynamic
-                        class="eu.cloudscaleproject.env.toolchain.explorer.ExplorerAlternativesContentRetriever"
+                        class="eu.cloudscaleproject.env.extractor.ExplorerProjectProvider"
                         empty="eu.cloudscaleproject.env.extractor.importjavaproject"
                         id="eu.cloudscaleproject.env.extractor.nodeInputalternativeContent"
-                        name="Input alternative content">
+                        name="Java projects">
                   </NodeDynamic>
                </Node>
                <Node

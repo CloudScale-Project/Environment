@@ -10,14 +10,19 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
  */
 public class ExplorerResourceNode extends ExplorerNode{
 
-	private final IResource resource;
+	private IResource resource;
 		
-	public ExplorerResourceNode(IEclipseContext context, String id, IResource resource, IExplorerNodeChildren childFactory) {
+	public ExplorerResourceNode(IEclipseContext context, String id, IExplorerNodeChildren childFactory) {
 		super(context, id, childFactory);
-		
+	}
+	
+	public void setResource(IResource resource){
 		this.resource = resource;
 		if(resource != null){
 			this.getContext().set(IExplorerConstants.NODE_RESOURCE, resource);
+		}
+		else{
+			this.getContext().remove(IExplorerConstants.NODE_RESOURCE);
 		}
 	}
 	

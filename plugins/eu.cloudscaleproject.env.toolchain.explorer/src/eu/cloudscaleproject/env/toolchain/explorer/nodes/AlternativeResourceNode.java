@@ -56,7 +56,9 @@ public class AlternativeResourceNode extends ExplorerEditorNode{
 	};
 	
 	public AlternativeResourceNode(IEclipseContext context, IFile file) {
-		super(context, file.getName(), null, file, null);
+		super(context, file.getName(), null, null);
+		
+		setResource(file);
 		
 		ModelType type = ModelType.getModelType(file.getFileExtension());
 		if(type != null){

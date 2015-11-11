@@ -135,12 +135,13 @@ public class AlternativeNode extends ExplorerEditorNode{
 	}; 
 	
 	public AlternativeNode(IEclipseContext context, String editorID, IEditorInputResource alternative, ExplorerNodeChildren children) {
-		super(context, alternative.getID(), editorID, alternative.getResource(), children);
+		super(context, alternative.getID(), editorID, children);
 		
 		this.alternative = alternative;
 		this.alternative.addStatusChangeListener(alternativeStatusListener);
 
 		setName(alternative.getName());
+		setResource(alternative.getResource());
 		
 		initIcon(alternative);
 		getContext().set(ILabelDecorator.class, DEFAULT_DECORATOR);

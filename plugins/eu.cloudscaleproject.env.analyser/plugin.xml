@@ -138,6 +138,7 @@
                name="Create new alternative...">
          </Node>
          <Node
+               action="eu.cloudscaleproject.env.analyser.command.createalternative"
                id="eu.cloudscaleproject.env.analyser.createconfiguration"
                name="Create new configuration...">
          </Node>

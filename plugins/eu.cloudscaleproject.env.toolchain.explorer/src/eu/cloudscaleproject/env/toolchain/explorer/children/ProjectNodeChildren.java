@@ -3,11 +3,9 @@ package eu.cloudscaleproject.env.toolchain.explorer.children;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.swt.graphics.Image;
 
 import eu.cloudscaleproject.env.toolchain.ToolchainExtensions;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerNodeChildren;
-import eu.cloudscaleproject.env.toolchain.explorer.ExplorerResources;
 import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.nodes.ConfigurationElementNode;
 import eu.cloudscaleproject.env.toolchain.resources.ProjectResourceRegistry;
@@ -37,16 +35,8 @@ public class ProjectNodeChildren extends ExplorerNodeChildren{
 		
 		IConfigurationElement tool = (IConfigurationElement)key;
 		
-		String id = tool.getAttribute("id");
-		String name = tool.getAttribute("name");
-		String defaultAction = tool.getAttribute("action");
-		Image icon = ExplorerResources.getImage(tool, "icon", 16, 16);
-		
 		ConfigurationElementNodeChildren children = new ConfigurationElementNodeChildren(tool);
-		ConfigurationElementNode node = new ConfigurationElementNode(getNode().getContext(), id, children);		
-		node.setIcon(icon, false);
-		node.setName(name);
-		node.setDefaultAction(defaultAction);
+		ConfigurationElementNode node = new ConfigurationElementNode(getNode().getContext(), tool, children);		
 		
 		return node;
 	}
