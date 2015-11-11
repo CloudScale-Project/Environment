@@ -48,8 +48,8 @@ public class CreateEmptyInputWizard extends Wizard{
 		ResourceProvider provider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 		final InputAlternative alternative = (InputAlternative)provider.createNewResource(name, null);
 		
-		ModelUtils.executeCreateModels(alternative, selectedModels);		
 		OpenAlternativeUtil.openAlternative(alternative);
+		ModelUtils.executeCreateModels(alternative, selectedModels);		
 		
 		return true;
 	}
