@@ -11,9 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.common.util.URI;
@@ -22,7 +19,6 @@ import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -85,32 +81,11 @@ public class DiagramViewPart{
 
 			if(ValidationDiagramService.PROP_SHOW_DIAGRAM.equals(evt.getPropertyName())){
 
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						if(!pinDiagram){
-							showDiagram((ValidationDiagram)evt.getNewValue());
-						}
-					}
-				});
-			}
-		}
-	};
-	
-	private final IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
-	{
-		@Override
-		public void resourceChanged(IResourceChangeEvent event) {
-			Control control = stackLayout.topControl;
-			if(control instanceof ValidationDiagramComposite){
-				ValidationDiagramComposite vdc = (ValidationDiagramComposite)control;
-				ValidationDiagram diagram = vdc.getValidationDiagram();
-				IProject project = diagram.getProject();
-				if(project == null || !project.isAccessible()){
-					showDiagram(null);
+				if(!pinDiagram){
+					showDiagram((ValidationDiagram)evt.getNewValue());
 				}
 			}
+
 		}
 	};
 	
@@ -131,8 +106,6 @@ public class DiagramViewPart{
 		}
 		
 		showDiagram(diagramService.getActiveDiagram());
-
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 	}
 	
 	@Inject
@@ -153,46 +126,52 @@ public class DiagramViewPart{
 	}
 	
 	private void showDiagram(final ValidationDiagram diagram){
+
+		if(composite == null || composite.isDisposed()){
+			return;
+		}
 		
-		if(diagram == null){
+		System.out.println(diagram == null ? "null" : diagram.getProject());
+		System.out.flush();
+		
+		Display.getDefault().asyncExec(new Runnable() {
 			
-			this.part.getContext().set(IProject.class, null);
-			
-			Display.getDefault().asyncExec(new Runnable() {
-				
-				@Override
-				public void run() {
+			@Override
+			public void run() {
+				if(diagram == null){
+
+		System.out.println("Async: null");
+		System.out.flush();
 					
-					if(composite == null || composite.isDisposed()){
-						return;
-					}
+					part.getContext().set(IProject.class, null);
 					
 					stackLayout.topControl = noDiagramComposite;
 					DiagramViewPart.this.composite.layout();
 					DiagramViewPart.this.composite.redraw();
 				}
-			});
-			
-			return;
-		}
-		
-		this.part.getContext().set(IProject.class, diagram.getProject());
-		
-		ValidationDiagramComposite composite = composites.get(diagram.getProject());
-		if(composite != null && !composite.isDisposed()){
-			stackLayout.topControl = composite;
-			DiagramViewPart.this.composite.layout();
-			DiagramViewPart.this.composite.redraw();
-		}
-		
+				else{
+
+		System.out.println("Async: project");
+		System.out.flush();
+
+					part.getContext().set(IProject.class, diagram.getProject());
+					
+					ValidationDiagramComposite composite = composites.get(diagram.getProject());
+
+					if(composite != null && !composite.isDisposed()){
+						stackLayout.topControl = composite;
+						DiagramViewPart.this.composite.layout();
+						DiagramViewPart.this.composite.redraw();
+					}
+				}
+			}
+		});
 	}
 	
 	@PreDestroy
 	public void preDestroy() {
 		IValidationDiagramService diagramService = CloudscaleContext.getGlobalContext().get(IValidationDiagramService.class);
 		diagramService.removePropertyChangeListener(diagramServiceListener);
-		
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
 	}
 
 	public ValidationDiagramComposite createDiagramComposite(ValidationDiagram diagram) {
