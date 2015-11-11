@@ -107,6 +107,10 @@ public class ExplorerAlternativesRetriever implements IExplorerContentRetriever{
 		IEditorInputResource parentEir = context.get(IEditorInputResource.class);
 		
 		List<Object> out = new ArrayList<Object>();		
+
+		if(resourceProvider == null){
+			return out;
+		}
 			
 		for(IEditorInputResource eir : resourceProvider.getResources()){
 			
