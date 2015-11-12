@@ -1,92 +1,60 @@
 package eu.cloudscaleproject.env.extractor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
-import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
+import eu.cloudscaleproject.env.extractor.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.toolchain.explorer.ExplorerContentRetriever;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ExplorerProjectProvider extends ExplorerContentRetriever{
 	
 
-	private final ExplorerChangeListener ecl = new ExplorerChangeListener() {
+	private InputAlternative alternative;
+	
+	private PropertyChangeListener projectListener = new PropertyChangeListener()
+	{
 		
-		public void resourceChanged(IResourceDelta delta) {
-			
-			for (IResourceDelta rootDelta : delta.getAffectedChildren()) {
-				
-				boolean refresh = false;
-				
-				IResource resource = rootDelta.getResource();
-				
-				if(rootDelta.getKind() == IResourceDelta.ADDED){
-					if(resource instanceof IProject){
-						refresh = true;
-					}
-				}
-				if(rootDelta.getKind() == IResourceDelta.REMOVED){
-					if(resource instanceof IProject){
-						refresh = true;
-					}
-				}
-
-				if(rootDelta.getKind() == IResourceDelta.CHANGED){
-					if(resource instanceof IProject){
-						refresh = true;
-					}
-				}
-				
-				if(refresh){
-					BatchExecutor.getInstance().addTask(ExplorerProjectProvider.this, "refresh", new Runnable() {
-						
-						@Override
-						public void run() {
-							refresh();
-						}
-					});
-				}
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+			if (evt.getPropertyName().equals(InputAlternative.KEY_INPUT_PROJECT))
+			{
+				refresh();
 			}
-		};
-		
-		public IResource[] getResources() {
-			return new IResource[]{ResourcesPlugin.getWorkspace().getRoot()};
-		};
+		}
 	};
+	
 
 	@Override
 	public List<Object> getChildren() {
-		
 		List<Object> out = new ArrayList<Object>();
-		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-			try {
-				if(project.hasNature("org.eclipse.jdt.core.javanature")){
-					out.add(project);
-				}
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		
+
+		IProject extractedProject = alternative.getExtractedProject();
+		if (extractedProject == null || !extractedProject.exists())
+			return out;
+
+		out.add(alternative.getExtractedProject());
 		return out;
 	}
 
 	@Override
 	public void initialize(String nodeID, IEclipseContext context) {
-		ExplorerChangeNotifier.getInstance().addListener(ecl);
+		alternative = (InputAlternative)context.get(IEditorInputResource.class);
+		if(alternative != null){
+			alternative.addPropertyChangeListener(projectListener);
+		}
 	}
+	
 
 	@Override
 	public void dispose() {
-		ExplorerChangeNotifier.getInstance().removeListener(ecl);
+
 	}
 
 }
