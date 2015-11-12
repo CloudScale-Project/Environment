@@ -50,7 +50,7 @@ public class CreateEmptyInputWizard extends Wizard{
 		
 		OpenAlternativeUtil.openAlternative(alternative);
 		ModelUtils.executeCreateModels(alternative, selectedModels);		
-		
+
 		return true;
 	}
 

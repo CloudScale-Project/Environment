@@ -119,11 +119,13 @@
             name="Nodes">
          <Node
                action="eu.cloudscaleproject.env.extractor.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.extractor.createalternative"
                name="Create new alternative...">
          </Node>
          <Node
                action="eu.cloudscaleproject.env.extractor.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.extractor.createconfiguration"
                name="Create new configuration...">
          </Node>
@@ -134,7 +136,7 @@
          </Node>
          <Node
                id="eu.cloudscaleproject.env.extractor.noresults"
-               name="No results">
+               name="(No results yet)">
          </Node>
       </Nodes>
    </extension>

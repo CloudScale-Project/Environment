@@ -227,13 +227,14 @@ public class ResourceRegistry {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
+				IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
+				explorerService.setSelection(eir);
+
 				IEclipseContext staticContext = EclipseContextFactory.create();
 				staticContext.set(IEditorInputResource.class, eir);
 				CommandExecutor.getInstance().execute("eu.cloudscaleproject.env.toolchain.openAlternative", staticContext);
 				staticContext.dispose();
 
-				IExplorerService explorerService = CloudscaleContext.getGlobalContext().get(IExplorerService.class);
-				explorerService.setSelection(eir);
 			}
 		});
 	}

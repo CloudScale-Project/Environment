@@ -1,5 +1,6 @@
 package eu.cloudscaleproject.env.spotter.alternatives;
 
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,12 +12,12 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
 
-import eu.cloudscaleproject.env.spotter.ResourceUtils;
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
 
 public class InputAlternative extends AbstractInputAlternative
 {
+	public static final String PLUGIN_FILE_ENVIRONMENT_CONFIG = "resources/alternative/mEnv.xml";
 	public static String KEY_ENVIRONMENT_CONFIG = "environment_config";
 	
 	private List<AbstractSpotterEditor> editors = new LinkedList<AbstractSpotterEditor>();
@@ -61,21 +62,22 @@ public class InputAlternative extends AbstractInputAlternative
 		}
 	}
 
+
 	@Override
 	protected void doCreate(IProgressMonitor monitor)
 	{
 		super.doCreate(monitor);
-		initModels();
-	}
-
-	private void initModels()
-	{
-		if (getSubResource(KEY_ENVIRONMENT_CONFIG) == null)
-		{
-			IFile file = getResource().getFile("mEnv.xml");
-			ResourceUtils.createDefaultFile(file, "" + "<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\"/>");
-
-			setSubResource(KEY_ENVIRONMENT_CONFIG, file);
+		try {
+			IFile environment = getResource().getFile("mEnv.xml");
+			if (!environment.exists()) {
+				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_ENVIRONMENT_CONFIG);
+				environment.create(in, false, null);
+				in.close();
+			}
+			setSubResource(KEY_ENVIRONMENT_CONFIG, environment);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

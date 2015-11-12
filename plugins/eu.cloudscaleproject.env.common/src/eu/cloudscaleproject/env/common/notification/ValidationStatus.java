@@ -89,7 +89,9 @@ public class ValidationStatus implements IValidationStatus, IProjectProvider{
 	}
 	
 	public synchronized Warning[] getWarnings(){
+		synchronized (warningsLock) {
 		return warnings.values().toArray(new Warning[warnings.values().size()]);
+		}
 	}
 
 	@Override

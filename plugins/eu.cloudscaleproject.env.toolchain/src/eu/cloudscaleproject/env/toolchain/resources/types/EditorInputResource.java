@@ -96,6 +96,7 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 				
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
+					if (isCreateInProgress() || isDeleteInProgress()) return;
 					
 					if (EditorInputResource.this.getID() == null){
 						return;

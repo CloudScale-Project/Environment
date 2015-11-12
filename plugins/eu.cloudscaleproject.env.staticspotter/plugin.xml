@@ -112,17 +112,19 @@
             name="Nodes">
          <Node
                action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.staticspotter.createalternative"
                name="Create alternative...">
          </Node>
          <Node
                action="eu.cloudscaleproject.env.staticspotter.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.staticspotter.createconfiguration"
                name="Create configuration...">
          </Node>
          <Node
                id="eu.cloudscaleproject.env.staticspotter.noresults"
-               name="No results">
+               name="(No results yet)">
          </Node>
       </Nodes>
    </extension>

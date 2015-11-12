@@ -64,7 +64,7 @@
                position="40">
             <NodeResource
                   editor="eu.cloudscaleproject.env.spotter.partdescriptor.serverEditor"
-                  icon="resources/icons/ic-input-16.png"
+                  icon="resources/icons/ic-ds-configuration-16.png"
                   id="eu.cloudscaleproject.env.spotter.nodeServerConnection"
                   name="Server connection">
             </NodeResource>
@@ -74,6 +74,11 @@
                   empty="eu.cloudscaleproject.env.spotter.createalternative"
                   id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
                   name="Input alternative">
+               <Node
+                     icon="resources/icons/ic-input-16.png"
+                     id="eu.cloudscaleproject.env.spotter.nodeInput"
+                     name="Input">
+               </Node>
                <Node
                      action="eu.cloudscaleproject.env.spotter.command.createalternative"
                      icon="resources/icons/configuration_16.png"
@@ -107,17 +112,19 @@
             name="Nodes">
          <Node
                action="eu.cloudscaleproject.env.spotter.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.spotter.createalternative"
                name="Create alternative...">
          </Node>
          <Node
                action="eu.cloudscaleproject.env.spotter.command.createalternative"
+               icon="resources/icons/ic-create-alternative-16.png"
                id="eu.cloudscaleproject.env.spotter.createconfiguration"
                name="Create configuration...">
          </Node>
          <Node
                id="eu.cloudscaleproject.env.spotter.noresults"
-               name="No results">
+               name="(No results yet)">
          </Node>
       </Nodes>
    </extension>

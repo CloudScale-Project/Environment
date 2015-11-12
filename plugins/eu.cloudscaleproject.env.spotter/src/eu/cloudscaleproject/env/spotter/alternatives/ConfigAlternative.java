@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.spotter.alternatives;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -28,19 +29,22 @@ import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternat
 public class ConfigAlternative extends AbstractConfigAlternative
 {
 
+	public static final String PLUGIN_FILE_ENVIRONMENT_CONFIG = "resources/alternative/mEnv.xml";
+	public static final String PLUGIN_FILE_HIERARCHY_CONFIG = "resources/alternative/hierarchy.xml";
+	public static final String PLUGIN_FILE_SPOTTER_CONFIG = "resources/alternative/spotter.conf";
+
 	public static String KEY_ENVIRONMENT_CONFIG = "environment_config";
 	public static String KEY_SPOTTER_CONFIG = "config";
 	public static String KEY_HIERARCHY_CONFIG = "hierarchy";
 
 	private List<AbstractSpotterEditor> editors = new LinkedList<AbstractSpotterEditor>();
-	
+
 	final IPropertyListener listener = new IPropertyListener()
 	{
 		@Override
 		public void propertyChanged(Object source, int propId)
 		{
-			if (EditorPart.PROP_DIRTY == propId)
-			{
+			if (EditorPart.PROP_DIRTY == propId) {
 				setDirty(true);
 			}
 		}
@@ -67,9 +71,8 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	protected void doSave(IProgressMonitor monitor)
 	{
 		super.doSave(monitor);
-		
-		for (AbstractSpotterEditor editor : editors)
-		{
+
+		for (AbstractSpotterEditor editor : editors) {
 			editor.doSave(monitor);
 		}
 	}
@@ -79,74 +82,112 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	{
 		super.doLoad(monitor);
 	}
-	
+
 	@Override
 	protected void doCreate(IProgressMonitor monitor)
 	{
 		super.doCreate(monitor);
-		initModels();
+		//initModels();
+
+		try {
+			IFile environment = getResource().getFile("mEnv.xml");
+			if (!environment.exists()) {
+				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_ENVIRONMENT_CONFIG);
+				environment.create(in, false, null);
+				in.close();
+			}
+
+			IFile hierarchy = getResource().getFile("hierarchy.xml");
+			if (!hierarchy.exists()) {
+				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_HIERARCHY_CONFIG);
+				hierarchy.create(in, false, null);
+				in.close();
+			}
+
+			IFile spotter = getResource().getFile("spotter.conf");
+			if (!spotter.exists()) {
+				Properties confProp = new Properties();
+				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_SPOTTER_CONFIG);
+				confProp.load(in);
+
+				String envPath = environment.getLocation().toString();
+				String hierarchyPath = hierarchy.getLocation().toString();
+
+				confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
+				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
+				confProp.setProperty("org.spotter.resultDir",
+					getResultResourceProvider().getRootFolder().getLocation().toString());
+
+				confProp.store(new FileOutputStream(spotter.getLocation().toFile()), "");
+			}
+
+
+			setSubResource(KEY_ENVIRONMENT_CONFIG, environment);
+			setSubResource(KEY_HIERARCHY_CONFIG, hierarchy);
+			setSubResource(KEY_SPOTTER_CONFIG, spotter);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	private void initModels ()
+
+	private void initModels()
 	{
-		if (getSubResource(KEY_ENVIRONMENT_CONFIG) == null)
-		{
+/*		if (getSubResource(KEY_ENVIRONMENT_CONFIG) == null) {
 			IFile file = getResource().getFile("mEnv.xml");
-			ResourceUtils.createDefaultFile(file, ""
-					+ "<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\">" + "<workloadAdapter>"
-					+ "<extensionName>workload.satellite.adapter.customized</extensionName>"
-					+ "<config key=\"org.spotter.satellite.adapter.name\" value=\"Customized Workload Satellite Adapter\"/>"
-					+ "<config key=\"org.spotter.workload.simple.userScriptClassName\" value=\"\"/>"
-					+ "<config key=\"org.spotter.workload.simple.userScriptPath\" value=\"\"/>" + "</workloadAdapter>"
-					+ "</measurementEnvironment>");
+			ResourceUtils.createDefaultFile(file,
+					"" + "<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\">" + "<workloadAdapter>"
+							+ "<extensionName>workload.satellite.adapter.customized</extensionName>"
+							+ "<config key=\"org.spotter.satellite.adapter.name\" value=\"Customized Workload Satellite Adapter\"/>"
+							+ "<config key=\"org.spotter.workload.simple.userScriptClassName\" value=\"\"/>"
+							+ "<config key=\"org.spotter.workload.simple.userScriptPath\" value=\"\"/>"
+							+ "</workloadAdapter>" + "</measurementEnvironment>");
 
 			setSubResource(KEY_ENVIRONMENT_CONFIG, file);
 		}
 
-		if (getSubResource(KEY_HIERARCHY_CONFIG) == null)
-		{
+		if (getSubResource(KEY_HIERARCHY_CONFIG) == null) {
 			IFile file = getResource().getFile("hierarchy.xml");
-			ResourceUtils.createDefaultFile(file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-					+ "<root xmlns=\"http://www.sopeco.org/PerformanceProblemHierarchySchema\">" 
-				    + "<uniqueId>3a105ebc-9390-4176-ba51-ce2f092092fb</uniqueId>"
-				    + "<config key=\"org.spotter.detection.detectable\" value=\"false\"/>"
-                    + "</root>");
+			ResourceUtils.createDefaultFile(file,
+					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+							+ "<root xmlns=\"http://www.sopeco.org/PerformanceProblemHierarchySchema\">"
+							+ "<uniqueId>3a105ebc-9390-4176-ba51-ce2f092092fb</uniqueId>"
+							+ "<config key=\"org.spotter.detection.detectable\" value=\"false\"/>" + "</root>");
 
 			setSubResource(KEY_HIERARCHY_CONFIG, file);
 		}
+*/
+		if (getSubResource(KEY_SPOTTER_CONFIG) == null) {
+			IFile file = getResource().getFile("spotter.conf");
+			Properties confProp = new Properties();
 
-		if (getSubResource(KEY_SPOTTER_CONFIG) == null)
-		{
-				IFile file = getResource().getFile("spotter.conf");
-				Properties confProp = new Properties();
+			String envPath = getSubResource(KEY_ENVIRONMENT_CONFIG).getLocation().toString();
+			String hierarchyPath = getSubResource(KEY_HIERARCHY_CONFIG).getLocation().toString();
 
-				String envPath = getSubResource(KEY_ENVIRONMENT_CONFIG).getLocation().toString();
-				String hierarchyPath = getSubResource(KEY_HIERARCHY_CONFIG).getLocation().toString();
+			confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
+			confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
+			confProp.setProperty("org.spotter.resultDir",
+					getResultResourceProvider().getRootFolder().getLocation().toString());
 
-				confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
-				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
-				confProp.setProperty("org.spotter.resultDir", getResultResourceProvider().getRootFolder().getLocation().toString());
+			confProp.setProperty("org.spotter.workload.maxusers", "10");
+			confProp.setProperty("org.spotter.workload.experiment.duration", "180");
+			confProp.setProperty("org.spotter.prewarmup.duration", "1");
+			confProp.setProperty("org.spotter.workload.experiment.rampup.intervalLength", "1");
+			confProp.setProperty("org.spotter.workload.experiment.rampup.numUsersPerInterval", "5");
+			confProp.setProperty("org.spotter.workload.experiment.cooldown.intervalLength", "1");
+			confProp.setProperty("org.spotter.workload.experiment.cooldown.numUsersPerInterval", "2");
 
-				confProp.setProperty("org.spotter.workload.maxusers", "10");
-				confProp.setProperty("org.spotter.workload.experiment.duration", "180");
-				confProp.setProperty("org.spotter.prewarmup.duration", "1");
-				confProp.setProperty("org.spotter.workload.experiment.rampup.intervalLength", "1");
-				confProp.setProperty("org.spotter.workload.experiment.rampup.numUsersPerInterval", "5");
-				confProp.setProperty("org.spotter.workload.experiment.cooldown.intervalLength", "1");
-				confProp.setProperty("org.spotter.workload.experiment.cooldown.numUsersPerInterval", "2");
-				
-				try
-				{
-					confProp.store(new FileOutputStream(file.getLocation().toFile()), hierarchyPath);
-				} catch (IOException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				setSubResource(KEY_SPOTTER_CONFIG, file);
-				
-				save();
+			try {
+				confProp.store(new FileOutputStream(file.getLocation().toFile()), hierarchyPath);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			setSubResource(KEY_SPOTTER_CONFIG, file);
+
+			save();
 		}
 	}
 
@@ -155,20 +196,17 @@ public class ConfigAlternative extends AbstractConfigAlternative
 	{
 		InputAlternative selectedEditorInput = (InputAlternative) getInputAlternative();
 
-		if (selectedEditorInput != null)
-		{
+		if (selectedEditorInput != null) {
 			ResourceUtils.bindEditorInputs(selectedEditorInput, this);
-			try
-			{
+			try {
 				CustomDynamicSpotterRunJob job = Util.createJob(this);
 				return job.run(m);
-			} catch (UICoreException e)
-			{
+			} catch (UICoreException e) {
 				e.printStackTrace();
-				throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error when preparign DS job.", e));
+				throw new CoreException(
+						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error when preparign DS job.", e));
 			}
-		} else
-		{
+		} else {
 			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Input not defined.");
 		}
 	}

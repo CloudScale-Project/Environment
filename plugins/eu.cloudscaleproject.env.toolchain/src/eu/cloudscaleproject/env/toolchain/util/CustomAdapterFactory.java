@@ -151,14 +151,20 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 
 		private String getName(Object obj)
 		{
-			EObject eobj = (EObject) obj;
-			EStructuralFeature nameFeature = getLabelFeature(eobj.eClass());
-			if (nameFeature != null)
-			{
-				Object name = eobj.eGet(nameFeature);
+			try{
+				EObject eobj = (EObject) obj;
+				EStructuralFeature nameFeature = getLabelFeature(eobj.eClass());
+				if (nameFeature != null)
+				{
+					Object name = eobj.eGet(nameFeature);
 
-				if (name != null)
-					return name.toString();
+					if (name != null)
+						return name.toString();
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 
 			return null;

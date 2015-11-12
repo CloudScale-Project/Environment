@@ -595,7 +595,6 @@ public class EditorInputFolder extends EditorInputResource{
 				e.printStackTrace();
 			}
 		}
-		updateStatusList();
 	}
 	
 	protected void doDelete(IProgressMonitor monitor){
