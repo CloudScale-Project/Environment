@@ -268,7 +268,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				continue;
 			}
 			
-			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
+			if(alternative.getModelRootObjects(mt.getToolchainFileID()).isEmpty()){
 				modelTypes.add(mt);
 			}
 		}

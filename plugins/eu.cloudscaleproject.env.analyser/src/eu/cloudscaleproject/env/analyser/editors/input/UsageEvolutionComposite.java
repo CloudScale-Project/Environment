@@ -39,7 +39,7 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 		super(parent, style);
 		
 		this.alternative = alt;
-		this.usageEvolution = (UsageEvolution)alt.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		this.usageEvolution = (UsageEvolution)alt.getModelRootObject(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		
 		setLayout(new GridLayout(1, false));
 		
@@ -112,7 +112,7 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 				
 				if(usageEvolution == null){
 					ModelUtils.createModels(alternative, null, ModelType.USAGE_EVOLUTION);
-					usageEvolution = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+					usageEvolution = (UsageEvolution)alternative.getModelRootObject(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						
@@ -144,7 +144,7 @@ public class UsageEvolutionComposite extends Composite implements IRefreshable{
 	@Override
 	public void refresh() {
 		
-		UsageEvolution ue = (UsageEvolution)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+		UsageEvolution ue = (UsageEvolution)alternative.getModelRootObject(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
 		if(usageEvolution != ue){
 			usageEvolution = ue;
 			initBinding();

@@ -43,7 +43,7 @@ public class ImportModelWizard extends Wizard{
 				continue;
 			}
 			
-			if(alternative.getModelRoot(mt.getToolchainFileID()).isEmpty()){
+			if(alternative.getModelRootObjects(mt.getToolchainFileID()).isEmpty()){
 				modelTypes.add(mt);
 			}
 		}

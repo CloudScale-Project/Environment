@@ -1,11 +1,25 @@
 package eu.cloudscaleproject.env.analyser.editors.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.observable.Diffs;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.property.Properties;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.IViewerObservableValue;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,20 +32,30 @@ import org.palladiosimulator.experimentautomation.abstractsimulation.Abstractsim
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
+import org.palladiosimulator.experimentautomation.experiments.ExperimentsPackage;
+import org.palladiosimulator.experimentautomation.experiments.InitialModel;
+import org.palladiosimulator.pcm.core.entity.NamedElement;
+import org.scaledl.usageevolution.Usage;
+import org.scaledl.usageevolution.UsageEvolution;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
+import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.converters.IntToString;
 import eu.cloudscaleproject.env.analyser.converters.StringToInt;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
+import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
-	@SuppressWarnings("unused")
 	private DataBindingContext m_bindingContext;
 	
 	private Text stTextValue;
 	private Text mcTextValue;
+
+	private ComboViewer comboUsage;
+	private ComboViewer comboUsageEvo;
 	
+	private InitialModel initialModel;
 	private SimTimeStopCondition stStopCondition;
 	private MeasurementCountStopCondition mcStopCondition;
 	
@@ -39,6 +63,12 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	private Button btnMeasurementCountStop;
 	
 	protected final ConfAlternative alternative;
+	
+	private List<Usage> usageModels = new ArrayList<Usage>();
+	private List<UsageEvolution> usageEvolutionModels = new ArrayList<UsageEvolution>();
+	
+	private IObservableList usageModelsObs = Properties.selfList(Usage.class).observe(usageModels);
+	private IObservableList usageEvolutionModelsObs = Properties.selfList(UsageEvolution.class).observe(usageEvolutionModels);
 
 	private final Composite extensionComposite;
 	
@@ -46,6 +76,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		super(parent, style);
 		
 		this.alternative = input;
+		this.initialModel = input.getActiveInitialModel();
 		
 		//retrieve stop conditions
 		for(StopCondition sc : alternative.getActiveExperiment().getStopConditions()){
@@ -90,7 +121,8 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		gl_basicConfigComposite.marginHeight = 10;
 		basicConfigComposite.setLayout(gl_basicConfigComposite);
 		basicConfigComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
+		
+		{
 			Label lblDescription = new Label(basicConfigComposite, SWT.NONE);
 			lblDescription.setText("Basic measurements settings:");
 			lblDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
@@ -100,7 +132,49 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 			gl_settingsComposite.marginLeft = 10;
 			settingsComposite.setLayout(gl_settingsComposite);
 			settingsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+			{
+				//usage combo selection
+				Label labelUsage = new Label(settingsComposite, SWT.NONE);
+				labelUsage.setText("Select usage: ");
+				
+				comboUsage = new ComboViewer(settingsComposite);
+				GridData gdUsage = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gdUsage.widthHint = 180;
+				comboUsage.getCombo().setLayoutData(gdUsage);
+				comboUsage.setContentProvider(new ObservableListContentProvider());
+				comboUsage.setLabelProvider(new LabelProvider(){
+					@Override
+					public String getText(Object element) {
+						if(element instanceof NamedElement){
+							return ((NamedElement)element).getEntityName();
+						}
+						return element.toString();
+					}
+				});
+				comboUsage.setInput(usageModelsObs);
+
+				//usage evolution combo selection
+				Label labelUsageEvo = new Label(settingsComposite, SWT.NONE);
+				labelUsageEvo.setText("Select usage evolution: ");
+				
+				comboUsageEvo = new ComboViewer(settingsComposite);
+				GridData gdUsageEvo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+				gdUsageEvo.widthHint = 180;
+				comboUsageEvo.getCombo().setLayoutData(gdUsageEvo);
+				comboUsageEvo.setContentProvider(new ObservableListContentProvider());
+				comboUsageEvo.setLabelProvider(new LabelProvider(){
+					@Override
+					public String getText(Object element) {
+						if(element instanceof NamedElement){
+							return ((NamedElement)element).getEntityName();
+						}
+						return element.toString();
+					}
+				});
+				comboUsageEvo.setInput(usageEvolutionModelsObs);
 			
+				//stop time condition
 				btnSimulationTimeStop = new Button(settingsComposite, SWT.CHECK);
 				btnSimulationTimeStop.setText("Simulation time stop condition");
 				
@@ -109,6 +183,7 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				gd_stTextValue.widthHint = 60;
 				stTextValue.setLayoutData(gd_stTextValue);
 				
+				//stop m. count condition
 				btnMeasurementCountStop = new Button(settingsComposite, SWT.CHECK);
 				btnMeasurementCountStop.setText("Measurement count stop condition");
 				
@@ -116,6 +191,8 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				GridData gd_mcTextValue = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_mcTextValue.widthHint = 60;
 				mcTextValue.setLayoutData(gd_mcTextValue);
+			}
+		}
 		
 		m_bindingContext = initDataBindings();
 
@@ -136,10 +213,66 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 
 	@Override
 	public void refresh() {
+		
+		List<EObject> usages = new ArrayList<EObject>();
+		List<EObject> usageEvolutions = new ArrayList<EObject>();
+		
+		InputAlternative ia = alternative.getInputAlternative();
+		
+		if(ia != null){
+
+			List<IResource> usageFileList = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGE);
+			List<IResource> usageEvoFileList = ia.getSubResources(ToolchainUtils.KEY_FILE_USAGEEVOLUTION);
+			
+			for(IResource usageFile : usageFileList){
+				alternative.loadExternalModel((IFile)usageFile);
+				usages.addAll(alternative.getModelRootObjects((IFile)usageFile));
+			}
+			
+			for(IResource usageEvoFile : usageEvoFileList){
+				alternative.loadExternalModel((IFile)usageEvoFile);
+				for(EObject o : alternative.getModelRootObjects((IFile)usageEvoFile)){
+					if(o instanceof UsageEvolution){
+						UsageEvolution ue = (UsageEvolution)o;
+						usageEvolutions.addAll(ue.getUsages());
+					}
+				}
+			}
+		}
+		
+		//update usage and usage evolution selection choices
+		Diffs.computeLazyListDiff(usageModelsObs, usages).applyTo(usageModelsObs);
+		Diffs.computeLazyListDiff(usageEvolutionModelsObs, usageEvolutions).applyTo(usageEvolutionModelsObs);
+
+		if(m_bindingContext != null){
+			m_bindingContext.updateTargets();
+		}
+		
+		if(comboUsage.getCombo().isDisposed()){
+			comboUsage.refresh();
+		}
+		if(comboUsageEvo.getCombo().isDisposed()){
+			comboUsageEvo.refresh();
+		}
+		
 	}
 	
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
+		
+		// Usage selection combo
+		IObservableValue usageEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																	   initialModel, 
+																	   ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_MODEL);
+		IViewerObservableValue usageSelectionObs = ViewerProperties.singleSelection().observe(comboUsage);
+		bindingContext.bindValue(usageSelectionObs, usageEmfObs);
+		
+		// Usage evolution selection combo
+		IObservableValue usageEvoEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																		  initialModel, 
+																		  ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_EVOLUTION);
+		IViewerObservableValue usageEvoSelectionObs = ViewerProperties.singleSelection().observe(comboUsageEvo);
+		bindingContext.bindValue(usageEvoSelectionObs, usageEvoEmfObs);
 
 		if(stStopCondition != null){
 

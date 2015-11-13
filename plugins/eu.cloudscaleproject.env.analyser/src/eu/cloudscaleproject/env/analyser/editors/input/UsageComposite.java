@@ -133,7 +133,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 					IEditorInputResource eir = (IEditorInputResource)ss.getFirstElement();
 					if(eir instanceof EditorInputEMF){
 						EditorInputEMF eie = (EditorInputEMF)eir;
-						EObject eo = eie.getModelRootSingle(ToolchainUtils.KEY_FILE_LIMBO);
+						EObject eo = eie.getModelRootObject(ToolchainUtils.KEY_FILE_LIMBO);
 						UsageComposite.this.usage.setLoadEvolution((Sequence)eo);						
 					}					
 				}
@@ -218,7 +218,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 	}
 	
 	private List<UsageScenario> getUsageScenarios(){
-		List<EObject> usageModels = alternative.getModelRoot(ToolchainUtils.KEY_FILE_USAGE);
+		List<EObject> usageModels = alternative.getModelRootObjects(ToolchainUtils.KEY_FILE_USAGE);
 		
 		List<UsageScenario> scenarios = new ArrayList<>();
 		for(EObject eo : usageModels){

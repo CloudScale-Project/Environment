@@ -150,19 +150,22 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	private Resource loadModelResource(final IFile file){
 		
-		logger.info("Loading model resource: " + file.getFullPath().toString());
+		logger.info("Alternative '" + getName() + "' is loading model resource: " + file.getFullPath().toString());
 		
-		//unload resource if it already exist in the resource set
-		final Resource current = getModelResource(file); 
-		if(current != null){
-			unloadModelResource(file);
-		}
 
 		try {
 			Resource resource = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
 
 				@Override
 				public void run() {
+
+					//unload resource if it already exist in the resource set
+					final Resource current = getModelResource(file); 
+					if(current != null){
+						unloadModelResource(file);
+					}
+					
+					//load resource
 					Resource resource = null;
 					if(ModelType.getModelType(file.getFileExtension()) != null){
 						//resource = editingDomain.loadResource(file.getFullPath().toString());
@@ -194,7 +197,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	private void unloadModelResource(final IFile file){
 
-		logger.info("Unloading model resource: " + file.getFullPath().toString());
+		logger.info("Alternative '"+ getName() +"' is unloading model resource: " + file.getFullPath().toString());
 
 		try {
 			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
@@ -301,6 +304,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		return factory;
 	}
 
+	/*
 	public EObject getModelRootSingle(String key){
 		return getModelRootSingle(resSet, key);
 	}
@@ -315,35 +319,114 @@ public class EditorInputEMF extends EditorInputFolder{
 	public List<EObject> getModelRoot(String key) {
 		return getModelRoot(resSet, key);
 	}
+	*/
 	
 	//TODO: refactor to getModelRoots and implement getModelRoot for retrieving single EObject.
-	public List<EObject> getModelRoot(ResourceSet resSet, String key) {
+	
+	public EObject getModelRootObject(String key){
+
+		List<EObject> out = getModelRootObjects(key);
+		if(out.isEmpty()){
+			return null;
+		}
+		return out.get(0);
+	}
+	
+	public List<EObject> getModelRootObjects(String key) {
 		
 		List<EObject> out = new ArrayList<>();
 		List<IResource> resources = getSubResources(key);
 		
 		for(IResource res : resources){
 			if(res instanceof IFile){
-				IFile file = (IFile)res;
-				Resource emfResource = getModelResource(file);
-				
-				if(emfResource.isLoaded() && !emfResource.getContents().isEmpty()){
-					out.add(emfResource.getContents().get(0));
-				}
+				out.addAll(getModelRootObjects((IFile)res));
 			}
 		}
+
+		return out;
+	}
+
+	public EObject getModelRootObject(IFile file){
+
+		List<EObject> out = getModelRootObjects(file);
+		if(out.isEmpty()){
+			return null;
+		}
+		return out.get(0);
+	}
+
+	/**
+	 * Collect EMF root objects based on the specified file.
+	 * If the EMF resource, under the specified file, is not loaded in the editing domain, 
+	 * this method will return an empty list.
+	 * 
+	 * @param file IFile of the EMF resource.
+	 * @return List of the model root objects.
+	 */
+	public List<EObject> getModelRootObjects(final IFile file) {
+		
+		List<EObject> out = new ArrayList<>();
+			
+		try {
+			List<EObject> eObjects = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<List<EObject>>(){
+				
+				@Override
+				public void run() {
+					Resource emfResource = getModelResource(file);
+					
+					if(emfResource == null){
+						logger.warning("Requested resource is not contained in the "
+								+ "'" + getName() + "' alternative resource set! Resource: " + file.getFullPath().toString());
+						return;
+					}
+
+					if(emfResource.isLoaded() && !emfResource.getContents().isEmpty()){
+						setResult(emfResource.getContents());
+					}
+				}
+				
+			});
+			
+			if(eObjects != null){
+				out.addAll(eObjects);
+			}
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		return out;
 	}
 	
-	public List<Resource> loadExternal(EditorInputEMF resource, String key){
+	/**
+	 * Loads the EMF resource under specified file into the editing domain.
+	 * 
+	 * @param file
+	 * @return EMF Resource
+	 */
+	public Resource loadExternalModel(final IFile file){
 		
-		List<Resource> resources = new ArrayList<Resource>();
-		for(IResource res : resource.getSubResources(key)){
-			if(res instanceof IFile){
-				resources.add(loadModelResource((IFile)res));
-			}
+		Resource resource = null;
+		
+		try {
+			resource = TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+				
+				@Override
+				public void run() {
+					
+					Resource res = getModelResource(file);
+					if(res == null){
+						res = loadModelResource(file);
+					}
+					setResult(res);
+					
+				}
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		return resources;
+		
+		return resource;
 	}
 	
 	public void executeModelChange(final Runnable runnable){

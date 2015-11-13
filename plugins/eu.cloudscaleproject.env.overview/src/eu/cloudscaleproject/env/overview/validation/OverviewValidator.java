@@ -49,7 +49,7 @@ public class OverviewValidator implements IResourceValidator {
 			status.checkError(ERR_OVERVIEW_INVALID, overviewRes != null, true, "Overview model file has invalid content!");
 			status.checkError(ERR_OVERVIEW_EMPTY, !overviewRes.getContents().isEmpty(), true, "Overview model file is empty!");
 			
-			Overview ov = (Overview)alternative.getModelRootSingle(ToolchainUtils.KEY_FILE_OVERVIEW);
+			Overview ov = (Overview)alternative.getModelRootObject(ToolchainUtils.KEY_FILE_OVERVIEW);
 			status.checkError(ERR_OVERVIEW_EMPTY, ov.getArchitecture() != null, true, "Overview model missing architecture!");
 			status.checkError(ERR_OVERVIEW_EMPTY, ov.getDefinition() != null, true, "Overview model missing system specification!");
 			status.checkError(ERR_OVERVIEW_EMPTY, ov.getDeployment() != null, true, "Overview model missing deployment!");
