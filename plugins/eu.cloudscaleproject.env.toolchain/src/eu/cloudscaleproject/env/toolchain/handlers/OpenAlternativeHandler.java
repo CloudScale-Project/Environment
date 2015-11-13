@@ -93,6 +93,7 @@ public class OpenAlternativeHandler {
 			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
 			if(stack != null){
 				
+				eir.load(); // Load before opening
 				part = partService.createPart(editorPartID);
 				part.getProperties().put(AlternativeEditor.ALTERNATIVE_RESOURCE, eir.getResource().getFullPath().toString());
 				
@@ -101,6 +102,7 @@ public class OpenAlternativeHandler {
 			}
 		}
 		else{
+			eir.load(); // Load before opening again...
 			partService.showPart(part, PartState.ACTIVATE);
 		}
 		

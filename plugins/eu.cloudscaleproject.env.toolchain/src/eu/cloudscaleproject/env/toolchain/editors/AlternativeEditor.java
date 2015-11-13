@@ -183,24 +183,8 @@ public abstract class AlternativeEditor {
 
 		this.alternative = alternative;
 		this.alternative.addPropertyChangeListener(alternativeListener);
+		setControl(createComposite(parentComposite, alternative));
 				
-		EditorInputJob loadJob = new EditorInputJob("Loading alternative") {
-			
-			@Override
-			public IStatus execute(IProgressMonitor monitor) {
-				
-				monitor.beginTask("Loading '"+alternative.getName()+"' alternative", IProgressMonitor.UNKNOWN);
-				
-				//load
-				alternative.load(monitor);
-				monitor.done();
-				
-				return Status.OK_STATUS;
-			}
-		};
-		loadJob.setUser(true);
-		loadJob.schedule();
-		
 		focus();
 		
 		dirtyable.setDirty(alternative.isDirty());		
@@ -234,12 +218,16 @@ public abstract class AlternativeEditor {
 		}
 	}
 	
+
+	
 	@PreDestroy
 	public void preDestroy(EModelService modelService, MApplication app){
 		
 		part.getContext().remove(IEditorInputResource.class);
 		
 		if(alternative != null){
+			this.alternative.removePropertyChangeListener(alternativeListener);
+
 			boolean openedElsewhere = ToolchainUtils.getOpenedAlternatives().contains(alternative);
 			if(!openedElsewhere && alternative.isDirty()){
 				EditorInputJob job = new EditorInputJob("Discarding changes...") {
@@ -256,7 +244,6 @@ public abstract class AlternativeEditor {
 				job.schedule();				
 			}
 			
-			this.alternative.removePropertyChangeListener(alternativeListener);
 		}
 		
 	}
