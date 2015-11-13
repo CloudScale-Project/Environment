@@ -64,7 +64,7 @@ public class ImageHelper {
 	    PaletteData palette = data.palette;
 	    if (palette.isDirect) {
 	    	int alphaMask = ~(0x00000000 | palette.redMask | palette.greenMask | palette.blueMask);
-	        colorModel = new DirectColorModel(data.depth, palette.redMask, palette.greenMask, palette.blueMask, alphaMask);
+	        colorModel = new DirectColorModel(32, palette.redMask, palette.greenMask, palette.blueMask, alphaMask);
 	        BufferedImage bufferedImage = new BufferedImage(colorModel, colorModel.createCompatibleWritableRaster(data.width, data.height),
 	            false, null);
 	        WritableRaster raster = bufferedImage.getRaster();
