@@ -186,11 +186,15 @@ public class ConfigComposite extends ConfigEditorView implements IRefreshable, I
 			return;
 		}
 		
-		Control c = tabFolder.getSelection().getControl();
-		if (c instanceof IRefreshable)
-		{
-			((IRefreshable) c).refresh();
+		CTabItem selection = tabFolder.getSelection();
+		
+		if(selection != null){
+			Control c = tabFolder.getSelection().getControl();
+			if (c instanceof IRefreshable)
+			{
+				((IRefreshable) c).refresh();
+			}
 		}
-		ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
+		//ProjectEditorSelectionService.getInstance().reloadPropertySheetPage();
 	}
 }

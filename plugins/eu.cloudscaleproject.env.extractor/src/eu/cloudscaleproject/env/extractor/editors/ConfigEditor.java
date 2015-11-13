@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 import eu.cloudscaleproject.env.extractor.editors.composites.ConfigAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
  *
@@ -21,10 +22,11 @@ public class ConfigEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ConfingAlternative alternative){
-				
-		setAlternative(alternative);
-		setControl(new ConfigAlternativeComposite(parent, SWT.NONE, alternative));
-		
 		part.setLabel("Extractor config ["+ alternative.getName() +"]");
+	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		return new ConfigAlternativeComposite(composite, SWT.NONE, (ConfingAlternative)resource);
 	}
 }

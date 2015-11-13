@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.PersistState;
@@ -28,7 +29,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
-import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.common.interfaces.ISelectable;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
@@ -41,9 +41,9 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class AlternativeEditor {
+public abstract class AlternativeEditor {
 	
-	private static final String ALTERNATIVE_RESOURCE = "alternative_resource";
+	public static final String ALTERNATIVE_RESOURCE = "alternative_resource";
 	
 	@Inject
 	private MDirtyable dirtyable;
@@ -63,7 +63,7 @@ public class AlternativeEditor {
 	private PropertyChangeListener alternativeListener = new PropertyChangeListener() {
 		
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
+		public void propertyChange(final PropertyChangeEvent evt) {
 			if(IEditorInputResource.PROP_DIRTY.equals(evt.getPropertyName())){
 				dirtyable.setDirty(alternative.isDirty());
 			}
@@ -74,10 +74,10 @@ public class AlternativeEditor {
 					@Override
 					public void run() {
 						if(!parentComposite.isDisposed()){
-							for(Control control : parentComposite.getChildren()){
-								if(control instanceof IRefreshable){
-									((IRefreshable)control).refresh();
-								}
+							
+							IEditorInputResource source = (IEditorInputResource)evt.getSource();
+							if(source == alternative){
+								setControl(createComposite(parentComposite, source));
 							}
 						}
 					}
@@ -96,6 +96,8 @@ public class AlternativeEditor {
 		}
 	};
 	
+	public abstract Composite createComposite(Composite composite, IEditorInputResource resource);
+	
 	@PostConstruct
 	public void postConstruct(IEclipseContext context){
 		
@@ -106,13 +108,16 @@ public class AlternativeEditor {
 	}
 	
 	@Inject
-	public void setInput(IEclipseContext context, @Named("input") String resourcePath){
+	public void setInput(IEclipseContext context, @Named(ALTERNATIVE_RESOURCE) String resourcePath){
 		
+		part.getPersistedState().put(ALTERNATIVE_RESOURCE, resourcePath);
+
 		IEditorInputResource eir = ResourceRegistry.getInstance().findResource(resourcePath);
 		if(eir != null){
 			context.set(IResource.class, eir.getResource());
-			context.set(eir.getClass().getName(), eir);
+			context.set(IEditorInputResource.class, eir);
 		}
+		
 	}
 	
 	protected IEditorInputResource getAlternative(){
@@ -150,6 +155,8 @@ public class AlternativeEditor {
 		this.parentComposite.redraw();
 	}
 	
+	@Inject
+	@Optional
 	protected void setAlternative(final IEditorInputResource alternative){
 		
 		if(this.alternative == alternative){
@@ -183,10 +190,9 @@ public class AlternativeEditor {
 			public IStatus execute(IProgressMonitor monitor) {
 				
 				monitor.beginTask("Loading '"+alternative.getName()+"' alternative", IProgressMonitor.UNKNOWN);
-				if(!alternative.isLoaded()){
-					alternative.load(monitor);
-				}
-				alternative.validate(monitor);
+				
+				//load
+				alternative.load(monitor);
 				monitor.done();
 				
 				return Status.OK_STATUS;
@@ -223,7 +229,7 @@ public class AlternativeEditor {
 	public void persistState(){
 		if(this.alternative != null && part != null && part.getPersistedState() != null){
 			if(alternative.getResource() != null && alternative.getResource().getLocation() != null){
-				part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getLocation().toPortableString());
+				part.getPersistedState().put(ALTERNATIVE_RESOURCE, alternative.getResource().getFullPath().toString());
 			}
 		}
 	}

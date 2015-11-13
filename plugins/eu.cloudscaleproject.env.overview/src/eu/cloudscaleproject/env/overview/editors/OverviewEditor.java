@@ -10,16 +10,20 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.overview.OverviewAlternative;
 import eu.cloudscaleproject.env.overview.editors.composites.OverviewComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class OverviewEditor extends AlternativeEditor{
 	
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, OverviewAlternative alternative){
-		
-		setAlternative(alternative);
-		setControl(new OverviewComposite(parent, SWT.NONE, alternative));
-		
 		part.setLabel("Overview ["+ alternative.getName() +"]");
 	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		return new OverviewComposite(composite, SWT.NONE, (OverviewAlternative)resource);
+	}
+	
+	
 }

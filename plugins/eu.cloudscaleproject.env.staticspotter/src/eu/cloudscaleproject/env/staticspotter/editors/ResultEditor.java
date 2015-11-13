@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.staticspotter.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.staticspotter.editors.composites.ResultAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
  *
@@ -21,11 +22,12 @@ public class ResultEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
-		
-		setAlternative(alternative);
-		setControl(new ResultAlternativeComposite(parent, SWT.NONE, alternative));
-		
 		part.setLabel("Static spotter result ["+ alternative.getName() +"]");
+	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		return new ResultAlternativeComposite(composite, SWT.NONE, (ResultAlternative)resource);
 	}
 	
 }

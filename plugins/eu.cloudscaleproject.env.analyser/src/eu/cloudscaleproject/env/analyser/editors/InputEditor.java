@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.analyser.editors.input.InputComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 
 /**
@@ -23,10 +24,11 @@ public class InputEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
-				
-		setAlternative(alternative);
-		setControl(new InputComposite(alternative, parent, SWT.NONE));
-		
 		part.setLabel("Analyser input ["+ alternative.getName() +"]");
+	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		return new InputComposite((InputAlternative)resource, composite, SWT.NONE);
 	}
 }

@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.analyser.editors.result.ResultsComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 
 /**
@@ -23,11 +24,13 @@ public class ResultsEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
-		
-		setAlternative(alternative);
-		setControl(new ResultsComposite(alternative, parent, SWT.NONE));
-		
 		part.setLabel("Analyser results ["+ alternative.getName() +"]");
 	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		return new ResultsComposite((ResultAlternative)resource, composite, SWT.NONE);
+	}
+	
 
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.Active;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -20,6 +18,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceExtensions;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -76,31 +75,33 @@ public class OpenAlternativeHandler {
 	}
 	
 	private void openEditor(EPartService partService, IEditorInputResource eir){
+
 		String editorPartID = findEditorID(eir);
-		MPart part = partService.findPart(editorPartID);
+		String resourcePath = eir.getResource().getFullPath().toString();
+		
+		MPart part = null;
+		
+		//find existing
+		for(MPart p : partService.getParts()){
+			String path = p.getPersistedState().get(AlternativeEditor.ALTERNATIVE_RESOURCE);
+			if(path != null && path.equals(resourcePath)){
+				part = p;
+			}
+		}
 		
 		if(part == null){
 			MPartStack stack = (MPartStack)modelService.find("org.eclipse.e4.primaryDataStack", application);
 			if(stack != null){
 				
 				part = partService.createPart(editorPartID);
-				part.getProperties().put("input", eir.getResource().getFullPath().toPortableString());
+				part.getProperties().put(AlternativeEditor.ALTERNATIVE_RESOURCE, eir.getResource().getFullPath().toString());
 				
 				stack.getChildren().add(part);				
 				partService.showPart(part, PartState.ACTIVATE);
 			}
 		}
 		else{
-			
 			partService.showPart(part, PartState.ACTIVATE);
-			
-			IEclipseContext context = part.getContext();
-			context.set(eir.getClass().getName(), eir);
-			
-			IResource resource = eir.getResource();
-			if(resource != null){
-				context.set(IResource.class, resource);
-			}
 		}
 		
 	}

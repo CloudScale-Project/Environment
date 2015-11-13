@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import eu.cloudscaleproject.env.spotter.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.spotter.editors.composite.InputAlternativeComposite;
 import eu.cloudscaleproject.env.toolchain.editors.AlternativeEditor;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 
 /**
@@ -22,11 +23,13 @@ public class InputEditor extends AlternativeEditor{
 	@Inject
 	@Optional
 	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
-		
-		setAlternative(alternative);
-		setControl(new InputAlternativeComposite(alternative.getProject(), parent, SWT.NONE, alternative));
-		
 		part.setLabel("Dynamic spotter input ["+ alternative.getName() +"]");
+	}
+
+	@Override
+	public Composite createComposite(Composite composite, IEditorInputResource resource) {
+		InputAlternative alternative = (InputAlternative)resource;
+		return new InputAlternativeComposite(alternative.getProject(), composite, SWT.NONE, alternative);
 	}
 	
 }
