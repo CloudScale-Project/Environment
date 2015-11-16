@@ -114,6 +114,7 @@ public abstract class AlternativeEditor {
 
 		IEditorInputResource eir = ResourceRegistry.getInstance().findResource(resourcePath);
 		if(eir != null){
+			eir.load();
 			context.set(IResource.class, eir.getResource());
 			context.set(IEditorInputResource.class, eir);
 		}
