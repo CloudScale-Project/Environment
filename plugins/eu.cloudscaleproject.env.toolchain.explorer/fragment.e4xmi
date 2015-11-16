@@ -35,7 +35,7 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_SwQLsFx6EeWT--3X3lai2w" elementId="eu.cloudscaleproject.env.toolchain.explorer.handledmenuitem.import" label="Import..." iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain.explorer/icons/import_wiz.png" command="_50s2AD0dEeWij6XaP9iBUA"/>
       </menus>
       <toolbar xmi:id="_xSrloEKDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.explorer.toolbar.explorer">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_y42SMEKDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handledtoolitem.linkWithEditor" label="Link with editor" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain.explorer/icons/ic-target-16.png" command="_Fw-10EKEEeW-jpWqcIfmeQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_y42SMEKDEeW-jpWqcIfmeQ" elementId="eu.cloudscaleproject.env.toolchain.handledtoolitem.linkWithEditor" label="" iconURI="platform:/plugin/eu.cloudscaleproject.env.toolchain.explorer/icons/ic-target-16.png" tooltip="Reveal node from active editor" command="_Fw-10EKEEeW-jpWqcIfmeQ"/>
       </toolbar>
     </elements>
   </fragments>
