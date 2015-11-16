@@ -32,7 +32,9 @@ import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -178,7 +180,6 @@ public class MeasurementSpecComposite extends Composite{
 		});
 		
 		initBindings();
-		
 	}
 	
 	private void initBindings(){
@@ -187,19 +188,16 @@ public class MeasurementSpecComposite extends Composite{
 			bindingContext = null;
 		}
 		bindingContext = new DataBindingContext();
-		
+
 		//bind combo metric description
 		{
-			ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
-			//IObservableMap observeMap = PojoObservables.observeMap(listContentProvider.getKnownElements(), MetricDescription.class, "name");
-			
-			IObservableMap observeMap = Properties.observeEach(
-					listContentProvider.getKnownElements(), PojoProperties.values(new String[]{"name"}))[0];
-			
-			comboViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-			comboViewer.setContentProvider(listContentProvider);
-						IObservableList selfList = Properties.selfList(MetricDescription.class).observe(metricDescList);
-			comboViewer.setInput(selfList);
+			comboViewer.setLabelProvider(new LabelProvider(){
+				public String getText(Object element) {
+					return ((MetricDescription)element).getName();
+				};
+			});
+			comboViewer.setContentProvider(new ArrayContentProvider());
+			comboViewer.setInput(metricDescList);
 			
 			IObservableValue observeSingleSelectionComboViewer = ViewerProperties.singleSelection().observe(comboViewer);
 			IObservableValue msMetricDescriptionObserveValue = EMFEditObservables.observeValue(ed, ms, Literals.MEASUREMENT_SPECIFICATION__METRIC_DESCRIPTION);
@@ -311,7 +309,7 @@ public class MeasurementSpecComposite extends Composite{
 			bindingContext.bindValue(intervalObservable, 
 					EMFEditProperties.value(ed, MonitorRepositoryPackage.Literals.MEASUREMENT_SPECIFICATION__TEMPORAL_RESTRICTION).observe(ms));
 		}
-		
+
 		//bind textbox
 		{	
 			ISWTObservableValue textFirstObservable = WidgetProperties.text(SWT.Modify).observe(textFirst);
@@ -344,8 +342,9 @@ public class MeasurementSpecComposite extends Composite{
 			timeStartBinding = bindingContext.bindValue(textFirstObservable, timeFrameStartProp.observe(ms), t2mStrategy, m2tStrategy);
 			timeStopBinding = bindingContext.bindValue(textSecondObservable, timeFrameStopProp.observe(ms), t2mStrategy, m2tStrategy);
 			
-			bindingContext.updateTargets();
 		}
+
+		bindingContext.updateTargets();
 	}
 
 	public MeasurementSpecification getMeasurementSpecification(){
