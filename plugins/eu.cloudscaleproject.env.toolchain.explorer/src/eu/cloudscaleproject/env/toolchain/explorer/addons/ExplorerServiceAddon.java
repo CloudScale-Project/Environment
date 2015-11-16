@@ -48,7 +48,7 @@ public class ExplorerServiceAddon {
 		if (!part.getElementId().equals("eu.cloudscaleproject.env.toolchain.explorer.part.explorer"))
 		{
 			IEditorInputResource eir = part.getContext().get(IEditorInputResource.class);
-			if (eir != null) SelectInExplorerHandler.eir = eir;
+			SelectInExplorerHandler.eir = eir;
 		}
 	}
 	

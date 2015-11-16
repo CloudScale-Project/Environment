@@ -1,6 +1,7 @@
  
 package eu.cloudscaleproject.env.toolchain.explorer.handlers;
 
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 
 import eu.cloudscaleproject.env.toolchain.explorer.Explorer;
@@ -19,5 +20,11 @@ public class SelectInExplorerHandler {
 		IExplorerNode en = Explorer.getInstance().findNode(eir);
 
 		if (en != null) Explorer.getInstance().setSelection(en);
+	}
+	
+	@CanExecute
+	public boolean canExecute() {
+
+		return (eir != null);
 	}
 }
