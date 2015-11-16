@@ -6,6 +6,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -114,6 +115,12 @@ public class ConfigSLOListComposite extends Composite implements IRefreshable{
 			public void run() {
 
 				ServiceLevelObjectiveRepository sloRep = alternative.initActiveSLORepository();
+
+				if(sloRep == null){
+					MessageDialog.openError(getShell(), "Error", "SLORepository does not exist!");
+					return;
+				}
+
 				ServiceLevelObjective slo = ServicelevelObjectiveFactory.eINSTANCE.createServiceLevelObjective();
 				
 				slo.setName(name);

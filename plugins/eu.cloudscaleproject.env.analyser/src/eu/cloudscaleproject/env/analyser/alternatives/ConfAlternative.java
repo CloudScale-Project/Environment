@@ -286,13 +286,20 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 	// Helper methods for retrieving model objects ////////////////////
 
-	public void createEMFResource(String newFilename, String key, EObject rootObject)
+	public void createEMFResource(final String newFilename, final String key, final EObject rootObject)
 	{
-		IFile file = ((IFolder) getResource()).getFile(newFilename);
-		this.setSubResource(key, file);
-		Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, file);
-		resMp.getContents().clear();
-		resMp.getContents().add(rootObject);
+		this.executeModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+
+				IFile file = ((IFolder) getResource()).getFile(newFilename);
+				setSubResource(key, file);
+				Resource resMp = ExplorerProjectPaths.getEmfResource(resSet, file);
+				resMp.getContents().clear();
+				resMp.getContents().add(rootObject);
+			}
+		});
 	}
 
 	public List<MeasuringPoint> getMeasuringPointObjects(EClass clazz)
@@ -685,6 +692,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 			if(experiment != null && experiment.getInitialModel() != null){
 				experiment.getInitialModel().setMonitorRepository(mr);
 			}
+			else{
+				return null;
+			}
 			needToSave = true;
 		}
 		else{
@@ -724,6 +734,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 			Experiment experiment = getActiveExperiment();
 			if(experiment != null && experiment.getInitialModel() != null){
 				experiment.getInitialModel().setServiceLevelObjectives(sloRep);
+			}
+			else{
+				return null;
 			}
 			needToSave = true;
 		}

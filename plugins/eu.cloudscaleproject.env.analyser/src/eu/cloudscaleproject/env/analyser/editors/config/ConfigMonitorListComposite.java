@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -50,8 +51,6 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 	
 	private WritableList monitorGroups = new WritableList(new ArrayList<MonitorGroup>(), MonitorGroup.class); 
 
-	//private List<MonitorGroup> monitorGroups = new ArrayList<MonitorGroup>();
-	
 	public ConfigMonitorListComposite(ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		this.alternative = input;
@@ -135,6 +134,12 @@ public class ConfigMonitorListComposite extends Composite implements IRefreshabl
 			public void run() {
 
 				MonitorRepository monitorRep = alternative.initActiveMonitorRepository();
+				
+				if(monitorRep == null){
+					MessageDialog.openError(getShell(), "Error", "MonitorRepository does not exist!");
+					return;
+				}
+				
 				Monitor monitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
 				
 				MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();

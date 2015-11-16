@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -22,16 +23,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.palladiosimulator.pcm.usagemodel.UsageScenario;
 import org.scaledl.usageevolution.Usage;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.common.CloudscaleContext;
-import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
@@ -44,6 +40,7 @@ import tools.descartes.dlim.Sequence;
 
 public class UsageComposite extends Composite implements IRefreshable{
 	
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(UsageComposite.class.getName());
 
 	private ComboViewer scenarioComboViewer;
@@ -204,11 +201,13 @@ public class UsageComposite extends Composite implements IRefreshable{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				CommandExecutor ce = CloudscaleContext.getCustomContext().get(CommandExecutor.class);
-				if(ce != null){
-					ce.execute("eu.cloudscaleproject.env.usageevolution.command.openeditor");
-				}		
-				
+				IStructuredSelection selection = (IStructuredSelection)limboComboViewer.getSelection();
+				if(selection != null && selection.getFirstElement() instanceof IEditorInputResource){
+					ResourceRegistry.getInstance().openResourceEditor((IEditorInputResource)selection.getFirstElement());
+				}
+				else{
+					MessageDialog.openInformation(getShell(), "Information", "Empty selection! Please select Usage evolution first.");
+				}
 				super.widgetSelected(e);
 			}
 		});
@@ -265,6 +264,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		return null;
 	}
 	
+	/*
 	public void openLimboEditor(){
 		IFile limboFile = ExplorerProjectPaths.getFileFromEmfResource(usage.getLoadEvolution().eResource());
 		
@@ -279,6 +279,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 			e.printStackTrace();
 		}
 	}
+	*/
 
 	@Override
 	public void refresh() {

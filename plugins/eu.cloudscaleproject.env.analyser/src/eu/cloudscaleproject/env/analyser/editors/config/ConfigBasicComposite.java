@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.analyser.editors.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -19,7 +20,10 @@ import org.eclipse.jface.databinding.viewers.IViewerObservableValue;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,16 +31,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationFactory;
 import org.palladiosimulator.experimentautomation.abstractsimulation.AbstractsimulationPackage.Literals;
 import org.palladiosimulator.experimentautomation.abstractsimulation.MeasurementCountStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.SimTimeStopCondition;
 import org.palladiosimulator.experimentautomation.abstractsimulation.StopCondition;
+import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentsPackage;
 import org.palladiosimulator.experimentautomation.experiments.InitialModel;
-import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.scaledl.usageevolution.Usage;
 import org.scaledl.usageevolution.UsageEvolution;
+import org.scaledl.usageevolution.UsageevolutionFactory;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -47,6 +51,8 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
+	private static final Logger logger = Logger.getLogger(ConfigBasicComposite.class.getName());
+	
 	private DataBindingContext m_bindingContext;
 	
 	private Text stTextValue;
@@ -55,7 +61,9 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	private ComboViewer comboUsage;
 	private ComboViewer comboUsageEvo;
 	
+	private Experiment experiment;
 	private InitialModel initialModel;
+	
 	private SimTimeStopCondition stStopCondition;
 	private MeasurementCountStopCondition mcStopCondition;
 	
@@ -70,46 +78,29 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	private IObservableList usageModelsObs = Properties.selfList(Usage.class).observe(usageModels);
 	private IObservableList usageEvolutionModelsObs = Properties.selfList(UsageEvolution.class).observe(usageEvolutionModels);
 
-	private final Composite extensionComposite;
+	private Composite extensionComposite;
+	
+	private final UsageEvolution usageEvolutionEmpty = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
 	
 	public ConfigBasicComposite(final ConfAlternative input, Composite parent, int style) {
 		super(parent, style);
 		
 		this.alternative = input;
-		this.initialModel = input.getActiveInitialModel();
+		this.experiment = input.getActiveExperiment();
 		
-		//retrieve stop conditions
-		for(StopCondition sc : alternative.getActiveExperiment().getStopConditions()){
-			if(sc instanceof SimTimeStopCondition){
-				stStopCondition = (SimTimeStopCondition)sc;
-			}
-			else if(sc instanceof MeasurementCountStopCondition){
-				mcStopCondition = (MeasurementCountStopCondition)sc;
-			}
-		}
-		
-		// create stop conditions if they do not exist
-		if(stStopCondition == null){
-			stStopCondition = AbstractsimulationFactory.eINSTANCE.createSimTimeStopCondition();
-			stStopCondition.setSimulationTime(-1);
-
-			input.executeModelChange(new Runnable(){
-				@Override
-				public void run() {
-					input.getActiveExperiment().getStopConditions().add(stStopCondition);
+		if(experiment != null){
+			
+			this.initialModel = this.experiment.getInitialModel();
+			
+			//retrieve stop conditions
+			for(StopCondition sc : experiment.getStopConditions()){
+				if(sc instanceof SimTimeStopCondition){
+					stStopCondition = (SimTimeStopCondition)sc;
 				}
-			});
-		}
-		if(mcStopCondition == null){
-			mcStopCondition = AbstractsimulationFactory.eINSTANCE.createMeasurementCountStopCondition();
-			mcStopCondition.setMeasurementCount(-1);
-
-			input.executeModelChange(new Runnable(){
-				@Override
-				public void run() {
-					input.getActiveExperiment().getStopConditions().add(mcStopCondition);
+				else if(sc instanceof MeasurementCountStopCondition){
+					mcStopCondition = (MeasurementCountStopCondition)sc;
 				}
-			});
+			}
 		}
 
 		setLayout(new GridLayout(1, false));
@@ -146,8 +137,9 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				comboUsage.setLabelProvider(new LabelProvider(){
 					@Override
 					public String getText(Object element) {
-						if(element instanceof NamedElement){
-							return ((NamedElement)element).getEntityName();
+						if(element instanceof EObject){
+							EObject object = (EObject)element;
+							return object.eResource().getURI().lastSegment();
 						}
 						return element.toString();
 					}
@@ -166,13 +158,31 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 				comboUsageEvo.setLabelProvider(new LabelProvider(){
 					@Override
 					public String getText(Object element) {
-						if(element instanceof NamedElement){
-							return ((NamedElement)element).getEntityName();
+						if(element == usageEvolutionEmpty){
+							return "Do not use Usage evolution";
+						}
+						if(element instanceof EObject){
+							EObject object = (EObject)element;
+							return object.eResource().getURI().lastSegment();
 						}
 						return element.toString();
 					}
 				});
 				comboUsageEvo.setInput(usageEvolutionModelsObs);
+				
+				comboUsageEvo.addSelectionChangedListener(new ISelectionChangedListener() {
+					
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+						if(selection.getFirstElement() == usageEvolutionEmpty){
+							comboUsage.getCombo().setEnabled(true);
+						}
+						else{
+							comboUsage.getCombo().setEnabled(false);
+						}
+					}
+				});
 			
 				//stop time condition
 				btnSimulationTimeStop = new Button(settingsComposite, SWT.CHECK);
@@ -217,6 +227,8 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		List<EObject> usages = new ArrayList<EObject>();
 		List<EObject> usageEvolutions = new ArrayList<EObject>();
 		
+		usageEvolutions.add(usageEvolutionEmpty);
+		
 		InputAlternative ia = alternative.getInputAlternative();
 		
 		if(ia != null){
@@ -244,14 +256,35 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 		Diffs.computeLazyListDiff(usageModelsObs, usages).applyTo(usageModelsObs);
 		Diffs.computeLazyListDiff(usageEvolutionModelsObs, usageEvolutions).applyTo(usageEvolutionModelsObs);
 
-		if(m_bindingContext != null){
-			m_bindingContext.updateTargets();
+		//retrieve model objects
+		experiment = alternative.getActiveExperiment();
+		initialModel = alternative.getActiveInitialModel();
+		stStopCondition = null;
+		mcStopCondition = null;
+		
+		if(experiment != null){
+			//retrieve stop conditions
+			for(StopCondition sc : experiment.getStopConditions()){
+				if(sc instanceof SimTimeStopCondition){
+					stStopCondition = (SimTimeStopCondition)sc;
+				}
+				else if(sc instanceof MeasurementCountStopCondition){
+					mcStopCondition = (MeasurementCountStopCondition)sc;
+				}
+			}
 		}
 		
-		if(comboUsage.getCombo().isDisposed()){
+		//re-bind new model objects
+		if(m_bindingContext != null){
+			m_bindingContext.dispose();
+		}
+		m_bindingContext = initDataBindings();
+		
+		//refresh combo
+		if(!comboUsage.getCombo().isDisposed()){
 			comboUsage.refresh();
 		}
-		if(comboUsageEvo.getCombo().isDisposed()){
+		if(!comboUsageEvo.getCombo().isDisposed()){
 			comboUsageEvo.refresh();
 		}
 		
@@ -259,21 +292,49 @@ public class ConfigBasicComposite extends Composite implements IRefreshable{
 	
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
-		
-		// Usage selection combo
-		IObservableValue usageEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
-																	   initialModel, 
-																	   ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_MODEL);
-		IViewerObservableValue usageSelectionObs = ViewerProperties.singleSelection().observe(comboUsage);
-		bindingContext.bindValue(usageSelectionObs, usageEmfObs);
-		
-		// Usage evolution selection combo
-		IObservableValue usageEvoEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
-																		  initialModel, 
-																		  ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_EVOLUTION);
-		IViewerObservableValue usageEvoSelectionObs = ViewerProperties.singleSelection().observe(comboUsageEvo);
-		bindingContext.bindValue(usageEvoSelectionObs, usageEvoEmfObs);
 
+		if(initialModel == null){
+			
+			logger.warning("Experiment initial model object does not exist! Basic configurations will not be displayed!");
+			
+			comboUsage.getCombo().setEnabled(false);
+			comboUsageEvo.getCombo().setEnabled(false);
+		}
+		else{
+
+			comboUsage.getCombo().setEnabled(true);
+			comboUsageEvo.getCombo().setEnabled(true);
+			
+			// Usage selection combo
+			IObservableValue usageEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																		   initialModel, 
+																		   ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_MODEL);
+			IViewerObservableValue usageSelectionObs = ViewerProperties.singleSelection().observe(comboUsage);
+			bindingContext.bindValue(usageSelectionObs, usageEmfObs);
+			
+			// Usage evolution selection combo
+			IObservableValue usageEvoEmfObs = EMFEditObservables.observeValue(alternative.getEditingDomain(), 
+																			  initialModel, 
+																			  ExperimentsPackage.Literals.INITIAL_MODEL__USAGE_EVOLUTION);
+			IViewerObservableValue usageEvoSelectionObs = ViewerProperties.singleSelection().observe(comboUsageEvo);
+			
+			UpdateValueStrategy uvs = new UpdateValueStrategy(true, UpdateValueStrategy.POLICY_UPDATE){
+				
+				@Override
+				public Object convert(Object value) {
+					if(value == usageEvolutionEmpty){
+						return null;
+					}
+					if(value == null){
+						return usageEvolutionEmpty;
+					}
+					return super.convert(value);
+				}
+				
+			};
+			bindingContext.bindValue(usageEvoSelectionObs, usageEvoEmfObs, uvs, uvs);
+		}
+		
 		if(stStopCondition != null){
 
 			btnSimulationTimeStop.setEnabled(true);

@@ -17,7 +17,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 
-import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListener;
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
@@ -86,33 +85,6 @@ public abstract class ResourceProvider {
 						removeResource(r);
 						r.delete();
 					}
-				}
-				
-				if (alternativeDelta.getKind() == IResourceDelta.CHANGED)
-				{
-					final IEditorInputResource alternative = resources.get(resource);
-					
-					if (alternative == null){
-						return;
-					}
-										
-					// do not trigger re-load, if the property change is 
-					// triggered from create/save/delete operations 
-					if(alternative.isJobInProgress() 
-							|| alternative.isCreateInProgress() 
-							|| alternative.isDeleteInProgress() 
-							|| alternative.isSaveInProgress()){
-						return;
-					}
-					
-					BatchExecutor.getInstance().addTask(this, resource, new Runnable() {
-						
-						@Override
-						public void run() {
-							alternative.load();
-						}
-					});
-					
 				}
 			}
 			
