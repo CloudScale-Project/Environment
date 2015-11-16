@@ -113,7 +113,8 @@ public abstract class AlternativeEditor {
 		part.getPersistedState().put(ALTERNATIVE_RESOURCE, resourcePath);
 
 		IEditorInputResource eir = ResourceRegistry.getInstance().findResource(resourcePath);
-		if(eir != null){
+		IEditorInputResource oldEir = context.get(IEditorInputResource.class);
+		if(eir != null && eir != oldEir){
 			eir.load();
 			context.set(IResource.class, eir.getResource());
 			context.set(IEditorInputResource.class, eir);
