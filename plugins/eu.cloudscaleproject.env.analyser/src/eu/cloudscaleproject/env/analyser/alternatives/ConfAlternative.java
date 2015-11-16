@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import javax.measure.Measure;
 import javax.measure.unit.Unit;
@@ -91,6 +92,8 @@ import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ConfAlternative extends AbstractConfigAlternative
 {
+	private static final Logger logger = Logger.getLogger(ConfAlternative.class.getName());
+	
 	public static final String KEY_NAME = "name";
 	private final Type type;
 
@@ -1271,7 +1274,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		// create data source - a.k.a where the result will be saved
 		FileDatasource ds = AbstractsimulationFactory.eINSTANCE.createFileDatasource();
-		ds.setLocation(resultAlternative.getResource().getLocation().toString());
+		
+		String resultPath = resultAlternative.getResource().getLocation().toString();
+		logger.info("Results folder: " + resultPath);
+		ds.setLocation(resultPath);
 
 		SimuLizarConfiguration conf = SimulizartooladapterFactory.eINSTANCE.createSimuLizarConfiguration();
 		conf.setName("SimuLizar default configuration");
