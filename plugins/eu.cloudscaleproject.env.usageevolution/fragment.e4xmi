@@ -8,7 +8,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_gBx9IIexEeWtgv-_M2130A" elementId="eu.cloudscaleproject.env.usageevolution.handler.1" contributionURI="bundleclass://eu.cloudscaleproject.env.usageevolution/eu.cloudscaleproject.env.usageevolution.handlers.CreateAlternativeHandler" command="_aGRoAIexEeWtgv-_M2130A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_L5Sr0GEYEeWayeVD4LyD5g" featurename="descriptors" parentElementId="eu.cloudscaleproject.env.product.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_QOtM4GEYEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution" label="Usage evolution" tooltip="Usage evolution alternative editor" allowMultiple="true" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.usageevolution/eu.cloudscaleproject.env.usageevolution.editors.UsageEvolutionEditor">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_QOtM4GEYEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.usageevolution.partdescriptor.usageEvolution" label="Usage evolution" iconURI="platform:/plugin/eu.cloudscaleproject.env.usageevolution/resources/icons/ic-usage-evolution.png" tooltip="Usage evolution alternative editor" allowMultiple="true" closeable="true" dirtyable="true" contributionURI="bundleclass://eu.cloudscaleproject.env.usageevolution/eu.cloudscaleproject.env.usageevolution.editors.UsageEvolutionEditor">
       <handlers xmi:id="_l_R50IFwEeWdDrhvqLZUaw" elementId="eu.cloudscaleproject.env.usageevolution.handler.0" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.handlers.SaveHandler" command="_jlWOAIFwEeWdDrhvqLZUaw"/>
     </elements>
   </fragments>
