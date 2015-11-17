@@ -29,6 +29,7 @@
         </children>
       </children>
     </children>
+    <handlers xmi:id="_k036cI0cEeWwovX2CY4ckw" elementId="eu.cloudscaleproject.env.product.handler.3" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.ExitHandler" command="_3Cp1UGExEeWayeVD4LyD5g"/>
     <sharedElements xsi:type="advanced:Area" xmi:id="_dcRyAIDpEeKVEoXKPSzKEw" elementId="org.eclipse.ui.editorss" selectedElement="_dcRyAYDpEeKVEoXKPSzKEw">
       <children xsi:type="basic:PartStack" xmi:id="_dcRyAYDpEeKVEoXKPSzKEw" elementId="org.eclipse.e4.primaryDataStack">
         <tags>newtablook</tags>
