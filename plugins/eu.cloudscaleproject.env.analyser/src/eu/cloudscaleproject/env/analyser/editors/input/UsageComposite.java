@@ -196,7 +196,7 @@ public class UsageComposite extends Composite implements IRefreshable{
 		limboComboViewer.setInput(getLimboAlternatives());
 		
 		Button button = new Button(this, SWT.NONE);
-		button.setText("Open limbo editor");
+		button.setText("Open editor");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
