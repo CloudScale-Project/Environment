@@ -41,7 +41,7 @@ public class ResultAlternative extends AbstractResultAlternative{
 			e1.printStackTrace();
 		}
 			
-		return findOrInitRepository(getResource().getLocation().toOSString());
+		return findOrInitRepository(getResource().getLocation().toString());
 	}
 	
 	/**
