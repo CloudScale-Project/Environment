@@ -180,6 +180,16 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 				selectionService.setSelection(e.getSelection());
 			}
 		});
+		
+		Display.getDefault().timerExec(100, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				treeViewer.getTree().setSelection(treeViewer.getTree().getItem(0));
+				propertySheetPage.selectionChanged(null, treeViewer.getSelection());
+			}
+		});
 	}
 	
 	public TreeViewer getTreeViewer(){
