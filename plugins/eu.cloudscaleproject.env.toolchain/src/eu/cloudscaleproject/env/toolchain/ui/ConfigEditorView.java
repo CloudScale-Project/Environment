@@ -344,7 +344,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void updateControls()
 	{
-		Display.getDefault().asyncExec(new Runnable()
+		Display.getDefault().timerExec(200,new Runnable()
 		{
 			@Override
 			public void run()
