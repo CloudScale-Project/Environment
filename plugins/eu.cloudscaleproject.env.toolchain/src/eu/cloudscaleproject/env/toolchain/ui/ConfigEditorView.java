@@ -324,12 +324,15 @@ public abstract class ConfigEditorView extends AbstractEditorView
 			{
 				updateControls();
 			}
+			@Override
+			public void running(IJobChangeEvent event)
+			{
+				updateControls();
+			}
 		});
 
-		job.schedule();
 		lastJob = job;
-
-		updateControls();
+		job.schedule();
 	}
 
 	private void stop()
@@ -344,7 +347,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 	private void updateControls()
 	{
-		Display.getDefault().timerExec(200,new Runnable()
+		Display.getDefault().asyncExec(new Runnable()
 		{
 			@Override
 			public void run()
