@@ -94,11 +94,6 @@ public abstract class ReportResultComposite extends Composite implements IRefres
 		LocalDirectoryRepository ldr = alternative.getEDP2Model();
 		EList<ExperimentGroup> egList = ldr.getExperimentGroups();
 		
-		if (egList.isEmpty()) {
-			tableViewer.setInput(tableRows);
-			return;
-		}
-		
 		for(int i=0; i<egList.size(); i++){
 			fillTable(egList.get(i), i, tableRows);
 		}		

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -59,7 +60,7 @@ import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 
 /**
  *
- * @author Vito Čuček <vito.cucek@xlab.si>
+ * @author Vito ÄŒuÄ�ek <vito.cucek@xlab.si>
  *
  */
 @SuppressWarnings("deprecation")
@@ -176,6 +177,8 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 
 		if (egList.isEmpty())
 		{
+			MessageDialog.open(MessageDialog.ERROR, Display.getDefault().getActiveShell(), 
+					"Results are empty", "This is not expected. Could be caused by not handling whitespaces correctly in CSE project path (bug already reported to Palladio community).", SWT.NONE);		
 			return;
 		}
 
