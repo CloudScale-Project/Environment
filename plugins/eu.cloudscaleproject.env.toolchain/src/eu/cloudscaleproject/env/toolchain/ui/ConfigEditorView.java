@@ -235,9 +235,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 					@Override
 					public void mouseUp(MouseEvent e)
 					{
-
 						ResourceRegistry.getInstance().openResourceEditor(alternative.getInputAlternative());
-						// TODO Auto-generated method stub
 						super.mouseUp(e);
 					}
 				});
@@ -320,13 +318,11 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		job.addJobChangeListener(new JobChangeAdapter()
 		{
 			@Override
-			public void done(IJobChangeEvent event)
-			{
+			public void done(IJobChangeEvent event)	{
 				updateControls();
 			}
 			@Override
-			public void running(IJobChangeEvent event)
-			{
+			public void running(IJobChangeEvent event) {
 				updateControls();
 			}
 		});
@@ -355,27 +351,33 @@ public abstract class ConfigEditorView extends AbstractEditorView
 				if (stackedContainer == null || stackedContainer.isDisposed()) {
 					return;
 				}
+				
+				Composite newTopControl = null;
 
 				if (isRunning()) {
 					btnRun.setEnabled(false);
-					((StackLayout) stackedContainer.getLayout()).topControl = progressComposite;
-					stackedContainer.layout();
+					newTopControl = progressComposite;
 				} else {
 					// WORKAROUND : if before 3s after job is finished, than
 					// show result
+					 
 					if (lastJob != null && System.currentTimeMillis() < 3000 + lastJob.getEndTimestamp()) {
 						resultsComposite.setStatus(lastJob.getResult());
-						((StackLayout) stackedContainer.getLayout()).topControl = resultsComposite;
+						newTopControl = resultsComposite;
 					} else {
-						((StackLayout) stackedContainer.getLayout()).topControl = validationComposite;
+						
+						newTopControl = validationComposite;
 					}
 
-					btnRun.setEnabled(true);
+					btnRun.setEnabled(true);					
+					updateMetaData();
+				}
+				
+				if (((StackLayout) stackedContainer.getLayout()).topControl != newTopControl)
+				{
+					((StackLayout) stackedContainer.getLayout()).topControl = newTopControl;
 					stackedContainer.layout();
 					stackedContainer.redraw();
-					
-					updateMetaData();
-					ConfigEditorView.this.forceFocus();
 				}
 			}
 		});
@@ -389,16 +391,18 @@ public abstract class ConfigEditorView extends AbstractEditorView
 		public AlternativeRunJob()
 		{
 			super("CloudScale Run [" + alternative.getName() + "]");
-
+			
+			startTimestamp = System.currentTimeMillis();
+			endTimestamp = -1;
 		}
 
 		private RunProgressMonitor internalMonitor;
-
+		
+		
 		@Override
 		protected IStatus run(IProgressMonitor monitor)
 		{
 			try {
-				startTimestamp = System.currentTimeMillis();
 				internalMonitor = new RunProgressMonitor();
 				return alternative.run(internalMonitor);
 			} finally {
@@ -415,7 +419,7 @@ public abstract class ConfigEditorView extends AbstractEditorView
 
 		public boolean isRunning()
 		{
-			return startTimestamp > 0 && endTimestamp == 0;
+			return startTimestamp > 0 && endTimestamp < startTimestamp;
 		}
 
 		@SuppressWarnings("unused")
