@@ -48,6 +48,8 @@ import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.edp2.visualization.IVisualisationInput;
 import org.palladiosimulator.edp2.visualization.jfreechart.input.JFreeChartVisualizationInput;
 import org.palladiosimulator.edp2.visualization.wizards.DefaultViewsWizard;
+import org.palladiosimulator.pcmmeasuringpoint.ActiveResourceMeasuringPoint;
+import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ResultAlternative;
 import eu.cloudscaleproject.env.analyser.editors.result.ResultUtils.ChartType;
@@ -165,7 +167,9 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 		if (menuList.getInput() != null)
 			return;
 
-		List<MonitorItem> monitors = new ArrayList<>();
+		List<MonitorItem> activeResourceMonitors = new ArrayList<>();
+		List<MonitorItem> usageSenarioMonitors = new ArrayList<>();
+		List<MonitorItem> otherMonitors = new ArrayList<>();
 
 		LocalDirectoryRepository ldr = alternative.getEDP2Model();
 		EList<ExperimentGroup> egList = ldr.getExperimentGroups();
@@ -183,11 +187,27 @@ public class MonitorResultsComposite extends Composite implements IRefreshable
 			{
 				for (Measurement measurement : run.getMeasurement())
 				{
+					MonitorItem monitorItem = new MonitorItem(setting, measurement);
 
-					monitors.add(new MonitorItem(setting, measurement));
+					if (monitorItem.measuringPoint instanceof ActiveResourceMeasuringPoint)
+					{
+						activeResourceMonitors.add(monitorItem);
+					}
+					else if (monitorItem.measuringPoint instanceof UsageScenarioMeasuringPoint){
+						usageSenarioMonitors.add(monitorItem);
+					}
+					else
+					{
+						otherMonitors.add(monitorItem);
+					}
 				}
 			}
 		}
+		
+		List<MonitorItem> monitors = new ArrayList<>();
+		monitors.addAll(usageSenarioMonitors);
+		monitors.addAll(activeResourceMonitors);
+		monitors.addAll(otherMonitors);
 
 		menuList.setInput(monitors);
 
