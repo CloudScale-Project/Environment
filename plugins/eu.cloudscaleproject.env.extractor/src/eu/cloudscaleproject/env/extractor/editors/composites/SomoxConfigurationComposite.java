@@ -70,7 +70,7 @@ public class SomoxConfigurationComposite extends Composite
 				}
 
 				Label lblGroupName = new Label (composite, SWT.NONE);
-				lblGroupName.setFont(SWTResourceManager.getFont("Sans", 10, SWT.ITALIC));
+				lblGroupName.setFont(SWTResourceManager.getFont("Sans", 10, SWT.NORMAL));
 				GridData gd_lblGroup = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
 				gd_lblGroup.heightHint = 20;
 				lblGroupName.setLayoutData(gd_lblGroup);
@@ -94,7 +94,7 @@ public class SomoxConfigurationComposite extends Composite
 		Label lblName = new Label(parent, SWT.NONE);
 		GridData gd_lblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		lblName.setLayoutData(gd_lblNewLabel);
-		lblName.setText(md.metricLabel);
+		lblName.setText("  "+md.metricLabel);
 		
 		Label lblValue = new Label(parent, SWT.BORDER);
 		lblValue.setAlignment(SWT.CENTER);
