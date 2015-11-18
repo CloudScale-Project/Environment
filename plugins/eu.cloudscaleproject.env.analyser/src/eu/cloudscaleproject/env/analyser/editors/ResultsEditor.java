@@ -23,7 +23,7 @@ public class ResultsEditor extends AlternativeEditor{
 			
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Analyser results ["+ alternative.getName() +"]");
 	}
 

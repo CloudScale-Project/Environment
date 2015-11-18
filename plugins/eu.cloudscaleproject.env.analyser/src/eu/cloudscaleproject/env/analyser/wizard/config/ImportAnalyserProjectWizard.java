@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -25,6 +27,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.wizard.Wizard;
 import org.palladiosimulator.experimentautomation.experiments.Experiment;
 import org.palladiosimulator.experimentautomation.experiments.ExperimentRepository;
+import org.palladiosimulator.experimentautomation.experiments.Modification;
+import org.palladiosimulator.experimentautomation.experiments.SchedulingPolicy2DelayModification;
+import org.palladiosimulator.experimentautomation.experiments.Variation;
 import org.palladiosimulator.pcm.allocation.Allocation;
 
 import eu.cloudscaleproject.env.analyser.Activator;
@@ -38,7 +43,6 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputEMF;
-import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.ExternalModelsSelectionPage;
 
@@ -56,6 +60,8 @@ public class ImportAnalyserProjectWizard extends Wizard{
 	private final AlternativeNamePage selectNamePage;
 	private final ExternalModelsSelectionPage modelSelectionPage;
 	
+	private InputAlternative ia;
+	private ConfAlternative ca;
 	private final Map<Resource, EditorInputEMF> limboAlternatives  = new HashMap<Resource, EditorInputEMF>();
 	
 	public ImportAnalyserProjectWizard(IProject project) {
@@ -165,19 +171,15 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		
 		limboAlternatives.clear();
 		
-		final InputAlternative ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
-		final ConfAlternative ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), ConfAlternative.Type.NORMAL.name(), true);
-
-		EditorInputJob job = new EditorInputJob("Project import", ia, ca) {
+		WorkspaceJob job = new WorkspaceJob("Project import") {
 			
 			@Override
-			public IStatus execute(final IProgressMonitor monitor){
-								
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				try{
-					boolean done = importProject(ia, ca, monitor);
+					boolean done = importProject(monitor);
 					if(!done){
-						ia.delete();
-						ca.delete();
+						if(ia != null){ia.delete(); ia = null;};
+						if(ca != null){ca.delete(); ca = null;};
 						for(EditorInputEMF eir : limboAlternatives.values()){
 							eir.delete();
 						}
@@ -197,8 +199,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		return true;
 	}
 
-	public boolean importProject(final InputAlternative ia, 
-								 final ConfAlternative ca, final IProgressMonitor monitor) {
+	public boolean importProject(final IProgressMonitor monitor) {
 		
 		monitor.beginTask("Project import", 10);
 		
@@ -246,6 +247,29 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		if(exp == null){
 			return false;
 		}
+		
+		//find out the experiment type (normal, capacity...)
+		ConfAlternative.Type type = ConfAlternative.Type.NORMAL;
+		for(Variation v : exp.getVariations()){
+			if(v.getType() != null && 
+					"org.palladiosimulator.pcm.usagemodel.ClosedWorkload".equals(v.getType().getVariedEntityInterface())){
+				
+				type = ConfAlternative.Type.CAPACITY;
+				
+				for(Modification m : exp.getModifications()){
+					
+					if(m instanceof SchedulingPolicy2DelayModification){
+						type = ConfAlternative.Type.SCALABILITY;
+					}
+					
+				}
+				
+			}
+		}
+
+		//create new alternatives
+		ia = (InputAlternative)inputResourceProvider.createNewResource(selectNamePage.getName(), null);
+		ca = (ConfAlternative)confResourceProvider.createNewResource(selectNamePage.getName(), type.name(), true);
 		
 		monitor.worked(1);
 		if(monitor.isCanceled()){
@@ -357,7 +381,7 @@ public class ImportAnalyserProjectWizard extends Wizard{
 		{
 			if(ia != null){
 				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-				ia.addSubResourceModel(f);
+				ia.addSubResource(f);
 			}
 		}
 		for (Resource resource : limboResources)
@@ -365,14 +389,14 @@ public class ImportAnalyserProjectWizard extends Wizard{
 			EditorInputEMF eir = limboAlternatives.get(resource);
 			if(eir != null){
 				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-				eir.addSubResourceModel(f);
+				eir.addSubResource(f);
 			}
 		}
 		for (Resource resource : confResources)
 		{
 			if(ca != null){
 				IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-				ca.addSubResourceModel(f);
+				ca.addSubResource(f);
 			}
 		}
 		

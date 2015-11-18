@@ -16,7 +16,7 @@ public class UsageEvolutionEditor extends AlternativeEditor{
 	
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, UsageEvolutionAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Usage evolution ["+ alternative.getName() +"]");
 	}
 

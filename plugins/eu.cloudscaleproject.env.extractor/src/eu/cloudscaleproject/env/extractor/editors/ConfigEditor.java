@@ -21,7 +21,7 @@ public class ConfigEditor extends AlternativeEditor{
 
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, ConfingAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Extractor config ["+ alternative.getName() +"]");
 	}
 

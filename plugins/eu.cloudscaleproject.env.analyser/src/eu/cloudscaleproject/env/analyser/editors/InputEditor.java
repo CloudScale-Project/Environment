@@ -23,7 +23,7 @@ public class InputEditor extends AlternativeEditor{
 	
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, InputAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Analyser input ["+ alternative.getName() +"]");
 	}
 

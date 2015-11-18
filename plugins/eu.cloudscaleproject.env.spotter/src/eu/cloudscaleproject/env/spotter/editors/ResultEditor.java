@@ -21,7 +21,7 @@ public class ResultEditor extends AlternativeEditor{
 	
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, ResultAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Dynamic spotter result ["+ alternative.getName() +"]");
 	}
 

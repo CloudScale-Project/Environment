@@ -14,7 +14,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.PersistState;
@@ -99,15 +98,6 @@ public abstract class AlternativeEditor {
 	public abstract Composite createComposite(Composite composite, IEditorInputResource resource);
 	
 	@PostConstruct
-	public void postConstruct(IEclipseContext context){
-		
-		String resourcePath = part.getPersistedState().get(ALTERNATIVE_RESOURCE);
-		if(resourcePath != null){
-			setInput(context, resourcePath);
-		}
-	}
-	
-	@Inject
 	public void setInput(IEclipseContext context, @Named(ALTERNATIVE_RESOURCE) String resourcePath){
 		
 		part.getPersistedState().put(ALTERNATIVE_RESOURCE, resourcePath);
@@ -116,8 +106,7 @@ public abstract class AlternativeEditor {
 		IEditorInputResource oldEir = context.get(IEditorInputResource.class);
 		if(eir != null && eir != oldEir){
 			eir.load();
-			context.set(IResource.class, eir.getResource());
-			context.set(IEditorInputResource.class, eir);
+			setAlternative(eir);
 		}
 		
 	}
@@ -157,8 +146,6 @@ public abstract class AlternativeEditor {
 		this.parentComposite.redraw();
 	}
 	
-	@Inject
-	@Optional
 	protected void setAlternative(final IEditorInputResource alternative){
 		
 		if(this.alternative == alternative){
@@ -179,6 +166,7 @@ public abstract class AlternativeEditor {
 		}
 		
 		part.getContext().set(IProject.class, alternative.getProject());
+		part.getContext().set(IResource.class, alternative.getResource());
 		part.getContext().set(IEditorInputResource.class, alternative);
 		part.getContext().set(IValidationStatusProvider.class, alternative);
 		part.getContext().set(MDirtyable.class, dirtyable);

@@ -16,7 +16,7 @@ public class OverviewEditor extends AlternativeEditor{
 	
 	@Inject
 	@Optional
-	public void setAlternative(MPart part, Composite parent, OverviewAlternative alternative){
+	public void setAlternative(MPart part, IEditorInputResource alternative){
 		part.setLabel("Overview ["+ alternative.getName() +"]");
 	}
 

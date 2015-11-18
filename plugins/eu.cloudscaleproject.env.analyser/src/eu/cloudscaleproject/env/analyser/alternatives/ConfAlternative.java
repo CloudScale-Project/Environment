@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.transaction.RunnableWithResult;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gmf.runtime.emf.core.internal.resources.PathmapManager;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
@@ -937,12 +939,19 @@ public class ConfAlternative extends AbstractConfigAlternative
 		exp.getVariations().clear();
 		exp.getVariations().add(var);
 
-		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		
-		synchronized (resSet) {
-			resSet.getResource(variations, true);
+		try {
+			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+				@Override
+				public void run() {
+					URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+					resSet.getResource(variations, true);
+				}
+				
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-
+		
 		// create SLO
 		{
 			ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
@@ -978,12 +987,19 @@ public class ConfAlternative extends AbstractConfigAlternative
 
 		exp.getModifications().add(ExperimentsFactory.eINSTANCE.createSchedulingPolicy2DelayModification());
 
-		URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
-		
-		synchronized (resSet) {
-			resSet.getResource(variations, true);
+		try {
+			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+				@Override
+				public void run() {
+					URI variations = PathmapManager.denormalizeURI(URI.createURI("pathmap://ENVIRONMENT_ANALYSER/pcm.variation"));
+					resSet.getResource(variations, true);
+				}
+				
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-
+		
 		// create SLO
 		{
 			ServiceLevelObjectiveRepository sloRep = retrieveSLORepository();
