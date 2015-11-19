@@ -4,53 +4,6 @@
    <extension
          point="eu.cloudscaleproject.env.example">
       <example
-            description="This is CloudStore example."
-            name="CloudStore"
-            readme="resources/examples/cloudstore/README-CloudStore.html">
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-environment.zip"
-               dependency="Source"
-               name="Environment"
-               readme="resources/examples/cloudstore/README-CloudStore-environment.html"
-               type="environment">
-         </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-project.zip"
-               name="Source"
-               readme="resources/examples/cloudstore/README-CloudStore-project.html"
-               type="source">
-         </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-extractor.zip"
-               dependency="Source"
-               name="Extractor"
-               readme="resources/examples/cloudstore/README-CloudStore-extractor.html"
-               type="extractor">
-         </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-analyser.zip"
-               name="Analyser"
-               readme="resources/examples/cloudstore/README-CloudStore-analyser.html"
-               type="analyser">
-         </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-staticspotter.zip"
-               dependency="Source"
-               name="Static Spotter"
-               readme="resources/examples/cloudstore/README-CloudStore-staticspotter.html"
-               type="staticspotter">
-         </resource>
-         <resource
-               bundle="resources/examples/cloudstore/CloudStore-dynamicspotter.zip"
-               name="Dynamic Spotter"
-               readme="resources/examples/cloudstore/README-CloudStore-dynamicspotter.html"
-               type="dynamicspotter">
-         </resource>
-      </example>
-   </extension>
-   <extension
-         point="eu.cloudscaleproject.env.example">
-      <example
             description="This is Minimal example."
             name="Minimal"
             readme="resources/examples/minimal/README-Minimal.html">
@@ -67,31 +20,26 @@
                readme="resources/examples/minimal/README-Minimal-project.html"
                type="source">
          </resource>
+      </example>
+   </extension>
+   <extension
+         point="eu.cloudscaleproject.env.example">
+      <example
+            description="This is CloudStore example."
+            name="CloudStore"
+            readme="resources/examples/cloudstore/README-CloudStore.html">
          <resource
-               bundle="resources/examples/minimal/Minimal-extractor.zip"
+               bundle="resources/examples/cloudstore/CloudStore-environment.zip"
                dependency="Source"
-               name="Extractor"
-               readme="resources/examples/minimal/README-Minimal-extractor.html"
-               type="extractor">
+               name="Environment"
+               readme="resources/examples/cloudstore/README-CloudStore-environment.html"
+               type="environment">
          </resource>
          <resource
-               bundle="resources/examples/minimal/Minimal-analyser.zip"
-               name="Analyser"
-               readme="resources/examples/minimal/README-Minimal-analyser.html"
-               type="analyser">
-         </resource>
-         <resource
-               bundle="resources/examples/minimal/Minimal-staticspotter.zip"
-               dependency="Source"
-               name="Static Spotter"
-               readme="resources/examples/minimal/README-Minimal-staticspotter.html"
-               type="staticspotter">
-         </resource>
-         <resource
-               bundle="resources/examples/minimal/Minimal-dynamicspotter.zip"
-               name="Dynamic Spotter"
-               readme="resources/examples/minimal/README-Minimal-dynamicspotter.html"
-               type="dynamicspotter">
+               bundle="resources/examples/cloudstore/CloudStore-project.zip"
+               name="Source"
+               readme="resources/examples/cloudstore/README-CloudStore-project.html"
+               type="source">
          </resource>
       </example>
    </extension>
