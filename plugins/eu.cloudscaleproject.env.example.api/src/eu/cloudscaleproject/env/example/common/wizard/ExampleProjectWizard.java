@@ -23,6 +23,7 @@ import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.eclipse.ui.wizards.datatransfer.ZipFileStructureProvider;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.CommandExecutor;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
 import eu.cloudscaleproject.env.example.common.Example;
 import eu.cloudscaleproject.env.example.common.Example.Resource;
@@ -94,6 +95,7 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 					selectExampleProject(cseProject);
 				}
 
+
 				return Status.OK_STATUS;
 			}
 		};
@@ -101,7 +103,15 @@ public class ExampleProjectWizard extends Wizard implements INewWizard, IExecuta
 		job.setUser(true);
 		job.schedule();
 
+		openMainPerspective();
+
 		return true;
+	}
+	
+	private static void openMainPerspective(){
+
+		CommandExecutor.getInstance().execute("eu.cloudscaleproject.env.product.command.openperspective", 
+								"eu.cloudscaleproject.env.product.perspective.main");
 	}
 	
 	private static void selectExampleProject (final IProject project)
