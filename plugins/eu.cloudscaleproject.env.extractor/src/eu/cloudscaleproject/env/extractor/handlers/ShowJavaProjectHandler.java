@@ -6,14 +6,26 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 public class ShowJavaProjectHandler {
 	
 	@Execute
 	public void execute(IResource resource){
-		IProject project = (IProject)resource;
-		System.out.println("Action executed on: " + project.getFullPath().toString());
-		//TODO:
+		try {
+			IProject project = (IProject)resource;
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IViewPart viewPart = page.findView("org.eclipse.ui.navigator.ProjectExplorer");
+			page.showView("org.eclipse.ui.navigator.ProjectExplorer");
+			ISelectionProvider selProvider = viewPart.getSite().getSelectionProvider();
+			selProvider.setSelection(new StructuredSelection(project));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@CanExecute
