@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.staticspotter.wizard;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
@@ -104,8 +105,11 @@ public class ImportExtractorResultWizard extends Wizard
 	@Override
 	public boolean canFinish()
 	{
-		if (getContainer().getCurrentPage() == getPages()[getPageCount() - 1])
+		IWizardPage lastPage = getPages()[getPageCount() - 1];
+		if (getContainer().getCurrentPage() == lastPage && lastPage.isPageComplete())
+		{
 			return true;
+		}
 
 		return false;
 	}

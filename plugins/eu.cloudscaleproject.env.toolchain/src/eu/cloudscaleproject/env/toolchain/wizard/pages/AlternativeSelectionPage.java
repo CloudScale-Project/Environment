@@ -68,7 +68,14 @@ public class AlternativeSelectionPage extends WizardPage{
 				checkComplete();
 			}
 		});
+
 		m_bindingContext = initDataBindings();
+
+		Object e = listViewer.getElementAt(0);
+		if (e != null)
+			listViewer.setSelection(new StructuredSelection(e));
+
+		checkComplete();
 	}
 
 	protected DataBindingContext initDataBindings() {

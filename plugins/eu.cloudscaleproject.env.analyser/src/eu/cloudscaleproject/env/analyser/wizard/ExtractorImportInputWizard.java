@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -85,8 +86,11 @@ public class ExtractorImportInputWizard extends Wizard
 	@Override
 	public boolean canFinish()
 	{
-		if (getContainer().getCurrentPage() == getPages()[getPageCount() - 1])
+		IWizardPage lastPage = getPages()[getPageCount() - 1];
+		if (getContainer().getCurrentPage() == lastPage && lastPage.isPageComplete())
+		{
 			return true;
+		}
 
 		return false;
 	}
