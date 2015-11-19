@@ -79,8 +79,15 @@ public class ResultAlternative extends AbstractResultAlternative{
     
     @Override
     protected void doDelete(IProgressMonitor monitor) {
-    	LocalDirectoryRepository ldr = getEDP2Model();
-    	RepositoryManager.removeRepository(RepositoryManager.getCentralRepository(), ldr);
+    	try
+    	{
+			LocalDirectoryRepository ldr = getEDP2Model();
+			RepositoryManager.removeRepository(RepositoryManager.getCentralRepository(), ldr);
+    	} catch (Exception e)
+    	{
+    		e.printStackTrace();
+    	}
+
     	super.doDelete(monitor);
     }
 }
