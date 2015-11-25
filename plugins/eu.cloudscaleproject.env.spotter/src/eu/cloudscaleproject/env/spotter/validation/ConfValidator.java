@@ -48,10 +48,7 @@ public class ConfValidator implements IResourceValidator {
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration file is empty!"));
 				
 				status.checkError(ERROR_CONF,
-						job.getMeasurementEnvironment().getWorkloadAdapter() != null, true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
-				status.checkError(ERROR_CONF,
-						!job.getMeasurementEnvironment().getWorkloadAdapter().isEmpty(), true, 
+						job.getMeasurementEnvironment().getWorkloadAdapter() != null && !job.getMeasurementEnvironment().getWorkloadAdapter().isEmpty(), true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
 				
 				status.checkError(ERROR_CONF,
