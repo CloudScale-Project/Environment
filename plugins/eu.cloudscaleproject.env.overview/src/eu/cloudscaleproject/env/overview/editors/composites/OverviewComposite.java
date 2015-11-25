@@ -1,12 +1,8 @@
 package eu.cloudscaleproject.env.overview.editors.composites;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -60,7 +56,21 @@ public class OverviewComposite extends AbstractEditorView implements ISelectable
 		mainContainer.setLayout(new FillLayout());
 		
 		new ValidationWidget(getFooter(), style, input);
+
+		{
+			SplitComposite splitComposite = new SplitComposite(mainContainer, SWT.VERTICAL);
+			
+			//Tree view
+			this.treeviewComposite = new EMFEditableTreeviewComposite(input, splitComposite, SWT.NONE);
+			splitComposite.setTopControl(treeviewComposite);
+			
+			//Property sheet page
+			PropertyPageComposite pageSheet = new PropertyPageComposite(
+					splitComposite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
+			splitComposite.setBottomControl(pageSheet);
+		}
 		
+		/*
 		CTabFolder tabFolder = new CTabFolder(mainContainer, SWT.NONE);
 		
 		CTabItem diagramTabItem = new CTabItem(tabFolder, SWT.NONE);
@@ -88,6 +98,7 @@ public class OverviewComposite extends AbstractEditorView implements ISelectable
 			diagramComposite.initializePalette(paletteComposite);
 			splitComposite.setBottomControl(paletteComposite);
 			
+			splitComposite.setSizeRatio(80);
 			diagramTabItem.setControl(splitComposite);
 		}
 		
@@ -109,6 +120,7 @@ public class OverviewComposite extends AbstractEditorView implements ISelectable
 		
 		tabFolder.setSelection(diagramTabItem);
 		tabFolder.layout();
+		*/
 		
 	}
 	

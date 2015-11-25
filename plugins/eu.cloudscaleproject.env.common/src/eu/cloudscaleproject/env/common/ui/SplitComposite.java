@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Sash;
 public class SplitComposite extends Composite{
 	
 	private final Sash sash;
+	private final FormData sashData;
 	private int layout;
 
 	public SplitComposite(Composite parent, int style) {
@@ -32,10 +33,10 @@ public class SplitComposite extends Composite{
 		}
 		
 		sash = new Sash (this, layout);
+		sashData = new FormData();
 		
 		final int limit = 120, percent = 50;
 		
-		final FormData sashData = new FormData ();
 		if(layout == SWT.HORIZONTAL){
 			sashData.left = new FormAttachment (0, 0);
 			sashData.right = new FormAttachment (100, 0);
@@ -72,6 +73,57 @@ public class SplitComposite extends Composite{
 				}
 			}
 		});
+		
+	}
+	
+	/**
+	 * 
+	 * Set the size ratio between the top and bottom composites.
+	 * 
+	 * @param ratio value in range (0-100)
+	 */
+	public void setSizeRatio(int percent) {
+
+		// clamp
+		//ratio = (float) Math.min(Math.max(ratio, 0.0), 1.0);
+
+		if(layout == SWT.HORIZONTAL){
+			sashData.left = new FormAttachment (0, 0);
+			sashData.right = new FormAttachment (100, 0);
+			sashData.top = new FormAttachment (percent, 0);
+		}
+		else{
+			sashData.left = new FormAttachment (percent, 0);
+			sashData.top = new FormAttachment (0, 0);
+			sashData.bottom = new FormAttachment (100, 0);
+		}
+
+		/*
+		Rectangle sashRect = sash.getBounds();
+		Rectangle rect = SplitComposite.this.getClientArea();
+
+		if (layout == SWT.HORIZONTAL) {
+			
+			int top = rect.height - sashRect.height;
+			int y = (int)((float)top * ratio);
+			
+			y = Math.max(Math.min(y, top), 0);
+			if (y != sashRect.y) {
+				sashData.top = new FormAttachment(0, y);
+				SplitComposite.this.layout();
+			}
+		} 
+		else {
+			int left = rect.width - sashRect.width;
+			int x = (int)((float)left * ratio);
+			
+			x = Math.max(Math.min(x, left), 0);
+			if (x != sashRect.x) {
+				sashData.left = new FormAttachment(0, x);
+				SplitComposite.this.layout();
+			}
+		}
+		*/
 		
 	}
 		

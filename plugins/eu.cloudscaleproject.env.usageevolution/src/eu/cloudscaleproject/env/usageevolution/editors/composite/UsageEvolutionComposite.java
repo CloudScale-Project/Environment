@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -115,7 +116,9 @@ public class UsageEvolutionComposite extends AbstractEditorView implements ISele
 		EList<EObject> contents = modelResource.getContents();
 		if (!contents.isEmpty())
 		{
-			plotCanvas.setRootSequence((Sequence) contents.get(0));
+			//copy sequence ( PlotCanvas does not support Transactions )
+			Sequence sequence = (Sequence)EcoreUtil.copy(contents.get(0));
+			plotCanvas.setRootSequence(sequence);
 			plotCanvas.redraw();
 		}
 	}
