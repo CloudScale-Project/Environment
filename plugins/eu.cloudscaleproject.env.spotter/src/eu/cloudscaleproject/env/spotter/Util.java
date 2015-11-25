@@ -63,6 +63,7 @@ public class Util
 		HierarchyFactory hierFactory = HierarchyFactory.getInstance();
 		String hierFile = confEditorInput.getResource().getFile(FileManager.HIERARCHY_FILENAME).getLocation().toString();
 		XPerformanceProblem hierarchy = hierFactory.parseHierarchyFile(hierFile);
+		if (hierarchy.getUniqueId() == null) hierarchy.setUniqueId(hierFile);
 		jobDescription.setHierarchy(hierarchy);
 
 		return jobDescription;

@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.spotter.alternatives;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,9 +15,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.EditorPart;
+import org.lpe.common.config.ConfigParameterDescription;
 import org.spotter.eclipse.ui.Activator;
 import org.spotter.eclipse.ui.UICoreException;
 import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
+import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
+import org.spotter.shared.configuration.ConfigKeys;
+import org.spotter.shared.environment.model.XMeasurementEnvironment;
+import org.spotter.shared.hierarchy.model.RawHierarchyFactory;
+import org.spotter.shared.hierarchy.model.XPerformanceProblem;
+import org.spotter.shared.util.JAXBUtil;
 
 import eu.cloudscaleproject.env.spotter.CustomDynamicSpotterRunJob;
 import eu.cloudscaleproject.env.spotter.ResourceUtils;
@@ -92,14 +98,17 @@ public class ConfigAlternative extends AbstractConfigAlternative
 		try {
 			IFile environment = getResource().getFile("mEnv.xml");
 			if (!environment.exists()) {
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_ENVIRONMENT_CONFIG);
+				MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
+				XMeasurementEnvironment defaultEnvironment = factory.createMeasurementEnvironment();
+				InputStream in = JAXBUtil.createInputStreamFromElement(defaultEnvironment);
 				environment.create(in, false, null);
 				in.close();
 			}
 
 			IFile hierarchy = getResource().getFile("hierarchy.xml");
 			if (!hierarchy.exists()) {
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_HIERARCHY_CONFIG);
+				XPerformanceProblem defaultHierarchy = RawHierarchyFactory.getInstance().createProblemHierarchyRoot();
+				InputStream in = JAXBUtil.createInputStreamFromElement(defaultHierarchy);
 				hierarchy.create(in, false, null);
 				in.close();
 			}
@@ -107,16 +116,25 @@ public class ConfigAlternative extends AbstractConfigAlternative
 			IFile spotter = getResource().getFile("spotter.conf");
 			if (!spotter.exists()) {
 				Properties confProp = new Properties();
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_SPOTTER_CONFIG);
-				confProp.load(in);
+				
+				for (ConfigParameterDescription cpd : ConfigKeys.getSpotterConfigParamters())
+				{
+					if (cpd.isMandatory()) 
+					{
+						if (cpd.getDefaultValue() == null)
+							confProp.put(cpd.getName(), "");
+						else
+							confProp.put(cpd.getName(), cpd.getDefaultValue());
+					}
+				}
 
 				String envPath = environment.getLocation().toString();
 				String hierarchyPath = hierarchy.getLocation().toString();
 
 				confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
 				confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
-				confProp.setProperty("org.spotter.resultDir",
-					getResultResourceProvider().getRootFolder().getLocation().toString());
+				confProp.setProperty("org.spotter.resultDir", getResultResourceProvider().getRootFolder().getLocation().toString());
+
 
 				confProp.store(new FileOutputStream(spotter.getLocation().toFile()), "");
 			}
@@ -129,65 +147,6 @@ public class ConfigAlternative extends AbstractConfigAlternative
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-
-	private void initModels()
-	{
-/*		if (getSubResource(KEY_ENVIRONMENT_CONFIG) == null) {
-			IFile file = getResource().getFile("mEnv.xml");
-			ResourceUtils.createDefaultFile(file,
-					"" + "<measurementEnvironment xmlns=\"org.spotter.shared.environment.model\">" + "<workloadAdapter>"
-							+ "<extensionName>workload.satellite.adapter.customized</extensionName>"
-							+ "<config key=\"org.spotter.satellite.adapter.name\" value=\"Customized Workload Satellite Adapter\"/>"
-							+ "<config key=\"org.spotter.workload.simple.userScriptClassName\" value=\"\"/>"
-							+ "<config key=\"org.spotter.workload.simple.userScriptPath\" value=\"\"/>"
-							+ "</workloadAdapter>" + "</measurementEnvironment>");
-
-			setSubResource(KEY_ENVIRONMENT_CONFIG, file);
-		}
-
-		if (getSubResource(KEY_HIERARCHY_CONFIG) == null) {
-			IFile file = getResource().getFile("hierarchy.xml");
-			ResourceUtils.createDefaultFile(file,
-					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-							+ "<root xmlns=\"http://www.sopeco.org/PerformanceProblemHierarchySchema\">"
-							+ "<uniqueId>3a105ebc-9390-4176-ba51-ce2f092092fb</uniqueId>"
-							+ "<config key=\"org.spotter.detection.detectable\" value=\"false\"/>" + "</root>");
-
-			setSubResource(KEY_HIERARCHY_CONFIG, file);
-		}
-*/
-		if (getSubResource(KEY_SPOTTER_CONFIG) == null) {
-			IFile file = getResource().getFile("spotter.conf");
-			Properties confProp = new Properties();
-
-			String envPath = getSubResource(KEY_ENVIRONMENT_CONFIG).getLocation().toString();
-			String hierarchyPath = getSubResource(KEY_HIERARCHY_CONFIG).getLocation().toString();
-
-			confProp.setProperty("org.spotter.measurement.environmentDescriptionFile", envPath);
-			confProp.setProperty("org.spotter.conf.problemHierarchyFile", hierarchyPath);
-			confProp.setProperty("org.spotter.resultDir",
-					getResultResourceProvider().getRootFolder().getLocation().toString());
-
-			confProp.setProperty("org.spotter.workload.maxusers", "10");
-			confProp.setProperty("org.spotter.workload.experiment.duration", "180");
-			confProp.setProperty("org.spotter.prewarmup.duration", "1");
-			confProp.setProperty("org.spotter.workload.experiment.rampup.intervalLength", "1");
-			confProp.setProperty("org.spotter.workload.experiment.rampup.numUsersPerInterval", "5");
-			confProp.setProperty("org.spotter.workload.experiment.cooldown.intervalLength", "1");
-			confProp.setProperty("org.spotter.workload.experiment.cooldown.numUsersPerInterval", "2");
-
-			try {
-				confProp.store(new FileOutputStream(file.getLocation().toFile()), hierarchyPath);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			setSubResource(KEY_SPOTTER_CONFIG, file);
-
-			save();
 		}
 	}
 

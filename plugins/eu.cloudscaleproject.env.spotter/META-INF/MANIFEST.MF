@@ -28,7 +28,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: .,
- lib/org.spotter.service-1.0.1-server.jar
+Bundle-ClassPath: .
 Import-Package: javax.annotation;version="1.2.0",
  javax.inject

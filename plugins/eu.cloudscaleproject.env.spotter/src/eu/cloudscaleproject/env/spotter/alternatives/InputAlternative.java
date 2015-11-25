@@ -11,6 +11,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.EditorPart;
 import org.spotter.eclipse.ui.editors.AbstractSpotterEditor;
+import org.spotter.eclipse.ui.model.xml.MeasurementEnvironmentFactory;
+import org.spotter.shared.environment.model.XMeasurementEnvironment;
+import org.spotter.shared.util.JAXBUtil;
 
 import eu.cloudscaleproject.env.toolchain.CSTool;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractInputAlternative;
@@ -70,7 +73,9 @@ public class InputAlternative extends AbstractInputAlternative
 		try {
 			IFile environment = getResource().getFile("mEnv.xml");
 			if (!environment.exists()) {
-				InputStream in = getClass().getClassLoader().getResourceAsStream(PLUGIN_FILE_ENVIRONMENT_CONFIG);
+				MeasurementEnvironmentFactory factory = MeasurementEnvironmentFactory.getInstance();
+				XMeasurementEnvironment defaultEnvironment = factory.createMeasurementEnvironment();
+				InputStream in = JAXBUtil.createInputStreamFromElement(defaultEnvironment);
 				environment.create(in, false, null);
 				in.close();
 			}

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<root xmlns="http://www.sopeco.org/PerformanceProblemHierarchySchema">
-    <config key="org.spotter.detection.detectable" value="false"/>
-</root>
