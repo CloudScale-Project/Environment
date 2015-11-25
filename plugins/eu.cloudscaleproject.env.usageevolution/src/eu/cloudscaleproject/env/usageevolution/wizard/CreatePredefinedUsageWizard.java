@@ -53,8 +53,7 @@ public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
 
 				modelResource.getContents().clear();
 				modelResource.getContents().add(sequence);
-
-				
+				alternative.save();
 			}
 		});
 		
