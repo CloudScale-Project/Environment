@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.scaledl.overview.diagram.Activator
 Export-Package: org.scaledl.overview.diagram,
  org.scaledl.overview.diagram.decorations,
+ org.scaledl.overview.diagram.diagram,
  org.scaledl.overview.diagram.editor.interfaces,
  org.scaledl.overview.diagram.util,
  org.scaledl.overview.diagram.wizard

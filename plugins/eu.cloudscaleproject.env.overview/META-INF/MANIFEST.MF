@@ -27,6 +27,15 @@ Require-Bundle: org.eclipse.ui,
  eu.cloudscaleproject.env.common,
  org.eclipse.core.expressions;bundle-version="3.4.600",
  javax.inject,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.eclipse.graphiti;bundle-version="0.12.1",
+ org.eclipse.graphiti.doc;bundle-version="0.12.1",
+ org.eclipse.graphiti.export.batik;bundle-version="0.12.1",
+ org.eclipse.graphiti.mm;bundle-version="0.12.1",
+ org.eclipse.graphiti.pattern;bundle-version="0.12.1",
+ org.eclipse.graphiti.tools.newprojectwizard;bundle-version="0.12.1",
+ org.eclipse.graphiti.ui,
+ org.eclipse.graphiti.ui.capabilities;bundle-version="0.12.1",
+ org.eclipse.gef;bundle-version="3.10.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

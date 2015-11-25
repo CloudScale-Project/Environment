@@ -17,7 +17,7 @@ public class OICEditorInput implements IEditorInput{
 		return this.oic;
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object getAdapter(Class adapter) {
 		return null;

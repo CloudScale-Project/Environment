@@ -156,8 +156,16 @@ public class CustomAdapterFactory extends ComposedAdapterFactory
 				EStructuralFeature nameFeature = getLabelFeature(eobj.eClass());
 				if (nameFeature != null)
 				{
-					Object name = eobj.eGet(nameFeature);
-
+					//TODO:
+					//Measuring points return sometimes null pointer exception!
+					Object name = null;
+					try{
+						name = eobj.eGet(nameFeature);
+					}
+					catch(Exception e){
+						//do nothing
+					}
+					
 					if (name != null)
 						return name.toString();
 				}

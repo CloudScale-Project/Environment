@@ -17,11 +17,11 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
-public class CSMDiagramTypeProvider extends AbstractDiagramTypeProvider{
+public class OverviewDiagramTypeProvider extends AbstractDiagramTypeProvider{
 	
     private IToolBehaviorProvider[] toolBehaviorProviders;
         
-	public CSMDiagramTypeProvider() {
+	public OverviewDiagramTypeProvider() {
 		super();
 		setFeatureProvider(new DiagramFeatureProvider(this));
 	}

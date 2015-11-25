@@ -44,7 +44,7 @@
          point="org.eclipse.graphiti.ui.diagramTypeProviders">
       <diagramTypeProvider
             name="CSM Diagram Type Provider"
-            class="org.scaledl.overview.diagram.diagram.CSMDiagramTypeProvider"
+            class="org.scaledl.overview.diagram.diagram.OverviewDiagramTypeProvider"
             id="org.scaledl.overview.diagram.diagramDiagramTypeProvider">
          <diagramType
                id="org.scaledl.overview.diagram.diagramCSMType">

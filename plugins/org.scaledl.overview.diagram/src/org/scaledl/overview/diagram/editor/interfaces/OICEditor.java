@@ -9,9 +9,10 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.scaledl.overview.application.OperationInterfaceContainer;
 import org.scaledl.overview.application.util.ApplicationAdapterFactory;
 import org.scaledl.overview.architecture.util.ArchitectureAdapterFactory;
 import org.scaledl.overview.parametertype.util.ParametertypeAdapterFactory;
@@ -35,8 +36,9 @@ public class OICEditor extends MultiPageEditorPart implements IEditingDomainProv
 	protected void createPages() {
 		
 		OICEditorInput editorInput = (OICEditorInput)getEditorInput();
-		TransactionalEditingDomain ed = TransactionalEditingDomain.Factory.INSTANCE.getEditingDomain(
-				editorInput.getOperationInterfaceContainer().eResource().getResourceSet());
+		OperationInterfaceContainer oic = editorInput.getOperationInterfaceContainer();
+		
+		EditingDomain ed = TransactionUtil.getEditingDomain(oic);
 		
 		adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());

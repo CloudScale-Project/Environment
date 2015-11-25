@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobGroup;
 
 import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
@@ -29,7 +33,9 @@ public class StatusManager {
 	
 	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
-	private final Object validationLock = new Object();
+	//private final Object validationLock = new Object();
+
+	private JobGroup jobGroup = new JobGroup("Validation group", 1, 1);
 	
 	//forward status provider changes to this prop. change support.
 	private final PropertyChangeListener statusProviderListener = new PropertyChangeListener() {
@@ -97,6 +103,29 @@ public class StatusManager {
 		
 		public String getID(){
 			return id;
+		}
+	}
+
+	private class ValidationJob extends Job
+	{
+		private IProject project;
+		private IValidationStatusProvider statusProvider;
+
+		public ValidationJob(String name, IProject project, IValidationStatusProvider statusProvider)
+		{
+			super(name);
+			this.project = project;
+			this.statusProvider = statusProvider;
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			
+			monitor.beginTask("Validating...", IProgressMonitor.UNKNOWN);
+			doValidate(project, statusProvider);
+			monitor.done();
+			
+			return Status.OK_STATUS;
 		}
 	}
 	
@@ -189,44 +218,7 @@ public class StatusManager {
 	public void removePropertyChangeListener(PropertyChangeListener listener){
 		pcs.removePropertyChangeListener(listener);
 	}
-	
-	//validation thread
-	private static final ConcurrentLinkedQueue<ValidationRunnable> validationTasks = new ConcurrentLinkedQueue<ValidationRunnable>();
-	static {
-		Thread validationThread = new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				while(!Thread.interrupted()){
-										
-					synchronized (validationTasks) {
-						if(validationTasks.isEmpty()){
-							try {
-								validationTasks.wait();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-					
-					Runnable r = validationTasks.poll();
-					
-					try{
-						if(r != null){
-							r.run();
-						}
-					}
-					catch(Exception e){
-						e.printStackTrace();
-					}
-				
-				}
-			}
-			
-		}, "Validation thread");
-		validationThread.start();
-	}
-	
 	public boolean hasValidator(String id){
 		boolean validatorFound = false;
 		for (IResourceValidator v : Extensions.getInstance().getResourceValidators()) {
@@ -238,41 +230,34 @@ public class StatusManager {
 		return validatorFound;
 	}
 	
-	public void validate(IProject project, IValidationStatusProvider statusProvider){
+	public synchronized void validate(IProject project, IValidationStatusProvider statusProvider){
 		
 		if(statusProvider == null){
 			logger.severe("Status provider is NULL! Can not validate!");
 			return;
 		}
 
-		synchronized (validationTasks) {
-			for (ValidationRunnable r : validationTasks)
-			{
-				if (r.statusProvider == statusProvider) return;
+		List<Job> jobs = jobGroup.getActiveJobs();
+		for(Job job : jobs){
+			if(job instanceof ValidationJob){
+				ValidationJob vj = (ValidationJob)job;
+				if (vj.statusProvider == statusProvider) return;
 			}
-
-			ValidationRunnable r = new ValidationRunnable(project, statusProvider);		
-			validationTasks.add(r);
-			validationTasks.notify();
 		}
+		
+		//find out name
+		String name = "Validating '" + project.getName() + "' project";
+		IValidationStatus vs = statusProvider.getSelfStatus();
+		if(vs != null){
+			name = "Validating '" + vs.getName() + "' alternative";
+		}
+		
+		ValidationJob job = new ValidationJob(name, project, statusProvider);
+		job.setUser(false);
+		job.setJobGroup(jobGroup);
+		job.schedule();
 	}
 
-	private class ValidationRunnable implements Runnable
-	{
-		private IProject project;
-		private IValidationStatusProvider statusProvider;
-
-		public ValidationRunnable(IProject project, IValidationStatusProvider statusProvider)
-		{
-			this.project = project;
-			this.statusProvider = statusProvider;
-		}
-
-		public void run()
-		{
-			doValidate(project, statusProvider);
-		}
-	}
 	
 	private void doValidate(IProject project, IValidationStatusProvider statusProvider) {
 		try{
@@ -282,11 +267,8 @@ public class StatusManager {
 					validatorFound = true;
 					
 					//limit only one validation at a time
-					synchronized (validationLock) {
-						v.validate(project, statusProvider);
-						statusProvider.setValidated(true);
-					}
-					
+					v.validate(project, statusProvider);
+					statusProvider.setValidated(true);
 				}
 			}
 	

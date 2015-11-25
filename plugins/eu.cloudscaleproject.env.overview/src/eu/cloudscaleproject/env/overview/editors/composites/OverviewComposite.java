@@ -1,9 +1,12 @@
 package eu.cloudscaleproject.env.overview.editors.composites;
 
-
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -26,7 +29,7 @@ import eu.cloudscaleproject.env.toolchain.util.PropertyPageComposite;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class OverviewComposite extends AbstractEditorView implements ISelectable{
+public class OverviewComposite extends AbstractEditorView implements ISelectable {
 
 	private EMFEditableTreeviewComposite treeviewComposite;
 	private OverviewAlternative alternative;
@@ -58,16 +61,55 @@ public class OverviewComposite extends AbstractEditorView implements ISelectable
 		
 		new ValidationWidget(getFooter(), style, input);
 		
-		SplitComposite splitComposite = new SplitComposite(mainContainer, SWT.NONE);
+		CTabFolder tabFolder = new CTabFolder(mainContainer, SWT.NONE);
 		
-		//tree view
-		this.treeviewComposite = new EMFEditableTreeviewComposite(input, splitComposite, SWT.NONE);
-		splitComposite.setTopControl(treeviewComposite);
+		CTabItem diagramTabItem = new CTabItem(tabFolder, SWT.NONE);
+		diagramTabItem.setText("Diagram editor");
+
+		CTabItem modelTabItem = new CTabItem(tabFolder, SWT.NONE);
+		modelTabItem.setText("Model editor");
+
+		//Diagram editor
+		{
+			SplitComposite splitComposite = new SplitComposite(tabFolder, SWT.HORIZONTAL);
+			
+			//Diagram
+			OverviewDiagramComposite diagramComposite = new OverviewDiagramComposite(splitComposite, SWT.NONE);
+			
+        	IFile file = this.alternative.getResource().getFile("overview.sdlo_diagram");
+			URI diagramUri = URI.createPlatformResourceURI(file.getFullPath().toString(), false);
+			
+			DiagramEditorInput editorInput = new DiagramEditorInput(diagramUri, null);
+			diagramComposite.setInput(input.getEditingDomain(), editorInput);
+			splitComposite.setTopControl(diagramComposite);
+			
+			//Palette
+			Composite paletteComposite = new Composite(splitComposite, SWT.NONE);
+			diagramComposite.initializePalette(paletteComposite);
+			splitComposite.setBottomControl(paletteComposite);
+			
+			diagramTabItem.setControl(splitComposite);
+		}
 		
-		//property sheet page
-		PropertyPageComposite pageSheet = new PropertyPageComposite(
-				splitComposite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
-		splitComposite.setBottomControl(pageSheet);
+		//Model editor
+		{
+			SplitComposite splitComposite = new SplitComposite(tabFolder, SWT.VERTICAL);
+			
+			//Tree view
+			this.treeviewComposite = new EMFEditableTreeviewComposite(input, splitComposite, SWT.NONE);
+			splitComposite.setTopControl(treeviewComposite);
+			
+			//Property sheet page
+			PropertyPageComposite pageSheet = new PropertyPageComposite(
+					splitComposite, SWT.BORDER, treeviewComposite.getPropertySheetPage());
+			splitComposite.setBottomControl(pageSheet);
+			
+			modelTabItem.setControl(splitComposite);
+		}
+		
+		tabFolder.setSelection(diagramTabItem);
+		tabFolder.layout();
+		
 	}
 	
 	@Override
@@ -86,4 +128,5 @@ public class OverviewComposite extends AbstractEditorView implements ISelectable
                 e.printStackTrace();
         }
 	}
+
 }

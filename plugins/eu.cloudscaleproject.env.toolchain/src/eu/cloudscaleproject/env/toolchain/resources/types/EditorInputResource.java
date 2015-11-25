@@ -78,6 +78,16 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 					if(PROP_DISPOSED.equals(evt.getPropertyName())){
 						return;
 					}
+					if(PROP_VALIDATED.equals(evt.getPropertyName())){
+						return;
+					}
+					if(PROP_DIRTY.equals(evt.getPropertyName())){
+						return;
+					}
+					
+					if(isLoadInProgress()){
+						return;
+					}
 					
 					if(isLoaded){
 						if (EditorInputResource.this.getID() != null){
@@ -164,6 +174,11 @@ public abstract class EditorInputResource extends EditorInput implements IEditor
 	
 	@Override
 	public void setDirty(boolean value) {
+		IValidationStatus vs = getSelfStatus();
+		if(vs != null){
+			vs.setIsDirty(value);
+		}
+		
 		firePropertyChange(PROP_DIRTY, this.isDirty, this.isDirty = value);
 	}
 	

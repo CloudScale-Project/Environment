@@ -1,7 +1,6 @@
 package eu.cloudscaleproject.env.toolchain.resources.types;
 
 import java.io.IOException;
-import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -26,10 +24,10 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.RunnableWithResult;
-import org.eclipse.emf.transaction.TransactionalCommandStack;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.impl.TransactionalEditingDomainImpl;
 import org.eclipse.emf.transaction.util.TransactionUtil;
+import org.eclipse.emf.workspace.WorkspaceEditingDomainFactory;
+import org.eclipse.emf.workspace.impl.WorkspaceCommandStackImpl;
 
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
@@ -42,7 +40,7 @@ public class EditorInputEMF extends EditorInputFolder{
 
 	public static final String PROP_COMMAND_STACK_CHANGED = EditorInputEMF.class.getName() + ".commandStackChanged";
 	
-	protected final CommandStack commandStack;
+	protected final WorkspaceCommandStackImpl commandStack;
 	protected final TransactionalEditingDomain editingDomain;
 	
 	protected final ResourceSet resSet;
@@ -53,14 +51,18 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		this.modelTypes = modelTypes != null ? modelTypes : new ModelType[]{};
 		
-		editingDomain = new TransactionalEditingDomainImpl(factory);
+		//TODO: find out why I was using WorkspaceCommandStack - it was during some bug fixing
+		//commandStack = new WorkspaceCommandStackImpl(new DefaultOperationHistory());
+		//editingDomain = new TransactionalEditingDomainImpl(factory, commandStack);
 		
-		commandStack = (TransactionalCommandStack)editingDomain.getCommandStack();
+		editingDomain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
+		commandStack = (WorkspaceCommandStackImpl)editingDomain.getCommandStack();
+		
 		commandStack.addCommandStackListener(new CommandStackListener() {
 			
 			@Override
 			public void commandStackChanged(EventObject event) {
-				setDirty(true);
+				setDirty(commandStack.isSaveNeeded());
 				firePropertyChange(PROP_COMMAND_STACK_CHANGED, false, true);
 			}
 		});
@@ -208,6 +210,31 @@ public class EditorInputEMF extends EditorInputFolder{
 					if(resource != null){
 						resource.unload();
 						resSet.getResources().remove(resource);
+					}
+				}
+			});
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void saveModelResource(final IFile file){
+		
+		logger.info("Alternative '"+ getName() +"' is saving model resource: " + file.getFullPath().toString());
+
+		try {
+			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Resource>(){
+
+				@Override
+				public void run() {
+					Resource resource = getModelResource(file);
+					if(resource != null){
+						try {
+							resource.save(null);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			});
@@ -479,7 +506,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	protected void doCreateModels(){
-		
+		//implement in sub-classes
 	}
 	
 	@Override
@@ -495,28 +522,12 @@ public class EditorInputEMF extends EditorInputFolder{
 		for(IResource r : getLoadedSubResources()){
 			
 			if(r instanceof IFile){
-				try {
-					//do not save auto-loaded resources
-					IFile file = (IFile)r;
-					Resource res = getModelResource(file); 
-					
-					if(res != null && !res.getContents().isEmpty()){
-						if(monitor != null){
-							monitor.subTask("Saving resource '" + res.getURI().lastSegment() + "'");
-						}
-						res.save(null);
-						if(monitor != null){
-							monitor.worked(1);
-						}
-					}
-				} catch (UnknownServiceException e){
-					//ignore - file can not be saved
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					logger.severe("Conf alternative: "+ getResource().getLocation().toString() 
-									+" Can not save resource: "+ r.getFullPath().toString());
-					e.printStackTrace();
-				}
+				
+				IFile file = (IFile)r;
+				
+				workOn(monitor, "Saving resource '" + file.getName() + "'");
+				saveModelResource(file);
+				work(monitor);
 			}
 			
 		}
@@ -526,8 +537,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
-		commandStack.flush();
 	}
 	
 	@Override
@@ -535,14 +544,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		super.doLoad(monitor);
 		
-		//unload existing models
-		for(Resource res : new ArrayList<Resource>(resSet.getResources())){
-			res.unload();
-		}
-		
-		//TODO: Test the new loading and saving approach
-		editingDomain.getResourceSet().getResources().clear();
-
 		workOn(monitor, "Loading resources");
 		
 		//load registered models
@@ -555,6 +556,8 @@ public class EditorInputEMF extends EditorInputFolder{
 					continue;
 				}
 
+				workOn(monitor, "Loading resource '" + resource.getName() + "'");
+
 				if(resource instanceof IFile){
 					IFile file = (IFile)resource;
 				
@@ -562,8 +565,16 @@ public class EditorInputEMF extends EditorInputFolder{
 						loadModelResource(file);
 					}
 				}
+				
+				work(monitor);
 			}
 		}
+	}
+	
+	@Override
+	protected void doDelete(IProgressMonitor monitor) {
+		dispose();
+		super.doDelete(monitor);
 	}
 	
 	public Map<IFile, List<Diagnostic>> validateModels(){
