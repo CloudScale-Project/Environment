@@ -48,20 +48,6 @@ public class ConfValidator implements IResourceValidator {
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration file is empty!"));
 				
 				status.checkError(ERROR_CONF,
-						job.getMeasurementEnvironment().getInstrumentationController() != null, true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing instrumentation controller!"));
-				status.checkError(ERROR_CONF,
-						!job.getMeasurementEnvironment().getInstrumentationController().isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing instrumentation controller!"));
-				
-				status.checkError(ERROR_CONF,
-						job.getMeasurementEnvironment().getMeasurementController() != null, true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing measurement environment!"));
-				status.checkError(ERROR_CONF,
-						!job.getMeasurementEnvironment().getMeasurementController().isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing measurement environment!"));
-				
-				status.checkError(ERROR_CONF,
 						job.getMeasurementEnvironment().getWorkloadAdapter() != null, true, 
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
 				status.checkError(ERROR_CONF,
@@ -69,8 +55,11 @@ public class ConfValidator implements IResourceValidator {
 						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing workload adapter!"));
 				
 				status.checkError(ERROR_CONF,
-						!job.getHierarchy().getProblem().isEmpty(), true, 
-						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Configuration missing has incomplete hierarcy specification!"));
+						job.getHierarchy() != null, true, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Hierarcy specification is missing!"));
+				status.checkError(ERROR_CONF,
+						job.getHierarchy().getProblem() != null && !job.getHierarchy().getProblem().isEmpty(), true, 
+						MessageFormat.format(MESSAGE_PATTERN, selectedRes.getName(), "Hierarcy specification is empty!"));
 
 			} catch (UICoreException e) {
 				jobCreationFailed = true;
