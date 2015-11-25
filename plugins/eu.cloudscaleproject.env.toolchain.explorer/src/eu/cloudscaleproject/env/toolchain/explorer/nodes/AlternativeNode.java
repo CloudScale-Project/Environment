@@ -23,6 +23,7 @@ import eu.cloudscaleproject.env.toolchain.explorer.IExplorerNode;
 import eu.cloudscaleproject.env.toolchain.explorer.style.AbstractLabelDecorator;
 import eu.cloudscaleproject.env.toolchain.explorer.ui.ExplorerImageDescriptor;
 import eu.cloudscaleproject.env.toolchain.resources.types.IConfigAlternative;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IResultAlternative;
@@ -50,6 +51,19 @@ public class AlternativeNode extends ExplorerEditorNode{
 		}
 		
 	};		
+	
+	private final PropertyChangeListener alternativeNameListener = new PropertyChangeListener()
+	{
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+			if (evt.getPropertyName().equals(IEditorInput.PROP_NAME) || 
+					evt.getPropertyName().equals(IEditorInputResource.PROP_LOADED))
+			{
+				setName(alternative.getName());
+			}
+		}
+	};
 	
 	private static final AbstractLabelDecorator DEFAULT_DECORATOR = new AbstractLabelDecorator() {
 		
@@ -139,6 +153,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 		
 		this.alternative = alternative;
 		this.alternative.addStatusChangeListener(alternativeStatusListener);
+		this.alternative.addPropertyChangeListener(alternativeNameListener);
 
 		setName(alternative.getName());
 		setResource(alternative.getResource());
@@ -175,6 +190,7 @@ public class AlternativeNode extends ExplorerEditorNode{
 	@Override		
 	public void dispose() {		
 		this.alternative.removeStatusChangeListener(alternativeStatusListener);		
+		this.alternative.addPropertyChangeListener(alternativeNameListener);
 		super.dispose();		
 	}
 
