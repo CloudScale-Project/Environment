@@ -38,13 +38,15 @@
                class="eu.cloudscaleproject.env.spotter.alternatives.providers.InputResourceProviderFactory"
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.inputEditor"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput"
-               name="Input">
+               name="Input"
+               wizard="eu.cloudscaleproject.env.spotter.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.spotter.alternatives.providers.ConfigResourceProviderFactory"
                editor="eu.cloudscaleproject.env.spotter.partdescriptor.configEditor"
                id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf"
-               name="Configuration">
+               name="Configuration"
+               wizard="eu.cloudscaleproject.env.spotter.command.createalternative">
          </ResourceProviderFactory>
          <ResourceProviderFactory
                class="eu.cloudscaleproject.env.spotter.alternatives.providers.ResultResourceProviderFactory"
