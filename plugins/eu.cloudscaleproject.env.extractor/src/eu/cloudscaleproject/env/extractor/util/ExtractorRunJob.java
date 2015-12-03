@@ -147,7 +147,7 @@ public class ExtractorRunJob
 		SoMoXConfiguration somoxConfiguration = configAlternative.getSomoxConfiguration();
 
 		IFile file = (IFile)resultAlternative.getSubResource(ToolchainUtils.KEY_FILE_MODISCO_JAVA2KDM);
-		somoxConfiguration.getFileLocations().setAnalyserInputFile(file.getFullPath().toString());
+		somoxConfiguration.getFileLocations().setAnalyserInputFile(file.getRawLocation().toString());
 
 		somoxConfiguration.getFileLocations().setProjectName(this.project.getName());
 		IFolder res = (IFolder) resultAlternative.getSubResource(ToolchainUtils.KEY_FOLDER_SOMOX);
