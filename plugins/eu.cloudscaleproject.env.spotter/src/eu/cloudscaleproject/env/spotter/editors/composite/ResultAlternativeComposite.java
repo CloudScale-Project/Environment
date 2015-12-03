@@ -25,6 +25,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -66,7 +67,6 @@ import org.spotter.eclipse.ui.model.ImmutableExtensionItemFactory;
 import org.spotter.eclipse.ui.navigator.SpotterProjectParent;
 import org.spotter.eclipse.ui.providers.ResultExtensionsImageProvider;
 import org.spotter.eclipse.ui.providers.SpotterExtensionsLabelProvider;
-import org.spotter.eclipse.ui.util.WidgetUtils;
 import org.spotter.eclipse.ui.viewers.ExtensionsGroupViewer;
 import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 import org.spotter.shared.result.ResultsLocationConstants;
@@ -102,7 +102,6 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 	private final IExtensionItemFactory extensionItemFactory;
 
-	private Group grpDetails;
 	private TreeViewer hierarchyTreeViewer;
 	private ResultExtensionsImageProvider imageProvider;
 	private Text textReport;
@@ -128,14 +127,24 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 	private CTabFolder mainTabFolder;
 
 	PropertyChangeListener connecionListener = new PropertyChangeListener()
+	{
+		@Override
+		public void propertyChange(PropertyChangeEvent evt)
 		{
-			@Override
-			public void propertyChange(PropertyChangeEvent evt)
+			if (ResultAlternativeComposite.this.isDisposed())
+				return;
+			Display.getDefault().asyncExec(new Runnable()
 			{
-				if (ResultAlternativeComposite.this.isDisposed()) return;
-				Display.getDefault().asyncExec(new Runnable() { @Override public void run() { refresh(); } });
-			}
-		};
+				@Override
+				public void run()
+				{
+					refresh();
+				}
+			});
+		}
+	};
+
+	private ScrolledComposite detailsScrollComposite;
 
 	public ResultAlternativeComposite(Composite parent, int style, ResultAlternative resultAlternative)
 	{
@@ -147,31 +156,35 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 		this.extensionItemFactory = new ImmutableExtensionItemFactory(resultAlternative.getName());
 
 		getContainer().setLayout(new StackLayout());
-		
+
 		warningComposite = new Composite(getContainer(), SWT.BORDER);
 		warningComposite.setLayout(new GridLayout(1, false));
 		Label lblEmpty = new Label(warningComposite, SWT.CENTER);
 		lblEmpty.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true, 1, 1));
-		lblEmpty.setText("Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
-		
+		lblEmpty.setText(
+				"Spotter client not connected... \nTo enable editing, go to Server section and connect Spotter client.");
+
 		Button btnStartServer = new Button(warningComposite, SWT.NONE);
 		GridData gd_btnStartServer = new GridData(SWT.CENTER, SWT.TOP, true, true, 1, 1);
 		gd_btnStartServer.verticalIndent = 20;
 		gd_btnStartServer.heightHint = 42;
 		btnStartServer.setLayoutData(gd_btnStartServer);
-		btnStartServer.addSelectionListener(new SelectionAdapter() {
+		btnStartServer.addSelectionListener(new SelectionAdapter()
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e)
+			{
 				Util.startBuiltinServerAndConnectAsync(ResultAlternativeComposite.this.resultAlternative.getProject());
 			}
 		});
-		
-		SpotterClientController.getController(resultAlternative.getProject()).addPropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
+
+		SpotterClientController.getController(resultAlternative.getProject())
+				.addPropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
 
 		btnStartServer.setText("Start server");
-		
-		//mainComposite = new Composite(getContainer(), SWT.NONE);
-		//mainComposite.setLayout(new GridLayout(1, false));
+
+		// mainComposite = new Composite(getContainer(), SWT.NONE);
+		// mainComposite.setLayout(new GridLayout(1, false));
 
 		mainTabFolder = new CTabFolder(getContainer(), SWT.BORDER);
 		mainTabFolder.setTabHeight(32);
@@ -192,13 +205,12 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			{
 				Set<Shell> shells = new HashSet<>();
 				shells.addAll(resourceShells.values());
-				for (Shell shell : shells)
-				{
+				for (Shell shell : shells) {
 					shell.close();
 				}
 
-				SpotterClientController.getController(ResultAlternativeComposite.this.resultAlternative.getProject()).
-					removePropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
+				SpotterClientController.getController(ResultAlternativeComposite.this.resultAlternative.getProject())
+						.removePropertyChangeListener(SpotterClientController.PROP_CONNECTION, connecionListener);
 			}
 		});
 	}
@@ -206,15 +218,12 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 	@Override
 	public void refresh()
 	{
-		if (SpotterClientController.getController(resultAlternative.getProject()).isConnected()) 
-		{
-			((StackLayout)getContainer().getLayout()).topControl = mainTabFolder;
+		if (SpotterClientController.getController(resultAlternative.getProject()).isConnected()) {
+			((StackLayout) getContainer().getLayout()).topControl = mainTabFolder;
 			getContainer().layout();
 			updateTabs();
-		}
-		else
-		{
-			((StackLayout)getContainer().getLayout()).topControl = warningComposite;
+		} else {
+			((StackLayout) getContainer().getLayout()).topControl = warningComposite;
 			getContainer().layout();
 		}
 	}
@@ -223,35 +232,60 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 	{
 		CTabItem tabItem = new CTabItem(folder, SWT.NONE);
 		tabItem.setText(TAB_HIERARCHY_NAME);
+		
+		Composite composite = new Composite(mainTabFolder, SWT.NONE);
+		tabItem.setControl(composite);
+		GridLayout gl_composite = new GridLayout(1, false);
+		gl_composite.verticalSpacing = 10;
+		composite.setLayout(gl_composite);
+		
+		Composite containerTable = new Composite(composite, SWT.NONE);
+		GridData gd_containerTable = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_containerTable.heightHint = 80;
+		containerTable.setLayoutData(gd_containerTable);
+		containerTable.setLayout(new FillLayout());
+		createTableComposite(containerTable);
+		
+		Composite composite_1 = new Composite(composite, SWT.NONE);
+		GridData gd_composite_1 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_composite_1.heightHint = 5;
+		composite_1.setLayoutData(gd_composite_1);
+		
+		Composite containerDetails = new Composite(composite, SWT.NONE);
+		GridData gd_containerDetails = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_containerDetails.heightHint = 120;
+		containerDetails.setLayoutData(gd_containerDetails);
+		containerDetails.setLayout(new FillLayout());
+		createDetailsComposite(containerDetails);
+		
+		Composite containerCharts = new Composite(composite, SWT.NONE);
+		containerCharts.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		containerCharts.setLayout(new FillLayout());
+		createChartsComposite(containerCharts);
 
-		Composite parent = new Composite(folder, SWT.NONE);
-		parent.setLayout(new FillLayout());
-		SashForm container = new SashForm(parent, SWT.VERTICAL | SWT.SMOOTH);
-
-		hierarchyTreeViewer = ExtensionsGroupViewer.createTreeViewer(container, extensionItemFactory.createExtensionItem(), null, false);
-		SpotterExtensionsLabelProvider labelProvider = (SpotterExtensionsLabelProvider) hierarchyTreeViewer.getLabelProvider();
-		imageProvider = new ResultExtensionsImageProvider();
-		labelProvider.setImageProvider(imageProvider);
-
-		grpDetails = new Group(container, SWT.NONE);
-		grpDetails.setText("Details");
-		grpDetails.setLayout(WidgetUtils.createGridLayout(1, true));
-
-		createHierarchyDetailsUpperPart(grpDetails);
-		createHierarchyDetailsLowerPart(grpDetails);
-
-		container.setWeights(new int[] { 1, 9 });
 
 		addSelectionListeners();
-		tabItem.setControl(parent);
 	}
-
-	private void createHierarchyDetailsUpperPart(Composite parent)
+	
+	private void createTableComposite (Composite container)
 	{
-		grpDetails.setLayout(new GridLayout(1, false));
-		Composite compUpperPart = new Composite(parent, SWT.NONE);
-		compUpperPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		compUpperPart.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
+		hierarchyTreeViewer = ExtensionsGroupViewer.createTreeViewer(container,
+				extensionItemFactory.createExtensionItem(), null, false);
+		SpotterExtensionsLabelProvider labelProvider = (SpotterExtensionsLabelProvider) hierarchyTreeViewer
+				.getLabelProvider();
+		imageProvider = new ResultExtensionsImageProvider();
+		labelProvider.setImageProvider(imageProvider);
+	}
+	
+	private void createDetailsComposite (Composite container)
+	{
+		detailsScrollComposite = new ScrolledComposite(container,
+				SWT.BORDER | SWT.V_SCROLL);
+		detailsScrollComposite.setExpandHorizontal(true);
+		detailsScrollComposite.setExpandVertical(true);
+		
+		Composite compUpperPart = new Composite(detailsScrollComposite, SWT.NONE);
+		//compUpperPart.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		compUpperPart.setLayout(new GridLayout(2, false));
 
 		Label label = new Label(compUpperPart, SWT.NONE);
@@ -276,23 +310,21 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 		lblDescription.setText("");
 
 		Label lblMessageTitle = new Label(compUpperPart, SWT.NONE);
+		lblMessageTitle.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		lblMessageTitle.setText("Message:");
 		lblMessage = new Label(compUpperPart, SWT.NONE);
+
+		detailsScrollComposite.setContent(compUpperPart);
+		detailsScrollComposite.setMinSize(compUpperPart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
-
-	private void createHierarchyDetailsLowerPart(Composite parent)
+	
+	private void createChartsComposite (Composite container)
 	{
-		new Label(grpDetails, SWT.NONE);
-
-		Composite compLowerPart = new Composite(parent, SWT.NONE);
-		compLowerPart.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		compLowerPart.setLayout(new FillLayout(SWT.HORIZONTAL));
-		SashForm sashContainer = new SashForm(compLowerPart, SWT.HORIZONTAL | SWT.SMOOTH);
-
-		Group grpResources = new Group(sashContainer, SWT.NONE);
+		Group grpResources = new Group(container, SWT.NONE);
 		grpResources.setText("Resources");
 		grpResources.setLayout(new FillLayout(SWT.HORIZONTAL));
 		SashForm sashResources = new SashForm(grpResources, SWT.HORIZONTAL | SWT.SMOOTH);
+		sashResources.setSashWidth(8);
 
 		listViewer = new ListViewer(sashResources, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		listResources = listViewer.getList();// new List(sashResources,
@@ -308,7 +340,7 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			}
 		});
 		canvasRes = new Canvas(sashResources, SWT.NONE);
-		sashResources.setWeights(new int[] { 130, 417 });
+		sashResources.setWeights(new int[] {3, 7});
 		addCanvasListeners();
 	}
 
@@ -322,11 +354,9 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			@Override
 			public void mouseEnter(MouseEvent e)
 			{
-				if (resourceImage != null)
-				{
+				if (resourceImage != null) {
 					shell = canvasRes.getShell();
-					if (shell != null)
-					{
+					if (shell != null) {
 						savedCursor = shell.getCursor();
 						Cursor zoomCursor = Display.getDefault().getSystemCursor(SWT.CURSOR_HAND);
 						shell.setCursor(zoomCursor);
@@ -337,10 +367,8 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			@Override
 			public void mouseExit(MouseEvent e)
 			{
-				if (shell != null)
-				{
-					if (!shell.isDisposed())
-					{
+				if (shell != null) {
+					if (!shell.isDisposed()) {
 						shell.setCursor(savedCursor);
 					}
 					shell = null;
@@ -354,15 +382,13 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			@Override
 			public void mouseDown(MouseEvent e)
 			{
-				if (resourceImageData != null && !listViewer.getSelection().isEmpty())
-				{
-					String resourceName = ((StructuredSelection) listViewer.getSelection()).getFirstElement().toString();
+				if (resourceImageData != null && !listViewer.getSelection().isEmpty()) {
+					String resourceName = ((StructuredSelection) listViewer.getSelection()).getFirstElement()
+							.toString();
 					String resourceIdentifier = createResourceIdentifier(resourceName);
-					if (resourceShells.containsKey(resourceIdentifier))
-					{
+					if (resourceShells.containsKey(resourceIdentifier)) {
 						resourceShells.get(resourceIdentifier).setFocus();
-					} else
-					{
+					} else {
 						openResourcePopupShell(e.display, resourceIdentifier);
 					}
 				}
@@ -388,12 +414,10 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			{
 				IStructuredSelection sel = (IStructuredSelection) event.getSelection();
 				currentSelectedProblem = null;
-				if (!sel.isEmpty())
-				{
+				if (!sel.isEmpty()) {
 					IExtensionItem item = (IExtensionItem) sel.getFirstElement();
 					Object problem = item.getModelWrapper().getXMLModel();
-					if (problem instanceof XPerformanceProblem)
-					{
+					if (problem instanceof XPerformanceProblem) {
 						currentSelectedProblem = (XPerformanceProblem) problem;
 					}
 				}
@@ -425,13 +449,11 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 	private void updateCanvasImage()
 	{
-		if (!listViewer.getSelection().isEmpty())
-		{
+		if (!listViewer.getSelection().isEmpty()) {
 			String selection = ((StructuredSelection) listViewer.getSelection()).getFirstElement().toString();
 			String prefix = getCurrentResourceFolder();
 			String resourceFile = prefix + selection;
-			if (resourceImage != null)
-			{
+			if (resourceImage != null) {
 				resourceImage.dispose();
 				resourceImage = null;
 			}
@@ -443,16 +465,13 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 			boolean isCanvasVisible = canvasWidth > 0 && canvasHeight > 0;
 
-			if (isCanvasVisible)
-			{
-				if (file.exists())
-				{
+			if (isCanvasVisible) {
+				if (file.exists()) {
 					resourceImageData = new ImageData(resourceFile);
 					int width = Math.min(canvasWidth, resourceImageData.width);
 					int height = Math.min(canvasHeight, resourceImageData.height);
 					resourceImage = new Image(canvasRes.getDisplay(), resourceImageData.scaledTo(width, height));
-				} else
-				{
+				} else {
 					// draw "not available image" picture using GC
 					final Display display = canvasRes.getDisplay();
 					final Rectangle bounds = canvasRes.getBounds();
@@ -511,8 +530,7 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 			@Override
 			public void keyPressed(KeyEvent e)
 			{
-				if (e.keyCode == SWT.ESC)
-				{
+				if (e.keyCode == SWT.ESC) {
 					popupShell.close();
 				}
 			}
@@ -543,12 +561,10 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 		float wFactor = ((float) scaledWidth) / width;
 		float hFactor = ((float) scaledHeight) / height;
 		boolean scaleToFitWidth = wFactor <= hFactor;
-		if (scaleToFitWidth)
-		{
+		if (scaleToFitWidth) {
 			width = scaledWidth;
 			height *= wFactor;
-		} else
-		{
+		} else {
 			width *= hFactor;
 			height = scaledHeight;
 		}
@@ -564,22 +580,19 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 	private void updateProblemDetails()
 	{
 		listViewer.setInput(new String[0]);
-		if (resourceImage != null)
-		{
+		if (resourceImage != null) {
 			resourceImage.dispose();
 			resourceImage = null;
 		}
 		resourceImageData = null;
 		canvasRes.setBackgroundImage(null);
 
-		if (currentSelectedProblem == null)
-		{
+		if (currentSelectedProblem == null) {
 			lblProblemName.setText(LABEL_NONE_SELECTED);
 			lblDescription.setText("");
 			lblStatus.setText("");
 			lblMessage.setText("");
-		} else
-		{
+		} else {
 			String name = currentSelectedProblem.getExtensionName();
 			lblProblemName.setText(name);
 			String description = SpotterClientController.getController(resultAlternative.getProject()).getClient()
@@ -588,19 +601,18 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 			String id = currentSelectedProblem.getUniqueId();
 			SpotterResult spotterResult = resultsContainer == null ? null : resultsContainer.getResultsMap().get(id);
-			if (spotterResult == null)
-			{
+			if (spotterResult == null) {
 				lblStatus.setText(LABEL_NO_LOOKUP);
 				lblMessage.setText(LABEL_NO_LOOKUP);
-			} else
-			{
+			} else {
 				lblStatus.setText(spotterResult.isDetected() ? LABEL_DETECTED : LABEL_NOT_DETECTED);
 				lblMessage.setText(spotterResult.getMessage());
 				populateResourcesList(spotterResult);
 				updateCanvasImage();
 			}
 		}
-		grpDetails.layout();
+		((Composite)detailsScrollComposite.getContent()).layout();
+		detailsScrollComposite.setMinSize(detailsScrollComposite.getContent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	private void populateResourcesList(SpotterResult spotterResult)
@@ -624,68 +636,60 @@ public class ResultAlternativeComposite extends ResultEditorView implements IRef
 
 	private void updateTabs()
 	{
-		if (!SpotterClientController.getController(this.resultAlternative.getProject()).isConnected()) return;
+		if (!SpotterClientController.getController(this.resultAlternative.getProject()).isConnected())
+			return;
 
-		if (resultsContainer == null)
-		{
-			IFile file = resultAlternative.getResource().getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME);
-			if (!file.exists()) return;
+		if (resultsContainer == null) {
+			IFile file = resultAlternative.getResource()
+					.getFile(ResultsLocationConstants.RESULTS_SERIALIZATION_FILE_NAME);
+			if (!file.exists())
+				return;
 
-			try
-			{
+			try {
 				resultsContainer = (ResultsContainer) LpeFileUtils.readObject(file.getLocation().toFile());
 				updateHierarchy();
 				updateReport();
-			} catch (ClassNotFoundException | IOException e)
-			{
+			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void updateHierarchy()
 	{
 		IExtensionItem input = null;
 
-
-		if (resultsContainer != null)
-		{
+		if (resultsContainer != null) {
 			XPerformanceProblem root = resultsContainer.getRootProblem();
-			if (root != null)
-			{
+			if (root != null) {
 				String projectName = resultAlternative.getProject().getName();
 				input = HierarchyEditor.createPerformanceProblemHierarchy(projectName, extensionItemFactory, root);
 			}
 		}
 
 		imageProvider.setResultsContainer(resultsContainer);
-		if (input == null)
-		{
+		if (input == null) {
 			input = extensionItemFactory.createExtensionItem();
 		}
 		hierarchyTreeViewer.setInput(input);
 		hierarchyTreeViewer.expandAll();
 
-		if (hierarchyTreeViewer.getTree().getItemCount() > 0)
-		{
-		hierarchyTreeViewer.getTree().setSelection(hierarchyTreeViewer.getTree().getItems()[0]);
-		IExtensionItem iExtensionItem = input.getItems()[0];
-		Object problem = iExtensionItem.getModelWrapper().getXMLModel();
-		if (problem instanceof XPerformanceProblem)
-		{
-			currentSelectedProblem = (XPerformanceProblem) problem;
-		}
-		updateProblemDetails();
+		if (hierarchyTreeViewer.getTree().getItemCount() > 0) {
+			hierarchyTreeViewer.getTree().setSelection(hierarchyTreeViewer.getTree().getItems()[0]);
+			IExtensionItem iExtensionItem = input.getItems()[0];
+			Object problem = iExtensionItem.getModelWrapper().getXMLModel();
+			if (problem instanceof XPerformanceProblem) {
+				currentSelectedProblem = (XPerformanceProblem) problem;
+			}
+			updateProblemDetails();
 		}
 	}
 
 	private void updateReport()
 	{
-		if (resultsContainer != null && resultsContainer.getReport() != null)
-		{
+		if (resultsContainer != null && resultsContainer.getReport() != null) {
 			textReport.setText(resultsContainer.getReport());
-		} else
-		{
+		} else {
 			textReport.setText(ERR_MSG_MISSING_REPORT);
 		}
 	}

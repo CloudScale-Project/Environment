@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ControlAdapter;
@@ -12,6 +13,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
@@ -218,7 +220,11 @@ public class TitleWidget extends Composite
 
 	protected static Image loadImage(String filepath)
 	{
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, filepath).createImage();
+		ImageDescriptor imgDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, filepath);
+		if (imgDescriptor == null)
+			return new Image(Display.getDefault(), new Rectangle(0, 0, 16, 16));
+		
+		return imgDescriptor.createImage();
 	}
 
 }
