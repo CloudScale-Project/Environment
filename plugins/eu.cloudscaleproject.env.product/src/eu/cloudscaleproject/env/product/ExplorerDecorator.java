@@ -43,8 +43,7 @@ public class ExplorerDecorator extends LabelProvider implements
 	
 	@SuppressWarnings("unused") // How to detect if folder is expanded??
 	private static final String FOLDER_CLOSE_ICON = ICON_PATH + "folder_close.png";
-	private static final String FOLDER_OPEN_ICON = ICON_PATH + "folder_open.png";
-	
+	private static final String FOLDER_OPEN_ICON = ICON_PATH + "folder_open.png"; 
 	private HashMap<String, Properties> mapPropertiesFile = new HashMap<String, Properties>();
 	
 	@Override
@@ -126,13 +125,11 @@ public class ExplorerDecorator extends LabelProvider implements
 	private Image getFolderImage (IFolder f)
 	{
 		Preferences prop = ExplorerProjectPaths.getProjectProperties(f.getProject());
-		return null;
 		
-		/*
 		//Properties prop = getProjectProperties(f.getProject());
 		if (prop == null) return null;
 		
-		if (f.getName().equals(prop.get(ExplorerProjectPaths.FOLDER_GENERATED_KEY, null)))
+		if (f.getName().equals("Generated models"))
 		{
 			return getIcon(GENERATED_ICON);
 		}
@@ -140,37 +137,37 @@ public class ExplorerDecorator extends LabelProvider implements
 		//{
 		//	return getIcon(IMPORTED_ICON);
 		//}
-		else if (f.getName().equals(prop.get(CST)))
+		else if (f.getName().equals("ScaleDL models"))
 		{
 			return getIcon(SCALEDL_ICON);
 		}
 
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_ANALYSER)))
+		else if (f.getName().equals("Analyser"))
 		{
 			return getIcon(ANALYSER_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_EXTRACTOR)))
+		else if (f.getName().equals("Extractor"))
 		{
 			return getIcon(EXTRACTOR_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_STATIC_SPOTTER)))
+		else if (f.getName().equals("Static Spotter"))
 		{
 			return getIcon(STATIC_SPOTTER_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_DYNAMIC_SPOTTER)))
+		else if (f.getName().equals("Dynamic Spotter"))
 		{
 			return getIcon(DYNAMIC_SPOTTER_ICON);
 		}
 
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_INPUT)))
+		else if (f.getName().equals("Input"))
 		{
 			return getIcon(INPUT_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_CONFIGURATION)))
+		else if (f.getName().equals("Configurations"))
 		{
 			return getIcon(CONFIGURATION_ICON);
 		}
-		else if (f.getName().equals(prop.getProperty(ExplorerProjectPaths.KEY_FOLDER_RESULTS)))
+		else if (f.getName().equals("Result"))
 		{
 			return getIcon(RESULTS_ICON);
 		}
@@ -183,7 +180,6 @@ public class ExplorerDecorator extends LabelProvider implements
 		{
 			return getIcon(FOLDER_OPEN_ICON);
 		}
-		*/
 	}
 	
 	private Properties getProjectProperties (IProject p)
