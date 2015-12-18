@@ -214,27 +214,33 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		return mm;
 	}
 	
-	private void executeCommand (String cmdId, ISelection selection)
+	private void executeCommand (final String cmdId, final ISelection selection)
 	{
+		alternative.executeRecordingModelChange(new Runnable() {
+			
+			@Override
+			public void run() {
+				try  {
+					// TODO: move to common helpers
+					IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+					ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
 
-		try  {
-			// TODO: move to common helpers
-			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-			ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+					Command command = commandService.getCommand(cmdId);
+					
+					EvaluationContext c = new EvaluationContext(null, "non null value");
+					c.addVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME, selection);
+					c.addVariable(ISources.ACTIVE_SHELL_NAME, Display.getDefault().getActiveShell());
 
-		    Command command = commandService.getCommand(cmdId);
-		    
-		    EvaluationContext c = new EvaluationContext(null, "non null value");
-		    c.addVariable(ISources.ACTIVE_CURRENT_SELECTION_NAME, selection);
-		    c.addVariable(ISources.ACTIVE_SHELL_NAME, Display.getDefault().getActiveShell());
+					ExecutionEvent e = new ExecutionEvent(command, new HashMap<Object,Object>(), this, c);
+					command.executeWithChecks(e);
 
-		    ExecutionEvent e = new ExecutionEvent(command, new HashMap<Object,Object>(), this, c);
-		    command.executeWithChecks(e);
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			}
+		});
 
-		} catch (Exception e) {
-		    
-		    e.printStackTrace();
-		}
 	}
 	
 	private void refreshButtonStates(){

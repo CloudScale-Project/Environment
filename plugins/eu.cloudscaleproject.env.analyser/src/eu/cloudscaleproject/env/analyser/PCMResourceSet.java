@@ -195,6 +195,34 @@ public class PCMResourceSet extends ResourceSetImpl{
 	
 	public void setRootObject(ModelType model, EObject object){
 		
+		
+		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+		Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+		
+		if(res == null || resD == null){
+			create(model);
+			
+			//retrieve resources again 
+			res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
+			resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
+		}
+		
+		res.getContents().clear();
+		resD.getContents().clear();
+
+		if(object == null){
+			return;
+		}
+		
+		res.getContents().add(object);
+		//recreate diagram for the new root object
+		if(hasDiagram(model)){
+			resD.getContents().add(createDiagramRootObject(object));
+		}
+	}
+
+	public void setRootObjects(ModelType model, List<EObject> objects){
+		
 		Resource res = ExplorerProjectPaths.getEmfResource(this, getModelFile(model));
 		Resource resD = ExplorerProjectPaths.getEmfResource(this, getDiagramFile(model));
 		
@@ -209,10 +237,10 @@ public class PCMResourceSet extends ResourceSetImpl{
 		res.getContents().clear();
 		resD.getContents().clear();
 		
-		res.getContents().add(object);
+		res.getContents().addAll(objects);
 		//recreate diagram for the new root object
-		if(hasDiagram(model)){
-			resD.getContents().add(createDiagramRootObject(getModelRootObject(model)));
+		if(hasDiagram(model) && !objects.isEmpty()){
+			resD.getContents().add(createDiagramRootObject(objects.get(0)));
 		}
 	}
 	

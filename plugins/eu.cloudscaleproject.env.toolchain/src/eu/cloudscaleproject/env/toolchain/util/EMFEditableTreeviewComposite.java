@@ -42,6 +42,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.palladiosimulator.mdsdprofiles.provider.StereotypableElementDecoratorAdapterFactory;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
@@ -117,11 +118,16 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			}
 		});
 
-		contentProvider = new AdapterFactoryContentProvider(alternative.getAdapterFactory());
+		contentProvider = new AdapterFactoryContentProvider(new StereotypableElementDecoratorAdapterFactory(alternative.getAdapterFactory()));
 
 		this.treeViewer.setContentProvider(contentProvider);
+		
 		this.treeViewer.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
 				new AdapterFactoryLabelProvider.StyledLabelProvider(alternative.getAdapterFactory(), this.treeViewer)));
+		
+		//this is needed to show Profile/Stereotype/AT labels - it does not work with the StyledLabelProvider
+		//this.treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(
+		//		new StereotypableElementDecoratorAdapterFactory(alternative.getAdapterFactory())));
 		
 		new AdapterFactoryTreeEditor(tree, alternative.getAdapterFactory());
 

@@ -183,6 +183,9 @@ public class ResourceRegistry {
 	public IEditorInputResource findResource(String resourcePath){
 		IPath path = Path.fromPortableString(resourcePath);
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
+		if(!resource.exists()){
+			resource = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+		}
 		IProject project = resource.getProject();
 		
 		if(project == null){

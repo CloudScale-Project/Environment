@@ -117,16 +117,11 @@ public class OverviewConverterNew{
 				res.unload();
 			}
 						
-			resSet.setRootObject(ModelType.RESOURCE, 
-					outputResource.getContents().isEmpty() ? null : outputResource.getContents().get(0));
-			resSet.setRootObject(ModelType.REPOSITORY, 
-					outputRepository.getContents().isEmpty() ? null : outputRepository.getContents().get(0));
-			resSet.setRootObject(ModelType.SYSTEM, 
-					outputSystem.getContents().isEmpty() ? null : outputSystem.getContents().get(0));
-			resSet.setRootObject(ModelType.ALLOCATION, 
-					outputAllocation.getContents().isEmpty() ? null : outputAllocation.getContents().get(0));
-			resSet.setRootObject(ModelType.USAGE, 
-					outputUsage.getContents().isEmpty() ? null : outputUsage.getContents().get(0));
+			resSet.setRootObjects(ModelType.RESOURCE, outputResource.getContents());
+			resSet.setRootObjects(ModelType.REPOSITORY, outputRepository.getContents());
+			resSet.setRootObjects(ModelType.SYSTEM, outputSystem.getContents());
+			resSet.setRootObjects(ModelType.ALLOCATION, outputAllocation.getContents());
+			resSet.setRootObjects(ModelType.USAGE, outputUsage.getContents());
 			
 			resSet.saveAll(ModelTypes);			
 		
@@ -191,15 +186,15 @@ public class OverviewConverterNew{
 			IFile usage = resSet.getModelFile(ModelType.USAGE);
 
 			if(repository != null)
-				analyserAlternative.addSubResourceModel(repository);
+				analyserAlternative.addSubResource(repository);
 			if(system != null)
-				analyserAlternative.addSubResourceModel(system);
+				analyserAlternative.addSubResource(system);
 			if(resource != null)
-				analyserAlternative.addSubResourceModel(resource);
+				analyserAlternative.addSubResource(resource);
 			if(allocation != null)
-				analyserAlternative.addSubResourceModel(allocation);
+				analyserAlternative.addSubResource(allocation);
 			if(usage != null)
-				analyserAlternative.addSubResourceModel(usage);
+				analyserAlternative.addSubResource(usage);
 		
 		}
 

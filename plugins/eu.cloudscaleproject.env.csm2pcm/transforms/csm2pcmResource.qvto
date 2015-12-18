@@ -1,10 +1,14 @@
 library csm2pcmResource;
 
+import org.scaledl.architecturaltemplates.repositories.cloudscale.black.ProfilesLibrary;
+
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
 modeltype RESOURCE_TYPE uses pcm::resourcetype('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype SYSTEM uses pcm::system('http://palladiosimulator.org/PalladioComponentModel/5.1');
 
+modeltype ECORE uses 'http://www.eclipse.org/emf/2002/Ecore';
 modeltype STOEX uses stoex('http://sdq.ipd.uka.de/StochasticExpressions/2.2');
 
 configuration property CSMID : String;
@@ -260,6 +264,68 @@ helper createComputingInfrastructureResourceSpecifications(in resourceRepository
 }
 */
 
+helper applyArchitecturalTemplates(in system : System, 
+								   in resourceRepository : ResourceEnvironment,
+								   in container : ResourceContainer,
+								   in deployment : OVERVIEW::deployment::RuntimeDeployment){
+
+	var horizontalScalingProfile : String;
+	var verticalScalingProfile : String;
+	var loadbalancingProfile : String;
+	
+	horizontalScalingProfile := "DynamicHorizontalScalingResourceContainerProfile";
+	verticalScalingProfile := "DynamicVerticalScalingResourceContainerProfile";
+	loadbalancingProfile := "StaticResourceContainerLoadbalancingProfile";
+
+	if(deployment.computingEnvironment.oclIsKindOf(OVERVIEW::deployment::ScalableComputingEnvironment)) then{
+
+		//apply profile to the System
+		if(not isProfileApplied(system.oclAsType(EObject), horizontalScalingProfile)) {
+			applyProfile(system.oclAsType(EObject), horizontalScalingProfile);
+		};
+	
+		//apply profile to the ResourceEnvironment
+		if(not isProfileApplied(resourceRepository.oclAsType(EObject), horizontalScalingProfile)) {
+			applyProfile(resourceRepository.oclAsType(EObject), horizontalScalingProfile);
+		};
+		
+		//Vertical scaling is not supported in the Overview model.
+		//if(not isProfileApplied(resourceRepository.oclAsType(EObject), verticalScalingProfile)) {
+		//	applyProfile(resourceRepository.oclAsType(EObject), verticalScalingProfile);
+		//};
+
+		var sce := deployment.computingEnvironment.oclAsType(OVERVIEW::deployment::ScalableComputingEnvironment);
+		var stReplicable = "ReplicableResourceContainer";
+
+		if(not hasAppliedStereotype(container, stReplicable)) then {
+			applyStereotype(container, stReplicable);
+			setTaggedValue(container, sce.size, stReplicable, "numberOfReplicas");
+		} endif;
+	}
+	else{
+
+		//apply profile to the System
+		if(not isProfileApplied(system.oclAsType(EObject), loadbalancingProfile)) {
+			applyProfile(system.oclAsType(EObject), loadbalancingProfile);
+		};
+	
+		//apply profile to the ResourceEnvironment
+		if(not isProfileApplied(resourceRepository.oclAsType(EObject), loadbalancingProfile)) {
+			applyProfile(resourceRepository.oclAsType(EObject), loadbalancingProfile);
+		};
+
+		var cce := deployment.computingEnvironment.oclAsType(OVERVIEW::deployment::ClusteredComputingEnvironment);
+		var stReplicable = "StaticLoadbalancedResourceContainer";
+
+		if(not hasAppliedStereotype(container, stReplicable)) then {
+			applyStereotype(container, stReplicable);
+			setTaggedValue(container, cce.size, stReplicable, "numberOfReplicas");
+		} endif;
+		
+	} endif;
+								   	
+}
+
 helper createProvidedServiceResourceSpecifications(in resourceRepository : ResourceRepository, 
 									in service : OVERVIEW::architecture::ProvidedService, 
 									in container : ResourceContainer) : Sequence(RESOURCE::ProcessingResourceSpecification){
@@ -278,47 +344,47 @@ helper createProvidedServiceResourceSpecifications(in resourceRepository : Resou
 	}
 	else{
 	
-	//add one CPU
-	resources += object ProcessingResourceSpecification{
-		
-		activeResourceType_ActiveResourceSpecification 
-			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
-		
-		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
-		
-		MTTR := 0.0;
-		MTTF := 0.0;
-		requiredByContainer := false;
-		numberOfReplicas := 1;
-		resourceContainer_ProcessingResourceSpecification := container;
-		
-		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
-			//TODO: fix/parse wsdl
-			specification := '100';
+		//add one CPU
+		resources += object ProcessingResourceSpecification{
+			
+			activeResourceType_ActiveResourceSpecification 
+				:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'CPU');
+			
+			schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'ProcessorSharing');
+			
+			MTTR := 0.0;
+			MTTF := 0.0;
+			requiredByContainer := false;
+			numberOfReplicas := 1;
+			resourceContainer_ProcessingResourceSpecification := container;
+			
+			processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+				//TODO: fix/parse wsdl
+				specification := '100';
+			};
+			id := CSMID + service.id + '_createCPU';
 		};
-		id := CSMID + service.id + '_createCPU';
-	};
-	
-	//add one HDD
-	resources += object ProcessingResourceSpecification{
 		
-		activeResourceType_ActiveResourceSpecification 
-			:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
-		
-		schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
-		
-		MTTR := 0.0;
-		MTTF := 0.0;
-		requiredByContainer := false;
-		numberOfReplicas := 1;
-		resourceContainer_ProcessingResourceSpecification := container;
-		
-		processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
-			//TODO: fix/parse wsdl
-			specification := '100';
+		//add one HDD
+		resources += object ProcessingResourceSpecification{
+			
+			activeResourceType_ActiveResourceSpecification 
+				:= resourceRepository.availableResourceTypes_ResourceRepository[ProcessingResourceType]->selectOne(entityName = 'HDD');
+			
+			schedulingPolicy := resourceRepository.schedulingPolicies__ResourceRepository->selectOne(id = 'FCFS');
+			
+			MTTR := 0.0;
+			MTTF := 0.0;
+			requiredByContainer := false;
+			numberOfReplicas := 1;
+			resourceContainer_ProcessingResourceSpecification := container;
+			
+			processingRate_ProcessingResourceSpecification := object pcm::core::PCMRandomVariable{
+				//TODO: fix/parse wsdl
+				specification := '100';
+			};
+			id := CSMID + service.id + '_createHDD';
 		};
-		id := CSMID + service.id + '_createHDD';
-	};
 	
 	}endif;
 	
@@ -373,6 +439,7 @@ helper createSingleComputingEnvResourceSpecifications(in resourceRepository : Re
 		};
 		id := CSMID + service.id + '_createHDD';
 	};
+	
 	
 	return resources;																	
 	

@@ -2,6 +2,8 @@ import csm2pcmUtil;
 import csm2pcmResource;
 import csm2pcmData;
 
+import org.scaledl.architecturaltemplates.repositories.cloudscale.black.ProfilesLibrary;
+
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0');
 
 modeltype CORE uses pcm::core('http://palladiosimulator.org/PalladioComponentModel/5.1');
@@ -13,6 +15,7 @@ modeltype DATA_TYPE uses pcm::repository('http://palladiosimulator.org/PalladioC
 modeltype RESOURCE uses pcm::resourceenvironment('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype ALLOCATION uses pcm::allocation('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype USAGE uses pcm::usagemodel('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype ECORE uses 'http://www.eclipse.org/emf/2002/Ecore';
 
 
 transformation csm2pcm(in csmInstance : OVERVIEW,
@@ -55,6 +58,28 @@ main() {
 	csmRoot.map csm2system();
 	csmRoot.map csm2allocation();
 	csmRoot.map csm2usage();
+	
+	//apply Architectural Templates
+	pcmResourceInstance.rootObjects()![ResourceEnvironment].resourceContainer_ResourceEnvironment->forEach(rc){
+		var ps : OVERVIEW::architecture::ProvidedService;
+		ps := rc.invresolveoneIn(OVERVIEW::architecture::ProvidedService::providedService2resourceContainer,
+								 OVERVIEW::architecture::ProvidedService);
+		
+		log("Applying profile to: " + ps.name);
+		
+		var resourceEnvironment : ResourceEnvironment;
+		var system : System;
+		
+		resourceEnvironment := pcmResourceInstance.rootObjects()![ResourceEnvironment];
+		system := pcmSystemInstance.rootObjects()![System];
+		
+		if(ps.deployment.oclIsKindOf(OVERVIEW::deployment::RuntimeDeployment)){
+			applyArchitecturalTemplates(system, resourceEnvironment, 
+										rc, ps.deployment.oclAsType(OVERVIEW::deployment::RuntimeDeployment));	
+		}
+	};
+	
+	//pcmResourceInstance.rootObjects()![ResourceEnvironment].oclAsType(EObject).eResource().getContent();
 		
 	log("Transformation CSM2PCM done");
 }
@@ -86,6 +111,21 @@ mapping OVERVIEW::Overview::csm2resource() : RESOURCE::ResourceEnvironment @ pcm
 								
 
 		resourceContainer_ResourceEnvironment += resourceContainers;
+		
+		//apply Architectural Templates
+		/*
+		resourceContainer_ResourceEnvironment->forEach(rc){
+			var ps : OVERVIEW::architecture::ProvidedService;
+			ps := rc.invresolveoneIn(OVERVIEW::architecture::ProvidedService::providedService2resourceContainer,
+									 OVERVIEW::architecture::ProvidedService);
+			
+			log("Applying profile to: " + ps.name);
+			
+			if(ps.deployment.oclIsKindOf(OVERVIEW::deployment::RuntimeDeployment)){
+				applyArchitecturalTemplates(resourceRepository, rc, ps.deployment.oclAsType(OVERVIEW::deployment::RuntimeDeployment));	
+			}
+		};
+		*/
 
 		//link internal resources	
 		if(not cp.internalConnections->isEmpty()) then{

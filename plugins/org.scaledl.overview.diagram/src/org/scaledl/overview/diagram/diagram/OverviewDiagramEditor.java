@@ -1,8 +1,14 @@
 package org.scaledl.overview.diagram.diagram;
 
+import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 public class OverviewDiagramEditor extends DiagramEditor{
+	
+	@Override
+	protected DiagramBehavior createDiagramBehavior() {
+		return new OverviewDiagramBehavior(this);
+	}
 	
 	@Override
 	public void setFocus() {
@@ -22,5 +28,5 @@ public class OverviewDiagramEditor extends DiagramEditor{
 		//TODO:
 		//add alternative into this part context, so the validation diagram updates accordingly...
 	}
-
+	
 }
