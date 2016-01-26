@@ -14,6 +14,8 @@ public enum ModelType{
 	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "Allocation model", "allocation"),
 	 //AT(ToolchainUtils.KEY_FILE_AT, "xmi"),
 	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "Usage model", "usagemodel"),
+	 REPRESENTATIONS(ToolchainUtils.KEY_FILE_REPRESENTATIONS, "Representation models", "aird"), 
+
 	 
 	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "Usage evolution model", "usageevolution"),
 	 MONITOR(ToolchainUtils.KEY_FILE_MONITOR, "Monitors model", "monitorrepository"),
@@ -29,8 +31,8 @@ public enum ModelType{
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_NONE  		   	 = {};
-	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION} ;
-	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION} ;
+	 public static ModelType[] GROUP_PCM  		   	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION, REPRESENTATIONS} ;
+	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION, REPRESENTATIONS} ;
 	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, MONITOR, SLO, VARIATION, USAGE_EVOLUTION, MEASURING_POINT} ;
 	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
 	 
@@ -50,6 +52,24 @@ public enum ModelType{
 	 
 	 public static ModelType getModelType(Resource resource){
 		 for(ModelType mt : ModelType.values()){
+			 if(mt.extension.equals(resource.getURI().fileExtension())){
+				 return mt;
+			 }
+		 }
+		 return null;
+	 }
+	 
+	 public static ModelType filterModelType(ModelType[] modelTypes, String extension){
+		 for(ModelType mt : modelTypes){
+			 if(mt.extension.equals(extension)){
+				 return mt;
+			 }
+		 }
+		 return null;
+	 }
+	 
+	 public static ModelType filterModelType(ModelType[] modelTypes, Resource resource){
+		 for(ModelType mt : modelTypes){
 			 if(mt.extension.equals(resource.getURI().fileExtension())){
 				 return mt;
 			 }

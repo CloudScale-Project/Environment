@@ -340,6 +340,9 @@ public class PCMResourceSet extends ResourceSetImpl{
 			case USAGE_EVOLUTION:
 				model = UsageevolutionFactory.eINSTANCE.createUsageEvolution();
 				break;
+			case REPRESENTATIONS:
+				//TODO: implement this
+				break;
 			default:
 				String msg = "createModel(): Specified 'ModelType' not supported: " + id.name();
 				logger.log(Level.SEVERE, msg);

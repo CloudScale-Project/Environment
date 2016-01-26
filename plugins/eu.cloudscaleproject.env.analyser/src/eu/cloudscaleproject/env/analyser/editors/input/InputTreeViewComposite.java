@@ -40,6 +40,7 @@ import eu.cloudscaleproject.env.analyser.wizard.NewModelWizard;
 import eu.cloudscaleproject.env.toolchain.IPropertySheetPageProvider;
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
+import eu.cloudscaleproject.env.toolchain.util.ModelTypeViewFilter;
 
 public class InputTreeViewComposite extends Composite implements IPropertySheetPageProvider{
 
@@ -96,6 +97,7 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 		};
 		
 		treeviewComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		treeviewComposite.addFilter(new ModelTypeViewFilter(input.getModelTypes(), true));
 		
 		buttonsComposite = new Composite(this, SWT.NONE);
 		buttonsComposite.setLayout(new GridLayout(1, true));

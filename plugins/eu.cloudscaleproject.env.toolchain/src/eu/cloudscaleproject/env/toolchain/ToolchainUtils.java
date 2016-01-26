@@ -44,6 +44,7 @@ public class ToolchainUtils {
 	public static final String KEY_FILE_USAGE			= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usage";
 	public static final String KEY_FILE_AT				= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_at";
 	public static final String KEY_FILE_ALLOCATION		= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_allocation";
+	public static final String KEY_FILE_REPRESENTATIONS	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_representations";
 	
 	// Analyser conf
 	public static final String KEY_FILE_EXPERIMENTS 	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_experiments";

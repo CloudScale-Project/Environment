@@ -38,6 +38,18 @@ public class InputComposite extends InputEditorView implements ISelectable, IRef
 		super(parent, style, input);
 
 		//alternative = input;
+		/*
+		
+		//Open sirius diagram
+		DialectManager dm = DialectManager.INSTANCE;
+		DialectService ds = dm.createRepresentation(arg0, arg1, arg2, arg3, arg4);
+				
+		//Open sirius diagram
+		DialectUIManager manager = DialectUIManager.INSTANCE;
+		manager.openEditor(arg0, arg1, arg2);
+		
+		*/
+		//
 		
 		GridLayout layout = new GridLayout(1, true);
 		layout.marginWidth = 0;

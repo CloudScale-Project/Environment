@@ -41,6 +41,14 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0",
  eu.cloudscaleproject.env.analyser,
  org.scaledl.overview;bundle-version="1.0.0",
- eu.cloudscaleproject.env.overview;bundle-version="1.0.0"
+ eu.cloudscaleproject.env.overview;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.api;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.completion.jobs;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.edit;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.editor;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.ocl;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.repositories.cloudscale;bundle-version="1.0.0",
+ org.scaledl.architecturaltemplates.ui;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

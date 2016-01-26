@@ -119,7 +119,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 	}
 	
 	public void selectResource(ModelType modelType, boolean state, boolean selectOnlyOne){
-		for(Resource r : resSet.getResources()){
+		for(Resource r : new ArrayList<Resource>(resSet.getResources())) {
 			if(modelType.getFileExtension().equals(r.getURI().fileExtension())){
 				selectResource(r, state);
 				if(selectOnlyOne){

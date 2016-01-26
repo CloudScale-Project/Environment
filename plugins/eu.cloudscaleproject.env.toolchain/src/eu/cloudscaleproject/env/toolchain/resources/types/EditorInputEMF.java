@@ -70,6 +70,10 @@ public class EditorInputEMF extends EditorInputFolder{
 		resSet = editingDomain.getResourceSet();
 	}
 	
+	public ModelType[] getModelTypes(){
+		return modelTypes;
+	}
+	
 	/**
 	 * Deprecated: Use addSubResource(IResource) method.
 	 * 
