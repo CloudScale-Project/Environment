@@ -763,6 +763,7 @@ public class ExplorerProjectPaths {
 				monitor.worked(1);
 			}
 		}
+		
 	}
 
 	public static IProject getProject(IEditorPart editor) {

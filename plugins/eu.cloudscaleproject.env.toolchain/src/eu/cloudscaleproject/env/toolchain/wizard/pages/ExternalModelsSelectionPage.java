@@ -2,8 +2,6 @@ package eu.cloudscaleproject.env.toolchain.wizard.pages;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -11,12 +9,9 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -45,6 +40,7 @@ import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeListe
 import eu.cloudscaleproject.env.common.explorer.notification.ExplorerChangeNotifier;
 import eu.cloudscaleproject.env.common.interfaces.IRefreshable;
 import eu.cloudscaleproject.env.toolchain.ModelType;
+import eu.cloudscaleproject.env.toolchain.util.ModelTypeViewFilter;
 
 public class ExternalModelsSelectionPage extends WizardPage implements IRefreshable{
 		
@@ -151,9 +147,11 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 			}
 		}
 		
+		/*
 		for(Resource lRes : findLinked(res)){
 			selectResource(lRes, state);
 		}
+		*/
 	}
 	
 	@Override
@@ -183,6 +181,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		tableView.setLabelProvider(new org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider(
 				new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, this.tableView)));
 		tableView.setInput(resSet);
+		tableView.addFilter(new ModelTypeViewFilter(ModelType.GROUP_PCM_EXTENDED, true));
 		
 		tableView.addCheckStateListener(new ICheckStateListener() {
 			
@@ -236,6 +235,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		return null;
 	}
 	
+	/*
 	private List<Resource> findLinked(Resource resource){
 			
 		List<Resource> selected = new ArrayList<Resource>();
@@ -278,6 +278,7 @@ public class ExternalModelsSelectionPage extends WizardPage implements IRefresha
 		selected.remove(resource);
 		return selected;
 	}
+	*/
 	
 	public void refresh(){
 		if(folder != null){

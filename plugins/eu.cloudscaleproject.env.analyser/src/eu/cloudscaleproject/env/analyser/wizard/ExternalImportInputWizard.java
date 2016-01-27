@@ -1,14 +1,20 @@
 package eu.cloudscaleproject.env.analyser.wizard;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
+import org.eclipse.sirius.viewpoint.DAnalysis;
 
 import eu.cloudscaleproject.env.analyser.Activator;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -103,13 +109,43 @@ public class ExternalImportInputWizard extends Wizard{
 					monitor.worked(1);
 					ExplorerProjectPaths.copyEMFResources(alternative.getResource(), selectedDiagramResources, monitor);
 					monitor.worked(1);
+					
+					//fix references inside representations (Sirius) model
+					for(Resource res : selectedResources){
+						if(ModelType.getModelType(res) == ModelType.REPRESENTATIONS){
+							if(!res.getContents().isEmpty() && res.getContents().get(0) instanceof DAnalysis){
+								DAnalysis analysis = (DAnalysis)res.getContents().get(0);
+								for(ResourceDescriptor rd : new ArrayList<ResourceDescriptor>(analysis.getSemanticResources())){
+									
+									URI uri = rd.getResourceURI();
+									
+									if(uri != null && uri.isPlatformResource()){
+										//String newPlatformResourcePath = alternative.getResource().getFullPath().append(uri.lastSegment()).toString();
+										URI newPlatformResourcePrefix = URI.createPlatformResourceURI(alternative.getResource().getFullPath().toString() + "/", true);
+										URI newUri = uri.replacePrefix(uri.trimSegments(1).appendSegment(""), newPlatformResourcePrefix);
+										
+										ResourceDescriptor newRd = new ResourceDescriptor(newUri);
+										analysis.getSemanticResources().remove(rd);
+										analysis.getSemanticResources().add(newRd);
+									}
+								}
+							}
+							
+							try {
+								res.save(null);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
 				}
 				
 				for (Resource resource : selectedResources)
 				{
 					IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-					alternative.addSubResourceModel(f);
+					alternative.addSubResource(f);
 				}
+				
 				monitor.worked(1);
 				
 				monitor.subTask("Validating alternative...");
