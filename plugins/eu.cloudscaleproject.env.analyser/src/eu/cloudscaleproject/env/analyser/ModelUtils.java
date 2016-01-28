@@ -22,6 +22,7 @@ import org.palladiosimulator.pcm.core.entity.NamedElement;
 import org.palladiosimulator.pcm.repository.RepositoryFactory;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceenvironmentFactory;
 import org.palladiosimulator.pcm.system.SystemFactory;
+import org.palladiosimulator.pcm.system.impl.SystemImpl;
 import org.palladiosimulator.pcm.usagemodel.UsagemodelFactory;
 import org.scaledl.usageevolution.UsageevolutionFactory;
 
@@ -68,6 +69,9 @@ public class ModelUtils {
 				monitor.subTask("Saving alternative");
 				alternative.save();
 				monitor.worked(1);
+				
+				//IFile repFile = ExplorerProjectPaths.getNonexistingSubFile(alternative.getResource(), "model", ModelType.REPRESENTATIONS.getFileExtension());
+				//ResourceUtils.createSystemDiagramRepresentation((SystemImpl)alternative.getModelRootObject(ModelType.SYSTEM.getToolchainFileID()), repFile, modelResSet);
 
 				return new Status(IStatus.OK, Activator.PLUGIN_ID, "Creating new models done.");
 			}
@@ -137,6 +141,29 @@ public class ModelUtils {
 				Resource resD = ExplorerProjectPaths.getEmfResource(diagramResSet, diagramFile);
 				resD.getContents().clear();
 				resD.getContents().add(createDiagramRootObject(modelRoot));
+			}
+			
+			//TODO: create diagram representation if applicable
+			if(modelRoot instanceof SystemImpl){
+				
+				//IFile repFile = ExplorerProjectPaths.getNonexistingSubFile(folder, "model", ModelType.REPRESENTATIONS.getFileExtension());
+				//ResourceUtils.createSystemDiagramRepresentation((SystemImpl)modelRoot, repFile, modelResSet);
+				
+				/*
+				DialectManager dm = DialectManager.INSTANCE;
+				
+				DRepresentationContainer container = ViewpointFactory.eINSTANCE.createDRepresentationContainer();
+				DSemanticDiagram diagram = DiagramFactory.eINSTANCE.createDSemanticDiagram();
+				
+				diagram.setTarget(modelRoot);
+				container.getOwnedRepresentations().add(diagram);
+				
+				DiagramDescriptionSpec dds = new DiagramDescriptionSpec();
+				dds.
+				RepresentationDescription rd = DiagramFactory.eINSTANCE.create
+				
+				DRepresentation representation = dm.createRepresentation(arg0, arg1, arg2, arg3, arg4);
+				*/
 			}
 		}
 		

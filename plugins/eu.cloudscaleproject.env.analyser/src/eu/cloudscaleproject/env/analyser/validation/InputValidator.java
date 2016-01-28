@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -22,6 +23,7 @@ import eu.cloudscaleproject.env.common.notification.IValidationStatus;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.common.notification.ValidationException;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
+import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 
 public class InputValidator implements IResourceValidator {
@@ -43,8 +45,25 @@ public class InputValidator implements IResourceValidator {
 		
 		ia.getSelfStatus().checkError("Repository missing", !repFiles.isEmpty(), false, "Repository model is missing!");
 		ia.getSelfStatus().checkError("System missing", !sysFiles.isEmpty(), false, "System model is missing!");
-		ia.getSelfStatus().checkError("Allocation missing", !allFiles.isEmpty(), false, "Allocation model is missing!");
-		ia.getSelfStatus().checkError("Resource missing", !resFiles.isEmpty(), false, "Resource model is missing!");
+		
+		
+		boolean atApplyed = false;
+		if(!sysFiles.isEmpty() && (ia.getModelResource((IFile)sysFiles.get(0)) != null)){
+			Resource sysRes = ia.getModelResource((IFile)sysFiles.get(0));
+			if(sysRes.getContents().size() > 1){
+				atApplyed = true;
+			}
+		}
+		
+		if(atApplyed){
+			ia.getSelfStatus().checkError("Allocation missing", true, false, "Allocation model is missing!");
+			ia.getSelfStatus().checkError("Resource missing", true, false, "Resource model is missing!");
+		}
+		else{
+			ia.getSelfStatus().checkError("Allocation missing", !allFiles.isEmpty(), false, "Allocation model is missing!");
+			ia.getSelfStatus().checkError("Resource missing", !resFiles.isEmpty(), false, "Resource model is missing!");
+		}
+		
 		ia.getSelfStatus().checkError("Usage missing", !usaFiles.isEmpty(), false, "Usage model is missing!");
 		
 		boolean areModelsValid = true;
@@ -53,7 +72,16 @@ public class InputValidator implements IResourceValidator {
 		for(Entry<IFile, List<Diagnostic>> entry : diagnostics.entrySet()){
 			
 			final IFile file = entry.getKey();
-			IValidationStatus status = ia.getStatus(file);
+			final IValidationStatus status = ia.getStatus(file);
+			
+			//TODO: System model validation is broken, when the AT's are applied
+			if(atApplyed){
+				ModelType modelType = ModelType.getModelType(file.getFileExtension());
+				if(modelType == ModelType.SYSTEM){
+					status.setIsValid(true);
+					continue;
+				}
+			}
 			
 			BasicCallback<Object> handle = new BasicCallback<Object>() {
 

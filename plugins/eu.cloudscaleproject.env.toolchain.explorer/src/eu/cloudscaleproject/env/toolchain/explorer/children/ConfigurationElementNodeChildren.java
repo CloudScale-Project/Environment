@@ -124,7 +124,7 @@ public class ConfigurationElementNodeChildren extends ExplorerNodeChildren{
 							
 						}
 						else{
-							for(Object content : contentRetriever.getChildren()){
+							for(Object content : contentList){
 								keys.add(new Key(el, content));
 							}
 						}

@@ -2,9 +2,25 @@ package eu.cloudscaleproject.env.analyser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
+import org.eclipse.sirius.business.api.dialect.DialectManager;
+import org.eclipse.sirius.business.api.dialect.command.CreateRepresentationCommand;
+import org.eclipse.sirius.business.api.session.Session;
+import org.eclipse.sirius.business.api.session.SessionManager;
+import org.eclipse.sirius.tools.api.command.semantic.AddSemanticResourceCommand;
+import org.eclipse.sirius.viewpoint.DRepresentation;
+import org.eclipse.sirius.viewpoint.description.RepresentationDescription;
+import org.eclipse.sirius.viewpoint.description.Viewpoint;
+import org.palladiosimulator.pcm.system.System;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
@@ -15,6 +31,8 @@ import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class ResourceUtils {
+	
+	private static final Logger logger = Logger.getLogger(ResourceUtils.class.getName());
 	
 	public static final String ANALYSER_INPUT_GENERATED_RES_NAME = "overview.alt";
 	public static final String ANALYSER_CONF_CAPACITY_ANALYSES = "Capacity analyses";
@@ -30,6 +48,112 @@ public class ResourceUtils {
 		}
 		
 		return (InputAlternative)editorInput;
+	}
+	
+	public static void createSystemDiagramRepresentation(System system, IFile file, ResourceSet resSet){
+		
+		//monitor.beginTask("Create System and representation:", 100);
+		
+		/*
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(systemURI.segment(1));
+		if (!project.hasNature(ModelingProject.NATURE_ID)) {
+			monitor.subTask("Converting to Modeling Project");
+			// Ask user whether he wants to add the modeling nature
+			final MessageDialog confirmationDialog = new MessageDialog(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), CONFIRMATION_TITLE, null,
+					CONFIRMATION_QUESTION,
+					MessageDialog.CONFIRM, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
+			if (confirmationDialog.open() != Dialog.OK)
+				return;
+
+			ModelingProjectManager.INSTANCE.convertToModelingProject(project, monitor);
+		}
+		*/
+
+		//monitor.subTask("Requesting Session");
+		final Session session = SessionManager.INSTANCE.getSession(
+				URI.createPlatformResourceURI(file.getFullPath().toString(), true),
+				new NullProgressMonitor());
+		
+		//SessionManager.INSTANCE.add(session);
+		final TransactionalEditingDomain domain = session.getTransactionalEditingDomain();
+
+		//monitor.worked(16);
+
+		/*
+		monitor.subTask("Creating System");
+		final CreateSystemModelCommand createSystemModelCommand = new CreateSystemModelCommand(domain, systemURI);
+		domain.getCommandStack().execute(createSystemModelCommand);
+
+		monitor.worked(16);
+		*/
+
+		
+		//monitor.subTask("Adding as semantic resource");
+		//final System createdSystem = createSystemModelCommand.getCreatedSystem();
+		domain.getCommandStack().execute(new AddSemanticResourceCommand(session, system.eResource().getURI(), new NullProgressMonitor()));
+
+		//monitor.worked(16);
+		
+		Viewpoint systemViewpoint = null;
+		
+		for(Viewpoint viewpoint : ViewpointRegistry.getInstance().getViewpoints()){
+			if(viewpoint.getName().equals("System Design")){
+				systemViewpoint = viewpoint;
+			}
+		}
+		
+		if(systemViewpoint == null){
+			logger.warning("System diagram viewpoint does not exist! Representation diagram can not be created.");
+			return;
+		}
+		
+		RepresentationDescription systemRepresentationDescription = null;
+		
+		for (RepresentationDescription representationDescription : systemViewpoint.getOwnedRepresentations()) {
+			  if (representationDescription.getName().equals("ComposedProvidingRequiringEntity Diagram")) {
+				  systemRepresentationDescription = representationDescription;
+				  break;
+			  }	  
+		}
+		
+		if(systemRepresentationDescription == null){
+			logger.warning("System diagram representation description does not exist! Representation diagram can not be created.");
+			return;
+		}
+
+		//monitor.subTask("Selecting viewpoint");
+		/*
+		final Collection<Viewpoint> selectedViewpoints = session.getSelectedViewpoints(true);
+		if (!selectedViewpoints.contains(Activator.getDefault().SYSTEM_DESIGN)) {
+			domain.getCommandStack()
+					.execute(new ChangeViewpointSelectionCommand(session, new ViewpointSelectionCallback(),
+							Collections.singleton(Activator.getDefault().SYSTEM_DESIGN),
+							Collections.<Viewpoint> emptySet(), new NullProgressMonitor()));
+		}
+		*/
+		//monitor.worked(16);
+
+		//monitor.subTask("Creating representation");
+		/*
+		final CreateRepresentationCommand createRepresentationCommand = new CreateRepresentationCommand(session,
+				systemRepresentationDescription, system, "System diagram representation",
+				new NullProgressMonitor());
+		
+		domain.getCommandStack().execute(createRepresentationCommand);
+		*/
+		
+		//final DRepresentation createdRepresentation = createRepresentationCommand.getCreatedRepresentation();
+		//monitor.worked(16);
+		
+		//test
+		DialectManager dm = DialectManager.INSTANCE;
+		DRepresentation representation = dm.createRepresentation("TEst", system, systemRepresentationDescription, session, new NullProgressMonitor());
+
+		//
+		
+		session.save(null);
+		
 	}
 	
 	/**

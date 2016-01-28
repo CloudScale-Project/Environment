@@ -8,6 +8,7 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
@@ -18,6 +19,14 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.sirius.business.api.session.Session;
+import org.eclipse.sirius.business.api.session.SessionManager;
+import org.eclipse.sirius.diagram.DSemanticDiagram;
+import org.eclipse.sirius.ui.business.api.dialect.DialectUIManager;
+import org.eclipse.sirius.viewpoint.DAnalysis;
+import org.eclipse.sirius.viewpoint.DRepresentation;
+import org.eclipse.sirius.viewpoint.DRepresentationContainer;
+import org.eclipse.sirius.viewpoint.DView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -43,6 +52,12 @@ import eu.cloudscaleproject.env.toolchain.util.EMFEditableTreeviewComposite;
 import eu.cloudscaleproject.env.toolchain.util.ModelTypeViewFilter;
 
 public class InputTreeViewComposite extends Composite implements IPropertySheetPageProvider{
+	
+	/* TODO: create representation diagram
+		Example:
+			DialectManager dm = DialectManager.INSTANCE;
+			DialectService ds = dm.createRepresentation(arg0, arg1, arg2, arg3, arg4);
+	*/
 
 	private Composite buttonsComposite;
 	private EMFEditableTreeviewComposite treeviewComposite;
@@ -93,6 +108,73 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 			protected void menuAboutToShow(IMenuManager menuManager, EObject selectedElement) {
 				// TODO: AT branding
 				menuManager.add(createMDSDProfilesMenu());
+			}
+			
+			protected MenuManager createOpenMenuManager()
+			{
+				MenuManager mm = new MenuManager("Open");
+
+				mm.add(new Action("Editor")
+				{
+					@Override
+					public void run()
+					{
+						openEditor(getSelectedModelFile());
+					}
+					@Override
+					public boolean isEnabled()
+					{
+						return getSelectedModelFile() != null;
+					}
+				});
+
+				mm.add(new Action("Diagram")
+				{
+					@Override
+					public void run()
+					{						
+						openEditor(getSelectedDiagramFile());
+					}
+					
+					@Override
+					public boolean isEnabled()
+					{
+						return getSelectedDiagramFile() != null;
+					}
+				});
+				
+				mm.add(new Action("Diagram representation")
+				{
+					@Override
+					public void run()
+					{
+						Object o = getSelectedObject();
+						if(o instanceof EObject){
+							EObject eobjectRoot = EcoreUtil.getRootContainer((EObject)o);
+							DSemanticDiagram diagram = findRepresentationDiagram(eobjectRoot);
+							if(diagram != null){
+								openRepresentationDiagram(diagram);
+							}
+						}
+						
+					}
+					
+					@Override
+					public boolean isEnabled()
+					{
+						Object o = getSelectedObject();
+						if(o instanceof EObject){
+							EObject eobjectRoot = EcoreUtil.getRootContainer((EObject)o);
+							if(findRepresentationDiagram(eobjectRoot) != null){
+								return true;
+							}
+						}
+						return false;
+						
+					}
+				});
+
+				return mm;
 			}
 		};
 		
@@ -186,6 +268,48 @@ public class InputTreeViewComposite extends Composite implements IPropertySheetP
 				treeviewComposite.getTreeViewer().removeSelectionChangedListener(treeViewSelectionListener);
 			}
 		});
+	}
+	
+	private DSemanticDiagram findRepresentationDiagram(EObject eobjectRoot){
+		
+		if(eobjectRoot == null){
+			return null;
+		}
+		
+		EObject repRoot = alternative.getModelRootObject(ModelType.REPRESENTATIONS.getToolchainFileID());
+		if(repRoot instanceof DAnalysis){
+			
+			DAnalysis analysis = (DAnalysis)repRoot;
+			for(DView view : analysis.getOwnedViews()){
+				if(view instanceof DRepresentationContainer){
+					DRepresentationContainer repContainer = (DRepresentationContainer)view;
+					for(DRepresentation rep : repContainer.getOwnedRepresentations()){
+						if(rep instanceof DSemanticDiagram){
+							DSemanticDiagram diagram = (DSemanticDiagram)rep;
+							if(diagram.getTarget() == eobjectRoot){
+								return diagram;
+							}
+						}
+					}
+				}
+			}
+			
+		}
+		
+		return null;
+	}
+	
+	private void openRepresentationDiagram(DSemanticDiagram diagram) {
+		
+		SessionManager sm = SessionManager.INSTANCE;
+		Session session = sm.getSession(diagram);
+		if (session == null) {
+			session = sm.getSession(diagram.eResource().getURI(), new NullProgressMonitor());
+			session.open(new NullProgressMonitor());
+		}
+		DialectUIManager manager = DialectUIManager.INSTANCE;
+		manager.openEditor(session, diagram, new NullProgressMonitor());
+
 	}
 	
 	private MenuManager createMDSDProfilesMenu ()

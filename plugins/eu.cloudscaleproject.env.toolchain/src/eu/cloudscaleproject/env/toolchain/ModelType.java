@@ -14,7 +14,7 @@ public enum ModelType{
 	 ALLOCATION(ToolchainUtils.KEY_FILE_ALLOCATION, "Allocation model", "allocation"),
 	 //AT(ToolchainUtils.KEY_FILE_AT, "xmi"),
 	 USAGE(ToolchainUtils.KEY_FILE_USAGE, "Usage model", "usagemodel"),
-	 REPRESENTATIONS(ToolchainUtils.KEY_FILE_REPRESENTATIONS, "Representation models", "aird"), 
+	 REPRESENTATIONS(ToolchainUtils.KEY_FILE_REPRESENTATIONS, "Representation model", "aird"), 
 
 	 
 	 USAGE_EVOLUTION(ToolchainUtils.KEY_FILE_USAGEEVOLUTION, "Usage evolution model", "usageevolution"),

@@ -2,6 +2,7 @@ package eu.cloudscaleproject.env.analyser.wizard.pages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -22,11 +23,15 @@ import eu.cloudscaleproject.env.toolchain.ModelType;
 
 public class ModelSelectionPage extends WizardPage{
 	
-	private List<ModelType> selectedModels = new ArrayList<ModelType>();
-	
+	private static final Logger logger = Logger.getLogger(ModelSelectionPage.class.getName());
+		
 	private AdapterFactory adapterFactory = null;
 	
 	private ModelType[] types;
+	
+	private List<ModelType> selectedModels = new ArrayList<ModelType>();
+	private List<ModelType> models = new ArrayList<ModelType>();
+	
 	private Resource resource = new ResourceImpl();
 	
 	private CheckboxTableViewer tableView;
@@ -53,7 +58,7 @@ public class ModelSelectionPage extends WizardPage{
 	}
 	
 	private void doSelectAll(){
-		for(ModelType t : types){
+		for(ModelType t : models){
 			selectedModels.add(t);
 		}
 		tableView.setAllChecked(true);
@@ -67,7 +72,13 @@ public class ModelSelectionPage extends WizardPage{
 		
 		for(int i=0; i<types.length; i++){
 			EObject rootObject = PCMResourceSet.createModelRootObject(types[i]);
-			resource.getContents().add(rootObject);
+			if(rootObject != null){
+				resource.getContents().add(rootObject);
+				models.add(types[i]);
+			}
+			else{
+				logger.warning("Model root object can not be created: " + types[i].getDisplayName());
+			}
 		}
 				
 		tableView = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
@@ -88,7 +99,7 @@ public class ModelSelectionPage extends WizardPage{
 				for(int i=0; i<selection.length; i++){
 					Object o = selection[i];
 					
-					ModelType type = types[resource.getContents().indexOf(o)];
+					ModelType type = models.get(resource.getContents().indexOf(o));
 					selectedModels.add(type);
 				}				
 			}

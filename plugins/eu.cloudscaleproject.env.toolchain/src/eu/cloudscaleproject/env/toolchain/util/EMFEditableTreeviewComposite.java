@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
@@ -109,6 +110,11 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			@Override
 			public void doubleClick(DoubleClickEvent event)
 			{
+				if(handleDoubleClick()){
+					return;
+				}
+				
+				//Execute default double-click behavior (locate file and open it, using default editor)
 				IFile file = getSelectedDiagramFile();
 				if (file == null)
 					file = getSelectedModelFile();
@@ -192,7 +198,9 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 			@Override
 			public void run()
 			{
-				treeViewer.getTree().setSelection(treeViewer.getTree().getItem(0));
+				if(treeViewer.getTree().getItemCount() > 0){
+					treeViewer.getTree().setSelection(treeViewer.getTree().getItem(0));
+				}
 				propertySheetPage.selectionChanged(null, treeViewer.getSelection());
 			}
 		});
@@ -206,7 +214,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		// Override in subclasses to add additional popup actions.
 	}
 
-	private MenuManager createOpenMenuManager()
+	protected MenuManager createOpenMenuManager()
 	{
 		MenuManager mm = new MenuManager("Open");
 
@@ -242,15 +250,26 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 		return mm;
 	}
 	
-	public IFile getSelectedModelFile()
-	{
-		ISelection s = treeViewer.getSelection();
+	protected boolean handleDoubleClick(){
+		//override in subclasses
+		return false;
+	}
+	
+	public Object getSelectedObject(){
 		
+		ISelection s = treeViewer.getSelection();
 		if(s == null){
 			return null;
 		}
 		
 		Object element = ((StructuredSelection) s).getFirstElement();
+		return element;
+	}
+	
+	public IFile getSelectedModelFile()
+	{
+		
+		Object element = getSelectedObject();
 				
 		if (element instanceof Resource)
 		{
@@ -281,7 +300,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
         {
                 return diagramFile;
         }
-        else
+        else if(!(modelFile.getParent() instanceof IProject))
         {
                 diagramFile = modelFile.getParent().getParent().getFile(new Path(path));
                 if (diagramFile.exists())
@@ -294,7 +313,7 @@ public class EMFEditableTreeviewComposite extends Composite implements IProperty
 	}
 
 
-	private void openEditor(IFile file)
+	protected void openEditor(IFile file)
 	{
         try
         {
