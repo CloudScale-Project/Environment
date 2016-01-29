@@ -130,16 +130,25 @@ public class StatusManager {
 	}
 	
 	private static final Logger logger = Logger.getLogger(StatusManager.class.getName());
-		
+	
+	private long managerCreationTime = 0;
 	private HashMap<IValidationStatusProvider, IProject> statusProviders = new HashMap<IValidationStatusProvider, IProject>();
 		
-	private static StatusManager instance = null;
+	//private static StatusManager instance = null;
 	public static StatusManager getInstance(){
+		/*
 		if(instance == null){
 			instance = new StatusManager();
 			CloudscaleContext.inject(instance);
 		}
 		return instance;
+		*/
+		
+		return CloudscaleContext.getGlobalContext().get(StatusManager.class);
+	}
+	
+	public StatusManager(){
+		this.managerCreationTime = System.currentTimeMillis();
 	}
 	
 	public synchronized void addStatusProvider(IProject project, IValidationStatusProvider statusProvider){
@@ -255,7 +264,15 @@ public class StatusManager {
 		ValidationJob job = new ValidationJob(name, project, statusProvider);
 		job.setUser(false);
 		job.setJobGroup(jobGroup);
-		job.schedule();
+		
+		long startupDelay = 3000;
+		
+		if(System.currentTimeMillis() - managerCreationTime > startupDelay){
+			job.schedule();
+		}
+		else{
+			job.schedule(startupDelay - System.currentTimeMillis() + managerCreationTime);
+		}
 	}
 
 	

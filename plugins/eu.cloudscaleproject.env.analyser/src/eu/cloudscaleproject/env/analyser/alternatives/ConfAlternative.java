@@ -66,6 +66,7 @@ import org.palladiosimulator.monitorrepository.MonitorRepositoryFactory;
 import org.palladiosimulator.monitorrepository.StatisticalCharacterizationEnum;
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.system.System;
 import org.palladiosimulator.pcm.usagemodel.ClosedWorkload;
 import org.palladiosimulator.pcm.usagemodel.OpenWorkload;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
@@ -216,7 +217,7 @@ public class ConfAlternative extends AbstractConfigAlternative
 		// set initial model
 		{
 			// allocation
-			{
+			{				
 				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_ALLOCATION);
 				if (file != null && file.exists())
 				{
@@ -230,6 +231,26 @@ public class ConfAlternative extends AbstractConfigAlternative
 					initialModel.setAllocation(null);
 				}
 			}
+			
+			// system
+			if(initialModel.getAllocation() == null){
+				//Allocation model is not specified. Set system model manually
+				IResource file = inputAlt.getSubResource(ToolchainUtils.KEY_FILE_SYSTEM);
+				if (file != null && file.exists())
+				{
+					Resource res = ExplorerProjectPaths.getEmfResource(resSet, (IFile) file);
+					for(EObject eo : res.getContents()){
+						if(eo instanceof System){
+							initialModel.setSystem((System)eo);
+							break;
+						}
+					}
+				} else
+				{
+					initialModel.setSystem(null);
+				}
+			}
+			
 
 			// usage
 			{

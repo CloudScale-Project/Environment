@@ -44,7 +44,7 @@ public class Activator extends AbstractUIPlugin {
 		ToolchainExtensions.getInstance().retrieveExtensions();
 		
 		//initialize project resources
-		ResourceRegistry.getInstance().initialize();
+		//ResourceRegistry.getInstance().initialize();
 	}
 	
 	/*

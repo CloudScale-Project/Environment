@@ -3,6 +3,7 @@ package eu.cloudscaleproject.env.analyser.validation;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -10,11 +11,15 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.palladiosimulator.pcm.system.impl.SystemImpl;
+import org.scaledl.architecturaltemplates.repositories.cloudscale.black.ProfilesLibrary;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -46,22 +51,29 @@ public class InputValidator implements IResourceValidator {
 		ia.getSelfStatus().checkError("Repository missing", !repFiles.isEmpty(), false, "Repository model is missing!");
 		ia.getSelfStatus().checkError("System missing", !sysFiles.isEmpty(), false, "System model is missing!");
 		
+		boolean resourceModelNeeded = true;
+		boolean allocationModelNeeded = true;
 		
-		boolean atApplyed = false;
-		if(!sysFiles.isEmpty() && (ia.getModelResource((IFile)sysFiles.get(0)) != null)){
-			Resource sysRes = ia.getModelResource((IFile)sysFiles.get(0));
-			if(sysRes.getContents().size() > 1){
-				atApplyed = true;
-			}
+		if(isSystemStereotypeApplyed(ia, "HadoopMapReduceSystem")){
+			resourceModelNeeded = false;
+			allocationModelNeeded = false;
+		}
+		else if(isSystemStereotypeApplyed(ia, "StaticAssemblyContextLoadbalancingSystem")){
+			resourceModelNeeded = false;
+			allocationModelNeeded = false;
 		}
 		
-		if(atApplyed){
-			ia.getSelfStatus().checkError("Allocation missing", true, false, "Allocation model is missing!");
+		if(!resourceModelNeeded){
 			ia.getSelfStatus().checkError("Resource missing", true, false, "Resource model is missing!");
 		}
 		else{
-			ia.getSelfStatus().checkError("Allocation missing", !allFiles.isEmpty(), false, "Allocation model is missing!");
 			ia.getSelfStatus().checkError("Resource missing", !resFiles.isEmpty(), false, "Resource model is missing!");
+		}	
+		if(!allocationModelNeeded){
+			ia.getSelfStatus().checkError("Allocation missing", true, false, "Allocation model is missing!");
+		}
+		else{
+			ia.getSelfStatus().checkError("Allocation missing", !allFiles.isEmpty(), false, "Allocation model is missing!");
 		}
 		
 		ia.getSelfStatus().checkError("Usage missing", !usaFiles.isEmpty(), false, "Usage model is missing!");
@@ -73,15 +85,7 @@ public class InputValidator implements IResourceValidator {
 			
 			final IFile file = entry.getKey();
 			final IValidationStatus status = ia.getStatus(file);
-			
-			//TODO: System model validation is broken, when the AT's are applied
-			if(atApplyed){
-				ModelType modelType = ModelType.getModelType(file.getFileExtension());
-				if(modelType == ModelType.SYSTEM){
-					status.setIsValid(true);
-					continue;
-				}
-			}
+			final ModelType modelType = ModelType.getModelType(file.getFileExtension());
 			
 			BasicCallback<Object> handle = new BasicCallback<Object>() {
 
@@ -102,6 +106,33 @@ public class InputValidator implements IResourceValidator {
 			}
 			
 			status.clearWarnings();
+			
+			//TODO: System model validation is broken, when the AT's are applied
+			if(modelType == ModelType.SYSTEM 
+					&& isSystemStereotypeApplyed(ia, "HadoopMapReduceSystem")){
+				
+				status.setIsValid(true);
+				continue;
+			}
+			
+			//Representation model is not crucial for the simulation
+			if(modelType == ModelType.REPRESENTATIONS ){
+				status.setIsValid(true);
+				continue;
+			}
+			
+			//Set allocation and resource models status to valid, if they are not needed
+			//TODO: Implement enabled/disabled status field and representation
+			/*
+			if(modelType == ModelType.RESOURCE && !resourceModelNeeded){
+				status.setIsValid(true);
+				continue;
+			}
+			if(modelType == ModelType.ALLOCATION && !allocationModelNeeded){
+				status.setIsValid(true);
+				continue;
+			}
+			*/
 			
 			for(Diagnostic d : entry.getValue()){
 				
@@ -135,6 +166,44 @@ public class InputValidator implements IResourceValidator {
 				IValidationStatus.SEVERITY_ERROR, "Alternative models are not valid!");
 		ia.getSelfStatus().setIsValid(areModelsValid);
 		
+	}
+	
+	public boolean isSystemStereotypeApplyed(InputAlternative ia, final String profileName){
+		
+		return true;
+		
+		//TODO: The following code does not return correct value. 
+		//		Another problem is, that it has to be executed in read/write transaction, which triggers a dirty state.
+		/*
+		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
+		
+		if(sysFiles.size() > 0){
+			Resource sysRes = ia.getModelResource((IFile)sysFiles.get(0));
+			
+			for(EObject eo : sysRes.getContents()){
+				
+				if(eo instanceof SystemImpl){
+					
+					final SystemImpl sys = (SystemImpl)eo;
+					final AtomicBoolean isProfileApplyed = new AtomicBoolean(false);
+					
+					ia.getEditingDomain().getCommandStack().execute(new RecordingCommand(ia.getEditingDomain()) {
+						@Override
+						protected void doExecute() {
+							boolean isApplyed = ProfilesLibrary.isProfileApplied(sys, profileName);
+							isProfileApplyed.set(isApplyed);
+						}
+					});
+					
+					return isProfileApplyed.get();
+					
+				}
+				
+			}
+		}
+		
+		return false;
+		*/
 	}
 	
 	@Override

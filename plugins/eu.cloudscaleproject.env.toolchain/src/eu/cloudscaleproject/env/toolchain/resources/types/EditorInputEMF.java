@@ -28,6 +28,7 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.emf.workspace.WorkspaceEditingDomainFactory;
 import org.eclipse.emf.workspace.impl.WorkspaceCommandStackImpl;
+import org.modelversioning.emfprofileapplication.impl.ProfileApplicationImpl;
 
 import eu.cloudscaleproject.env.toolchain.ModelType;
 import eu.cloudscaleproject.env.toolchain.util.CustomAdapterFactory;
@@ -281,7 +282,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	public int getUnloadProxyResourcesWork(){		
-		List<IResource> loadedSubResources = getLoadedSubResources();
+		List<IResource> loadedSubResources = getSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
 		for(IResource res : loadedSubResources){
@@ -300,7 +301,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	
 	public void unloadProxyResources(IProgressMonitor monitor){
 				
-		List<IResource> loadedSubResources = getLoadedSubResources();
+		List<IResource> loadedSubResources = getSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
 		for(IResource res : loadedSubResources){
@@ -523,7 +524,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		super.doSave(monitor);
 		
-		for(IResource r : getLoadedSubResources()){
+		for(IResource r : getSubResources()){
 			
 			if(r instanceof IFile){
 				
@@ -622,6 +623,11 @@ public class EditorInputEMF extends EditorInputFolder{
 						// Concurrent modification exception can occur here - despite using transactions...
 						for(EObject eo : new ArrayList<EObject>(res.getContents())){
 
+							if(eo instanceof ProfileApplicationImpl){
+								//ProfileApplication object does not need to be validated
+								continue;
+							}
+							
 							Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
 							out.add(diagnostic);
 							
@@ -664,7 +670,7 @@ public class EditorInputEMF extends EditorInputFolder{
 	public int getSaveWork() {
 		
 		int work = super.getSaveWork();
-		for (IResource r : getLoadedSubResources()) {
+		for (IResource r : getSubResources()) {
 			if (r instanceof IFile) {
 				
 				Resource res = getModelResource((IFile) r);

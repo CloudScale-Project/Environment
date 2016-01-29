@@ -16,6 +16,7 @@ import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
 import eu.cloudscaleproject.env.toolchain.ActiveResources;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 /**
@@ -35,6 +36,9 @@ public class ToolchainAddon {
 		
 		context.declareModifiable(IActiveResources.class);
 		context.modify(IActiveResources.class, new ActiveResources());
+		
+		//initialize project resources
+		ResourceRegistry.getInstance().initialize();
 	}
 	
 	@Inject @GroupUpdates

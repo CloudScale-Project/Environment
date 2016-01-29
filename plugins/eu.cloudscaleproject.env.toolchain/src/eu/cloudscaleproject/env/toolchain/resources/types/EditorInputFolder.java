@@ -389,7 +389,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		// File must be relative to project folder
-		IPath path = file.getProjectRelativePath();
+		IPath path = file.getFullPath();
 		return path.toPortableString();
 	}
 
@@ -484,7 +484,7 @@ public class EditorInputFolder extends EditorInputResource{
 			IResource res = getResource().findMember(relPath);
 			//if the internal resource does not exist, try project relative path
 			if(res == null){
-				res = getResource().getProject().findMember(relPath);
+				res = getResource().getProject().getParent().findMember(relPath);
 			}			
 			if(res != null){
 				resources.add(res);
@@ -492,15 +492,6 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		return resources;
-	}
-	
-	public List<IResource> getLoadedSubResources(){
-		
-		List<IResource> out = new ArrayList<IResource>();
-		for(List<IResource> list : subResources.values()){
-			out.addAll(list);
-		}
-		return out;
 	}
 	
 	protected final void handleCreate(IProgressMonitor monitor) {
