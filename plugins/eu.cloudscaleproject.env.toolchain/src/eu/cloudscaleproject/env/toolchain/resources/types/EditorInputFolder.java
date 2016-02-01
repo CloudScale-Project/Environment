@@ -198,7 +198,7 @@ public class EditorInputFolder extends EditorInputResource{
 		updateStatusList();
 	}
 	
-	public void doRemoveSubResources(String key){
+	protected void doRemoveSubResources(String key){
 		List<IResource> resources = getSubResources(key);
 		resources.clear();
 		doSetSubResources(key, resources);
@@ -207,10 +207,27 @@ public class EditorInputFolder extends EditorInputResource{
 	///////////////////////////////////////////////////////////////////
 	// Sub resource delete methods
 	
+	/**
+	 * Deletes specified internal sub resource from the workbench and removes it from the internal cache.
+	 * 
+	 * If the resource is not contained under this EditorInput resource folder (external), 
+	 * the specified resource is only unregistered and removed from the internal cache.
+	 * 
+	 * @param resource The IResource to delete or remove, depending on the internal/external type (read the description above).
+	 */
 	public void deleteSubResource(IResource resource){
 		deleteSubResource(DEFAULT_KEY, resource);
 	}
 	
+	/**
+	 * Deletes specified internal sub resource from the workbench and removes it from the internal cache.
+	 * 
+	 * If the resource is not contained under this EditorInput resource folder (external), 
+	 * the specified resource is only unregistered and removed from the internal cache.
+	 * 
+	 * @param key The key under which the resource path is saved.
+	 * @param resource The IResource to delete or remove, depending on the internal/external type (read the description above).
+	 */
 	public void deleteSubResource(String key, IResource resource){
 		
 		boolean isInternal = isResourceInternal(resource);
@@ -247,10 +264,22 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 	}
 
+	/**
+	 * Delete resources, stored under the default key (EditorInputFolder.DEFAULT_KEY)
+	 * It behaves exactly like deleteSubResources(EditorInputFolder.DEFAULT_KEY).
+	 */
 	public void deleteSubResources(){
 		deleteSubResources(DEFAULT_KEY);
 	}
 	
+	/**
+	 * Deletes all sub resources, stored under specified key, from the workbench and removes it from the internal cache.
+	 * 
+	 * If the resource is not contained under this EditorInput resource folder (external), 
+	 * the resource is only unregistered and removed from the internal cache.
+	 * 
+	 * @param key The key under which the resource path is saved.
+	 */
 	public void deleteSubResources(String key){
 		
 		synchronized (subResourcesLock) {
@@ -453,7 +482,7 @@ public class EditorInputFolder extends EditorInputResource{
 	
 	//////////////////////////////////////////////////////////////////////
 
-	private List<IResource> getSubResourcesFromWorkspace(String key)
+	protected List<IResource> getSubResourcesFromWorkspace(String key)
 	{
 		ArrayList<IResource> resources = new ArrayList<IResource>();
 		

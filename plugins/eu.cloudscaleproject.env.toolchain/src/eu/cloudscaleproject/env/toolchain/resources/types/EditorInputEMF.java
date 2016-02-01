@@ -47,18 +47,15 @@ public class EditorInputEMF extends EditorInputFolder{
 	protected final ResourceSet resSet;
 	protected final ModelType[] modelTypes;
 	
+	
 	public EditorInputEMF(IProject project, IFolder folder, ModelType[] modelTypes, String validationID) {
 		super(project, folder, validationID);
 		
 		this.modelTypes = modelTypes != null ? modelTypes : new ModelType[]{};
 		
-		//TODO: find out why I was using WorkspaceCommandStack - it was during some bug fixing
-		//commandStack = new WorkspaceCommandStackImpl(new DefaultOperationHistory());
-		//editingDomain = new TransactionalEditingDomainImpl(factory, commandStack);
+		editingDomain = createEditingDomain();
 		
-		editingDomain = WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
 		commandStack = (WorkspaceCommandStackImpl)editingDomain.getCommandStack();
-		
 		commandStack.addCommandStackListener(new CommandStackListener() {
 			
 			@Override
@@ -69,6 +66,11 @@ public class EditorInputEMF extends EditorInputFolder{
 		});
 		
 		resSet = editingDomain.getResourceSet();
+	}
+	
+	protected TransactionalEditingDomain createEditingDomain(){
+	
+		return WorkspaceEditingDomainFactory.INSTANCE.createEditingDomain();
 	}
 	
 	public ModelType[] getModelTypes(){
@@ -82,6 +84,21 @@ public class EditorInputEMF extends EditorInputFolder{
 	 */
 	@Deprecated
 	public void addSubResourceModel(IResource res) {
+		addSubResource(res);
+	}
+	
+	/**
+	 * Deprecated: Use removeSubResource(IResource) method.
+	 * 
+	 * @param res
+	 */
+	@Deprecated
+	public void removeSubResourceModel(IResource res) {
+		removeSubResource(res);
+	}
+	
+	@Override
+	public void addSubResource(IResource res) {
 		
 		String ext = res.getFileExtension();
 		ModelType type = ModelType.getModelType(ext);
@@ -98,17 +115,8 @@ public class EditorInputEMF extends EditorInputFolder{
 	}
 	
 	@Override
-	public void addSubResource(IResource res) {
-		addSubResourceModel(res);
-	}
-	
-	/**
-	 * Deprecated: Use removeSubResource(IResource) method.
-	 * 
-	 * @param res
-	 */
-	@Deprecated
-	public void removeSubResourceModel(IResource res) {
+	public void removeSubResource(IResource res) {
+		
 		String ext = res.getFileExtension();
 		String key = null;
 
@@ -126,11 +134,6 @@ public class EditorInputEMF extends EditorInputFolder{
 		}
 		
 		removeSubResource(key, res);
-	}
-	
-	@Override
-	public void removeSubResource(IResource res) {
-		removeSubResourceModel(res);
 	}
 	
 	@Override
@@ -155,6 +158,13 @@ public class EditorInputEMF extends EditorInputFolder{
 		deleteSubResource(key, resource);
 	}
 	
+	/**
+	 * Loads EMF model resource into the ResourceSet
+	 * If the model resource already exists, it is reloaded.
+	 * 
+	 * @param file IFile in the workbench that represents EMF model. 
+	 * @return EMF model resource
+	 */
 	private Resource loadModelResource(final IFile file){
 		
 		logger.info("Alternative '" + getName() + "' is loading model resource: " + file.getFullPath().toString());
@@ -281,7 +291,8 @@ public class EditorInputEMF extends EditorInputFolder{
 		return editingDomain.getResourceSet();
 	}
 	
-	public int getUnloadProxyResourcesWork(){		
+	/*
+	private int getUnloadProxyResourcesWork(){		
 		List<IResource> loadedSubResources = getSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
 		
@@ -299,7 +310,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		return proxyResources.size();
 	}
 	
-	public void unloadProxyResources(IProgressMonitor monitor){
+	private void unloadProxyResources(IProgressMonitor monitor){
 				
 		List<IResource> loadedSubResources = getSubResources();
 		List<Resource> loadedEMFResources = new ArrayList<Resource>();
@@ -327,6 +338,7 @@ public class EditorInputEMF extends EditorInputFolder{
 		
 		firePropertyChange(PROP_SUB_RESOURCE_CHANGED, false, reloaded);
 	}
+	*/
 	
 	public TransactionalEditingDomain getEditingDomain(){
 		return editingDomain;
@@ -550,6 +562,24 @@ public class EditorInputEMF extends EditorInputFolder{
 		super.doLoad(monitor);
 		
 		workOn(monitor, "Loading resources");
+		
+		//unload all resources from the resource set
+		//this is needed to reflect external/proxy resource changes in the current resource set
+		try {
+			TransactionUtil.runExclusive(editingDomain, new RunnableWithResult.Impl<Object>(){
+
+				@Override
+				public void run() {
+					for(Resource res : resSet.getResources()){
+						res.unload();
+					}
+				}
+				
+			});
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		//load registered models
 		for (ModelType type : modelTypes)

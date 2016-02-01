@@ -117,6 +117,8 @@ public class ResourceRegistry {
 		
 		projectResourceRegistryMap.put(project, prr);
 		
+		prr.initialize();
+		
 		pcs.firePropertyChange(PROJECT_RESOURCE_REGISTRY_ADDED, prrOld, prr);
 	}
 	

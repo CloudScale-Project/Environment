@@ -105,7 +105,6 @@ public abstract class AlternativeEditor {
 		IEditorInputResource eir = ResourceRegistry.getInstance().findResource(resourcePath);
 		IEditorInputResource oldEir = context.get(IEditorInputResource.class);
 		if(eir != null && eir != oldEir){
-			eir.load();
 			setAlternative(eir);
 		}
 		
@@ -147,8 +146,9 @@ public abstract class AlternativeEditor {
 	}
 	
 	protected void setAlternative(final IEditorInputResource alternative){
-		
+				
 		if(this.alternative == alternative){
+			this.alternative.load();
 			return;
 		}
 				
@@ -164,6 +164,8 @@ public abstract class AlternativeEditor {
 				}
 			}
 		}
+		
+		alternative.load();
 		
 		part.getContext().set(IProject.class, alternative.getProject());
 		part.getContext().set(IResource.class, alternative.getResource());

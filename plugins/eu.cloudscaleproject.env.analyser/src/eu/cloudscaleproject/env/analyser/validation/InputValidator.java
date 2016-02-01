@@ -3,7 +3,6 @@ package eu.cloudscaleproject.env.analyser.validation;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
@@ -13,13 +12,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.palladiosimulator.pcm.system.impl.SystemImpl;
-import org.scaledl.architecturaltemplates.repositories.cloudscale.black.ProfilesLibrary;
+import org.modelversioning.emfprofileapplication.ProfileApplication;
+import org.modelversioning.emfprofileapplication.StereotypeApplication;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.BasicCallback;
@@ -34,6 +32,9 @@ import eu.cloudscaleproject.env.toolchain.ToolchainUtils;
 public class InputValidator implements IResourceValidator {
 
 	private static final Logger logger = Logger.getLogger(InputValidator.class.getName());
+	
+	private static final String AT_HADOOP = "HadoopMapReduceSystem";
+	private static final String AT_LOAD_BALANCER = "StaticAssemblyContextLoadbalancingSystem";
 	
 	@Override
 	public String getID() {
@@ -54,11 +55,11 @@ public class InputValidator implements IResourceValidator {
 		boolean resourceModelNeeded = true;
 		boolean allocationModelNeeded = true;
 		
-		if(isSystemStereotypeApplyed(ia, "HadoopMapReduceSystem")){
+		if(isSystemStereotypeApplyed(ia, AT_HADOOP)){
 			resourceModelNeeded = false;
 			allocationModelNeeded = false;
 		}
-		else if(isSystemStereotypeApplyed(ia, "StaticAssemblyContextLoadbalancingSystem")){
+		else if(isSystemStereotypeApplyed(ia, AT_LOAD_BALANCER)){
 			resourceModelNeeded = false;
 			allocationModelNeeded = false;
 		}
@@ -109,7 +110,7 @@ public class InputValidator implements IResourceValidator {
 			
 			//TODO: System model validation is broken, when the AT's are applied
 			if(modelType == ModelType.SYSTEM 
-					&& isSystemStereotypeApplyed(ia, "HadoopMapReduceSystem")){
+					&& isSystemStereotypeApplyed(ia, AT_HADOOP)){
 				
 				status.setIsValid(true);
 				continue;
@@ -168,23 +169,33 @@ public class InputValidator implements IResourceValidator {
 		
 	}
 	
-	public boolean isSystemStereotypeApplyed(InputAlternative ia, final String profileName){
-		
-		//return true;
-		
-		//TODO: The following code does not return correct value. 
-		//		Another problem is, that it has to be executed in read/write transaction, which triggers a dirty state.
+	public boolean isSystemStereotypeApplyed(InputAlternative ia, final String name){
 		
 		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
 		
 		if(sysFiles.size() > 0){
 			Resource sysRes = ia.getModelResource((IFile)sysFiles.get(0));
+			for(EObject o : sysRes.getContents()){
+				if(o instanceof ProfileApplication){
+					ProfileApplication pa = (ProfileApplication)o;
+					for(StereotypeApplication sa : pa.getStereotypeApplications()){
+						if(name.equals(sa.getStereotype().getName())){
+							return true;
+						}
+					}
+				}
+			}
 			
+			//TODO: The following code does not return correct value. 
+			//		Another problem is, that it has to be executed in read/write transaction, which triggers a dirty state.
+			
+			/*
 			for(EObject eo : sysRes.getContents()){
 				
 				if(eo instanceof SystemImpl){
 					
 					final SystemImpl sys = (SystemImpl)eo;
+					
 					final AtomicBoolean isProfileApplyed = new AtomicBoolean(false);
 					
 					ia.getEditingDomain().getCommandStack().execute(new RecordingCommand(ia.getEditingDomain()) {
@@ -201,6 +212,7 @@ public class InputValidator implements IResourceValidator {
 				}
 				
 			}
+			*/
 		}
 		
 		return false;

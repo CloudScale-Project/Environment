@@ -7,6 +7,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.Active;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.GroupUpdates;
@@ -14,6 +19,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.notification.IValidationStatusProvider;
+import eu.cloudscaleproject.env.toolchain.Activator;
 import eu.cloudscaleproject.env.toolchain.ActiveResources;
 import eu.cloudscaleproject.env.toolchain.IActiveResources;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -38,7 +44,22 @@ public class ToolchainAddon {
 		context.modify(IActiveResources.class, new ActiveResources());
 		
 		//initialize project resources
-		ResourceRegistry.getInstance().initialize();
+		WorkspaceJob resourceInitJob = new WorkspaceJob("Cloudscale resources initialization") {
+			
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor arg0) throws CoreException {
+				try{
+					ResourceRegistry.getInstance().initialize();
+				}
+				catch(Exception e){
+					e.printStackTrace();
+					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage());
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		
+		resourceInitJob.schedule(3000);
 	}
 	
 	@Inject @GroupUpdates

@@ -39,6 +39,10 @@ import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 
 public class SelectInputAltComposite extends Composite{
+	
+	/*
+	 *This class is not used anymore
+	 */
 		
 	private final ResourceProvider inputResourceProvider;
 	private final ComboViewer comboViewerInput;
@@ -56,11 +60,12 @@ public class SelectInputAltComposite extends Composite{
 	};
 	
 	/**
+	 * 
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public SelectInputAltComposite(final IProject project, final ConfAlternative alternative, Composite parent, int style) {
+	private SelectInputAltComposite(final IProject project, final ConfAlternative alternative, Composite parent, int style) {
 		super(parent, style);
 				
 		this.inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
@@ -128,13 +133,13 @@ public class SelectInputAltComposite extends Composite{
 					
 					@Override
 					public IStatus execute(IProgressMonitor monitor) {
-						
+						/*
 						int work = alternative.getLoadWork() + alternative.getUnloadProxyResourcesWork();
 						monitor.beginTask("Reloading '" + alternative.getName() +"' alternative.", work);
 						alternative.unloadProxyResources(monitor);
 						alternative.load(monitor);
 						monitor.done();
-						
+						*/
 						return new Status(IStatus.OK, Activator.PLUGIN_ID, "Reloading data done.");
 					}
 				};

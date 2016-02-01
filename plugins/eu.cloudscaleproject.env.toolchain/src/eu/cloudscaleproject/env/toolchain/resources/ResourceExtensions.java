@@ -1,7 +1,7 @@
 package eu.cloudscaleproject.env.toolchain.resources;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.CoreException;
@@ -21,7 +21,7 @@ public class ResourceExtensions {
 		return instance;
 	}
 	
-	private HashMap<String, ResourceExtensionItem> resourceExtensionItems = new HashMap<String, ResourceExtensionItem>();
+	private LinkedHashMap<String, ResourceExtensionItem> resourceExtensionItems = new LinkedHashMap<String, ResourceExtensionItem>();
 
 	public ResourceExtensions() {
 		

@@ -46,6 +46,9 @@ public class ProjectResourceRegistry {
 	
 	public ProjectResourceRegistry(IProject project) {
 		this.project = project;
+	}
+	
+	public void initialize(){
 		
 		for(ResourceExtensionItem re : ResourceExtensions.getInstance().getResourceExtensions()){
 			String id = re.getID();
@@ -61,6 +64,7 @@ public class ProjectResourceRegistry {
 		if(diagramService != null){
 			diagramService.createDiagram(project);
 		}
+		
 	}
 	
 	public IProject getProject(){
