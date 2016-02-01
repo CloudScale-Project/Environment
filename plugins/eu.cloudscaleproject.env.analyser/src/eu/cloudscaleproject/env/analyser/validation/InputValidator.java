@@ -170,11 +170,11 @@ public class InputValidator implements IResourceValidator {
 	
 	public boolean isSystemStereotypeApplyed(InputAlternative ia, final String profileName){
 		
-		return true;
+		//return true;
 		
 		//TODO: The following code does not return correct value. 
 		//		Another problem is, that it has to be executed in read/write transaction, which triggers a dirty state.
-		/*
+		
 		List<IResource> sysFiles = ia.getSubResources(ToolchainUtils.KEY_FILE_SYSTEM);
 		
 		if(sysFiles.size() > 0){
@@ -188,6 +188,7 @@ public class InputValidator implements IResourceValidator {
 					final AtomicBoolean isProfileApplyed = new AtomicBoolean(false);
 					
 					ia.getEditingDomain().getCommandStack().execute(new RecordingCommand(ia.getEditingDomain()) {
+						
 						@Override
 						protected void doExecute() {
 							boolean isApplyed = ProfilesLibrary.isProfileApplied(sys, profileName);
@@ -203,7 +204,6 @@ public class InputValidator implements IResourceValidator {
 		}
 		
 		return false;
-		*/
 	}
 	
 	@Override
