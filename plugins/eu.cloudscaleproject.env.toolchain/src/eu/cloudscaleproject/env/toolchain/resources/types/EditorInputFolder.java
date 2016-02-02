@@ -418,7 +418,7 @@ public class EditorInputFolder extends EditorInputResource{
 		}
 		
 		// File must be relative to project folder
-		IPath path = file.getFullPath();
+		IPath path = file.getFullPath().makeRelativeTo(getResource().getFullPath());
 		return path.toPortableString();
 	}
 
@@ -513,7 +513,7 @@ public class EditorInputFolder extends EditorInputResource{
 			IResource res = getResource().findMember(relPath);
 			//if the internal resource does not exist, try project relative path
 			if(res == null){
-				res = getResource().getProject().getParent().findMember(relPath);
+				res = getResource().getProject().findMember(relPath);
 			}			
 			if(res != null){
 				resources.add(res);
