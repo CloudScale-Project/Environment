@@ -1289,6 +1289,9 @@ public class ConfAlternative extends AbstractConfigAlternative
 		lcwc.setAttribute("Experiment Automation", getActiveExperiment().eResource().getURI().toString());
 		lcwc.setAttribute("de.uka.ipd.sdq.workflowengine.debuglevel", 2);
 		lcwc.setAttribute("outpath", "org.palladiosimulator.temporary");
+		
+		lcwc.setAttribute("org.scaledl.architecturaltemplates.completion.config.modelStorageLocation", "org.scaledl.architecturaltemplates.temporary");
+		lcwc.setAttribute("org.scaledl.architecturaltemplates.completion.config.storeCompletedModels", true);
 
 		lcwc.launch(ILaunchManager.RUN_MODE, monitor);
 		return Status.OK_STATUS;
