@@ -495,16 +495,20 @@ public class EditorInputFolder extends EditorInputResource{
 		if(relPath.contains(MULTIPATH_SEPARATOR)){
 			for(String path : relPath.split(MULTIPATH_SEPARATOR)){
 				
+				if(path == null || path.isEmpty()){
+					continue;
+				}
+				
 				IResource res = getResource().findMember(path);
 				
 				//TODO: This could cause problems!
 				//try project relative path
 				if(res == null){
-					res = getResource().getProject().findMember(relPath);
+					res = getResource().getProject().findMember(path);
 				}
 				
-				if (res instanceof IFile){
-					resources.add((IFile)res);
+				if (res != null){
+					resources.add(res);
 				}
 			}
 		}
