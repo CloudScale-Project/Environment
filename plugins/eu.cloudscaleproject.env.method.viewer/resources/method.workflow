@@ -214,7 +214,7 @@
           <link businessObjects="_7zWcEDRVEeSMLJ8vnBP-0A"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
@@ -275,7 +275,7 @@
           <link businessObjects="_7Eo-8DHDEeSAkNNGxeU_SA"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
         <children xsi:type="pi:ContainerShape" visible="true" active="true">
@@ -844,7 +844,7 @@
     </nodes>
     <nodes xsi:type="method:Container" id="_Yqbi4C61EeSADewJHO2y3w" name="Analyser" description="Analyser is a software architecture simulation framework, which analyses software at the model level for performance bottlenecks, scalability issues and reliability threats, and allows for a subsequent optimisation." tooltip="Analyser tool status container">
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput" name="Analyser input" description="Input models used by the Analyser tool." tooltip="Analyser input status section" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.4" previous="/1/@links.0 /1/@links.3 /1/@links.12">
-        <commands id="_7zWcEDRVEeSMLJ8vnBP-0A" name="v" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_7zWcEDRVEeSMLJ8vnBP-0A" name="+" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.createalternative"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository" name="Repository" description="Repository model diagram is used to model cloud services and their components." tooltip="Represents the repository model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="10"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_system" name="System" description="System model is used to design cloud environment architecture." tooltip="Represents the system model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="20"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_allocation" name="Allocation" description="Allocation model provides binding between repository and resource environment model. " tooltip="Represents the allocation model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="30"/>
@@ -853,7 +853,7 @@
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usageevolution" name="Usage Evolution" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="200"/>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf" name="Analyser" description="Configuration models used by the Analyser tool." tooltip="Analyser configuration status section" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.15" previous="/1/@links.4 /1/@links.13">
-        <commands id="_7Eo-8DHDEeSAkNNGxeU_SA" name="v" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod" position="10"/>
+        <commands id="_7Eo-8DHDEeSAkNNGxeU_SA" name="+" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.analyser.command.createalternative" position="10"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_pcmmeasuringpoint" name="Measuring points" description="Contains measuring points." tooltip="Represents the measuring points model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="10"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_pms" name="Monitors" description="Contains monitors. They describe how the measurements from the measuring points are interpreted." tooltip="Represents the monitors model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="20"/>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserConf.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_slo" name="Service Level Objectives" description="Contains service level objectives." tooltip="Represents the SLO model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="30"/>

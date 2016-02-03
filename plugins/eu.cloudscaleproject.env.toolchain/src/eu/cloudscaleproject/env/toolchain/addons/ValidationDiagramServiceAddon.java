@@ -264,7 +264,7 @@ public class ValidationDiagramServiceAddon {
 			diagramService.showStatus(statusProvider.getProject(), statusProvider);
 		}
 		
-		IProject project = activeResources.getActiveProject();
+		IProject project = activeResources.getProject();
 		diagramService.showDiagram(project);
 	}
 	

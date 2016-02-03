@@ -33,8 +33,8 @@ public class ImportExtractorResultWizard extends Wizard
 		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
-		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,
-				CSToolResource.EXTRACTOR_RES));
+		alternativeSelectionPage = new AlternativeSelectionPage();
+		alternativeSelectionPage.setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.EXTRACTOR_RES));
 		alternativeSelectionPage.setDescription("Please select extractor result to be imported into Static Spotter");
 
 	}

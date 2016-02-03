@@ -24,7 +24,7 @@ public class ActiveResources implements IActiveResources{
 	}
 	
 	@Override
-	public IProject getActiveProject() {
+	public IProject getProject() {
 		return this.project;
 	}
 

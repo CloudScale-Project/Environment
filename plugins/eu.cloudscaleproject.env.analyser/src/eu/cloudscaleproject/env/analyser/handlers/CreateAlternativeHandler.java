@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.analyser.wizard.CreateInputSelectionWizard;
+import eu.cloudscaleproject.env.analyser.wizard.CreateInputAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.analyser.wizard.config.CreateConfigAlternativeSelectionWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
@@ -26,13 +26,14 @@ public class CreateAlternativeHandler {
 		CSToolResource tool = CSToolResource.getTool(id);
 		
 		if(CSToolResource.ANALYSER_INPUT.equals(tool)){
-			CreateInputSelectionWizard createInputAltWizard = new CreateInputSelectionWizard(project);
+			CreateInputAlternativeSelectionWizard createInputAltWizard = new CreateInputAlternativeSelectionWizard(project);
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}
 		else if(CSToolResource.ANALYSER_CONF.equals(tool)){
 						
-			CreateConfigAlternativeSelectionWizard createConfigAltWizard = new CreateConfigAlternativeSelectionWizard(project);
+			CreateConfigAlternativeSelectionWizard createConfigAltWizard = new CreateConfigAlternativeSelectionWizard();
+			createConfigAltWizard.setProject(project);
 			
 			if(eir instanceof InputAlternative){
 				createConfigAltWizard.setInputAlternative((InputAlternative)eir);

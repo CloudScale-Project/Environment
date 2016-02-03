@@ -297,11 +297,11 @@ public class ImportWizard extends Wizard implements IWorkbenchWizard {
 
 		public CustomAlternativeSelectionPage(WizardData data, ResourceProvider provider)
 		{
-			super(provider);
 			this.data = data;
 			
 			setTitle("Select Overview alternative");
 			setDescription("Please select Overview alternative to be used as target when importing transformed PCM models.");
+			setResourceProvider(provider);
 		}
 
 		@Override

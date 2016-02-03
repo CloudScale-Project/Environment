@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -34,6 +35,8 @@ import org.osgi.service.prefs.Preferences;
 import eu.cloudscaleproject.env.common.BasicCallback;
 import eu.cloudscaleproject.env.common.BatchExecutor;
 import eu.cloudscaleproject.env.common.CloudScaleConstants;
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
 
 public class ExplorerProjectPaths {
 
@@ -45,11 +48,20 @@ public class ExplorerProjectPaths {
 	public static final String FOLDER_GENERATED_DEFAULT = "Generated models";
 
 	/**
-	 * Retrieve all CloudScale projects from the Workspace
+	 * Retrieves all projects from the Workspace.
+	 * 
+	 * @return All projects in the workspace
+	 */
+	public static IProject[] getProjects(){
+		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
+	}
+	
+	/**
+	 * Retrieves all CloudScale projects from the Workspace.
 	 * 
 	 * @return CloudScale IProject's
 	 */
-	public static IProject[] getProjects(){
+	public static IProject[] getCloudScaleProjects(){
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 
 		List<IProject> filtered = new ArrayList<IProject>();
@@ -60,6 +72,52 @@ public class ExplorerProjectPaths {
 		}
 		
 		return filtered.toArray(new IProject[filtered.size()]);
+	}
+	
+	/**
+	 * Tries to retrieve the CloudScale project from the selected object.
+	 * If the provided 'IStructuredSelection' is null, or if the project can not be retrieved,
+	 * this method looks into an active 'IEclipseContext' and ties to retrieve the project from there.
+	 * 
+	 * @param selection IStructuredSelection
+	 * @return IProject
+	 */
+	public static IProject getProject(IStructuredSelection selection){
+		
+		IProject project = null;
+		
+		if(selection != null){
+			Object selectedObject = selection.getFirstElement();
+			if(selectedObject instanceof IResource){
+				IResource res = (IResource)selectedObject;
+				project = res.getProject();
+			}
+			else if(selectedObject instanceof IProject){
+				project = (IProject)selectedObject;
+			}
+			else if(selectedObject instanceof IProjectProvider){
+				project = ((IProjectProvider)selectedObject).getProject();
+			}
+			
+			//Try to adapt the object
+			if(project == null){
+				IResource res = Platform.getAdapterManager().getAdapter(selectedObject, IResource.class);
+				if(res != null){
+					project = res.getProject();
+				}
+			}
+		}
+		
+		//Try to inject project
+		if(project == null){
+			project = CloudscaleContext.getActiveContext().get(IProject.class);
+		}
+		if(project == null){
+			IProjectProvider pp = CloudscaleContext.getActiveContext().get(IProjectProvider.class);
+			project = pp.getProject();
+		}
+		
+		return project;
 	}
 	
 	public static boolean isCloudScaleProject(IProject project){

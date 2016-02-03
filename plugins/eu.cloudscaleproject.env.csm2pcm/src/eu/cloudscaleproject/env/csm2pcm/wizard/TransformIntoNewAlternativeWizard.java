@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.csm2pcm.Activator;
@@ -16,7 +15,6 @@ import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.EditorInputJob;
-import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 
@@ -40,7 +38,8 @@ public class TransformIntoNewAlternativeWizard extends Wizard{
 		ResourceProvider overviewResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW);
 		
 		overviewSelectionPage = new AlternativeSelectionPage("Overview alternative selection", 
-				"Please select Overview alternative to transform into the Analyser input alternative PCM models.", overviewResourceProvider);
+				"Please select Overview alternative to transform into the Analyser input alternative PCM models.");
+		overviewSelectionPage.setResourceProvider(overviewResourceProvider);
 		//transformPage = new TransformWizardPage(project, folder);
 		
 		/*

@@ -6,13 +6,23 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 
 import eu.cloudscaleproject.env.analyser.alternatives.ConfAlternative;
 import eu.cloudscaleproject.env.analyser.alternatives.InputAlternative;
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.wizard.util.ProjectSelectionPage;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
+import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
+import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
@@ -21,24 +31,28 @@ import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class CreateConfigAlternativeSelectionWizard extends Wizard{
+public class CreateConfigAlternativeSelectionWizard extends Wizard implements IWorkbenchWizard{
 	
 	@Inject 
 	private ExtensionRetriever extensionRetriever;
+	
+	private ProjectSelectionPage projectSelectionPage;
+	private AlternativeSelectionPage inputAlternativeSelectionPage;
 	private WizardSelectionPage newInputSelectionPage;
 	
+	private IProject project;
 	private InputAlternative inputAlternative;
+	
 		
-	public CreateConfigAlternativeSelectionWizard(IProject project) {
+	public CreateConfigAlternativeSelectionWizard() {
 		
 		CloudscaleContext.inject(this);
-		
+				
 		List<WizardNode> nodes = new ArrayList<>();
-		
-		nodes.add(new CreateNormalAltNode(project));
-		nodes.add(new CreateCapacityAltNode(project));
-		nodes.add(new CreateScalabilityAltNode(project));
-		nodes.add(new ExternalImportNode(project));
+		nodes.add(new CreateNormalAltNode());
+		nodes.add(new CreateCapacityAltNode());
+		nodes.add(new CreateScalabilityAltNode());
+		nodes.add(new ExternalImportNode());
 		
 		//retrieve nodes from extension point
 		List<WizardNode> nodesFromExtensions = extensionRetriever.retrieveExtensionObjects(
@@ -47,18 +61,63 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 		
 		nodes.addAll(nodesFromExtensions);
 		
-		
 		newInputSelectionPage = new WizardSelectionPage("New config alternative selection page",
-														"Create new config alternative", nodes);
+				"Create new config alternative", nodes);
+		
+		inputAlternativeSelectionPage = new AlternativeSelectionPage("Analyser alternative selection", "Please select the desired Analyser input alternative."){
+			public void handleSelection(IEditorInputResource eir) {
+				if(eir instanceof InputAlternative){
+					inputAlternative = (InputAlternative)eir;
+				}
+			};
+		};
+		
+		projectSelectionPage = new ProjectSelectionPage(){
+			public void handleSelection(IProject project) {
+				if(project != null){
+					ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
+					inputAlternativeSelectionPage.setResourceProvider(rp);
+				}
+			};
+		};
 		
 	}
 	
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		
+		IProject project = ExplorerProjectPaths.getProject(selection);
+		if(ExplorerProjectPaths.isCloudScaleProject(project)){
+			setProject(project);
+		}
+		
+		//If project is not found, the project selection page will be shown.
+	}
+	
 	public void setInputAlternative(InputAlternative ia){
+		
 		inputAlternative = ia;
+	}
+	
+	public void setProject(IProject project){
+		
+		this.project = project;
+		
+		ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
+		if(rp != null){
+			inputAlternativeSelectionPage.setResourceProvider(rp);
+		}
 	}
 	
 	@Override
 	public void addPages() {
+		
+		if(project == null){
+			addPage(projectSelectionPage);
+		}
+		if(inputAlternative == null){
+			addPage(inputAlternativeSelectionPage);
+		}
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -76,17 +135,12 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 	private class CreateNormalAltNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateNormalAltNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.NORMAL, inputAlternative);
+			return new CreateConfigAlternativeWizard(
+					project != null ? project : projectSelectionPage.getProject(), 
+					ConfAlternative.Type.NORMAL, inputAlternative);
 		}
 
 		@Override
@@ -103,17 +157,12 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 	
 	private class CreateCapacityAltNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateCapacityAltNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.CAPACITY, inputAlternative);
+			return new CreateConfigAlternativeWizard(
+					project != null ? project : projectSelectionPage.getProject(), 
+					ConfAlternative.Type.CAPACITY, inputAlternative);
 		}
 
 		@Override
@@ -130,17 +179,12 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 	
 	private class CreateScalabilityAltNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateScalabilityAltNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateConfigAlternativeWizard(project, ConfAlternative.Type.SCALABILITY, inputAlternative);
+			return new CreateConfigAlternativeWizard(
+					project != null ? project : projectSelectionPage.getProject(), 
+					ConfAlternative.Type.SCALABILITY, inputAlternative);
 		}
 
 		@Override
@@ -155,19 +199,12 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 
 	}
 	
-	private static class ExternalImportNode extends WizardNode
+	private class ExternalImportNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public ExternalImportNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new ImportAnalyserProjectWizard(project);
+			return new ImportAnalyserProjectWizard(project != null ? project : projectSelectionPage.getProject());
 		}
 
 		@Override
@@ -181,4 +218,5 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard{
 		}
 
 	}
+
 }

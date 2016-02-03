@@ -17,7 +17,8 @@ public class CloneAlternativeWizard extends CreateAlternativeWizard{
 	public CloneAlternativeWizard(ResourceProvider provider) {
 		super (provider.getProject(), provider);
 		
-		alternativeSelectionPage = new AlternativeSelectionPage(provider);
+		alternativeSelectionPage = new AlternativeSelectionPage();
+		alternativeSelectionPage.setResourceProvider(provider);
 		
 		setWindowTitle("Clone alternative");
 	}

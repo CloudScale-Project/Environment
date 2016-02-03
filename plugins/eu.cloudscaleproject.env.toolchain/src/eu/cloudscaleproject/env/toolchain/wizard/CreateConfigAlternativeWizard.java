@@ -36,7 +36,10 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		this.configProvider = configProvider;
 		
 		this.nameSelectionPage = new AlternativeNamePage(configProvider);
-		if (inputProvider != null) this.inputSelectionPage = new AlternativeSelectionPage(inputProvider);
+		if (inputProvider != null) {
+			this.inputSelectionPage = new AlternativeSelectionPage();
+			this.inputSelectionPage.setResourceProvider(inputProvider);
+		}
 				
 		setWindowTitle("Create alternative");
 	}

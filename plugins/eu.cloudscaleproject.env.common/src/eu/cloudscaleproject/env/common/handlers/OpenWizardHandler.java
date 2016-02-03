@@ -16,8 +16,9 @@ public class OpenWizardHandler {
 	
 	@Execute
 	public void execute(@Named("id") String wizardID) {
+		
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry()
-				.findWizard("eu.cloudscaleproject.env.product.wizard.newproject");
+				.findWizard(wizardID);
 		
 		if(descriptor != null){
 			try {
@@ -31,6 +32,7 @@ public class OpenWizardHandler {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	
 	@CanExecute
@@ -41,7 +43,7 @@ public class OpenWizardHandler {
 		}
 		
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry()
-				.findWizard("eu.cloudscaleproject.env.product.wizard.newproject");
+				.findWizard(wizardID);
 		
 		if(descriptor != null){
 			return true;
