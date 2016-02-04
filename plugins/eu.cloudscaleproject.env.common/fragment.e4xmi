@@ -5,7 +5,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DSmXgF4SEeWKs5YPUow6lg" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
     <elements xsi:type="commands:Command" xmi:id="_F_Ek0F4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.command.openwizard" commandName="openWizard" description="Open wizard with the specified id">
-      <parameters xmi:id="_IwY14F4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.commandparameter.0" name="id" optional="false"/>
+      <parameters xmi:id="_IwY14F4SEeWKs5YPUow6lg" elementId="eu.cloudscaleproject.env.common.command.openwizard.param.id" name="id" optional="false"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Le98AF4SEeWKs5YPUow6lg" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">

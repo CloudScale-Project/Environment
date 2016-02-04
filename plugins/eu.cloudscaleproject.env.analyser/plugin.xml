@@ -250,13 +250,8 @@
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
-      <category
-            id="eu.cloudscaleproject.env.analyser.wizard.category"
-            name="Analyser"
-            parentCategory="eu.cloudscaleproject.env.product.wizard.category">
-      </category>
       <wizard
-            category="eu.cloudscaleproject.env.analyser.wizard.category"
+            category="eu.cloudscaleproject.env.product.wizard.category"
             class="eu.cloudscaleproject.env.analyser.wizard.CreateInputAlternativeSelectionWizard"
             hasPages="true"
             icon="resources/icons/ic-input-alternative-16.png"
@@ -265,7 +260,7 @@
             project="false">
       </wizard>
       <wizard
-            category="eu.cloudscaleproject.env.analyser.wizard.category"
+            category="eu.cloudscaleproject.env.product.wizard.category"
             class="eu.cloudscaleproject.env.analyser.wizard.config.CreateConfigAlternativeSelectionWizard"
             hasPages="true"
             icon="resources/icons/configuration_16.png"
