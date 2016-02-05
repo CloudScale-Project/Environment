@@ -120,8 +120,7 @@ public class CreateAlternativeSelectionWizard extends Wizard{
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateAlternativeWizard (project, 
-					ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW));
+			return new CreateAlternativeWizard (ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.OVERVIEW));
 		}
 
 		@Override

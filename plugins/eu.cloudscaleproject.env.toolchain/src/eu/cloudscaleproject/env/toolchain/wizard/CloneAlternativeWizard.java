@@ -2,7 +2,9 @@ package eu.cloudscaleproject.env.toolchain.wizard;
 
 import org.eclipse.core.resources.IProject;
 
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 
@@ -14,13 +16,17 @@ public class CloneAlternativeWizard extends CreateAlternativeWizard{
 	private AlternativeSelectionPage alternativeSelectionPage;
 
 	
-	public CloneAlternativeWizard(ResourceProvider provider) {
-		super (provider.getProject(), provider);
+	public CloneAlternativeWizard(CSToolResource providerID) {
+		super (providerID);
 		
-		alternativeSelectionPage = new AlternativeSelectionPage();
-		alternativeSelectionPage.setResourceProvider(provider);
-		
+		alternativeSelectionPage = new AlternativeSelectionPage();		
 		setWindowTitle("Clone alternative");
+	}
+	
+	@Override
+	public void setProject(IProject p) {
+		alternativeSelectionPage.setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project, providerID));
+		super.setProject(p);
 	}
 	
 	@Override

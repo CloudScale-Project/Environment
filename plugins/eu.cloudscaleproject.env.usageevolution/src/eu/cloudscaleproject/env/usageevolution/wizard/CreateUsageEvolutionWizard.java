@@ -34,7 +34,7 @@ public class CreateUsageEvolutionWizard extends DlimModelWizard{
 			
 			@Override
 			public IWizard createWizard() {
-				return new CreateAlternativeWizard(project,
+				return new CreateAlternativeWizard(
 						ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.USAGEEVOLUTION));
 			}
 		};

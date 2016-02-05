@@ -35,11 +35,11 @@ public class CreateAlternativeHandler {
 			CreateConfigAlternativeWizard createlternativeWizard;
 			
 			if(eir instanceof InputAlternative){
-				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (InputAlternative)eir);			
+				createlternativeWizard = new CreateConfigAlternativeWizard(rp, (InputAlternative)eir);			
 			}
 			else{
 				ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT);
-				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, inputResourceProvider);
+				createlternativeWizard = new CreateConfigAlternativeWizard(rp, inputResourceProvider);
 			}
 			
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);

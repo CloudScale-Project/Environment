@@ -21,10 +21,10 @@ public class CreateAlternativeHandler {
 		IWizard wizard = null;
 		
 		if(resource instanceof IInputAlternative){
-			wizard = new CreateConfigAlternativeWizard(rp.getProject(), rp, (IInputAlternative)resource);
+			wizard = new CreateConfigAlternativeWizard(rp, (IInputAlternative)resource);
 		}
 		else{
-			wizard = new CreateAlternativeWizard(rp.getProject(), rp);
+			wizard = new CreateAlternativeWizard(rp);
 		}
 		
 		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
