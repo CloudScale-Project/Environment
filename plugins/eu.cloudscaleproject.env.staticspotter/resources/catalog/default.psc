@@ -52,11 +52,6 @@
     <nodes xsi:type="specification:PSObject" id="_WLDqAPVoEeO8apkjJxxSYA" name="primitiveComponent"
         incoming="#_BdcOoPVsEeOhXMVyYRdIxA #_EKcAYPVsEeOhXMVyYRdIxA" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
   </patternSpecifications>
-  <patternSpecifications id="_yArXoPbJEeOeYJP9coicjQ" name="Pool">
-    <nodes xsi:type="specification:PSAnnotation" id="_yBX7MPbJEeOeYJP9coicjQ" type="#_yArXoPbJEeOeYJP9coicjQ"/>
-    <nodes xsi:type="specification:PSObject" id="_9IXdwPbJEeOeYJP9coicjQ" name="obj1"
-        instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//ASTNode"/>
-  </patternSpecifications>
   <patternSpecifications id="_cpjMkPbKEeOeYJP9coicjQ" name="SynchronizedMethod">
     <connections xsi:type="specification:PSLink" id="_KuCMwPbLEeOeYJP9coicjQ" name="link1"
         source="#_d3HL4PbKEeOeYJP9coicjQ" target="#_js-MAPbKEeOeYJP9coicjQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//BodyDeclaration/modifier"/>
@@ -96,5 +91,40 @@
     <nodes xsi:type="specification:PSAnnotation" id="_PFOU0fbeEeOeYJP9coicjQ" type="#_PFOU0PbeEeOeYJP9coicjQ"/>
     <nodes xsi:type="specification:PSObject" id="_P-e4EPbeEeOeYJP9coicjQ" name="obj1"
         instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/CallAction"/>
+  </patternSpecifications>
+  <patternSpecifications id="_2aa-cLXlEeWOkIpooXnIiQ" name="CandidateSeffMethod">
+    <connections xsi:type="specification:PSLink" id="_AP510LXmEeWOkIpooXnIiQ" name="link1"
+        source="#_3WrLULXlEeWOkIpooXnIiQ" target="#_5jTa8LXlEeWOkIpooXnIiQ" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink/blockstatement"/>
+    <connections xsi:type="specification:PSLink" id="_A8EYQLXmEeWOkIpooXnIiQ" name="annotatedElement"
+        source="#_2aa-cbXlEeWOkIpooXnIiQ" target="#_5jTa8LXlEeWOkIpooXnIiQ" qualifier="seffblock"
+        instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_2aa-cbXlEeWOkIpooXnIiQ" outgoing="#_A8EYQLXmEeWOkIpooXnIiQ"
+        type="#_2aa-cLXlEeWOkIpooXnIiQ"/>
+    <nodes xsi:type="specification:PSObject" id="_3WrLULXlEeWOkIpooXnIiQ" name="obj1"
+        outgoing="#_AP510LXmEeWOkIpooXnIiQ" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink"/>
+    <nodes xsi:type="specification:PSObject" id="_5jTa8LXlEeWOkIpooXnIiQ" name="obj2"
+        incoming="#_AP510LXmEeWOkIpooXnIiQ #_A8EYQLXmEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+  </patternSpecifications>
+  <patternSpecifications id="_GNgcsLXmEeWOkIpooXnIiQ" name="ExcessiveAllocationCandidate">
+    <connections xsi:type="specification:PSPath" id="_cqUoALXmEeWOkIpooXnIiQ" name="path1"
+        source="#_S5PvgLXmEeWOkIpooXnIiQ" target="#_Tl9EgLXmEeWOkIpooXnIiQ"/>
+    <connections xsi:type="specification:PSPath" id="_c_EwALXmEeWOkIpooXnIiQ" name="path2"
+        source="#_SJjX8LXmEeWOkIpooXnIiQ" target="#_S5PvgLXmEeWOkIpooXnIiQ"/>
+    <connections xsi:type="specification:PSLink" id="_dpQ8gLXmEeWOkIpooXnIiQ" name="link1"
+        source="#_UrFgkLXmEeWOkIpooXnIiQ" target="#_SJjX8LXmEeWOkIpooXnIiQ" qualifier="seffblock"
+        instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
+    <connections xsi:type="specification:PSLink" id="_eLXkALXmEeWOkIpooXnIiQ" name="annotatedElement"
+        source="#_GNgcsbXmEeWOkIpooXnIiQ" target="#_Tl9EgLXmEeWOkIpooXnIiQ" qualifier="excessiveAllocation"
+        instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_GNgcsbXmEeWOkIpooXnIiQ" outgoing="#_eLXkALXmEeWOkIpooXnIiQ"
+        type="#_GNgcsLXmEeWOkIpooXnIiQ"/>
+    <nodes xsi:type="specification:PSObject" id="_SJjX8LXmEeWOkIpooXnIiQ" name="obj1"
+        outgoing="#_c_EwALXmEeWOkIpooXnIiQ" incoming="#_dpQ8gLXmEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+    <nodes xsi:type="specification:PSObject" id="_S5PvgLXmEeWOkIpooXnIiQ" name="obj2"
+        outgoing="#_cqUoALXmEeWOkIpooXnIiQ" incoming="#_c_EwALXmEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//ForStatement"/>
+    <nodes xsi:type="specification:PSObject" id="_Tl9EgLXmEeWOkIpooXnIiQ" name="obj3"
+        incoming="#_cqUoALXmEeWOkIpooXnIiQ #_eLXkALXmEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//ArrayCreation"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_UrFgkLXmEeWOkIpooXnIiQ" name="seffMethod"
+        outgoing="#_dpQ8gLXmEeWOkIpooXnIiQ" type="#_2aa-cLXlEeWOkIpooXnIiQ"/>
   </patternSpecifications>
 </specification:PSCatalog>
