@@ -12,12 +12,9 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
-import org.eclipse.sirius.business.api.dialect.DialectManager;
-import org.eclipse.sirius.business.api.dialect.command.CreateRepresentationCommand;
 import org.eclipse.sirius.business.api.session.Session;
 import org.eclipse.sirius.business.api.session.SessionManager;
 import org.eclipse.sirius.tools.api.command.semantic.AddSemanticResourceCommand;
-import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.description.RepresentationDescription;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
 import org.palladiosimulator.pcm.system.System;
@@ -147,8 +144,8 @@ public class ResourceUtils {
 		//monitor.worked(16);
 		
 		//test
-		DialectManager dm = DialectManager.INSTANCE;
-		DRepresentation representation = dm.createRepresentation("TEst", system, systemRepresentationDescription, session, new NullProgressMonitor());
+		//DialectManager dm = DialectManager.INSTANCE;
+		//DRepresentation representation = dm.createRepresentation("TEst", system, systemRepresentationDescription, session, new NullProgressMonitor());
 
 		//
 		
