@@ -58,7 +58,9 @@ public class UsageEvolutionSidebarComposite extends SidebarEditorComposite {
 	
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		CreateUsageEvolutionWizard createInputAltWizard = new CreateUsageEvolutionWizard(project);
+		CreateUsageEvolutionWizard createInputAltWizard = new CreateUsageEvolutionWizard();
+		createInputAltWizard.setProject(project);
+		
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createInputAltWizard);
 		wizardDialog.open();
 	}

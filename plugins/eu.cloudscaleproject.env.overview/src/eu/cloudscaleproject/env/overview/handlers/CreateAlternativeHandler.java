@@ -8,7 +8,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import eu.cloudscaleproject.env.overview.wizard.CreateAlternativeSelectionWizard;
+import eu.cloudscaleproject.env.overview.wizard.CreateOverviewWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -24,7 +24,9 @@ public class CreateAlternativeHandler {
 		CSToolResource tool = CSToolResource.getTool(id);
 		
 		if(CSToolResource.OVERVIEW.equals(tool)){
-			CreateAlternativeSelectionWizard createInputAltWizard = new CreateAlternativeSelectionWizard(project);
+			CreateOverviewWizard createInputAltWizard = new CreateOverviewWizard();
+			createInputAltWizard.setProject(project);
+			
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}

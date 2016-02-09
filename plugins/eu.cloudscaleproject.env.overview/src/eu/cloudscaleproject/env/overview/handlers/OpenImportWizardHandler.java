@@ -13,7 +13,9 @@ public class OpenImportWizardHandler {
 	
 	@Execute
 	public void execute(IProject project, CommandExecutor commandExecutor) {
-		ImportSelectionWizard selectionWizard = new ImportSelectionWizard(project);
+		ImportSelectionWizard selectionWizard = new ImportSelectionWizard();
+		selectionWizard.setProject(project);
+		
 		WizardDialog wd = new  WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), selectionWizard);
 		wd.setTitle(selectionWizard.getWindowTitle());
 		wd.open();

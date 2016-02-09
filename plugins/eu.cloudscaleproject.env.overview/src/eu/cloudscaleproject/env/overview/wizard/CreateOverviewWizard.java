@@ -3,36 +3,30 @@ package eu.cloudscaleproject.env.overview.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.wizard.util.AbstractProjectWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class CreateAlternativeSelectionWizard extends Wizard{
+public class CreateOverviewWizard extends AbstractProjectWizard{
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public CreateAlternativeSelectionWizard(IProject project) {
-		
-		CloudscaleContext.inject(this);
-		
+	public CreateOverviewWizard() {
+				
 		setWindowTitle("Overview model wizard");
 		
 		List<WizardNode> nodes = new ArrayList<>();
 		
-		nodes.add(new CreateNewNode(project));
-
+		nodes.add(new CreateNewNode());
 		//TODO:
 		//nodes.add(new CreateTemplateNode());
-		
-		nodes.add(new CreateImportNewNode(project));
-		nodes.add(new CreateImportExistingNode(project));
+		nodes.add(new CreateImportNewNode());
+		nodes.add(new CreateImportExistingNode());
 		
 		newInputSelectionPage = new WizardSelectionPage("Overview model options",
 														"Select one of the possible options.", nodes);
@@ -40,6 +34,9 @@ public class CreateAlternativeSelectionWizard extends Wizard{
 	
 	@Override
 	public void addPages() {
+		
+		super.addPages();
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -56,15 +53,8 @@ public class CreateAlternativeSelectionWizard extends Wizard{
 	}
 
 	
-	public static class CreateImportNewNode extends WizardNode
+	public class CreateImportNewNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateImportNewNode (IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
@@ -82,15 +72,8 @@ public class CreateAlternativeSelectionWizard extends Wizard{
 		}
 	}
 
-	public static class CreateImportExistingNode extends WizardNode
+	public class CreateImportExistingNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateImportExistingNode (IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
@@ -108,15 +91,8 @@ public class CreateAlternativeSelectionWizard extends Wizard{
 		}
 	}
 
-	public static class CreateNewNode extends WizardNode
+	public class CreateNewNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateNewNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {

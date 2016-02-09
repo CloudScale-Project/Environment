@@ -3,18 +3,18 @@ package eu.cloudscaleproject.env.overview.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.IWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.wizard.util.AbstractProjectWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class ImportSelectionWizard extends Wizard{
+public class ImportSelectionWizard extends AbstractProjectWizard{
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public ImportSelectionWizard(IProject project) {
+	public ImportSelectionWizard() {
 		
 		CloudscaleContext.inject(this);
 		
@@ -22,8 +22,8 @@ public class ImportSelectionWizard extends Wizard{
 		
 		List<WizardNode> nodes = new ArrayList<>();
 		
-		nodes.add(new CreateAlternativeSelectionWizard.CreateImportNewNode(project));
-		nodes.add(new CreateAlternativeSelectionWizard.CreateImportExistingNode(project));
+		nodes.add(new CreateImportNewNode());
+		nodes.add(new CreateImportExistingNode());
 		
 		newInputSelectionPage = new WizardSelectionPage("Import options",
 														"Select one of the possible options.", nodes);
@@ -31,6 +31,9 @@ public class ImportSelectionWizard extends Wizard{
 	
 	@Override
 	public void addPages() {
+		
+		super.addPages();
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -44,5 +47,43 @@ public class ImportSelectionWizard extends Wizard{
 	public boolean canFinish()
 	{
 		return false;
+	}
+	
+	public class CreateImportNewNode extends WizardNode
+	{
+
+		@Override
+		public IWizard createWizard() {
+			return new ImportWizard(project, false);
+		}
+
+		@Override
+		public String getName() {
+			return "Transform PCM (New Overview)";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Creates new Overview alternative from existing extractor configuration.";
+		}
+	}
+
+	public class CreateImportExistingNode extends WizardNode
+	{
+
+		@Override
+		public IWizard createWizard() {
+			return new ImportWizard(project, true);
+		}
+
+		@Override
+		public String getName() {
+			return "Tranfrorm PCM (Existing Overview)";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Imports PCM into existing overview alternative.";
+		}
 	}
 }

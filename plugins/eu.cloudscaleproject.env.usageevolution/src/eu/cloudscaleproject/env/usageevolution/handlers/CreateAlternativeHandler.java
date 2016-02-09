@@ -19,7 +19,9 @@ public class CreateAlternativeHandler {
 		
 		IProject project = rp.getProject();
 		
-		CreateUsageEvolutionWizard createInputAltWizard = new CreateUsageEvolutionWizard(project);
+		CreateUsageEvolutionWizard createInputAltWizard = new CreateUsageEvolutionWizard();
+		createInputAltWizard.setProject(project);
+		
 		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 		wizardDialog.open();
 	}

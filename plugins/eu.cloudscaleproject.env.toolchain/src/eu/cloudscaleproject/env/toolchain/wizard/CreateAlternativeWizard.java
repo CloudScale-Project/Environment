@@ -19,7 +19,7 @@ import eu.cloudscaleproject.env.toolchain.services.IExplorerService;
 import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 
-public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard{
+public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard {
 	
 	private static final Logger logger = Logger.getLogger(CreateAlternativeWizard.class.getName());
 	

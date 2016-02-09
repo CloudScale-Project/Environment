@@ -85,5 +85,17 @@
          </with>
       </definition>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.overview.wizard.CreateOverviewWizard"
+            hasPages="true"
+            icon="resources/icons/ic-overview.png"
+            id="eu.cloudscaleproject.env.overview.createOverviewWizard"
+            name="Overview alternative"
+            project="false">
+      </wizard>
+   </extension>
 
 </plugin>

@@ -85,5 +85,17 @@
          </with>
       </definition>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.usageevolution.wizard.CreateUsageEvolutionWizard"
+            hasPages="true"
+            icon="resources/icons/ic-usage-evolution.png"
+            id="eu.cloudscaleproject.env.usageevolution.createUsageEvolutionWizard"
+            name="Usage evolution alternative"
+            project="false">
+      </wizard>
+   </extension>
 
 </plugin>
