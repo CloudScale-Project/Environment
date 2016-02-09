@@ -28,9 +28,9 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 	protected ResourceProvider inputProvider;
 	protected ResourceProvider configProvider;
 	
-	private ProjectSelectionPage projectSelectionPage;
-	private AlternativeNamePage nameSelectionPage;
-	private AlternativeSelectionPage inputSelectionPage;
+	protected ProjectSelectionPage projectSelectionPage;
+	protected AlternativeSelectionPage inputSelectionPage;
+	protected AlternativeNamePage nameSelectionPage;
 	
 	protected IEditorInputResource inputResource;
 	
@@ -97,9 +97,9 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		this.inputResource = inputAlternative;
 		
 		this.nameSelectionPage = new AlternativeNamePage(configProvider);
-		
+		this.inputSelectionPage = new AlternativeSelectionPage();
+
 		if (inputProvider != null) {
-			this.inputSelectionPage = new AlternativeSelectionPage();
 			this.inputSelectionPage.setResourceProvider(inputProvider);
 		}
 				
@@ -128,9 +128,17 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		}
 		
 		this.project = project;
-		this.inputProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
-		this.configProvider = ResourceRegistry.getInstance().getResourceProvider(project, configID);
-		this.nameSelectionPage.setResourceProvider(configProvider);
+		
+		if(this.project != null){
+			this.inputProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
+			this.configProvider = ResourceRegistry.getInstance().getResourceProvider(project, configID);
+		}
+		if(this.configProvider != null){
+			this.nameSelectionPage.setResourceProvider(configProvider);
+		}
+		if(this.inputProvider != null){
+			this.inputSelectionPage.setResourceProvider(inputProvider);
+		}
 	}
 	
 	public void setInputResource(IEditorInputResource eir){
@@ -158,8 +166,6 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		
 		String altName = nameSelectionPage.getName();
 		
-		if (this.inputSelectionPage != null) this.inputResource = this.inputSelectionPage.getSelection();
-
 		AbstractConfigAlternative alternative = (AbstractConfigAlternative)configProvider.createNewResource(altName, null);
 		initAlternative(alternative);	
 		

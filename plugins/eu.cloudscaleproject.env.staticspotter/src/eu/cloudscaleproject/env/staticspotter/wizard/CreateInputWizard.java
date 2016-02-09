@@ -10,11 +10,11 @@ import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class InputSelectionWizard extends CreateAlternativeWizard{
+public class CreateInputWizard extends CreateAlternativeWizard{
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public InputSelectionWizard() {
+	public CreateInputWizard() {
 		
 		super(CSToolResource.SPOTTER_STA_INPUT);
 		
@@ -30,6 +30,11 @@ public class InputSelectionWizard extends CreateAlternativeWizard{
 	
 	@Override
 	public void addPages() {
+		
+		if(this.project == null){
+			addPage(projectSelectionPage);
+		}
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}

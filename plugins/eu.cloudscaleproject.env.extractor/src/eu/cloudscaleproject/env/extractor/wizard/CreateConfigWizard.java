@@ -6,15 +6,13 @@ import java.util.List;
 import org.eclipse.jface.wizard.IWizard;
 
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.CreateConfigAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
 public class CreateConfigWizard extends CreateConfigAlternativeWizard {
 	
-private WizardSelectionPage newInputSelectionPage;
+	private WizardSelectionPage newInputSelectionPage;
 	
 	public CreateConfigWizard() {
 		
@@ -33,7 +31,9 @@ private WizardSelectionPage newInputSelectionPage;
 	@Override
 	public void addPages() {
 		
-		super.addPages();
+		if(this.project == null){
+			addPage(projectSelectionPage);
+		}
 		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
@@ -50,7 +50,6 @@ private WizardSelectionPage newInputSelectionPage;
 		return false;
 	}
 
-	
 	private class CreateImportNode extends WizardNode
 	{
 
@@ -69,12 +68,14 @@ private WizardSelectionPage newInputSelectionPage;
 			return "Creates new cofig alternative from existing extractor configuration.";
 		}
 	}
+	
 	private class CreateNewNode extends WizardNode
 	{
 		@Override
 		public IWizard createWizard() {
-			return new CreateAlternativeWizard (
-					ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.EXTRACTOR_CONF));
+			CreateConfigAlternativeWizard confAlternativeWizard = new CreateConfigAlternativeWizard(CSToolResource.EXTRACTOR_CONF, CSToolResource.EXTRACTOR_INPUT);
+			confAlternativeWizard.setProject(project);
+			return confAlternativeWizard;					
 		}
 
 		@Override

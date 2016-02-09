@@ -119,14 +119,19 @@ public class AlternativeNamePage extends WizardPage
 			setPageComplete(false);
 			return;
 		}
-		
-		
+			
 		setErrorMessage(null);
 		setPageComplete(true);
 	}
 	
 	private String findPotentialName (ResourceProvider rp)
 	{
+		if(rp == null){
+			StringBuilder sb = new StringBuilder();
+			sb.append(PREFIX).append("_").append(System.currentTimeMillis());
+			return sb.toString(); 
+		}
+		
 		if (rp.getResourceByName(PREFIX) == null) return PREFIX;
 		
 		int count = 0;

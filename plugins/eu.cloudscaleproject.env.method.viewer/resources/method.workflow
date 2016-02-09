@@ -377,7 +377,7 @@
           <link businessObjects="_cwXP4Po8EeSga-ySs5-xDw"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="V"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -398,7 +398,7 @@
           <link businessObjects="_gElZsPo8EeSga-ySs5-xDw"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="V"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -430,7 +430,7 @@
           <link businessObjects="_tgQWoF3mEeScwqkqKbMIeg"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -451,7 +451,7 @@
           <link businessObjects="_yxql4F3mEeScwqkqKbMIeg"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -877,17 +877,25 @@
     </nodes>
     <nodes xsi:type="method:Container" id="_Zcc1sC61EeSADewJHO2y3w" name="Spotter" description="Spotter tools are used to detect antipaterns from the modeled source code, or by measuring and stress testing a deployed application." tooltip="Static and Dynamic Spotter tool status container">
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaInput" name="Static spotter input" description="Static spotter input alternative, containing modeled description of the service architecture (Repository and System PCM models). " colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.6" previous="/1/@links.8">
-        <commands id="_cwXP4Po8EeSga-ySs5-xDw" name="V" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_cwXP4Po8EeSga-ySs5-xDw" name="+" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+          <commandParam>eu.cloudscaleproject.env.staticspotter.createInputAlternativeWizard</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaConf" name="Static spotter" description="Configuration parameters for the Static Spotter analyses. This step allocates antipaterns from the software service architecture. " colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.17" previous="/1/@links.6">
-        <commands id="_gElZsPo8EeSga-ySs5-xDw" name="V" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_gElZsPo8EeSga-ySs5-xDw" name="+" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+          <commandParam>eu.cloudscaleproject.env.staticspotter.createConfigAlternativeWizard</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterStaRes" name="Results" description="Static spotter results." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" previous="/1/@links.17"/>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynInput" name="Dynamic spotter input" description="Dynamic spotter input alternatives." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.7">
-        <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="v" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_tgQWoF3mEeScwqkqKbMIeg" name="+" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+          <commandParam>eu.cloudscaleproject.env.spotter.createInputAlternativeWizard</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynConf" name="Dynamic spotter" description="Dynaimc spotter configuration alternatives." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.16" previous="/1/@links.7">
-        <commands id="_yxql4F3mEeScwqkqKbMIeg" name="v" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_yxql4F3mEeScwqkqKbMIeg" name="+" tooltip="Select configuration alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+          <commandParam>eu.cloudscaleproject.env.spotter.createConfigAlternativeWizard</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes" name="Results" description="Dynamic spotter results." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" previous="/1/@links.16"/>
       <commands id="_j1WngPo6EeSga-ySs5-xDw" name="?" description="Opens help." tooltip="Show Dynamic Spotter introduction page" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor">

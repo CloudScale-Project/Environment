@@ -171,7 +171,7 @@
             hasPages="true"
             icon="resources/icons/ic-input-alternative-16.png"
             id="eu.cloudscaleproject.env.extractor.createInputAlternativeWizard"
-            name="Extractor input alternative wizard"
+            name="Extractor input alternative"
             project="false">
       </wizard>
       <wizard
@@ -180,7 +180,7 @@
             hasPages="true"
             icon="resources/icons/configuration_16.png"
             id="eu.cloudscaleproject.env.extractor.createConfigAlternativeWizard"
-            name="Extractor configuration alternative wizard"
+            name="Extractor configuration alternative"
             project="false">
       </wizard>
    </extension>

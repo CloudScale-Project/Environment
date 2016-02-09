@@ -30,6 +30,8 @@ public class AlternativeSelectionPage extends WizardPage{
 	private ObservableListContentProvider listContentProvider;
 	private ObservableMapLabelProvider listLabelProvider;
 	
+	private IEditorInputResource selectedAlternative = null;
+	
 	public AlternativeSelectionPage() {
 		this(DEFAULT_TITLE, DEFAULT_DESCRIPTION);
 	}
@@ -90,11 +92,15 @@ public class AlternativeSelectionPage extends WizardPage{
 			@Override
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				checkComplete();
 				
-				if(isPageComplete()){
-					handleSelection(getSelection());
+				Object selection = ((StructuredSelection)listViewer.getSelection()).getFirstElement();
+				if(selection instanceof IEditorInputResource){
+					selectedAlternative = (IEditorInputResource)selection;
+					handleSelection((IEditorInputResource)selection);
 				}
+				
+				checkComplete();
+
 			}
 		});
 
@@ -111,7 +117,7 @@ public class AlternativeSelectionPage extends WizardPage{
 	
 	public IEditorInputResource getSelection ()
 	{
-		return (IEditorInputResource) ((StructuredSelection)listViewer.getSelection()).getFirstElement();
+		return selectedAlternative;
 	}
 	
 	public void handleSelection(IEditorInputResource eir){
@@ -120,6 +126,6 @@ public class AlternativeSelectionPage extends WizardPage{
 	
 	private void checkComplete()
 	{
-		this.setPageComplete(getSelection() != null);
+		this.setPageComplete(selectedAlternative != null);
 	}
 }

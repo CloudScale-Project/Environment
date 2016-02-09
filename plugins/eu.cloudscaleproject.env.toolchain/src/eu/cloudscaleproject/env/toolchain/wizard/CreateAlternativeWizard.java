@@ -28,8 +28,8 @@ public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard{
 	protected IProject project = null;
 	protected ResourceProvider provider = null;
 	
-	private ProjectSelectionPage projectSelectionPage = null;
-	private AlternativeNamePage nameSelectionPage = null;
+	protected ProjectSelectionPage projectSelectionPage = null;
+	protected AlternativeNamePage nameSelectionPage = null;
 	
 	public CreateAlternativeWizard(ResourceProvider rp){
 		
@@ -82,8 +82,13 @@ public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard{
 		}
 		
 		this.project = p;
-		this.provider = ResourceRegistry.getInstance().getResourceProvider(p, providerID);
-		this.nameSelectionPage.setResourceProvider(this.provider);
+		
+		if(p != null){
+			this.provider = ResourceRegistry.getInstance().getResourceProvider(p, providerID);
+		}
+		if(this.provider != null){
+			this.nameSelectionPage.setResourceProvider(this.provider);
+		}
 	}
 	
 	@Override

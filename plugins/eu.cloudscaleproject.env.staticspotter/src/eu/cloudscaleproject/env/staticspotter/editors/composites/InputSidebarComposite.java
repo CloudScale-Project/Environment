@@ -5,7 +5,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
+import eu.cloudscaleproject.env.staticspotter.wizard.CreateInputWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
@@ -52,7 +52,9 @@ public class InputSidebarComposite extends SidebarEditorComposite {
 
 	@Override
 	public void handleNewInput(IEditorInput selected) {
-		InputSelectionWizard inputSelectionWizard = new InputSelectionWizard(project);
+		CreateInputWizard inputSelectionWizard = new CreateInputWizard();
+		inputSelectionWizard.setProject(project);
+		
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), inputSelectionWizard);
 		wizardDialog.open();
 	}

@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
+import eu.cloudscaleproject.env.staticspotter.wizard.CreateInputWizard;
 
 public class OpenInputWizardHandler {
 	
@@ -21,7 +21,9 @@ public class OpenInputWizardHandler {
 		Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
 		
 		if(project != null){
-			InputSelectionWizard createInputAltWizard = new InputSelectionWizard(project);
+			CreateInputWizard createInputAltWizard = new CreateInputWizard();
+			createInputAltWizard.setProject(project);
+			
 			WizardDialog wizardDialog = new WizardDialog(shell, createInputAltWizard);
 			wizardDialog.open();
 		}

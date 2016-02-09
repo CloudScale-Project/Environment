@@ -256,7 +256,7 @@
             hasPages="true"
             icon="resources/icons/ic-input-alternative-16.png"
             id="eu.cloudscaleproject.env.analyser.createInputAlternativeWizard"
-            name="Create Analyser input alternative"
+            name="Analyser input alternative"
             project="false">
       </wizard>
       <wizard
@@ -265,7 +265,7 @@
             hasPages="true"
             icon="resources/icons/configuration_16.png"
             id="eu.cloudscaleproject.env.analyser.createConfigurationAlternativeWizard"
-            name="Create Analyser configuration alternative"
+            name="Analyser configuration alternative"
             project="false">
       </wizard>
    </extension>
