@@ -1,14 +1,17 @@
 package eu.cloudscaleproject.env.toolchain.explorer;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+
+import eu.cloudscaleproject.env.common.interfaces.IProjectProvider;
 
 /**
  *
  * @author Vito Čuček <vito.cucek@xlab.si>
  *
  */
-public class ExplorerResourceNode extends ExplorerNode{
+public class ExplorerResourceNode extends ExplorerNode implements IProjectProvider{
 
 	private IResource resource;
 		
@@ -30,6 +33,14 @@ public class ExplorerResourceNode extends ExplorerNode{
 	
 	public IResource getResource(){
 		return resource;
+	}
+	
+	public IProject getProject(){
+		if(resource != null){
+			return resource.getProject();
+		}
+		
+		return null;
 	}
 	
 	public boolean canDelete(){

@@ -18,10 +18,7 @@ public class CreatePredefinedUsageWizard extends CreateAlternativeWizard{
 	private TemplateSelectionPage presetSelectionPage = null;
 
 	public CreatePredefinedUsageWizard(IProject project) {
-		super(project, ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.USAGEEVOLUTION));
-		
-		this.project = project;
-		
+		super(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.USAGEEVOLUTION));		
 		presetSelectionPage = new TemplateSelectionPage();
 	}
 	

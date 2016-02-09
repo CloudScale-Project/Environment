@@ -56,7 +56,9 @@ public class ConfigSidebarComposite extends SidebarEditorComposite
 	@Override
 	public void handleNewInput(IEditorInput selected)
 	{
-		CreateConfigAlternativeSelectionWizard createconfigAltWizard = new CreateConfigAlternativeSelectionWizard(project);
+		CreateConfigAlternativeSelectionWizard createconfigAltWizard = new CreateConfigAlternativeSelectionWizard();
+		createconfigAltWizard.setProject(project);
+		
 		WizardDialog wizardDialog = new WizardDialog(this.getShell(), createconfigAltWizard);
 		wizardDialog.open();
 	}

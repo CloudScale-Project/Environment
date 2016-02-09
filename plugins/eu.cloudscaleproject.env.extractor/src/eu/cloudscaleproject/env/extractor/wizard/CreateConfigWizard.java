@@ -3,31 +3,26 @@ package eu.cloudscaleproject.env.extractor.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
-import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
-import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
+import eu.cloudscaleproject.env.toolchain.wizard.CreateConfigAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class CreateConfigSelectionWizard extends Wizard{
+public class CreateConfigWizard extends CreateConfigAlternativeWizard {
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public CreateConfigSelectionWizard(IProject project) {
+	public CreateConfigWizard() {
 		
-		CloudscaleContext.inject(this);
+		super(CSToolResource.EXTRACTOR_CONF, CSToolResource.EXTRACTOR_INPUT);
 		
 		setWindowTitle("Extractor Configuration");
 		
 		List<WizardNode> nodes = new ArrayList<>();
-		
-		nodes.add(new CreateNewNode(project));
-		nodes.add(new CreateImportNode(project));
+		nodes.add(new CreateNewNode());
+		nodes.add(new CreateImportNode());
 		
 		newInputSelectionPage = new WizardSelectionPage("Extractor configuration options",
 														"Select one of the possible options.", nodes);
@@ -35,6 +30,11 @@ public class CreateConfigSelectionWizard extends Wizard{
 	
 	@Override
 	public void addPages() {
+		
+		if(this.project == null){
+			addPage(projectSelectionPage);
+		}
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -50,17 +50,8 @@ public class CreateConfigSelectionWizard extends Wizard{
 		return false;
 	}
 
-	
-	private static class CreateImportNode extends WizardNode
+	private class CreateImportNode extends WizardNode
 	{
-		@SuppressWarnings("unused")
-		private final IProject project;
-		
-
-		public CreateImportNode (IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
@@ -77,20 +68,14 @@ public class CreateConfigSelectionWizard extends Wizard{
 			return "Creates new cofig alternative from existing extractor configuration.";
 		}
 	}
-	private static class CreateNewNode extends WizardNode
+	
+	private class CreateNewNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateNewNode(IProject project)
-		{
-			this.project = project;
-		}
-
 		@Override
 		public IWizard createWizard() {
-			return new CreateAlternativeWizard (project, 
-					ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.EXTRACTOR_CONF));
+			CreateConfigAlternativeWizard confAlternativeWizard = new CreateConfigAlternativeWizard(CSToolResource.EXTRACTOR_CONF, CSToolResource.EXTRACTOR_INPUT);
+			confAlternativeWizard.setProject(project);
+			return confAlternativeWizard;					
 		}
 
 		@Override
@@ -103,6 +88,5 @@ public class CreateConfigSelectionWizard extends Wizard{
 			return "Creates new default configuration alternative.";
 		}
 	}
-
 
 }

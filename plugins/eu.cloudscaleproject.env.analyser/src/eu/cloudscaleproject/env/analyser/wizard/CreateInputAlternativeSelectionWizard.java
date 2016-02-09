@@ -6,30 +6,43 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 
 import eu.cloudscaleproject.env.common.CloudscaleContext;
 import eu.cloudscaleproject.env.common.ExtensionRetriever;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.wizard.util.ProjectSelectionPage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class CreateInputSelectionWizard extends Wizard{
+public class CreateInputAlternativeSelectionWizard extends Wizard implements IWorkbenchWizard{
 	
 	@Inject 
 	private ExtensionRetriever extensionRetriever;
 	
-	private WizardSelectionPage newInputSelectionPage;
+	private IProject project;
 	
-	public CreateInputSelectionWizard(IProject project) {
+	private WizardSelectionPage newInputSelectionPage;
+	private ProjectSelectionPage projectSelectionPage;
+	
+	public CreateInputAlternativeSelectionWizard() {
+		this(null);
+	}
+	
+	public CreateInputAlternativeSelectionWizard(IProject project) {
 		
 		CloudscaleContext.inject(this);
 		
-		List<WizardNode> nodes = new ArrayList<>();
+		this.project = project;
 		
-		nodes.add(new CreateEmptyInputAltNode(project));
-		nodes.add(new ExternalImportNode(project));
-		nodes.add(new ExtractorImportNode(project));
+		List<WizardNode> nodes = new ArrayList<>();
+		nodes.add(new CreateEmptyInputAltNode());
+		nodes.add(new ExternalImportNode());
+		nodes.add(new ExtractorImportNode());
 		
 		//retrieve nodes from extension point
 		List<WizardNode> nodesFromExtensions = extensionRetriever.retrieveExtensionObjects(
@@ -38,7 +51,7 @@ public class CreateInputSelectionWizard extends Wizard{
 		
 		nodes.addAll(nodesFromExtensions);
 		
-		
+		projectSelectionPage = new ProjectSelectionPage();
 		newInputSelectionPage = new WizardSelectionPage("New input alternative selection page",
 														"Create new input alternative", nodes);
 		
@@ -46,7 +59,23 @@ public class CreateInputSelectionWizard extends Wizard{
 	}
 	
 	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		
+		IProject project = ExplorerProjectPaths.getProject(selection);
+		if(ExplorerProjectPaths.isCloudScaleProject(project)){
+			this.project = project;
+		}
+		
+		//If project is not found, the project selection page will be shown.
+	}
+	
+	@Override
 	public void addPages() {
+		
+		if(project == null){
+			addPage(projectSelectionPage);
+		}
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -62,19 +91,12 @@ public class CreateInputSelectionWizard extends Wizard{
 		return false;
 	}
 
-	private static class CreateEmptyInputAltNode extends WizardNode
+	private class CreateEmptyInputAltNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateEmptyInputAltNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new CreateEmptyInputWizard(project);
+			return new CreateEmptyInputWizard(project != null ? project : projectSelectionPage.getProject());
 		}
 
 		@Override
@@ -89,19 +111,12 @@ public class CreateInputSelectionWizard extends Wizard{
 
 	}
 	
-	private static class ExternalImportNode extends WizardNode
+	private class ExternalImportNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public ExternalImportNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new ExternalImportInputWizard(project);
+			return new ExternalImportInputWizard(project != null ? project : projectSelectionPage.getProject());
 		}
 
 		@Override
@@ -116,19 +131,12 @@ public class CreateInputSelectionWizard extends Wizard{
 
 	}
 
-	private static class ExtractorImportNode extends WizardNode
+	private class ExtractorImportNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public ExtractorImportNode (IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
-			return new ExtractorImportInputWizard(project);
+			return new ExtractorImportInputWizard(project != null ? project : projectSelectionPage.getProject());
 		}
 
 		@Override
@@ -142,6 +150,5 @@ public class CreateInputSelectionWizard extends Wizard{
 		}
 
 	}
-
 
 }

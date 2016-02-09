@@ -35,7 +35,8 @@ public class ExtractorImportInputWizard extends Wizard
 		nameSelectionPage = new AlternativeNamePage(ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT));
 		nameSelectionPage.setDescription("Please type in name for the new alternative");
 
-		alternativeSelectionPage = new AlternativeSelectionPage(ResourceRegistry.getInstance().getResourceProvider(project,CSToolResource.EXTRACTOR_RES));
+		alternativeSelectionPage = new AlternativeSelectionPage();
+		alternativeSelectionPage.setResourceProvider(ResourceRegistry.getInstance().getResourceProvider(project,CSToolResource.EXTRACTOR_RES));
 		alternativeSelectionPage.setDescription("Please select extractor result to be imported into Analyser");
 	}
 
@@ -74,7 +75,7 @@ public class ExtractorImportInputWizard extends Wizard
 		for (Resource resource : resources)
 		{
 			IFile f = ExplorerProjectPaths.getFileFromEmfResource(resource);
-			alternative.addSubResourceModel(f);
+			alternative.addSubResource(f);
 		}
 
 		alternative.save();

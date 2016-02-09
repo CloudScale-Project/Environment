@@ -1,7 +1,6 @@
  
 package eu.cloudscaleproject.env.spotter.handlers;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -23,12 +22,11 @@ public class CreateAlternativeHandler {
 	public void execute(ResourceProvider rp, @Optional IEditorInputResource eir) {
 				
 		String id = rp.getID();
-		IProject project = rp.getProject();
 
 		CSToolResource tool = CSToolResource.getTool(id);
 		
 		if(CSToolResource.SPOTTER_DYN_INPUT.equals(tool)){
-			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(project, rp){
+			CreateAlternativeWizard createInputAltWizard = new CreateAlternativeWizard(rp){
 				@Override
 				protected void initAlternative(IEditorInputResource inputAlternative)
 				{
@@ -43,7 +41,7 @@ public class CreateAlternativeHandler {
 		}
 		else if(CSToolResource.SPOTTER_DYN_CONF.equals(tool)){
 			CreateConfigAlternativeWizard createAlternativeWizard;
-			createAlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (IEditorInputResource)eir);
+			createAlternativeWizard = new CreateConfigAlternativeWizard(rp, (IEditorInputResource)eir);
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createAlternativeWizard);
 			wizardDialog.open();
 		}

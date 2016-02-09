@@ -40,8 +40,8 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		
 		this.selectNamePage = new AlternativeNamePage(confResourceProvider);
 		this.alternativeSelectionPage = new AlternativeSelectionPage("Input alternative selection", 
-																	 "Please select the input alternative.", 
-																	 inputResourceProvider);
+																	 "Please select the input alternative.");
+		this.alternativeSelectionPage.setResourceProvider(inputResourceProvider);
 	}
 	
 	@Override

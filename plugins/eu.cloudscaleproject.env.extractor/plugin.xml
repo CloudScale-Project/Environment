@@ -163,4 +163,25 @@
          </with>
       </definition>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.extractor.wizard.CreateInputWizard"
+            hasPages="true"
+            icon="resources/icons/ic-input-alternative-16.png"
+            id="eu.cloudscaleproject.env.extractor.createInputAlternativeWizard"
+            name="Extractor input alternative"
+            project="false">
+      </wizard>
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.extractor.wizard.CreateConfigWizard"
+            hasPages="true"
+            icon="resources/icons/configuration_16.png"
+            id="eu.cloudscaleproject.env.extractor.createConfigAlternativeWizard"
+            name="Extractor configuration alternative"
+            project="false">
+      </wizard>
+   </extension>
 </plugin>

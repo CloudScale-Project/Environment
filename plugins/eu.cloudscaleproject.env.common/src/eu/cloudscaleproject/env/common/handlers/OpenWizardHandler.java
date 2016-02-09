@@ -15,9 +15,10 @@ import org.eclipse.ui.wizards.IWizardDescriptor;
 public class OpenWizardHandler {
 	
 	@Execute
-	public void execute(@Named("id") String wizardID) {
+	public void execute(@Named("eu.cloudscaleproject.env.common.command.openwizard.param.id") String wizardID) {
+		
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry()
-				.findWizard("eu.cloudscaleproject.env.product.wizard.newproject");
+				.findWizard(wizardID);
 		
 		if(descriptor != null){
 			try {
@@ -31,17 +32,18 @@ public class OpenWizardHandler {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	
 	@CanExecute
-	public boolean canExecute(@Optional @Named("id") String wizardID){
+	public boolean canExecute(@Optional @Named("eu.cloudscaleproject.env.common.command.openwizard.param.id") String wizardID){
 		
 		if(wizardID == null){
 			return false;
 		}
 		
 		IWizardDescriptor descriptor = PlatformUI.getWorkbench().getNewWizardRegistry()
-				.findWizard("eu.cloudscaleproject.env.product.wizard.newproject");
+				.findWizard(wizardID);
 		
 		if(descriptor != null){
 			return true;

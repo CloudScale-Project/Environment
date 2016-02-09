@@ -103,7 +103,7 @@ public class ToolchainAddon {
 		}
 		else if(currentActiveResources != null){
 			
-			IProject currentProject = currentActiveResources.getActiveProject();
+			IProject currentProject = currentActiveResources.getProject();
 			if(currentProject != null && currentProject.isAccessible()){
 				activeResources.setProject(currentProject);
 			}

@@ -150,7 +150,7 @@ public class StatusViewPart {
 		}
 		
 		IValidationStatusProvider statusProvider = activeResources.getActiveStatusProvider();
-		IProject project = activeResources.getActiveProject();
+		IProject project = activeResources.getProject();
 				
 		this.statusProviders.clear();
 		

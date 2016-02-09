@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.cloudscaleproject.env.staticspotter.alternatives.InputAlternative;
-import eu.cloudscaleproject.env.staticspotter.wizard.InputSelectionWizard;
+import eu.cloudscaleproject.env.staticspotter.wizard.CreateInputWizard;
 import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
@@ -27,7 +27,9 @@ public class CreateAlternativeHandler {
 		CSToolResource tool = CSToolResource.getTool(id);
 		
 		if(CSToolResource.SPOTTER_STA_INPUT.equals(tool)){
-			InputSelectionWizard createInputAltWizard = new InputSelectionWizard(project);
+			CreateInputWizard createInputAltWizard = new CreateInputWizard();
+			createInputAltWizard.setProject(project);
+			
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createInputAltWizard);
 			wizardDialog.open();
 		}
@@ -35,11 +37,11 @@ public class CreateAlternativeHandler {
 			CreateConfigAlternativeWizard createlternativeWizard;
 			
 			if(eir instanceof InputAlternative){
-				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, (InputAlternative)eir);			
+				createlternativeWizard = new CreateConfigAlternativeWizard(rp, (InputAlternative)eir);			
 			}
 			else{
 				ResourceProvider inputResourceProvider = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.SPOTTER_STA_INPUT);
-				createlternativeWizard = new CreateConfigAlternativeWizard(project, rp, inputResourceProvider);
+				createlternativeWizard = new CreateConfigAlternativeWizard(rp, inputResourceProvider);
 			}
 			
 			WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);

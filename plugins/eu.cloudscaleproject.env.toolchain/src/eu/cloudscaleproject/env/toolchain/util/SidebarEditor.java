@@ -9,6 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInput;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
@@ -137,7 +138,8 @@ public class SidebarEditor extends AbstractSidebarEditor
 
 	public void doHandleNewInput(IEditorInput selected)
 	{
-		CreateAlternativeWizard createlternativeWizard = new CreateAlternativeWizard(resourceProvider.getProject(), resourceProvider);
+		CreateAlternativeWizard createlternativeWizard = new CreateAlternativeWizard(CSToolResource.getTool(resourceProvider.getID()));
+		createlternativeWizard.setProject(resourceProvider.getProject());
 		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), createlternativeWizard);
 		wizardDialog.open();
 	}
@@ -152,7 +154,8 @@ public class SidebarEditor extends AbstractSidebarEditor
 	{
 		if (resourceProvider.getResources().isEmpty()) return;
 
-		CloneAlternativeWizard cloneAlternativeWizard = new CloneAlternativeWizard(resourceProvider);
+		CloneAlternativeWizard cloneAlternativeWizard = new CloneAlternativeWizard(CSToolResource.getTool(resourceProvider.getID()));
+		cloneAlternativeWizard.setProject(resourceProvider.getProject());
 		WizardDialog wizardDialog = new WizardDialog(Display.getDefault().getActiveShell(), cloneAlternativeWizard);
 		wizardDialog.open();
 	}

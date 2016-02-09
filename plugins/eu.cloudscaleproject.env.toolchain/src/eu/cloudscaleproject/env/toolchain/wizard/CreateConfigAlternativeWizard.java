@@ -1,9 +1,17 @@
 package eu.cloudscaleproject.env.toolchain.wizard;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 
+import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.common.explorer.ExplorerProjectPaths;
+import eu.cloudscaleproject.env.common.wizard.util.ProjectSelectionPage;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
 import eu.cloudscaleproject.env.toolchain.resources.ResourceProvider;
+import eu.cloudscaleproject.env.toolchain.resources.ResourceRegistry;
 import eu.cloudscaleproject.env.toolchain.resources.types.AbstractConfigAlternative;
 import eu.cloudscaleproject.env.toolchain.resources.types.IEditorInputResource;
 import eu.cloudscaleproject.env.toolchain.resources.types.IInputAlternative;
@@ -11,42 +19,146 @@ import eu.cloudscaleproject.env.toolchain.util.OpenAlternativeUtil;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeNamePage;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.AlternativeSelectionPage;
 
-public class CreateConfigAlternativeWizard extends Wizard{
+public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchWizard{
+	
+	private final CSToolResource inputID;
+	private final CSToolResource configID;
 
 	protected IProject project;
+	protected ResourceProvider inputProvider;
 	protected ResourceProvider configProvider;
 	
-	private AlternativeNamePage nameSelectionPage;
-	private AlternativeSelectionPage inputSelectionPage;
-	private IEditorInputResource inputResource;
+	protected ProjectSelectionPage projectSelectionPage;
+	protected AlternativeSelectionPage inputSelectionPage;
+	protected AlternativeNamePage nameSelectionPage;
 	
-	public CreateConfigAlternativeWizard(IProject project, ResourceProvider configProvider, IEditorInputResource inputResource){
-		this.project = project;
-		this.configProvider = configProvider;
+	protected IEditorInputResource inputResource;
+	
+	public CreateConfigAlternativeWizard(CSToolResource configID, CSToolResource inputID){
 		
-		this.nameSelectionPage = new AlternativeNamePage(configProvider);		
-		this.inputResource = inputResource;
+		this.inputID = inputID;
+		this.configID = configID;
+		
+		this.projectSelectionPage = new ProjectSelectionPage(){
+			@Override
+			public void handleSelection(IProject project) {
+				if(ExplorerProjectPaths.isCloudScaleProject(project)){
+					setProject(project);
+				}
+			}
+		};
+		this.inputSelectionPage = new AlternativeSelectionPage(){
+			@Override
+			public void handleSelection(IEditorInputResource eir) {
+				setInputResource(eir);
+			}
+		};
+		this.nameSelectionPage = new AlternativeNamePage();
 		
 		setWindowTitle("Create alternative");
 	}
-
-	public CreateConfigAlternativeWizard(IProject project, ResourceProvider configProvider, ResourceProvider inputProvider) {
+	
+	public CreateConfigAlternativeWizard(ResourceProvider configProvider, ResourceProvider inputProvider) {
 		
-		this.project = project;
+		//Not needed
+		this.inputID = null;
+		this.configID = null;
+		
+		this.project = configProvider.getProject();
+
+		//Not needed - we already have the input alternative
+		this.inputProvider = inputProvider;
 		this.configProvider = configProvider;
+		this.inputResource = null;
 		
 		this.nameSelectionPage = new AlternativeNamePage(configProvider);
-		if (inputProvider != null) this.inputSelectionPage = new AlternativeSelectionPage(inputProvider);
+		this.inputSelectionPage = new AlternativeSelectionPage(){
+			@Override
+			public void handleSelection(IEditorInputResource eir) {
+				setInputResource(eir);
+			}
+		};
+		this.inputSelectionPage.setResourceProvider(this.inputProvider);
+				
+		setWindowTitle("Create alternative");
+	}
+
+	public CreateConfigAlternativeWizard(ResourceProvider configProvider, IEditorInputResource inputAlternative) {
+		
+		//Not needed
+		this.inputID = null;
+		this.configID = null;
+		
+		this.project = configProvider.getProject();
+
+		//Not needed - we already have the input alternative
+		this.inputProvider = null;
+		this.configProvider = configProvider;
+		this.inputResource = inputAlternative;
+		
+		this.nameSelectionPage = new AlternativeNamePage(configProvider);
+		this.inputSelectionPage = new AlternativeSelectionPage();
+
+		if (inputProvider != null) {
+			this.inputSelectionPage.setResourceProvider(inputProvider);
+		}
 				
 		setWindowTitle("Create alternative");
 	}
 	
 	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		
+		IProject project = ExplorerProjectPaths.getProject(selection);
+		if(ExplorerProjectPaths.isCloudScaleProject(project)){
+			setProject(project);
+		}
+		
+		IEditorInputResource inputRes = CloudscaleContext.getActiveContext().get(IEditorInputResource.class);
+		if(inputRes instanceof IInputAlternative){
+			setInputResource(inputRes);
+		}
+		
+	}
+	
+	public void setProject(IProject project){
+		
+		if(inputID == null || configID == null){
+			throw new IllegalStateException("Can not set the project! The resource providers and the project has already been specified in the constructor");
+		}
+		
+		this.project = project;
+		
+		if(this.project != null){
+			this.inputProvider = ResourceRegistry.getInstance().getResourceProvider(project, inputID);
+			this.configProvider = ResourceRegistry.getInstance().getResourceProvider(project, configID);
+		}
+		if(this.configProvider != null){
+			this.nameSelectionPage.setResourceProvider(configProvider);
+		}
+		if(this.inputProvider != null){
+			this.inputSelectionPage.setResourceProvider(inputProvider);
+		}
+	}
+	
+	public void setInputResource(IEditorInputResource eir){
+		if(eir.getProject() != null){
+			setProject(eir.getProject());
+		}
+		this.inputResource = eir;
+	}
+	
+	@Override
 	public void addPages() {
-		addPage(nameSelectionPage);
-		if(inputSelectionPage != null){
+		
+		if(this.project == null){
+			addPage(projectSelectionPage);
+		}
+		if(this.inputResource == null){
 			addPage(inputSelectionPage);
 		}
+		
+		addPage(nameSelectionPage);
 	}
 
 	@Override
@@ -54,8 +166,6 @@ public class CreateConfigAlternativeWizard extends Wizard{
 		
 		String altName = nameSelectionPage.getName();
 		
-		if (this.inputSelectionPage != null) this.inputResource = this.inputSelectionPage.getSelection();
-
 		AbstractConfigAlternative alternative = (AbstractConfigAlternative)configProvider.createNewResource(altName, null);
 		initAlternative(alternative);	
 		

@@ -3,28 +3,26 @@ package eu.cloudscaleproject.env.staticspotter.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.Wizard;
 
-import eu.cloudscaleproject.env.common.CloudscaleContext;
+import eu.cloudscaleproject.env.toolchain.CSToolResource;
+import eu.cloudscaleproject.env.toolchain.wizard.CreateAlternativeWizard;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardNode;
 import eu.cloudscaleproject.env.toolchain.wizard.pages.WizardSelectionPage;
 
-public class InputSelectionWizard extends Wizard{
+public class CreateInputWizard extends CreateAlternativeWizard{
 	
 	private WizardSelectionPage newInputSelectionPage;
 	
-	public InputSelectionWizard(IProject project) {
+	public CreateInputWizard() {
 		
-		CloudscaleContext.inject(this);
+		super(CSToolResource.SPOTTER_STA_INPUT);
 		
 		setWindowTitle("StaticSpotter Import");
 		
 		List<WizardNode> nodes = new ArrayList<>();
-		
-		nodes.add(new CreateImportExtractorNode(project));
-		nodes.add(new CreateExternalNode(project));
+		nodes.add(new CreateImportExtractorNode());
+		nodes.add(new CreateExternalNode());
 		
 		newInputSelectionPage = new WizardSelectionPage("Import options",
 														"Select one of the possible options.", nodes);
@@ -32,6 +30,11 @@ public class InputSelectionWizard extends Wizard{
 	
 	@Override
 	public void addPages() {
+		
+		if(this.project == null){
+			addPage(projectSelectionPage);
+		}
+		
 		addPage(newInputSelectionPage);
 		setForcePreviousAndNextButtons(true);
 	}
@@ -48,15 +51,8 @@ public class InputSelectionWizard extends Wizard{
 	}
 
 	
-	private static class CreateImportExtractorNode extends WizardNode
+	private class CreateImportExtractorNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateImportExtractorNode (IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
@@ -73,15 +69,8 @@ public class InputSelectionWizard extends Wizard{
 			return "Creates new input alternative from extractor result.";
 		}
 	}
-	private static class CreateExternalNode extends WizardNode
+	private class CreateExternalNode extends WizardNode
 	{
-		private final IProject project;
-		
-
-		public CreateExternalNode(IProject project)
-		{
-			this.project = project;
-		}
 
 		@Override
 		public IWizard createWizard() {
