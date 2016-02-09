@@ -15,6 +15,7 @@ import eu.cloudscaleproject.env.extractor.alternatives.ConfingAlternative;
 
 public class SomoxConfigurationUtil
 {
+	private static String DEFAULT_BLACKLIST ="java.*§javax.*§"; 
 	private static SoMoXProjectPreferences somoxPreferences = new SoMoXProjectPreferences();
 	private static Map<String, MetricsDetails> mapMetrics = new LinkedHashMap<String, MetricsDetails>();
 	static 
@@ -37,7 +38,7 @@ public class SomoxConfigurationUtil
 		//
 		somoxConfiguration.setExcludedSuffixesForNameResemblance("");
 		somoxConfiguration.setExcludedPrefixesForNameResemblance("");
-		somoxConfiguration.setWildcardKey("§javax.swing.border§rbe.util§java.util§java.net§java.text§(default package)§java.lang.reflect§javax.swing§javax§java.io§rbe.args§java§java.util.regex§rbe§java.lang§java.sql§", "");
+		somoxConfiguration.setWildcardKey(DEFAULT_BLACKLIST, "");
 		somoxConfiguration.setReverseEngineerInterfacesNotAssignedToComponent(false);
 		
 		//
@@ -121,7 +122,7 @@ public class SomoxConfigurationUtil
 			try
 			{
 				double value = Double.parseDouble(r.getProperty(metric));
-				setValueByKey(metric, value, somoxConfiguration);
+				setMetricValueByKey(metric, value, somoxConfiguration);
 			}
 			catch(NullPointerException e){} // Expected
 			catch(NumberFormatException e){
@@ -130,16 +131,31 @@ public class SomoxConfigurationUtil
 			} 
 		}
 		
+		String blacklist = getBlacklist(r);
+		somoxConfiguration.setWildcardKey(blacklist, "");
+		
 		return somoxConfiguration;
 	}
 	
+	public static String getBlacklist (ConfingAlternative alternative)
+	{
+		String blacklist = alternative.getProperty("blacklist");
+		return blacklist == null ? DEFAULT_BLACKLIST : blacklist;
+	}
 
-	public static void persistValue (String key, double value, ConfingAlternative alternative)
+	public static void setBlacklist (String blacklist, ConfingAlternative alternative)
+	{
+		alternative.setProperty("blacklist", blacklist);
+		alternative.getSomoxConfiguration().setWildcardKey(blacklist, "");
+	}
+	
+
+	public static void persistMetricValue (String key, double value, ConfingAlternative alternative)
 	{
 		alternative.setProperty(key, ""+value);
 	}
 	
-	public static void setValueByKey (String key, double value, SoMoXConfiguration conf)
+	public static void setMetricValueByKey (String key, double value, SoMoXConfiguration conf)
 	{
 		switch (key)
 		{
@@ -192,7 +208,7 @@ public class SomoxConfigurationUtil
 		
 	}
 
-	public static double getValueByKey (String key, SoMoXConfiguration conf)
+	public static double getMetricValueByKey (String key, SoMoXConfiguration conf)
 	{
 		switch (key)
 		{

@@ -1,5 +1,9 @@
 package eu.cloudscaleproject.env.extractor.validators;
 
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.eclipse.core.resources.IProject;
 import org.somox.configuration.SoMoXConfiguration;
 
@@ -60,6 +64,25 @@ public class ConfigValidator implements IResourceValidator {
         if (!(somoxConfiguration.getClusteringConfig().getMinMergeClusteringThreshold() < somoxConfiguration.getClusteringConfig().getMaxMergeClusteringThreshold())) {
 			selfStatus.addWarning("merge-minmax", IValidationStatus.SEVERITY_ERROR, "The minimum merge threshold must be lower than maximum merge threshold");
         }
+        
+        validateBlacklist(ca);
+	}
+	
+	private void validateBlacklist(ConfingAlternative ca)
+	{
+		IValidationStatus selfStatus = ca.getSelfStatus();
+		SoMoXConfiguration somoxConfiguration = ca.getSomoxConfiguration();
+		
+		Set<String> blacklist = somoxConfiguration.getBlacklist();
+		
+		for (String s : blacklist){
+			try{
+				Pattern.compile(s);
+			}catch(PatternSyntaxException e)
+			{
+				selfStatus.addWarning("blacklist-item-["+s+"]", IValidationStatus.SEVERITY_ERROR, "Blacklist item is invalid -> "+e.getDescription());
+			}
+		}
 	}
 	
 }

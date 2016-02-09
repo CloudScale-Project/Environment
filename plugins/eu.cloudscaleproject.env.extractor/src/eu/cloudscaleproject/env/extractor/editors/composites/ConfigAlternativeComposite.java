@@ -62,6 +62,15 @@ public class ConfigAlternativeComposite extends ConfigEditorView implements IRef
 			tabFolder.setSelection(tabItem);
 		}
 
+		{
+			SomoxBlacklistComposite composite = new SomoxBlacklistComposite(tabFolder, SWT.NONE, configAlternative);
+
+			CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+			tabItem.setControl(composite);
+			tabItem.setText("Blacklist");
+			tabFolder.setSelection(tabItem);
+		}
+
 		tabFolder.setSelection(0);
 	}
 	

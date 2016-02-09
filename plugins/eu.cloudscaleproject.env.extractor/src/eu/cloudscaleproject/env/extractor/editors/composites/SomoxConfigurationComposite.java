@@ -120,8 +120,8 @@ public class SomoxConfigurationComposite extends Composite
 	    scale.addListener(SWT.Selection, new Listener() {
 	        public void handleEvent(Event event) {
 	        	// TODO: Use batch executor
-	        	SomoxConfigurationUtil.setValueByKey(metricKey, scale.getSelection()/100d, alternative.getSomoxConfiguration());
-	        	SomoxConfigurationUtil.persistValue(metricKey, scale.getSelection()/100d, alternative);
+	        	SomoxConfigurationUtil.setMetricValueByKey(metricKey, scale.getSelection()/100d, alternative.getSomoxConfiguration());
+	        	SomoxConfigurationUtil.persistMetricValue(metricKey, scale.getSelection()/100d, alternative);
 	        }
 	      });
 	    
@@ -138,7 +138,7 @@ public class SomoxConfigurationComposite extends Composite
 		for (String key : mapScales.keySet())
 		{
 			Scale scale = mapScales.get(key);
-			int value = (int)(100*SomoxConfigurationUtil.getValueByKey(key, alternative.getSomoxConfiguration()));
+			int value = (int)(100*SomoxConfigurationUtil.getMetricValueByKey(key, alternative.getSomoxConfiguration()));
 			scale.setSelection(value);
 		}
 
