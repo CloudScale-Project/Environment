@@ -59,7 +59,7 @@
           <link businessObjects="_1QP7cDRVEeSMLJ8vnBP-0A"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -80,7 +80,7 @@
           <link businessObjects="_6bS5cDRUEeSMLJ8vnBP-0A"/>
           <children visible="true">
             <properties key="node_name" value="node_name"/>
-            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="v"/>
+            <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.4" lineWidth="1" filled="false" transparency="0.0" width="21" height="20" horizontalAlignment="ALIGNMENT_CENTER" value="+"/>
           </children>
         </children>
       </children>
@@ -823,10 +823,14 @@
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorRes.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_system" name="System" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="10"/>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorInput" name="Input" description="Shows if there are any suitable Java projects in the current workspace." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.5">
-        <commands id="_1QP7cDRVEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod"/>
+        <commands id="_1QP7cDRVEeSMLJ8vnBP-0A" name="+" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+          <commandParam>eu.cloudscaleproject.env.extractor.createInputAlternativeWizard</commandParam>
+        </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.extractorConf" name="Extractor" description="Configurations for extracting Java source code into the Repository and System PCM models. " colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.14" previous="/1/@links.5">
-        <commands id="_6bS5cDRUEeSMLJ8vnBP-0A" name="v" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.selectAlternativeMethod" position="10"/>
+        <commands id="_6bS5cDRUEeSMLJ8vnBP-0A" name="+" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard" position="10">
+          <commandParam>eu.cloudscaleproject.env.extractor.createConfigAlternativeWizard</commandParam>
+        </commands>
       </children>
       <commands id="_3sl3EDc_EeSoZdJQhqDUDw" name="?" description="Opens help." tooltip="Show Extractor introduction page" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.extractor.command.openeditor" position="10">
         <commandParam>openIntro</commandParam>
@@ -844,7 +848,7 @@
     </nodes>
     <nodes xsi:type="method:Container" id="_Yqbi4C61EeSADewJHO2y3w" name="Analyser" description="Analyser is a software architecture simulation framework, which analyses software at the model level for performance bottlenecks, scalability issues and reliability threats, and allows for a subsequent optimisation." tooltip="Analyser tool status container">
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput" name="Analyser input" description="Input models used by the Analyser tool." tooltip="Analyser input status section" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" next="/1/@links.4" previous="/1/@links.0 /1/@links.3 /1/@links.12">
-        <commands id="_7zWcEDRVEeSMLJ8vnBP-0A" name="+" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
+        <commands id="_7zWcEDRVEeSMLJ8vnBP-0A" name="+" description="" tooltip="Select input alternative" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.common.command.openwizard">
           <commandParam>eu.cloudscaleproject.env.analyser.createInputAlternativeWizard</commandParam>
         </commands>
         <requirements id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.analyserInput.eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_repository" name="Repository" description="Repository model diagram is used to model cloud services and their components." tooltip="Represents the repository model status" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" position="10"/>

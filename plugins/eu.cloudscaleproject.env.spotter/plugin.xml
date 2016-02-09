@@ -153,5 +153,26 @@
          </with>
       </definition>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.spotter.wizard.CreateInputWizard"
+            hasPages="true"
+            icon="resources/icons/ic-input-alternative-16.png"
+            id="eu.cloudscaleproject.env.spotter.createInputAlternativeWizard"
+            name="Dynamic spotter input alternative wizard"
+            project="false">
+      </wizard>
+      <wizard
+            category="eu.cloudscaleproject.env.product.wizard.category"
+            class="eu.cloudscaleproject.env.spotter.wizard.CreateConfigWizard"
+            hasPages="true"
+            icon="resources/icons/configuration_16.png"
+            id="eu.cloudscaleproject.env.spotter.createInputAlternativeWizard"
+            name="Dynamic spotter configuration alternative wizard"
+            project="false">
+      </wizard>
+   </extension>
 
 </plugin>

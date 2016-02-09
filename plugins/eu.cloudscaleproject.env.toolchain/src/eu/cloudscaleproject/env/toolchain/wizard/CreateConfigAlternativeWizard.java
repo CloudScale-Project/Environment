@@ -24,15 +24,15 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 	private final CSToolResource inputID;
 	private final CSToolResource configID;
 
-	private IProject project;
-	private ResourceProvider inputProvider;
-	private ResourceProvider configProvider;
+	protected IProject project;
+	protected ResourceProvider inputProvider;
+	protected ResourceProvider configProvider;
 	
 	private ProjectSelectionPage projectSelectionPage;
 	private AlternativeNamePage nameSelectionPage;
 	private AlternativeSelectionPage inputSelectionPage;
 	
-	private IEditorInputResource inputResource;
+	protected IEditorInputResource inputResource;
 	
 	public CreateConfigAlternativeWizard(CSToolResource configID, CSToolResource inputID){
 		
