@@ -64,6 +64,11 @@ public class ToolchainUtils {
 	public static final String KEY_FILE_SYSTEM_DIAGRAM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_system_diagram";
 	public static final String KEY_FILE_REPOSITORY_DIAGRAM = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_repositroy_diagram";
 
+	// Static spotter
+	public static final String KEY_FILE_ANTIPATTERNS_PSA = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_antipatterns_psa";
+	
+	// Static spotter -> Dynamic spotter integration
+	public static final String KEY_FILE_ANTIPATTERNS_SCOPE = "eu.cloudscaleproject.env.toolchain.ToolchainUtils.file_antipatterns_scope";
 
 	// Usage evolution
 	public static final String KEY_FILE_USAGEEVOLUTION	= "eu.cloudscaleproject.env.toolchain.ToolchainUtils.path_usageevolution";

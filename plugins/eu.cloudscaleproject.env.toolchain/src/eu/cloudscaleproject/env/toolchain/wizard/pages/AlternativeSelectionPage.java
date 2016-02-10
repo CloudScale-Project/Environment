@@ -96,7 +96,15 @@ public class AlternativeSelectionPage extends WizardPage{
 				Object selection = ((StructuredSelection)listViewer.getSelection()).getFirstElement();
 				if(selection instanceof IEditorInputResource){
 					selectedAlternative = (IEditorInputResource)selection;
-					handleSelection((IEditorInputResource)selection);
+					if(handleSelection((IEditorInputResource)selection)){
+						selectedAlternative = (IEditorInputResource)selection;
+					}
+					else{
+						selectedAlternative = null;
+					}
+				}
+				else{
+					selectedAlternative = null;
 				}
 				
 				checkComplete();
@@ -112,7 +120,6 @@ public class AlternativeSelectionPage extends WizardPage{
 			listViewer.setSelection(new StructuredSelection(e));
 		}
 
-		checkComplete();
 	}
 	
 	public IEditorInputResource getSelection ()
@@ -120,8 +127,9 @@ public class AlternativeSelectionPage extends WizardPage{
 		return selectedAlternative;
 	}
 	
-	public void handleSelection(IEditorInputResource eir){
+	public boolean handleSelection(IEditorInputResource eir){
 		//Override
+		return true;
 	}
 	
 	private void checkComplete()

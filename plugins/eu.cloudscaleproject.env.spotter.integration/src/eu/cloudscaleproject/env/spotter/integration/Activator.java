@@ -6,6 +6,13 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
+	
+	public static String STATIC_SPOTTER_PROBLEM_EXTENSION = 
+			"org.spotter.ext.detection.staticspotter.olb.StaticSpotterSynchronizedMethodDetectionController";
+	public static String STATIC_SPOTTER_PROBLEM_DETECTIBLE = 
+			"org.spotter.detection.detectable";
+	public static String STATIC_SPOTTER_PROBLEM_FILE = 
+			"static_spotter_export_file";
 
 	static BundleContext getContext() {
 		return context;

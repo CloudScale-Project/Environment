@@ -14,7 +14,22 @@ Require-Bundle: javax.inject;bundle-version="0.0.0",
  org.eclipse.e4.ui.di;bundle-version="0.0.0",
  org.eclipse.e4.core.contexts;bundle-version="0.0.0",
  org.eclipse.core.runtime;bundle-version="0.0.0",
+ org.eclipse.ui;bundle-version="3.107.0",
+ org.eclipse.ui.workbench;bundle-version="3.107.0",
+ org.eclipse.core.resources,
+ org.eclipse.emf.ecore,
+ org.reclipse.structure.inference.annotations,
+ org.eclipse.gmt.modisco.java.discoverer,
+ org.eclipse.gmt.modisco.java;bundle-version="0.13.1",
+ org.fujaba.commons;bundle-version="1.0.0",
+ org.reclipse.structure.specification;bundle-version="1.0.0",
+ eu.cloudscaleproject.env.common;bundle-version="1.0.0",
+ eu.cloudscaleproject.env.toolchain;bundle-version="1.0.0",
  eu.cloudscaleproject.env.spotter;bundle-version="1.0.0",
- eu.cloudscaleproject.env.staticspotter;bundle-version="1.0.0"
+ eu.cloudscaleproject.env.staticspotter;bundle-version="1.0.0",
+ org.spotter.eclipse.ui;bundle-version="1.0.1",
+ org.eclipse.emf;bundle-version="2.6.0",
+ org.eclipse.emf.edit;bundle-version="2.11.1",
+ org.eclipse.emf.edit.ui;bundle-version="2.11.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

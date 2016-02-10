@@ -490,7 +490,7 @@
         <anchors xsi:type="pi:ChopboxAnchor" outgoingConnections="/0/@connections.19" incomingConnections="/0/@connections.18"/>
         <children visible="true">
           <properties key="node_name" value="node_name"/>
-          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="76" height="52" x="5" value="Use"/>
+          <graphicsAlgorithm xsi:type="al:Text" foreground="/0/@colors.2" lineWidth="1" filled="false" transparency="0.0" width="76" height="52" x="5" value="Import"/>
         </children>
       </children>
     </children>
@@ -947,7 +947,7 @@
         </commands>
       </children>
       <children xsi:type="method:Section" id="eu.cloudscaleproject.env.toolchain.ToolchainUtils.spotterDynRes" name="Results" description="Dynamic spotter results." colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.toolchain.openAlternative" previous="/1/@links.16"/>
-      <children xsi:type="method:Action" id="_jY3GQM9FEeWjg-hMs_oxpw" name="Use" colorForeground="000000" colorBackground="a1c9d5" next="/1/@links.19" previous="/1/@links.18"/>
+      <children xsi:type="method:Action" id="_jY3GQM9FEeWjg-hMs_oxpw" name="Import" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.spotter.integration.command.importantipatterns" next="/1/@links.19" previous="/1/@links.18"/>
       <commands id="_j1WngPo6EeSga-ySs5-xDw" name="?" description="Opens help." tooltip="Show Dynamic Spotter introduction page" colorText="0000ff" colorForeground="000000" colorBackground="a1c9d5" commandId="eu.cloudscaleproject.env.dynamicspotter.command.openeditor">
         <commandParam>openIntro</commandParam>
       </commands>

@@ -18,10 +18,12 @@ public abstract class AbstractProjectWizard extends Wizard implements IWorkbench
 		this.project = project;
 		
 		projectSelectionPage = new ProjectSelectionPage(){
-			public void handleSelection(IProject p) {
+			public boolean handleSelection(IProject p) {
 				if(ExplorerProjectPaths.isCloudScaleProject(p)){
 					setProject(p);
+					return true;
 				}
+				return false;
 			};
 		};
 		
@@ -30,10 +32,12 @@ public abstract class AbstractProjectWizard extends Wizard implements IWorkbench
 	public AbstractProjectWizard() {
 				
 		projectSelectionPage = new ProjectSelectionPage(){
-			public void handleSelection(IProject p) {
+			public boolean handleSelection(IProject p) {
 				if(ExplorerProjectPaths.isCloudScaleProject(p)){
 					setProject(p);
+					return true;
 				}
+				return false;
 			};
 		};
 		

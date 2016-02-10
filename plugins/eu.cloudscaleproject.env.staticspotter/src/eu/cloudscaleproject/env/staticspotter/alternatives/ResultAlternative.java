@@ -9,12 +9,11 @@ import eu.cloudscaleproject.env.toolchain.resources.types.AbstractResultAlternat
 
 public class ResultAlternative extends AbstractResultAlternative {
 	
-	public static final String KEY_PSA = "key_output";
 	public static final String RESULT_PSA_FILE = "result.psa";
 
 	public ResultAlternative(IProject project, IFolder folder) {
 		// TODO Auto-generated constructor stub
-		super (project, folder, ModelType.GROUP_NONE, CSTool.SPOTTER_STA);
+		super (project, folder, ModelType.GROUP_ANTIPATTERNS, CSTool.SPOTTER_STA);
 	}
 	
 }

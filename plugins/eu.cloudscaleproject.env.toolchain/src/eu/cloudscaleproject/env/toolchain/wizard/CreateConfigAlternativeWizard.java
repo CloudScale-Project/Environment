@@ -41,16 +41,24 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		
 		this.projectSelectionPage = new ProjectSelectionPage(){
 			@Override
-			public void handleSelection(IProject project) {
+			public boolean handleSelection(IProject project) {
+				
 				if(ExplorerProjectPaths.isCloudScaleProject(project)){
 					setProject(project);
+					return true;
 				}
+				return false;
 			}
 		};
 		this.inputSelectionPage = new AlternativeSelectionPage(){
 			@Override
-			public void handleSelection(IEditorInputResource eir) {
-				setInputResource(eir);
+			public boolean handleSelection(IEditorInputResource eir) {
+				
+				if(validateSelectedInput(eir)){
+					setInputResource(eir);
+					return true;
+				}
+				return false;
 			}
 		};
 		this.nameSelectionPage = new AlternativeNamePage();
@@ -74,8 +82,13 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		this.nameSelectionPage = new AlternativeNamePage(configProvider);
 		this.inputSelectionPage = new AlternativeSelectionPage(){
 			@Override
-			public void handleSelection(IEditorInputResource eir) {
-				setInputResource(eir);
+			public boolean handleSelection(IEditorInputResource eir) {
+				
+				if(validateSelectedInput(eir)){
+					setInputResource(eir);
+					return true;
+				}
+				return false;
 			}
 		};
 		this.inputSelectionPage.setResourceProvider(this.inputProvider);
@@ -183,6 +196,10 @@ public class CreateConfigAlternativeWizard extends Wizard implements IWorkbenchW
 		// Nothing to do here - overwrite
 	}
 	
+	protected boolean validateSelectedInput(IEditorInputResource eir){
+		// Override
+		return true;
+	}
 	
 	@Override
 	public boolean canFinish()

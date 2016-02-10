@@ -136,6 +136,22 @@ public class ExplorerProjectPaths {
 		return false;
 	}
 	
+	public static boolean checkProjectType(IProject project, String projectNature){
+		
+		if(!project.isAccessible()){
+			return false;
+		}
+		
+		try {
+			if(project.isNatureEnabled(projectNature)){
+				return true;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	/**
 	 * 
 	 * Check if specified project has property file. This method can be used

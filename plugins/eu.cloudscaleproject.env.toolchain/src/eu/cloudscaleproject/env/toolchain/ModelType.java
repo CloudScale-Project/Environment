@@ -27,7 +27,9 @@ public enum ModelType{
 	 LIMBO(ToolchainUtils.KEY_FILE_LIMBO, "Limbo model", "dlim"),
 
 	 SOURCECODEDECORATOR(ToolchainUtils.KEY_FILE_SOURCEDECORATOR, "Source decorator model", "sourcecodedecorator"),
-	 ECORE(null, "ECore model", "ecore");
+	 ECORE(null, "ECore model", "ecore"),
+	 
+	 ANTIPATTERNS_PSA(ToolchainUtils.KEY_FILE_ANTIPATTERNS_PSA, "Detected antipatterns model", "psa");
 	 
 	 public static ModelType[] GROUP_ALL  		   	 = ModelType.values();
 	 public static ModelType[] GROUP_NONE  		   	 = {};
@@ -35,6 +37,7 @@ public enum ModelType{
 	 public static ModelType[] GROUP_PCM_EXTENDED	 = {REPOSITORY, SYSTEM, RESOURCE, ALLOCATION, USAGE, USAGE_EVOLUTION, REPRESENTATIONS} ;
 	 public static ModelType[] GROUP_EXPERIMENTS 	 = {EXPERIMENTS, MONITOR, SLO, VARIATION, USAGE_EVOLUTION, MEASURING_POINT} ;
 	 public static ModelType[] GROUP_SOURCEDECORATOR = {SOURCECODEDECORATOR, REPOSITORY, SYSTEM, ECORE} ;
+	 public static ModelType[] GROUP_ANTIPATTERNS 	 = {ANTIPATTERNS_PSA} ;
 	 
 	 private final String extension;
 	 private final String name;

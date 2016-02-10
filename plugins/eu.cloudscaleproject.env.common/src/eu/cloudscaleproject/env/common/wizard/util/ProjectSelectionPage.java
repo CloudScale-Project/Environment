@@ -50,10 +50,13 @@ public class ProjectSelectionPage extends WizardPage{
 					Object selection = ss.getFirstElement();
 					
 					if(selection instanceof IProject){
-						project = (IProject)selection;
-						setPageComplete(true);
 						
-						handleSelection(project);
+						if(handleSelection(project)){
+							project = (IProject)selection;
+							setPageComplete(true);
+						}
+						
+						setPageComplete(false);
 					}
 				}
 			}
@@ -67,8 +70,9 @@ public class ProjectSelectionPage extends WizardPage{
 		return this.project;
 	}
 	
-	public void handleSelection(IProject project){
+	public boolean handleSelection(IProject project){
 		//Override
+		return true;
 	}
 
 }

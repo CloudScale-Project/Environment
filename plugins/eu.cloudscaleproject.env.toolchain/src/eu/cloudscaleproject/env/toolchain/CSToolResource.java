@@ -44,7 +44,7 @@ public enum CSToolResource {
 			 "eu.cloudscaleproject.env.toolchain.ToolchainUtils.overview"),
 	ARCHITECTURAL_TEMPLATES("Architectural Templates", 
 							"eu.cloudscaleproject.env.toolchain.ToolchainUtils.architecturaltemplates");
-
+	
 	private final String name;
 	private final String id;
 	

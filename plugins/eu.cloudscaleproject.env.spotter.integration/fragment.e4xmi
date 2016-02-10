@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_IETPQM9NEeWjg-hMs_oxpw"/>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_IETPQM9NEeWjg-hMs_oxpw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jq6hgM_zEeWjg-hMs_oxpw" featurename="commands" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Command" xmi:id="_cClBsM_0EeWjg-hMs_oxpw" elementId="eu.cloudscaleproject.env.spotter.integration.command.importantipatterns" commandName="Import antipatterns" description="Import detected antipatterns into the Dynamic spotter"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_n38ioM_zEeWjg-hMs_oxpw" featurename="handlers" parentElementId="eu.cloudscaleproject.env.product.application">
+    <elements xsi:type="commands:Handler" xmi:id="_nE0nIM_0EeWjg-hMs_oxpw" elementId="eu.cloudscaleproject.env.spotter.integration.handler.importantipatterns" contributionURI="bundleclass://eu.cloudscaleproject.env.spotter.integration/eu.cloudscaleproject.env.spotter.integration.handlers.ImportResultsHandler" command="_cClBsM_0EeWjg-hMs_oxpw"/>
+  </fragments>
+</fragment:ModelFragments>

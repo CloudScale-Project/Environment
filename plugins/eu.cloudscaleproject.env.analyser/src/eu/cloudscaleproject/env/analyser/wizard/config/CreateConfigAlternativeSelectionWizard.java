@@ -65,19 +65,23 @@ public class CreateConfigAlternativeSelectionWizard extends Wizard implements IW
 				"Create new config alternative", nodes);
 		
 		inputAlternativeSelectionPage = new AlternativeSelectionPage("Analyser alternative selection", "Please select the desired Analyser input alternative."){
-			public void handleSelection(IEditorInputResource eir) {
+			public boolean handleSelection(IEditorInputResource eir) {
 				if(eir instanceof InputAlternative){
 					inputAlternative = (InputAlternative)eir;
+					return true;
 				}
+				return false;
 			};
 		};
 		
 		projectSelectionPage = new ProjectSelectionPage(){
-			public void handleSelection(IProject project) {
+			public boolean handleSelection(IProject project) {
 				if(project != null){
 					ResourceProvider rp = ResourceRegistry.getInstance().getResourceProvider(project, CSToolResource.ANALYSER_INPUT);
 					inputAlternativeSelectionPage.setResourceProvider(rp);
+					return true;
 				}
+				return false;
 			};
 		};
 		

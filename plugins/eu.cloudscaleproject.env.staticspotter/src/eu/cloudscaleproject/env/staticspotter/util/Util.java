@@ -148,7 +148,7 @@ public class Util
 		try
 		{
 			res.save(Collections.emptyMap());
-			rif.setSubResource(ResultAlternative.KEY_PSA, file);
+			rif.setSubResource(ToolchainUtils.KEY_FILE_ANTIPATTERNS_PSA, file);
 			rif.setConfigAlternative(configAlternative);
 
 			rif.save();
@@ -194,7 +194,7 @@ public class Util
 	//
 	public static Collection<ASGAnnotation> loadAnnotations(ResultAlternative resultFolder)
 	{
-		IFile resultFile = (IFile)resultFolder.getSubResource(ResultAlternative.KEY_PSA);
+		IFile resultFile = (IFile)resultFolder.getSubResource(ToolchainUtils.KEY_FILE_ANTIPATTERNS_PSA);
 		if (resultFile == null) return null;
 		
 		URI resultUri = URI.createPlatformResourceURI(resultFile.getFullPath().toString(), true);

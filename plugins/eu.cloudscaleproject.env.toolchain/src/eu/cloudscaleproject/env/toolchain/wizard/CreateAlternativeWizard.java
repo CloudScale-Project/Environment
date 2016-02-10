@@ -39,10 +39,12 @@ public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard 
 		this.providerID = null;
 		
 		projectSelectionPage = new ProjectSelectionPage(){
-			public void handleSelection(IProject p) {
+			public boolean handleSelection(IProject p) {
 				if(ExplorerProjectPaths.isCloudScaleProject(p)){
 					setProject(p);
+					return true;
 				}
+				return false;
 			};
 		};
 		nameSelectionPage = new AlternativeNamePage(rp);
@@ -55,10 +57,12 @@ public class CreateAlternativeWizard extends Wizard implements IWorkbenchWizard 
 		this.providerID = resID;
 		
 		projectSelectionPage = new ProjectSelectionPage(){
-			public void handleSelection(IProject p) {
+			public boolean handleSelection(IProject p) {
 				if(ExplorerProjectPaths.isCloudScaleProject(p)){
 					setProject(p);
+					return true;
 				}
+				return false;
 			};
 		};
 		nameSelectionPage = new AlternativeNamePage();
