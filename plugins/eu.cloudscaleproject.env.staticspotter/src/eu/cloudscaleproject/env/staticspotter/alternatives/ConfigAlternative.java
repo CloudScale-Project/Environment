@@ -22,8 +22,8 @@ public class ConfigAlternative extends AbstractConfigAlternative {
 	public static final String PLUGIN_FILE_DEFAULT_CATALOG = "resources/catalog/default.psc";
 	public static final String PLUGIN_FILE_DEFAULT_ENGINES = "resources/catalog/default.psc.ecore";
 
-	public static final String FILE_CATALOG = "catalog.pcs";
-	public static final String FILE_ENGINES = "catalog.pcs.ecore";
+	public static final String FILE_CATALOG = "catalog.psc";
+	public static final String FILE_ENGINES = "catalog.psc.ecore";
 
 	public static final String KEY_CATALOG = "catalog";
 	public static final String KEY_ENGINES = "engines_ecore";

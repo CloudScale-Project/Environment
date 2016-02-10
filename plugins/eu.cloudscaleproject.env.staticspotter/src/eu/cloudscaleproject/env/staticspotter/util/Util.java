@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.fujaba.commons.console.ReportLevel;
+import org.reclipse.structure.generator.preparationstrategies.GenerateNewEnginesStrategy;
 import org.reclipse.structure.inference.DetectPatternsJob;
 import org.reclipse.structure.inference.annotations.ASGAnnotation;
 import org.reclipse.structure.inference.annotations.AnnotationsPackage;
@@ -53,23 +54,23 @@ public class Util
 	{
 		assert (inputAlternative != null);
 
-		ResourceSet resSet = new ResourceSetImpl();
 		IFile catalogFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_CATALOG);
-		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
-
 		IFile enginesFile = (IFile)configFolder.getSubResource(ConfigAlternative.KEY_ENGINES);
-		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
-
 		IFile sdFile = (IFile)inputAlternative.getSubResource(ToolchainUtils.KEY_FILE_SOURCEDECORATOR);
+
+		URI catalogURI = URI.createPlatformResourceURI(catalogFile.getFullPath().toString(), true);
+		URI enginesURI = URI.createPlatformResourceURI(enginesFile.getFullPath().toString(), true);
 		URI sdURI = URI.createPlatformResourceURI(sdFile.getFullPath().toString(), true);
 
 		//
-		// Run resources
+		// Resources
 		//
-		Resource catalogResource = resSet.createResource(catalogURI);
+		ResourceSet resSet = new ResourceSetImpl();
+		Resource catalogResource = resSet.getResource(catalogURI, true);
 		Resource enginesResource = resSet.createResource(enginesURI);
-		Resource sourcedecoratorResource = resSet.createResource(sdURI);
-
+		Resource sourcedecoratorResource = resSet.getResource(sdURI, true);
+		
+		
 		//
 		// Configurations
 		//
@@ -80,6 +81,10 @@ public class Util
 		DetectPatternsJob job = new DetectPatternsJob(catalogResource, enginesResource, sourcedecoratorResource, reportLevel);
 		job.setAnnotateAdditionalElements(searchForAdditionalElements);
 		job.setEvaluator(evaluator.getEvaluator());
+
+        GenerateNewEnginesStrategy strategy = new GenerateNewEnginesStrategy(catalogResource);
+        strategy.setReporter(job);
+        strategy.prepareEngines();
 
 		return job;
 	}
