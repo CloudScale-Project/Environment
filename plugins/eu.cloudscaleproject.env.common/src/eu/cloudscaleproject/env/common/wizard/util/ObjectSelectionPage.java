@@ -26,8 +26,8 @@ public class ObjectSelectionPage<T> extends WizardPage{
 	//		Selection handles have different meaning, depending on the 'multipleSelection' boolean argument.
 
 	private boolean multipleSelection = false;
-	private List<T> objects;
-	
+
+	private List<T> objects = new ArrayList<T>();
 	private List<T> selectedObjects = new ArrayList<T>();
 	
 	private StructuredViewer listViewer;
@@ -45,6 +45,7 @@ public class ObjectSelectionPage<T> extends WizardPage{
 	public void setItems(List<T> items){
 		
 		this.objects = items;
+		this.selectedObjects.clear();
 		
 		if(listViewer instanceof TableViewer){
 			TableViewer tv = (TableViewer)listViewer;
@@ -57,6 +58,10 @@ public class ObjectSelectionPage<T> extends WizardPage{
 			if(!tv.getList().isDisposed()){
 				listViewer.setInput(objects);
 			}
+		}
+		
+		if(selectAll){
+			selectAll();
 		}
 	}
 	
@@ -167,10 +172,7 @@ public class ObjectSelectionPage<T> extends WizardPage{
 		
 		listViewer.setContentProvider(new ArrayContentProvider());		
 		listViewer.setLabelProvider(createLabelProvider());
-		
-		if(objects != null){
-			listViewer.setInput(objects);
-		}
+		listViewer.setInput(objects);
 		
 		if(selectAll){
 			selectAll();

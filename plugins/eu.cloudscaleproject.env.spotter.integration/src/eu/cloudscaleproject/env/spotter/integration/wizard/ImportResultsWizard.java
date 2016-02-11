@@ -32,6 +32,7 @@ import org.spotter.eclipse.ui.util.SpotterProjectSupport;
 import org.spotter.shared.environment.model.XMConfiguration;
 import org.spotter.shared.hierarchy.model.XPerformanceProblem;
 
+import eu.cloudscaleproject.env.common.dialogs.DialogUtils;
 import eu.cloudscaleproject.env.common.wizard.util.AbstractProjectWizard;
 import eu.cloudscaleproject.env.common.wizard.util.ObjectSelectionPage;
 import eu.cloudscaleproject.env.spotter.alternatives.ConfigAlternative;
@@ -170,6 +171,14 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 	@Override
 	public boolean performFinish() {
 		
+		if(spotterConfigAlternative.isDirty()){
+			boolean save = DialogUtils.openConfirm("Save Dynamic Spotter configuration alternative", 
+				"Dynamic Spotter configuration alternative needs to be saved before this operation can complete.");
+			if(!save){
+				return false;
+			}
+		}
+		
 		ExportResultsJob job = new ExportResultsJob(spotterConfigAlternative, selectedAntipatterns);
 		job.schedule();
 		
@@ -201,6 +210,10 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 			if(this.spotterConfigAlternative == null){
 				//DialogUtils.openError("Operation fialed!", "Please select the desired Dynamic spotter configuration alternative and try again.");
 				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Please select the desired Dynamic spotter configuration alternative and try again.");
+			}
+			
+			if(this.spotterConfigAlternative.isDirty()){
+				this.spotterConfigAlternative.save();
 			}
 			
 			//Import Static Spotter results into the Dynamic Spotter Configuration alternative
