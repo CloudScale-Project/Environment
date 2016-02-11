@@ -34,6 +34,7 @@ Package : mvn install
     <module>plugins/eu.cloudscaleproject.env.analyser</module>
     <module>plugins/eu.cloudscaleproject.env.staticspotter</module>
     <module>plugins/eu.cloudscaleproject.env.spotter</module>
+    <module>plugins/eu.cloudscaleproject.env.spotter.integration</module>
 
     <module>plugins/eu.cloudscaleproject.env.usageevolution</module>
 	<module>plugins/eu.cloudscaleproject.env.overview</module>
