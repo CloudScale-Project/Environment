@@ -171,7 +171,7 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 	@Override
 	public boolean performFinish() {
 		
-		if(spotterConfigAlternative.isDirty()){
+		if(spotterConfigAlternative != null && spotterConfigAlternative.isDirty()){
 			boolean save = DialogUtils.openConfirm("Save Dynamic Spotter configuration alternative", 
 				"Dynamic Spotter configuration alternative needs to be saved before this operation can complete.");
 			if(!save){
