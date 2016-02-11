@@ -100,7 +100,7 @@ public class ExplorerProjectPaths {
 			}
 			
 			//Try to adapt the object
-			if(project == null){
+			if(project == null && selectedObject != null){
 				IResource res = Platform.getAdapterManager().getAdapter(selectedObject, IResource.class);
 				if(res != null){
 					project = res.getProject();

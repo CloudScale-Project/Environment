@@ -7,6 +7,8 @@ public class Activator implements BundleActivator {
 
 	private static BundleContext context;
 	
+	public static final String PLUGIN_ID = "eu.cloudscaleproject.env.spotter.integration"; //$NON-NLS-1$
+	
 	public static String STATIC_SPOTTER_PROBLEM_EXTENSION = 
 			"org.spotter.ext.detection.staticspotter.olb.StaticSpotterSynchronizedMethodDetectionController";
 	public static String STATIC_SPOTTER_PROBLEM_DETECTIBLE = 
