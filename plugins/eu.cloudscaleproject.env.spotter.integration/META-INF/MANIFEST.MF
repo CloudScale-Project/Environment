@@ -20,7 +20,7 @@ Require-Bundle: javax.inject;bundle-version="0.0.0",
  org.eclipse.emf.ecore,
  org.reclipse.structure.inference.annotations,
  org.eclipse.gmt.modisco.java.discoverer,
- org.eclipse.gmt.modisco.java;bundle-version="0.13.1",
+ org.eclipse.gmt.modisco.java,
  org.fujaba.commons;bundle-version="1.0.0",
  org.reclipse.structure.specification;bundle-version="1.0.0",
  eu.cloudscaleproject.env.common;bundle-version="1.0.0",
@@ -31,6 +31,6 @@ Require-Bundle: javax.inject;bundle-version="0.0.0",
  org.eclipse.emf;bundle-version="2.6.0",
  org.eclipse.emf.edit;bundle-version="2.11.1",
  org.eclipse.emf.edit.ui;bundle-version="2.11.0",
- org.reclipse.structure.inference.ui;bundle-version="1.0.1"
+ org.reclipse.structure.inference.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -114,13 +114,19 @@ public class ExplorerProjectPaths {
 		}
 		if(project == null){
 			IProjectProvider pp = CloudscaleContext.getActiveContext().get(IProjectProvider.class);
-			project = pp.getProject();
+			if(pp != null){
+				project = pp.getProject();
+			}
 		}
 		
 		return project;
 	}
 	
 	public static boolean isCloudScaleProject(IProject project){
+		
+		if(project == null){
+			return false;
+		}
 		
 		if(!project.isAccessible()){
 			return false;
