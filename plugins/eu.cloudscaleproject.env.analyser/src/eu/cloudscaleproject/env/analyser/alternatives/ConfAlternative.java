@@ -1277,9 +1277,10 @@ public class ConfAlternative extends AbstractConfigAlternative
 			public void run() {
 				getInputAlternative().save();
 				configureResults();
-				save();
 			}
 		});
+		
+		save();
 
 		ILaunchManager mgr = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType lct = mgr

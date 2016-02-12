@@ -213,7 +213,7 @@ public class EditorInputFile extends EditorInputResource{
 	@Override
 	public void setName(String name){
 		String old = getName();
-		setProperty(KEY_NAME, name);
+		doSetProperty(KEY_NAME, name);
 		
 		setDirty(true);
 		firePropertyChange(PROP_NAME, old, name);
@@ -228,7 +228,7 @@ public class EditorInputFile extends EditorInputResource{
 	protected void handleCreate(IProgressMonitor monitor) {
 		
 		if (!file.exists()) {
-			setProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
+			doSetProperty(KEY_TIMESTAMP_CREATED, ""+System.currentTimeMillis());
 			try (InputStream is = new ByteArrayInputStream(new byte[0])) {
 				file.create(is, true, null);
 			} catch (CoreException e) {
@@ -258,7 +258,7 @@ public class EditorInputFile extends EditorInputResource{
 		
 		try (OutputStream os = new FileOutputStream(new File(
 				file.getLocationURI()))) {
-			setProperty(KEY_TIMESTAMP_MODIFIED, ""+System.currentTimeMillis());
+			doSetProperty(KEY_TIMESTAMP_MODIFIED, ""+System.currentTimeMillis());
 			synchronized (source) {
 				source.storeToXML(os, "");
 			}
