@@ -302,7 +302,7 @@ helper applyArchitecturalTemplates(in system : System,
 			setTaggedValue(container, sce.size, stReplicable, "numberOfReplicas");
 		} endif;
 	}
-	else{
+	else if (deployment.computingEnvironment.oclIsKindOf(OVERVIEW::deployment::ClusteredComputingEnvironment)) then{
 
 		//apply profile to the System
 		if(not isProfileApplied(system.oclAsType(EObject), loadbalancingProfile)) {
@@ -322,7 +322,7 @@ helper applyArchitecturalTemplates(in system : System,
 			setTaggedValue(container, cce.size, stReplicable, "numberOfReplicas");
 		} endif;
 		
-	} endif;
+	} endif endif;
 								   	
 }
 
