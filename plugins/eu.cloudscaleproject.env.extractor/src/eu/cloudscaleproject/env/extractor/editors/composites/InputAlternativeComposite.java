@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
@@ -61,6 +62,14 @@ public class InputAlternativeComposite extends InputEditorView {
 
 		initDataBindings();
 		
+		// WORKAROUND - initial layout is off
+		Display.getDefault().timerExec(100, new Runnable() {
+			@Override
+			public void run() {
+				layout(true, true);
+				redraw();
+			}
+		});
 	}
 	
 	private void initProjectSelection(Composite container)
