@@ -60,9 +60,9 @@ Package : mvn install
     <!--
      Features and Update sites
  	-->
-    <module>features/eu.cloudscaleproject.feature.method</module>
-    <module>features/eu.cloudscaleproject.feature.environment</module>
-    <module>features/eu.cloudscaleproject.updatesite.environment</module>
+    <!--<module>features/eu.cloudscaleproject.feature.method</module>-->
+    <!--<module>features/eu.cloudscaleproject.feature.environment</module>-->
+    <!--<module>features/eu.cloudscaleproject.updatesite.environment</module>-->
 
   </modules>
   <!-- Export "Available Software Sites" (properties > install/update) from eclipse and use following sed command on it -->
@@ -72,7 +72,7 @@ Package : mvn install
 	<repository><id>CloudScale Toolchain</id><layout>p2</layout><url>http://cloudscale.xlab.si/cse/updatesites/toolchain/nightly/</url></repository>
 
 	<!-- Eclipse update-sites -->
-	<repository><id>Luna</id><layout>p2</layout><url>http://download.eclipse.org/releases/mars/</url></repository>
+	<repository><id>Mars</id><layout>p2</layout><url>http://download.eclipse.org/releases/mars/</url></repository>
 
 	<repository><id>Eclipse 4.5 Update</id><layout>p2</layout><url>http://download.eclipse.org/eclipse/updates/4.5/</url></repository>
 
