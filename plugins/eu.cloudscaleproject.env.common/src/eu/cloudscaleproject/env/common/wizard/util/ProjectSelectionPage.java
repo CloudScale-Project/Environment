@@ -54,7 +54,7 @@ public class ProjectSelectionPage extends WizardPage{
 						
 						if(selection instanceof IProject){
 							
-							if(handleSelection(project)){
+							if(handleSelection((IProject)selection)){
 								project = (IProject)selection;
 								setPageComplete(true);
 								return;
