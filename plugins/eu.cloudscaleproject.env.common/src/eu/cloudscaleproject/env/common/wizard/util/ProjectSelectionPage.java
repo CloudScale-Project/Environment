@@ -47,17 +47,22 @@ public class ProjectSelectionPage extends WizardPage{
 				
 				if(event.getSelection() instanceof StructuredSelection){
 					StructuredSelection ss = (StructuredSelection)event.getSelection();
-					Object selection = ss.getFirstElement();
 					
-					if(selection instanceof IProject){
+					if(ss != null){
 						
-						if(handleSelection(project)){
-							project = (IProject)selection;
-							setPageComplete(true);
+						Object selection = ss.getFirstElement();
+						
+						if(selection instanceof IProject){
+							
+							if(handleSelection(project)){
+								project = (IProject)selection;
+								setPageComplete(true);
+								return;
+							}						
 						}
-						
-						setPageComplete(false);
 					}
+					
+					setPageComplete(false);
 				}
 			}
 		});
