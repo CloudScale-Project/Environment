@@ -123,8 +123,10 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 							continue;
 						}
 						
-						if("SynchronizedMethod".equals(annotation.getPattern().getName())){
-							items.add(annotation);
+						switch (annotation.getPattern().getName()){
+							case "SynchronizedMethod": items.add(annotation); break;
+							case "AcquireReleasePair": items.add(annotation); break;
+							default: break;
 						}
 					}
 				}
@@ -339,9 +341,17 @@ public class ImportResultsWizard extends AbstractProjectWizard {
                 final ASGAnnotation annotation = (ASGAnnotation) node;
 
                 switch (annotation.getPattern().getName()) {
-                case "SynchronizedMethod":
-                    scopeSpecifications.add(computeExportString(annotation));
+                case "SynchronizedMethod":{
+					MethodDeclaration methodDeclaration = (MethodDeclaration) annotation.getBoundObjects().get("method").get(0);
+                    scopeSpecifications.add(computeExportString(methodDeclaration));
                     break;
+                }
+                case "AcquireReleasePair":{
+                	ASGAnnotation seff = (ASGAnnotation) annotation.getBoundObjects().get("seff").get(0);
+                	MethodDeclaration methodDeclaration = (MethodDeclaration)seff.getBoundObjects().get("containingMethod").get(0);
+                    scopeSpecifications.add(computeExportString(methodDeclaration));
+                    break;
+                }
                 default:
                     break;
                 }
@@ -351,9 +361,8 @@ public class ImportResultsWizard extends AbstractProjectWizard {
         return scopeSpecifications;
     }
 
-	private static String computeExportString(final ASGAnnotation annotation) {
+	private static String computeExportString(final MethodDeclaration methodDeclaration) {
 		
-        final MethodDeclaration methodDeclaration = (MethodDeclaration) annotation.getBoundObjects().get("method").get(0);
         final ClassDeclaration classDeclaration = (ClassDeclaration) methodDeclaration.getAbstractTypeDeclaration();
 
         final StringBuilder sb = new StringBuilder();
