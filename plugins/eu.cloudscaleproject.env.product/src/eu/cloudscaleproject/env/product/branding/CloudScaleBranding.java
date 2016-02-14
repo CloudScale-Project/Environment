@@ -9,7 +9,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -27,8 +30,14 @@ public class CloudScaleBranding {
 	{
 		removeWizards();
 		initProjectExplorer();
+		initPerspectiveListener();
 	}
 	
+	private static void initPerspectiveListener() {
+		IWorkbenchWindow[] workbenchs = PlatformUI.getWorkbench().getWorkbenchWindows();
+		workbenchs[0].addPerspectiveListener(new CloudScalePerspectiveListener());
+	}
+
 	public static void initProjectExplorer ()
 	{
 	
