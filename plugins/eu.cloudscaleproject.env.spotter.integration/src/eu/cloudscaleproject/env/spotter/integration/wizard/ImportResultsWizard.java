@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -260,9 +261,11 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 				IResource hierarchyFile = this.spotterConfigAlternative.getSubResource(ConfigAlternative.KEY_HIERARCHY_CONFIG);
 				if(hierarchyFile instanceof IFile){
 					HierarchyEditorInput hei = new HierarchyEditorInput((IFile)hierarchyFile);
+					if (hei.getPerformanceProblemRoot().getProblem() == null)
+						hei.getPerformanceProblemRoot().setProblem(new LinkedList<XPerformanceProblem>() );
 					
 					XPerformanceProblem problem = null;
-					
+
 					for(XPerformanceProblem p : hei.getPerformanceProblemRoot().getProblem()){
 						if(Activator.STATIC_SPOTTER_PROBLEM_EXTENSION.equals(p.getExtensionName())){
 							problem = p;
