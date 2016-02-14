@@ -133,7 +133,9 @@
       </children>
     </children>
   </menuContributions>
-  <menuContributions xmi:id="_QRPFQH9CEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.help.contribution" parentId="cloudscale.environment.product.menu.tools"/>
+  <menuContributions xmi:id="_QRPFQH9CEeKbPfR9EFmuvQ" elementId="eu.cloudscaleproject.env.product.menu.help.contribution" parentId="cloudscale.environment.product.menu.tools">
+    <children xsi:type="menu:DirectMenuItem" xmi:id="_R2I3ENMOEeW4hqQTwZhbZg" elementId="eu.cloudscaleproject.env.product.directmenuitem.usermanual" label="User manual" tooltip="Open uesr manual" contributionURI="bundleclass://eu.cloudscaleproject.env.product/eu.cloudscaleproject.env.product.handlers.OpenUserManualHandler"/>
+  </menuContributions>
   <menuContributions xmi:id="_I5MoYEP2EeSK3KV4OioXdg" elementId="eu.cloudscaleproject.env.product.menucontribution.view" parentId="cloudscale.environment.product.menu.view"/>
   <menuContributions xmi:id="_QmUPEGEtEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.product.menu.file.contribution" parentId="file">
     <children xsi:type="menu:Menu" xmi:id="_WCTkYGEyEeWayeVD4LyD5g" elementId="eu.cloudscaleproject.env.product.menu.new" label="New">

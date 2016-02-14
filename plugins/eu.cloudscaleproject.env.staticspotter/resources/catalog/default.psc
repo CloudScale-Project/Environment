@@ -16,15 +16,13 @@
     <connections xsi:type="specification:PSLink" id="_ufK84PViEeOgbJdIqiztvw" name="annotatedElement"
         source="#_8u6OgfVhEeOgbJdIqiztvw" target="#_LWXAEPViEeOgbJdIqiztvw" qualifier="acquire"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
-    <connections xsi:type="specification:PSLink" id="_iBGuIPVsEeOhXMVyYRdIxA" name="link7"
-        source="#_R8FLUPVsEeOhXMVyYRdIxA" target="#_bXgj8PVsEeOhXMVyYRdIxA" qualifier="primitiveComponent"
+    <connections xsi:type="specification:PSLink" id="_DCkuYNMJEeWcFIwc26d39g" name="link7"
+        source="#_vH03MNMIEeWcFIwc26d39g" target="#_-WpBUPVhEeOgbJdIqiztvw" qualifier="seff"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
-    <connections xsi:type="specification:PSLink" id="_Ao5W0PVtEeOhXMVyYRdIxA" name="link8"
-        source="#_bXgj8PVsEeOhXMVyYRdIxA" target="#_-WpBUPVhEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent/serviceEffectSpecifications__BasicComponent"/>
     <nodes xsi:type="specification:PSAnnotation" id="_8u6OgfVhEeOgbJdIqiztvw" outgoing="#_t4ohUPViEeOgbJdIqiztvw #_ufK84PViEeOgbJdIqiztvw"
         type="#_8u6OgPVhEeOgbJdIqiztvw"/>
     <nodes xsi:type="specification:PSObject" id="_-WpBUPVhEeOgbJdIqiztvw" name="behaviour"
-        outgoing="#_VF19IPViEeOgbJdIqiztvw #_V51l4PViEeOgbJdIqiztvw" incoming="#_Ao5W0PVtEeOhXMVyYRdIxA"
+        outgoing="#_VF19IPViEeOgbJdIqiztvw #_V51l4PViEeOgbJdIqiztvw" incoming="#_DCkuYNMJEeWcFIwc26d39g"
         instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ResourceDemandingSEFF"/>
     <nodes xsi:type="specification:PSObject" id="_LWXAEPViEeOgbJdIqiztvw" name="acquireAction"
         outgoing="#_oHb-wPViEeOgbJdIqiztvw" incoming="#_VF19IPViEeOgbJdIqiztvw #_ufK84PViEeOgbJdIqiztvw"
@@ -34,10 +32,8 @@
         instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ReleaseAction"/>
     <nodes xsi:type="specification:PSObject" id="_jVVhsPViEeOgbJdIqiztvw" name="passiveResource"
         incoming="#_nlJKAPViEeOgbJdIqiztvw #_oHb-wPViEeOgbJdIqiztvw" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/PassiveResource"/>
-    <nodes xsi:type="specification:PSAnnotation" id="_R8FLUPVsEeOhXMVyYRdIxA" name="annoPrimitiveComponent"
-        outgoing="#_iBGuIPVsEeOhXMVyYRdIxA" type="#_7E0R8PVmEeO8apkjJxxSYA"/>
-    <nodes xsi:type="specification:PSObject" id="_bXgj8PVsEeOhXMVyYRdIxA" name="primitiveComponent"
-        outgoing="#_Ao5W0PVtEeOhXMVyYRdIxA" incoming="#_iBGuIPVsEeOhXMVyYRdIxA" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_vH03MNMIEeWcFIwc26d39g" name="seff"
+        outgoing="#_DCkuYNMJEeWcFIwc26d39g" type="#_2aa-cLXlEeWOkIpooXnIiQ"/>
   </patternSpecifications>
   <patternSpecifications id="_7E0R8PVmEeO8apkjJxxSYA" name="FindPrimitiveComponents">
     <connections xsi:type="specification:PSLink" id="_BdcOoPVsEeOhXMVyYRdIxA" name="annotatedElement"
@@ -58,21 +54,21 @@
     <connections xsi:type="specification:PSLink" id="_Lrsu4PbLEeOeYJP9coicjQ" name="annotatedElement"
         source="#_cpjMkfbKEeOeYJP9coicjQ" target="#_d3HL4PbKEeOeYJP9coicjQ" qualifier="synchronizedMethods"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
-    <connections xsi:type="specification:PSLink" id="_wP2YkPbcEeOeYJP9coicjQ" name="link3"
-        source="#_KiQx4PbcEeOeYJP9coicjQ" target="#_d3HL4PbKEeOeYJP9coicjQ" qualifier="methods"
+    <connections xsi:type="specification:PSLink" id="_YiHjsNMKEeWcFIwc26d39g" name="link3"
+        source="#_W53zgNMKEeWcFIwc26d39g" target="#_d3HL4PbKEeOeYJP9coicjQ" qualifier="method"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
     <nodes xsi:type="specification:PSAnnotation" id="_cpjMkfbKEeOeYJP9coicjQ" outgoing="#_Lrsu4PbLEeOeYJP9coicjQ"
         type="#_cpjMkPbKEeOeYJP9coicjQ"/>
     <nodes xsi:type="specification:PSObject" id="_d3HL4PbKEeOeYJP9coicjQ" name="method"
-        outgoing="#_KuCMwPbLEeOeYJP9coicjQ" incoming="#_Lrsu4PbLEeOeYJP9coicjQ #_wP2YkPbcEeOeYJP9coicjQ"
+        outgoing="#_KuCMwPbLEeOeYJP9coicjQ" incoming="#_Lrsu4PbLEeOeYJP9coicjQ #_YiHjsNMKEeWcFIwc26d39g"
         instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
     <nodes xsi:type="specification:PSObject" id="_js-MAPbKEeOeYJP9coicjQ" name="modifier"
         incoming="#_KuCMwPbLEeOeYJP9coicjQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Modifier">
       <nodeConstraints xsi:type="specification:PSAttributeConstraint" id="_-132gPbLEeOeYJP9coicjQ"
           valueExpression="true" operator="EQUAL" attribute="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Modifier/synchronized"/>
     </nodes>
-    <nodes xsi:type="specification:PSAnnotation" id="_KiQx4PbcEeOeYJP9coicjQ" name="methods"
-        outgoing="#_wP2YkPbcEeOeYJP9coicjQ" type="#_cY9jIPbbEeOeYJP9coicjQ"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_W53zgNMKEeWcFIwc26d39g" name="seff"
+        outgoing="#_YiHjsNMKEeWcFIwc26d39g" type="#_2aa-cLXlEeWOkIpooXnIiQ"/>
   </patternSpecifications>
   <patternSpecifications id="_cY9jIPbbEeOeYJP9coicjQ" name="FindMethods">
     <connections xsi:type="specification:PSLink" id="_x73q8PbbEeOeYJP9coicjQ" name="link1"
@@ -98,12 +94,27 @@
     <connections xsi:type="specification:PSLink" id="_A8EYQLXmEeWOkIpooXnIiQ" name="annotatedElement"
         source="#_2aa-cbXlEeWOkIpooXnIiQ" target="#_5jTa8LXlEeWOkIpooXnIiQ" qualifier="seffblock"
         instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
-    <nodes xsi:type="specification:PSAnnotation" id="_2aa-cbXlEeWOkIpooXnIiQ" outgoing="#_A8EYQLXmEeWOkIpooXnIiQ"
+    <connections xsi:type="specification:PSLink" id="_1bvsUNMIEeWcFIwc26d39g" name="link3"
+        source="#_3WrLULXlEeWOkIpooXnIiQ" target="#_wYnwsNMIEeWcFIwc26d39g" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink/seff"/>
+    <connections xsi:type="specification:PSLink" id="_3ur_UNMIEeWcFIwc26d39g" name="annotatedElement"
+        source="#_2aa-cbXlEeWOkIpooXnIiQ" target="#_wYnwsNMIEeWcFIwc26d39g" qualifier="seff"
+        instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
+    <connections xsi:type="specification:PSLink" id="__INKkNMIEeWcFIwc26d39g" name="link5"
+        source="#_55fqANMIEeWcFIwc26d39g" target="#_5jTa8LXlEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//AbstractMethodDeclaration/body"/>
+    <connections xsi:type="specification:PSLink" id="__3DNkNMIEeWcFIwc26d39g" name="annotatedElement"
+        source="#_2aa-cbXlEeWOkIpooXnIiQ" target="#_55fqANMIEeWcFIwc26d39g" qualifier="method"
+        instanceOf="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements"/>
+    <nodes xsi:type="specification:PSAnnotation" id="_2aa-cbXlEeWOkIpooXnIiQ" outgoing="#_A8EYQLXmEeWOkIpooXnIiQ #_3ur_UNMIEeWcFIwc26d39g #__3DNkNMIEeWcFIwc26d39g"
         type="#_2aa-cLXlEeWOkIpooXnIiQ"/>
-    <nodes xsi:type="specification:PSObject" id="_3WrLULXlEeWOkIpooXnIiQ" name="obj1"
-        outgoing="#_AP510LXmEeWOkIpooXnIiQ" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink"/>
-    <nodes xsi:type="specification:PSObject" id="_5jTa8LXlEeWOkIpooXnIiQ" name="obj2"
-        incoming="#_AP510LXmEeWOkIpooXnIiQ #_A8EYQLXmEeWOkIpooXnIiQ" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+    <nodes xsi:type="specification:PSObject" id="_3WrLULXlEeWOkIpooXnIiQ" name="link"
+        outgoing="#_AP510LXmEeWOkIpooXnIiQ #_1bvsUNMIEeWcFIwc26d39g" instanceOf="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink"/>
+    <nodes xsi:type="specification:PSObject" id="_5jTa8LXlEeWOkIpooXnIiQ" name="block"
+        incoming="#_AP510LXmEeWOkIpooXnIiQ #_A8EYQLXmEeWOkIpooXnIiQ #__INKkNMIEeWcFIwc26d39g"
+        instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+    <nodes xsi:type="specification:PSObject" id="_wYnwsNMIEeWcFIwc26d39g" name="seff"
+        incoming="#_1bvsUNMIEeWcFIwc26d39g #_3ur_UNMIEeWcFIwc26d39g" instanceOf="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ServiceEffectSpecification"/>
+    <nodes xsi:type="specification:PSObject" id="_55fqANMIEeWcFIwc26d39g" name="containingMethod"
+        outgoing="#__INKkNMIEeWcFIwc26d39g" incoming="#__3DNkNMIEeWcFIwc26d39g" instanceOf="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
   </patternSpecifications>
   <patternSpecifications id="_GNgcsLXmEeWOkIpooXnIiQ" name="ExcessiveAllocationCandidate">
     <connections xsi:type="specification:PSPath" id="_cqUoALXmEeWOkIpooXnIiQ" name="path1"

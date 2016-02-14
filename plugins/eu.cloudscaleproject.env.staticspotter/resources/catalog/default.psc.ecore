@@ -48,7 +48,7 @@
                   incoming="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.9"
                   forEach="true">
                 <ownedRule>
-                  <variable xsi:type="sdp:ObjectVariable" name="behaviour" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.5"
+                  <variable xsi:type="sdp:ObjectVariable" name="behaviour" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
                       outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
                       classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ResourceDemandingSEFF"/>
                   <variable xsi:type="sdp:ObjectVariable" name="acquireAction" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
@@ -59,15 +59,11 @@
                       classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ReleaseAction"/>
                   <variable xsi:type="sdp:ObjectVariable" name="passiveResource" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.2 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.3"
                       classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/PassiveResource"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
-                      bindingState="BOUND" outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
-                      classifier="#/1/FindPrimitiveComponentsAnnotation">
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
+                      outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
+                      classifier="#/1/CandidateSeffMethodAnnotation">
                     <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/0/AcquireReleasePairEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
                   </variable>
-                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
-                      incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.4"
-                      outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.5"
-                      classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="steps_Behaviour"
                       source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
                       target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
@@ -86,22 +82,18 @@
                       targetEnd="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/AcquireAction/passiveresource_AcquireAction"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
                       source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.4"
-                      target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.5"
+                      target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
-                  <linkVariable xsi:type="sdp:LinkVariable" name="serviceEffectSpecifications__BasicComponent"
-                      source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.5"
-                      target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
-                      targetEnd="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent/serviceEffectSpecifications__BasicComponent"/>
                 </ownedRule>
               </ownedActivityNode>
               <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
                   outgoing="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
                   incoming="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
                 <ownedRule>
-                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.5"
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3 #/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4"
                       bindingOperator="CREATE" classifier="#/1/AcquireReleasePairAnnotation"/>
                   <variable xsi:type="sdp:ObjectVariable" name="behaviour" bindingState="BOUND"
                       incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
@@ -115,12 +107,9 @@
                   <variable xsi:type="sdp:ObjectVariable" name="passiveResource" bindingState="BOUND"
                       incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3"
                       classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/PassiveResource"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
-                      bindingState="BOUND" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4"
-                      classifier="#/1/FindPrimitiveComponentsAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="primitiveComponent"
-                      bindingState="BOUND" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.5"
-                      classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//repository/BasicComponent"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
+                      incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.4"
+                      classifier="#/1/CandidateSeffMethodAnnotation"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
                       source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
@@ -153,14 +142,7 @@
                       source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.5"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'annoPrimitiveComponent'"
-                        language="OCL" languageVersion="1.0"/>
-                  </linkVariable>
-                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
-                      source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
-                      target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.6"
-                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'primitiveComponent'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -273,9 +255,9 @@
                   <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
                       outgoingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
                       classifier="#/1/AcquireReleasePairAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="annoPrimitiveComponent"
-                      bindingState="BOUND" incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
-                      classifier="#/1/FindPrimitiveComponentsAnnotation"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
+                      incomingLink="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
+                      classifier="#/1/CandidateSeffMethodAnnotation"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="antecedentAnnos"
                       bindingOperator="CREATE" source="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.0"
                       target="#/0/AcquireReleasePairEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.1"
@@ -533,9 +515,9 @@
                           language="OCL" languageVersion="1.0"/>
                     </constraint>
                   </variable>
-                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
                       outgoingLink="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
-                      classifier="#/1/FindMethodsAnnotation">
+                      classifier="#/1/CandidateSeffMethodAnnotation">
                     <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/0/SynchronizedMethodEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
                   </variable>
                   <linkVariable xsi:type="sdp:LinkVariable" name="modifier" source="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
@@ -545,7 +527,7 @@
                       source="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.2"
                       target="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'method'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -562,9 +544,9 @@
                   <variable xsi:type="sdp:ObjectVariable" name="modifier" bindingState="BOUND"
                       incomingLink="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
                       classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Modifier"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
                       incomingLink="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2"
-                      classifier="#/1/FindMethodsAnnotation"/>
+                      classifier="#/1/CandidateSeffMethodAnnotation"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
                       source="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
@@ -583,7 +565,7 @@
                       source="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.3"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'methods'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -666,9 +648,9 @@
                   <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
                       outgoingLink="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
                       classifier="#/1/SynchronizedMethodAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="methods" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
                       incomingLink="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@linkVariable.0"
-                      classifier="#/1/FindMethodsAnnotation"/>
+                      classifier="#/1/CandidateSeffMethodAnnotation"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="antecedentAnnos"
                       bindingOperator="CREATE" source="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.0"
                       target="#/0/SynchronizedMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.6/@ownedRule/@variable.1"
@@ -1041,43 +1023,74 @@
                   incoming="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.2 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.7 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.8"
                   forEach="true">
                 <ownedRule>
-                  <variable xsi:type="sdp:ObjectVariable" name="obj1" bindingState="BOUND"
-                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                  <variable xsi:type="sdp:ObjectVariable" name="link" bindingState="BOUND"
+                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
                       classifier="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink">
                     <bindingExpression xsi:type="sdce:ParameterExpression" parameter="#/0/CandidateSeffMethodEngine/annotate/element/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0"/>
                   </variable>
-                  <variable xsi:type="sdp:ObjectVariable" name="obj2" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0"
+                  <variable xsi:type="sdp:ObjectVariable" name="block" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.2"
                       classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.1"
+                      classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ServiceEffectSpecification"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="containingMethod"
+                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="blockstatement"
                       source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
                       targetEnd="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink/blockstatement"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="seff" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.2"
+                      targetEnd="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink/seff"/>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="body" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.3"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.1/@ownedRule/@variable.1"
+                      targetEnd="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//AbstractMethodDeclaration/body"/>
                 </ownedRule>
               </ownedActivityNode>
               <ownedActivityNode xsi:type="sda:ModifyingStoryNode" name="Bind Matched Nodes To New Annotation"
                   outgoing="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6"
                   incoming="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.5">
                 <ownedRule>
-                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
+                  <variable xsi:type="sdp:ObjectVariable" name="annotation" outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3"
                       bindingOperator="CREATE" classifier="#/1/CandidateSeffMethodAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="obj1" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="link" bindingState="BOUND"
                       incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.0"
                       classifier="http://somox.org/SourceCodeDecorator/2.0#//Seff2MethodLink"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="obj2" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="block" bindingState="BOUND"
                       incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.1"
                       classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
+                      incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.2"
+                      classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ServiceEffectSpecification"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="containingMethod"
+                      bindingState="BOUND" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@linkVariable.3"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
                       source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.1"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'obj1'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'link'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                   <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
                       source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.2"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'obj2'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'block'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" bindingOperator="CREATE"
+                      source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.2/@ownedRule/@variable.4"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'containingMethod'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -1086,16 +1099,36 @@
                   outgoing="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.3 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.4"
                   incoming="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.6">
                 <ownedRule>
-                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
+                  <variable xsi:type="sdp:ObjectVariable" name="any" outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.1 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.2"
                       classifier="#/1/CandidateSeffMethodAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="obj2" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="block" bindingState="BOUND"
                       incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.0"
                       classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//Block"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="seff" bindingState="BOUND"
+                      incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.1"
+                      classifier="http://palladiosimulator.org/PalladioComponentModel/5.1#//seff/ServiceEffectSpecification"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="containingMethod"
+                      bindingState="BOUND" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java#//MethodDeclaration"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
                       source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.1"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
                     <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seffblock'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.3/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'method'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -1114,9 +1147,14 @@
                       classifier="http://org.reclipse.structure.inference.annotations#//AnnotationSet"/>
                   <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
                       incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.1"
-                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.3 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.4"
                       classifier="#/1/CandidateSeffMethodAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="bound_obj2" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_block" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.2"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_seff" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.3"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_containingMethod"
+                      incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@linkVariable.4"
                       classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="foundAnnotations"
                       source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.0"
@@ -1129,7 +1167,19 @@
                   <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.3"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
-                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'obj2'"
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'block'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.4"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="boundObjects" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.2"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.4/@ownedRule/@variable.5"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/boundObjects">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'containingMethod'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
@@ -1139,16 +1189,36 @@
                   incoming="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityEdge.0">
                 <ownedRule>
                   <variable xsi:type="sdp:ObjectVariable" name="annotation" bindingState="BOUND"
-                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      outgoingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.1 #/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.2"
                       classifier="#/1/CandidateSeffMethodAnnotation"/>
-                  <variable xsi:type="sdp:ObjectVariable" name="bound_obj2" bindingState="BOUND"
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_block" bindingState="BOUND"
                       incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.0"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_seff" bindingState="BOUND"
+                      incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.1"
+                      classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+                  <variable xsi:type="sdp:ObjectVariable" name="bound_containingMethod"
+                      bindingState="BOUND" incomingLink="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@linkVariable.2"
                       classifier="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
                   <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
                       bindingOperator="CREATE" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
                       target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.1"
                       targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
                     <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seffblock'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.2"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'seff'"
+                        language="OCL" languageVersion="1.0"/>
+                  </linkVariable>
+                  <linkVariable xsi:type="sdp:LinkVariable" name="annotatedElements"
+                      bindingOperator="CREATE" source="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.0"
+                      target="#/0/CandidateSeffMethodEngine/annotate/%http:%2F%2Fwww.storydriven.org%2Fcore%2Fextension%/@contents.0/@ownedActivity/@ownedActivityNode.5/@ownedRule/@variable.3"
+                      targetEnd="http://org.reclipse.structure.inference.annotations#//ASGAnnotation/annotatedElements">
+                    <qualifierExpression xsi:type="expr:TextualExpression" expressionText="'method'"
                         language="OCL" languageVersion="1.0"/>
                   </linkVariable>
                 </ownedRule>
