@@ -150,6 +150,19 @@ query collectProvidedOpInterfaces(in connections : Set(OVERVIEW::architecture::C
 	return hcs;
 }
 
+query collectRequiredOpInterfaces(in connections : Set(OVERVIEW::architecture::Connection)) : Set(OVERVIEW::application::OperationInterface){
+	var hcs : Set(OVERVIEW::application::OperationInterface);
+	//collect internal
+	connections[OVERVIEW::architecture::InternalConnection]->forEach(ic){
+		hcs += ic.source.requiredInterfaces;
+	};
+	//collect hybrid
+	connections[OVERVIEW::architecture::ExternalConnection]->forEach(ec){
+		hcs += ec.source.requiredInterfaces;
+	};
+	return hcs;
+}
+
 query getApplicationServicesRequiringInterfaces(in platformService : OVERVIEW::architecture::SoftwareServiceContainer, 
 												in interface : OVERVIEW::application::OperationInterface) 
 												: Set(OVERVIEW::architecture::SoftwareService){

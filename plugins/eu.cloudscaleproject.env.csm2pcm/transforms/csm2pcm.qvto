@@ -577,7 +577,7 @@ mapping OVERVIEW::Overview::csm2system() : SYSTEM::System @ pcmSystemInstance {
 	
 	//create usage external provided roles and delegation connectors
 	self.architecture.cloudEnvironments->forEach(cp){
-		var externalInterfaces = collectProvidedOpInterfaces(getUsageConnections(cp));
+		var externalInterfaces = collectRequiredOpInterfaces(getUsageConnections(cp));
 		//create provided roles
 		providedRoles_InterfaceProvidingEntity += externalInterfaces->map OpInterface2ProvidedRole('System');
 		//create provided delegation connectors
@@ -698,7 +698,7 @@ mapping OVERVIEW::Overview::csm2usage() : USAGE::UsageModel @ pcmUsageInstance{
 				entityName := 'Default entry level system call';
 			};
 			
-			var opInterface : Set(OVERVIEW::application::OperationInterface) := collectProvidedOpInterfaces(self.architecture.usageConnections);
+			var opInterface : Set(OVERVIEW::application::OperationInterface) := collectRequiredOpInterfaces(self.architecture.usageConnections);
 			
 			//count all operations
 			var operation_count := 0.0;
