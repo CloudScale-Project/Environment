@@ -39,10 +39,10 @@ public class ConfigValidator implements IResourceValidator {
 			status.setIsValid(false);
 		}
 		
-		if (!validateCatalog(ca) | !validateEngines(ca))
-		{
-			status.setIsValid(false);
-		}
+//		if (!validateCatalog(ca) | !validateEngines(ca))
+//		{
+//			status.setIsValid(false);
+//		}
 	}
 	
 	private boolean validateCatalog (ConfigAlternative ca)
