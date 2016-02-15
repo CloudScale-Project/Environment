@@ -65,24 +65,34 @@ mapping REPOSITORY::DataType::dataTypePrimitive2parameter() : OVERVIEW::paramete
 	
 	var par : REPOSITORY::PrimitiveDataType;
 	par := self.oclAsType(REPOSITORY::PrimitiveDataType);
+	
+	log("Transformig primitive type: " + par.type.toString());
 		
 	//INT
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::INT) then{
+		name := "INT";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::INT;
 	}endif;
 	
 	//STRING
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::STRING) then{
+		name := "STRING";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::STRING;
 	}endif;
 	
 	//BOOL
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::BOOL) then{
+		name := "BOOL";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::BOOL;
 	}endif;
 	
 	//DOUBLE
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::DOUBLE) then{
+		name := "DOUBLE";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
 	}endif;
 	
@@ -90,16 +100,22 @@ mapping REPOSITORY::DataType::dataTypePrimitive2parameter() : OVERVIEW::paramete
 	
 	//CHAR
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::CHAR) then{
+		name := "CHAR";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
 	}endif;
 	
 	//BYTE
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::BYTE) then{
+		name := "BYTE";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
 	}endif;
 	
 	//LONG
 	if(par.type = REPOSITORY::PrimitiveTypeEnum::LONG) then{
+		name := "LONG";
+		description := "Transformed from PCM";
 		type := OVERVIEW::parametertype::TypeEnum::DOUBLE;
 	}endif;
 }
@@ -116,7 +132,7 @@ mapping REPOSITORY::DataType::dataTypeComposite2parameter() : OVERVIEW::paramete
 																   OVERVIEW::parametertype::CompositeParameter);
 	parameters := par.innerDeclaration_CompositeDataType
 						.datatype_InnerDeclaration->late resolveIn(REPOSITORY::DataType::dataType2parameter,
-							 										  OVERVIEW::parametertype::Parameter);
+							 									   OVERVIEW::parametertype::Parameter);
 }
 
 //collection parameter trensformation
@@ -127,6 +143,6 @@ mapping REPOSITORY::DataType::dataTypeCollection2parameter() :OVERVIEW::paramete
 	par := self.oclAsType(REPOSITORY::CollectionDataType);
 	
 	name := par.entityName;
-	parameter := par.innerType_CollectionDataType.late resolveoneIn(REPOSITORY::DataType::dataType2parameter, 
+	parameter := par.innerType_CollectionDataType->late resolveoneIn(REPOSITORY::DataType::dataType2parameter, 
 																	OVERVIEW::parametertype::Parameter);
 }

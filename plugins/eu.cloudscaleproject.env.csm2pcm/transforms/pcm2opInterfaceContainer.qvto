@@ -3,9 +3,11 @@ import pcm2csmData;
 modeltype OVERVIEW uses overview('http://org.scaledl.overview/ScaleDLOverviewComponentModel/1.0'); 
 modeltype PCM uses pcm('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype REPOSITORY uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.1');
+modeltype DATA_TYPE uses pcm::repository('http://palladiosimulator.org/PalladioComponentModel/5.1');
 modeltype ECORE uses "http://www.eclipse.org/emf/2002/Ecore";
 
 transformation csm2pcm(in pcmInstance : PCM,
+					   in datatypeInstance : DATA_TYPE,
 					   inout overviewInstance : OVERVIEW);
 					  
 configuration property moduleID : String;
@@ -23,6 +25,7 @@ main() {
 	
 	var systemRoot : pcm::system::System := pcmInstance.rootObjects()![pcm::system::System];
 	var repositoryRoot : pcm::repository::Repository := pcmInstance.rootObjects()![pcm::repository::Repository];
+	var dataTypeRoot : pcm::repository::Repository := datatypeInstance.rootObjects()![pcm::repository::Repository];
 	
 	var softwareService : OVERVIEW::architecture::SoftwareService := csmRoot.architecture.cloudEnvironments.softwareLayer.services![id = moduleID];
 	
@@ -35,6 +38,8 @@ main() {
 	softwareService.name := systemRoot.entityName;
 	
 	//datatypes
+	csmRoot.dataTypes.types := OrderedSet{};
+	csmRoot.dataTypes.types += dataTypeRoot.dataTypes__Repository->map dataType2parameter();
 	csmRoot.dataTypes.types += repositoryRoot.dataTypes__Repository->map dataType2parameter();
 	
 	//interfaces

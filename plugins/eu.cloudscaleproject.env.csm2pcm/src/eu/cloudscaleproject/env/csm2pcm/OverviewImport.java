@@ -7,8 +7,12 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -17,6 +21,7 @@ import org.eclipse.m2m.qvt.oml.ExecutionContextImpl;
 import org.eclipse.m2m.qvt.oml.ExecutionDiagnostic;
 import org.eclipse.m2m.qvt.oml.ModelExtent;
 import org.eclipse.m2m.qvt.oml.TransformationExecutor;
+import org.palladiosimulator.pcm.repository.Repository;
 import org.scaledl.overview.Overview;
 import org.scaledl.overview.application.OperationInterfaceContainer;
 import org.scaledl.overview.converter.IOverviewConverter;
@@ -98,10 +103,29 @@ public class OverviewImport{
 				List<EObject> inputCsmList = new ArrayList<EObject>();
 				inputCsmList.add(overviewModel);
 				
-				final ModelExtent inputCsm = new BasicModelExtent(inputCsmList);		
-				final ModelExtent inputExternal = new BasicModelExtent(external);		
+				ResourceSet dataSet = new ResourceSetImpl();
 				
-				ExecutionDiagnostic result = executor.execute(context, inputExternal, inputCsm);
+				//find resource set
+				for(EObject eo : external){
+					if(eo instanceof Repository){
+						
+						EcoreUtil.resolveAll(eo);
+						
+						if(eo.eResource() != null && eo.eResource().getResourceSet() != null){
+							dataSet = eo.eResource().getResourceSet();
+						}
+					}
+				}
+				
+				URI inDataTypeUri = URI.createURI("pathmap://PCM_MODELS/PrimitiveTypes.repository");
+				Resource dataTypesResource = dataSet.getResource(inDataTypeUri, true);
+				EList<EObject> inObjectsDataTypes = dataTypesResource.getContents();
+				
+				final ModelExtent inputCsm = new BasicModelExtent(inputCsmList);		
+				final ModelExtent inputExternal = new BasicModelExtent(external);
+				final ModelExtent inputDataTypes = new BasicModelExtent(inObjectsDataTypes);
+				
+				ExecutionDiagnostic result = executor.execute(context, inputExternal, inputDataTypes, inputCsm);
 
 				if(result.getSeverity() == Diagnostic.OK) {
 					try {

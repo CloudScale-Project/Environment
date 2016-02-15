@@ -14,10 +14,10 @@ mapping OVERVIEW::parametertype::Parameter::parameter2dataType() : REPOSITORY::D
 //primitive paramtere transformation
 mapping OVERVIEW::parametertype::Parameter::parameterPrimitive2dataType() : PrimitiveDataType
 	when{self.oclIsKindOf(OVERVIEW::parametertype::PrimitiveParameter)} {
-	
+		
 	var par : OVERVIEW::parametertype::PrimitiveParameter;
 	par := self.oclAsType(OVERVIEW::parametertype::PrimitiveParameter);
-		
+			
 	//INT
 	if(par.type = OVERVIEW::parametertype::TypeEnum::INT) then{
 		type := REPOSITORY::PrimitiveTypeEnum::INT;
@@ -47,8 +47,8 @@ mapping OVERVIEW::parametertype::Parameter::parameterComposite2dataType() : Comp
 	par := self.oclAsType(OVERVIEW::parametertype::CompositeParameter);
 	
 	entityName := self.name;
-	parentType_CompositeDataType := par._extends.late resolveoneIn(OVERVIEW::parametertype::Parameter::parameterComposite2dataType,
-																   REPOSITORY::CompositeDataType);
+	parentType_CompositeDataType := par._extends->late resolveoneIn(OVERVIEW::parametertype::Parameter::parameterComposite2dataType,
+																    REPOSITORY::CompositeDataType);
 	innerDeclaration_CompositeDataType := par.parameters->map parameter2InnerDeclaration(result);
 }
 
@@ -60,15 +60,15 @@ mapping OVERVIEW::parametertype::Parameter::parameterCollection2dataType() : Col
 	par := self.oclAsType(OVERVIEW::parametertype::CollectionParameter);
 	
 	entityName := self.name;
-	innerType_CollectionDataType := par.parameter.late resolveoneIn(OVERVIEW::parametertype::Parameter::parameter2dataType, 
-																	REPOSITORY::CollectionDataType);
+	innerType_CollectionDataType := par.parameter->late resolveoneIn(OVERVIEW::parametertype::Parameter::parameter2dataType, 
+																	REPOSITORY::DataType);
 }
 
 mapping OVERVIEW::parametertype::Parameter::parameter2InnerDeclaration(in parent : CompositeDataType) : InnerDeclaration{
 	
 	entityName := self.name;
 	compositeDataType_InnerDeclaration := parent;
-	datatype_InnerDeclaration := self.late resolveoneIn(OVERVIEW::parametertype::Parameter::parameter2dataType, 
+	datatype_InnerDeclaration := self->late resolveoneIn(OVERVIEW::parametertype::Parameter::parameter2dataType, 
 														REPOSITORY::DataType)
 }
 	
