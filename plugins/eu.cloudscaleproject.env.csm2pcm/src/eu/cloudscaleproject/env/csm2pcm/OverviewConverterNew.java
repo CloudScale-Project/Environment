@@ -176,6 +176,31 @@ public class OverviewConverterNew{
 						}
 					}
 				}, null);
+
+				//generate diagrams for the external models
+				ResourceSet tempResSet = new ResourceSetImpl(); 
+				List<IFile> files = ExplorerProjectPaths.findFilesByExtension(servicesFolder, ModelType.REPOSITORY.getFileExtension(), true);
+				for(IFile file : files){
+					Resource r = ExplorerProjectPaths.getEmfResource(tempResSet, file);
+					if(!r.getContents().isEmpty()){
+						EObject root = r.getContents().get(0);
+						EObject diagramRoot = PCMResourceSet.createDiagramRootObject(root);
+						
+						URI diagramUri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+						diagramUri = diagramUri.trimFileExtension().appendFileExtension(ModelType.REPOSITORY.getDiagramFileExtension());
+						
+						Resource diagramResource = tempResSet.createResource(diagramUri);
+						diagramResource.getContents().add(diagramRoot);
+						
+						try {
+							diagramResource.save(null);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+					}
+				}
+
 			}
 			
 			//register generated models
