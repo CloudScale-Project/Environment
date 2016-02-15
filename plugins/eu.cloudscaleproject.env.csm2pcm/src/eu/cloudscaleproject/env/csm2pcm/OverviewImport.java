@@ -121,7 +121,7 @@ public class OverviewImport{
 				Resource dataTypesResource = dataSet.getResource(inDataTypeUri, true);
 				EList<EObject> inObjectsDataTypes = dataTypesResource.getContents();
 				
-				final ModelExtent inputCsm = new BasicModelExtent(inputCsmList);		
+				final ModelExtent inputCsm = new BasicModelExtent(inputCsmList);
 				final ModelExtent inputExternal = new BasicModelExtent(external);
 				final ModelExtent inputDataTypes = new BasicModelExtent(inObjectsDataTypes);
 				

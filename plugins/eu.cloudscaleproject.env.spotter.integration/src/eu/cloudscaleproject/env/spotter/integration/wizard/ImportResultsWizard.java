@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -280,6 +281,7 @@ public class ImportResultsWizard extends AbstractProjectWizard {
 						
 						problem = new XPerformanceProblem();
 						problem.setExtensionName(Activator.STATIC_SPOTTER_PROBLEM_EXTENSION);
+						problem.setUniqueId(UUID.randomUUID().toString());
 						
 						XMConfiguration detectableConf = new XMConfiguration();
 						detectableConf.setKey(Activator.STATIC_SPOTTER_PROBLEM_DETECTIBLE);
